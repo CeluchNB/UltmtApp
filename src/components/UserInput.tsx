@@ -1,23 +1,25 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import { ColorPalette, darkColors, lightColors } from '../theme/colors'
-import { StyleSheet, useColorScheme } from 'react-native'
+import { useColors } from '../hooks/useColors'
 
-export interface UserInputProps {
+interface UserInputProps {
     placeholder: string
+    isPassword?: boolean
+    onChangeText?: (...event: any[]) => void
+    value?: string
 }
 
 const UserInput: React.FC<UserInputProps> = props => {
-    const isDarkMode = useColorScheme() === 'dark'
-    const colors: ColorPalette = isDarkMode ? darkColors : lightColors
+    const { colors } = useColors()
 
     const styles = StyleSheet.create({
         inputStyle: {
             backgroundColor: colors.primary,
-            color: colors.textPrimary,
             marginTop: 20,
             marginStart: 50,
             marginEnd: 50,
+            placeholderTextColor: colors.secondary,
         },
     })
 
@@ -25,10 +27,13 @@ const UserInput: React.FC<UserInputProps> = props => {
         <TextInput
             style={styles.inputStyle}
             placeholder={props.placeholder}
-            placeholderTextColor={colors.secondary}
             mode="outlined"
             outlineColor={colors.textSecondary}
             activeOutlineColor={colors.textPrimary}
+            secureTextEntry={props.isPassword}
+            onChangeText={props.onChangeText}
+            value={props.value}
+            theme={{ colors: { text: colors.textPrimary } }}
         />
     )
 }

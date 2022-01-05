@@ -1,11 +1,15 @@
 import * as React from 'react'
 import { Button } from 'react-native-paper'
-import { ColorPalette, darkColors, lightColors } from '../theme/colors'
-import { StyleSheet, useColorScheme } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { useColors } from '../hooks/useColors'
 
-const PrimaryButton: React.FC<{ text: string }> = ({ text }) => {
-    const isDarkMode = useColorScheme() === 'dark'
-    const colors: ColorPalette = isDarkMode ? darkColors : lightColors
+interface PrimaryButtonProps {
+    text: string
+    onPress: () => {}
+}
+
+const PrimaryButton: React.FC<PrimaryButtonProps> = ({ text, onPress }) => {
+    const { colors, isDarkMode } = useColors()
 
     const styles = StyleSheet.create({
         button: {
@@ -19,7 +23,8 @@ const PrimaryButton: React.FC<{ text: string }> = ({ text }) => {
             mode="contained"
             compact={true}
             dark={!isDarkMode}
-            style={styles.button}>
+            style={styles.button}
+            onPress={onPress}>
             {text}
         </Button>
     )
