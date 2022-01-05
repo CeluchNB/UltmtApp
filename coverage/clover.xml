@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1641354066788" clover="3.2.0">
+  <project timestamp="1641354066788" name="All files">
+    <metrics statements="17" coveredstatements="17" conditionals="16" coveredconditionals="9" methods="3" coveredmethods="3" elements="36" coveredelements="29" complexity="0" loc="17" ncloc="17" packages="3" files="5" classes="5"/>
+    <package name="UltmtApp">
+      <metrics statements="8" coveredstatements="8" conditionals="10" coveredconditionals="5" methods="2" coveredmethods="2"/>
+      <file name="App.tsx" path="/Users/noah/projects/UltmtApp/App.tsx">
+        <metrics statements="8" coveredstatements="8" conditionals="10" coveredconditionals="5" methods="2" coveredmethods="2"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="UltmtApp.src.components">
+      <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <file name="ScreenTitle.tsx" path="/Users/noah/projects/UltmtApp/src/components/ScreenTitle.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
+      </file>
+    </package>
+    <package name="UltmtApp.src.theme">
+      <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="2" methods="0" coveredmethods="0"/>
+      <file name="colors.ts" path="/Users/noah/projects/UltmtApp/src/theme/colors.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+      </file>
+      <file name="fonts.ts" path="/Users/noah/projects/UltmtApp/src/theme/fonts.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+      </file>
+      <file name="metrics.ts" path="/Users/noah/projects/UltmtApp/src/theme/metrics.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="4" coveredconditionals="2" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

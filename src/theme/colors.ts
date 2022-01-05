@@ -9,7 +9,7 @@ export interface ColorPalette {
 
 export const lightColors: ColorPalette = {
     primary: '#ffffff',
-    secondary: '#090909',
+    secondary: '#303030',
     textPrimary: '#3183ff',
     textSecondary: '#ffd600',
     success: '#40dd50',
@@ -17,7 +17,7 @@ export const lightColors: ColorPalette = {
 }
 
 export const darkColors: ColorPalette = {
-    primary: '#090909',
+    primary: '#303030',
     secondary: '#ffffff',
     textPrimary: '#ffd600',
     textSecondary: '#31adff',
