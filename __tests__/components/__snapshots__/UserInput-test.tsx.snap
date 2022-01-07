@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test snapshot 1`] = `
+<View
+  style={
+    Object {
+      "marginEnd": 50,
+      "marginStart": 50,
+      "marginTop": 20,
+      "placeholderTextColor": "#303030",
+    }
+  }
+>
+  <View
+    pointerEvents="none"
+    style={
+      Array [
+        Object {
+          "bottom": 0,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 6,
+        },
+        Object {
+          "backgroundColor": "#ffffff",
+          "borderColor": "#ffd600",
+          "borderRadius": 4,
+          "borderWidth": 1,
+        },
+      ]
+    }
+    testID="text-input-outline"
+  />
+  <View>
+    <View
+      style={
+        Array [
+          Object {
+            "paddingBottom": 0,
+          },
+          Object {
+            "minHeight": 64,
+            "paddingTop": 8,
+          },
+        ]
+      }
+    >
+      <TextInput
+        editable={true}
+        multiline={false}
+        onBlur={[Function]}
+        onChangeText={[Function]}
+        onFocus={[Function]}
+        placeholder="Placeholder"
+        placeholderTextColor="#303030"
+        selectionColor="#3183ff"
+        style={
+          Array [
+            Object {
+              "flexGrow": 1,
+              "margin": 0,
+              "paddingHorizontal": 14,
+              "zIndex": 1,
+            },
+            Object {
+              "height": 56,
+            },
+            Object {
+              "paddingBottom": 0,
+              "paddingTop": 0,
+            },
+            Object {
+              "color": "#3183ff",
+              "fontFamily": "System",
+              "fontSize": 16,
+              "fontWeight": undefined,
+              "textAlign": "left",
+              "textAlignVertical": "center",
+            },
+            false,
+            Array [
+              Object {},
+            ],
+          ]
+        }
+        testID="text-input-outlined"
+        underlineColorAndroid="transparent"
+      />
+    </View>
+  </View>
+</View>
+`;

@@ -5,9 +5,10 @@ import { useColors } from '../hooks'
 
 interface SecondaryButtonProps {
     text: string
+    onPress: () => {}
 }
 
-const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text }) => {
+const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text, onPress }) => {
     const { colors } = useColors()
 
     const style = StyleSheet.create({
@@ -22,7 +23,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text }) => {
             style={style.button}
             mode="text"
             color={colors.textPrimary}
-            onPress={() => {}}>
+            onPress={onPress}>
             {text}
         </Button>
     )

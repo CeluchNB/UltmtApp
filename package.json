@@ -22,6 +22,8 @@
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",
     "@react-native-community/eslint-config": "^2.0.0",
+    "@testing-library/jest-native": "^4.0.4",
+    "@testing-library/react-native": "^9.0.0",
     "@types/jest": "^26.0.23",
     "@types/react-native": "^0.66.4",
     "@types/react-test-renderer": "^17.0.1",
@@ -46,6 +48,9 @@
       "jsx",
       "json",
       "node"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@react-native|react-native|react-native-iphone-x-helper)/)"
     ]
   }
 }
