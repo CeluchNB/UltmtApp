@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import { useColors } from '../hooks/useColors'
+import { useColors } from '../hooks'
 
 interface UserInputProps {
     placeholder: string
@@ -33,7 +33,12 @@ const UserInput: React.FC<UserInputProps> = props => {
             secureTextEntry={props.isPassword}
             onChangeText={props.onChangeText}
             value={props.value}
-            theme={{ colors: { text: colors.textPrimary } }}
+            theme={{
+                colors: {
+                    text: colors.textPrimary,
+                    placeholder: colors.secondary,
+                },
+            }}
         />
     )
 }

@@ -3,11 +3,15 @@ import PrimaryButton from '../components/PrimaryButton'
 import ScreenTitle from '../components/ScreenTitle'
 import SecondaryButton from '../components/SecondaryButton'
 import UserInput from '../components/UserInput'
-import { useColors } from '../hooks/useColors'
+import { login } from '../store/reducers/features/account/accountReducer'
+import store from './../store/store'
+import { useColors } from '../hooks'
+import { useDispatch } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, View } from 'react-native'
 
 const LoginScreen: React.FC<{}> = () => {
+    const dispatch = useDispatch()
     const { colors } = useColors()
     const { control, handleSubmit } = useForm({
         defaultValues: {
@@ -16,7 +20,15 @@ const LoginScreen: React.FC<{}> = () => {
         },
     })
 
-    const onSubmit = (data: any) => console.log(data)
+    const [loading, setLoading] = React.useState(false)
+
+    const onSubmit = (data: any) => {
+        dispatch(login({ data }))
+    }
+
+    store.subscribe(() => {
+        setLoading(store.getState().account.loading)
+    })
 
     const styles = StyleSheet.create({
         screen: {
@@ -56,7 +68,11 @@ const LoginScreen: React.FC<{}> = () => {
                 name="password"
             />
 
-            <PrimaryButton text="Login" onPress={handleSubmit(onSubmit)} />
+            <PrimaryButton
+                text="Login"
+                loading={loading}
+                onPress={handleSubmit(onSubmit)}
+            />
             <SecondaryButton text="Create Account" />
         </View>
     )

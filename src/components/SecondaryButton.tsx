@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Button } from 'react-native-paper'
 import { StyleSheet } from 'react-native'
-import { useColors } from '../hooks/useColors'
+import { useColors } from '../hooks'
 
 interface SecondaryButtonProps {
     text: string

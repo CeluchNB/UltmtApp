@@ -10,10 +10,13 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.7.1",
+    "axios": "^0.24.0",
     "react": "17.0.2",
     "react-hook-form": "^7.22.5",
     "react-native": "0.66.4",
-    "react-native-paper": "^4.11.1"
+    "react-native-paper": "^4.11.1",
+    "react-redux": "^7.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
