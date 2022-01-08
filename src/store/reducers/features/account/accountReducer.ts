@@ -1,4 +1,6 @@
 import * as UserServices from './../../../services/user'
+import { LoginData } from '../../../../types/reducers'
+import { RootState } from '../../../store'
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export interface AccountSlice {
@@ -53,11 +55,20 @@ const accountSlice = createSlice({
         })
         builder.addCase(fetchProfile.fulfilled, (state, action) => {
             state.loading = false
+            console.log(
+                'fetch profile fulfilled',
+                action.payload.data.firstName,
+            )
             const { firstName, lastName, email, username } = action.payload.data
-            state = { ...state, firstName, lastName, email, username }
+            console.log('first', firstName, 'last', lastName)
+            state.firstName = firstName
+            state.lastName = lastName
+            state.email = email
+            state.username = username
         })
         builder.addCase(fetchProfile.rejected, (state, action) => {
             state.loading = false
+            console.log('fetch profile rejected', action.error)
             state.error = action.error.message
             state.token = ''
         })
@@ -66,19 +77,20 @@ const accountSlice = createSlice({
 
 export const login = createAsyncThunk(
     'account/login',
-    async (data: any, _thunkAPI) => {
-        const { username, password } = data.data
+    async (data: LoginData, _thunkAPI) => {
+        const { username, password } = data
         return await UserServices.login(username, password)
     },
 )
 
 export const fetchProfile = createAsyncThunk(
     'account/fetchProfile',
-    async (data: any, _thunkAPI) => {
-        const { token } = data.data
-        return await UserServices.fetchProfile(token)
+    async (data: string, _thunkAPI) => {
+        return await UserServices.fetchProfile(data)
     },
 )
 
+export const selectAccount = (state: RootState) => state.account
+export const selectLoading = (state: RootState) => state.account.loading
 export const { fetchToken, fetchDetails } = accountSlice.actions
 export default accountSlice.reducer

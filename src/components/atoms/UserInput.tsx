@@ -1,6 +1,6 @@
 import React from 'react'
 import { TextInput } from 'react-native-paper'
-import { useColors } from '../hooks'
+import { useColors } from '../../hooks'
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 
 interface UserInputProps {

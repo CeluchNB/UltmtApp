@@ -1,5 +1,5 @@
 import React from 'react'
-import SecondaryButton from '../../src/components/SecondaryButton'
+import SecondaryButton from '../../../src/components/atoms/SecondaryButton'
 import { fireEvent, render } from '@testing-library/react-native'
 
 import renderer from 'react-test-renderer'

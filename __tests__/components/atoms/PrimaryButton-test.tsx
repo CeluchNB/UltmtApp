@@ -1,4 +1,4 @@
-import PrimaryButton from '../../src/components/PrimaryButton'
+import PrimaryButton from '../../../src/components/atoms/PrimaryButton'
 import React from 'react'
 import ReactNative from 'react-native'
 

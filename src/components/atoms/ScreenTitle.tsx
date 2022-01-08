@@ -6,8 +6,8 @@ import {
     TextStyle,
     useColorScheme,
 } from 'react-native'
-import { darkColors, lightColors } from '../theme/colors'
-import { size, weight } from '../theme/fonts'
+import { darkColors, lightColors } from '../../theme/colors'
+import { size, weight } from '../../theme/fonts'
 
 const ScreenTitle: React.FC<{
     title: string

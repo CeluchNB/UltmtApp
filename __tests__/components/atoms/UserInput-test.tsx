@@ -1,5 +1,5 @@
 import React from 'react'
-import UserInput from '../../src/components/UserInput'
+import UserInput from '../../../src/components/atoms/UserInput'
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer'

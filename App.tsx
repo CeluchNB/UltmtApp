@@ -14,6 +14,7 @@ import ProfileScreen from './src/screens/ProfileScreen'
 import React from 'react'
 import { RootStackParamList } from './src/types/navigation'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import store from './src/store/store'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -21,7 +22,11 @@ const App: React.FC<{}> = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName="Login"
+                initialRouteName={
+                    store.getState().account.token.length > 0
+                        ? 'Profile'
+                        : 'Login'
+                }
                 screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Profile" component={ProfileScreen} />

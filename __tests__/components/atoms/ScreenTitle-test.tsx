@@ -4,7 +4,7 @@
 
 import React from 'react'
 import ReactNative from 'react-native'
-import ScreenTitle from '../../src/components/ScreenTitle'
+import ScreenTitle from '../../../src/components/atoms/ScreenTitle'
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer'

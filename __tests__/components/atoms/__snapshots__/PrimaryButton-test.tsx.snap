@@ -1,20 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test match snapshot 1`] = `
+exports[`test snapshot 1`] = `
 <View
   collapsable={false}
   nativeID="animatedComponent"
   style={
     Object {
-      "alignSelf": "center",
-      "backgroundColor": "transparent",
+      "backgroundColor": "#3183ff",
       "borderColor": "transparent",
       "borderRadius": 4,
       "borderStyle": "solid",
       "borderWidth": 0,
-      "elevation": 0,
-      "marginTop": 10,
-      "minWidth": 64,
+      "elevation": 2,
+      "minWidth": "auto",
+      "shadowColor": "#000000",
+      "shadowOffset": Object {
+        "height": 0.75,
+        "width": 0,
+      },
+      "shadowOpacity": 0.24,
+      "shadowRadius": 1.5,
     }
   }
 >
@@ -77,12 +82,14 @@ exports[`test match snapshot 1`] = `
                 "marginVertical": 9,
                 "textAlign": "center",
               },
-              undefined,
+              Object {
+                "marginHorizontal": 8,
+              },
               Object {
                 "textTransform": "uppercase",
               },
               Object {
-                "color": "#3183ff",
+                "color": "#ffffff",
                 "fontFamily": "System",
                 "fontWeight": "500",
               },

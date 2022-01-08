@@ -4,6 +4,7 @@ exports[`test matches snapshot 1`] = `
 <View
   style={
     Object {
+      "alignContent": "center",
       "backgroundColor": "#ffffff",
       "height": "100%",
     }
@@ -11,13 +12,17 @@ exports[`test matches snapshot 1`] = `
 >
   <Text
     style={
-      Object {
-        "alignSelf": "center",
-        "color": "#3183ff",
-        "fontSize": 82.1917808219178,
-        "fontWeight": "bold",
-        "marginTop": 50,
-      }
+      Array [
+        Object {
+          "color": "#3183ff",
+          "fontSize": 82.1917808219178,
+          "fontWeight": "bold",
+        },
+        Object {
+          "alignSelf": "center",
+          "marginTop": 50,
+        },
+      ]
     }
   >
     Login
@@ -323,7 +328,7 @@ exports[`test matches snapshot 1`] = `
         "borderStyle": "solid",
         "borderWidth": 0,
         "elevation": 0,
-        "marginTop": 10,
+        "marginTop": 5,
         "minWidth": 64,
       }
     }

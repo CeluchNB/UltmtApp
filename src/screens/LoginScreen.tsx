@@ -1,15 +1,19 @@
 import * as React from 'react'
-import PrimaryButton from '../components/PrimaryButton'
+import { LoginData } from '../types/reducers'
+import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
-import ScreenTitle from '../components/ScreenTitle'
-import SecondaryButton from '../components/SecondaryButton'
-import UserInput from '../components/UserInput'
-import { login } from '../store/reducers/features/account/accountReducer'
+import ScreenTitle from '../components/atoms/ScreenTitle'
+import SecondaryButton from '../components/atoms/SecondaryButton'
+import UserInput from '../components/atoms/UserInput'
 import store from './../store/store'
 import { useColors } from '../hooks'
-import { useDispatch } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, View } from 'react-native'
+import {
+    login,
+    selectLoading,
+} from '../store/reducers/features/account/accountReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     const dispatch = useDispatch()
@@ -18,18 +22,17 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         defaultValues: {
             username: '',
             password: '',
-        },
+        } as LoginData,
     })
 
-    const [loading, setLoading] = React.useState(false)
+    const loading = useSelector(selectLoading)
 
-    const onSubmit = (data: any) => {
-        dispatch(login({ data }))
+    const onSubmit = (data: LoginData) => {
+        dispatch(login(data))
     }
 
     const unsubscribe = store.subscribe(() => {
         const state = store.getState()
-        setLoading(state.account.loading)
 
         if (state.account.token.length > 0) {
             navigation.navigate('Profile')

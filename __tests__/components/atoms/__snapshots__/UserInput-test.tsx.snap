@@ -4,9 +4,6 @@ exports[`test snapshot 1`] = `
 <View
   style={
     Object {
-      "marginEnd": 50,
-      "marginStart": 50,
-      "marginTop": 20,
       "placeholderTextColor": "#303030",
     }
   }
