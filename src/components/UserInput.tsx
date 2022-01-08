@@ -1,31 +1,29 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import { useColors } from '../hooks'
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 
 interface UserInputProps {
     placeholder: string
     isPassword?: boolean
     onChangeText?: (...event: any[]) => void
     value?: string
+    style?: StyleProp<ViewStyle>
 }
 
 const UserInput: React.FC<UserInputProps> = props => {
     const { colors } = useColors()
 
-    const styles = StyleSheet.create({
+    const selfStyle = StyleSheet.create({
         inputStyle: {
             backgroundColor: colors.primary,
-            marginTop: 20,
-            marginStart: 50,
-            marginEnd: 50,
             placeholderTextColor: colors.secondary,
         },
     })
 
     return (
         <TextInput
-            style={styles.inputStyle}
+            style={[selfStyle.inputStyle, props.style]}
             placeholder={props.placeholder}
             mode="outlined"
             outlineColor={colors.textSecondary}

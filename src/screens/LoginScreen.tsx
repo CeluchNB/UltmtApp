@@ -1,5 +1,6 @@
 import * as React from 'react'
 import PrimaryButton from '../components/PrimaryButton'
+import { Props } from '../types/navigation'
 import ScreenTitle from '../components/ScreenTitle'
 import SecondaryButton from '../components/SecondaryButton'
 import UserInput from '../components/UserInput'
@@ -10,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, View } from 'react-native'
 
-const LoginScreen: React.FC<{}> = () => {
+const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     const dispatch = useDispatch()
     const { colors } = useColors()
     const { control, handleSubmit } = useForm({
@@ -26,20 +27,49 @@ const LoginScreen: React.FC<{}> = () => {
         dispatch(login({ data }))
     }
 
-    store.subscribe(() => {
-        setLoading(store.getState().account.loading)
+    const unsubscribe = store.subscribe(() => {
+        const state = store.getState()
+        setLoading(state.account.loading)
+
+        if (state.account.token.length > 0) {
+            navigation.navigate('Profile')
+        }
+    })
+
+    React.useEffect(() => {
+        return () => {
+            unsubscribe()
+        }
     })
 
     const styles = StyleSheet.create({
         screen: {
             backgroundColor: colors.primary,
             height: '100%',
+            alignContent: 'center',
+        },
+        title: {
+            alignSelf: 'center',
+            marginTop: 50,
+        },
+        input: {
+            marginTop: 20,
+            marginStart: 50,
+            marginEnd: 50,
+        },
+        loginButton: {
+            alignSelf: 'center',
+            marginTop: 20,
+        },
+        createButton: {
+            alignSelf: 'center',
+            marginTop: 5,
         },
     })
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle title="Login" />
+            <ScreenTitle title="Login" style={styles.title} />
             <Controller
                 control={control}
                 rules={{
@@ -50,6 +80,7 @@ const LoginScreen: React.FC<{}> = () => {
                         placeholder="Username"
                         onChangeText={onChange}
                         value={value}
+                        style={styles.input}
                     />
                 )}
                 name="username"
@@ -63,6 +94,7 @@ const LoginScreen: React.FC<{}> = () => {
                         onChangeText={onChange}
                         value={value}
                         isPassword={true}
+                        style={styles.input}
                     />
                 )}
                 name="password"
@@ -72,8 +104,13 @@ const LoginScreen: React.FC<{}> = () => {
                 text="Login"
                 loading={loading}
                 onPress={handleSubmit(onSubmit)}
+                style={styles.loginButton}
             />
-            <SecondaryButton text="Create Account" />
+            <SecondaryButton
+                text="Create Account"
+                onPress={() => ({})}
+                style={styles.createButton}
+            />
         </View>
     )
 }

@@ -1,4 +1,5 @@
 import { ApiResponse } from '../../types/services'
+
 export const login = async (
     username: string,
     password: string,
@@ -16,7 +17,22 @@ export const login = async (
     })
 
     if (response.ok) {
-        return { data: await response.json(), error: undefined }
+        return { data: await response.json() }
+    } else {
+        throw new Error(await response.text())
+    }
+}
+
+export const fetchProfile = async (token: string): Promise<ApiResponse> => {
+    const response = await fetch('https://ultmt-dev.herokuapp.com/user/me', {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+
+    if (response.ok) {
+        return { data: await response.json() }
     } else {
         throw new Error(await response.text())
     }

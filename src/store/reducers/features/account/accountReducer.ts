@@ -38,13 +38,28 @@ const accountSlice = createSlice({
         })
         builder.addCase(login.fulfilled, (state, action) => {
             state.loading = false
-            console.log('in fulfilled', action.payload)
+            console.log('in fulfilled', action.payload.data.token)
             state.error = undefined
-            state.token = { ...action.payload.data.token }
+            state.token = action.payload.data.token
         })
         builder.addCase(login.rejected, (state, action) => {
             state.loading = false
             console.log('in rejected', action.error.message)
+            state.error = action.error.message
+        })
+
+        builder.addCase(fetchProfile.pending, state => {
+            state.loading = true
+        })
+        builder.addCase(fetchProfile.fulfilled, (state, action) => {
+            state.loading = false
+            const { firstName, lastName, email, username } = action.payload.data
+            state = { ...state, firstName, lastName, email, username }
+        })
+        builder.addCase(fetchProfile.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.error.message
+            state.token = ''
         })
     },
 })
@@ -54,6 +69,14 @@ export const login = createAsyncThunk(
     async (data: any, _thunkAPI) => {
         const { username, password } = data.data
         return await UserServices.login(username, password)
+    },
+)
+
+export const fetchProfile = createAsyncThunk(
+    'account/fetchProfile',
+    async (data: any, _thunkAPI) => {
+        const { token } = data.data
+        return await UserServices.fetchProfile(token)
     },
 )
 

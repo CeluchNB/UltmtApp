@@ -1,4 +1,4 @@
 export type ApiResponse = {
-    data: any | undefined
-    error: string | undefined
+    data?: any
+    error?: string
 }
