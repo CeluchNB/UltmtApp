@@ -7,6 +7,7 @@ import { size, weight } from '../../theme/fonts'
 interface SectionProps {
     title: string
     onButtonPress: () => void
+    numColumns?: number
     listData: any[]
     renderItem: ListRenderItem<any>
     buttonText: string
@@ -16,6 +17,7 @@ interface SectionProps {
 const Section: React.FC<SectionProps> = ({
     title,
     onButtonPress,
+    numColumns = 1,
     listData,
     renderItem,
     buttonText,
@@ -25,7 +27,7 @@ const Section: React.FC<SectionProps> = ({
 
     const styles = StyleSheet.create({
         container: {
-            width: '70%',
+            width: '100%',
         },
         title: {
             fontSize: size.fontLarge,
@@ -38,23 +40,34 @@ const Section: React.FC<SectionProps> = ({
             alignSelf: 'center',
             marginTop: 10,
         },
+        error: {
+            fontSize: size.fontMedium,
+        },
     })
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
             {error ? (
-                <Text>{error}</Text>
+                <Text style={styles.error}>{error}</Text>
             ) : (
-                <FlatList data={listData} renderItem={renderItem} />
+                <FlatList
+                    listKey={title}
+                    data={listData}
+                    scrollEnabled={false}
+                    numColumns={numColumns}
+                    renderItem={renderItem}
+                />
             )}
-            <Button
-                mode="text"
-                style={styles.button}
-                color={colors.textPrimary}
-                onPress={onButtonPress}>
-                {buttonText}
-            </Button>
+            {!error && (
+                <Button
+                    mode="text"
+                    style={styles.button}
+                    color={colors.textPrimary}
+                    onPress={onButtonPress}>
+                    {buttonText}
+                </Button>
+            )}
         </View>
     )
 }

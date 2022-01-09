@@ -40,13 +40,11 @@ const accountSlice = createSlice({
         })
         builder.addCase(login.fulfilled, (state, action) => {
             state.loading = false
-            console.log('in fulfilled', action.payload.data.token)
             state.error = undefined
             state.token = action.payload.data.token
         })
         builder.addCase(login.rejected, (state, action) => {
             state.loading = false
-            console.log('in rejected', action.error.message)
             state.error = action.error.message
         })
 
@@ -55,12 +53,7 @@ const accountSlice = createSlice({
         })
         builder.addCase(fetchProfile.fulfilled, (state, action) => {
             state.loading = false
-            console.log(
-                'fetch profile fulfilled',
-                action.payload.data.firstName,
-            )
             const { firstName, lastName, email, username } = action.payload.data
-            console.log('first', firstName, 'last', lastName)
             state.firstName = firstName
             state.lastName = lastName
             state.email = email
@@ -68,7 +61,6 @@ const accountSlice = createSlice({
         })
         builder.addCase(fetchProfile.rejected, (state, action) => {
             state.loading = false
-            console.log('fetch profile rejected', action.error)
             state.error = action.error.message
             state.token = ''
         })

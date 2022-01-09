@@ -5,6 +5,7 @@ export interface ColorPalette {
     textSecondary: string
     success: string
     error: string
+    gray: string
 }
 
 export const lightColors: ColorPalette = {
@@ -14,6 +15,7 @@ export const lightColors: ColorPalette = {
     textSecondary: '#ffd600',
     success: '#40dd50',
     error: '#ff0000',
+    gray: '#707070',
 }
 
 export const darkColors: ColorPalette = {
@@ -23,4 +25,5 @@ export const darkColors: ColorPalette = {
     textSecondary: '#31adff',
     success: '#40dd50',
     error: '#ff0000',
+    gray: '#ababab',
 }
