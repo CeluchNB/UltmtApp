@@ -15,7 +15,7 @@ const ScreenTitle: React.FC<{
 }> = ({ title, style }) => {
     const selfStyle = StyleSheet.create({
         title: {
-            fontSize: size.fontLarge,
+            fontSize: size.fontExtraLarge,
             color:
                 useColorScheme() === 'dark'
                     ? darkColors.textPrimary

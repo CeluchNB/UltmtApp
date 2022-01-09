@@ -3,7 +3,8 @@ import Metrics from './metrics'
 const size = {
     fontSmall: Metrics.screenWidth * (10 / 365),
     fontMedium: Metrics.screenWidth * (20 / 365),
-    fontLarge: Metrics.screenWidth * (40 / 365),
+    fontLarge: Metrics.screenWidth * (30 / 365),
+    fontExtraLarge: Metrics.screenWidth * (40 / 365),
 }
 
 type WeightStyle = '900' | '600' | '400' | 'bold' | 'normal'

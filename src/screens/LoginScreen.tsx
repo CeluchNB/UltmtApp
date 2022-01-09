@@ -35,6 +35,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         const state = store.getState()
 
         if (state.account.token.length > 0) {
+            console.log('navigating')
             navigation.navigate('Profile')
         }
     })
