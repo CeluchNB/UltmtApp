@@ -1,4 +1,5 @@
 import * as UserServices from './../../../services/user'
+import { DisplayTeam } from '../../../../types/team'
 import { LoginData } from '../../../../types/reducers'
 import { RootState } from '../../../store'
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
@@ -11,6 +12,7 @@ export interface AccountSlice {
     token: string
     error?: string
     loading: boolean
+    playerTeams: DisplayTeam[]
 }
 
 const initialState: AccountSlice = {
@@ -21,6 +23,7 @@ const initialState: AccountSlice = {
     token: '',
     error: undefined,
     loading: false,
+    playerTeams: [],
 }
 
 const accountSlice = createSlice({
@@ -53,11 +56,20 @@ const accountSlice = createSlice({
         })
         builder.addCase(fetchProfile.fulfilled, (state, action) => {
             state.loading = false
-            const { firstName, lastName, email, username } = action.payload.data
+            const { firstName, lastName, email, username, playerTeams } =
+                action.payload.data
+
             state.firstName = firstName
             state.lastName = lastName
             state.email = email
             state.username = username
+            state.playerTeams = playerTeams as DisplayTeam[]
+
+            state.playerTeams.sort(
+                (a, b) =>
+                    new Date(b.seasonStart).getUTCFullYear() -
+                    new Date(a.seasonStart).getUTCFullYear(),
+            )
         })
         builder.addCase(fetchProfile.rejected, (state, action) => {
             state.loading = false
@@ -84,5 +96,6 @@ export const fetchProfile = createAsyncThunk(
 
 export const selectAccount = (state: RootState) => state.account
 export const selectLoading = (state: RootState) => state.account.loading
+export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
 export const { fetchToken, fetchDetails } = accountSlice.actions
 export default accountSlice.reducer

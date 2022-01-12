@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Button } from 'react-native-paper'
 import { DisplayGame } from '../types/game'
 import { DisplayStat } from '../types/stats'
-import { DisplayTeam } from '../types/team'
 import GameListItem from '../components/atoms/GameListItem'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
@@ -15,25 +14,22 @@ import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import {
     fetchProfile,
     selectAccount,
+    selectPlayerTeams,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const ProfileScreen: React.FC<{}> = () => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
+    const playerTeams = useSelector(selectPlayerTeams)
 
     const dispatch = useDispatch()
 
-    const dispatchCallback = React.useCallback(
-        args => {
-            return dispatch(args)
-        },
-        [dispatch],
-    )
-
     React.useEffect(() => {
-        dispatchCallback(fetchProfile(store.getState().account.token))
-    }, [dispatchCallback])
+        if (store.getState().account.firstName.length < 1) {
+            dispatch(fetchProfile(store.getState().account.token))
+        }
+    })
 
     const styles = StyleSheet.create({
         screen: {
@@ -46,25 +42,34 @@ const ProfileScreen: React.FC<{}> = () => {
         },
     })
 
-    const teamList: DisplayTeam[] = [
-        { place: 'Pittsburgh', name: 'Temper', season: '2019' },
-        { place: 'Seattle', name: 'Sockeye', season: '2018' },
-        { place: 'San Francisco', name: 'Revolver', season: '2017' },
-    ]
-
     const gameList: DisplayGame[] = [
         {
-            opponent: { place: 'Chicago', name: 'Machine', season: '2019' },
+            opponent: {
+                place: 'Chicago',
+                name: 'Machine',
+                seasonStart: '2019',
+                seasonEnd: '2019',
+            },
             teamScore: 11,
             opponentScore: 15,
         },
         {
-            opponent: { place: 'Pittsburgh', name: 'Hazard', season: '2019' },
+            opponent: {
+                place: 'Pittsburgh',
+                name: 'Hazard',
+                seasonStart: '2019',
+                seasonEnd: '2019',
+            },
             teamScore: 15,
             opponentScore: 0,
         },
         {
-            opponent: { place: 'Portland', name: 'Rhino!', season: '2019' },
+            opponent: {
+                place: 'Portland',
+                name: 'Rhino!',
+                seasonStart: '2019',
+                seasonEnd: '2019',
+            },
             teamScore: 14,
             opponentScore: 12,
         },
@@ -128,7 +133,7 @@ const ProfileScreen: React.FC<{}> = () => {
                         <Section
                             title="Teams"
                             onButtonPress={() => ({})}
-                            listData={teamList}
+                            listData={playerTeams}
                             renderItem={({ item }) => {
                                 return <TeamListItem team={item} />
                             }}

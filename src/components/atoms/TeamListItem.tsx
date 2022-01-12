@@ -27,7 +27,15 @@ const TeamListItem: React.FC<TeamListItemProps> = ({ team }) => {
     return (
         <View>
             <Text style={styles.teamName}>{`${team.place} ${team.name}`}</Text>
-            <Text style={styles.season}>{team.season}</Text>
+            <Text style={styles.season}>
+                {team.seasonStart === team.seasonEnd
+                    ? new Date(team.seasonStart).getUTCFullYear()
+                    : `${new Date(
+                          team.seasonStart,
+                      ).getUTCFullYear()} - ${new Date(
+                          team.seasonEnd,
+                      ).getUTCFullYear()}`}
+            </Text>
         </View>
     )
 }
