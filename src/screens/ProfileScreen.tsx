@@ -45,6 +45,7 @@ const ProfileScreen: React.FC<{}> = () => {
     const gameList: DisplayGame[] = [
         {
             opponent: {
+                _id: 'id1',
                 place: 'Chicago',
                 name: 'Machine',
                 seasonStart: '2019',
@@ -55,6 +56,7 @@ const ProfileScreen: React.FC<{}> = () => {
         },
         {
             opponent: {
+                _id: 'id2',
                 place: 'Pittsburgh',
                 name: 'Hazard',
                 seasonStart: '2019',
@@ -65,6 +67,7 @@ const ProfileScreen: React.FC<{}> = () => {
         },
         {
             opponent: {
+                _id: 'id3',
                 place: 'Portland',
                 name: 'Rhino!',
                 seasonStart: '2019',
