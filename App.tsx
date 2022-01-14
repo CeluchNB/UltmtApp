@@ -7,7 +7,7 @@
  *
  * @format
  */
-
+import CreateAccountScreen from './src/screens/CreateAccountScreen'
 import LoginScreen from './src/screens/LoginScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from './src/screens/ProfileScreen'
@@ -30,6 +30,10 @@ const App: React.FC<{}> = () => {
                 screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Profile" component={ProfileScreen} />
+                <Stack.Screen
+                    name="CreateAccount"
+                    component={CreateAccountScreen}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     )

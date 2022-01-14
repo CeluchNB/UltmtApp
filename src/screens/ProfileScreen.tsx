@@ -1,7 +1,5 @@
 import * as React from 'react'
 import { Button } from 'react-native-paper'
-import { DisplayGame } from '../types/game'
-import { DisplayStat } from '../types/stats'
 import GameListItem from '../components/atoms/GameListItem'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
@@ -42,49 +40,6 @@ const ProfileScreen: React.FC<{}> = () => {
         },
     })
 
-    const gameList: DisplayGame[] = [
-        {
-            opponent: {
-                _id: 'id1',
-                place: 'Chicago',
-                name: 'Machine',
-                seasonStart: '2019',
-                seasonEnd: '2019',
-            },
-            teamScore: 11,
-            opponentScore: 15,
-        },
-        {
-            opponent: {
-                _id: 'id2',
-                place: 'Pittsburgh',
-                name: 'Hazard',
-                seasonStart: '2019',
-                seasonEnd: '2019',
-            },
-            teamScore: 15,
-            opponentScore: 0,
-        },
-        {
-            opponent: {
-                _id: 'id3',
-                place: 'Portland',
-                name: 'Rhino!',
-                seasonStart: '2019',
-                seasonEnd: '2019',
-            },
-            teamScore: 14,
-            opponentScore: 12,
-        },
-    ]
-
-    const statList: DisplayStat[] = [
-        { name: 'Goals', value: 27, points: 172 },
-        { name: 'Assists', value: 35, points: 172 },
-        { name: 'Ds', value: 11, points: 172 },
-        { name: 'Points', value: 172, points: 172 },
-    ]
-
     return (
         <SafeAreaView style={styles.screen}>
             <FlatList
@@ -117,7 +72,8 @@ const ProfileScreen: React.FC<{}> = () => {
                         <Section
                             title="Stats"
                             onButtonPress={() => ({})}
-                            listData={statList}
+                            error="No stats available"
+                            listData={[]}
                             numColumns={2}
                             renderItem={({ item }) => {
                                 return <StatListItem stat={item} />
@@ -127,7 +83,8 @@ const ProfileScreen: React.FC<{}> = () => {
                         <Section
                             title="Games"
                             onButtonPress={() => ({})}
-                            listData={gameList}
+                            error="No games available"
+                            listData={[]}
                             renderItem={({ item }) => {
                                 return <GameListItem game={item} />
                             }}

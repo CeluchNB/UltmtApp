@@ -42,6 +42,7 @@ const Section: React.FC<SectionProps> = ({
         },
         error: {
             fontSize: size.fontMedium,
+            marginBottom: 50,
         },
     })
 

@@ -111,7 +111,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
             />
             <SecondaryButton
                 text="Create Account"
-                onPress={() => ({})}
+                onPress={async () => navigation.navigate('CreateAccount')}
                 style={styles.createButton}
             />
         </View>
