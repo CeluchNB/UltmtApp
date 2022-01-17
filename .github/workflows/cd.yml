@@ -39,8 +39,8 @@ jobs:
 
       - name: Build app
         run: |       
-          xcodebuild -workspace myapp.xcworkspace -scheme myapp archive -archivePath myapp.xcarchive -allowProvisioningUpdates
-          xcodebuild -exportArchive -archivePath ./myapp.xcarchive -exportPath . -exportOptionsPlist myapp/Info.plist
+          xcodebuild -workspace UltmtApp.xcworkspace -scheme UltmtApp archive -archivePath UltmtApp.xcarchive -allowProvisioningUpdates
+          xcodebuild -exportArchive -archivePath ./UltmtApp.xcarchive -exportPath . -exportOptionsPlist UltmtApp/Info.plist
           mv myapp.ipa ../myapp.ipa
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
