@@ -1,11 +1,14 @@
 import * as UserServices from '../../src/store/services/user'
 import ProfileScreen from '../../src/screens/ProfileScreen'
+import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { login } from '../../src/store/reducers/features/account/accountReducer'
 import renderer from 'react-test-renderer'
 import store from '../../src/store/store'
 import { act, render } from '@testing-library/react-native'
+
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const loginData = { token: 'sample.1234.token' }
 const fetchProfileData = {
@@ -34,6 +37,14 @@ const fetchProfileData = {
         },
     ],
 }
+
+const props: Props = {
+    navigation: {
+        navigate: jest.fn(),
+    } as any,
+    route: {} as any,
+}
+
 beforeAll(() => {
     jest.spyOn(UserServices, 'login').mockImplementation(
         async (_username: string, _password: string) => {
@@ -55,7 +66,7 @@ it('profile screen matches snapshot', async () => {
     await act(async () => {
         const snapshot = renderer.create(
             <Provider store={store}>
-                <ProfileScreen />
+                <ProfileScreen {...props} />
             </Provider>,
         )
 
@@ -63,33 +74,35 @@ it('profile screen matches snapshot', async () => {
     })
 })
 
-it('contains correct text from response', () => {
+it('contains correct text from response', async () => {
     const { getByText } = render(
         <Provider store={store}>
-            <ProfileScreen />
+            <ProfileScreen {...props} />
         </Provider>,
     )
 
-    const title = getByText(
-        `${fetchProfileData.firstName} ${fetchProfileData.lastName}`,
-    )
-    expect(title).toBeTruthy()
+    await act(async () => {
+        const title = getByText(
+            `${fetchProfileData.firstName} ${fetchProfileData.lastName}`,
+        )
+        expect(title).toBeTruthy()
 
-    const username = getByText(`@${fetchProfileData.username}`)
-    expect(username).toBeTruthy()
+        const username = getByText(`@${fetchProfileData.username}`)
+        expect(username).toBeTruthy()
 
-    const team1 = getByText(
-        `${fetchProfileData.playerTeams[0].place} ${fetchProfileData.playerTeams[0].name}`,
-    )
-    expect(team1).toBeTruthy()
+        const team1 = getByText(
+            `${fetchProfileData.playerTeams[0].place} ${fetchProfileData.playerTeams[0].name}`,
+        )
+        expect(team1).toBeTruthy()
 
-    const team2 = getByText(
-        `${fetchProfileData.playerTeams[1].place} ${fetchProfileData.playerTeams[1].name}`,
-    )
-    expect(team2).toBeTruthy()
+        const team2 = getByText(
+            `${fetchProfileData.playerTeams[1].place} ${fetchProfileData.playerTeams[1].name}`,
+        )
+        expect(team2).toBeTruthy()
 
-    const team3 = getByText(
-        `${fetchProfileData.playerTeams[2].place} ${fetchProfileData.playerTeams[2].name}`,
-    )
-    expect(team3).toBeTruthy()
+        const team3 = getByText(
+            `${fetchProfileData.playerTeams[2].place} ${fetchProfileData.playerTeams[2].name}`,
+        )
+        expect(team3).toBeTruthy()
+    })
 })

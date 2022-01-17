@@ -4,7 +4,6 @@ exports[`test matches snapshot 1`] = `
 <View
   style={
     Object {
-      "alignContent": "center",
       "backgroundColor": "#ffffff",
       "height": "100%",
     }
@@ -30,10 +29,10 @@ exports[`test matches snapshot 1`] = `
   <View
     style={
       Object {
-        "marginEnd": 50,
-        "marginStart": 50,
+        "alignSelf": "center",
         "marginTop": 20,
         "placeholderTextColor": "#303030",
+        "width": "75%",
       }
     }
   >
@@ -78,7 +77,7 @@ exports[`test matches snapshot 1`] = `
           onBlur={[Function]}
           onChangeText={[Function]}
           onFocus={[Function]}
-          placeholder="Username"
+          placeholder="Username or Email"
           placeholderTextColor="#303030"
           selectionColor="#3183ff"
           style={
@@ -120,10 +119,10 @@ exports[`test matches snapshot 1`] = `
   <View
     style={
       Object {
-        "marginEnd": 50,
-        "marginStart": 50,
+        "alignSelf": "center",
         "marginTop": 20,
         "placeholderTextColor": "#303030",
+        "width": "75%",
       }
     }
   >
