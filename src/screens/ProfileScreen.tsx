@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { Button } from 'react-native-paper'
-import { DisplayGame } from '../types/game'
-import { DisplayStat } from '../types/stats'
 import GameListItem from '../components/atoms/GameListItem'
+import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
@@ -13,86 +12,70 @@ import { useColors } from '../hooks'
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import {
     fetchProfile,
+    logout,
     selectAccount,
+    selectLoading,
     selectPlayerTeams,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const ProfileScreen: React.FC<{}> = () => {
+const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
+    const loading = useSelector(selectLoading)
     const playerTeams = useSelector(selectPlayerTeams)
+    const hasRequested = React.useRef(false)
 
     const dispatch = useDispatch()
 
+    const unsubscribe = store.subscribe(() => {
+        const state = store.getState()
+
+        if (state.account.token.length === 0) {
+            navigation.navigate('Login')
+        }
+    })
+
     React.useEffect(() => {
-        if (store.getState().account.firstName.length < 1) {
+        if (!hasRequested.current) {
             dispatch(fetchProfile(store.getState().account.token))
+            hasRequested.current = true
+        }
+
+        return () => {
+            unsubscribe()
         }
     })
 
     const styles = StyleSheet.create({
-        screen: {
+        container: {
             minHeight: '100%',
             backgroundColor: colors.primary,
+        },
+        headerContainer: {
             alignItems: 'center',
+        },
+        footerContainer: {
+            marginStart: 50,
+            marginEnd: 50,
         },
         signOutButton: {
             marginTop: 5,
         },
     })
 
-    const gameList: DisplayGame[] = [
-        {
-            opponent: {
-                _id: 'id1',
-                place: 'Chicago',
-                name: 'Machine',
-                seasonStart: '2019',
-                seasonEnd: '2019',
-            },
-            teamScore: 11,
-            opponentScore: 15,
-        },
-        {
-            opponent: {
-                _id: 'id2',
-                place: 'Pittsburgh',
-                name: 'Hazard',
-                seasonStart: '2019',
-                seasonEnd: '2019',
-            },
-            teamScore: 15,
-            opponentScore: 0,
-        },
-        {
-            opponent: {
-                _id: 'id3',
-                place: 'Portland',
-                name: 'Rhino!',
-                seasonStart: '2019',
-                seasonEnd: '2019',
-            },
-            teamScore: 14,
-            opponentScore: 12,
-        },
-    ]
-
-    const statList: DisplayStat[] = [
-        { name: 'Goals', value: 27, points: 172 },
-        { name: 'Assists', value: 35, points: 172 },
-        { name: 'Ds', value: 11, points: 172 },
-        { name: 'Points', value: 172, points: 172 },
-    ]
+    const onLogout = () => {
+        dispatch(logout(account.token))
+    }
 
     return (
-        <SafeAreaView style={styles.screen}>
+        <SafeAreaView style={styles.container}>
             <FlatList
                 data={[]}
                 renderItem={() => <View />}
                 showsVerticalScrollIndicator={false}
-                ListFooterComponent={
-                    <View style={styles.screen}>
+                ListHeaderComponent={
+                    <View style={styles.headerContainer}>
                         <ScreenTitle
                             title={
                                 account.firstName.length > 0
@@ -110,14 +93,20 @@ const ProfileScreen: React.FC<{}> = () => {
                         <Button
                             mode="text"
                             color={colors.error}
-                            onPress={() => ({})}
+                            onPress={onLogout}
+                            loading={loading}
                             style={styles.signOutButton}>
                             Sign Out
                         </Button>
+                    </View>
+                }
+                ListFooterComponent={
+                    <View style={styles.footerContainer}>
                         <Section
                             title="Stats"
                             onButtonPress={() => ({})}
-                            listData={statList}
+                            error="No stats available"
+                            listData={[]}
                             numColumns={2}
                             renderItem={({ item }) => {
                                 return <StatListItem stat={item} />
@@ -127,11 +116,12 @@ const ProfileScreen: React.FC<{}> = () => {
                         <Section
                             title="Games"
                             onButtonPress={() => ({})}
-                            listData={gameList}
+                            listData={[]}
                             renderItem={({ item }) => {
                                 return <GameListItem game={item} />
                             }}
                             buttonText="see all games"
+                            error="No games available"
                         />
                         <Section
                             title="Teams"
@@ -141,6 +131,11 @@ const ProfileScreen: React.FC<{}> = () => {
                                 return <TeamListItem team={item} />
                             }}
                             buttonText="manage teams"
+                            error={
+                                playerTeams.length === 0
+                                    ? 'No teams available'
+                                    : undefined
+                            }
                         />
                     </View>
                 }
