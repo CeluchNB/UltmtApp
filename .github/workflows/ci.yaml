@@ -11,7 +11,7 @@ on:
       - github-actions
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
