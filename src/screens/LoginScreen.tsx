@@ -8,9 +8,10 @@ import UserInput from '../components/atoms/UserInput'
 import store from './../store/store'
 import { useColors } from '../hooks'
 import { Controller, useForm } from 'react-hook-form'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import {
     login,
+    selectAccount,
     selectLoading,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,20 +19,22 @@ import { useDispatch, useSelector } from 'react-redux'
 const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     const dispatch = useDispatch()
     const { colors } = useColors()
-    const { control, handleSubmit, reset } = useForm({
+    const account = useSelector(selectAccount)
+    const loading = useSelector(selectLoading)
+
+    const {
+        control,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             username: '',
             password: '',
         } as LoginData,
     })
 
-    const loading = useSelector(selectLoading)
-
     const onSubmit = (data: LoginData) => {
-        reset({
-            username: '',
-            password: '',
-        })
         dispatch(login(data))
     }
 
@@ -39,6 +42,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         const state = store.getState()
 
         if (state.account.token.length > 0) {
+            reset({
+                username: '',
+                password: '',
+            })
             navigation.navigate('Profile')
         }
     })
@@ -53,7 +60,6 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         screen: {
             backgroundColor: colors.primary,
             height: '100%',
-            alignContent: 'center',
         },
         title: {
             alignSelf: 'center',
@@ -61,8 +67,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         },
         input: {
             marginTop: 20,
-            marginStart: 50,
-            marginEnd: 50,
+            width: '75%',
+            alignSelf: 'center',
         },
         loginButton: {
             alignSelf: 'center',
@@ -71,6 +77,12 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         createButton: {
             alignSelf: 'center',
             marginTop: 5,
+        },
+        error: {
+            color: colors.error,
+            width: '75%',
+            alignSelf: 'center',
+            marginTop: 2,
         },
     })
 
@@ -84,7 +96,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                 }}
                 render={({ field: { onChange, value } }) => (
                     <UserInput
-                        placeholder="Username"
+                        placeholder="Username or Email"
                         onChangeText={onChange}
                         value={value}
                         style={styles.input}
@@ -92,6 +104,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                 )}
                 name="username"
             />
+            {errors.username && (
+                <Text style={styles.error}>This field is required</Text>
+            )}
             <Controller
                 control={control}
                 rules={{ required: true }}
@@ -106,6 +121,14 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                 )}
                 name="password"
             />
+            {errors.password && (
+                <Text style={styles.error}>This field is required</Text>
+            )}
+            {account.error && (
+                <Text style={styles.error}>
+                    Unable to login user with username and password combination
+                </Text>
+            )}
 
             <PrimaryButton
                 text="Login"

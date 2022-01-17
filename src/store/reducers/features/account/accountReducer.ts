@@ -103,7 +103,9 @@ const accountSlice = createSlice({
             })
             .addCase(createAccount.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.error.message
+                if (action.error.message) {
+                    state.error = JSON.parse(action.error.message).message
+                }
             })
 
         builder

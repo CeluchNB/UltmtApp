@@ -6,16 +6,17 @@ import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
 import { useColors } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
-import { createAccount, selectLoading } from '../store/reducers/features/account/accountReducer'
+import { createAccount, selectAccount, selectLoading } from '../store/reducers/features/account/accountReducer'
 import { Controller, useForm } from 'react-hook-form'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { CreateUserData } from '../types/user'
 
 const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
     const dispatch = useDispatch()
     const loading = useSelector(selectLoading)
-    const { control, handleSubmit } = useForm({
+    const account = useSelector(selectAccount)
+    const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             firstName: '',
             lastName: '',
@@ -69,6 +70,7 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.firstName && <Text>The first name field is required.</Text>}
 
             <Controller
                 control={control}
@@ -83,6 +85,7 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.lastName && <Text>The last name field is required.</Text>}
 
             <Controller
                 control={control}
@@ -97,6 +100,7 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.username && <Text>The username field is required.</Text>}
 
             <Controller
                 control={control}
@@ -111,6 +115,7 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.email && <Text>The email field is required.</Text>}
 
             <Controller
                 control={control}
@@ -126,6 +131,8 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.password && <Text>The password field is required.</Text>}
+            {account.error && <Text>Error creating account: {account.error}</Text>}
 
             <PrimaryButton
                 text="Create"

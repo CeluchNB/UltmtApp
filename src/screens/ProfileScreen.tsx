@@ -24,6 +24,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     const account = useSelector(selectAccount)
     const loading = useSelector(selectLoading)
     const playerTeams = useSelector(selectPlayerTeams)
+    const hasRequested = React.useRef(false)
 
     const dispatch = useDispatch()
 
@@ -36,8 +37,9 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     })
 
     React.useEffect(() => {
-        if (store.getState().account.firstName.length < 1) {
+        if (!hasRequested.current) {
             dispatch(fetchProfile(store.getState().account.token))
+            hasRequested.current = true
         }
 
         return () => {
