@@ -42,7 +42,6 @@ export const fetchProfile = async (token: string): Promise<ApiResponse> => {
 export const createAccount = async (
     profileData: CreateUserData,
 ): Promise<ApiResponse> => {
-    console.log('making create account call')
     const response = await fetch('https://ultmt-dev.herokuapp.com/user', {
         method: 'POST',
         headers: {
@@ -54,6 +53,24 @@ export const createAccount = async (
 
     if (response.ok) {
         return { data: await response.json() }
+    } else {
+        throw new Error(await response.text())
+    }
+}
+
+export const logout = async (token: string): Promise<ApiResponse> => {
+    const response = await fetch(
+        'https://ultmt-dev.herokuapp.com/user/logout',
+        {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+
+    if (response.ok) {
+        return {}
     } else {
         throw new Error(await response.text())
     }

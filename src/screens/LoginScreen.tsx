@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux'
 const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     const dispatch = useDispatch()
     const { colors } = useColors()
-    const { control, handleSubmit } = useForm({
+    const { control, handleSubmit, reset } = useForm({
         defaultValues: {
             username: '',
             password: '',
@@ -28,6 +28,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     const loading = useSelector(selectLoading)
 
     const onSubmit = (data: LoginData) => {
+        reset({
+            username: '',
+            password: '',
+        })
         dispatch(login(data))
     }
 

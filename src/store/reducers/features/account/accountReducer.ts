@@ -105,6 +105,26 @@ const accountSlice = createSlice({
                 state.loading = false
                 state.error = action.error.message
             })
+
+        builder
+            .addCase(logout.pending, state => {
+                state.loading = true
+            })
+            .addCase(logout.fulfilled, state => {
+                state.loading = false
+
+                state.firstName = ''
+                state.lastName = ''
+                state.email = ''
+                state.username = ''
+                state.privateProfile = false
+                state.openToRequests = false
+                state.token = ''
+            })
+            .addCase(logout.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+            })
     },
 })
 
@@ -127,6 +147,13 @@ export const createAccount = createAsyncThunk(
     'account/createAccount',
     async (data: CreateUserData, _thunkAPI) => {
         return await UserServices.createAccount(data)
+    },
+)
+
+export const logout = createAsyncThunk(
+    'account/logout',
+    async (data: string, _thunkAPI) => {
+        return await UserServices.logout(data)
     },
 )
 

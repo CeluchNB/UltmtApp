@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Button } from 'react-native-paper'
 import GameListItem from '../components/atoms/GameListItem'
+import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
@@ -11,21 +12,36 @@ import { useColors } from '../hooks'
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import {
     fetchProfile,
+    logout,
     selectAccount,
+    selectLoading,
     selectPlayerTeams,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const ProfileScreen: React.FC<{}> = () => {
+const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
+    const loading = useSelector(selectLoading)
     const playerTeams = useSelector(selectPlayerTeams)
 
     const dispatch = useDispatch()
 
+    const unsubscribe = store.subscribe(() => {
+        const state = store.getState()
+
+        if (state.account.token.length === 0) {
+            navigation.navigate('Login')
+        }
+    })
+
     React.useEffect(() => {
         if (store.getState().account.firstName.length < 1) {
             dispatch(fetchProfile(store.getState().account.token))
+        }
+
+        return () => {
+            unsubscribe()
         }
     })
 
@@ -45,6 +61,10 @@ const ProfileScreen: React.FC<{}> = () => {
             marginTop: 5,
         },
     })
+
+    const onLogout = () => {
+        dispatch(logout(account.token))
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -71,7 +91,8 @@ const ProfileScreen: React.FC<{}> = () => {
                         <Button
                             mode="text"
                             color={colors.error}
-                            onPress={() => ({})}
+                            onPress={onLogout}
+                            loading={loading}
                             style={styles.signOutButton}>
                             Sign Out
                         </Button>
