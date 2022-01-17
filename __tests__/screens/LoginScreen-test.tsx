@@ -41,7 +41,7 @@ it('test successful login', async () => {
     )
 
     await act(async () => {
-        fireEvent.changeText(getByPlaceholderText('Username'), 'user')
+        fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
         fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
         fireEvent.press(getAllByText('Login')[1])
     })
