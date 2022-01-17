@@ -27,7 +27,7 @@ jobs:
           path: android/app/build/outputs/apk/release/
 
   build-ios:
-    runs-on: [self-hosted, macos]
+    runs-on: macOS-latest
     steps: 
       - uses: actions/checkout@v2
       - name: Install Dependencies
