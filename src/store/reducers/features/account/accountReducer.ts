@@ -127,6 +127,19 @@ const accountSlice = createSlice({
                 state.loading = false
                 state.error = action.error.message
             })
+
+        builder
+            .addCase(getLocalToken.pending, state => {
+                state.loading = true
+            })
+            .addCase(getLocalToken.fulfilled, (state, action) => {
+                state.loading = false
+                state.token = action.payload.data
+            })
+            .addCase(getLocalToken.rejected, state => {
+                state.loading = false
+                state.token = ''
+            })
     },
 })
 
@@ -156,6 +169,13 @@ export const logout = createAsyncThunk(
     'account/logout',
     async (data: string, _thunkAPI) => {
         return await UserServices.logout(data)
+    },
+)
+
+export const getLocalToken = createAsyncThunk(
+    'account/getLocalToken',
+    async () => {
+        return await UserServices.getLocalToken()
     },
 )
 

@@ -1,5 +1,6 @@
 import { ApiResponse } from '../../types/services'
 import { CreateUserData } from '../../types/user'
+import EncryptedStorage from 'react-native-encrypted-storage'
 
 export const login = async (
     username: string,
@@ -18,7 +19,15 @@ export const login = async (
     })
 
     if (response.ok) {
-        return { data: await response.json() }
+        const data = await response.json()
+        if (data.token) {
+            try {
+                await EncryptedStorage.setItem('jwt_token', data.token)
+            } catch (error) {
+                throw error
+            }
+        }
+        return { data }
     } else {
         throw new Error(await response.text())
     }
@@ -52,7 +61,15 @@ export const createAccount = async (
     })
 
     if (response.ok) {
-        return { data: await response.json() }
+        const data = await response.json()
+        if (data.token) {
+            try {
+                await EncryptedStorage.setItem('jwt_token', data.token)
+            } catch (error) {
+                throw error
+            }
+        }
+        return { data }
     } else {
         throw new Error(await response.text())
     }
@@ -70,8 +87,21 @@ export const logout = async (token: string): Promise<ApiResponse> => {
     )
 
     if (response.ok) {
+        await EncryptedStorage.removeItem('jwt_token')
         return {}
     } else {
         throw new Error(await response.text())
     }
+}
+
+export const getLocalToken = async (): Promise<ApiResponse> => {
+    try {
+        const token = await EncryptedStorage.getItem('jwt_token')
+        if (token) {
+            return { data: token }
+        }
+    } catch (error) {
+        throw error
+    }
+    throw new Error('No token available')
 }

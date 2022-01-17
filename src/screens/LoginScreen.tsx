@@ -10,6 +10,7 @@ import { useColors } from '../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 import {
+    getLocalToken,
     login,
     selectAccount,
     selectLoading,
@@ -17,6 +18,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 
 const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
+    const hasCheckedLocalToken = React.useRef(false)
     const dispatch = useDispatch()
     const { colors } = useColors()
     const account = useSelector(selectAccount)
@@ -51,6 +53,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     })
 
     React.useEffect(() => {
+        if (!hasCheckedLocalToken.current) {
+            dispatch(getLocalToken())
+            hasCheckedLocalToken.current = true
+        }
         return () => {
             unsubscribe()
         }

@@ -1,22 +1,30 @@
 import * as React from 'react'
+import { CreateUserData } from '../types/user'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
 import { useColors } from '../hooks'
-import { useDispatch, useSelector } from 'react-redux'
-import { createAccount, selectAccount, selectLoading } from '../store/reducers/features/account/accountReducer'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
-import { CreateUserData } from '../types/user'
+import {
+    createAccount,
+    selectAccount,
+    selectLoading,
+} from '../store/reducers/features/account/accountReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
     const dispatch = useDispatch()
     const loading = useSelector(selectLoading)
     const account = useSelector(selectAccount)
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             firstName: '',
             lastName: '',
@@ -132,7 +140,9 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                 )}
             />
             {errors.password && <Text>The password field is required.</Text>}
-            {account.error && <Text>Error creating account: {account.error}</Text>}
+            {account.error && (
+                <Text>Error creating account: {account.error}</Text>
+            )}
 
             <PrimaryButton
                 text="Create"

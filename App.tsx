@@ -7,11 +7,12 @@
  *
  * @format
  */
+
+import * as React from 'react'
 import CreateAccountScreen from './src/screens/CreateAccountScreen'
 import LoginScreen from './src/screens/LoginScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from './src/screens/ProfileScreen'
-import React from 'react'
 import { RootStackParamList } from './src/types/navigation'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import store from './src/store/store'
