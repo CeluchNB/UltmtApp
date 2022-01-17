@@ -30,10 +30,16 @@ const ProfileScreen: React.FC<{}> = () => {
     })
 
     const styles = StyleSheet.create({
-        screen: {
+        container: {
             minHeight: '100%',
             backgroundColor: colors.primary,
+        },
+        headerContainer: {
             alignItems: 'center',
+        },
+        footerContainer: {
+            marginStart: 50,
+            marginEnd: 50,
         },
         signOutButton: {
             marginTop: 5,
@@ -41,13 +47,13 @@ const ProfileScreen: React.FC<{}> = () => {
     })
 
     return (
-        <SafeAreaView style={styles.screen}>
+        <SafeAreaView style={styles.container}>
             <FlatList
                 data={[]}
                 renderItem={() => <View />}
                 showsVerticalScrollIndicator={false}
-                ListFooterComponent={
-                    <View style={styles.screen}>
+                ListHeaderComponent={
+                    <View style={styles.headerContainer}>
                         <ScreenTitle
                             title={
                                 account.firstName.length > 0
@@ -69,6 +75,10 @@ const ProfileScreen: React.FC<{}> = () => {
                             style={styles.signOutButton}>
                             Sign Out
                         </Button>
+                    </View>
+                }
+                ListFooterComponent={
+                    <View style={styles.footerContainer}>
                         <Section
                             title="Stats"
                             onButtonPress={() => ({})}
@@ -83,12 +93,12 @@ const ProfileScreen: React.FC<{}> = () => {
                         <Section
                             title="Games"
                             onButtonPress={() => ({})}
-                            error="No games available"
                             listData={[]}
                             renderItem={({ item }) => {
                                 return <GameListItem game={item} />
                             }}
                             buttonText="see all games"
+                            error="No games available"
                         />
                         <Section
                             title="Teams"
@@ -98,6 +108,11 @@ const ProfileScreen: React.FC<{}> = () => {
                                 return <TeamListItem team={item} />
                             }}
                             buttonText="manage teams"
+                            error={
+                                playerTeams.length === 0
+                                    ? 'No teams available'
+                                    : undefined
+                            }
                         />
                     </View>
                 }

@@ -1,8 +1,9 @@
 import * as UserServices from './../../../services/user'
+import { CreateUserData } from '../../../../types/user'
 import { DisplayTeam } from '../../../../types/team'
 import { LoginData } from '../../../../types/reducers'
 import { RootState } from '../../../store'
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export interface AccountSlice {
     firstName: string
@@ -12,6 +13,8 @@ export interface AccountSlice {
     token: string
     error?: string
     loading: boolean
+    privateProfile: boolean
+    openToRequests: boolean
     playerTeams: DisplayTeam[]
 }
 
@@ -23,59 +26,85 @@ const initialState: AccountSlice = {
     token: '',
     error: undefined,
     loading: false,
+    privateProfile: false,
+    openToRequests: true,
     playerTeams: [],
 }
 
 const accountSlice = createSlice({
     name: 'account',
     initialState,
-    reducers: {
-        fetchToken: (state, action: PayloadAction<string>) => {
-            state.token = action.payload
-        },
-        fetchDetails: (state, action: PayloadAction<AccountSlice>) => {
-            state = action.payload
-        },
-    },
+    reducers: {},
     extraReducers: builder => {
-        builder.addCase(login.pending, state => {
-            state.loading = true
-        })
-        builder.addCase(login.fulfilled, (state, action) => {
-            state.loading = false
-            state.error = undefined
-            state.token = action.payload.data.token
-        })
-        builder.addCase(login.rejected, (state, action) => {
-            state.loading = false
-            state.error = action.error.message
-        })
+        builder
+            .addCase(login.pending, state => {
+                state.loading = true
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                state.loading = false
+                state.error = undefined
+                state.token = action.payload.data.token
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+            })
 
-        builder.addCase(fetchProfile.pending, state => {
-            state.loading = true
-        })
-        builder.addCase(fetchProfile.fulfilled, (state, action) => {
-            state.loading = false
-            const { firstName, lastName, email, username, playerTeams } =
-                action.payload.data
+        builder
+            .addCase(fetchProfile.pending, state => {
+                state.loading = true
+            })
+            .addCase(fetchProfile.fulfilled, (state, action) => {
+                state.loading = false
+                const { firstName, lastName, email, username, playerTeams } =
+                    action.payload.data
 
-            state.firstName = firstName
-            state.lastName = lastName
-            state.email = email
-            state.username = username
-            state.playerTeams = playerTeams as DisplayTeam[]
+                state.firstName = firstName
+                state.lastName = lastName
+                state.email = email
+                state.username = username
+                state.playerTeams = playerTeams as DisplayTeam[]
 
-            state.playerTeams.sort(
-                (a, b) =>
-                    new Date(b.seasonStart).getUTCFullYear() -
-                    new Date(a.seasonStart).getUTCFullYear(),
-            )
-        })
-        builder.addCase(fetchProfile.rejected, (state, action) => {
-            state.loading = false
-            state.error = action.error.message
-            state.token = ''
-        })
+                state.playerTeams.sort(
+                    (a, b) =>
+                        new Date(b.seasonStart).getUTCFullYear() -
+                        new Date(a.seasonStart).getUTCFullYear(),
+                )
+            })
+            .addCase(fetchProfile.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+                state.token = ''
+            })
+
+        builder
+            .addCase(createAccount.pending, state => {
+                state.loading = true
+            })
+            .addCase(createAccount.fulfilled, (state, action) => {
+                state.loading = false
+                const {
+                    firstName,
+                    lastName,
+                    email,
+                    username,
+                    private: privateProfile,
+                    openToRequests,
+                } = action.payload.data.user
+                const { token } = action.payload.data
+
+                state.firstName = firstName
+                state.lastName = lastName
+                state.email = email
+                state.username = username
+                state.privateProfile = privateProfile
+                state.openToRequests = openToRequests
+                state.token = token
+            })
+            .addCase(createAccount.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+            })
     },
 })
 
@@ -94,8 +123,14 @@ export const fetchProfile = createAsyncThunk(
     },
 )
 
+export const createAccount = createAsyncThunk(
+    'account/createAccount',
+    async (data: CreateUserData, _thunkAPI) => {
+        return await UserServices.createAccount(data)
+    },
+)
+
 export const selectAccount = (state: RootState) => state.account
 export const selectLoading = (state: RootState) => state.account.loading
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
-export const { fetchToken, fetchDetails } = accountSlice.actions
 export default accountSlice.reducer

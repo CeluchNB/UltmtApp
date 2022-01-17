@@ -5,11 +5,16 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
 import { useColors } from '../hooks'
+import { useDispatch, useSelector } from 'react-redux'
+import { createAccount, selectLoading } from '../store/reducers/features/account/accountReducer'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, View } from 'react-native'
+import { CreateUserData } from '../types/user'
 
 const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
+    const dispatch = useDispatch()
+    const loading = useSelector(selectLoading)
     const { control, handleSubmit } = useForm({
         defaultValues: {
             firstName: '',
@@ -17,7 +22,7 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
             email: '',
             username: '',
             password: '',
-        },
+        } as CreateUserData,
     })
 
     const styles = StyleSheet.create({
@@ -44,8 +49,8 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
         },
     })
 
-    const createAccount = () => {
-        console.log('creating account')
+    const dispatchCreateAccount = (data: CreateUserData) => {
+        dispatch(createAccount(data))
     }
 
     return (
@@ -124,8 +129,8 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
 
             <PrimaryButton
                 text="Create"
-                onPress={handleSubmit(createAccount)}
-                loading={false}
+                onPress={handleSubmit(dispatchCreateAccount)}
+                loading={loading}
                 style={styles.createButton}
             />
 
