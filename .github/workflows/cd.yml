@@ -30,22 +30,40 @@ jobs:
     runs-on: macOS-latest
     steps: 
       - uses: actions/checkout@v2
+      - name: Install Node
+        uses: actions/setup-node@v1
+      - name: Install RN CLI
+        run: |
+          yarn global add react-native-cli
       - name: Install Dependencies
         run: |
-          yarn
+          yarn install
+
+      - name: Building bundle
+        run: |
+          yarn react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios
+      
       - name: Install pod dependencies
         run: |
           cd ios && pod install
 
       - name: Build app
-        run: |
-          cd ios
-          xcodebuild -workspace UltmtApp.xcworkspace -scheme UltmtApp archive -archivePath UltmtApp.xcarchive -allowProvisioningUpdates
-          xcodebuild -exportArchive -archivePath ./UltmtApp.xcarchive -exportPath . -exportOptionsPlist UltmtApp/Info.plist
-          mv UltmtApp.ipa ../UtlmtApp.ipa
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
+        uses: yukiarrr/ios-build-action@v1.3.2
         with:
-          name: UltmtApp.ipa
-          path: ios/build/
+          project-path: ios/UltmtApp.xcodeproj
+          workspace-path: ios/UltmtApp.xcworkspace
+          team-id: ${{ secrets.TEAM_ID }}
+          p12-base64: ${{ secrets.P12_BASE64 }}
+          mobileprovision-base64: ${{ secrets.AD_HOC_MOBILEPROVISION_BASE64 }}
+          code-signing-identity: ${{ secrets.AD_HOC_CODE_SIGNING_IDENTITY }}
+          export-method: ad-hoc
+          output-path: output/output.ipa
+          update-targets: UltmtApp
+          scheme: UltmtApp
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: output/output.ipa
+        
           
