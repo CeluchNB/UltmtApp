@@ -38,13 +38,14 @@ jobs:
           cd ios && pod install
 
       - name: Build app
-        run: |       
+        run: |
+          cd ios
           xcodebuild -workspace UltmtApp.xcworkspace -scheme UltmtApp archive -archivePath UltmtApp.xcarchive -allowProvisioningUpdates
           xcodebuild -exportArchive -archivePath ./UltmtApp.xcarchive -exportPath . -exportOptionsPlist UltmtApp/Info.plist
-          mv myapp.ipa ../myapp.ipa
+          mv UltmtApp.ipa ../UtlmtApp.ipa
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: myapp.ipa
+          name: UltmtApp.ipa
           path: ios/build/
           
