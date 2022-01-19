@@ -26,32 +26,32 @@ jobs:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/
 
-  build-ios:
-    runs-on: macOS-latest
-    steps: 
-      - uses: actions/checkout@v2
-      - name: Install Node
-        uses: actions/setup-node@v2
-        with: 
-          node-version: '14'
-      - name: Install RN CLI
-        run: |
-          yarn global add react-native-cli
-      - name: Install Dependencies
-        run: |
-          yarn install
+  # build-ios:
+  #   runs-on: macOS-latest
+  #   steps: 
+  #     - uses: actions/checkout@v2
+  #     - name: Install Node
+  #       uses: actions/setup-node@v2
+  #       with: 
+  #         node-version: '14'
+  #     - name: Install RN CLI
+  #       run: |
+  #         yarn global add react-native-cli
+  #     - name: Install Dependencies
+  #       run: |
+  #         yarn install
 
-      - name: Building bundle
-        run: |
-          yarn react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios
+  #     - name: Building bundle
+  #       run: |
+  #         yarn react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios
       
-      - name: Install pod dependencies
-        run: |
-          cd ios && pod install
+  #     - name: Install pod dependencies
+  #       run: |
+  #         cd ios && pod install
 
-      - name: Build app
-        run: |
-          cd ios
-          xcodebuild -workspace UltmtApp.xcworkspace -configuration Debug -scheme UltmtApp
+  #     - name: Build app
+  #       run: |
+  #         cd ios
+  #         xcodebuild -workspace UltmtApp.xcworkspace -configuration Debug -scheme UltmtApp
         
           
