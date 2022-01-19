@@ -50,22 +50,8 @@ jobs:
           cd ios && pod install
 
       - name: Build app
-        uses: yukiarrr/ios-build-action@v1.3.2
-        with:
-          project-path: ios/UltmtApp.xcodeproj
-          workspace-path: ios/UltmtApp.xcworkspace
-          team-id: ${{ secrets.TEAM_ID }}
-          p12-base64: ${{ secrets.P12_BASE64 }}
-          mobileprovision-base64: ${{ secrets.AD_HOC_MOBILEPROVISION_BASE64 }}
-          code-signing-identity: ${{ secrets.AD_HOC_CODE_SIGNING_IDENTITY }}
-          export-method: ad-hoc
-          output-path: output/output.ipa
-          update-targets: UltmtApp
-          scheme: UltmtApp
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifact
-          path: output/output.ipa
+        run: |
+          cd ios
+          xcodebuild -workspace UltmtApp.xcworkspace -configuration Debug -scheme UltmtApp
         
           
