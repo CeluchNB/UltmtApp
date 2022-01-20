@@ -10,6 +10,7 @@
 
 import * as React from 'react'
 import CreateAccountScreen from './src/screens/CreateAccountScreen'
+import CreateTeamScreen from './src/screens/CreateTeamScreen'
 import LoginScreen from './src/screens/LoginScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from './src/screens/ProfileScreen'
@@ -35,6 +36,7 @@ const App: React.FC<{}> = () => {
                     name="CreateAccount"
                     component={CreateAccountScreen}
                 />
+                <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

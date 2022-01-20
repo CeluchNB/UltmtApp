@@ -68,6 +68,10 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
         dispatch(logout(account.token))
     }
 
+    const onCreateTeam = () => {
+        navigation.navigate('CreateTeam')
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -136,6 +140,8 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                                     ? 'No teams available'
                                     : undefined
                             }
+                            showCreateButton={true}
+                            onCreatePress={onCreateTeam}
                         />
                     </View>
                 }
