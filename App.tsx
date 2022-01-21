@@ -36,7 +36,11 @@ const App: React.FC<{}> = () => {
                     name="CreateAccount"
                     component={CreateAccountScreen}
                 />
-                <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
+                <Stack.Screen
+                    name="CreateTeam"
+                    component={CreateTeamScreen}
+                    initialParams={{ token: '' }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     )

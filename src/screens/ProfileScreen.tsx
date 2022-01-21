@@ -69,7 +69,9 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     }
 
     const onCreateTeam = () => {
-        navigation.navigate('CreateTeam')
+        navigation.navigate('CreateTeam', {
+            token: store.getState().account.token,
+        })
     }
 
     return (

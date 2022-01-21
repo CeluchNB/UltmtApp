@@ -1,13 +1,42 @@
 import * as React from 'react'
+import * as TeamServices from '../store/services/team'
+import { CreateTeam } from '../types/team'
+import { CreateTeamProps } from '../types/navigation'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
 import { useColors } from '../hooks'
-import { StyleSheet, View } from 'react-native'
+import { Controller, useForm } from 'react-hook-form'
+import { StyleSheet, Text, View } from 'react-native'
+import { size, weight } from '../theme/fonts'
 
-const CreateTeamScreen: React.FC<{}> = () => {
+interface CreateTeamFormData {
+    place: string
+    name: string
+    season: string
+}
+
+const CreateTeamScreen: React.FC<CreateTeamProps> = ({
+    route,
+}: CreateTeamProps) => {
+    const token = route.params?.token
+    const [loading, setLoading] = React.useState(false)
+    const currentYear = new Date().getFullYear()
+    const years = [
+        currentYear.toString(),
+        `${currentYear} - ${currentYear + 1}`,
+        (currentYear + 1).toString(),
+    ]
+
     const { colors } = useColors()
+    const { control, handleSubmit } = useForm({
+        defaultValues: {
+            place: '',
+            name: '',
+            season: currentYear.toString(),
+        },
+    })
 
     const styles = StyleSheet.create({
         screen: {
@@ -20,10 +49,19 @@ const CreateTeamScreen: React.FC<{}> = () => {
             alignSelf: 'center',
             marginTop: 20,
         },
+        pickerTitle: {
+            color: colors.textPrimary,
+            fontSize: size.fontMedium,
+            fontWeight: weight.bold,
+            width: '75%',
+            alignSelf: 'center',
+            marginTop: 20,
+        },
         picker: {
             color: colors.textPrimary,
             width: '75%',
             alignSelf: 'center',
+            backgroundColor: colors.primary,
         },
         button: {
             marginTop: 20,
@@ -31,36 +69,84 @@ const CreateTeamScreen: React.FC<{}> = () => {
         },
     })
 
-    const currentYear = new Date().getFullYear()
-    const years = [
-        currentYear.toString(),
-        `${currentYear} - ${currentYear + 1}`,
-        (currentYear + 1).toString(),
-    ]
-
-    const [selectedYear, setSelectedYear] = React.useState(years[0])
+    const createTeam = async (data: CreateTeamFormData) => {
+        setLoading(true)
+        const seasonSplit = data.season.split(' - ')
+        const createTeamData: CreateTeam = {
+            place: data.place,
+            name: data.name,
+            seasonStart: seasonSplit[0],
+            seasonEnd: seasonSplit[seasonSplit.length - 1],
+        }
+        const result = await TeamServices.createTeam(token, createTeamData)
+        setLoading(false)
+        if (result.data) {
+            console.log('success creating team', result.data)
+        } else {
+            console.log('error creating team', result.error)
+        }
+    }
 
     return (
         <View style={styles.screen}>
             <ScreenTitle style={styles.title} title="Create Team" />
-            <UserInput style={styles.input} placeholder="Team City" />
-            <UserInput style={styles.input} placeholder="Team Name" />
-            <Picker
-                style={styles.picker}
-                selectedValue={selectedYear}
-                prompt="Season"
-                onValueChange={itemValue => setSelectedYear(itemValue)}>
-                {years.map(value => {
-                    return (
-                        <Picker.Item value={value} label={value} key={value} />
-                    )
-                })}
-            </Picker>
+            <Controller
+                name="place"
+                control={control}
+                rules={{
+                    required: true,
+                }}
+                render={({ field: { onChange, value } }) => (
+                    <UserInput
+                        style={styles.input}
+                        placeholder="Team City"
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                )}
+            />
+            <Controller
+                name="name"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                    <UserInput
+                        style={styles.input}
+                        placeholder="Team Name"
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                )}
+            />
+            <Text style={styles.pickerTitle}>Season</Text>
+            <Controller
+                name="season"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                    <Picker
+                        style={styles.picker}
+                        selectedValue={value}
+                        prompt="Season"
+                        onValueChange={onChange}>
+                        {years.map(year => {
+                            return (
+                                <Picker.Item
+                                    value={year}
+                                    label={year}
+                                    key={year}
+                                />
+                            )
+                        })}
+                    </Picker>
+                )}
+            />
+
             <PrimaryButton
                 style={styles.button}
                 text="Create"
-                onPress={() => ({})}
-                loading={false}
+                onPress={handleSubmit(createTeam)}
+                loading={loading}
             />
         </View>
     )
