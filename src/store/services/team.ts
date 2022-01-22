@@ -25,3 +25,14 @@ export const createTeam = async (
         return { error: await response.text() }
     }
 }
+
+export const searchTeam = async (term: string): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://utltmt-dev.herokuapp.com/team/search?q=${term}`,
+    )
+    if (response.ok) {
+        return { data: await response.json() }
+    } else {
+        return { error: await response.text() }
+    }
+}

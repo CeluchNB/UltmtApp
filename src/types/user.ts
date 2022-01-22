@@ -5,3 +5,10 @@ export interface CreateUserData {
     email: string
     password: string
 }
+
+export interface DisplayUser {
+    _id: string
+    firstName: string
+    lastName: string
+    username: string
+}

@@ -1,3 +1,5 @@
+import { DisplayUser } from './user'
+
 export interface DisplayTeam {
     _id: string
     place: string
@@ -11,4 +13,14 @@ export interface CreateTeam {
     name: string
     seasonStart: string
     seasonEnd: string
+}
+
+export interface Team extends DisplayTeam {
+    managers: DisplayUser[]
+    players: DisplayUser[]
+    seasonNumber: number
+    continuationId: string
+    rosterOpen: boolean
+    requests: string[]
+    games: string[]
 }

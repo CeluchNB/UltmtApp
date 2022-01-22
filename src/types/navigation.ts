@@ -5,6 +5,7 @@ export type RootStackParamList = {
     Profile: undefined
     CreateAccount: undefined
     CreateTeam: { token: string }
+    ManageTeams: undefined
 }
 
 export type Props = NativeStackScreenProps<RootStackParamList, 'Login'>

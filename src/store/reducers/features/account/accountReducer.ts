@@ -16,6 +16,7 @@ export interface AccountSlice {
     privateProfile: boolean
     openToRequests: boolean
     playerTeams: DisplayTeam[]
+    managerTeams: DisplayTeam[]
 }
 
 const initialState: AccountSlice = {
@@ -29,6 +30,7 @@ const initialState: AccountSlice = {
     privateProfile: false,
     openToRequests: true,
     playerTeams: [],
+    managerTeams: [],
 }
 
 const accountSlice = createSlice({
@@ -56,14 +58,21 @@ const accountSlice = createSlice({
             })
             .addCase(fetchProfile.fulfilled, (state, action) => {
                 state.loading = false
-                const { firstName, lastName, email, username, playerTeams } =
-                    action.payload.data
+                const {
+                    firstName,
+                    lastName,
+                    email,
+                    username,
+                    playerTeams,
+                    managerTeams,
+                } = action.payload.data
 
                 state.firstName = firstName
                 state.lastName = lastName
                 state.email = email
                 state.username = username
                 state.playerTeams = playerTeams as DisplayTeam[]
+                state.managerTeams = managerTeams as DisplayTeam[]
 
                 state.playerTeams.sort(
                     (a, b) =>
@@ -182,4 +191,6 @@ export const getLocalToken = createAsyncThunk(
 export const selectAccount = (state: RootState) => state.account
 export const selectLoading = (state: RootState) => state.account.loading
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
+export const selectManagerTeams = (state: RootState) =>
+    state.account.managerTeams
 export default accountSlice.reducer

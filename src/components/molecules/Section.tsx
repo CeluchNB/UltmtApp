@@ -10,6 +10,7 @@ interface SectionProps {
     numColumns?: number
     listData: any[]
     renderItem: ListRenderItem<any>
+    showButton: boolean
     buttonText: string
     error?: string
     showCreateButton?: boolean
@@ -22,6 +23,7 @@ const Section: React.FC<SectionProps> = ({
     numColumns = 1,
     listData,
     renderItem,
+    showButton,
     buttonText,
     error,
     showCreateButton = false,
@@ -83,7 +85,7 @@ const Section: React.FC<SectionProps> = ({
                     renderItem={renderItem}
                 />
             )}
-            {!error && (
+            {showButton && (
                 <Button
                     mode="text"
                     style={styles.button}

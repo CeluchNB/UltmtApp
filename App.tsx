@@ -12,6 +12,7 @@ import * as React from 'react'
 import CreateAccountScreen from './src/screens/CreateAccountScreen'
 import CreateTeamScreen from './src/screens/CreateTeamScreen'
 import LoginScreen from './src/screens/LoginScreen'
+import ManageTeamsScreen from './src/screens/ManageTeamsScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from './src/screens/ProfileScreen'
 import { RootStackParamList } from './src/types/navigation'
@@ -40,6 +41,10 @@ const App: React.FC<{}> = () => {
                     name="CreateTeam"
                     component={CreateTeamScreen}
                     initialParams={{ token: '' }}
+                />
+                <Stack.Screen
+                    name="ManageTeams"
+                    component={ManageTeamsScreen}
                 />
             </Stack.Navigator>
         </NavigationContainer>

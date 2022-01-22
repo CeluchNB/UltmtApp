@@ -1,0 +1,73 @@
+import * as React from 'react'
+import { Props } from '../types/navigation'
+import ScreenTitle from '../components/atoms/ScreenTitle'
+import Section from '../components/molecules/Section'
+import TeamListItem from '../components/atoms/TeamListItem'
+import { useColors } from '../hooks/index'
+import { useSelector } from 'react-redux'
+import { StyleSheet, View } from 'react-native'
+import {
+    selectManagerTeams,
+    selectPlayerTeams,
+} from '../store/reducers/features/account/accountReducer'
+
+const ManageTeams: React.FC<Props> = () => {
+    const { colors } = useColors()
+    const playerTeams = useSelector(selectPlayerTeams)
+    const managerTeams = useSelector(selectManagerTeams)
+
+    const styles = StyleSheet.create({
+        screen: {
+            height: '100%',
+            backgroundColor: colors.primary,
+        },
+        title: {
+            alignSelf: 'center',
+        },
+        sectionContainer: {
+            marginTop: 20,
+            marginStart: 50,
+            marginEnd: 50,
+        },
+    })
+
+    return (
+        <View style={styles.screen}>
+            <ScreenTitle style={styles.title} title="Manage Teams" />
+            <View style={styles.sectionContainer}>
+                <Section
+                    title="Teams I Play For"
+                    showButton={true}
+                    onButtonPress={() => ({})}
+                    buttonText="request team"
+                    error={
+                        playerTeams.length === 0
+                            ? 'You have not played for any teams yet'
+                            : undefined
+                    }
+                    listData={playerTeams}
+                    renderItem={({ item }) => {
+                        return <TeamListItem team={item} />
+                    }}
+                />
+                <Section
+                    title="Teams I Manage"
+                    showButton={true}
+                    onButtonPress={() => ({})}
+                    buttonText="create team"
+                    error={
+                        managerTeams.length === 0
+                            ? 'You have not managed any teams yet'
+                            : undefined
+                    }
+                    listData={managerTeams}
+                    renderItem={({ item }) => {
+                        return <TeamListItem team={item} />
+                    }}
+                />
+            </View>
+        </View>
+    )
+}
+
+export default ManageTeams
