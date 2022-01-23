@@ -11,7 +11,7 @@ import {
     selectPlayerTeams,
 } from '../store/reducers/features/account/accountReducer'
 
-const ManageTeams: React.FC<Props> = () => {
+const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
     const playerTeams = useSelector(selectPlayerTeams)
     const managerTeams = useSelector(selectManagerTeams)
@@ -38,7 +38,9 @@ const ManageTeams: React.FC<Props> = () => {
                 <Section
                     title="Teams I Play For"
                     showButton={true}
-                    onButtonPress={() => ({})}
+                    onButtonPress={() => {
+                        navigation.navigate('RequestTeam')
+                    }}
                     buttonText="request team"
                     error={
                         playerTeams.length === 0
