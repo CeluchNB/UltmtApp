@@ -68,6 +68,12 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
         dispatch(logout(account.token))
     }
 
+    const onCreateTeam = () => {
+        navigation.navigate('CreateTeam', {
+            token: store.getState().account.token,
+        })
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -104,38 +110,45 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                     <View style={styles.footerContainer}>
                         <Section
                             title="Stats"
+                            showButton={false}
                             onButtonPress={() => ({})}
+                            buttonText="see all stats"
                             error="No stats available"
                             listData={[]}
                             numColumns={2}
                             renderItem={({ item }) => {
                                 return <StatListItem stat={item} />
                             }}
-                            buttonText="see all stats"
                         />
                         <Section
                             title="Games"
+                            showButton={false}
                             onButtonPress={() => ({})}
+                            buttonText="see all games"
                             listData={[]}
                             renderItem={({ item }) => {
                                 return <GameListItem game={item} />
                             }}
-                            buttonText="see all games"
                             error="No games available"
                         />
                         <Section
                             title="Teams"
-                            onButtonPress={() => ({})}
+                            showButton={true}
+                            onButtonPress={() => {
+                                navigation.navigate('ManageTeams')
+                            }}
+                            buttonText="manage teams"
                             listData={playerTeams}
                             renderItem={({ item }) => {
                                 return <TeamListItem team={item} />
                             }}
-                            buttonText="manage teams"
                             error={
                                 playerTeams.length === 0
                                     ? 'No teams available'
                                     : undefined
                             }
+                            showCreateButton={true}
+                            onCreatePress={onCreateTeam}
                         />
                     </View>
                 }

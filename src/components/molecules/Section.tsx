@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Button } from 'react-native-paper'
 import { useColors } from '../../hooks'
+import { Button, IconButton } from 'react-native-paper'
 import { FlatList, ListRenderItem, StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
@@ -10,8 +10,11 @@ interface SectionProps {
     numColumns?: number
     listData: any[]
     renderItem: ListRenderItem<any>
+    showButton: boolean
     buttonText: string
     error?: string
+    showCreateButton?: boolean
+    onCreatePress?: () => void
 }
 
 const Section: React.FC<SectionProps> = ({
@@ -20,8 +23,11 @@ const Section: React.FC<SectionProps> = ({
     numColumns = 1,
     listData,
     renderItem,
+    showButton,
     buttonText,
     error,
+    showCreateButton = false,
+    onCreatePress = () => {},
 }) => {
     const { colors } = useColors()
 
@@ -29,11 +35,22 @@ const Section: React.FC<SectionProps> = ({
         container: {
             width: '100%',
         },
+        titleContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+        },
         title: {
             fontSize: size.fontLarge,
             color: colors.textPrimary,
             fontWeight: weight.bold,
             marginBottom: 10,
+            flex: 1,
+        },
+        createButton: {
+            display: !showCreateButton ? 'none' : 'flex',
+            flexWrap: 'nowrap',
+            backgroundColor: colors.textPrimary,
+            borderRadius: 5,
         },
         list: {},
         button: {
@@ -48,7 +65,15 @@ const Section: React.FC<SectionProps> = ({
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{title}</Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>{title}</Text>
+                <IconButton
+                    color={colors.primary}
+                    style={styles.createButton}
+                    onPress={onCreatePress}
+                    icon="plus"
+                />
+            </View>
             {error ? (
                 <Text style={styles.error}>{error}</Text>
             ) : (
@@ -60,7 +85,7 @@ const Section: React.FC<SectionProps> = ({
                     renderItem={renderItem}
                 />
             )}
-            {!error && (
+            {showButton && (
                 <Button
                     mode="text"
                     style={styles.button}
