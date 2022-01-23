@@ -13,6 +13,7 @@ it('matches snapshot', () => {
                 listData={[]}
                 renderItem={() => <View />}
                 buttonText="button"
+                showButton={true}
             />,
         )
         .toJSON()
@@ -32,6 +33,7 @@ it('basic list data displayed', () => {
                 return <Text>{item}</Text>
             }}
             buttonText="button"
+            showButton={true}
         />,
     )
 
@@ -59,6 +61,7 @@ it('display with error', () => {
                 return <Text>{item}</Text>
             }}
             buttonText="button"
+            showButton={false}
             error="No valid data"
         />,
     )
