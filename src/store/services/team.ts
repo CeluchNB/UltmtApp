@@ -27,6 +27,9 @@ export const createTeam = async (
 }
 
 export const searchTeam = async (term: string): Promise<ApiResponse> => {
+    if (term.length < 3) {
+        return { error: 'Not enough characters to search' }
+    }
     const response = await fetch(
         `https://ultmt-dev.herokuapp.com/team/search?q=${term}`,
     )

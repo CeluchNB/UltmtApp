@@ -190,6 +190,7 @@ export const getLocalToken = createAsyncThunk(
 
 export const selectAccount = (state: RootState) => state.account
 export const selectLoading = (state: RootState) => state.account.loading
+export const selectToken = (state: RootState) => state.account.token
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
 export const selectManagerTeams = (state: RootState) =>
     state.account.managerTeams
