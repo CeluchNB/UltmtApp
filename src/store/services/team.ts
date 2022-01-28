@@ -1,5 +1,6 @@
 import { ApiResponse } from '../../types/services'
 import { CreateTeam } from '../../types/team'
+import { unwrapResponse } from '../../utils/service-utils'
 
 export const createTeam = async (
     token: string,
@@ -19,11 +20,7 @@ export const createTeam = async (
         }),
     })
 
-    if (response.ok) {
-        return { data: await response.json() }
-    } else {
-        return { error: await response.text() }
-    }
+    return unwrapResponse(response)
 }
 
 export const searchTeam = async (term: string): Promise<ApiResponse> => {
@@ -33,9 +30,11 @@ export const searchTeam = async (term: string): Promise<ApiResponse> => {
     const response = await fetch(
         `https://ultmt-dev.herokuapp.com/team/search?q=${term}`,
     )
-    if (response.ok) {
-        return { data: await response.json() }
-    } else {
-        return { error: await response.text() }
-    }
+    return unwrapResponse(response)
+}
+
+export const getTeam = async (id: string): Promise<ApiResponse> => {
+    const response = await fetch(`https://ultmt-dev.herokuapp.com/team/${id}`)
+
+    return unwrapResponse(response)
 }
