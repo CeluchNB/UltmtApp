@@ -9,12 +9,16 @@ interface UserListItemProps {
     user: DisplayUser
     showDelete: boolean
     showAccept: boolean
+    onDelete?: () => {}
+    onAccept?: () => {}
 }
 
 const UserListItem: React.FC<UserListItemProps> = ({
     user,
     showDelete,
     showAccept,
+    onDelete,
+    onAccept,
 }) => {
     const { colors } = useColors()
 
@@ -46,7 +50,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
                     style={styles.buttonStyle}
                     color={colors.success}
                     icon="plus"
-                    onPress={() => {}}
+                    onPress={onAccept}
                 />
             )}
             {showDelete && (
@@ -54,7 +58,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
                     style={styles.buttonStyle}
                     color={colors.error}
                     icon="close"
-                    onPress={() => {}}
+                    onPress={onDelete}
                 />
             )}
         </View>

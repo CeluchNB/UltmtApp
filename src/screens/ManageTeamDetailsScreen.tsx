@@ -46,8 +46,13 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     React.useEffect(() => {
         const teamResponse = TeamServices.getManagedTeam(account.token, id)
         teamResponse.then(response => {
-            setTeam(response.data?.team)
-            getRequestDetails(response.data?.team)
+            const { team: managedTeam } = response.data
+            if (managedTeam) {
+                setTeam(managedTeam)
+                getRequestDetails(managedTeam)
+            } else {
+                // HANDLE ERROR
+            }
         })
     }, [id, account, getRequestDetails])
 
@@ -72,6 +77,34 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
 
     const rolloverSeason = async () => {
         console.log('rolling over season')
+    }
+
+    const respondToRequest = async (requestId: string, accept: boolean) => {
+        const requestResponse = await RequestServices.respondToPlayerRequest(
+            account.token,
+            requestId,
+            accept,
+        )
+
+        if (requestResponse.data) {
+            setRequests(requests.filter(r => r._id !== requestId))
+        } else {
+            // HANDLE ERROR
+        }
+
+        if (accept) {
+            const teamResponse = await TeamServices.getManagedTeam(
+                account.token,
+                id,
+            )
+
+            const { team: managedTeam } = teamResponse.data
+            if (managedTeam) {
+                setTeam(managedTeam)
+            } else {
+                // HANDLE ERROR
+            }
+        }
     }
 
     return (
@@ -107,6 +140,12 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                                 user={item.userDetails}
                                 showDelete={true}
                                 showAccept={true}
+                                onDelete={() =>
+                                    respondToRequest(item._id, false)
+                                }
+                                onAccept={() =>
+                                    respondToRequest(item._id, true)
+                                }
                             />
                         )
                     }}
