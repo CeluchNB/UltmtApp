@@ -7,9 +7,15 @@ import { size, weight } from '../../theme/fonts'
 
 interface UserListItemProps {
     user: DisplayUser
+    showDelete: boolean
+    showAccept: boolean
 }
 
-const UserListItem: React.FC<UserListItemProps> = ({ user }) => {
+const UserListItem: React.FC<UserListItemProps> = ({
+    user,
+    showDelete,
+    showAccept,
+}) => {
     const { colors } = useColors()
 
     const styles = StyleSheet.create({
@@ -35,12 +41,22 @@ const UserListItem: React.FC<UserListItemProps> = ({ user }) => {
                 style={
                     styles.text
                 }>{`${user.firstName} ${user.lastName}`}</Text>
-            <IconButton
-                style={styles.buttonStyle}
-                color={colors.error}
-                icon="close"
-                onPress={() => {}}
-            />
+            {showAccept && (
+                <IconButton
+                    style={styles.buttonStyle}
+                    color={colors.success}
+                    icon="plus"
+                    onPress={() => {}}
+                />
+            )}
+            {showDelete && (
+                <IconButton
+                    style={styles.buttonStyle}
+                    color={colors.error}
+                    icon="close"
+                    onPress={() => {}}
+                />
+            )}
         </View>
     )
 }

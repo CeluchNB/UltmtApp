@@ -33,8 +33,21 @@ export const searchTeam = async (term: string): Promise<ApiResponse> => {
     return unwrapResponse(response)
 }
 
-export const getTeam = async (id: string): Promise<ApiResponse> => {
-    const response = await fetch(`https://ultmt-dev.herokuapp.com/team/${id}`)
+export const getManagedTeam = async (
+    token: string,
+    id: string,
+): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://ultmt-dev.herokuapp.com/team/managing/${id}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
 
     return unwrapResponse(response)
 }

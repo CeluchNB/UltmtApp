@@ -78,13 +78,8 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({
             seasonStart: seasonSplit[0],
             seasonEnd: seasonSplit[seasonSplit.length - 1],
         }
-        const result = await TeamServices.createTeam(token, createTeamData)
+        await TeamServices.createTeam(token, createTeamData)
         setLoading(false)
-        if (result.data) {
-            console.log('success creating team', result.data)
-        } else {
-            console.log('error creating team', result.error)
-        }
     }
 
     return (

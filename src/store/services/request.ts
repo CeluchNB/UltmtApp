@@ -1,4 +1,5 @@
 import { ApiResponse } from '../../types/services'
+import { unwrapResponse } from '../../utils/service-utils'
 
 export const requestTeam = async (
     token: string,
@@ -22,4 +23,23 @@ export const requestTeam = async (
         const error = JSON.parse(await response.text())
         return { error }
     }
+}
+
+export const getRequest = async (
+    token: string,
+    requestId: string,
+): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://ultmt-dev.herokuapp.com/request/${requestId}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+
+    return await unwrapResponse(response)
 }
