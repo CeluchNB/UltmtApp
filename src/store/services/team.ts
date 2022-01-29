@@ -51,3 +51,23 @@ export const getManagedTeam = async (
 
     return unwrapResponse(response)
 }
+
+export const toggleRosterStatus = async (
+    token: string,
+    id: string,
+    open: boolean,
+): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://ultmt-dev.herokuapp.com/team/open/${id}?open=${open}`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+
+    return await unwrapResponse(response)
+}

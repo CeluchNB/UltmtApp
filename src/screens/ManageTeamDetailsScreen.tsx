@@ -22,6 +22,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     const { id, place, name } = route.params
     const [team, setTeam] = React.useState({} as Team)
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
+    const [openLoading, setOpenLoading] = React.useState(false)
     const account = useSelector(selectAccount)
 
     const getRequestDetails = React.useCallback(
@@ -71,8 +72,21 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         },
     })
 
-    const toggleRosterStatus = async () => {
-        console.log('toggle roster status of team:', id)
+    const toggleRosterStatus = async (open: boolean) => {
+        setOpenLoading(true)
+        const teamResult = await TeamServices.toggleRosterStatus(
+            account.token,
+            team._id,
+            open,
+        )
+
+        if (teamResult.data) {
+            setTeam(teamResult.data.team)
+            setOpenLoading(false)
+        } else {
+            // HANDLE ERROR
+            console.log('error', teamResult)
+        }
     }
 
     const rolloverSeason = async () => {
@@ -111,9 +125,9 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         <View style={styles.screen}>
             <ScreenTitle title={`${place} ${name}`} style={styles.title} />
             <PrimaryButton
-                text="Open Roster"
-                loading={false}
-                onPress={toggleRosterStatus}
+                text={`${team.rosterOpen ? 'Close' : 'Open'} Roster`}
+                loading={openLoading}
+                onPress={() => toggleRosterStatus(!team.rosterOpen)}
             />
             <SecondaryButton text="Start New Season" onPress={rolloverSeason} />
             <View style={styles.playerList}>
