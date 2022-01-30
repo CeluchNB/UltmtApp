@@ -64,7 +64,9 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                 <Section
                     title="Teams I Manage"
                     showButton={true}
-                    onButtonPress={() => ({})}
+                    onButtonPress={() => {
+                        navigation.navigate('CreateTeam')
+                    }}
                     buttonText="create team"
                     error={
                         managerTeams.length === 0

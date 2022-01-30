@@ -4,7 +4,7 @@ export type RootStackParamList = {
     Login: undefined
     Profile: undefined
     CreateAccount: undefined
-    CreateTeam: { token: string }
+    CreateTeam: undefined
     ManageTeams: undefined
     RequestTeam: undefined
     TeamDetails: { id: string; place: string; name: string }

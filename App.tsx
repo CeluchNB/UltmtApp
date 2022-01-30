@@ -39,11 +39,7 @@ const App: React.FC<{}> = () => {
                     name="CreateAccount"
                     component={CreateAccountScreen}
                 />
-                <Stack.Screen
-                    name="CreateTeam"
-                    component={CreateTeamScreen}
-                    initialParams={{ token: '' }}
-                />
+                <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
                 <Stack.Screen
                     name="ManageTeams"
                     component={ManageTeamsScreen}
