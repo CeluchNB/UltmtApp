@@ -1,12 +1,14 @@
 import * as React from 'react'
 import * as TeamServices from '../store/services/team'
 import { CreateTeam } from '../types/team'
-import { CreateTeamProps } from '../types/navigation'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
+import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
+import { selectAccount } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
+import { useSelector } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../theme/fonts'
@@ -17,10 +19,8 @@ interface CreateTeamFormData {
     season: string
 }
 
-const CreateTeamScreen: React.FC<CreateTeamProps> = ({
-    route,
-}: CreateTeamProps) => {
-    const token = route.params?.token
+const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
+    const account = useSelector(selectAccount)
     const [loading, setLoading] = React.useState(false)
     const currentYear = new Date().getFullYear()
     const years = [
@@ -78,12 +78,15 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({
             seasonStart: seasonSplit[0],
             seasonEnd: seasonSplit[seasonSplit.length - 1],
         }
-        const result = await TeamServices.createTeam(token, createTeamData)
+        const response = await TeamServices.createTeam(
+            account.token,
+            createTeamData,
+        )
         setLoading(false)
-        if (result.data) {
-            console.log('success creating team', result.data)
+        if (response.data) {
+            navigation.goBack()
         } else {
-            console.log('error creating team', result.error)
+            // HANDLE ERROR
         }
     }
 

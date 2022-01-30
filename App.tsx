@@ -12,6 +12,7 @@ import * as React from 'react'
 import CreateAccountScreen from './src/screens/CreateAccountScreen'
 import CreateTeamScreen from './src/screens/CreateTeamScreen'
 import LoginScreen from './src/screens/LoginScreen'
+import ManageTeamDetailsScreen from './src/screens/ManageTeamDetailsScreen'
 import ManageTeamsScreen from './src/screens/ManageTeamsScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from './src/screens/ProfileScreen'
@@ -38,11 +39,7 @@ const App: React.FC<{}> = () => {
                     name="CreateAccount"
                     component={CreateAccountScreen}
                 />
-                <Stack.Screen
-                    name="CreateTeam"
-                    component={CreateTeamScreen}
-                    initialParams={{ token: '' }}
-                />
+                <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
                 <Stack.Screen
                     name="ManageTeams"
                     component={ManageTeamsScreen}
@@ -50,6 +47,11 @@ const App: React.FC<{}> = () => {
                 <Stack.Screen
                     name="RequestTeam"
                     component={RequestTeamScreen}
+                />
+                <Stack.Screen
+                    name="TeamDetails"
+                    component={ManageTeamDetailsScreen}
+                    initialParams={{ id: '', place: '', name: '' }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

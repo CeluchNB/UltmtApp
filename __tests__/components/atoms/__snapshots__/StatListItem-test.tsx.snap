@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test matches snapshot 1`] = `
+<View
+  style={
+    Object {
+      "minWidth": 150,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#707070",
+        "fontSize": 41.0958904109589,
+        "fontWeight": "bold",
+      }
+    }
+  >
+    Goals
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "#3183ff",
+        "fontSize": 61.64383561643835,
+        "fontWeight": "bold",
+      }
+    }
+  >
+    10
+  </Text>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#ffd600",
+        "borderRadius": 5,
+        "height": 10,
+        "width": 60,
+      }
+    }
+  />
+</View>
+`;

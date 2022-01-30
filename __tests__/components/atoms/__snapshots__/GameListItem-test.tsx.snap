@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test matches snapshot 1`] = `
+<View>
+  <Text
+    style={
+      Object {
+        "color": "#707070",
+        "fontSize": 41.0958904109589,
+        "fontWeight": "bold",
+      }
+    }
+  >
+    vs. Place1 Name1
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "#3183ff",
+        "fontSize": 20.54794520547945,
+        "fontWeight": "bold",
+      }
+    }
+  >
+    15 - 14
+  </Text>
+</View>
+`;

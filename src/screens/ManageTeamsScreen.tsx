@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { DisplayTeam } from '../types/team'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
@@ -31,6 +32,14 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         },
     })
 
+    const openTeamDetails = async (item: DisplayTeam) => {
+        navigation.navigate('TeamDetails', {
+            id: item._id,
+            place: item.place,
+            name: item.name,
+        })
+    }
+
     return (
         <View style={styles.screen}>
             <ScreenTitle style={styles.title} title="Manage Teams" />
@@ -55,7 +64,9 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                 <Section
                     title="Teams I Manage"
                     showButton={true}
-                    onButtonPress={() => ({})}
+                    onButtonPress={() => {
+                        navigation.navigate('CreateTeam')
+                    }}
                     buttonText="create team"
                     error={
                         managerTeams.length === 0
@@ -64,7 +75,12 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                     }
                     listData={managerTeams}
                     renderItem={({ item }) => {
-                        return <TeamListItem team={item} />
+                        return (
+                            <TeamListItem
+                                team={item}
+                                onPress={() => openTeamDetails(item)}
+                            />
+                        )
                     }}
                 />
             </View>

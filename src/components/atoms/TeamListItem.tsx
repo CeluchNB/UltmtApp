@@ -1,14 +1,15 @@
 import * as React from 'react'
 import { DisplayTeam } from '../../types/team'
 import { useColors } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 interface TeamListItemProps {
     team: DisplayTeam
+    onPress?: () => {}
 }
 
-const TeamListItem: React.FC<TeamListItemProps> = ({ team }) => {
+const TeamListItem: React.FC<TeamListItemProps> = ({ team, onPress }) => {
     const { colors } = useColors()
 
     const styles = StyleSheet.create({
@@ -26,16 +27,21 @@ const TeamListItem: React.FC<TeamListItemProps> = ({ team }) => {
 
     return (
         <View>
-            <Text style={styles.teamName}>{`${team.place} ${team.name}`}</Text>
-            <Text style={styles.season}>
-                {team.seasonStart === team.seasonEnd
-                    ? new Date(team.seasonStart).getUTCFullYear()
-                    : `${new Date(
-                          team.seasonStart,
-                      ).getUTCFullYear()} - ${new Date(
-                          team.seasonEnd,
-                      ).getUTCFullYear()}`}
-            </Text>
+            <TouchableOpacity onPress={onPress}>
+                <Text
+                    style={
+                        styles.teamName
+                    }>{`${team.place} ${team.name}`}</Text>
+                <Text style={styles.season}>
+                    {team.seasonStart === team.seasonEnd
+                        ? new Date(team.seasonStart).getUTCFullYear()
+                        : `${new Date(
+                              team.seasonStart,
+                          ).getUTCFullYear()} - ${new Date(
+                              team.seasonEnd,
+                          ).getUTCFullYear()}`}
+                </Text>
+            </TouchableOpacity>
         </View>
     )
 }
