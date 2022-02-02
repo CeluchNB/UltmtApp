@@ -91,7 +91,8 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                 renderItem={({ item }: { item: Team }) => {
                     return (
                         <SearchResultItem
-                            item={`${item.place} ${item.name}`}
+                            header={`${item.place} ${item.name}`}
+                            subheader={`@${item.teamname}`}
                             onPress={() => requestTeam(item._id)}
                             loading={selectedId === item._id && loading}
                             error={

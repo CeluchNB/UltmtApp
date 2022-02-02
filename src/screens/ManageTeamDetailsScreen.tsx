@@ -11,9 +11,10 @@ import { Team } from '../types/team'
 import { TeamDetailsProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
+import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     route,
@@ -65,6 +66,12 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         },
         title: {
             textAlign: 'center',
+        },
+        teamname: {
+            textAlign: 'center',
+            fontSize: size.fontFifteen,
+            color: colors.textSecondary,
+            marginBottom: 5,
         },
         playerList: {
             width: '75%',
@@ -124,6 +131,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     return (
         <View style={styles.screen}>
             <ScreenTitle title={`${place} ${name}`} style={styles.title} />
+            <Text style={styles.teamname}>@{team.teamname}</Text>
             <PrimaryButton
                 text={`${team.rosterOpen ? 'Close' : 'Open'} Roster`}
                 loading={openLoading}
