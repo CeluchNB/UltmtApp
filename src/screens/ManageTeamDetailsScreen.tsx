@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux'
 import { StyleSheet, Text, View } from 'react-native'
 
 const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
+    navigation,
     route,
 }: TeamDetailsProps) => {
     const { colors } = useColors()
@@ -151,7 +152,9 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                     )}
                     showButton={true}
                     buttonText="Add Players"
-                    onButtonPress={() => {}}
+                    onButtonPress={() => {
+                        navigation.navigate('RequestUser')
+                    }}
                 />
                 <Section
                     title="Requests from Players"

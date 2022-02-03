@@ -32,6 +32,7 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             color: colors.textPrimary,
             width: '75%',
             alignSelf: 'center',
+            marginBottom: 5,
         },
         list: {
             width: '75%',
