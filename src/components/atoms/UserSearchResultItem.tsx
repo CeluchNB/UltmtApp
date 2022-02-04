@@ -1,17 +1,27 @@
 import * as React from 'react'
 import { IconButton } from 'react-native-paper'
 import { useColors } from '../../hooks'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+    ActivityIndicator,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 interface UserSearchResultItemProps {
     name: string
     username: string
+    loading: boolean
+    onPress: () => {}
 }
 
 const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
     name,
     username,
+    loading,
+    onPress,
 }) => {
     const { colors } = useColors()
 
@@ -43,17 +53,29 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
 
     return (
         <View>
-            <TouchableOpacity style={styles.container}>
+            <TouchableOpacity
+                style={styles.container}
+                onPress={onPress}
+                disabled={loading}>
                 <View style={styles.nameContainer}>
                     <Text style={styles.name}>{name}</Text>
                     <Text style={styles.username}>{username}</Text>
                 </View>
-                <IconButton
-                    style={styles.buttonStyle}
-                    color={colors.success}
-                    icon="plus"
-                    onPress={() => {}}
-                />
+                {!loading && (
+                    <IconButton
+                        style={styles.buttonStyle}
+                        color={colors.success}
+                        icon="plus"
+                        onPress={onPress}
+                    />
+                )}
+                {loading && (
+                    <ActivityIndicator
+                        size="small"
+                        color={colors.gray}
+                        animating={loading}
+                    />
+                )}
             </TouchableOpacity>
         </View>
     )

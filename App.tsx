@@ -57,6 +57,7 @@ const App: React.FC<{}> = () => {
                 <Stack.Screen
                     name="RequestUser"
                     component={RequestUserScreen}
+                    initialParams={{ id: '' }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

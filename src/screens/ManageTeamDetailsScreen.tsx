@@ -153,7 +153,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                     showButton={true}
                     buttonText="Add Players"
                     onButtonPress={() => {
-                        navigation.navigate('RequestUser')
+                        navigation.navigate('RequestUser', { id })
                     }}
                 />
                 <Section
