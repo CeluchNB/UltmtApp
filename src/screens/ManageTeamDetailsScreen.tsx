@@ -143,6 +143,25 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         }
     }
 
+    const removePlayer = async (userId: string) => {
+        try {
+            const response = await TeamServices.removePlayer(
+                account.token,
+                team._id,
+                userId,
+            )
+            if (response.data) {
+                const { team: responseTeam } = response.data
+                setTeam(responseTeam)
+            } else {
+                console.log(response.error)
+                // HANDLE ERROR
+            }
+        } catch (e) {
+            console.log(e)
+            // HANLDE ERROR
+        }
+    }
     return (
         <ScrollView style={styles.screen}>
             <View style={styles.headerContainer}>
@@ -168,6 +187,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                             user={item}
                             showDelete={true}
                             showAccept={false}
+                            onDelete={() => removePlayer(item._id)}
                         />
                     )}
                     loading={teamLoading}
@@ -178,7 +198,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                         navigation.navigate('RequestUser', { id })
                     }}
                     error={
-                        team.players.length <= 0
+                        team.players && team.players.length <= 0
                             ? 'No players on this team'
                             : undefined
                     }
