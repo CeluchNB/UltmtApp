@@ -162,6 +162,27 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
             // HANLDE ERROR
         }
     }
+
+    const deleteRequest = async (requestId: string) => {
+        try {
+            const response = await RequestServices.deleteTeamRequest(
+                account.token,
+                requestId,
+            )
+            if (response.data) {
+                const { request } = response.data
+                // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
+                setRequests(requests.filter(r => r._id !== request._id))
+            } else {
+                console.log(response.error)
+                // HANDLE ERROR
+            }
+        } catch (e) {
+            console.log(e)
+            // HANDLE ERROR
+        }
+    }
+
     return (
         <ScrollView style={styles.screen}>
             <View style={styles.headerContainer}>
@@ -248,6 +269,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                                 user={item.userDetails}
                                 showDelete={true}
                                 showAccept={false}
+                                onDelete={() => deleteRequest(item._id)}
                             />
                         )
                     }}
