@@ -1,12 +1,13 @@
 import * as React from 'react'
 import { DisplayTeam } from '../types/team'
+import MapSection from '../components/molecules/MapSection'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
-import Section from '../components/molecules/Section'
+// import Section from '../components/molecules/Section'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { useColors } from '../hooks/index'
 import { useSelector } from 'react-redux'
-import { StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import {
     selectManagerTeams,
     selectPlayerTeams,
@@ -26,9 +27,9 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
             alignSelf: 'center',
         },
         sectionContainer: {
-            marginTop: 20,
-            marginStart: 50,
-            marginEnd: 50,
+            width: '75%',
+            alignSelf: 'center',
+            flex: 1,
         },
     })
 
@@ -42,48 +43,61 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle style={styles.title} title="Manage Teams" />
-            <View style={styles.sectionContainer}>
-                <Section
-                    title="Teams I Play For"
-                    showButton={true}
-                    onButtonPress={() => {
-                        navigation.navigate('RequestTeam')
-                    }}
-                    buttonText="request team"
-                    error={
-                        playerTeams.length === 0
-                            ? 'You have not played for any teams yet'
-                            : undefined
-                    }
-                    listData={playerTeams}
-                    renderItem={({ item }) => {
-                        return <TeamListItem team={item} />
-                    }}
-                />
-                <Section
-                    title="Teams I Manage"
-                    showButton={true}
-                    onButtonPress={() => {
-                        navigation.navigate('CreateTeam')
-                    }}
-                    buttonText="create team"
-                    error={
-                        managerTeams.length === 0
-                            ? 'You have not managed any teams yet'
-                            : undefined
-                    }
-                    listData={managerTeams}
-                    renderItem={({ item }) => {
-                        return (
-                            <TeamListItem
-                                team={item}
-                                onPress={() => openTeamDetails(item)}
-                            />
-                        )
-                    }}
-                />
-            </View>
+            <FlatList
+                data={[]}
+                renderItem={() => <View />}
+                ListHeaderComponent={
+                    <ScreenTitle style={styles.title} title="Manage Teams" />
+                }
+                ListFooterComponent={
+                    <View style={styles.sectionContainer}>
+                        <MapSection
+                            title="Teams I Play For"
+                            showButton={true}
+                            showCreateButton={false}
+                            onButtonPress={() => {
+                                navigation.navigate('RequestTeam')
+                            }}
+                            buttonText="request team"
+                            error={
+                                playerTeams.length === 0
+                                    ? 'You have not played for any teams yet'
+                                    : undefined
+                            }
+                            listData={playerTeams}
+                            renderItem={item => {
+                                return (
+                                    <TeamListItem key={item._id} team={item} />
+                                )
+                            }}
+                        />
+                        <MapSection
+                            title="Teams I Manage"
+                            showButton={true}
+                            showCreateButton={false}
+                            onButtonPress={() => {
+                                navigation.navigate('CreateTeam')
+                            }}
+                            buttonText="create team"
+                            error={
+                                managerTeams.length === 0
+                                    ? 'You have not managed any teams yet'
+                                    : undefined
+                            }
+                            listData={managerTeams}
+                            renderItem={item => {
+                                return (
+                                    <TeamListItem
+                                        key={item._id}
+                                        team={item}
+                                        onPress={() => openTeamDetails(item)}
+                                    />
+                                )
+                            }}
+                        />
+                    </View>
+                }
+            />
         </View>
     )
 }

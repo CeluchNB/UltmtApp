@@ -1,61 +1,58 @@
 import * as React from 'react'
 import { useColors } from '../../hooks'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { Button, IconButton } from 'react-native-paper'
-import { FlatList, ListRenderItem, StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
-interface SectionProps {
+interface MapSectionProps<T> {
     title: string
-    onButtonPress: () => void
-    numColumns?: number
-    listData: any[]
-    renderItem: ListRenderItem<any>
+    listData: T[]
+    renderItem: (item: T) => JSX.Element
     showButton: boolean
-    buttonText: string
-    error?: string
-    showCreateButton?: boolean
+    showCreateButton: boolean
+    loading?: boolean
+    buttonText?: string
+    onButtonPress?: () => void
     onCreatePress?: () => void
+    error?: string
 }
 
-const Section: React.FC<SectionProps> = ({
+const MapSection = <T,>({
     title,
-    onButtonPress,
-    numColumns = 1,
     listData,
     renderItem,
     showButton,
+    showCreateButton,
+    loading,
     buttonText,
+    onButtonPress,
+    onCreatePress,
     error,
-    showCreateButton = false,
-    onCreatePress = () => {},
-}) => {
+}: MapSectionProps<T>) => {
     const { colors } = useColors()
 
     const styles = StyleSheet.create({
         container: {
             width: '100%',
-            flex: 0,
-            flexShrink: 1,
         },
         titleContainer: {
             flex: 1,
             display: 'flex',
             flexDirection: 'row',
         },
-        title: {
-            fontSize: size.fontLarge,
-            color: colors.textPrimary,
-            fontWeight: weight.bold,
-            marginBottom: 10,
-            flex: 1,
-        },
         createButton: {
-            display: !showCreateButton ? 'none' : 'flex',
+            display: 'flex',
             flexWrap: 'nowrap',
             backgroundColor: colors.textPrimary,
             borderRadius: 5,
         },
-        list: {},
+        title: {
+            flex: 1,
+            fontSize: size.fontLarge,
+            color: colors.textPrimary,
+            fontWeight: weight.bold,
+            marginBottom: 10,
+        },
         button: {
             alignSelf: 'center',
             marginTop: 10,
@@ -70,22 +67,22 @@ const Section: React.FC<SectionProps> = ({
         <View style={styles.container}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{title}</Text>
-                <IconButton
-                    color={colors.primary}
-                    style={styles.createButton}
-                    onPress={onCreatePress}
-                    icon="plus"
-                />
+                {showCreateButton && (
+                    <IconButton
+                        color={colors.primary}
+                        style={styles.createButton}
+                        onPress={onCreatePress}
+                        icon="plus"
+                    />
+                )}
             </View>
-            {error ? (
-                <Text style={styles.error}>{error}</Text>
-            ) : (
-                <FlatList
-                    listKey={title}
-                    data={listData}
-                    scrollEnabled={false}
-                    numColumns={numColumns}
-                    renderItem={renderItem}
+            {error && <Text style={styles.error}>{error}</Text>}
+            {!error && listData && listData.map(item => renderItem(item))}
+            {loading && (
+                <ActivityIndicator
+                    size="large"
+                    color={colors.textPrimary}
+                    animating={loading}
                 />
             )}
             {showButton && (
@@ -101,4 +98,4 @@ const Section: React.FC<SectionProps> = ({
     )
 }
 
-export default Section
+export default MapSection

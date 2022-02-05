@@ -13,10 +13,16 @@ const TeamListItem: React.FC<TeamListItemProps> = ({ team, onPress }) => {
     const { colors } = useColors()
 
     const styles = StyleSheet.create({
-        teamName: {
+        name: {
             color: colors.gray,
             fontSize: size.fontMedium,
             fontWeight: weight.bold,
+        },
+        teamname: {
+            color: colors.textPrimary,
+            fontSize: size.fontMedium,
+            fontWeight: weight.bold,
+            marginBottom: 10,
         },
         season: {
             color: colors.textPrimary,
@@ -28,10 +34,8 @@ const TeamListItem: React.FC<TeamListItemProps> = ({ team, onPress }) => {
     return (
         <View>
             <TouchableOpacity onPress={onPress}>
-                <Text
-                    style={
-                        styles.teamName
-                    }>{`${team.place} ${team.name}`}</Text>
+                <Text style={styles.name}>{`${team.place} ${team.name}`}</Text>
+                <Text style={styles.teamname}>@{team.teamname}</Text>
                 <Text style={styles.season}>
                     {team.seasonStart === team.seasonEnd
                         ? new Date(team.seasonStart).getUTCFullYear()

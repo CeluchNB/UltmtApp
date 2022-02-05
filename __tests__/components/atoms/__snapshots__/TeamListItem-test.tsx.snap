@@ -35,6 +35,18 @@ exports[`matches snapshot 1`] = `
       style={
         Object {
           "color": "#3183ff",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "bold",
+          "marginBottom": 10,
+        }
+      }
+    >
+      @
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "#3183ff",
           "fontSize": 20.54794520547945,
           "fontWeight": "bold",
         }

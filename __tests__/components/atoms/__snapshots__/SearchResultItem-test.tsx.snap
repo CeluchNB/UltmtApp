@@ -22,18 +22,30 @@ exports[`test matches snapshot 1`] = `
       }
     }
   >
-    <Text
-      style={
-        Object {
-          "color": "#3183ff",
-          "fontSize": 41.0958904109589,
-          "fontWeight": "900",
-          "margin": 5,
+    <View>
+      <Text
+        style={
+          Object {
+            "color": "#3183ff",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+          }
         }
-      }
-    >
-      item
-    </Text>
+      >
+        header
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#ffd600",
+            "fontSize": 30.821917808219176,
+            "fontWeight": "900",
+          }
+        }
+      >
+        subheader
+      </Text>
+    </View>
     <ActivityIndicator
       animating={false}
       color="#3183ff"
@@ -73,18 +85,82 @@ exports[`test matches snapshot with loading 1`] = `
       }
     }
   >
-    <Text
-      style={
-        Object {
-          "color": "#3183ff",
-          "fontSize": 41.0958904109589,
-          "fontWeight": "900",
-          "margin": 5,
+    <View>
+      <Text
+        style={
+          Object {
+            "color": "#3183ff",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+          }
         }
+      >
+        item
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#ffd600",
+            "fontSize": 30.821917808219176,
+            "fontWeight": "900",
+          }
+        }
+      >
+        subheader
+      </Text>
+    </View>
+    <ActivityIndicator
+      animating={true}
+      color="#3183ff"
+      size="small"
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#ffd600",
+        "height": 1,
       }
-    >
-      item
-    </Text>
+    }
+  />
+</View>
+`;
+
+exports[`test matches snapshot without subheader 1`] = `
+<View>
+  <View
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    nativeID="animatedComponent"
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "display": "flex",
+        "flexDirection": "row",
+        "opacity": 1,
+      }
+    }
+  >
+    <View>
+      <Text
+        style={
+          Object {
+            "color": "#3183ff",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+          }
+        }
+      >
+        item
+      </Text>
+    </View>
     <ActivityIndicator
       animating={true}
       color="#3183ff"

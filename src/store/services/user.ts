@@ -1,6 +1,7 @@
 import { ApiResponse } from '../../types/services'
 import { CreateUserData } from '../../types/user'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { unwrapResponse } from '../../utils/service-utils'
 
 export const login = async (
     username: string,
@@ -41,11 +42,7 @@ export const fetchProfile = async (token: string): Promise<ApiResponse> => {
         },
     })
 
-    if (response.ok) {
-        return { data: await response.json() }
-    } else {
-        throw new Error(await response.text())
-    }
+    return await unwrapResponse(response)
 }
 
 export const createAccount = async (
@@ -104,4 +101,11 @@ export const getLocalToken = async (): Promise<ApiResponse> => {
         throw error
     }
     throw new Error('No token available')
+}
+
+export const searchUsers = async (term: string): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://ultmt-dev.herokuapp.com/user/search?q=${term}`,
+    )
+    return await unwrapResponse(response)
 }

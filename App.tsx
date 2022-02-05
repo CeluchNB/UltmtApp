@@ -17,6 +17,7 @@ import ManageTeamsScreen from './src/screens/ManageTeamsScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from './src/screens/ProfileScreen'
 import RequestTeamScreen from './src/screens/RequestTeamScreen'
+import RequestUserScreen from './src/screens/RequestUserScreen'
 import { RootStackParamList } from './src/types/navigation'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import store from './src/store/store'
@@ -52,6 +53,11 @@ const App: React.FC<{}> = () => {
                     name="TeamDetails"
                     component={ManageTeamDetailsScreen}
                     initialParams={{ id: '', place: '', name: '' }}
+                />
+                <Stack.Screen
+                    name="RequestUser"
+                    component={RequestUserScreen}
+                    initialParams={{ id: '' }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

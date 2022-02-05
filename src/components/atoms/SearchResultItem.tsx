@@ -10,25 +10,31 @@ import {
 import { size, weight } from '../../theme/fonts'
 
 interface SearchResultItemProps {
-    item: string
+    header: string
+    subheader?: string
     onPress: () => void
     loading: boolean
     error?: string
 }
 
 const SearchResultItem: React.FC<SearchResultItemProps> = ({
-    item,
+    header,
+    subheader,
     onPress,
     loading,
     error,
 }) => {
     const { colors } = useColors()
     const styles = StyleSheet.create({
-        text: {
+        header: {
             color: colors.textPrimary,
             fontSize: size.fontMedium,
             fontWeight: weight.full,
-            margin: 5,
+        },
+        subheader: {
+            color: colors.textSecondary,
+            fontSize: size.fontFifteen,
+            fontWeight: weight.full,
         },
         opacity: {
             display: 'flex',
@@ -48,7 +54,12 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
     return (
         <View>
             <TouchableOpacity style={styles.opacity} onPress={onPress}>
-                <Text style={styles.text}>{item}</Text>
+                <View>
+                    <Text style={styles.header}>{header}</Text>
+                    {subheader && (
+                        <Text style={styles.subheader}>{subheader}</Text>
+                    )}
+                </View>
                 <ActivityIndicator
                     size="small"
                     color={colors.textPrimary}

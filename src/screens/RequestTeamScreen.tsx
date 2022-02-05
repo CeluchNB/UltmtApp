@@ -32,6 +32,7 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             color: colors.textPrimary,
             width: '75%',
             alignSelf: 'center',
+            marginBottom: 5,
         },
         list: {
             width: '75%',
@@ -91,7 +92,8 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                 renderItem={({ item }: { item: Team }) => {
                     return (
                         <SearchResultItem
-                            item={`${item.place} ${item.name}`}
+                            header={`${item.place} ${item.name}`}
+                            subheader={`@${item.teamname}`}
                             onPress={() => requestTeam(item._id)}
                             loading={selectedId === item._id && loading}
                             error={

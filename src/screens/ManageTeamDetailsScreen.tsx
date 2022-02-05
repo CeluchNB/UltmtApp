@@ -2,31 +2,35 @@ import * as React from 'react'
 import * as RequestServices from '../store/services/request'
 import * as TeamServices from '../store/services/team'
 import { DetailedRequest } from '../types/request'
-import { DisplayUser } from '../types/user'
+import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
-import Section from '../components/molecules/Section'
 import { Team } from '../types/team'
 import { TeamDetailsProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
+import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
+    navigation,
     route,
 }: TeamDetailsProps) => {
     const { colors } = useColors()
     const { id, place, name } = route.params
     const [team, setTeam] = React.useState({} as Team)
+    const [teamLoading, setTeamLoading] = React.useState(false)
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
+    const [requestsLoading, setRequestsLoading] = React.useState(false)
     const [openLoading, setOpenLoading] = React.useState(false)
     const account = useSelector(selectAccount)
 
     const getRequestDetails = React.useCallback(
         async (teamDetails: Team) => {
+            setRequestsLoading(true)
             try {
                 const values = await Promise.all(
                     teamDetails.requests.map((req: string) => {
@@ -39,34 +43,52 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                 setRequests(reqs)
             } catch (error) {
                 // Use Error Boundaries
+            } finally {
+                setRequestsLoading(false)
             }
         },
         [account],
     )
 
     React.useEffect(() => {
+        setTeamLoading(true)
         const teamResponse = TeamServices.getManagedTeam(account.token, id)
-        teamResponse.then(response => {
-            const { team: managedTeam } = response.data
-            if (managedTeam) {
-                setTeam(managedTeam)
-                getRequestDetails(managedTeam)
-            } else {
-                // HANDLE ERROR
-            }
-        })
+        teamResponse
+            .then(response => {
+                setRequestsLoading(false)
+                const { team: managedTeam } = response.data
+                if (managedTeam) {
+                    setTeamLoading(false)
+                    setTeam(managedTeam)
+                    getRequestDetails(managedTeam)
+                } else {
+                    // HANDLE ERROR
+                }
+            })
+            .catch(_error => {
+                setRequestsLoading(false)
+            })
     }, [id, account, getRequestDetails])
 
     const styles = StyleSheet.create({
         screen: {
             height: '100%',
             backgroundColor: colors.primary,
+            flex: 1,
+        },
+        headerContainer: {
             alignItems: 'center',
         },
         title: {
             textAlign: 'center',
         },
-        playerList: {
+        teamname: {
+            textAlign: 'center',
+            fontSize: size.fontFifteen,
+            color: colors.textPrimary,
+            marginBottom: 5,
+        },
+        listContainer: {
             width: '75%',
             alignSelf: 'center',
         },
@@ -121,36 +143,96 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         }
     }
 
+    const removePlayer = async (userId: string) => {
+        try {
+            const response = await TeamServices.removePlayer(
+                account.token,
+                team._id,
+                userId,
+            )
+            if (response.data) {
+                const { team: responseTeam } = response.data
+                setTeam(responseTeam)
+            } else {
+                console.log(response.error)
+                // HANDLE ERROR
+            }
+        } catch (e) {
+            console.log(e)
+            // HANLDE ERROR
+        }
+    }
+
+    const deleteRequest = async (requestId: string) => {
+        try {
+            const response = await RequestServices.deleteTeamRequest(
+                account.token,
+                requestId,
+            )
+            if (response.data) {
+                const { request } = response.data
+                // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
+                setRequests(requests.filter(r => r._id !== request._id))
+            } else {
+                console.log(response.error)
+                // HANDLE ERROR
+            }
+        } catch (e) {
+            console.log(e)
+            // HANDLE ERROR
+        }
+    }
+
     return (
-        <View style={styles.screen}>
-            <ScreenTitle title={`${place} ${name}`} style={styles.title} />
-            <PrimaryButton
-                text={`${team.rosterOpen ? 'Close' : 'Open'} Roster`}
-                loading={openLoading}
-                onPress={() => toggleRosterStatus(!team.rosterOpen)}
-            />
-            <SecondaryButton text="Start New Season" onPress={rolloverSeason} />
-            <View style={styles.playerList}>
-                <Section
+        <ScrollView style={styles.screen}>
+            <View style={styles.headerContainer}>
+                <ScreenTitle title={`${place} ${name}`} style={styles.title} />
+                <Text style={styles.teamname}>@{team.teamname}</Text>
+                <PrimaryButton
+                    text={`${team.rosterOpen ? 'Close' : 'Open'} Roster`}
+                    loading={openLoading}
+                    onPress={() => toggleRosterStatus(!team.rosterOpen)}
+                />
+                <SecondaryButton
+                    text="Start New Season"
+                    onPress={rolloverSeason}
+                />
+            </View>
+            <View style={styles.listContainer}>
+                <MapSection
                     title="Players"
                     listData={team.players}
-                    renderItem={({ item }: { item: DisplayUser }) => (
+                    renderItem={item => (
                         <UserListItem
+                            key={item._id}
                             user={item}
                             showDelete={true}
                             showAccept={false}
+                            onDelete={() => removePlayer(item._id)}
                         />
                     )}
+                    loading={teamLoading}
                     showButton={true}
+                    showCreateButton={false}
                     buttonText="Add Players"
-                    onButtonPress={() => {}}
+                    onButtonPress={() => {
+                        navigation.navigate('RequestUser', { id })
+                    }}
+                    error={
+                        team.players && team.players.length <= 0
+                            ? 'No players on this team'
+                            : undefined
+                    }
                 />
-                <Section
-                    title="Requests from Players"
-                    listData={requests}
-                    renderItem={({ item }: { item: DetailedRequest }) => {
+                <MapSection
+                    title="Request From Players"
+                    listData={requests.filter(
+                        item => item.requestSource !== 'team',
+                    )}
+                    renderItem={item => {
                         return (
                             <UserListItem
+                                key={item._id}
                                 user={item.userDetails}
                                 showDelete={true}
                                 showAccept={true}
@@ -163,12 +245,48 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                             />
                         )
                     }}
+                    loading={requestsLoading}
                     showButton={false}
+                    showCreateButton={false}
                     buttonText=""
                     onButtonPress={() => {}}
+                    error={
+                        requests.filter(item => item.requestSource !== 'team')
+                            .length <= 0
+                            ? 'No open requests from players'
+                            : undefined
+                    }
+                />
+                <MapSection
+                    title="Requests To Players"
+                    listData={requests.filter(
+                        item => item.requestSource !== 'player',
+                    )}
+                    renderItem={item => {
+                        return (
+                            <UserListItem
+                                key={item._id}
+                                user={item.userDetails}
+                                showDelete={true}
+                                showAccept={false}
+                                onDelete={() => deleteRequest(item._id)}
+                            />
+                        )
+                    }}
+                    loading={requestsLoading}
+                    showButton={false}
+                    showCreateButton={false}
+                    buttonText=""
+                    onButtonPress={() => {}}
+                    error={
+                        requests.filter(item => item.requestSource !== 'player')
+                            .length <= 0
+                            ? 'No open requests to players'
+                            : undefined
+                    }
                 />
             </View>
-        </View>
+        </ScrollView>
     )
 }
 

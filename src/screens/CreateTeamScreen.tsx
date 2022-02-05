@@ -16,6 +16,7 @@ import { size, weight } from '../theme/fonts'
 interface CreateTeamFormData {
     place: string
     name: string
+    teamname: string
     season: string
 }
 
@@ -34,6 +35,7 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
         defaultValues: {
             place: '',
             name: '',
+            teamname: '',
             season: currentYear.toString(),
         },
     })
@@ -75,6 +77,7 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
         const createTeamData: CreateTeam = {
             place: data.place,
             name: data.name,
+            teamname: data.teamname,
             seasonStart: seasonSplit[0],
             seasonEnd: seasonSplit[seasonSplit.length - 1],
         }
@@ -116,6 +119,19 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                     <UserInput
                         style={styles.input}
                         placeholder="Team Name"
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                )}
+            />
+            <Controller
+                name="teamname"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                    <UserInput
+                        style={styles.input}
+                        placeholder="Team Handle"
                         onChangeText={onChange}
                         value={value}
                     />

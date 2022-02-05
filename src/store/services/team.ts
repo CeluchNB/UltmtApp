@@ -71,3 +71,23 @@ export const toggleRosterStatus = async (
 
     return await unwrapResponse(response)
 }
+
+export const removePlayer = async (
+    token: string,
+    teamId: string,
+    userId: string,
+): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://ultmt-dev.herokuapp.com/team/remove/player/${teamId}?user=${userId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+
+    return await unwrapResponse(response)
+}

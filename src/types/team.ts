@@ -4,6 +4,7 @@ export interface DisplayTeam {
     _id: string
     place: string
     name: string
+    teamname: string
     seasonStart: string
     seasonEnd: string
 }
@@ -11,6 +12,7 @@ export interface DisplayTeam {
 export interface CreateTeam {
     place: string
     name: string
+    teamname: string
     seasonStart: string
     seasonEnd: string
 }

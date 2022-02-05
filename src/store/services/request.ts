@@ -25,6 +25,31 @@ export const requestTeam = async (
     }
 }
 
+export const requestUser = async (
+    token: string,
+    userId: string,
+    teamId: string,
+): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://ultmt-dev.herokuapp.com/request/team/${teamId}?user=${userId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+
+    if (response.ok) {
+        return { data: await response.json() }
+    } else {
+        const error = JSON.parse(await response.text())
+        return { error }
+    }
+}
+
 export const getRequest = async (
     token: string,
     requestId: string,
@@ -63,5 +88,23 @@ export const respondToPlayerRequest = async (
         },
     )
 
+    return await unwrapResponse(response)
+}
+
+export const deleteTeamRequest = async (
+    token: string,
+    requestId: string,
+): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://ultmt-dev.herokuapp.com/request/team/delete/${requestId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
     return await unwrapResponse(response)
 }
