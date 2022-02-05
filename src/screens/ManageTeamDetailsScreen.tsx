@@ -14,7 +14,7 @@ import { selectAccount } from '../store/reducers/features/account/accountReducer
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     navigation,
@@ -64,6 +64,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
             height: '100%',
             backgroundColor: colors.primary,
             alignItems: 'center',
+            flex: 1,
         },
         title: {
             textAlign: 'center',
@@ -71,8 +72,11 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         teamname: {
             textAlign: 'center',
             fontSize: size.fontFifteen,
-            color: colors.textSecondary,
+            color: colors.textPrimary,
             marginBottom: 5,
+        },
+        list: {
+            width: '75%',
         },
         playerList: {
             width: '75%',
@@ -131,54 +135,104 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle title={`${place} ${name}`} style={styles.title} />
-            <Text style={styles.teamname}>@{team.teamname}</Text>
-            <PrimaryButton
-                text={`${team.rosterOpen ? 'Close' : 'Open'} Roster`}
-                loading={openLoading}
-                onPress={() => toggleRosterStatus(!team.rosterOpen)}
-            />
-            <SecondaryButton text="Start New Season" onPress={rolloverSeason} />
-            <View style={styles.playerList}>
-                <Section
-                    title="Players"
-                    listData={team.players}
-                    renderItem={({ item }: { item: DisplayUser }) => (
-                        <UserListItem
-                            user={item}
-                            showDelete={true}
-                            showAccept={false}
+            <FlatList
+                style={styles.list}
+                showsVerticalScrollIndicator={false}
+                data={[]}
+                renderItem={() => {
+                    return <View />
+                }}
+                ListHeaderComponent={
+                    <View>
+                        <ScreenTitle
+                            title={`${place} ${name}`}
+                            style={styles.title}
                         />
-                    )}
-                    showButton={true}
-                    buttonText="Add Players"
-                    onButtonPress={() => {
-                        navigation.navigate('RequestUser', { id })
-                    }}
-                />
-                <Section
-                    title="Requests from Players"
-                    listData={requests}
-                    renderItem={({ item }: { item: DetailedRequest }) => {
-                        return (
-                            <UserListItem
-                                user={item.userDetails}
-                                showDelete={true}
-                                showAccept={true}
-                                onDelete={() =>
-                                    respondToRequest(item._id, false)
-                                }
-                                onAccept={() =>
-                                    respondToRequest(item._id, true)
-                                }
-                            />
-                        )
-                    }}
-                    showButton={false}
-                    buttonText=""
-                    onButtonPress={() => {}}
-                />
-            </View>
+                        <Text style={styles.teamname}>@{team.teamname}</Text>
+                        <PrimaryButton
+                            text={`${
+                                team.rosterOpen ? 'Close' : 'Open'
+                            } Roster`}
+                            loading={openLoading}
+                            onPress={() => toggleRosterStatus(!team.rosterOpen)}
+                        />
+                        <SecondaryButton
+                            text="Start New Season"
+                            onPress={rolloverSeason}
+                        />
+                    </View>
+                }
+                ListFooterComponent={
+                    <View>
+                        <Section
+                            title="Players"
+                            listData={team.players}
+                            renderItem={({ item }: { item: DisplayUser }) => (
+                                <UserListItem
+                                    user={item}
+                                    showDelete={true}
+                                    showAccept={false}
+                                />
+                            )}
+                            showButton={true}
+                            buttonText="Add Players"
+                            onButtonPress={() => {
+                                navigation.navigate('RequestUser', { id })
+                            }}
+                        />
+                        <Section
+                            title="Player Requests"
+                            listData={requests.filter(
+                                item => item.requestSource !== 'team',
+                            )}
+                            renderItem={({
+                                item,
+                            }: {
+                                item: DetailedRequest
+                            }) => {
+                                return (
+                                    <UserListItem
+                                        user={item.userDetails}
+                                        showDelete={true}
+                                        showAccept={true}
+                                        onDelete={() =>
+                                            respondToRequest(item._id, false)
+                                        }
+                                        onAccept={() =>
+                                            respondToRequest(item._id, true)
+                                        }
+                                    />
+                                )
+                            }}
+                            showButton={false}
+                            buttonText=""
+                            onButtonPress={() => {}}
+                        />
+                        <Section
+                            title="Team Requests"
+                            listData={requests.filter(
+                                item => item.requestSource !== 'player',
+                            )}
+                            renderItem={({
+                                item,
+                            }: {
+                                item: DetailedRequest
+                            }) => {
+                                return (
+                                    <UserListItem
+                                        user={item.userDetails}
+                                        showDelete={true}
+                                        showAccept={false}
+                                    />
+                                )
+                            }}
+                            showButton={false}
+                            buttonText=""
+                            onButtonPress={() => {}}
+                        />
+                    </View>
+                }
+            />
         </View>
     )
 }

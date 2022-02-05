@@ -56,8 +56,8 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
             alignItems: 'center',
         },
         footerContainer: {
-            marginStart: 50,
-            marginEnd: 50,
+            width: '75%',
+            alignSelf: 'center',
         },
         signOutButton: {
             marginTop: 5,
@@ -69,9 +69,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     }
 
     const onCreateTeam = () => {
-        navigation.navigate('CreateTeam', {
-            token: store.getState().account.token,
-        })
+        navigation.navigate('CreateTeam')
     }
 
     return (

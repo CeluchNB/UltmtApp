@@ -34,8 +34,11 @@ const Section: React.FC<SectionProps> = ({
     const styles = StyleSheet.create({
         container: {
             width: '100%',
+            flex: 0,
+            flexShrink: 1,
         },
         titleContainer: {
+            flex: 1,
             display: 'flex',
             flexDirection: 'row',
         },
