@@ -4,21 +4,25 @@ import * as UserServices from '../store/services/user'
 import { DisplayUser } from '../types/user'
 import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
-import { TextInput } from 'react-native-paper'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
 import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { IconButton, TextInput } from 'react-native-paper'
+import { size, weight } from '../theme/fonts'
 
 const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const { colors } = useColors()
     const { id } = route.params
     const token = useSelector(selectToken)
     const [players, setPlayers] = React.useState([])
-    // const [selectedPlayers, setSelectedPlayers] = React.useState([])
+    const [selectedPlayers, setSelectedPlayers] = React.useState<DisplayUser[]>(
+        [],
+    )
     const [requestLoading, setRequestLoading] = React.useState(false)
     const [selectedId, setSelectedId] = React.useState('')
+    const [error, setError] = React.useState('')
 
     const styles = StyleSheet.create({
         screen: {
@@ -38,37 +42,62 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
         list: {
             width: '75%',
             alignSelf: 'center',
+            flexGrow: 0,
+        },
+        separator: {
+            height: 2,
+            width: '75%',
+            backgroundColor: colors.gray,
+            alignSelf: 'center',
+            marginBottom: 10,
+            marginTop: 10,
+        },
+        playerContainer: {
+            flexDirection: 'row',
+        },
+        playerItem: {
+            color: colors.success,
+            fontSize: size.fontMedium,
+            fontWeight: weight.full,
+            flex: 1,
+            alignSelf: 'center',
         },
     })
 
     const search = async (term: string) => {
+        setError('')
         if (term.length < 3) {
+            setPlayers([])
             return
         }
 
         try {
             const result = await UserServices.searchUsers(term)
             setPlayers(result.data.users)
-        } catch (error) {
-            console.log('search error', error)
+        } catch (e) {
+            console.log('search error', e)
             // HANDLE ERROR
         }
     }
 
-    const requestUser = async (userId: string) => {
+    const requestUser = async (user: DisplayUser) => {
+        setError('')
         try {
             setRequestLoading(true)
-            setSelectedId(userId)
-            const result = await RequestServices.requestUser(token, userId, id)
+            setSelectedId(user._id)
+            const result = await RequestServices.requestUser(
+                token,
+                user._id,
+                id,
+            )
             if (result.data) {
+                setSelectedPlayers([user, ...selectedPlayers])
             } else {
-                console.log('request response error', result.error)
-                // HANDLE ERROR
+                setError(result.error.message)
             }
             setRequestLoading(false)
-        } catch (error) {
-            console.log('request handle error', error)
-            // HANDLE ERROR
+        } catch (e) {
+            setError('Unable to request user')
         }
     }
 
@@ -98,9 +127,35 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                         name={`${item.firstName} ${item.lastName}`}
                         username={`@${item.username}`}
                         loading={selectedId === item._id && requestLoading}
-                        onPress={() => requestUser(item._id)}
+                        onPress={() => requestUser(item)}
+                        error={
+                            selectedId === item._id && error.length > 0
+                                ? error
+                                : undefined
+                        }
                     />
                 )}
+            />
+            {selectedPlayers.length > 0 && <View style={styles.separator} />}
+            <FlatList
+                style={styles.list}
+                data={selectedPlayers}
+                keyExtractor={item => item._id}
+                renderItem={({ item }: { item: DisplayUser }) => {
+                    return (
+                        <View style={styles.playerContainer}>
+                            <Text
+                                style={
+                                    styles.playerItem
+                                }>{`${item.firstName} ${item.lastName}`}</Text>
+                            <IconButton
+                                icon="check"
+                                color={colors.success}
+                                disabled
+                            />
+                        </View>
+                    )
+                }}
             />
         </View>
     )

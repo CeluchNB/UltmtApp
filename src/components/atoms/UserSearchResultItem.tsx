@@ -15,6 +15,7 @@ interface UserSearchResultItemProps {
     username: string
     loading: boolean
     onPress: () => {}
+    error?: string
 }
 
 const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
@@ -22,6 +23,7 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
     username,
     loading,
     onPress,
+    error,
 }) => {
     const { colors } = useColors()
 
@@ -48,6 +50,11 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
         buttonStyle: {
             alignItems: 'center',
             justifyContent: 'center',
+        },
+        error: {
+            color: colors.error,
+            fontSize: size.fontFifteen,
+            fontWeight: weight.medium,
         },
     })
 
@@ -77,6 +84,7 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
                     />
                 )}
             </TouchableOpacity>
+            {error && <Text style={styles.error}>{error}</Text>}
         </View>
     )
 }
