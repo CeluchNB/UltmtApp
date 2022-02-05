@@ -1,8 +1,9 @@
 import * as React from 'react'
 import { DisplayTeam } from '../types/team'
+import MapSection from '../components/molecules/MapSection'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
-import Section from '../components/molecules/Section'
+// import Section from '../components/molecules/Section'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { useColors } from '../hooks/index'
 import { useSelector } from 'react-redux'
@@ -50,9 +51,10 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                 }
                 ListFooterComponent={
                     <View style={styles.sectionContainer}>
-                        <Section
+                        <MapSection
                             title="Teams I Play For"
                             showButton={true}
+                            showCreateButton={false}
                             onButtonPress={() => {
                                 navigation.navigate('RequestTeam')
                             }}
@@ -63,13 +65,16 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                     : undefined
                             }
                             listData={playerTeams}
-                            renderItem={({ item }) => {
-                                return <TeamListItem team={item} />
+                            renderItem={item => {
+                                return (
+                                    <TeamListItem key={item._id} team={item} />
+                                )
                             }}
                         />
-                        <Section
+                        <MapSection
                             title="Teams I Manage"
                             showButton={true}
+                            showCreateButton={false}
                             onButtonPress={() => {
                                 navigation.navigate('CreateTeam')
                             }}
@@ -80,9 +85,10 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                     : undefined
                             }
                             listData={managerTeams}
-                            renderItem={({ item }) => {
+                            renderItem={item => {
                                 return (
                                     <TeamListItem
+                                        key={item._id}
                                         team={item}
                                         onPress={() => openTeamDetails(item)}
                                     />

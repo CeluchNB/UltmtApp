@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Button } from 'react-native-paper'
 import GameListItem from '../components/atoms/GameListItem'
+import MapSection from '../components/molecules/MapSection'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
@@ -118,18 +119,19 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                                 return <StatListItem stat={item} />
                             }}
                         />
-                        <Section
+                        <MapSection
                             title="Games"
                             showButton={false}
+                            showCreateButton={false}
                             onButtonPress={() => ({})}
                             buttonText="see all games"
                             listData={[]}
-                            renderItem={({ item }) => {
+                            renderItem={item => {
                                 return <GameListItem game={item} />
                             }}
                             error="No games available"
                         />
-                        <Section
+                        <MapSection
                             title="Teams"
                             showButton={true}
                             onButtonPress={() => {
@@ -137,8 +139,10 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                             }}
                             buttonText="manage teams"
                             listData={playerTeams}
-                            renderItem={({ item }) => {
-                                return <TeamListItem team={item} />
+                            renderItem={item => {
+                                return (
+                                    <TeamListItem key={item._id} team={item} />
+                                )
                             }}
                             error={
                                 playerTeams.length === 0
