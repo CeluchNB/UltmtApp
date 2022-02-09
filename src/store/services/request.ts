@@ -108,3 +108,25 @@ export const deleteTeamRequest = async (
     )
     return await unwrapResponse(response)
 }
+
+export const respondToTeamRequest = async (
+    token: string,
+    requestId: string,
+    accept: boolean,
+): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://ultmt-dev.herokuapp.com/request/user/${
+            accept ? 'accept' : 'deny'
+        }/${requestId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+
+    return await unwrapResponse(response)
+}

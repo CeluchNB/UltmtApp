@@ -1,22 +1,57 @@
 import * as React from 'react'
+import * as RequestServices from '../store/services/request'
+import { DetailedRequest } from '../types/request'
 import { DisplayTeam } from '../types/team'
 import MapSection from '../components/molecules/MapSection'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
-// import Section from '../components/molecules/Section'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { useColors } from '../hooks/index'
-import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, View } from 'react-native'
 import {
+    fetchProfile,
     selectManagerTeams,
     selectPlayerTeams,
+    selectRequests,
+    selectToken,
 } from '../store/reducers/features/account/accountReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
+    const dispatch = useDispatch()
     const playerTeams = useSelector(selectPlayerTeams)
     const managerTeams = useSelector(selectManagerTeams)
+    const requestIds = useSelector(selectRequests)
+    const token = useSelector(selectToken)
+    const [requests, setRequests] = React.useState([] as DetailedRequest[])
+    let isMounted = React.useRef(false)
+
+    const getRequests = React.useCallback(async () => {
+        const values = await Promise.all(
+            requestIds.map(req => {
+                return RequestServices.getRequest(token, req)
+            }),
+        )
+        const reqs = values.map(
+            (v: { data?: { request: DetailedRequest } }) => {
+                return v.data?.request
+            },
+        )
+        if (isMounted.current) {
+            setRequests(
+                reqs.filter(req => req !== undefined) as DetailedRequest[],
+            )
+        }
+    }, [requestIds, token, isMounted])
+
+    React.useEffect(() => {
+        isMounted.current = true
+        getRequests()
+        return () => {
+            isMounted.current = false
+        }
+    })
 
     const styles = StyleSheet.create({
         screen: {
@@ -39,6 +74,24 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
             place: item.place,
             name: item.name,
         })
+    }
+
+    const respondToRequest = async (requestId: string, accept: boolean) => {
+        const response = await RequestServices.respondToTeamRequest(
+            token,
+            requestId,
+            accept,
+        )
+
+        if (response.data) {
+            if (accept) {
+                dispatch(fetchProfile(token))
+            } else {
+                setRequests(requests.filter(req => req._id !== requestId))
+            }
+        } else {
+            // HANDLE ERROR
+        }
     }
 
     return (
@@ -91,6 +144,34 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                         key={item._id}
                                         team={item}
                                         onPress={() => openTeamDetails(item)}
+                                    />
+                                )
+                            }}
+                        />
+                        <MapSection
+                            title="Requests"
+                            showButton={false}
+                            showCreateButton={false}
+                            listData={requests}
+                            renderItem={item => {
+                                return (
+                                    <TeamListItem
+                                        key={item._id}
+                                        team={item.teamDetails}
+                                        showAccept={true}
+                                        showDelete={true}
+                                        onAccept={async () => {
+                                            await respondToRequest(
+                                                item._id,
+                                                true,
+                                            )
+                                        }}
+                                        onDelete={async () => {
+                                            await respondToRequest(
+                                                item._id,
+                                                false,
+                                            )
+                                        }}
                                     />
                                 )
                             }}
