@@ -269,6 +269,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                                 user={item.userDetails}
                                 showDelete={true}
                                 showAccept={false}
+                                requestStatus={item.status}
                                 onDelete={() => deleteRequest(item._id)}
                             />
                         )

@@ -12,6 +12,7 @@ interface TeamListItemProps {
     showAccept?: boolean
     onDelete?: () => {}
     onAccept?: () => {}
+    requestStatus?: string
 }
 
 const TeamListItem: React.FC<TeamListItemProps> = ({
@@ -21,6 +22,7 @@ const TeamListItem: React.FC<TeamListItemProps> = ({
     showAccept,
     onDelete,
     onAccept,
+    requestStatus,
 }) => {
     const { colors } = useColors()
 
@@ -52,6 +54,21 @@ const TeamListItem: React.FC<TeamListItemProps> = ({
             alignItems: 'center',
             justifyContent: 'center',
         },
+        acceptedText: {
+            fontSize: size.fontSmall,
+            fontWeight: weight.bold,
+            color: colors.success,
+        },
+        deniedText: {
+            fontSize: size.fontSmall,
+            fontWeight: weight.bold,
+            color: colors.error,
+        },
+        pendingText: {
+            fontSize: size.fontSmall,
+            fontWeight: weight.bold,
+            color: colors.gray,
+        },
     })
 
     return (
@@ -70,6 +87,15 @@ const TeamListItem: React.FC<TeamListItemProps> = ({
                               team.seasonEnd,
                           ).getUTCFullYear()}`}
                 </Text>
+                {requestStatus === 'approved' && (
+                    <Text style={styles.acceptedText}>Accepted</Text>
+                )}
+                {requestStatus === 'denied' && (
+                    <Text style={styles.deniedText}>Denied</Text>
+                )}
+                {requestStatus === 'pending' && (
+                    <Text style={styles.pendingText}>Pending</Text>
+                )}
             </TouchableOpacity>
             {showAccept && (
                 <IconButton

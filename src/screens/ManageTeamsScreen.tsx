@@ -38,6 +38,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                 return v.data?.request
             },
         )
+
         if (isMounted.current) {
             setRequests(
                 reqs.filter(req => req !== undefined) as DetailedRequest[],
@@ -51,7 +52,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         return () => {
             isMounted.current = false
         }
-    })
+    }, [getRequests, token])
 
     const styles = StyleSheet.create({
         screen: {
@@ -89,6 +90,19 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
             } else {
                 setRequests(requests.filter(req => req._id !== requestId))
             }
+        } else {
+            // HANDLE ERROR
+        }
+    }
+
+    const deleteRequest = async (requestId: string) => {
+        const response = await RequestServices.deleteUserRequest(
+            token,
+            requestId,
+        )
+
+        if (response.data) {
+            setRequests(requests.filter(req => req._id !== requestId))
         } else {
             // HANDLE ERROR
         }
@@ -149,10 +163,12 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                             }}
                         />
                         <MapSection
-                            title="Requests"
+                            title="Requests From Teams"
                             showButton={false}
                             showCreateButton={false}
-                            listData={requests}
+                            listData={requests.filter(
+                                req => req.requestSource !== 'player',
+                            )}
                             renderItem={item => {
                                 return (
                                     <TeamListItem
@@ -172,6 +188,28 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                                 false,
                                             )
                                         }}
+                                    />
+                                )
+                            }}
+                        />
+                        <MapSection
+                            title="Requests To Teams"
+                            showButton={false}
+                            showCreateButton={false}
+                            listData={requests.filter(
+                                req => req.requestSource !== 'team',
+                            )}
+                            renderItem={item => {
+                                return (
+                                    <TeamListItem
+                                        key={item._id}
+                                        team={item.teamDetails}
+                                        showAccept={false}
+                                        showDelete={true}
+                                        onDelete={async () => {
+                                            await deleteRequest(item._id)
+                                        }}
+                                        requestStatus={item.status}
                                     />
                                 )
                             }}
