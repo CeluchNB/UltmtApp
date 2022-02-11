@@ -50,6 +50,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         [account],
     )
 
+    // REFACTOR TO USE REDUX
     React.useEffect(() => {
         setTeamLoading(true)
         const teamResponse = TeamServices.getManagedTeam(account.token, id)
@@ -112,7 +113,8 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     }
 
     const rolloverSeason = async () => {
-        console.log('rolling over season')
+        // navigate to rollover screen
+        navigation.navigate('RolloverTeam', { id })
     }
 
     const respondToRequest = async (requestId: string, accept: boolean) => {

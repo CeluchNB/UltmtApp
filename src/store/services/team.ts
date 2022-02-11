@@ -91,3 +91,26 @@ export const removePlayer = async (
 
     return await unwrapResponse(response)
 }
+
+export const rollover = async (
+    token: string,
+    teamId: string,
+    copyPlayers: boolean,
+    seasonStart: string,
+    seasonEnd: string,
+): Promise<ApiResponse> => {
+    const response = await fetch(
+        `https://ultmt-dev.herokuapp.com/team/rollover/${teamId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: '*/*',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ copyPlayers, seasonStart, seasonEnd }),
+        },
+    )
+
+    return unwrapResponse(response)
+}
