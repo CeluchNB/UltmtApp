@@ -1,33 +1,42 @@
 import * as React from 'react'
+import * as TeamServices from '../store/services/team'
 import CheckBox from '@react-native-community/checkbox'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { RolloverTeamProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
+import { useSelector } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
+import { size, weight } from '../theme/fonts'
 
 interface RolloverTeamFormData {
     copyPlayers: boolean
     season: string
 }
 
-const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ route }) => {
+const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
+    route,
+    navigation,
+}) => {
     const { colors } = useColors()
     const { id } = route.params
-    const { control, handleSubmit } = useForm({
-        defaultValues: {
-            copyPlayers: true,
-            season: '',
-        },
-    })
+    const [loading, setLoading] = React.useState(false)
+    const token = useSelector(selectToken)
     const currentYear = new Date().getFullYear()
     const years = [
         currentYear.toString(),
         `${currentYear} - ${currentYear + 1}`,
         (currentYear + 1).toString(),
     ]
+    const { control, handleSubmit } = useForm({
+        defaultValues: {
+            copyPlayers: false,
+            season: currentYear,
+        },
+    })
 
     const styles = StyleSheet.create({
         screen: {
@@ -37,9 +46,23 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ route }) => {
         },
         checkboxContainer: {
             flexDirection: 'row',
+            alignItems: 'center',
+            width: '75%',
+        },
+        checkboxTitle: {
+            flex: 1,
         },
         checkbox: {
+            alignSelf: 'center',
+            marginTop: 25,
+        },
+        sectionTitle: {
             color: colors.textPrimary,
+            fontSize: size.fontMedium,
+            fontWeight: weight.bold,
+            width: '75%',
+            alignSelf: 'center',
+            marginTop: 20,
         },
         picker: {
             color: colors.textPrimary,
@@ -47,21 +70,46 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ route }) => {
             alignSelf: 'center',
             backgroundColor: colors.primary,
         },
+        warning: {
+            color: colors.error,
+            alignSelf: 'center',
+            width: '75%',
+            marginBottom: 10,
+        },
     })
 
-    const rollover = async (data: RolloverTeamFormData) => {
-        console.log('rolling over with data', id, data)
+    const rolloverTeam = async (data: RolloverTeamFormData) => {
+        setLoading(true)
+        const seasonArray = data.season.split(' - ')
+        const seasonStart = seasonArray[0]
+        const seasonEnd = seasonArray[seasonArray.length - 1]
+        const response = await TeamServices.rollover(
+            token,
+            id,
+            data.copyPlayers,
+            seasonStart,
+            seasonEnd,
+        )
+
+        if (response.data) {
+            setLoading(false)
+            navigation.goBack()
+        } else {
+            // HANDLE ERROR
+        }
     }
 
     return (
         <View style={styles.screen}>
             <ScreenTitle title="Start New Season" />
             <View style={styles.checkboxContainer}>
-                <Text>Keep Current Players</Text>
+                <Text
+                    style={{ ...styles.sectionTitle, ...styles.checkboxTitle }}>
+                    Keep Current Players
+                </Text>
                 <Controller
                     name="copyPlayers"
                     control={control}
-                    rules={{ required: true }}
                     render={({ field: { onChange, value } }) => (
                         <CheckBox
                             value={value}
@@ -72,11 +120,13 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ route }) => {
                             }}
                             onFillColor={colors.textPrimary}
                             onCheckColor={colors.textPrimary}
+                            style={styles.checkbox}
                         />
                     )}
                 />
             </View>
-            <Text>Season</Text>
+            <Text>You can always add and drop players later</Text>
+            <Text style={styles.sectionTitle}>Season</Text>
             <Controller
                 name="season"
                 control={control}
@@ -99,10 +149,14 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ route }) => {
                     </Picker>
                 )}
             />
+            <Text style={styles.warning}>
+                Warning: You will not be able to edit the current season after
+                starting the new season.
+            </Text>
             <PrimaryButton
                 text="Submit"
-                loading={false}
-                onPress={handleSubmit(rollover)}
+                loading={loading}
+                onPress={handleSubmit(rolloverTeam)}
             />
         </View>
     )
