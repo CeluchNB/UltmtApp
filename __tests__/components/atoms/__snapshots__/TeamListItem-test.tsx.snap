@@ -1,7 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`matches snapshot 1`] = `
-<View>
+<View
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
   <View
     accessible={true}
     collapsable={false}
@@ -16,6 +23,7 @@ exports[`matches snapshot 1`] = `
     onStartShouldSetResponder={[Function]}
     style={
       Object {
+        "flex": 1,
         "opacity": 1,
       }
     }
