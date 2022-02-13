@@ -8,6 +8,7 @@ const team: DisplayTeam = {
     _id: 'id1',
     place: 'Place1',
     name: 'Name1',
+    teamname: 'teamname1',
     seasonStart: '2019',
     seasonEnd: '2019',
 }

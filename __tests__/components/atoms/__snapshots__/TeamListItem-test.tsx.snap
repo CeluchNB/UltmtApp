@@ -50,6 +50,7 @@ exports[`matches snapshot 1`] = `
       }
     >
       @
+      teamname1
     </Text>
     <Text
       style={
