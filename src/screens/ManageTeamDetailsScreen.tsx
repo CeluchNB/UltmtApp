@@ -10,10 +10,10 @@ import { Team } from '../types/team'
 import { TeamDetailsProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
-import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { size, weight } from '../theme/fonts'
 
 const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     navigation,
@@ -50,6 +50,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         [account],
     )
 
+    // REFACTOR TO USE REDUX
     React.useEffect(() => {
         setTeamLoading(true)
         const teamResponse = TeamServices.getManagedTeam(account.token, id)
@@ -82,6 +83,13 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         title: {
             textAlign: 'center',
         },
+        date: {
+            textAlign: 'center',
+            fontSize: size.fontFifteen,
+            fontWeight: weight.medium,
+            color: colors.textPrimary,
+            marginBottom: 5,
+        },
         teamname: {
             textAlign: 'center',
             fontSize: size.fontFifteen,
@@ -112,7 +120,8 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     }
 
     const rolloverSeason = async () => {
-        console.log('rolling over season')
+        // navigate to rollover screen
+        navigation.navigate('RolloverTeam', { id })
     }
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
@@ -187,6 +196,17 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         <ScrollView style={styles.screen}>
             <View style={styles.headerContainer}>
                 <ScreenTitle title={`${place} ${name}`} style={styles.title} />
+                {team.seasonStart === team.seasonEnd ? (
+                    <Text style={styles.date}>
+                        {new Date(team.seasonStart).getUTCFullYear()}
+                    </Text>
+                ) : (
+                    <Text style={styles.date}>
+                        {new Date(team.seasonStart).getUTCFullYear() +
+                            ' - ' +
+                            new Date(team.seasonEnd).getUTCFullYear()}
+                    </Text>
+                )}
                 <Text style={styles.teamname}>@{team.teamname}</Text>
                 <PrimaryButton
                     text={`${team.rosterOpen ? 'Close' : 'Open'} Roster`}
@@ -269,6 +289,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                                 user={item.userDetails}
                                 showDelete={true}
                                 showAccept={false}
+                                requestStatus={item.status}
                                 onDelete={() => deleteRequest(item._id)}
                             />
                         )

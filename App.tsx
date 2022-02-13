@@ -18,6 +18,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from './src/screens/ProfileScreen'
 import RequestTeamScreen from './src/screens/RequestTeamScreen'
 import RequestUserScreen from './src/screens/RequestUserScreen'
+import RolloverTeamScreen from './src/screens/RolloverTeamScreen'
 import { RootStackParamList } from './src/types/navigation'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import store from './src/store/store'
@@ -57,6 +58,11 @@ const App: React.FC<{}> = () => {
                 <Stack.Screen
                     name="RequestUser"
                     component={RequestUserScreen}
+                    initialParams={{ id: '' }}
+                />
+                <Stack.Screen
+                    name="RolloverTeam"
+                    component={RolloverTeamScreen}
                     initialParams={{ id: '' }}
                 />
             </Stack.Navigator>

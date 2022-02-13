@@ -127,7 +127,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                             buttonText="see all games"
                             listData={[]}
                             renderItem={item => {
-                                return <GameListItem game={item} />
+                                return <GameListItem key={item} game={item} />
                             }}
                             error="No games available"
                         />

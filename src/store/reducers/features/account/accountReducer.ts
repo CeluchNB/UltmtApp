@@ -17,6 +17,7 @@ export interface AccountSlice {
     openToRequests: boolean
     playerTeams: DisplayTeam[]
     managerTeams: DisplayTeam[]
+    requests: string[]
 }
 
 const initialState: AccountSlice = {
@@ -31,6 +32,7 @@ const initialState: AccountSlice = {
     openToRequests: true,
     playerTeams: [],
     managerTeams: [],
+    requests: [],
 }
 
 const accountSlice = createSlice({
@@ -65,6 +67,7 @@ const accountSlice = createSlice({
                     username,
                     playerTeams,
                     managerTeams,
+                    requests,
                 } = action.payload.data
 
                 state.firstName = firstName
@@ -73,6 +76,7 @@ const accountSlice = createSlice({
                 state.username = username
                 state.playerTeams = playerTeams as DisplayTeam[]
                 state.managerTeams = managerTeams as DisplayTeam[]
+                state.requests = requests
 
                 state.playerTeams.sort(
                     (a, b) =>
@@ -194,4 +198,5 @@ export const selectToken = (state: RootState) => state.account.token
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
 export const selectManagerTeams = (state: RootState) =>
     state.account.managerTeams
+export const selectRequests = (state: RootState) => state.account.requests
 export default accountSlice.reducer

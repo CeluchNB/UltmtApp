@@ -9,6 +9,7 @@ export type RootStackParamList = {
     RequestTeam: undefined
     TeamDetails: { id: string; place: string; name: string }
     RequestUser: { id: string }
+    RolloverTeam: { id: string }
 }
 
 export type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
@@ -24,4 +25,9 @@ export type TeamDetailsProps = NativeStackScreenProps<
 export type RequestUserProps = NativeStackScreenProps<
     RootStackParamList,
     'RequestUser'
+>
+
+export type RolloverTeamProps = NativeStackScreenProps<
+    RootStackParamList,
+    'RolloverTeam'
 >
