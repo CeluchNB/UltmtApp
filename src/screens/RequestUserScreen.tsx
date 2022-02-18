@@ -23,6 +23,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const [requestLoading, setRequestLoading] = React.useState(false)
     const [selectedId, setSelectedId] = React.useState('')
     const [error, setError] = React.useState('')
+    const [searchError, setSearchError] = React.useState('')
 
     const styles = StyleSheet.create({
         screen: {
@@ -38,6 +39,13 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             width: '75%',
             alignSelf: 'center',
             marginBottom: 5,
+        },
+        error: {
+            color: colors.gray,
+            width: '75%',
+            fontSize: size.fontLarge,
+            fontWeight: weight.normal,
+            alignSelf: 'center',
         },
         list: {
             width: '75%',
@@ -67,16 +75,25 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const search = async (term: string) => {
         setError('')
         if (term.length < 3) {
+            setSearchError('')
             setPlayers([])
             return
         }
 
         try {
             const result = await UserServices.searchUsers(term)
-            setPlayers(result.data.users)
+            if (result.data) {
+                if (!result.data?.users || result.data.users.length < 1) {
+                    throw Error('error')
+                }
+                setSearchError('')
+                setPlayers(result.data.users)
+            } else {
+                throw Error('Error')
+            }
         } catch (e) {
-            console.log('search error', e)
-            // HANDLE ERROR
+            setPlayers([])
+            setSearchError('No results from this search, please try again')
         }
     }
 
@@ -118,6 +135,9 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                 }}
                 placeholder="Search players..."
             />
+            {searchError.length > 0 && (
+                <Text style={styles.error}>{searchError}</Text>
+            )}
             <FlatList
                 style={styles.list}
                 data={players}
