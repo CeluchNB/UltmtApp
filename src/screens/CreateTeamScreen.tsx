@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as TeamServices from '../store/services/team'
+import * as TeamServices from '../services/network/team'
 import { CreateTeam } from '../types/team'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'

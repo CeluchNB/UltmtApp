@@ -1,6 +1,6 @@
 import * as React from 'react'
-import * as RequestServices from '../store/services/request'
-import * as UserServices from '../store/services/user'
+import * as RequestServices from '../services/network/request'
+import * as UserServices from '../services/network/user'
 import { DisplayUser } from '../types/user'
 import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'

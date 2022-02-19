@@ -1,6 +1,6 @@
 import * as React from 'react'
-import * as RequestServices from '../store/services/request'
-import * as TeamServices from '../store/services/team'
+import * as RequestServices from '../services/network/request'
+import * as TeamServices from '../services/network/team'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SearchResultItem from '../components/atoms/SearchResultItem'

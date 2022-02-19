@@ -1,4 +1,4 @@
-import * as UserServices from '../../src/store/services/user'
+import * as UserServices from '../../src/services/network/user'
 import ProfileScreen from '../../src/screens/ProfileScreen'
 import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'

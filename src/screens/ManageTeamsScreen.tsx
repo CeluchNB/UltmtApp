@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as RequestServices from '../store/services/request'
+import * as RequestServices from '../services/network/request'
 import { DetailedRequest } from '../types/request'
 import { DisplayTeam } from '../types/team'
 import MapSection from '../components/molecules/MapSection'
