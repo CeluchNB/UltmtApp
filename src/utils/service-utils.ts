@@ -11,8 +11,10 @@ export const unwrapResponse = async (
 }
 
 export const throwApiError = (error: any, message: string) => {
-    if (typeof error === typeof ApiError) {
-        throw error
+    if (error.response.data.message) {
+        throw new ApiError(error.response.data.message)
+    } else if (typeof error === typeof ApiError) {
+        throw new ApiError(error.message)
     } else {
         throw new ApiError(message)
     }

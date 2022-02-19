@@ -1,10 +1,10 @@
 import * as React from 'react'
 import * as RequestServices from '../services/network/request'
-import * as UserServices from '../services/network/user'
 import { DisplayUser } from '../types/user'
 import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
+import { searchUsers } from '../services/data/user'
 import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
@@ -16,7 +16,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const { colors } = useColors()
     const { id } = route.params
     const token = useSelector(selectToken)
-    const [players, setPlayers] = React.useState([])
+    const [players, setPlayers] = React.useState<DisplayUser[]>([])
     const [selectedPlayers, setSelectedPlayers] = React.useState<DisplayUser[]>(
         [],
     )
@@ -81,16 +81,11 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
         }
 
         try {
-            const result = await UserServices.searchUsers(term)
-            if (result.data) {
-                if (!result.data?.users || result.data.users.length < 1) {
-                    throw Error('error')
-                }
-                setSearchError('')
-                setPlayers(result.data.users)
-            } else {
-                throw Error('Error')
+            const users = await searchUsers(term)
+            if (users.length <= 0) {
+                throw new Error()
             }
+            setPlayers(users)
         } catch (e) {
             setPlayers([])
             setSearchError('No results from this search, please try again')

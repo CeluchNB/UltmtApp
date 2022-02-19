@@ -1,5 +1,4 @@
 import * as UserData from '../../../../services/data/user'
-import * as UserServices from '../../../../services/network/user'
 import { CreateUserData } from '../../../../types/user'
 import { DisplayTeam } from '../../../../types/team'
 import { LoginData } from '../../../../types/reducers'
@@ -104,8 +103,8 @@ const accountSlice = createSlice({
                     username,
                     private: privateProfile,
                     openToRequests,
-                } = action.payload.data.user
-                const { token } = action.payload.data
+                } = action.payload.user
+                const { token } = action.payload
 
                 state.firstName = firstName
                 state.lastName = lastName
@@ -117,9 +116,7 @@ const accountSlice = createSlice({
             })
             .addCase(createAccount.rejected, (state, action) => {
                 state.loading = false
-                if (action.error.message) {
-                    state.error = JSON.parse(action.error.message).message
-                }
+                state.error = action.error.message
             })
 
         builder
@@ -148,7 +145,7 @@ const accountSlice = createSlice({
             })
             .addCase(getLocalToken.fulfilled, (state, action) => {
                 state.loading = false
-                state.token = action.payload.data
+                state.token = action.payload
             })
             .addCase(getLocalToken.rejected, state => {
                 state.loading = false
@@ -175,21 +172,21 @@ export const fetchProfile = createAsyncThunk(
 export const createAccount = createAsyncThunk(
     'account/createAccount',
     async (data: CreateUserData, _thunkAPI) => {
-        return await UserServices.createAccount(data)
+        return await UserData.createAccount(data)
     },
 )
 
 export const logout = createAsyncThunk(
     'account/logout',
     async (data: string, _thunkAPI) => {
-        return await UserServices.logout(data)
+        return await UserData.logout(data)
     },
 )
 
 export const getLocalToken = createAsyncThunk(
     'account/getLocalToken',
     async () => {
-        return await UserServices.getLocalToken()
+        return await UserData.getLocalToken()
     },
 )
 
