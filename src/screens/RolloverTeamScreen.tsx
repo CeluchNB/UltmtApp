@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as TeamServices from '../services/network/team'
+import * as TeamData from '../services/data/team'
 import CheckBox from '@react-native-community/checkbox'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
@@ -91,7 +91,7 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
         const seasonStart = seasonArray[0]
         const seasonEnd = seasonArray[seasonArray.length - 1]
         try {
-            const response = await TeamServices.rollover(
+            await TeamData.rollover(
                 token,
                 id,
                 data.copyPlayers,
@@ -99,18 +99,10 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
                 seasonEnd,
             )
 
-            console.log(JSON.parse(response.error).message)
-            if (response.data) {
-                setLoading(false)
-                navigation.goBack()
-            } else {
-                setError(
-                    JSON.parse(response.error).message ??
-                        'Unable to rollover team',
-                )
-            }
-        } catch (e) {
-            setError('Unable to rollover team')
+            setLoading(false)
+            navigation.goBack()
+        } catch (e: any) {
+            setError(e.message ?? 'Unable to rollover team')
         } finally {
             setLoading(false)
         }

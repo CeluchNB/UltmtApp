@@ -2,7 +2,7 @@ import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { throwApiError } from '../../utils/service-utils'
-import { CreateUserData, DisplayUser, IUser } from '../../types/user'
+import { CreateUserData, DisplayUser, User } from '../../types/user'
 import {
     createAccount as networkCreateAccount,
     fetchProfile as networkFetchProfile,
@@ -37,7 +37,7 @@ export const login = async (
  * @param token jwt of the user
  * @returns a user object
  */
-export const fetchProfile = async (token: string): Promise<IUser> => {
+export const fetchProfile = async (token: string): Promise<User> => {
     try {
         const response = await networkFetchProfile(token)
         const user = response.data
@@ -54,7 +54,7 @@ export const fetchProfile = async (token: string): Promise<IUser> => {
  */
 export const createAccount = async (
     profileData: CreateUserData,
-): Promise<{ user: IUser; token: string }> => {
+): Promise<{ user: User; token: string }> => {
     try {
         const response = await networkCreateAccount(profileData)
         const { user, token } = response.data
@@ -101,9 +101,12 @@ export const getLocalToken = async (): Promise<string> => {
  */
 export const searchUsers = async (term: string): Promise<DisplayUser[]> => {
     try {
+        if (term.length < 3) {
+            throw new ApiError('Not enough characters to search')
+        }
         const response = await networkSearchUsers(term)
         return response.data.users
     } catch (error) {
-        throw throwApiError(error, Constants.SEARCH_USER_ERROR)
+        throw throwApiError(error, Constants.SEARCH_ERROR)
     }
 }

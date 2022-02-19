@@ -15,7 +15,7 @@ export interface DisplayUser {
     username: string
 }
 
-export interface IUser extends DisplayUser {
+export interface User extends DisplayUser {
     email: string
     requests: string[]
     playerTeams: DisplayTeam[]

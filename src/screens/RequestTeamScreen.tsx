@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as RequestServices from '../services/network/request'
-import * as TeamServices from '../services/network/team'
+import * as TeamData from '../services/data/team'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SearchResultItem from '../components/atoms/SearchResultItem'
@@ -13,7 +13,7 @@ import { FlatList, StyleSheet, View } from 'react-native'
 
 const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
-    const [teams, setTeams] = React.useState([])
+    const [teams, setTeams] = React.useState<Team[]>([])
     const token = useSelector(selectToken)
     const [loading, setLoading] = React.useState(false)
     const [selectedId, setSelectedId] = React.useState('')
@@ -42,9 +42,10 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
 
     const search = async (text: string) => {
         if (text.length >= 3) {
-            const result = await TeamServices.searchTeam(text)
-            setTeams(result.data)
+            const teamsResponse = await TeamData.searchTeam(text)
+            setTeams(teamsResponse)
         } else {
+            // HANDLE SEARCH ERROR
             setTeams([])
         }
     }

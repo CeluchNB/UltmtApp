@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as RequestServices from '../services/network/request'
-import * as TeamServices from '../services/network/team'
+import * as TeamData from '../services/data/team'
 import { DetailedRequest } from '../types/request'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
@@ -53,21 +53,17 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     // REFACTOR TO USE REDUX
     React.useEffect(() => {
         setTeamLoading(true)
-        const teamResponse = TeamServices.getManagedTeam(account.token, id)
+        const teamResponse = TeamData.getManagedTeam(account.token, id)
         teamResponse
-            .then(response => {
-                setRequestsLoading(false)
-                const { team: managedTeam } = response.data
-                if (managedTeam) {
-                    setTeamLoading(false)
-                    setTeam(managedTeam)
-                    getRequestDetails(managedTeam)
-                } else {
-                    // HANDLE ERROR
-                }
+            .then(managedTeam => {
+                setTeam(managedTeam)
+                getRequestDetails(managedTeam)
             })
             .catch(_error => {
-                setRequestsLoading(false)
+                // HANDLE ERRORS BETTER
+            })
+            .finally(() => {
+                setTeamLoading(false)
             })
     }, [id, account, getRequestDetails])
 
@@ -103,19 +99,18 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     })
 
     const toggleRosterStatus = async (open: boolean) => {
-        setOpenLoading(true)
-        const teamResult = await TeamServices.toggleRosterStatus(
-            account.token,
-            team._id,
-            open,
-        )
+        try {
+            setOpenLoading(true)
+            const teamResult = await TeamData.toggleRosterStatus(
+                account.token,
+                team._id,
+                open,
+            )
 
-        if (teamResult.data) {
-            setTeam(teamResult.data.team)
+            setTeam(teamResult)
             setOpenLoading(false)
-        } else {
+        } catch (error) {
             // HANDLE ERROR
-            console.log('error', teamResult)
         }
     }
 
@@ -138,15 +133,13 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         }
 
         if (accept) {
-            const teamResponse = await TeamServices.getManagedTeam(
-                account.token,
-                id,
-            )
-
-            const { team: managedTeam } = teamResponse.data
-            if (managedTeam) {
+            try {
+                const managedTeam = await TeamData.getManagedTeam(
+                    account.token,
+                    id,
+                )
                 setTeam(managedTeam)
-            } else {
+            } catch (error) {
                 // HANDLE ERROR
             }
         }
@@ -154,21 +147,14 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
 
     const removePlayer = async (userId: string) => {
         try {
-            const response = await TeamServices.removePlayer(
+            const responseTeam = await TeamData.removePlayer(
                 account.token,
                 team._id,
                 userId,
             )
-            if (response.data) {
-                const { team: responseTeam } = response.data
-                setTeam(responseTeam)
-            } else {
-                console.log(response.error)
-                // HANDLE ERROR
-            }
+            setTeam(responseTeam)
         } catch (e) {
-            console.log(e)
-            // HANLDE ERROR
+            // HANDLE ERROR
         }
     }
 
@@ -183,11 +169,9 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                 // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
                 setRequests(requests.filter(r => r._id !== request._id))
             } else {
-                console.log(response.error)
                 // HANDLE ERROR
             }
         } catch (e) {
-            console.log(e)
             // HANDLE ERROR
         }
     }
