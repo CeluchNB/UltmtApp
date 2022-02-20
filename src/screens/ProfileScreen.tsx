@@ -38,6 +38,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     })
 
     React.useEffect(() => {
+        console.log('in profile screen useeffect')
         if (!hasRequested.current) {
             dispatch(fetchProfile(store.getState().account.token))
             hasRequested.current = true
