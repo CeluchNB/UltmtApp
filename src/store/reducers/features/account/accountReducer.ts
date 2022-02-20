@@ -1,4 +1,4 @@
-import * as UserServices from './../../../services/user'
+import * as UserData from '../../../../services/data/user'
 import { CreateUserData } from '../../../../types/user'
 import { DisplayTeam } from '../../../../types/team'
 import { LoginData } from '../../../../types/reducers'
@@ -47,7 +47,7 @@ const accountSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false
                 state.error = undefined
-                state.token = action.payload.data.token
+                state.token = action.payload
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false
@@ -68,7 +68,7 @@ const accountSlice = createSlice({
                     playerTeams,
                     managerTeams,
                     requests,
-                } = action.payload.data
+                } = action.payload
 
                 state.firstName = firstName
                 state.lastName = lastName
@@ -103,8 +103,8 @@ const accountSlice = createSlice({
                     username,
                     private: privateProfile,
                     openToRequests,
-                } = action.payload.data.user
-                const { token } = action.payload.data
+                } = action.payload.user
+                const { token } = action.payload
 
                 state.firstName = firstName
                 state.lastName = lastName
@@ -116,9 +116,7 @@ const accountSlice = createSlice({
             })
             .addCase(createAccount.rejected, (state, action) => {
                 state.loading = false
-                if (action.error.message) {
-                    state.error = JSON.parse(action.error.message).message
-                }
+                state.error = action.error.message
             })
 
         builder
@@ -147,7 +145,7 @@ const accountSlice = createSlice({
             })
             .addCase(getLocalToken.fulfilled, (state, action) => {
                 state.loading = false
-                state.token = action.payload.data
+                state.token = action.payload
             })
             .addCase(getLocalToken.rejected, state => {
                 state.loading = false
@@ -160,35 +158,35 @@ export const login = createAsyncThunk(
     'account/login',
     async (data: LoginData, _thunkAPI) => {
         const { username, password } = data
-        return await UserServices.login(username, password)
+        return await UserData.login(username, password)
     },
 )
 
 export const fetchProfile = createAsyncThunk(
     'account/fetchProfile',
     async (data: string, _thunkAPI) => {
-        return await UserServices.fetchProfile(data)
+        return await UserData.fetchProfile(data)
     },
 )
 
 export const createAccount = createAsyncThunk(
     'account/createAccount',
     async (data: CreateUserData, _thunkAPI) => {
-        return await UserServices.createAccount(data)
+        return await UserData.createAccount(data)
     },
 )
 
 export const logout = createAsyncThunk(
     'account/logout',
     async (data: string, _thunkAPI) => {
-        return await UserServices.logout(data)
+        return await UserData.logout(data)
     },
 )
 
 export const getLocalToken = createAsyncThunk(
     'account/getLocalToken',
     async () => {
-        return await UserServices.getLocalToken()
+        return await UserData.getLocalToken()
     },
 )
 

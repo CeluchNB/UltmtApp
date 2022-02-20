@@ -130,11 +130,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
             {errors.password && (
                 <Text style={styles.error}>This field is required</Text>
             )}
-            {account.error && (
-                <Text style={styles.error}>
-                    Unable to login user with username and password combination
-                </Text>
-            )}
+            {account.error && <Text style={styles.error}>{account.error}</Text>}
 
             <PrimaryButton
                 text="Login"

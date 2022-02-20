@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as TeamServices from '../store/services/team'
+import * as TeamData from '../services/data/team'
 import { CreateTeam } from '../types/team'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
@@ -81,14 +81,12 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             seasonStart: seasonSplit[0],
             seasonEnd: seasonSplit[seasonSplit.length - 1],
         }
-        const response = await TeamServices.createTeam(
-            account.token,
-            createTeamData,
-        )
-        setLoading(false)
-        if (response.data) {
+
+        try {
+            await TeamData.createTeam(account.token, createTeamData)
+            setLoading(false)
             navigation.goBack()
-        } else {
+        } catch (error) {
             // HANDLE ERROR
         }
     }

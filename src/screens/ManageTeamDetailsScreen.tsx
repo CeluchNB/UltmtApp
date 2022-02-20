@@ -1,6 +1,6 @@
 import * as React from 'react'
-import * as RequestServices from '../store/services/request'
-import * as TeamServices from '../store/services/team'
+import * as RequestData from '../services/data/request'
+import * as TeamData from '../services/data/team'
 import { DetailedRequest } from '../types/request'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
@@ -32,16 +32,14 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         async (teamDetails: Team) => {
             setRequestsLoading(true)
             try {
-                const values = await Promise.all(
+                const reqs = await Promise.all(
                     teamDetails.requests.map((req: string) => {
-                        return RequestServices.getRequest(account.token, req)
+                        return RequestData.getRequest(account.token, req)
                     }),
                 )
-                const reqs = values.map((v: { data?: { request: any } }) => {
-                    return v.data?.request
-                })
                 setRequests(reqs)
             } catch (error) {
+                // HANDLE ERROR
                 // Use Error Boundaries
             } finally {
                 setRequestsLoading(false)
@@ -53,21 +51,17 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     // REFACTOR TO USE REDUX
     React.useEffect(() => {
         setTeamLoading(true)
-        const teamResponse = TeamServices.getManagedTeam(account.token, id)
+        const teamResponse = TeamData.getManagedTeam(account.token, id)
         teamResponse
-            .then(response => {
-                setRequestsLoading(false)
-                const { team: managedTeam } = response.data
-                if (managedTeam) {
-                    setTeamLoading(false)
-                    setTeam(managedTeam)
-                    getRequestDetails(managedTeam)
-                } else {
-                    // HANDLE ERROR
-                }
+            .then(managedTeam => {
+                setTeam(managedTeam)
+                getRequestDetails(managedTeam)
             })
             .catch(_error => {
-                setRequestsLoading(false)
+                // HANDLE ERRORS BETTER
+            })
+            .finally(() => {
+                setTeamLoading(false)
             })
     }, [id, account, getRequestDetails])
 
@@ -103,19 +97,18 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     })
 
     const toggleRosterStatus = async (open: boolean) => {
-        setOpenLoading(true)
-        const teamResult = await TeamServices.toggleRosterStatus(
-            account.token,
-            team._id,
-            open,
-        )
+        try {
+            setOpenLoading(true)
+            const teamResult = await TeamData.toggleRosterStatus(
+                account.token,
+                team._id,
+                open,
+            )
 
-        if (teamResult.data) {
-            setTeam(teamResult.data.team)
+            setTeam(teamResult)
             setOpenLoading(false)
-        } else {
+        } catch (error) {
             // HANDLE ERROR
-            console.log('error', teamResult)
         }
     }
 
@@ -125,69 +118,48 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     }
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
-        const requestResponse = await RequestServices.respondToPlayerRequest(
-            account.token,
-            requestId,
-            accept,
-        )
-
-        if (requestResponse.data) {
-            setRequests(requests.filter(r => r._id !== requestId))
-        } else {
-            // HANDLE ERROR
-        }
-
-        if (accept) {
-            const teamResponse = await TeamServices.getManagedTeam(
+        try {
+            await RequestData.respondToPlayerRequest(
                 account.token,
-                id,
+                requestId,
+                accept,
             )
+            setRequests(requests.filter(r => r._id !== requestId))
 
-            const { team: managedTeam } = teamResponse.data
-            if (managedTeam) {
+            if (accept) {
+                const managedTeam = await TeamData.getManagedTeam(
+                    account.token,
+                    id,
+                )
                 setTeam(managedTeam)
-            } else {
-                // HANDLE ERROR
             }
+        } catch (error) {
+            // HANDLE ERROR
         }
     }
 
     const removePlayer = async (userId: string) => {
         try {
-            const response = await TeamServices.removePlayer(
+            const responseTeam = await TeamData.removePlayer(
                 account.token,
                 team._id,
                 userId,
             )
-            if (response.data) {
-                const { team: responseTeam } = response.data
-                setTeam(responseTeam)
-            } else {
-                console.log(response.error)
-                // HANDLE ERROR
-            }
+            setTeam(responseTeam)
         } catch (e) {
-            console.log(e)
-            // HANLDE ERROR
+            // HANDLE ERROR
         }
     }
 
     const deleteRequest = async (requestId: string) => {
         try {
-            const response = await RequestServices.deleteTeamRequest(
+            const request = await RequestData.deleteTeamRequest(
                 account.token,
                 requestId,
             )
-            if (response.data) {
-                const { request } = response.data
-                // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
-                setRequests(requests.filter(r => r._id !== request._id))
-            } else {
-                console.log(response.error)
-                // HANDLE ERROR
-            }
+            // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
+            setRequests(requests.filter(r => r._id !== request._id))
         } catch (e) {
-            console.log(e)
             // HANDLE ERROR
         }
     }

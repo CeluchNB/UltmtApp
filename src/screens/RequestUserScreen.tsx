@@ -1,10 +1,10 @@
 import * as React from 'react'
-import * as RequestServices from '../store/services/request'
-import * as UserServices from '../store/services/user'
+import * as RequestData from '../services/data/request'
 import { DisplayUser } from '../types/user'
 import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
+import { searchUsers } from '../services/data/user'
 import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
@@ -16,13 +16,14 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const { colors } = useColors()
     const { id } = route.params
     const token = useSelector(selectToken)
-    const [players, setPlayers] = React.useState([])
+    const [players, setPlayers] = React.useState<DisplayUser[]>([])
     const [selectedPlayers, setSelectedPlayers] = React.useState<DisplayUser[]>(
         [],
     )
     const [requestLoading, setRequestLoading] = React.useState(false)
     const [selectedId, setSelectedId] = React.useState('')
     const [error, setError] = React.useState('')
+    const [searchError, setSearchError] = React.useState('')
 
     const styles = StyleSheet.create({
         screen: {
@@ -38,6 +39,13 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             width: '75%',
             alignSelf: 'center',
             marginBottom: 5,
+        },
+        error: {
+            color: colors.gray,
+            width: '75%',
+            fontSize: size.fontLarge,
+            fontWeight: weight.normal,
+            alignSelf: 'center',
         },
         list: {
             width: '75%',
@@ -67,37 +75,34 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const search = async (term: string) => {
         setError('')
         if (term.length < 3) {
+            setSearchError('')
             setPlayers([])
             return
         }
 
         try {
-            const result = await UserServices.searchUsers(term)
-            setPlayers(result.data.users)
+            const users = await searchUsers(term)
+            if (users.length <= 0) {
+                throw new Error()
+            }
+            setPlayers(users)
         } catch (e) {
-            console.log('search error', e)
-            // HANDLE ERROR
+            setPlayers([])
+            setSearchError('No results from this search, please try again')
         }
     }
 
     const requestUser = async (user: DisplayUser) => {
-        setError('')
         try {
+            setError('')
             setRequestLoading(true)
             setSelectedId(user._id)
-            const result = await RequestServices.requestUser(
-                token,
-                user._id,
-                id,
-            )
-            if (result.data) {
-                setSelectedPlayers([user, ...selectedPlayers])
-            } else {
-                setError(result.error.message)
-            }
+            await RequestData.requestUser(token, user._id, id)
+            setSelectedPlayers([user, ...selectedPlayers])
+        } catch (e: any) {
+            setError(e.message)
+        } finally {
             setRequestLoading(false)
-        } catch (e) {
-            setError('Unable to request user')
         }
     }
 
@@ -118,6 +123,9 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                 }}
                 placeholder="Search players..."
             />
+            {searchError.length > 0 && (
+                <Text style={styles.error}>{searchError}</Text>
+            )}
             <FlatList
                 style={styles.list}
                 data={players}

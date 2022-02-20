@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as TeamServices from '../store/services/team'
+import * as TeamData from '../services/data/team'
 import CheckBox from '@react-native-community/checkbox'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
@@ -24,6 +24,7 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
     const { colors } = useColors()
     const { id } = route.params
     const [loading, setLoading] = React.useState(false)
+    const [error, setError] = React.useState('')
     const token = useSelector(selectToken)
     const currentYear = new Date().getFullYear()
     const years = [
@@ -34,7 +35,7 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
     const { control, handleSubmit } = useForm({
         defaultValues: {
             copyPlayers: false,
-            season: currentYear,
+            season: years[0],
         },
     })
 
@@ -71,6 +72,12 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
             backgroundColor: colors.primary,
         },
         warning: {
+            color: colors.textSecondary,
+            alignSelf: 'center',
+            width: '75%',
+            marginBottom: 10,
+        },
+        error: {
             color: colors.error,
             alignSelf: 'center',
             width: '75%',
@@ -83,19 +90,21 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
         const seasonArray = data.season.split(' - ')
         const seasonStart = seasonArray[0]
         const seasonEnd = seasonArray[seasonArray.length - 1]
-        const response = await TeamServices.rollover(
-            token,
-            id,
-            data.copyPlayers,
-            seasonStart,
-            seasonEnd,
-        )
+        try {
+            await TeamData.rollover(
+                token,
+                id,
+                data.copyPlayers,
+                seasonStart,
+                seasonEnd,
+            )
 
-        if (response.data) {
             setLoading(false)
             navigation.goBack()
-        } else {
-            // HANDLE ERROR
+        } catch (e: any) {
+            setError(e.message ?? 'Unable to rollover team')
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -153,6 +162,7 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
                 Warning: You will not be able to edit the current season after
                 starting the new season.
             </Text>
+            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
             <PrimaryButton
                 text="Submit"
                 loading={loading}

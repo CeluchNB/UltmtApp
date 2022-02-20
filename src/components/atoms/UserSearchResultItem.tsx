@@ -31,7 +31,6 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
         container: {
             display: 'flex',
             flexDirection: 'row',
-            margin: 5,
         },
         nameContainer: {
             flex: 1,

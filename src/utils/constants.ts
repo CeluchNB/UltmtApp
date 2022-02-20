@@ -1,0 +1,13 @@
+/* eslint-disable prettier/prettier */
+export const GENERIC_LOGIN_ERROR = 'Unable to login. Please try again.'
+export const GENERIC_FETCH_PROFILE_ERROR = 'Unable to fetch profile. Please try again later.'
+export const GENERIC_CREATE_ACCOUNT_ERROR = 'Unable to create account. Please try again.'
+export const GENERIC_LOGOUT_ERROR = 'Unable to logout. Please try again'
+export const GENERIC_GET_TOKEN_ERROR = 'Unable to find token.'
+export const SEARCH_ERROR = 'Unable to get results from your search.'
+export const CREATE_TEAM_ERROR = 'Unable to create team. Please try again.'
+export const GET_TEAM_ERROR = 'Unable to get team. Please try again.'
+export const EDIT_TEAM_ERROR = 'Unable to make changes to the team. Please try again.'
+export const CREATE_REQUEST_ERROR = 'Unable to create request. Please try again.'
+export const GET_REQUEST_ERROR = 'Unable to get request.'
+export const REQUEST_RESPONSE_ERROR = 'Error responding to request.'

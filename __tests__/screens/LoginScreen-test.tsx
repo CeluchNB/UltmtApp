@@ -1,4 +1,4 @@
-import * as UserServices from '../../src/store/services/user'
+import * as UserServices from '../../src/services/network/user'
 import LoginScreen from '../../src/screens/LoginScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { Props } from '../../src/types/navigation'
