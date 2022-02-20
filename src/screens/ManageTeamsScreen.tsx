@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as RequestServices from '../services/network/request'
+import * as RequestData from '../services/data/request'
 import { DetailedRequest } from '../types/request'
 import { DisplayTeam } from '../types/team'
 import MapSection from '../components/molecules/MapSection'
@@ -28,15 +28,10 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     let isMounted = React.useRef(false)
 
     const getRequests = React.useCallback(async () => {
-        const values = await Promise.all(
+        const reqs = await Promise.all(
             requestIds.map(req => {
-                return RequestServices.getRequest(token, req)
+                return RequestData.getRequest(token, req)
             }),
-        )
-        const reqs = values.map(
-            (v: { data?: { request: DetailedRequest } }) => {
-                return v.data?.request
-            },
         )
 
         if (isMounted.current) {
@@ -78,32 +73,23 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     }
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
-        const response = await RequestServices.respondToTeamRequest(
-            token,
-            requestId,
-            accept,
-        )
-
-        if (response.data) {
+        try {
+            await RequestData.respondToTeamRequest(token, requestId, accept)
             if (accept) {
                 dispatch(fetchProfile(token))
             } else {
                 setRequests(requests.filter(req => req._id !== requestId))
             }
-        } else {
+        } catch (error) {
             // HANDLE ERROR
         }
     }
 
     const deleteRequest = async (requestId: string) => {
-        const response = await RequestServices.deleteUserRequest(
-            token,
-            requestId,
-        )
-
-        if (response.data) {
+        try {
+            await RequestData.deleteUserRequest(token, requestId)
             setRequests(requests.filter(req => req._id !== requestId))
-        } else {
+        } catch (error) {
             // HANDLE ERROR
         }
     }

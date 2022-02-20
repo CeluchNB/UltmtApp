@@ -1,14 +1,4 @@
-import { ApiError, ApiResponse } from '../types/services'
-
-export const unwrapResponse = async (
-    response: Awaited<ReturnType<typeof fetch>>,
-): Promise<ApiResponse> => {
-    if (response.ok) {
-        return { data: await response.json() }
-    } else {
-        return { error: await response.text() }
-    }
-}
+import { ApiError } from '../types/services'
 
 export const throwApiError = (error: any, message: string) => {
     if (error.response.data.message) {

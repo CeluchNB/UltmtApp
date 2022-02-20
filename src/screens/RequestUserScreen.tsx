@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as RequestServices from '../services/network/request'
+import * as RequestData from '../services/data/request'
 import { DisplayUser } from '../types/user'
 import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
@@ -93,23 +93,16 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     }
 
     const requestUser = async (user: DisplayUser) => {
-        setError('')
         try {
+            setError('')
             setRequestLoading(true)
             setSelectedId(user._id)
-            const result = await RequestServices.requestUser(
-                token,
-                user._id,
-                id,
-            )
-            if (result.data) {
-                setSelectedPlayers([user, ...selectedPlayers])
-            } else {
-                setError(result.error.message)
-            }
+            await RequestData.requestUser(token, user._id, id)
+            setSelectedPlayers([user, ...selectedPlayers])
+        } catch (e: any) {
+            setError(e.message)
+        } finally {
             setRequestLoading(false)
-        } catch (e) {
-            setError('Unable to request user')
         }
     }
 

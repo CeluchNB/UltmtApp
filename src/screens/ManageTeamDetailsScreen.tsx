@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as RequestServices from '../services/network/request'
+import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
 import { DetailedRequest } from '../types/request'
 import MapSection from '../components/molecules/MapSection'
@@ -32,16 +32,14 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
         async (teamDetails: Team) => {
             setRequestsLoading(true)
             try {
-                const values = await Promise.all(
+                const reqs = await Promise.all(
                     teamDetails.requests.map((req: string) => {
-                        return RequestServices.getRequest(account.token, req)
+                        return RequestData.getRequest(account.token, req)
                     }),
                 )
-                const reqs = values.map((v: { data?: { request: any } }) => {
-                    return v.data?.request
-                })
                 setRequests(reqs)
             } catch (error) {
+                // HANDLE ERROR
                 // Use Error Boundaries
             } finally {
                 setRequestsLoading(false)
@@ -120,28 +118,23 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     }
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
-        const requestResponse = await RequestServices.respondToPlayerRequest(
-            account.token,
-            requestId,
-            accept,
-        )
-
-        if (requestResponse.data) {
+        try {
+            await RequestData.respondToPlayerRequest(
+                account.token,
+                requestId,
+                accept,
+            )
             setRequests(requests.filter(r => r._id !== requestId))
-        } else {
-            // HANDLE ERROR
-        }
 
-        if (accept) {
-            try {
+            if (accept) {
                 const managedTeam = await TeamData.getManagedTeam(
                     account.token,
                     id,
                 )
                 setTeam(managedTeam)
-            } catch (error) {
-                // HANDLE ERROR
             }
+        } catch (error) {
+            // HANDLE ERROR
         }
     }
 
@@ -160,17 +153,12 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
 
     const deleteRequest = async (requestId: string) => {
         try {
-            const response = await RequestServices.deleteTeamRequest(
+            const request = await RequestData.deleteTeamRequest(
                 account.token,
                 requestId,
             )
-            if (response.data) {
-                const { request } = response.data
-                // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
-                setRequests(requests.filter(r => r._id !== request._id))
-            } else {
-                // HANDLE ERROR
-            }
+            // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
+            setRequests(requests.filter(r => r._id !== request._id))
         } catch (e) {
             // HANDLE ERROR
         }
