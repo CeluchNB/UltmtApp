@@ -21,7 +21,6 @@ import RequestUserScreen from './src/screens/RequestUserScreen'
 import RolloverTeamScreen from './src/screens/RolloverTeamScreen'
 import { RootStackParamList } from './src/types/navigation'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import store from './src/store/store'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -29,11 +28,7 @@ const App: React.FC<{}> = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName={
-                    store.getState().account.token.length > 0
-                        ? 'Profile'
-                        : 'Login'
-                }
+                initialRouteName={'Login'}
                 screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Profile" component={ProfileScreen} />

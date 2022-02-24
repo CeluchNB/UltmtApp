@@ -8,46 +8,49 @@ import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { size } from '../theme/fonts'
-import store from '../store/store'
 import { useColors } from '../hooks'
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import {
     fetchProfile,
     logout,
     selectAccount,
-    selectLoading,
     selectPlayerTeams,
+    selectToken,
+    setError,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
-    const loading = useSelector(selectLoading)
+    const token = useSelector(selectToken)
     const playerTeams = useSelector(selectPlayerTeams)
+    const [loading, setLoading] = React.useState(false)
     const hasRequested = React.useRef(false)
 
     const dispatch = useDispatch()
 
-    const unsubscribe = store.subscribe(() => {
-        const state = store.getState()
-
-        if (state.account.token.length === 0) {
-            navigation.navigate('Login')
-        }
-    })
-
     React.useEffect(() => {
-        console.log('in profile screen useeffect')
         if (!hasRequested.current) {
-            dispatch(fetchProfile(store.getState().account.token))
+            dispatch(fetchProfile(token))
             hasRequested.current = true
         }
-
-        return () => {
-            unsubscribe()
-        }
     })
+
+    const onLogout = async () => {
+        try {
+            setLoading(true)
+            dispatch(logout(token))
+            setLoading(false)
+            navigation.navigate('Login')
+        } catch (error: any) {
+            dispatch(setError(error.message ?? 'Unable to logout'))
+        }
+    }
+
+    const onCreateTeam = () => {
+        navigation.navigate('CreateTeam')
+    }
 
     const styles = StyleSheet.create({
         container: {
@@ -65,14 +68,6 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
             marginTop: 5,
         },
     })
-
-    const onLogout = () => {
-        dispatch(logout(account.token))
-    }
-
-    const onCreateTeam = () => {
-        navigation.navigate('CreateTeam')
-    }
 
     return (
         <SafeAreaView style={styles.container}>

@@ -71,8 +71,8 @@ export const createAccount = async (
  */
 export const logout = async (token: string) => {
     try {
-        await networkLogout(token)
         await EncryptedStorage.removeItem('jwt_token')
+        await networkLogout(token)
     } catch (error: any) {
         throw throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
     }

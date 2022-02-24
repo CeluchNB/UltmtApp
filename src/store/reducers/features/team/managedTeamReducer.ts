@@ -10,61 +10,67 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export interface ManagedTeamSlice {
     team?: Team
-    loading: boolean
+    openLoading: boolean
+    teamLoading: boolean
     error?: string
 }
 
 const initialState: ManagedTeamSlice = {
     team: undefined,
-    loading: false,
+    openLoading: false,
+    teamLoading: false,
     error: undefined,
 }
 
 const managedTeamSlice = createSlice({
     name: 'managedTeam',
     initialState,
-    reducers: {},
+    reducers: {
+        setTeam(state, action) {
+            state.team = action.payload
+        },
+    },
     extraReducers: builder => {
         builder
             .addCase(getManagedTeam.pending, state => {
-                state.loading = true
+                state.teamLoading = true
                 state.error = undefined
             })
             .addCase(getManagedTeam.fulfilled, (state, action) => {
-                state.loading = false
+                state.teamLoading = false
                 state.error = undefined
                 state.team = action.payload
             })
             .addCase(getManagedTeam.rejected, (state, action) => {
-                state.loading = false
+                state.teamLoading = false
                 state.error = action.error.message
             })
         builder
             .addCase(toggleRosterStatus.pending, state => {
-                state.loading = true
+                state.openLoading = true
                 state.error = undefined
             })
             .addCase(toggleRosterStatus.fulfilled, (state, action) => {
-                state.loading = false
+                state.openLoading = false
                 state.error = undefined
                 state.team = action.payload
             })
             .addCase(toggleRosterStatus.rejected, (state, action) => {
-                state.loading = false
+                state.openLoading = false
                 state.error = action.error.message
             })
         builder
             .addCase(removePlayer.pending, state => {
-                state.loading = true
+                state.teamLoading = true
                 state.error = undefined
             })
             .addCase(removePlayer.fulfilled, (state, action) => {
-                state.loading = false
+                state.teamLoading = false
                 state.error = undefined
                 state.team = action.payload
             })
             .addCase(removePlayer.rejected, (state, action) => {
-                state.loading = false
+                state.teamLoading = false
                 state.error = action.error.message
             })
     },
@@ -95,6 +101,10 @@ export const removePlayer = createAsyncThunk(
 )
 
 export const selectTeam = (state: RootState) => state.managedTeam.team
-export const selectTeamLoading = (state: RootState) => state.managedTeam.loading
+export const selectTeamLoading = (state: RootState) =>
+    state.managedTeam.teamLoading
+export const selectOpenLoading = (state: RootState) =>
+    state.managedTeam.openLoading
 export const selectTeamError = (state: RootState) => state.managedTeam.error
+export const { setTeam } = managedTeamSlice.actions
 export default managedTeamSlice.reducer

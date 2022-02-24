@@ -12,7 +12,6 @@ export interface AccountSlice {
     username: string
     token: string
     error?: string
-    loading: boolean
     privateProfile: boolean
     openToRequests: boolean
     playerTeams: DisplayTeam[]
@@ -27,7 +26,6 @@ const initialState: AccountSlice = {
     username: '',
     token: '',
     error: undefined,
-    loading: false,
     privateProfile: false,
     openToRequests: true,
     playerTeams: [],
@@ -38,28 +36,30 @@ const initialState: AccountSlice = {
 const accountSlice = createSlice({
     name: 'account',
     initialState,
-    reducers: {},
+    reducers: {
+        setToken(state, action) {
+            state.token = action.payload
+        },
+        setError(state, action) {
+            state.error = action.payload
+        },
+        resetState(state) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            state = initialState
+        },
+    },
     extraReducers: builder => {
         builder
-            .addCase(login.pending, state => {
-                state.loading = true
-            })
             .addCase(login.fulfilled, (state, action) => {
-                state.loading = false
                 state.error = undefined
                 state.token = action.payload
             })
             .addCase(login.rejected, (state, action) => {
-                state.loading = false
                 state.error = action.error.message
             })
 
         builder
-            .addCase(fetchProfile.pending, state => {
-                state.loading = true
-            })
             .addCase(fetchProfile.fulfilled, (state, action) => {
-                state.loading = false
                 const {
                     firstName,
                     lastName,
@@ -85,17 +85,12 @@ const accountSlice = createSlice({
                 )
             })
             .addCase(fetchProfile.rejected, (state, action) => {
-                state.loading = false
                 state.error = action.error.message
                 state.token = ''
             })
 
         builder
-            .addCase(createAccount.pending, state => {
-                state.loading = true
-            })
             .addCase(createAccount.fulfilled, (state, action) => {
-                state.loading = false
                 const {
                     firstName,
                     lastName,
@@ -115,17 +110,11 @@ const accountSlice = createSlice({
                 state.token = token
             })
             .addCase(createAccount.rejected, (state, action) => {
-                state.loading = false
                 state.error = action.error.message
             })
 
         builder
-            .addCase(logout.pending, state => {
-                state.loading = true
-            })
             .addCase(logout.fulfilled, state => {
-                state.loading = false
-
                 state.firstName = ''
                 state.lastName = ''
                 state.email = ''
@@ -135,20 +124,14 @@ const accountSlice = createSlice({
                 state.token = ''
             })
             .addCase(logout.rejected, (state, action) => {
-                state.loading = false
                 state.error = action.error.message
             })
 
         builder
-            .addCase(getLocalToken.pending, state => {
-                state.loading = true
-            })
             .addCase(getLocalToken.fulfilled, (state, action) => {
-                state.loading = false
                 state.token = action.payload
             })
             .addCase(getLocalToken.rejected, state => {
-                state.loading = false
                 state.token = ''
             })
     },
@@ -191,10 +174,10 @@ export const getLocalToken = createAsyncThunk(
 )
 
 export const selectAccount = (state: RootState) => state.account
-export const selectLoading = (state: RootState) => state.account.loading
 export const selectToken = (state: RootState) => state.account.token
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
 export const selectManagerTeams = (state: RootState) =>
     state.account.managerTeams
 export const selectRequests = (state: RootState) => state.account.requests
+export const { setToken, setError, resetState } = accountSlice.actions
 export default accountSlice.reducer

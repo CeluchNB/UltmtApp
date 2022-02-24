@@ -1,19 +1,18 @@
 import * as React from 'react'
+import * as UserData from '../services/data/user'
 import { LoginData } from '../types/reducers'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
-import store from './../store/store'
 import { useColors } from '../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 import {
-    getLocalToken,
-    login,
     selectAccount,
-    selectLoading,
+    setError,
+    setToken,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -22,7 +21,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     const dispatch = useDispatch()
     const { colors } = useColors()
     const account = useSelector(selectAccount)
-    const loading = useSelector(selectLoading)
+    const [loading, setLoading] = React.useState(false)
 
     const {
         control,
@@ -36,31 +35,36 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
         } as LoginData,
     })
 
-    const onSubmit = (data: LoginData) => {
-        dispatch(login(data))
-    }
-
-    const unsubscribe = store.subscribe(() => {
-        const state = store.getState()
-
-        if (state.account.token.length > 0) {
+    const onSubmit = async (data: LoginData) => {
+        try {
+            setLoading(true)
             reset({
                 username: '',
                 password: '',
             })
+            const { username, password } = data
+            const token = await UserData.login(username, password)
+            dispatch(setToken(token))
+            setLoading(false)
             navigation.navigate('Profile')
+        } catch (error: any) {
+            setLoading(false)
+            dispatch(setError(error.message ?? 'Unable to login'))
         }
-    })
+    }
 
     React.useEffect(() => {
         if (!hasCheckedLocalToken.current) {
-            dispatch(getLocalToken())
-            hasCheckedLocalToken.current = true
+            UserData.getLocalToken()
+                .then(token => {
+                    dispatch(setToken(token))
+                    navigation.navigate('Profile')
+                })
+                .catch(error => {
+                    dispatch(setError(error.message ?? 'Error fetching token'))
+                })
         }
-        return () => {
-            unsubscribe()
-        }
-    })
+    }, [dispatch, navigation])
 
     const styles = StyleSheet.create({
         screen: {

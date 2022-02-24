@@ -1,26 +1,26 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
+import * as TeamData from '../services/data/team'
 import { DetailedRequest } from '../types/request'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
+import { Team } from '../types/team'
 import { TeamDetailsProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
-import store from '../store/store'
+import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import {
     getManagedTeam,
     removePlayer,
+    selectOpenLoading,
     selectTeam,
     selectTeamLoading,
+    setTeam,
     toggleRosterStatus,
 } from '../store/reducers/features/team/managedTeamReducer'
-import {
-    selectAccount,
-    selectToken,
-} from '../store/reducers/features/account/accountReducer'
 import { size, weight } from '../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -30,58 +30,48 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
 }: TeamDetailsProps) => {
     const { colors } = useColors()
     const { id, place, name } = route.params
-    // const [team, setTeam] = React.useState({} as Team)
-    // const [teamLoading, setTeamLoading] = React.useState(false)
+    const dispatch = useDispatch()
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
     const [requestsLoading, setRequestsLoading] = React.useState(false)
-    const [openLoading, setOpenLoading] = React.useState(false)
-    const dispatch = useDispatch()
-    const account = useSelector(selectAccount)
     const token = useSelector(selectToken)
     const team = useSelector(selectTeam)
     const teamLoading = useSelector(selectTeamLoading)
+    const openLoading = useSelector(selectOpenLoading)
 
-    const unsubscribe = store.subscribe(async () => {
-        try {
-            console.log('trying to init requests')
-            setRequestsLoading(true)
-            if (!team) {
-                console.log('no team')
-                throw new Error()
-            }
-            const reqs = await Promise.all(
-                team.requests.map((req: string) => {
-                    return RequestData.getRequest(account.token, req)
+    const fetchRequests = React.useCallback(
+        async (teamResponse: Team): Promise<DetailedRequest[]> => {
+            return Promise.all(
+                teamResponse.requests.map((req: string) => {
+                    return RequestData.getRequest(token, req)
                 }),
             )
-            console.log('team', team)
-            console.log('reqs', reqs)
-            setRequests(reqs)
-        } catch (error) {
-            // HANDLE ERROR
-            // Use Error Boundaries
-        } finally {
-            setRequestsLoading(false)
-        }
-    })
+        },
+        [token],
+    )
 
     React.useEffect(() => {
-        console.log('dispatching get managed team')
-        dispatch(getManagedTeam({ token, id }))
-        return () => {
-            console.log('calling unsubscribe')
-            unsubscribe()
-        }
-    }, [dispatch, unsubscribe, token, id])
+        TeamData.getManagedTeam(token, id)
+            .then(teamResponse => {
+                setRequestsLoading(true)
+                dispatch(setTeam(teamResponse))
+                return fetchRequests(teamResponse)
+            })
+            .then(reqs => {
+                setRequests(reqs)
+            })
+            .catch(e => {
+                console.log(e)
+            })
+            .finally(() => {
+                setRequestsLoading(false)
+            })
+    }, [token, id, dispatch, fetchRequests])
 
     const onToggleRosterStatus = async (open: boolean) => {
         try {
-            setOpenLoading(true)
             dispatch(toggleRosterStatus({ token, id, open }))
         } catch (error) {
             // HANDLE ERROR
-        } finally {
-            setOpenLoading(false)
         }
     }
 
@@ -92,11 +82,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
         try {
-            await RequestData.respondToPlayerRequest(
-                account.token,
-                requestId,
-                accept,
-            )
+            await RequestData.respondToPlayerRequest(token, requestId, accept)
             setRequests(requests.filter(r => r._id !== requestId))
 
             if (accept) {
@@ -114,7 +100,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     const deleteRequest = async (requestId: string) => {
         try {
             const request = await RequestData.deleteTeamRequest(
-                account.token,
+                token,
                 requestId,
             )
             // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
