@@ -21,13 +21,3 @@ export type TeamDetailsProps = NativeStackScreenProps<
     RootStackParamList,
     'TeamDetails'
 >
-
-export type RequestUserProps = NativeStackScreenProps<
-    RootStackParamList,
-    'RequestUser'
->
-
-export type RolloverTeamProps = NativeStackScreenProps<
-    RootStackParamList,
-    'RolloverTeam'
->

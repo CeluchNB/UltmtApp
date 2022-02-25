@@ -19,6 +19,7 @@ import {
     selectTeam,
     selectTeamLoading,
     setTeam,
+    setTeamLoading,
     toggleRosterStatus,
 } from '../store/reducers/features/team/managedTeamReducer'
 import { size, weight } from '../theme/fonts'
@@ -31,9 +32,9 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     const { colors } = useColors()
     const { id, place, name } = route.params
     const dispatch = useDispatch()
+    const [requestsLoading, setRequestsLoading] = React.useState(false)
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
     const [error, setError] = React.useState(undefined)
-    const [requestsLoading, setRequestsLoading] = React.useState(false)
     const token = useSelector(selectToken)
     const team = useSelector(selectTeam)
     const teamLoading = useSelector(selectTeamLoading)
@@ -51,23 +52,29 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     )
 
     React.useEffect(() => {
-        TeamData.getManagedTeam(token, id)
-            .then(teamResponse => {
-                setRequestsLoading(true)
-                dispatch(setTeam(teamResponse))
-                return fetchRequests(teamResponse)
-            })
-            .then(reqs => {
-                setRequests(reqs)
-            })
-            .catch(e => {
-                dispatch(setTeam(undefined))
-                setError(e.message)
-            })
-            .finally(() => {
-                setRequestsLoading(false)
-            })
-    }, [token, id, dispatch, fetchRequests])
+        const unsubscribe = navigation.addListener('focus', () => {
+            dispatch(setTeamLoading(true))
+            TeamData.getManagedTeam(token, id)
+                .then(teamResponse => {
+                    setRequestsLoading(true)
+                    dispatch(setTeam(teamResponse))
+                    dispatch(setTeamLoading(false))
+                    return fetchRequests(teamResponse)
+                })
+                .then(reqs => {
+                    setRequests(reqs)
+                })
+                .catch(e => {
+                    dispatch(setTeam(undefined))
+                    setError(e.message)
+                })
+                .finally(() => {
+                    setRequestsLoading(false)
+                    dispatch(setTeamLoading(false))
+                })
+        })
+        return unsubscribe
+    })
 
     const onToggleRosterStatus = async (open: boolean) => {
         try {

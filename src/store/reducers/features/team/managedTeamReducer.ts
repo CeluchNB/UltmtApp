@@ -29,6 +29,9 @@ const managedTeamSlice = createSlice({
         setTeam(state, action) {
             state.team = action.payload
         },
+        setTeamLoading(state, action) {
+            state.teamLoading = action.payload
+        },
     },
     extraReducers: builder => {
         builder
@@ -106,5 +109,5 @@ export const selectTeamLoading = (state: RootState) =>
 export const selectOpenLoading = (state: RootState) =>
     state.managedTeam.openLoading
 export const selectTeamError = (state: RootState) => state.managedTeam.error
-export const { setTeam } = managedTeamSlice.actions
+export const { setTeam, setTeamLoading } = managedTeamSlice.actions
 export default managedTeamSlice.reducer

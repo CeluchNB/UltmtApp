@@ -77,7 +77,10 @@ const MapSection = <T,>({
                 )}
             </View>
             {error && <Text style={styles.error}>{error}</Text>}
-            {!error && listData && listData.map(item => renderItem(item))}
+            {!error &&
+                !loading &&
+                listData &&
+                listData.map(item => renderItem(item))}
             {loading && (
                 <ActivityIndicator
                     size="large"

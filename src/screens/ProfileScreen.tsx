@@ -26,15 +26,14 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     const token = useSelector(selectToken)
     const playerTeams = useSelector(selectPlayerTeams)
     const [loading, setLoading] = React.useState(false)
-    const hasRequested = React.useRef(false)
 
     const dispatch = useDispatch()
 
     React.useEffect(() => {
-        if (!hasRequested.current) {
+        const unsubscribe = navigation.addListener('focus', () => {
             dispatch(fetchProfile(token))
-            hasRequested.current = true
-        }
+        })
+        return unsubscribe
     })
 
     const onLogout = async () => {

@@ -3,7 +3,7 @@ import * as TeamData from '../services/data/team'
 import CheckBox from '@react-native-community/checkbox'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { RolloverTeamProps } from '../types/navigation'
+import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
@@ -21,7 +21,7 @@ interface RolloverTeamFormData {
     season: string
 }
 
-const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
+const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
     const { colors } = useColors()
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')

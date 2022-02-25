@@ -49,21 +49,6 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         }
     }, [getRequests, token])
 
-    const styles = StyleSheet.create({
-        screen: {
-            height: '100%',
-            backgroundColor: colors.primary,
-        },
-        title: {
-            alignSelf: 'center',
-        },
-        sectionContainer: {
-            width: '75%',
-            alignSelf: 'center',
-            flex: 1,
-        },
-    })
-
     const openTeamDetails = async (item: DisplayTeam) => {
         navigation.navigate('TeamDetails', {
             id: item._id,
@@ -93,6 +78,21 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
             // HANDLE ERROR
         }
     }
+
+    const styles = StyleSheet.create({
+        screen: {
+            height: '100%',
+            backgroundColor: colors.primary,
+        },
+        title: {
+            alignSelf: 'center',
+        },
+        sectionContainer: {
+            width: '75%',
+            alignSelf: 'center',
+            flex: 1,
+        },
+    })
 
     return (
         <View style={styles.screen}>
