@@ -7,24 +7,26 @@ import { RolloverTeamProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
-import { useSelector } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
+import {
+    selectTeam,
+    setTeam,
+} from '../store/reducers/features/team/managedTeamReducer'
 import { size, weight } from '../theme/fonts'
+import { useDispatch, useSelector } from 'react-redux'
 
 interface RolloverTeamFormData {
     copyPlayers: boolean
     season: string
 }
 
-const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
-    route,
-    navigation,
-}) => {
+const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
     const { colors } = useColors()
-    const { id } = route.params
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
+    const dispatch = useDispatch()
+    const team = useSelector(selectTeam)
     const token = useSelector(selectToken)
     const currentYear = new Date().getFullYear()
     const years = [
@@ -38,6 +40,29 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
             season: years[0],
         },
     })
+
+    const rolloverTeam = async (data: RolloverTeamFormData) => {
+        setLoading(true)
+        const seasonArray = data.season.split(' - ')
+        const seasonStart = seasonArray[0]
+        const seasonEnd = seasonArray[seasonArray.length - 1]
+        try {
+            const newTeam = await TeamData.rollover(
+                token,
+                team?._id || '',
+                data.copyPlayers,
+                seasonStart,
+                seasonEnd,
+            )
+            dispatch(setTeam(newTeam))
+            setLoading(false)
+            navigation.goBack()
+        } catch (e: any) {
+            setError(e.message ?? 'Unable to rollover team')
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const styles = StyleSheet.create({
         screen: {
@@ -84,29 +109,6 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
             marginBottom: 10,
         },
     })
-
-    const rolloverTeam = async (data: RolloverTeamFormData) => {
-        setLoading(true)
-        const seasonArray = data.season.split(' - ')
-        const seasonStart = seasonArray[0]
-        const seasonEnd = seasonArray[seasonArray.length - 1]
-        try {
-            await TeamData.rollover(
-                token,
-                id,
-                data.copyPlayers,
-                seasonStart,
-                seasonEnd,
-            )
-
-            setLoading(false)
-            navigation.goBack()
-        } catch (e: any) {
-            setError(e.message ?? 'Unable to rollover team')
-        } finally {
-            setLoading(false)
-        }
-    }
 
     return (
         <View style={styles.screen}>

@@ -32,6 +32,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     const { id, place, name } = route.params
     const dispatch = useDispatch()
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
+    const [error, setError] = React.useState(undefined)
     const [requestsLoading, setRequestsLoading] = React.useState(false)
     const token = useSelector(selectToken)
     const team = useSelector(selectTeam)
@@ -60,7 +61,8 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
                 setRequests(reqs)
             })
             .catch(e => {
-                console.log(e)
+                dispatch(setTeam(undefined))
+                setError(e.message)
             })
             .finally(() => {
                 setRequestsLoading(false)
@@ -70,7 +72,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     const onToggleRosterStatus = async (open: boolean) => {
         try {
             dispatch(toggleRosterStatus({ token, id, open }))
-        } catch (error) {
+        } catch (e) {
             // HANDLE ERROR
         }
     }
@@ -88,7 +90,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
             if (accept) {
                 dispatch(getManagedTeam({ token, id }))
             }
-        } catch (error) {
+        } catch (e) {
             // HANDLE ERROR
         }
     }
@@ -139,7 +141,25 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
             width: '75%',
             alignSelf: 'center',
         },
+        error: {
+            color: colors.error,
+            fontSize: size.fontLarge,
+        },
     })
+
+    if (error) {
+        return (
+            <View style={styles.screen}>
+                <View style={styles.headerContainer}>
+                    <ScreenTitle
+                        title={`${place} ${name}`}
+                        style={styles.title}
+                    />
+                    <Text style={styles.error}>{error}</Text>
+                </View>
+            </View>
+        )
+    }
 
     return (
         <ScrollView style={styles.screen}>

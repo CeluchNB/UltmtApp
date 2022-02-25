@@ -1,7 +1,5 @@
 import * as UserData from '../../../../services/data/user'
-import { CreateUserData } from '../../../../types/user'
 import { DisplayTeam } from '../../../../types/team'
-import { LoginData } from '../../../../types/reducers'
 import { RootState } from '../../../store'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
@@ -50,15 +48,6 @@ const accountSlice = createSlice({
     },
     extraReducers: builder => {
         builder
-            .addCase(login.fulfilled, (state, action) => {
-                state.error = undefined
-                state.token = action.payload
-            })
-            .addCase(login.rejected, (state, action) => {
-                state.error = action.error.message
-            })
-
-        builder
             .addCase(fetchProfile.fulfilled, (state, action) => {
                 const {
                     firstName,
@@ -90,30 +79,6 @@ const accountSlice = createSlice({
             })
 
         builder
-            .addCase(createAccount.fulfilled, (state, action) => {
-                const {
-                    firstName,
-                    lastName,
-                    email,
-                    username,
-                    private: privateProfile,
-                    openToRequests,
-                } = action.payload.user
-                const { token } = action.payload
-
-                state.firstName = firstName
-                state.lastName = lastName
-                state.email = email
-                state.username = username
-                state.privateProfile = privateProfile
-                state.openToRequests = openToRequests
-                state.token = token
-            })
-            .addCase(createAccount.rejected, (state, action) => {
-                state.error = action.error.message
-            })
-
-        builder
             .addCase(logout.fulfilled, state => {
                 state.firstName = ''
                 state.lastName = ''
@@ -126,24 +91,8 @@ const accountSlice = createSlice({
             .addCase(logout.rejected, (state, action) => {
                 state.error = action.error.message
             })
-
-        builder
-            .addCase(getLocalToken.fulfilled, (state, action) => {
-                state.token = action.payload
-            })
-            .addCase(getLocalToken.rejected, state => {
-                state.token = ''
-            })
     },
 })
-
-export const login = createAsyncThunk(
-    'account/login',
-    async (data: LoginData, _thunkAPI) => {
-        const { username, password } = data
-        return await UserData.login(username, password)
-    },
-)
 
 export const fetchProfile = createAsyncThunk(
     'account/fetchProfile',
@@ -152,24 +101,10 @@ export const fetchProfile = createAsyncThunk(
     },
 )
 
-export const createAccount = createAsyncThunk(
-    'account/createAccount',
-    async (data: CreateUserData, _thunkAPI) => {
-        return await UserData.createAccount(data)
-    },
-)
-
 export const logout = createAsyncThunk(
     'account/logout',
     async (data: string, _thunkAPI) => {
         return await UserData.logout(data)
-    },
-)
-
-export const getLocalToken = createAsyncThunk(
-    'account/getLocalToken',
-    async () => {
-        return await UserData.getLocalToken()
     },
 )
 

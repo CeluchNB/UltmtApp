@@ -6,22 +6,18 @@ import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
+import { setToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
+import { useDispatch } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
-import {
-    selectAccount,
-    setError,
-    setToken,
-} from '../store/reducers/features/account/accountReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
 const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     const hasCheckedLocalToken = React.useRef(false)
     const dispatch = useDispatch()
     const { colors } = useColors()
-    const account = useSelector(selectAccount)
     const [loading, setLoading] = React.useState(false)
+    const [error, setError] = React.useState(undefined)
 
     const {
         control,
@@ -37,6 +33,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 
     const onSubmit = async (data: LoginData) => {
         try {
+            setError(undefined)
             setLoading(true)
             reset({
                 username: '',
@@ -47,9 +44,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
             dispatch(setToken(token))
             setLoading(false)
             navigation.navigate('Profile')
-        } catch (error: any) {
+        } catch (e: any) {
             setLoading(false)
-            dispatch(setError(error.message ?? 'Unable to login'))
+            setError(e.message ?? 'Unable to login')
         }
     }
 
@@ -60,8 +57,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                     dispatch(setToken(token))
                     navigation.navigate('Profile')
                 })
-                .catch(error => {
-                    dispatch(setError(error.message ?? 'Error fetching token'))
+                .catch(_e => {
+                    // Error = No token, nothing wrong
                 })
         }
     }, [dispatch, navigation])
@@ -115,7 +112,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                 name="username"
             />
             {errors.username && (
-                <Text style={styles.error}>This field is required</Text>
+                <Text style={styles.error}>Must enter a username or email</Text>
             )}
             <Controller
                 control={control}
@@ -132,9 +129,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                 name="password"
             />
             {errors.password && (
-                <Text style={styles.error}>This field is required</Text>
+                <Text style={styles.error}>Must enter a password</Text>
             )}
-            {account.error && <Text style={styles.error}>{account.error}</Text>}
+            {error && <Text style={styles.error}>{error}</Text>}
 
             <PrimaryButton
                 text="Login"
