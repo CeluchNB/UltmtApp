@@ -6,18 +6,48 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import SearchResultItem from '../components/atoms/SearchResultItem'
 import { Team } from '../types/team'
 import { TextInput } from 'react-native-paper'
-import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
-import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, View } from 'react-native'
+import {
+    addRequest,
+    selectToken,
+} from '../store/reducers/features/account/accountReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
     const [teams, setTeams] = React.useState<Team[]>([])
     const token = useSelector(selectToken)
+    const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
     const [selectedId, setSelectedId] = React.useState('')
     const [error, setError] = React.useState('')
+
+    const search = async (text: string) => {
+        if (text.length >= 3) {
+            const teamsResponse = await TeamData.searchTeam(text)
+            setTeams(teamsResponse)
+        } else {
+            // HANDLE SEARCH ERROR
+            setTeams([])
+        }
+    }
+
+    const requestTeam = async (id: string) => {
+        try {
+            setError('')
+            setLoading(true)
+            setSelectedId(id)
+            const request = await RequestData.requestTeam(token, id)
+            dispatch(addRequest(request._id))
+
+            setLoading(false)
+            navigation.goBack()
+        } catch (e: any) {
+            setLoading(false)
+            setError(e.message)
+        }
+    }
 
     const styles = StyleSheet.create({
         screen: {
@@ -39,31 +69,6 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             alignSelf: 'center',
         },
     })
-
-    const search = async (text: string) => {
-        if (text.length >= 3) {
-            const teamsResponse = await TeamData.searchTeam(text)
-            setTeams(teamsResponse)
-        } else {
-            // HANDLE SEARCH ERROR
-            setTeams([])
-        }
-    }
-
-    const requestTeam = async (id: string) => {
-        try {
-            setError('')
-            setLoading(true)
-            setSelectedId(id)
-            await RequestData.requestTeam(token, id)
-
-            setLoading(false)
-            navigation.goBack()
-        } catch (e: any) {
-            setLoading(false)
-            setError(e.message)
-        }
-    }
 
     return (
         <View style={styles.screen}>

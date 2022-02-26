@@ -9,7 +9,7 @@ import TeamListItem from '../components/atoms/TeamListItem'
 import { useColors } from '../hooks/index'
 import { FlatList, StyleSheet, View } from 'react-native'
 import {
-    fetchProfile,
+    removeRequest,
     selectManagerTeams,
     selectPlayerTeams,
     selectRequests,
@@ -27,27 +27,39 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
     let isMounted = React.useRef(false)
 
-    const getRequests = React.useCallback(async () => {
-        const reqs = await Promise.all(
-            requestIds.map(req => {
-                return RequestData.getRequest(token, req)
-            }),
-        )
-
-        if (isMounted.current) {
-            setRequests(
-                reqs.filter(req => req !== undefined) as DetailedRequest[],
+    const getRequests = React.useCallback(
+        async (reqIds: string[]) => {
+            const reqResponses = await Promise.all(
+                reqIds.map(req => {
+                    return RequestData.getRequest(token, req)
+                }),
             )
-        }
-    }, [requestIds, token, isMounted])
+
+            if (isMounted.current) {
+                setRequests(
+                    reqResponses.filter(
+                        req => req !== undefined,
+                    ) as DetailedRequest[],
+                )
+            }
+        },
+        [token, isMounted],
+    )
 
     React.useEffect(() => {
         isMounted.current = true
-        getRequests()
+        const unsubscribe = navigation.addListener('focus', () => {
+            try {
+                getRequests(requestIds)
+            } catch (e) {
+                // HANDLE ERROR
+            }
+        })
         return () => {
             isMounted.current = false
+            unsubscribe()
         }
-    }, [getRequests, token])
+    }, [getRequests, navigation, requestIds])
 
     const openTeamDetails = async (item: DisplayTeam) => {
         navigation.navigate('TeamDetails', {
@@ -60,11 +72,8 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const respondToRequest = async (requestId: string, accept: boolean) => {
         try {
             await RequestData.respondToTeamRequest(token, requestId, accept)
-            if (accept) {
-                dispatch(fetchProfile(token))
-            } else {
-                setRequests(requests.filter(req => req._id !== requestId))
-            }
+            dispatch(removeRequest(requestId))
+            setRequests(requests.filter(req => req._id !== requestId))
         } catch (error) {
             // HANDLE ERROR
         }
@@ -73,6 +82,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const deleteRequest = async (requestId: string) => {
         try {
             await RequestData.deleteUserRequest(token, requestId)
+            dispatch(removeRequest(requestId))
             setRequests(requests.filter(req => req._id !== requestId))
         } catch (error) {
             // HANDLE ERROR

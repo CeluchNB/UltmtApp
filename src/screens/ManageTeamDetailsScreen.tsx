@@ -77,11 +77,7 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
     })
 
     const onToggleRosterStatus = async (open: boolean) => {
-        try {
-            dispatch(toggleRosterStatus({ token, id, open }))
-        } catch (e) {
-            // HANDLE ERROR
-        }
+        dispatch(toggleRosterStatus({ token, id, open }))
     }
 
     const rolloverSeason = async () => {

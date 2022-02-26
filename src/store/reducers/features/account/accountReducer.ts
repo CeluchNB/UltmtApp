@@ -41,6 +41,31 @@ const accountSlice = createSlice({
         setError(state, action) {
             state.error = action.payload
         },
+        setProfile(state, action) {
+            const {
+                firstName,
+                lastName,
+                username,
+                playerTeams,
+                managerTeams,
+                requests,
+            } = action.payload
+
+            state.firstName = firstName
+            state.lastName = lastName
+            state.username = username
+            state.playerTeams = playerTeams
+            state.managerTeams = managerTeams
+            state.requests = requests
+        },
+        removeRequest(state, action) {
+            state.requests = state.requests.filter(
+                req => req !== action.payload,
+            )
+        },
+        addRequest(state, action) {
+            state.requests.push(action.payload)
+        },
         resetState(state) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             state = initialState
@@ -114,5 +139,12 @@ export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
 export const selectManagerTeams = (state: RootState) =>
     state.account.managerTeams
 export const selectRequests = (state: RootState) => state.account.requests
-export const { setToken, setError, resetState } = accountSlice.actions
+export const {
+    addRequest,
+    removeRequest,
+    resetState,
+    setError,
+    setProfile,
+    setToken,
+} = accountSlice.actions
 export default accountSlice.reducer

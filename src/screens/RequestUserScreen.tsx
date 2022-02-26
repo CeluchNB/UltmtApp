@@ -26,6 +26,40 @@ const RequestUserScreen: React.FC<Props> = () => {
     const [error, setError] = React.useState('')
     const [searchError, setSearchError] = React.useState('')
 
+    const search = async (term: string) => {
+        setError('')
+        if (term.length < 3) {
+            setSearchError('')
+            setPlayers([])
+            return
+        }
+
+        try {
+            const users = await searchUsers(term)
+            if (users.length <= 0) {
+                throw new Error()
+            }
+            setPlayers(users)
+        } catch (e) {
+            setPlayers([])
+            setSearchError('No results from this search, please try again')
+        }
+    }
+
+    const requestUser = async (user: DisplayUser) => {
+        try {
+            setError('')
+            setRequestLoading(true)
+            setSelectedId(user._id)
+            await RequestData.requestUser(token, user._id, team?._id || '')
+            setSelectedPlayers([user, ...selectedPlayers])
+        } catch (e: any) {
+            setError(e.message)
+        } finally {
+            setRequestLoading(false)
+        }
+    }
+
     const styles = StyleSheet.create({
         screen: {
             height: '100%',
@@ -72,40 +106,6 @@ const RequestUserScreen: React.FC<Props> = () => {
             alignSelf: 'center',
         },
     })
-
-    const search = async (term: string) => {
-        setError('')
-        if (term.length < 3) {
-            setSearchError('')
-            setPlayers([])
-            return
-        }
-
-        try {
-            const users = await searchUsers(term)
-            if (users.length <= 0) {
-                throw new Error()
-            }
-            setPlayers(users)
-        } catch (e) {
-            setPlayers([])
-            setSearchError('No results from this search, please try again')
-        }
-    }
-
-    const requestUser = async (user: DisplayUser) => {
-        try {
-            setError('')
-            setRequestLoading(true)
-            setSelectedId(user._id)
-            await RequestData.requestUser(token, user._id, team?._id || '')
-            setSelectedPlayers([user, ...selectedPlayers])
-        } catch (e: any) {
-            setError(e.message)
-        } finally {
-            setRequestLoading(false)
-        }
-    }
 
     return (
         <View style={styles.screen}>
