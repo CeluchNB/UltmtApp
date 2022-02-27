@@ -9,7 +9,14 @@ import StatListItem from '../components/atoms/StatListItem'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import {
+    FlatList,
+    RefreshControl,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import {
     fetchProfile,
     logout,
@@ -26,6 +33,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     const token = useSelector(selectToken)
     const playerTeams = useSelector(selectPlayerTeams)
     const [loading, setLoading] = React.useState(false)
+    const [refreshing, setRefreshing] = React.useState(false)
 
     const dispatch = useDispatch()
 
@@ -74,6 +82,17 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                 data={[]}
                 renderItem={() => <View />}
                 showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        colors={[colors.textSecondary]}
+                        refreshing={refreshing}
+                        onRefresh={async () => {
+                            setRefreshing(true)
+                            dispatch(fetchProfile(token))
+                            setRefreshing(false)
+                        }}
+                    />
+                }
                 ListHeaderComponent={
                     <View style={styles.headerContainer}>
                         <ScreenTitle
