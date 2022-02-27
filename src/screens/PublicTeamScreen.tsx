@@ -6,21 +6,46 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import { Team } from '../types/team'
 import UserListItem from '../components/atoms/UserListItem'
 import { useColors } from '../hooks'
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import { size, weight } from '../theme/fonts'
 
-const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({ route }) => {
+const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
+    route,
+    navigation,
+}) => {
     const { colors } = useColors()
     const { id, place, name } = route.params
     const [team, setTeam] = React.useState({} as Team)
+    const [refreshing, setRefreshing] = React.useState(false)
+    const [error, setError] = React.useState<string>('')
 
-    React.useEffect(() => {
+    const initializeScreen = React.useCallback(async () => {
+        setError('')
         TeamData.getTeam(id)
-            .then(teamResponse => setTeam(teamResponse))
+            .then(teamResponse => {
+                setTeam(teamResponse)
+            })
             .catch(e => {
-                console.log('error', e)
+                setError(
+                    e.message ??
+                        'An error occurred looking for this team. Please try again',
+                )
             })
     }, [id])
+
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async () => {
+            await initializeScreen()
+        })
+        return unsubscribe
+    }, [navigation, initializeScreen])
 
     const styles = StyleSheet.create({
         screen: {
@@ -47,11 +72,32 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({ route }) => {
             color: colors.textPrimary,
             marginBottom: 5,
         },
+        bodyContainer: {
+            width: '75%',
+            alignSelf: 'center',
+        },
+        error: {
+            color: colors.gray,
+            fontSize: size.fontLarge,
+            fontWeight: weight.bold,
+            textAlign: 'center',
+        },
     })
 
     return (
         <SafeAreaView style={styles.screen}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        colors={[colors.textSecondary]}
+                        onRefresh={async () => {
+                            setRefreshing(true)
+                            await initializeScreen()
+                            setRefreshing(false)
+                        }}
+                    />
+                }>
                 <View style={styles.headerContainer}>
                     <ScreenTitle
                         title={`${place} ${name}`}
@@ -74,22 +120,28 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({ route }) => {
                     )}
                     <Text style={styles.teamname}>@{team?.teamname}</Text>
                 </View>
-                <MapSection
-                    title="Players"
-                    listData={team.players}
-                    showButton={false}
-                    showCreateButton={false}
-                    renderItem={user => {
-                        return (
-                            <UserListItem
-                                key={user._id}
-                                user={user}
-                                showDelete={false}
-                                showAccept={false}
-                            />
-                        )
-                    }}
-                />
+                <View style={styles.bodyContainer}>
+                    {error.length > 0 ? (
+                        <Text style={styles.error}>{error}</Text>
+                    ) : (
+                        <MapSection
+                            title="Players"
+                            listData={team.players}
+                            showButton={false}
+                            showCreateButton={false}
+                            renderItem={user => {
+                                return (
+                                    <UserListItem
+                                        key={user._id}
+                                        user={user}
+                                        showDelete={false}
+                                        showAccept={false}
+                                    />
+                                )
+                            }}
+                        />
+                    )}
+                </View>
             </ScrollView>
         </SafeAreaView>
     )

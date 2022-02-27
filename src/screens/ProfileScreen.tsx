@@ -153,9 +153,22 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                             }}
                             buttonText="manage teams"
                             listData={playerTeams}
-                            renderItem={item => {
+                            renderItem={team => {
                                 return (
-                                    <TeamListItem key={item._id} team={item} />
+                                    <TeamListItem
+                                        key={team._id}
+                                        team={team}
+                                        onPress={async () => {
+                                            navigation.navigate(
+                                                'PublicTeamDetails',
+                                                {
+                                                    id: team._id,
+                                                    place: team.place,
+                                                    name: team.name,
+                                                },
+                                            )
+                                        }}
+                                    />
                                 )
                             }}
                             error={
