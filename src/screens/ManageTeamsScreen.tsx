@@ -69,7 +69,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     }, [getRequests, navigation, requestIds])
 
     const openTeamDetails = async (item: DisplayTeam) => {
-        navigation.navigate('TeamDetails', {
+        navigation.navigate('ManagedTeamDetails', {
             id: item._id,
             place: item.place,
             name: item.name,
@@ -141,7 +141,22 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                         }
                         listData={playerTeams}
                         renderItem={item => {
-                            return <TeamListItem key={item._id} team={item} />
+                            return (
+                                <TeamListItem
+                                    key={item._id}
+                                    team={item}
+                                    onPress={async () => {
+                                        navigation.navigate(
+                                            'PublicTeamDetails',
+                                            {
+                                                id: item._id,
+                                                place: item.place,
+                                                name: item.name,
+                                            },
+                                        )
+                                    }}
+                                />
+                            )
                         }}
                     />
                     <MapSection

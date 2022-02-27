@@ -5,6 +5,7 @@ import { CreateTeam, Team } from '../../types/team'
 import {
     createTeam as networkCreateTeam,
     getManagedTeam as networkGetManagedTeam,
+    getTeam as networkGetTeam,
     removePlayer as networkRemovePlayer,
     rollover as networkRollover,
     searchTeam as networkSearchTeam,
@@ -42,6 +43,16 @@ export const getManagedTeam = async (
 ): Promise<Team> => {
     try {
         const response = await networkGetManagedTeam(token, id)
+        const { team } = response.data
+        return team
+    } catch (error) {
+        return throwApiError(error, Constants.GET_TEAM_ERROR)
+    }
+}
+
+export const getTeam = async (id: string): Promise<Team> => {
+    try {
+        const response = await networkGetTeam(id)
         const { team } = response.data
         return team
     } catch (error) {

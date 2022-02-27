@@ -16,6 +16,7 @@ import ManageTeamDetailsScreen from './src/screens/ManageTeamDetailsScreen'
 import ManageTeamsScreen from './src/screens/ManageTeamsScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from './src/screens/ProfileScreen'
+import PublicTeamScreen from './src/screens/PublicTeamScreen'
 import RequestTeamScreen from './src/screens/RequestTeamScreen'
 import RequestUserScreen from './src/screens/RequestUserScreen'
 import RolloverTeamScreen from './src/screens/RolloverTeamScreen'
@@ -46,8 +47,13 @@ const App: React.FC<{}> = () => {
                     component={RequestTeamScreen}
                 />
                 <Stack.Screen
-                    name="TeamDetails"
+                    name="ManagedTeamDetails"
                     component={ManageTeamDetailsScreen}
+                    initialParams={{ id: '', place: '', name: '' }}
+                />
+                <Stack.Screen
+                    name="PublicTeamDetails"
+                    component={PublicTeamScreen}
                     initialParams={{ id: '', place: '', name: '' }}
                 />
                 <Stack.Screen

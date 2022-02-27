@@ -2,12 +2,11 @@ import * as React from 'react'
 import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
 import { DetailedRequest } from '../types/request'
+import { ManagedTeamDetailsProps } from '../types/navigation'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
-// import { Team } from '../types/team'
-import { TeamDetailsProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
 import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
@@ -32,10 +31,10 @@ import {
 import { size, weight } from '../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
-const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
+const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     navigation,
     route,
-}: TeamDetailsProps) => {
+}: ManagedTeamDetailsProps) => {
     const { colors } = useColors()
     const { id, place, name } = route.params
     const dispatch = useDispatch()
