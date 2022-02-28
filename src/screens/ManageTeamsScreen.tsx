@@ -7,9 +7,16 @@ import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { useColors } from '../hooks/index'
-import { FlatList, StyleSheet, View } from 'react-native'
 import {
-    fetchProfile,
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    View,
+} from 'react-native'
+import {
+    leaveTeam,
+    removeRequest,
     selectManagerTeams,
     selectPlayerTeams,
     selectRequests,
@@ -25,29 +32,77 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const requestIds = useSelector(selectRequests)
     const token = useSelector(selectToken)
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
+    const [refreshing, setRefreshing] = React.useState(false)
     let isMounted = React.useRef(false)
 
-    const getRequests = React.useCallback(async () => {
-        const reqs = await Promise.all(
-            requestIds.map(req => {
-                return RequestData.getRequest(token, req)
-            }),
-        )
-
-        if (isMounted.current) {
-            setRequests(
-                reqs.filter(req => req !== undefined) as DetailedRequest[],
+    const getRequests = React.useCallback(
+        async (reqIds: string[]) => {
+            const reqResponses = await Promise.all(
+                reqIds.map(req => {
+                    return RequestData.getRequest(token, req)
+                }),
             )
-        }
-    }, [requestIds, token, isMounted])
+            if (isMounted.current) {
+                setRequests(
+                    reqResponses.filter(
+                        req => req !== undefined,
+                    ) as DetailedRequest[],
+                )
+            }
+        },
+        [token, isMounted],
+    )
 
     React.useEffect(() => {
         isMounted.current = true
-        getRequests()
+        const unsubscribe = navigation.addListener('focus', () => {
+            try {
+                getRequests(requestIds)
+            } catch (e) {
+                // HANDLE ERROR
+            }
+        })
         return () => {
             isMounted.current = false
+            unsubscribe()
         }
-    }, [getRequests, token])
+    }, [getRequests, navigation, requestIds])
+
+    const openTeamDetails = async (item: DisplayTeam) => {
+        navigation.navigate('ManagedTeamDetails', {
+            id: item._id,
+            place: item.place,
+            name: item.name,
+        })
+    }
+
+    // Strictly through redux?
+    const respondToRequest = async (requestId: string, accept: boolean) => {
+        try {
+            await RequestData.respondToTeamRequest(token, requestId, accept)
+            dispatch(removeRequest(requestId))
+            setRequests(requests.filter(req => req._id !== requestId))
+        } catch (error) {
+            // HANDLE ERROR
+        }
+    }
+
+    // Strictly through redux?
+    const deleteRequest = async (requestId: string) => {
+        try {
+            await RequestData.deleteUserRequest(token, requestId)
+            dispatch(removeRequest(requestId))
+            setRequests(requests.filter(req => req._id !== requestId))
+        } catch (error) {
+            // HANDLE ERROR
+        }
+    }
+
+    // Do it outside of redux?
+    // 'eventError' in redux vs. 'pageError'?
+    const onLeaveTeam = (teamId: string) => {
+        dispatch(leaveTeam({ token, teamId }))
+    }
 
     const styles = StyleSheet.create({
         screen: {
@@ -57,153 +112,138 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         title: {
             alignSelf: 'center',
         },
-        sectionContainer: {
+        container: {
             width: '75%',
             alignSelf: 'center',
-            flex: 1,
         },
     })
 
-    const openTeamDetails = async (item: DisplayTeam) => {
-        navigation.navigate('TeamDetails', {
-            id: item._id,
-            place: item.place,
-            name: item.name,
-        })
-    }
-
-    const respondToRequest = async (requestId: string, accept: boolean) => {
-        try {
-            await RequestData.respondToTeamRequest(token, requestId, accept)
-            if (accept) {
-                dispatch(fetchProfile(token))
-            } else {
-                setRequests(requests.filter(req => req._id !== requestId))
-            }
-        } catch (error) {
-            // HANDLE ERROR
-        }
-    }
-
-    const deleteRequest = async (requestId: string) => {
-        try {
-            await RequestData.deleteUserRequest(token, requestId)
-            setRequests(requests.filter(req => req._id !== requestId))
-        } catch (error) {
-            // HANDLE ERROR
-        }
-    }
-
     return (
-        <View style={styles.screen}>
-            <FlatList
-                data={[]}
-                renderItem={() => <View />}
-                ListHeaderComponent={
-                    <ScreenTitle style={styles.title} title="Manage Teams" />
-                }
-                ListFooterComponent={
-                    <View style={styles.sectionContainer}>
-                        <MapSection
-                            title="Teams I Play For"
-                            showButton={true}
-                            showCreateButton={false}
-                            onButtonPress={() => {
-                                navigation.navigate('RequestTeam')
-                            }}
-                            buttonText="request team"
-                            error={
-                                playerTeams.length === 0
-                                    ? 'You have not played for any teams yet'
-                                    : undefined
-                            }
-                            listData={playerTeams}
-                            renderItem={item => {
-                                return (
-                                    <TeamListItem key={item._id} team={item} />
-                                )
-                            }}
-                        />
-                        <MapSection
-                            title="Teams I Manage"
-                            showButton={true}
-                            showCreateButton={false}
-                            onButtonPress={() => {
-                                navigation.navigate('CreateTeam')
-                            }}
-                            buttonText="create team"
-                            error={
-                                managerTeams.length === 0
-                                    ? 'You have not managed any teams yet'
-                                    : undefined
-                            }
-                            listData={managerTeams}
-                            renderItem={item => {
-                                return (
-                                    <TeamListItem
-                                        key={item._id}
-                                        team={item}
-                                        onPress={() => openTeamDetails(item)}
-                                    />
-                                )
-                            }}
-                        />
-                        <MapSection
-                            title="Requests From Teams"
-                            showButton={false}
-                            showCreateButton={false}
-                            listData={requests.filter(
-                                req => req.requestSource !== 'player',
-                            )}
-                            renderItem={item => {
-                                return (
-                                    <TeamListItem
-                                        key={item._id}
-                                        team={item.teamDetails}
-                                        showAccept={true}
-                                        showDelete={true}
-                                        onAccept={async () => {
-                                            await respondToRequest(
-                                                item._id,
-                                                true,
-                                            )
-                                        }}
-                                        onDelete={async () => {
-                                            await respondToRequest(
-                                                item._id,
-                                                false,
-                                            )
-                                        }}
-                                    />
-                                )
-                            }}
-                        />
-                        <MapSection
-                            title="Requests To Teams"
-                            showButton={false}
-                            showCreateButton={false}
-                            listData={requests.filter(
-                                req => req.requestSource !== 'team',
-                            )}
-                            renderItem={item => {
-                                return (
-                                    <TeamListItem
-                                        key={item._id}
-                                        team={item.teamDetails}
-                                        showAccept={false}
-                                        showDelete={true}
-                                        onDelete={async () => {
-                                            await deleteRequest(item._id)
-                                        }}
-                                        requestStatus={item.status}
-                                    />
-                                )
-                            }}
-                        />
-                    </View>
-                }
-            />
-        </View>
+        <SafeAreaView style={styles.screen}>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        colors={[colors.textSecondary]}
+                        refreshing={refreshing}
+                        onRefresh={async () => {
+                            setRefreshing(true)
+                            await getRequests(requestIds)
+                            setRefreshing(false)
+                        }}
+                    />
+                }>
+                <ScreenTitle style={styles.title} title="Manage Teams" />
+                <View style={styles.container}>
+                    <MapSection
+                        title="Teams I Play For"
+                        showButton={true}
+                        showCreateButton={false}
+                        onButtonPress={() => {
+                            navigation.navigate('RequestTeam')
+                        }}
+                        buttonText="request team"
+                        error={
+                            playerTeams.length === 0
+                                ? 'You have not played for any teams yet'
+                                : undefined
+                        }
+                        listData={playerTeams}
+                        renderItem={team => {
+                            return (
+                                <TeamListItem
+                                    key={team._id}
+                                    team={team}
+                                    showDelete={true}
+                                    onDelete={async () => {
+                                        onLeaveTeam(team._id)
+                                    }}
+                                    onPress={async () => {
+                                        navigation.navigate(
+                                            'PublicTeamDetails',
+                                            {
+                                                id: team._id,
+                                                place: team.place,
+                                                name: team.name,
+                                            },
+                                        )
+                                    }}
+                                />
+                            )
+                        }}
+                    />
+                    <MapSection
+                        title="Teams I Manage"
+                        showButton={true}
+                        showCreateButton={false}
+                        onButtonPress={() => {
+                            navigation.navigate('CreateTeam')
+                        }}
+                        buttonText="create team"
+                        error={
+                            managerTeams.length === 0
+                                ? 'You have not managed any teams yet'
+                                : undefined
+                        }
+                        listData={managerTeams}
+                        renderItem={team => {
+                            return (
+                                <TeamListItem
+                                    key={team._id}
+                                    team={team}
+                                    onPress={() => openTeamDetails(team)}
+                                />
+                            )
+                        }}
+                    />
+                    <MapSection
+                        title="Requests From Teams"
+                        showButton={false}
+                        showCreateButton={false}
+                        listData={requests.filter(
+                            req => req.requestSource !== 'player',
+                        )}
+                        renderItem={item => {
+                            return (
+                                <TeamListItem
+                                    key={item._id}
+                                    team={item.teamDetails}
+                                    showAccept={true}
+                                    showDelete={true}
+                                    onAccept={async () => {
+                                        await respondToRequest(item._id, true)
+                                    }}
+                                    onDelete={async () => {
+                                        await respondToRequest(item._id, false)
+                                    }}
+                                />
+                            )
+                        }}
+                    />
+                    <MapSection
+                        title="Requests To Teams"
+                        showButton={false}
+                        showCreateButton={false}
+                        listData={requests.filter(
+                            req => req.requestSource !== 'team',
+                        )}
+                        renderItem={item => {
+                            return (
+                                <TeamListItem
+                                    key={item._id}
+                                    team={item.teamDetails}
+                                    showAccept={false}
+                                    showDelete={true}
+                                    onDelete={async () => {
+                                        await deleteRequest(item._id)
+                                    }}
+                                    requestStatus={item.status}
+                                />
+                            )
+                        }}
+                    />
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

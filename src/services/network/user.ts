@@ -58,3 +58,18 @@ export const searchUsers = async (term: string): Promise<AxiosResponse> => {
         `https://ultmt-dev.herokuapp.com/user/search?q=${term}`,
     )
 }
+
+export const leaveTeam = async (
+    token: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.post(
+        `https://ultmt-dev.herokuapp.com/user/leave/team?team=${teamId}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

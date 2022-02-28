@@ -2,68 +2,118 @@ import * as React from 'react'
 import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
 import { DetailedRequest } from '../types/request'
+import { ManagedTeamDetailsProps } from '../types/navigation'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
-import { Team } from '../types/team'
-import { TeamDetailsProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
-import { selectAccount } from '../store/reducers/features/account/accountReducer'
+import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
-import { useSelector } from 'react-redux'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
+import {
+    getManagedTeam,
+    removePlayer,
+    selectOpenLoading,
+    selectTeam,
+    selectTeamLoading,
+    setTeam,
+    setTeamLoading,
+    toggleRosterStatus,
+} from '../store/reducers/features/team/managedTeamReducer'
 import { size, weight } from '../theme/fonts'
+import { useDispatch, useSelector } from 'react-redux'
 
-const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
+const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     navigation,
     route,
-}: TeamDetailsProps) => {
+}: ManagedTeamDetailsProps) => {
     const { colors } = useColors()
     const { id, place, name } = route.params
-    const [team, setTeam] = React.useState({} as Team)
-    const [teamLoading, setTeamLoading] = React.useState(false)
-    const [requests, setRequests] = React.useState([] as DetailedRequest[])
+    const dispatch = useDispatch()
     const [requestsLoading, setRequestsLoading] = React.useState(false)
-    const [openLoading, setOpenLoading] = React.useState(false)
-    const account = useSelector(selectAccount)
+    const [requests, setRequests] = React.useState([] as DetailedRequest[])
+    const [error, setError] = React.useState(undefined)
+    const [refreshing, setRefreshing] = React.useState(false)
+    const token = useSelector(selectToken)
+    const team = useSelector(selectTeam)
+    const teamLoading = useSelector(selectTeamLoading)
+    const openLoading = useSelector(selectOpenLoading)
 
-    const getRequestDetails = React.useCallback(
-        async (teamDetails: Team) => {
+    const initializeScreen = React.useCallback(async () => {
+        try {
+            dispatch(setTeamLoading(true))
+            const teamResponse = await TeamData.getManagedTeam(token, id)
             setRequestsLoading(true)
-            try {
-                const reqs = await Promise.all(
-                    teamDetails.requests.map((req: string) => {
-                        return RequestData.getRequest(account.token, req)
-                    }),
-                )
-                setRequests(reqs)
-            } catch (error) {
-                // HANDLE ERROR
-                // Use Error Boundaries
-            } finally {
-                setRequestsLoading(false)
-            }
-        },
-        [account],
-    )
+            dispatch(setTeam(teamResponse))
+            dispatch(setTeamLoading(false))
+            const reqs = await Promise.all(
+                teamResponse.requests.map((req: string) => {
+                    return RequestData.getRequest(token, req)
+                }),
+            )
+            setRequests(reqs)
+        } catch (e: any) {
+            dispatch(setTeam(undefined))
+            setError(e.message)
+        } finally {
+            setRequestsLoading(false)
+            dispatch(setTeamLoading(false))
+        }
+    }, [dispatch, token, id])
 
-    // REFACTOR TO USE REDUX
     React.useEffect(() => {
-        setTeamLoading(true)
-        const teamResponse = TeamData.getManagedTeam(account.token, id)
-        teamResponse
-            .then(managedTeam => {
-                setTeam(managedTeam)
-                getRequestDetails(managedTeam)
-            })
-            .catch(_error => {
-                // HANDLE ERRORS BETTER
-            })
-            .finally(() => {
-                setTeamLoading(false)
-            })
-    }, [id, account, getRequestDetails])
+        const unsubscribe = navigation.addListener('focus', () => {
+            initializeScreen()
+        })
+        return unsubscribe
+    })
+
+    const onToggleRosterStatus = async (open: boolean) => {
+        dispatch(toggleRosterStatus({ token, id, open }))
+    }
+
+    const rolloverSeason = async () => {
+        // navigate to rollover screen
+        navigation.navigate('RolloverTeam', { id })
+    }
+
+    const respondToRequest = async (requestId: string, accept: boolean) => {
+        try {
+            await RequestData.respondToPlayerRequest(token, requestId, accept)
+            setRequests(requests.filter(r => r._id !== requestId))
+
+            if (accept) {
+                dispatch(getManagedTeam({ token, id }))
+            }
+        } catch (e) {
+            // HANDLE ERROR
+        }
+    }
+
+    const onRemovePlayer = async (userId: string) => {
+        dispatch(removePlayer({ token, id, userId }))
+    }
+
+    const deleteRequest = async (requestId: string) => {
+        try {
+            const request = await RequestData.deleteTeamRequest(
+                token,
+                requestId,
+            )
+            // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
+            setRequests(requests.filter(r => r._id !== request._id))
+        } catch (e) {
+            // HANDLE ERROR
+        }
+    }
 
     const styles = StyleSheet.create({
         screen: {
@@ -94,192 +144,164 @@ const ManageTeamDetailsScreen: React.FC<TeamDetailsProps> = ({
             width: '75%',
             alignSelf: 'center',
         },
+        error: {
+            color: colors.error,
+            fontSize: size.fontLarge,
+        },
     })
 
-    const toggleRosterStatus = async (open: boolean) => {
-        try {
-            setOpenLoading(true)
-            const teamResult = await TeamData.toggleRosterStatus(
-                account.token,
-                team._id,
-                open,
-            )
-
-            setTeam(teamResult)
-            setOpenLoading(false)
-        } catch (error) {
-            // HANDLE ERROR
-        }
-    }
-
-    const rolloverSeason = async () => {
-        // navigate to rollover screen
-        navigation.navigate('RolloverTeam', { id })
-    }
-
-    const respondToRequest = async (requestId: string, accept: boolean) => {
-        try {
-            await RequestData.respondToPlayerRequest(
-                account.token,
-                requestId,
-                accept,
-            )
-            setRequests(requests.filter(r => r._id !== requestId))
-
-            if (accept) {
-                const managedTeam = await TeamData.getManagedTeam(
-                    account.token,
-                    id,
-                )
-                setTeam(managedTeam)
-            }
-        } catch (error) {
-            // HANDLE ERROR
-        }
-    }
-
-    const removePlayer = async (userId: string) => {
-        try {
-            const responseTeam = await TeamData.removePlayer(
-                account.token,
-                team._id,
-                userId,
-            )
-            setTeam(responseTeam)
-        } catch (e) {
-            // HANDLE ERROR
-        }
-    }
-
-    const deleteRequest = async (requestId: string) => {
-        try {
-            const request = await RequestData.deleteTeamRequest(
-                account.token,
-                requestId,
-            )
-            // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
-            setRequests(requests.filter(r => r._id !== request._id))
-        } catch (e) {
-            // HANDLE ERROR
-        }
+    if (error) {
+        return (
+            <View style={styles.screen}>
+                <View style={styles.headerContainer}>
+                    <ScreenTitle
+                        title={`${place} ${name}`}
+                        style={styles.title}
+                    />
+                    <Text style={styles.error}>{error}</Text>
+                </View>
+            </View>
+        )
     }
 
     return (
-        <ScrollView style={styles.screen}>
-            <View style={styles.headerContainer}>
-                <ScreenTitle title={`${place} ${name}`} style={styles.title} />
-                {team.seasonStart === team.seasonEnd ? (
-                    <Text style={styles.date}>
-                        {new Date(team.seasonStart).getUTCFullYear()}
-                    </Text>
-                ) : (
-                    <Text style={styles.date}>
-                        {new Date(team.seasonStart).getUTCFullYear() +
-                            ' - ' +
-                            new Date(team.seasonEnd).getUTCFullYear()}
-                    </Text>
-                )}
-                <Text style={styles.teamname}>@{team.teamname}</Text>
-                <PrimaryButton
-                    text={`${team.rosterOpen ? 'Close' : 'Open'} Roster`}
-                    loading={openLoading}
-                    onPress={() => toggleRosterStatus(!team.rosterOpen)}
-                />
-                <SecondaryButton
-                    text="Start New Season"
-                    onPress={rolloverSeason}
-                />
-            </View>
-            <View style={styles.listContainer}>
-                <MapSection
-                    title="Players"
-                    listData={team.players}
-                    renderItem={item => (
-                        <UserListItem
-                            key={item._id}
-                            user={item}
-                            showDelete={true}
-                            showAccept={false}
-                            onDelete={() => removePlayer(item._id)}
-                        />
+        <SafeAreaView style={styles.screen}>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        colors={[colors.textSecondary]}
+                        refreshing={refreshing}
+                        onRefresh={async () => {
+                            setRefreshing(true)
+                            await initializeScreen()
+                            setRefreshing(false)
+                        }}
+                    />
+                }>
+                <View style={styles.headerContainer}>
+                    <ScreenTitle
+                        title={`${place} ${name}`}
+                        style={styles.title}
+                    />
+                    {team?.seasonStart === team?.seasonEnd ? (
+                        <Text style={styles.date}>
+                            {new Date(team?.seasonStart || '').getUTCFullYear()}
+                        </Text>
+                    ) : (
+                        <Text style={styles.date}>
+                            {new Date(
+                                team?.seasonStart || '',
+                            ).getUTCFullYear() +
+                                ' - ' +
+                                new Date(
+                                    team?.seasonEnd || '',
+                                ).getUTCFullYear()}
+                        </Text>
                     )}
-                    loading={teamLoading}
-                    showButton={true}
-                    showCreateButton={false}
-                    buttonText="Add Players"
-                    onButtonPress={() => {
-                        navigation.navigate('RequestUser', { id })
-                    }}
-                    error={
-                        team.players && team.players.length <= 0
-                            ? 'No players on this team'
-                            : undefined
-                    }
-                />
-                <MapSection
-                    title="Request From Players"
-                    listData={requests.filter(
-                        item => item.requestSource !== 'team',
-                    )}
-                    renderItem={item => {
-                        return (
+                    <Text style={styles.teamname}>@{team?.teamname}</Text>
+                    <PrimaryButton
+                        text={`${team?.rosterOpen ? 'Close' : 'Open'} Roster`}
+                        loading={openLoading}
+                        onPress={() => onToggleRosterStatus(!team?.rosterOpen)}
+                    />
+                    <SecondaryButton
+                        text="Start New Season"
+                        onPress={rolloverSeason}
+                    />
+                </View>
+                <View style={styles.listContainer}>
+                    <MapSection
+                        title="Players"
+                        listData={team?.players || []}
+                        renderItem={item => (
                             <UserListItem
                                 key={item._id}
-                                user={item.userDetails}
-                                showDelete={true}
-                                showAccept={true}
-                                onDelete={() =>
-                                    respondToRequest(item._id, false)
-                                }
-                                onAccept={() =>
-                                    respondToRequest(item._id, true)
-                                }
-                            />
-                        )
-                    }}
-                    loading={requestsLoading}
-                    showButton={false}
-                    showCreateButton={false}
-                    buttonText=""
-                    onButtonPress={() => {}}
-                    error={
-                        requests.filter(item => item.requestSource !== 'team')
-                            .length <= 0
-                            ? 'No open requests from players'
-                            : undefined
-                    }
-                />
-                <MapSection
-                    title="Requests To Players"
-                    listData={requests.filter(
-                        item => item.requestSource !== 'player',
-                    )}
-                    renderItem={item => {
-                        return (
-                            <UserListItem
-                                key={item._id}
-                                user={item.userDetails}
+                                user={item}
                                 showDelete={true}
                                 showAccept={false}
-                                requestStatus={item.status}
-                                onDelete={() => deleteRequest(item._id)}
+                                onDelete={() => onRemovePlayer(item._id)}
                             />
-                        )
-                    }}
-                    loading={requestsLoading}
-                    showButton={false}
-                    showCreateButton={false}
-                    buttonText=""
-                    onButtonPress={() => {}}
-                    error={
-                        requests.filter(item => item.requestSource !== 'player')
-                            .length <= 0
-                            ? 'No open requests to players'
-                            : undefined
-                    }
-                />
-            </View>
-        </ScrollView>
+                        )}
+                        loading={teamLoading}
+                        showButton={true}
+                        showCreateButton={false}
+                        buttonText="Add Players"
+                        onButtonPress={() => {
+                            navigation.navigate('RequestUser', { id })
+                        }}
+                        error={
+                            team?.players && team.players.length <= 0
+                                ? 'No players on this team'
+                                : undefined
+                        }
+                    />
+                    <MapSection
+                        title="Request From Players"
+                        listData={requests.filter(
+                            item => item.requestSource !== 'team',
+                        )}
+                        renderItem={item => {
+                            return (
+                                <UserListItem
+                                    key={item._id}
+                                    user={item.userDetails}
+                                    showDelete={true}
+                                    showAccept={true}
+                                    onDelete={() =>
+                                        respondToRequest(item._id, false)
+                                    }
+                                    onAccept={() =>
+                                        respondToRequest(item._id, true)
+                                    }
+                                />
+                            )
+                        }}
+                        loading={requestsLoading}
+                        showButton={false}
+                        showCreateButton={false}
+                        buttonText=""
+                        onButtonPress={() => {}}
+                        error={
+                            requests.filter(
+                                item => item.requestSource !== 'team',
+                            ).length <= 0
+                                ? 'No open requests from players'
+                                : undefined
+                        }
+                    />
+                    <MapSection
+                        title="Requests To Players"
+                        listData={requests.filter(
+                            item => item.requestSource !== 'player',
+                        )}
+                        renderItem={item => {
+                            return (
+                                <UserListItem
+                                    key={item._id}
+                                    user={item.userDetails}
+                                    showDelete={true}
+                                    showAccept={false}
+                                    requestStatus={item.status}
+                                    onDelete={() => deleteRequest(item._id)}
+                                />
+                            )
+                        }}
+                        loading={requestsLoading}
+                        showButton={false}
+                        showCreateButton={false}
+                        buttonText=""
+                        onButtonPress={() => {}}
+                        error={
+                            requests.filter(
+                                item => item.requestSource !== 'player',
+                            ).length <= 0
+                                ? 'No open requests to players'
+                                : undefined
+                        }
+                    />
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

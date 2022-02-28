@@ -8,45 +8,56 @@ import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { size } from '../theme/fonts'
-import store from '../store/store'
 import { useColors } from '../hooks'
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import {
+    FlatList,
+    RefreshControl,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import {
     fetchProfile,
     logout,
     selectAccount,
-    selectLoading,
     selectPlayerTeams,
+    selectToken,
+    setError,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
-    const loading = useSelector(selectLoading)
+    const token = useSelector(selectToken)
     const playerTeams = useSelector(selectPlayerTeams)
-    const hasRequested = React.useRef(false)
+    const [loading, setLoading] = React.useState(false)
+    const [refreshing, setRefreshing] = React.useState(false)
 
     const dispatch = useDispatch()
 
-    const unsubscribe = store.subscribe(() => {
-        const state = store.getState()
-
-        if (state.account.token.length === 0) {
-            navigation.navigate('Login')
-        }
-    })
-
     React.useEffect(() => {
-        if (!hasRequested.current) {
-            dispatch(fetchProfile(store.getState().account.token))
-            hasRequested.current = true
-        }
-
-        return () => {
-            unsubscribe()
-        }
+        const unsubscribe = navigation.addListener('focus', () => {
+            dispatch(fetchProfile(token))
+        })
+        return unsubscribe
     })
+
+    const onLogout = async () => {
+        try {
+            setLoading(true)
+            dispatch(logout(token))
+            setLoading(false)
+            navigation.navigate('Login')
+        } catch (error: any) {
+            dispatch(setError(error.message ?? 'Unable to logout'))
+        }
+    }
+
+    const onCreateTeam = () => {
+        navigation.navigate('CreateTeam')
+    }
 
     const styles = StyleSheet.create({
         container: {
@@ -65,20 +76,23 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
         },
     })
 
-    const onLogout = () => {
-        dispatch(logout(account.token))
-    }
-
-    const onCreateTeam = () => {
-        navigation.navigate('CreateTeam')
-    }
-
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
                 data={[]}
                 renderItem={() => <View />}
                 showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        colors={[colors.textSecondary]}
+                        refreshing={refreshing}
+                        onRefresh={async () => {
+                            setRefreshing(true)
+                            dispatch(fetchProfile(token))
+                            setRefreshing(false)
+                        }}
+                    />
+                }
                 ListHeaderComponent={
                     <View style={styles.headerContainer}>
                         <ScreenTitle
@@ -139,9 +153,22 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                             }}
                             buttonText="manage teams"
                             listData={playerTeams}
-                            renderItem={item => {
+                            renderItem={team => {
                                 return (
-                                    <TeamListItem key={item._id} team={item} />
+                                    <TeamListItem
+                                        key={team._id}
+                                        team={team}
+                                        onPress={async () => {
+                                            navigation.navigate(
+                                                'PublicTeamDetails',
+                                                {
+                                                    id: team._id,
+                                                    place: team.place,
+                                                    name: team.name,
+                                                },
+                                            )
+                                        }}
+                                    />
                                 )
                             }}
                             error={

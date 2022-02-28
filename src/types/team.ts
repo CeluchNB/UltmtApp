@@ -26,3 +26,16 @@ export interface Team extends DisplayTeam {
     requests: string[]
     games: string[]
 }
+
+export interface TeamRequestData {
+    token: string
+    id: string
+}
+
+export interface ToggleRosterStatusData extends TeamRequestData {
+    open: boolean
+}
+
+export interface RemovePlayerData extends TeamRequestData {
+    userId: string
+}

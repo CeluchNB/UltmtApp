@@ -38,6 +38,10 @@ export const getManagedTeam = async (
     )
 }
 
+export const getTeam = async (id: string): Promise<AxiosResponse> => {
+    return await axios.get(`https://ultmt-dev.herokuapp.com/team/${id}`)
+}
+
 export const toggleRosterStatus = async (
     token: string,
     id: string,

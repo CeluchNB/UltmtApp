@@ -7,7 +7,8 @@ export type RootStackParamList = {
     CreateTeam: undefined
     ManageTeams: undefined
     RequestTeam: undefined
-    TeamDetails: { id: string; place: string; name: string }
+    ManagedTeamDetails: { id: string; place: string; name: string }
+    PublicTeamDetails: { id: string; place: string; name: string }
     RequestUser: { id: string }
     RolloverTeam: { id: string }
 }
@@ -17,17 +18,12 @@ export type CreateTeamProps = NativeStackScreenProps<
     RootStackParamList,
     'CreateTeam'
 >
-export type TeamDetailsProps = NativeStackScreenProps<
+export type ManagedTeamDetailsProps = NativeStackScreenProps<
     RootStackParamList,
-    'TeamDetails'
+    'ManagedTeamDetails'
 >
 
-export type RequestUserProps = NativeStackScreenProps<
+export type PublicTeamDetailsProps = NativeStackScreenProps<
     RootStackParamList,
-    'RequestUser'
->
-
-export type RolloverTeamProps = NativeStackScreenProps<
-    RootStackParamList,
-    'RolloverTeam'
+    'PublicTeamDetails'
 >

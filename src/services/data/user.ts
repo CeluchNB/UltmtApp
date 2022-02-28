@@ -6,6 +6,7 @@ import { CreateUserData, DisplayUser, User } from '../../types/user'
 import {
     createAccount as networkCreateAccount,
     fetchProfile as networkFetchProfile,
+    leaveTeam as networkLeaveTeam,
     login as networkLogin,
     logout as networkLogout,
     searchUsers as networkSearchUsers,
@@ -16,6 +17,7 @@ import {
  * @param username username or email
  * @param password password
  * @returns user token
+ * @throws error if backend returns an error
  */
 export const login = async (
     username: string,
@@ -36,6 +38,7 @@ export const login = async (
  * Method to get a user's profile by their jwt
  * @param token jwt of the user
  * @returns a user object
+ * @throws error if backend returns an error
  */
 export const fetchProfile = async (token: string): Promise<User> => {
     try {
@@ -51,6 +54,7 @@ export const fetchProfile = async (token: string): Promise<User> => {
  * Method to create
  * @param profileData data to create account
  * @returns user data and a jwt token
+ * @throws error if backend returns an error
  */
 export const createAccount = async (
     profileData: CreateUserData,
@@ -68,11 +72,12 @@ export const createAccount = async (
 /**
  * Logout current user
  * @param token token of current user
+ * @throws error if backend returns an error
  */
 export const logout = async (token: string) => {
     try {
-        await networkLogout(token)
         await EncryptedStorage.removeItem('jwt_token')
+        await networkLogout(token)
     } catch (error: any) {
         throw throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
     }
@@ -81,6 +86,7 @@ export const logout = async (token: string) => {
 /**
  * Get current token from local storage
  * @returns token from local storage
+ * @throws error if backend returns an error
  */
 export const getLocalToken = async (): Promise<string> => {
     try {
@@ -98,6 +104,7 @@ export const getLocalToken = async (): Promise<string> => {
  * Method to search for users
  * @param term search term
  * @returns list of users
+ * @throws error if backend returns an error
  */
 export const searchUsers = async (term: string): Promise<DisplayUser[]> => {
     try {
@@ -108,5 +115,25 @@ export const searchUsers = async (term: string): Promise<DisplayUser[]> => {
         return response.data.users
     } catch (error) {
         throw throwApiError(error, Constants.SEARCH_ERROR)
+    }
+}
+
+/**
+ * Method for user to leave team
+ * @param token jwt of current user
+ * @param teamId id of team to leave
+ * @returns updated user profile
+ * @throws error if backend returns an error
+ */
+export const leaveTeam = async (
+    token: string,
+    teamId: string,
+): Promise<User> => {
+    try {
+        const response = await networkLeaveTeam(token, teamId)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.LEAVE_TEAM_ERROR)
     }
 }

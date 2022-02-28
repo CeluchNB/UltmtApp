@@ -28,6 +28,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
         container: {
             display: 'flex',
             flexDirection: 'row',
+            marginBottom: 5,
         },
         textContainer: {
             flex: 1,
@@ -57,6 +58,11 @@ const UserListItem: React.FC<UserListItemProps> = ({
             fontWeight: weight.bold,
             color: colors.gray,
         },
+        usernameText: {
+            fontSize: size.fontFifteen,
+            fontWeight: weight.normal,
+            color: colors.textPrimary,
+        },
     })
     return (
         <View style={styles.container}>
@@ -65,6 +71,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
                     style={
                         styles.text
                     }>{`${user.firstName} ${user.lastName}`}</Text>
+                <Text style={styles.usernameText}>@{user.username}</Text>
                 {requestStatus === 'approved' && (
                     <Text style={styles.acceptedText}>Accepted</Text>
                 )}
