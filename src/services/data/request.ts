@@ -11,6 +11,13 @@ import {
     respondToTeamRequest as networkRespondToTeamRequest,
 } from '../network/request'
 
+/**
+ * Method for user to request to join a team.
+ * @param token jwt of requesting user
+ * @param teamId id of requested team
+ * @returns a detailed request object
+ * @throws error if backend returns an error
+ */
 export const requestTeam = async (
     token: string,
     teamId: string,
@@ -24,6 +31,14 @@ export const requestTeam = async (
     }
 }
 
+/**
+ * Method for team to request a user join a team.
+ * @param token jwt of team manager
+ * @param userId user to request join team
+ * @param teamId team requesting the player to join
+ * @returns a detailed request object
+ * @throws error if backend returns an error
+ */
 export const requestUser = async (
     token: string,
     userId: string,
@@ -38,6 +53,15 @@ export const requestUser = async (
     }
 }
 
+/**
+ * Method to get request details. User must be authorized to view request.
+ * User is authorized if 1) he is the user on the request or 2) he is a manager
+ * of the team on the request
+ * @param token jwt of current user
+ * @param requestId id of request
+ * @returns a detailed request object
+ * @throws error if backend returns an error
+ */
 export const getRequest = async (
     token: string,
     requestId: string,
@@ -51,6 +75,14 @@ export const getRequest = async (
     }
 }
 
+/**
+ * Method for team to respond to a player's request
+ * @param token jwt of team manager
+ * @param requestId id of request
+ * @param accept boolean for accept/deny
+ * @returns a detailed request object
+ * @throws error if backend returns an error
+ */
 export const respondToPlayerRequest = async (
     token: string,
     requestId: string,
@@ -69,6 +101,13 @@ export const respondToPlayerRequest = async (
     }
 }
 
+/**
+ * Method for a team to delete a pending request it sent.
+ * @param token jwt of team manager
+ * @param requestId id of request to delete
+ * @returns a detailed request object
+ * @throws error if backend returns an error
+ */
 export const deleteTeamRequest = async (
     token: string,
     requestId: string,
@@ -82,6 +121,14 @@ export const deleteTeamRequest = async (
     }
 }
 
+/**
+ * Method for user to respond to a request from a team
+ * @param token jwt of user
+ * @param requestId id of request to respond to
+ * @param accept boolean for accept/deny
+ * @returns a detailed request object
+ * @throws error if backend returns an error
+ */
 export const respondToTeamRequest = async (
     token: string,
     requestId: string,
@@ -100,6 +147,13 @@ export const respondToTeamRequest = async (
     }
 }
 
+/**
+ * Method for a user to delete a pending request she has sent.
+ * @param token jwt of user
+ * @param requestId id of request to delete
+ * @returns a detailed request object
+ * @throws error if backend returns an error
+ */
 export const deleteUserRequest = async (
     token: string,
     requestId: string,

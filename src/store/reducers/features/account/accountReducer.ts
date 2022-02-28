@@ -116,6 +116,15 @@ const accountSlice = createSlice({
             .addCase(logout.rejected, (state, action) => {
                 state.error = action.error.message
             })
+
+        builder
+            .addCase(leaveTeam.fulfilled, (state, action) => {
+                const { playerTeams } = action.payload
+                state.playerTeams = playerTeams
+            })
+            .addCase(leaveTeam.rejected, (state, action) => {
+                state.error = action.error.message
+            })
     },
 })
 
@@ -130,6 +139,14 @@ export const logout = createAsyncThunk(
     'account/logout',
     async (data: string, _thunkAPI) => {
         return await UserData.logout(data)
+    },
+)
+
+export const leaveTeam = createAsyncThunk(
+    'account/leaveTeam',
+    async (data: { token: string; teamId: string }, _thunkAPI) => {
+        const { token, teamId } = data
+        return await UserData.leaveTeam(token, teamId)
     },
 )
 

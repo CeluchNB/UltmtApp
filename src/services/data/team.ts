@@ -12,6 +12,13 @@ import {
     toggleRosterStatus as networkToggleRosterStatus,
 } from '../network/team'
 
+/**
+ * Method to create team
+ * @param token token of user creating team
+ * @param data create team data
+ * @returns created team
+ * @throws error if team is not created successfully
+ */
 export const createTeam = async (
     token: string,
     data: CreateTeam,
@@ -25,6 +32,12 @@ export const createTeam = async (
     }
 }
 
+/**
+ * Method to search for teams by place, name, or username
+ * @param term search term
+ * @returns list of teams matching term
+ * @throws error if backend returns an error
+ */
 export const searchTeam = async (term: string): Promise<Team[]> => {
     try {
         if (term.length < 3) {
@@ -37,6 +50,13 @@ export const searchTeam = async (term: string): Promise<Team[]> => {
     }
 }
 
+/**
+ * Method to get team that the current user manages
+ * @param token jwt of current user
+ * @param id team id
+ * @returns team object
+ * @throws error if backend returns error
+ */
 export const getManagedTeam = async (
     token: string,
     id: string,
@@ -50,6 +70,12 @@ export const getManagedTeam = async (
     }
 }
 
+/**
+ * Method to get a public team
+ * @param id id of team to get
+ * @returns team object
+ * @throws error if backend returns an error
+ */
 export const getTeam = async (id: string): Promise<Team> => {
     try {
         const response = await networkGetTeam(id)
@@ -60,6 +86,14 @@ export const getTeam = async (id: string): Promise<Team> => {
     }
 }
 
+/**
+ * Method to change a team's roster status
+ * @param token jwt of user changing team
+ * @param id id of team to update
+ * @param open boolean for team's roster status
+ * @returns updated team object
+ * @throws error if backend returns error
+ */
 export const toggleRosterStatus = async (
     token: string,
     id: string,
@@ -74,6 +108,14 @@ export const toggleRosterStatus = async (
     }
 }
 
+/**
+ * Method to remove a player from a team
+ * @param token token of current user
+ * @param teamId team player is on
+ * @param userId id of player to remove
+ * @returns updated team object
+ * @throws error if backend returns an error
+ */
 export const removePlayer = async (
     token: string,
     teamId: string,
@@ -88,6 +130,17 @@ export const removePlayer = async (
     }
 }
 
+/**
+ * Method to start a new season for a team. After this method is called,
+ * the old team is no longer editable.
+ * @param token jwt of manager of team
+ * @param teamId id of team to move over
+ * @param copyPlayers boolean for deciding if current roster should be kept
+ * @param seasonStart start year for season
+ * @param seasonEnd start end for season
+ * @returns newly created team object
+ * @throws error if backend returns an error
+ */
 export const rollover = async (
     token: string,
     teamId: string,

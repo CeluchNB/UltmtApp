@@ -15,6 +15,7 @@ import {
     View,
 } from 'react-native'
 import {
+    leaveTeam,
     removeRequest,
     selectManagerTeams,
     selectPlayerTeams,
@@ -41,7 +42,6 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                     return RequestData.getRequest(token, req)
                 }),
             )
-
             if (isMounted.current) {
                 setRequests(
                     reqResponses.filter(
@@ -76,6 +76,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         })
     }
 
+    // Strictly through redux?
     const respondToRequest = async (requestId: string, accept: boolean) => {
         try {
             await RequestData.respondToTeamRequest(token, requestId, accept)
@@ -86,6 +87,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         }
     }
 
+    // Strictly through redux?
     const deleteRequest = async (requestId: string) => {
         try {
             await RequestData.deleteUserRequest(token, requestId)
@@ -94,6 +96,12 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         } catch (error) {
             // HANDLE ERROR
         }
+    }
+
+    // Do it outside of redux?
+    // 'eventError' in redux vs. 'pageError'?
+    const onLeaveTeam = (teamId: string) => {
+        dispatch(leaveTeam({ token, teamId }))
     }
 
     const styles = StyleSheet.create({
@@ -140,18 +148,22 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                 : undefined
                         }
                         listData={playerTeams}
-                        renderItem={item => {
+                        renderItem={team => {
                             return (
                                 <TeamListItem
-                                    key={item._id}
-                                    team={item}
+                                    key={team._id}
+                                    team={team}
+                                    showDelete={true}
+                                    onDelete={async () => {
+                                        onLeaveTeam(team._id)
+                                    }}
                                     onPress={async () => {
                                         navigation.navigate(
                                             'PublicTeamDetails',
                                             {
-                                                id: item._id,
-                                                place: item.place,
-                                                name: item.name,
+                                                id: team._id,
+                                                place: team.place,
+                                                name: team.name,
                                             },
                                         )
                                     }}
@@ -173,12 +185,12 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                 : undefined
                         }
                         listData={managerTeams}
-                        renderItem={item => {
+                        renderItem={team => {
                             return (
                                 <TeamListItem
-                                    key={item._id}
-                                    team={item}
-                                    onPress={() => openTeamDetails(item)}
+                                    key={team._id}
+                                    team={team}
+                                    onPress={() => openTeamDetails(team)}
                                 />
                             )
                         }}

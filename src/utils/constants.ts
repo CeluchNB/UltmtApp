@@ -11,3 +11,4 @@ export const EDIT_TEAM_ERROR = 'Unable to make changes to the team. Please try a
 export const CREATE_REQUEST_ERROR = 'Unable to create request. Please try again.'
 export const GET_REQUEST_ERROR = 'Unable to get request.'
 export const REQUEST_RESPONSE_ERROR = 'Error responding to request.'
+export const LEAVE_TEAM_ERROR = 'Unable to leave team right now. Please try again.'
