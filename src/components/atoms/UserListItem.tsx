@@ -2,7 +2,7 @@ import * as React from 'react'
 import { DisplayUser } from '../../types/user'
 import { IconButton } from 'react-native-paper'
 import { useColors } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 interface UserListItemProps {
@@ -11,6 +11,7 @@ interface UserListItemProps {
     showAccept: boolean
     onDelete?: () => {}
     onAccept?: () => {}
+    onPress?: () => {}
     requestStatus?: string
 }
 
@@ -20,6 +21,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
     showAccept,
     onDelete,
     onAccept,
+    onPress,
     requestStatus,
 }) => {
     const { colors } = useColors()
@@ -64,23 +66,26 @@ const UserListItem: React.FC<UserListItemProps> = ({
             color: colors.textPrimary,
         },
     })
+
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
-                <Text
-                    style={
-                        styles.text
-                    }>{`${user.firstName} ${user.lastName}`}</Text>
-                <Text style={styles.usernameText}>@{user.username}</Text>
-                {requestStatus === 'approved' && (
-                    <Text style={styles.acceptedText}>Accepted</Text>
-                )}
-                {requestStatus === 'denied' && (
-                    <Text style={styles.deniedText}>Denied</Text>
-                )}
-                {requestStatus === 'pending' && (
-                    <Text style={styles.pendingText}>Pending</Text>
-                )}
+                <TouchableOpacity onPress={onPress}>
+                    <Text
+                        style={
+                            styles.text
+                        }>{`${user.firstName} ${user.lastName}`}</Text>
+                    <Text style={styles.usernameText}>@{user.username}</Text>
+                    {requestStatus === 'approved' && (
+                        <Text style={styles.acceptedText}>Accepted</Text>
+                    )}
+                    {requestStatus === 'denied' && (
+                        <Text style={styles.deniedText}>Denied</Text>
+                    )}
+                    {requestStatus === 'pending' && (
+                        <Text style={styles.pendingText}>Pending</Text>
+                    )}
+                </TouchableOpacity>
             </View>
             {showAccept && (
                 <IconButton

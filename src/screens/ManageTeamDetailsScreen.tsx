@@ -46,11 +46,15 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     const team = useSelector(selectTeam)
     const teamLoading = useSelector(selectTeamLoading)
     const openLoading = useSelector(selectOpenLoading)
+    const isMounted = React.useRef(false)
 
     const initializeScreen = React.useCallback(async () => {
         try {
             dispatch(setTeamLoading(true))
             const teamResponse = await TeamData.getManagedTeam(token, id)
+            if (!isMounted.current) {
+                return
+            }
             setRequestsLoading(true)
             dispatch(setTeam(teamResponse))
             dispatch(setTeamLoading(false))
@@ -59,21 +63,31 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     return RequestData.getRequest(token, req)
                 }),
             )
-            setRequests(reqs)
+            if (isMounted.current) {
+                setRequests(reqs)
+            }
         } catch (e: any) {
-            dispatch(setTeam(undefined))
-            setError(e.message)
+            if (isMounted.current) {
+                dispatch(setTeam(undefined))
+                setError(e.message)
+            }
         } finally {
-            setRequestsLoading(false)
-            dispatch(setTeamLoading(false))
+            if (isMounted.current) {
+                setRequestsLoading(false)
+                dispatch(setTeamLoading(false))
+            }
         }
     }, [dispatch, token, id])
 
     React.useEffect(() => {
+        isMounted.current = true
         const unsubscribe = navigation.addListener('focus', () => {
             initializeScreen()
         })
-        return unsubscribe
+        return () => {
+            unsubscribe()
+            isMounted.current = false
+        }
     })
 
     const onToggleRosterStatus = async (open: boolean) => {
@@ -213,13 +227,18 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     <MapSection
                         title="Players"
                         listData={team?.players || []}
-                        renderItem={item => (
+                        renderItem={user => (
                             <UserListItem
-                                key={item._id}
-                                user={item}
+                                key={user._id}
+                                user={user}
                                 showDelete={true}
                                 showAccept={false}
-                                onDelete={() => onRemovePlayer(item._id)}
+                                onPress={async () => {
+                                    navigation.navigate('PublicUserDetails', {
+                                        user,
+                                    })
+                                }}
+                                onDelete={() => onRemovePlayer(user._id)}
                             />
                         )}
                         loading={teamLoading}

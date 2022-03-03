@@ -43,7 +43,6 @@ const TeamListItem: React.FC<TeamListItemProps> = ({
             color: colors.textPrimary,
             fontSize: size.fontMedium,
             fontWeight: weight.bold,
-            marginBottom: 10,
         },
         season: {
             color: colors.textPrimary,

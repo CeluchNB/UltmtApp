@@ -73,3 +73,7 @@ export const leaveTeam = async (
         },
     )
 }
+
+export const getPublicUser = async (id: string): Promise<AxiosResponse> => {
+    return await axios.get(`https://ultmt-dev.herokuapp.com/user/${id}`)
+}

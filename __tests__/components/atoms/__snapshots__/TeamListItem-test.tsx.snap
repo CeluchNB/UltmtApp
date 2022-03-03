@@ -45,7 +45,6 @@ exports[`matches snapshot 1`] = `
           "color": "#3183ff",
           "fontSize": 41.0958904109589,
           "fontWeight": "bold",
-          "marginBottom": 10,
         }
       }
     >
