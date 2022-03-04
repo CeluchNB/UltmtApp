@@ -139,6 +139,12 @@ export const leaveTeam = async (
     }
 }
 
+/**
+ * Method to get a user's public details. No authentication needed to make this call.
+ * @param id id of user
+ * @returns user object
+ * @throws error if backend returns an error
+ */
 export const getPublicUser = async (id: string): Promise<User> => {
     try {
         const response = await networkGetPublicUser(id)

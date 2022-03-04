@@ -29,9 +29,14 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
         `${currentYear} - ${currentYear + 1}`,
         (currentYear + 1).toString(),
     ]
+    const [error, setError] = React.useState('')
 
     const { colors } = useColors()
-    const { control, handleSubmit } = useForm({
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             place: '',
             name: '',
@@ -39,6 +44,27 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             season: currentYear.toString(),
         },
     })
+
+    const createTeam = async (data: CreateTeamFormData) => {
+        setLoading(true)
+        const seasonSplit = data.season.split(' - ')
+        const createTeamData: CreateTeam = {
+            place: data.place,
+            name: data.name,
+            teamname: data.teamname,
+            seasonStart: seasonSplit[0],
+            seasonEnd: seasonSplit[seasonSplit.length - 1],
+        }
+
+        try {
+            await TeamData.createTeam(account.token, createTeamData)
+            setLoading(false)
+            navigation.goBack()
+        } catch (e: any) {
+            setLoading(false)
+            setError(e.message ?? 'Error creating this team. Please try again')
+        }
+    }
 
     const styles = StyleSheet.create({
         screen: {
@@ -69,27 +95,13 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             marginTop: 20,
             alignSelf: 'center',
         },
+        error: {
+            fontSize: size.fontFifteen,
+            color: colors.error,
+            width: '75%',
+            alignSelf: 'center',
+        },
     })
-
-    const createTeam = async (data: CreateTeamFormData) => {
-        setLoading(true)
-        const seasonSplit = data.season.split(' - ')
-        const createTeamData: CreateTeam = {
-            place: data.place,
-            name: data.name,
-            teamname: data.teamname,
-            seasonStart: seasonSplit[0],
-            seasonEnd: seasonSplit[seasonSplit.length - 1],
-        }
-
-        try {
-            await TeamData.createTeam(account.token, createTeamData)
-            setLoading(false)
-            navigation.goBack()
-        } catch (error) {
-            // HANDLE ERROR
-        }
-    }
 
     return (
         <View style={styles.screen}>
@@ -109,6 +121,9 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.place && (
+                <Text style={styles.error}>Must enter a place</Text>
+            )}
             <Controller
                 name="name"
                 control={control}
@@ -122,6 +137,7 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.name && <Text style={styles.error}>Must enter a name</Text>}
             <Controller
                 name="teamname"
                 control={control}
@@ -135,6 +151,9 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.teamname && (
+                <Text style={styles.error}>Must enter a team handle</Text>
+            )}
             <Text style={styles.pickerTitle}>Season</Text>
             <Controller
                 name="season"
@@ -158,7 +177,7 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                     </Picker>
                 )}
             />
-
+            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
             <PrimaryButton
                 style={styles.button}
                 text="Create"
