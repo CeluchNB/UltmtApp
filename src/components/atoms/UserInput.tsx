@@ -9,21 +9,26 @@ interface UserInputProps {
     onChangeText?: (...event: any[]) => void
     value?: string
     style?: StyleProp<ViewStyle>
+    rightIcon?: boolean
+    onRightPress?: () => {}
 }
 
 const UserInput: React.FC<UserInputProps> = props => {
     const { colors } = useColors()
 
-    const selfStyle = StyleSheet.create({
+    const styles = StyleSheet.create({
         inputStyle: {
             backgroundColor: colors.primary,
             placeholderTextColor: colors.secondary,
+        },
+        rightButton: {
+            color: colors.textPrimary,
         },
     })
 
     return (
         <TextInput
-            style={[selfStyle.inputStyle, props.style]}
+            style={[styles.inputStyle, props.style]}
             placeholder={props.placeholder}
             mode="outlined"
             outlineColor={colors.textSecondary}
@@ -31,6 +36,16 @@ const UserInput: React.FC<UserInputProps> = props => {
             secureTextEntry={props.isPassword}
             onChangeText={props.onChangeText}
             value={props.value}
+            right={
+                props.rightIcon && (
+                    <TextInput.Icon
+                        name="eye"
+                        color={colors.textPrimary}
+                        onPressIn={props.onRightPress}
+                        onPressOut={props.onRightPress}
+                    />
+                )
+            }
             theme={{
                 colors: {
                     text: colors.textPrimary,

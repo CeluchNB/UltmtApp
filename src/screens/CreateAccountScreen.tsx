@@ -1,14 +1,17 @@
 import * as React from 'react'
 import * as UserData from '../services/data/user'
 import { CreateUserData } from '../types/user'
+import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
+import { getFormFieldRules } from '../utils/form-utils'
 import { setToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { useDispatch } from 'react-redux'
+import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
@@ -17,6 +20,7 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
     const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState(undefined)
+    const [passwordHidden, setPasswordHidden] = React.useState(true)
 
     const {
         control,
@@ -79,7 +83,7 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
             <ScreenTitle title="Create Account" style={styles.title} />
             <Controller
                 control={control}
-                rules={{ required: true }}
+                rules={getFormFieldRules('First name', true, undefined, 20)}
                 name="firstName"
                 render={({ field: { onChange, value } }) => (
                     <UserInput
@@ -91,14 +95,12 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                 )}
             />
             {errors.firstName && (
-                <Text style={styles.error}>
-                    The first name field is required.
-                </Text>
+                <Text style={styles.error}>{errors.firstName.message}</Text>
             )}
 
             <Controller
                 control={control}
-                rules={{ required: true }}
+                rules={getFormFieldRules('Last name', true, undefined, 30)}
                 name="lastName"
                 render={({ field: { onChange, value } }) => (
                     <UserInput
@@ -110,14 +112,19 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                 )}
             />
             {errors.lastName && (
-                <Text style={styles.error}>
-                    The last name field is required.
-                </Text>
+                <Text style={styles.error}>{errors.lastName.message}</Text>
             )}
 
             <Controller
                 control={control}
-                rules={{ required: true }}
+                rules={getFormFieldRules('Username', true, 2, 20, [
+                    {
+                        test: (v: string) => {
+                            return validator.isAlphanumeric(v)
+                        },
+                        message: 'Username can only use letters and numbers.',
+                    },
+                ])}
                 name="username"
                 render={({ field: { onChange, value } }) => (
                     <UserInput
@@ -129,14 +136,19 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                 )}
             />
             {errors.username && (
-                <Text style={styles.error}>
-                    The username field is required.
-                </Text>
+                <Text style={styles.error}>{errors.username.message}</Text>
             )}
 
             <Controller
                 control={control}
-                rules={{ required: true }}
+                rules={getFormFieldRules('Email', true, undefined, undefined, [
+                    {
+                        test: (v: string) => {
+                            return validator.isEmail(v)
+                        },
+                        message: 'Email must be in valid email format.',
+                    },
+                ])}
                 name="email"
                 render={({ field: { onChange, value } }) => (
                     <UserInput
@@ -148,27 +160,50 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
                 )}
             />
             {errors.email && (
-                <Text style={styles.error}>The email field is required.</Text>
+                <Text style={styles.error}>{errors.email.message}</Text>
             )}
 
             <Controller
                 control={control}
-                rules={{ required: true }}
+                rules={getFormFieldRules('Password', true, 7, 20, [
+                    {
+                        test: (v: string) => {
+                            const validateSchema = new PasswordValidator()
+
+                            validateSchema
+                                .is()
+                                .min(7)
+                                .is()
+                                .max(20)
+                                .has()
+                                .letters()
+                                .has()
+                                .digits()
+                                .has()
+                                .symbols()
+                            return validateSchema.validate(v) as boolean
+                        },
+                        message:
+                            'Password must contain a letter, number, and symbol.',
+                    },
+                ])}
                 name="password"
                 render={({ field: { onChange, value } }) => (
                     <UserInput
                         placeholder="Password"
                         onChangeText={onChange}
                         value={value}
-                        isPassword={true}
+                        isPassword={passwordHidden}
                         style={styles.input}
+                        rightIcon={true}
+                        onRightPress={async () => {
+                            setPasswordHidden(!passwordHidden)
+                        }}
                     />
                 )}
             />
             {errors.password && (
-                <Text style={styles.error}>
-                    The password field is required.
-                </Text>
+                <Text style={styles.error}>{errors.password.message}</Text>
             )}
             {error && (
                 <Text style={styles.error}>

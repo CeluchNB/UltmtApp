@@ -1,0 +1,52 @@
+interface Rules {
+    required?: { value: boolean; message: string }
+    minLength?: { value: number; message: string }
+    maxLength?: { value: number; message: string }
+    validate?: { validate: (v: string) => true | string }
+}
+
+export const getFormFieldRules = (
+    fieldName: string,
+    required?: boolean,
+    minLength?: number,
+    maxLength?: number,
+    validate?: [{ test: (v: string) => boolean; message: string }],
+): Rules => {
+    const rules: Rules = {}
+    if (required) {
+        rules.required = {
+            value: true,
+            message: `${fieldName} is required.`,
+        }
+    }
+
+    if (minLength) {
+        rules.minLength = {
+            value: minLength,
+            message: `${fieldName} must be at least ${minLength} characters.`,
+        }
+    }
+
+    if (maxLength) {
+        rules.maxLength = {
+            value: maxLength,
+            message: `${fieldName} cannot exceed ${maxLength} characters.`,
+        }
+    }
+
+    if (validate) {
+        rules.validate = {
+            validate: (value: string) => {
+                for (const v of validate) {
+                    if (v.test(value)) {
+                        return true
+                    } else {
+                        return v.message
+                    }
+                }
+                return true
+            },
+        }
+    }
+    return rules
+}
