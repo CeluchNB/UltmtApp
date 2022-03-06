@@ -6,8 +6,9 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import SearchResultItem from '../components/atoms/SearchResultItem'
 import { Team } from '../types/team'
 import { TextInput } from 'react-native-paper'
+import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import {
     addRequest,
     selectToken,
@@ -22,14 +23,18 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
     const [loading, setLoading] = React.useState(false)
     const [selectedId, setSelectedId] = React.useState('')
     const [error, setError] = React.useState('')
+    const [searchError, setSearchError] = React.useState('')
 
     const search = async (text: string) => {
-        if (text.length >= 3) {
+        setSearchError('')
+        if (text.length < 3) {
+            setTeams([])
+        }
+        try {
             const teamsResponse = await TeamData.searchTeam(text)
             setTeams(teamsResponse)
-        } else {
-            // HANDLE SEARCH ERROR
-            setTeams([])
+        } catch (e: any) {
+            setSearchError(e.message ?? 'No search results from this query.')
         }
     }
 
@@ -64,6 +69,12 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             alignSelf: 'center',
             marginBottom: 5,
         },
+        error: {
+            width: '75%',
+            alignSelf: 'center',
+            fontSize: size.fontLarge,
+            color: colors.gray,
+        },
         list: {
             width: '75%',
             alignSelf: 'center',
@@ -87,26 +98,30 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                 }}
                 placeholder="Search teams..."
             />
-            <FlatList
-                style={styles.list}
-                data={teams}
-                keyExtractor={item => item._id}
-                renderItem={({ item }: { item: Team }) => {
-                    return (
-                        <SearchResultItem
-                            header={`${item.place} ${item.name}`}
-                            subheader={`@${item.teamname}`}
-                            onPress={() => requestTeam(item._id)}
-                            loading={selectedId === item._id && loading}
-                            error={
-                                error.length > 0 && selectedId === item._id
-                                    ? error
-                                    : undefined
-                            }
-                        />
-                    )
-                }}
-            />
+            {searchError.length > 0 ? (
+                <Text style={styles.error}>{searchError}</Text>
+            ) : (
+                <FlatList
+                    style={styles.list}
+                    data={teams}
+                    keyExtractor={item => item._id}
+                    renderItem={({ item }: { item: Team }) => {
+                        return (
+                            <SearchResultItem
+                                header={`${item.place} ${item.name}`}
+                                subheader={`@${item.teamname}`}
+                                onPress={() => requestTeam(item._id)}
+                                loading={selectedId === item._id && loading}
+                                error={
+                                    error.length > 0 && selectedId === item._id
+                                        ? error
+                                        : undefined
+                                }
+                            />
+                        )
+                    }}
+                />
+            )}
         </View>
     )
 }

@@ -58,7 +58,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                     navigation.navigate('Profile')
                 })
                 .catch(_e => {
-                    // Error = No token, nothing wrong
+                    // No error handling here, user just needs
+                    // to sign in
                 })
         }
     }, [dispatch, navigation])

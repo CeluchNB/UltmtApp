@@ -1,3 +1,4 @@
+import { DisplayUser } from './user'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 export type RootStackParamList = {
@@ -9,6 +10,7 @@ export type RootStackParamList = {
     RequestTeam: undefined
     ManagedTeamDetails: { id: string; place: string; name: string }
     PublicTeamDetails: { id: string; place: string; name: string }
+    PublicUserDetails: { user: DisplayUser }
     RequestUser: { id: string }
     RolloverTeam: { id: string }
 }
@@ -26,4 +28,9 @@ export type ManagedTeamDetailsProps = NativeStackScreenProps<
 export type PublicTeamDetailsProps = NativeStackScreenProps<
     RootStackParamList,
     'PublicTeamDetails'
+>
+
+export type PublicUserDetailsProps = NativeStackScreenProps<
+    RootStackParamList,
+    'PublicUserDetails'
 >

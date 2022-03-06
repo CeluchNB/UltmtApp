@@ -17,6 +17,7 @@ import ManageTeamsScreen from './src/screens/ManageTeamsScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from './src/screens/ProfileScreen'
 import PublicTeamScreen from './src/screens/PublicTeamScreen'
+import PublicUserScreen from './src/screens/PublicUserScreen'
 import RequestTeamScreen from './src/screens/RequestTeamScreen'
 import RequestUserScreen from './src/screens/RequestUserScreen'
 import RolloverTeamScreen from './src/screens/RolloverTeamScreen'
@@ -65,6 +66,18 @@ const App: React.FC<{}> = () => {
                     name="RolloverTeam"
                     component={RolloverTeamScreen}
                     initialParams={{ id: '' }}
+                />
+                <Stack.Screen
+                    name="PublicUserDetails"
+                    component={PublicUserScreen}
+                    initialParams={{
+                        user: {
+                            _id: '',
+                            firstName: '',
+                            lastName: '',
+                            username: '',
+                        },
+                    }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

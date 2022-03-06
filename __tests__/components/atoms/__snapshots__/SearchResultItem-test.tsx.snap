@@ -22,11 +22,17 @@ exports[`test matches snapshot 1`] = `
       }
     }
   >
-    <View>
+    <View
+      style={
+        Object {
+          "flex": 1,
+        }
+      }
+    >
       <Text
         style={
           Object {
-            "color": "#3183ff",
+            "color": "#707070",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
           }
@@ -37,7 +43,7 @@ exports[`test matches snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#ffd600",
+            "color": "#3183ff",
             "fontSize": 30.821917808219176,
             "fontWeight": "900",
           }
@@ -57,6 +63,8 @@ exports[`test matches snapshot 1`] = `
       Object {
         "backgroundColor": "#ffd600",
         "height": 1,
+        "marginBottom": 10,
+        "marginTop": 10,
       }
     }
   />
@@ -85,11 +93,17 @@ exports[`test matches snapshot with loading 1`] = `
       }
     }
   >
-    <View>
+    <View
+      style={
+        Object {
+          "flex": 1,
+        }
+      }
+    >
       <Text
         style={
           Object {
-            "color": "#3183ff",
+            "color": "#707070",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
           }
@@ -100,7 +114,7 @@ exports[`test matches snapshot with loading 1`] = `
       <Text
         style={
           Object {
-            "color": "#ffd600",
+            "color": "#3183ff",
             "fontSize": 30.821917808219176,
             "fontWeight": "900",
           }
@@ -120,6 +134,8 @@ exports[`test matches snapshot with loading 1`] = `
       Object {
         "backgroundColor": "#ffd600",
         "height": 1,
+        "marginBottom": 10,
+        "marginTop": 10,
       }
     }
   />
@@ -148,11 +164,17 @@ exports[`test matches snapshot without subheader 1`] = `
       }
     }
   >
-    <View>
+    <View
+      style={
+        Object {
+          "flex": 1,
+        }
+      }
+    >
       <Text
         style={
           Object {
-            "color": "#3183ff",
+            "color": "#707070",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
           }
@@ -172,6 +194,8 @@ exports[`test matches snapshot without subheader 1`] = `
       Object {
         "backgroundColor": "#ffd600",
         "height": 1,
+        "marginBottom": 10,
+        "marginTop": 10,
       }
     }
   />

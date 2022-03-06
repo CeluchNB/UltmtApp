@@ -6,12 +6,14 @@ import MapSection from '../components/molecules/MapSection'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
+import { size } from '../theme/fonts'
 import { useColors } from '../hooks/index'
 import {
     RefreshControl,
     SafeAreaView,
     ScrollView,
     StyleSheet,
+    Text,
     View,
 } from 'react-native'
 import {
@@ -31,9 +33,15 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const managerTeams = useSelector(selectManagerTeams)
     const requestIds = useSelector(selectRequests)
     const token = useSelector(selectToken)
+
+    const isMounted = React.useRef(false)
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
     const [refreshing, setRefreshing] = React.useState(false)
-    let isMounted = React.useRef(false)
+    const [fetchError, setFetchError] = React.useState('')
+    const [respondRequestError, setRespondRequestError] = React.useState('')
+    const [respondRequestId, setRespondRequestId] = React.useState('')
+    const [deleteRequestError, setDeleteRequestError] = React.useState('')
+    const [deleteRequestId, setDeleteRequestId] = React.useState('')
 
     const getRequests = React.useCallback(
         async (reqIds: string[]) => {
@@ -56,11 +64,12 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     React.useEffect(() => {
         isMounted.current = true
         const unsubscribe = navigation.addListener('focus', () => {
-            try {
-                getRequests(requestIds)
-            } catch (e) {
-                // HANDLE ERROR
-            }
+            setFetchError('')
+            setRespondRequestError('')
+            setDeleteRequestError('')
+            getRequests(requestIds).catch((e: any) => {
+                setFetchError(e.message ?? 'Unable to get team details.')
+            })
         })
         return () => {
             isMounted.current = false
@@ -79,22 +88,26 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     // Strictly through redux?
     const respondToRequest = async (requestId: string, accept: boolean) => {
         try {
+            setRespondRequestId(requestId)
+            setRespondRequestError('')
             await RequestData.respondToTeamRequest(token, requestId, accept)
             dispatch(removeRequest(requestId))
             setRequests(requests.filter(req => req._id !== requestId))
-        } catch (error) {
-            // HANDLE ERROR
+        } catch (e: any) {
+            setRespondRequestError(e.message ?? 'Unable to respond to request')
         }
     }
 
     // Strictly through redux?
     const deleteRequest = async (requestId: string) => {
         try {
+            setDeleteRequestId(requestId)
+            setDeleteRequestError('')
             await RequestData.deleteUserRequest(token, requestId)
             dispatch(removeRequest(requestId))
             setRequests(requests.filter(req => req._id !== requestId))
-        } catch (error) {
-            // HANDLE ERROR
+        } catch (e: any) {
+            setDeleteRequestError(e.message ?? 'Unable to delete request')
         }
     }
 
@@ -112,11 +125,39 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         title: {
             alignSelf: 'center',
         },
+        error: {
+            width: '75%',
+            alignSelf: 'center',
+            fontSize: size.fontLarge,
+            color: colors.gray,
+        },
         container: {
             width: '75%',
             alignSelf: 'center',
         },
     })
+
+    if (fetchError.length > 0) {
+        return (
+            <SafeAreaView style={styles.screen}>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            colors={[colors.textSecondary]}
+                            refreshing={refreshing}
+                            onRefresh={async () => {
+                                setRefreshing(true)
+                                await getRequests(requestIds)
+                                setRefreshing(false)
+                            }}
+                        />
+                    }>
+                    <ScreenTitle style={styles.title} title="Manage Teams" />
+                    <Text style={styles.error}>{fetchError}</Text>
+                </ScrollView>
+            </SafeAreaView>
+        )
+    }
 
     return (
         <SafeAreaView style={styles.screen}>
@@ -215,6 +256,12 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                     onDelete={async () => {
                                         await respondToRequest(item._id, false)
                                     }}
+                                    error={
+                                        respondRequestError.length > 0 &&
+                                        respondRequestId === item._id
+                                            ? respondRequestError
+                                            : undefined
+                                    }
                                 />
                             )
                         }}
@@ -237,6 +284,12 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                         await deleteRequest(item._id)
                                     }}
                                     requestStatus={item.status}
+                                    error={
+                                        deleteRequestError.length > 0 &&
+                                        deleteRequestId === item._id
+                                            ? deleteRequestError
+                                            : undefined
+                                    }
                                 />
                             )
                         }}

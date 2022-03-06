@@ -27,12 +27,12 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
     const { colors } = useColors()
     const styles = StyleSheet.create({
         header: {
-            color: colors.textPrimary,
+            color: colors.gray,
             fontSize: size.fontMedium,
             fontWeight: weight.full,
         },
         subheader: {
-            color: colors.textSecondary,
+            color: colors.textPrimary,
             fontSize: size.fontFifteen,
             fontWeight: weight.full,
         },
@@ -40,8 +40,13 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
             display: 'flex',
             flexDirection: 'row',
         },
+        itemContainer: {
+            flex: 1,
+        },
         separator: {
             height: 1,
+            marginTop: 10,
+            marginBottom: 10,
             backgroundColor: colors.textSecondary,
         },
         error: {
@@ -54,7 +59,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
     return (
         <View>
             <TouchableOpacity style={styles.opacity} onPress={onPress}>
-                <View>
+                <View style={styles.itemContainer}>
                     <Text style={styles.header}>{header}</Text>
                     {subheader && (
                         <Text style={styles.subheader}>{subheader}</Text>

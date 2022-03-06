@@ -6,6 +6,7 @@ import { CreateUserData, DisplayUser, User } from '../../types/user'
 import {
     createAccount as networkCreateAccount,
     fetchProfile as networkFetchProfile,
+    getPublicUser as networkGetPublicUser,
     leaveTeam as networkLeaveTeam,
     login as networkLogin,
     logout as networkLogout,
@@ -135,5 +136,21 @@ export const leaveTeam = async (
         return user
     } catch (error) {
         return throwApiError(error, Constants.LEAVE_TEAM_ERROR)
+    }
+}
+
+/**
+ * Method to get a user's public details. No authentication needed to make this call.
+ * @param id id of user
+ * @returns user object
+ * @throws error if backend returns an error
+ */
+export const getPublicUser = async (id: string): Promise<User> => {
+    try {
+        const response = await networkGetPublicUser(id)
+        const user = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.GENERIC_FETCH_PROFILE_ERROR)
     }
 }

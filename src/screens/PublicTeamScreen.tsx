@@ -136,6 +136,12 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                                         user={user}
                                         showDelete={false}
                                         showAccept={false}
+                                        onPress={async () => {
+                                            navigation.navigate(
+                                                'PublicUserDetails',
+                                                { user },
+                                            )
+                                        }}
                                     />
                                 )
                             }}

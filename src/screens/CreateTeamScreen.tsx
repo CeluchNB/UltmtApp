@@ -6,9 +6,11 @@ import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
+import { getFormFieldRules } from '../utils/form-utils'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
+import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../theme/fonts'
@@ -29,9 +31,14 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
         `${currentYear} - ${currentYear + 1}`,
         (currentYear + 1).toString(),
     ]
+    const [error, setError] = React.useState('')
 
     const { colors } = useColors()
-    const { control, handleSubmit } = useForm({
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             place: '',
             name: '',
@@ -39,6 +46,27 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             season: currentYear.toString(),
         },
     })
+
+    const createTeam = async (data: CreateTeamFormData) => {
+        setLoading(true)
+        const seasonSplit = data.season.split(' - ')
+        const createTeamData: CreateTeam = {
+            place: data.place,
+            name: data.name,
+            teamname: data.teamname,
+            seasonStart: seasonSplit[0],
+            seasonEnd: seasonSplit[seasonSplit.length - 1],
+        }
+
+        try {
+            await TeamData.createTeam(account.token, createTeamData)
+            setLoading(false)
+            navigation.goBack()
+        } catch (e: any) {
+            setLoading(false)
+            setError(e.message ?? 'Error creating this team. Please try again')
+        }
+    }
 
     const styles = StyleSheet.create({
         screen: {
@@ -69,27 +97,13 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             marginTop: 20,
             alignSelf: 'center',
         },
+        error: {
+            fontSize: size.fontFifteen,
+            color: colors.error,
+            width: '75%',
+            alignSelf: 'center',
+        },
     })
-
-    const createTeam = async (data: CreateTeamFormData) => {
-        setLoading(true)
-        const seasonSplit = data.season.split(' - ')
-        const createTeamData: CreateTeam = {
-            place: data.place,
-            name: data.name,
-            teamname: data.teamname,
-            seasonStart: seasonSplit[0],
-            seasonEnd: seasonSplit[seasonSplit.length - 1],
-        }
-
-        try {
-            await TeamData.createTeam(account.token, createTeamData)
-            setLoading(false)
-            navigation.goBack()
-        } catch (error) {
-            // HANDLE ERROR
-        }
-    }
 
     return (
         <View style={styles.screen}>
@@ -97,22 +111,23 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             <Controller
                 name="place"
                 control={control}
-                rules={{
-                    required: true,
-                }}
+                rules={getFormFieldRules('Team place', true, undefined, 20)}
                 render={({ field: { onChange, value } }) => (
                     <UserInput
                         style={styles.input}
-                        placeholder="Team City"
+                        placeholder="Team Place"
                         onChangeText={onChange}
                         value={value}
                     />
                 )}
             />
+            {errors.place && (
+                <Text style={styles.error}>{errors.place.message}</Text>
+            )}
             <Controller
                 name="name"
                 control={control}
-                rules={{ required: true }}
+                rules={getFormFieldRules('Team name', true, undefined, 20)}
                 render={({ field: { onChange, value } }) => (
                     <UserInput
                         style={styles.input}
@@ -122,10 +137,21 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.name && (
+                <Text style={styles.error}>{errors.name.message}</Text>
+            )}
             <Controller
                 name="teamname"
                 control={control}
-                rules={{ required: true }}
+                rules={getFormFieldRules('Team handle', true, 2, 20, [
+                    {
+                        test: (v: string) => {
+                            return validator.isAlphanumeric(v)
+                        },
+                        message:
+                            'Team handle can only contain letters and numbers',
+                    },
+                ])}
                 render={({ field: { onChange, value } }) => (
                     <UserInput
                         style={styles.input}
@@ -135,6 +161,9 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                     />
                 )}
             />
+            {errors.teamname && (
+                <Text style={styles.error}>{errors.teamname.message}</Text>
+            )}
             <Text style={styles.pickerTitle}>Season</Text>
             <Controller
                 name="season"
@@ -158,7 +187,7 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                     </Picker>
                 )}
             />
-
+            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
             <PrimaryButton
                 style={styles.button}
                 text="Create"
