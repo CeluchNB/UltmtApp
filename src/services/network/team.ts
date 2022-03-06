@@ -1,3 +1,4 @@
+import { API_URL } from 'react-native-dotenv'
 import { CreateTeam } from '../../types/team'
 import axios, { AxiosResponse } from 'axios'
 
@@ -6,7 +7,7 @@ export const createTeam = async (
     data: CreateTeam,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        'https://ultmt-dev.herokuapp.com/team',
+        `${API_URL}/team`,
         {
             team: { ...data },
         },
@@ -19,27 +20,22 @@ export const createTeam = async (
 }
 
 export const searchTeam = async (term: string): Promise<AxiosResponse> => {
-    return await axios.get(
-        `https://ultmt-dev.herokuapp.com/team/search?q=${term}`,
-    )
+    return await axios.get(`${API_URL}/team/search?q=${term}`)
 }
 
 export const getManagedTeam = async (
     token: string,
     id: string,
 ): Promise<AxiosResponse> => {
-    return await axios.get(
-        `https://ultmt-dev.herokuapp.com/team/managing/${id}`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+    return await axios.get(`${API_URL}/team/managing/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
         },
-    )
+    })
 }
 
 export const getTeam = async (id: string): Promise<AxiosResponse> => {
-    return await axios.get(`https://ultmt-dev.herokuapp.com/team/${id}`)
+    return await axios.get(`${API_URL}/team/${id}`)
 }
 
 export const toggleRosterStatus = async (
@@ -48,7 +44,7 @@ export const toggleRosterStatus = async (
     open: boolean,
 ): Promise<AxiosResponse> => {
     return await axios.put(
-        `https://ultmt-dev.herokuapp.com/team/open/${id}?open=${open}`,
+        `${API_URL}/team/open/${id}?open=${open}`,
         {},
         {
             headers: {
@@ -64,7 +60,7 @@ export const removePlayer = async (
     userId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `https://ultmt-dev.herokuapp.com/team/remove/player/${teamId}?user=${userId}`,
+        `${API_URL}/team/remove/player/${teamId}?user=${userId}`,
         {},
         {
             headers: {
@@ -82,7 +78,7 @@ export const rollover = async (
     seasonEnd: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `https://ultmt-dev.herokuapp.com/team/rollover/${teamId}`,
+        `${API_URL}/team/rollover/${teamId}`,
         {
             copyPlayers,
             seasonStart,

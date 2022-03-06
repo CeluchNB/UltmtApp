@@ -63,3 +63,6 @@ buck-out/
 coverage/
 
 .vscode/
+
+.env
+env.d.ts

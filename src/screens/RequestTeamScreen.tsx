@@ -29,6 +29,7 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
         setSearchError('')
         if (text.length < 3) {
             setTeams([])
+            return
         }
         try {
             const teamsResponse = await TeamData.searchTeam(text)
