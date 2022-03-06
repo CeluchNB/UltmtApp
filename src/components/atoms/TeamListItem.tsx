@@ -13,6 +13,7 @@ interface TeamListItemProps {
     onDelete?: () => {}
     onAccept?: () => {}
     requestStatus?: string
+    error?: string
 }
 
 const TeamListItem: React.FC<TeamListItemProps> = ({
@@ -23,6 +24,7 @@ const TeamListItem: React.FC<TeamListItemProps> = ({
     onDelete,
     onAccept,
     requestStatus,
+    error,
 }) => {
     const { colors } = useColors()
 
@@ -48,6 +50,10 @@ const TeamListItem: React.FC<TeamListItemProps> = ({
             color: colors.textPrimary,
             fontSize: size.fontSmall,
             fontWeight: weight.bold,
+        },
+        error: {
+            color: colors.error,
+            fontSize: size.fontSmall,
         },
         buttonStyle: {
             alignItems: 'center',
@@ -95,6 +101,7 @@ const TeamListItem: React.FC<TeamListItemProps> = ({
                 {requestStatus === 'pending' && (
                     <Text style={styles.pendingText}>Pending</Text>
                 )}
+                {error ? <Text style={styles.error}>{error}</Text> : <View />}
             </TouchableOpacity>
             {showAccept && (
                 <IconButton

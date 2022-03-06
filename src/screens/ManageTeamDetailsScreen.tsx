@@ -35,18 +35,24 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     navigation,
     route,
 }: ManagedTeamDetailsProps) => {
-    const { colors } = useColors()
     const { id, place, name } = route.params
+
     const dispatch = useDispatch()
-    const [requestsLoading, setRequestsLoading] = React.useState(false)
-    const [requests, setRequests] = React.useState([] as DetailedRequest[])
-    const [error, setError] = React.useState(undefined)
-    const [refreshing, setRefreshing] = React.useState(false)
     const token = useSelector(selectToken)
     const team = useSelector(selectTeam)
     const teamLoading = useSelector(selectTeamLoading)
     const openLoading = useSelector(selectOpenLoading)
+
+    const { colors } = useColors()
     const isMounted = React.useRef(false)
+    const [requestsLoading, setRequestsLoading] = React.useState(false)
+    const [requests, setRequests] = React.useState([] as DetailedRequest[])
+    const [error, setError] = React.useState(undefined)
+    const [refreshing, setRefreshing] = React.useState(false)
+    const [deleteRequestError, setDeleteRequestError] = React.useState('')
+    const [deleteRequestId, setDeleteRequestId] = React.useState('')
+    const [respondRequestError, setRespondRequestError] = React.useState('')
+    const [respondRequestId, setResponseRequestId] = React.useState('')
 
     const initializeScreen = React.useCallback(async () => {
         try {
@@ -101,14 +107,18 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
         try {
+            setRespondRequestError('')
+            setResponseRequestId(requestId)
             await RequestData.respondToPlayerRequest(token, requestId, accept)
             setRequests(requests.filter(r => r._id !== requestId))
 
             if (accept) {
                 dispatch(getManagedTeam({ token, id }))
             }
-        } catch (e) {
-            // HANDLE ERROR
+        } catch (e: any) {
+            setRespondRequestError(
+                e.message ?? 'Unable to respond to this request',
+            )
         }
     }
 
@@ -118,14 +128,16 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 
     const deleteRequest = async (requestId: string) => {
         try {
+            setDeleteRequestError('')
+            setDeleteRequestId(requestId)
             const request = await RequestData.deleteTeamRequest(
                 token,
                 requestId,
             )
             // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
             setRequests(requests.filter(r => r._id !== request._id))
-        } catch (e) {
-            // HANDLE ERROR
+        } catch (e: any) {
+            setDeleteRequestError(e.message ?? 'Unable to delete this request.')
         }
     }
 
@@ -272,6 +284,12 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                                     onAccept={() =>
                                         respondToRequest(item._id, true)
                                     }
+                                    error={
+                                        respondRequestError.length > 0 &&
+                                        item._id === respondRequestId
+                                            ? respondRequestError
+                                            : undefined
+                                    }
                                 />
                             )
                         }}
@@ -302,6 +320,12 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                                     showAccept={false}
                                     requestStatus={item.status}
                                     onDelete={() => deleteRequest(item._id)}
+                                    error={
+                                        item._id === deleteRequestId &&
+                                        deleteRequestError.length > 0
+                                            ? deleteRequestError
+                                            : undefined
+                                    }
                                 />
                             )
                         }}

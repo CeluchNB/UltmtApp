@@ -13,6 +13,7 @@ interface UserListItemProps {
     onAccept?: () => {}
     onPress?: () => {}
     requestStatus?: string
+    error?: string
 }
 
 const UserListItem: React.FC<UserListItemProps> = ({
@@ -23,6 +24,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
     onAccept,
     onPress,
     requestStatus,
+    error,
 }) => {
     const { colors } = useColors()
 
@@ -85,6 +87,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
                     {requestStatus === 'pending' && (
                         <Text style={styles.pendingText}>Pending</Text>
                     )}
+                    {error && <Text style={styles.deniedText}>{error}</Text>}
                 </TouchableOpacity>
             </View>
             {showAccept && (

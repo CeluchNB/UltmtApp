@@ -42,7 +42,7 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
             fontWeight: weight.full,
         },
         username: {
-            color: colors.textSecondary,
+            color: colors.textPrimary,
             fontSize: size.fontFifteen,
             fontWeight: weight.full,
         },

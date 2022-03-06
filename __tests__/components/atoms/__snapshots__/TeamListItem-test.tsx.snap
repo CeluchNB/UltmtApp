@@ -62,6 +62,7 @@ exports[`matches snapshot 1`] = `
     >
       2019
     </Text>
+    <View />
   </View>
 </View>
 `;

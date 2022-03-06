@@ -5,6 +5,7 @@ import { PublicUserDetailsProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { User } from '../types/user'
+import { size } from '../theme/fonts'
 import { useColors } from './../hooks'
 import {
     RefreshControl,
@@ -24,6 +25,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     const [user, setUser] = React.useState<User>()
     const [refreshing, setRefreshing] = React.useState<boolean>(false)
     const [loading, setLoading] = React.useState<boolean>(false)
+    const [error, setError] = React.useState<string>('')
     const isMounted = React.useRef(false)
 
     const initializeScreen = React.useCallback(async () => {
@@ -34,14 +36,15 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                 setLoading(false)
                 setUser(responseUser)
             }
-        } catch (error) {
-            // HANDLE ERROR
+        } catch (e: any) {
+            setError(e.message ?? 'Unable to get this user.')
         }
     }, [initialUser])
 
     React.useEffect(() => {
         isMounted.current = true
         const unsubscribe = navigation.addListener('focus', () => {
+            setError('')
             initializeScreen()
         })
 
@@ -64,6 +67,11 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
             width: '75%',
             alignSelf: 'center',
         },
+        error: {
+            width: '75%',
+            alignSelf: 'center',
+            fontSize: size.fontLarge,
+        },
     })
 
     return (
@@ -84,33 +92,37 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     title={`${initialUser.firstName} ${initialUser.lastName}`}
                 />
                 <Text style={styles.titleText}>@{initialUser.username}</Text>
-                <View style={styles.sectionContainer}>
-                    <MapSection
-                        title="Teams"
-                        listData={user?.playerTeams ?? []}
-                        renderItem={team => {
-                            return (
-                                <TeamListItem
-                                    key={team._id}
-                                    team={team}
-                                    onPress={async () => {
-                                        navigation.navigate(
-                                            'PublicTeamDetails',
-                                            {
-                                                id: team._id,
-                                                place: team.place,
-                                                name: team.name,
-                                            },
-                                        )
-                                    }}
-                                />
-                            )
-                        }}
-                        loading={loading}
-                        showButton={false}
-                        showCreateButton={false}
-                    />
-                </View>
+                {error.length > 0 ? (
+                    <Text style={styles.error}>{error}</Text>
+                ) : (
+                    <View style={styles.sectionContainer}>
+                        <MapSection
+                            title="Teams"
+                            listData={user?.playerTeams ?? []}
+                            renderItem={team => {
+                                return (
+                                    <TeamListItem
+                                        key={team._id}
+                                        team={team}
+                                        onPress={async () => {
+                                            navigation.navigate(
+                                                'PublicTeamDetails',
+                                                {
+                                                    id: team._id,
+                                                    place: team.place,
+                                                    name: team.name,
+                                                },
+                                            )
+                                        }}
+                                    />
+                                )
+                            }}
+                            loading={loading}
+                            showButton={false}
+                            showCreateButton={false}
+                        />
+                    </View>
+                )}
             </ScrollView>
         </SafeAreaView>
     )
