@@ -1,4 +1,4 @@
-import * as UserServices from '../../src/services/network/user'
+import * as UserData from '../../src/services/data/user'
 import LoginScreen from '../../src/screens/LoginScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { Props } from '../../src/types/navigation'
@@ -13,6 +13,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const props: Props = {
     navigation: {
         navigate: jest.fn(),
+        reset: jest.fn(),
     } as any,
     route: {} as any,
 }
@@ -29,8 +30,8 @@ it('test matches snapshot', () => {
 })
 
 it('test successful login', async () => {
-    jest.spyOn(UserServices, 'login').mockImplementationOnce(async () => {
-        return { data: { token: 'asdf.asdf.asdf' } }
+    jest.spyOn(UserData, 'login').mockImplementationOnce(async () => {
+        return 'asdf.asdf.asdf'
     })
     const { getByPlaceholderText, getAllByText } = render(
         <Provider store={store}>
@@ -46,5 +47,5 @@ it('test successful login', async () => {
         fireEvent.press(getAllByText('Login')[1])
     })
 
-    expect(props.navigation.navigate).toHaveBeenCalled()
+    expect(props.navigation.reset).toHaveBeenCalled()
 })
