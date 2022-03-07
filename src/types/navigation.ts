@@ -1,7 +1,7 @@
 import { DisplayUser } from './user'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-export type RootStackParamList = {
+export type AccountStackParamList = {
     Login: undefined
     Profile: undefined
     CreateAccount: undefined
@@ -15,22 +15,26 @@ export type RootStackParamList = {
     RolloverTeam: { id: string }
 }
 
-export type Props = NativeStackScreenProps<RootStackParamList, 'Login'>
+export type GameStackParamList = {
+    GameSearch: undefined
+}
+
+export type Props = NativeStackScreenProps<AccountStackParamList, 'Login'>
 export type CreateTeamProps = NativeStackScreenProps<
-    RootStackParamList,
+    AccountStackParamList,
     'CreateTeam'
 >
 export type ManagedTeamDetailsProps = NativeStackScreenProps<
-    RootStackParamList,
+    AccountStackParamList,
     'ManagedTeamDetails'
 >
 
 export type PublicTeamDetailsProps = NativeStackScreenProps<
-    RootStackParamList,
+    AccountStackParamList,
     'PublicTeamDetails'
 >
 
 export type PublicUserDetailsProps = NativeStackScreenProps<
-    RootStackParamList,
+    AccountStackParamList,
     'PublicUserDetails'
 >

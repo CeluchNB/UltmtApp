@@ -106,6 +106,14 @@ const UserListItem: React.FC<UserListItemProps> = ({
                     onPress={onDelete}
                 />
             )}
+            {onPress && (
+                <IconButton
+                    style={styles.buttonStyle}
+                    color={colors.textPrimary}
+                    icon="chevron-right"
+                    onPress={onPress}
+                />
+            )}
         </View>
     )
 }

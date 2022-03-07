@@ -12,6 +12,8 @@
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.9",
     "@react-native-picker/picker": "^2.2.1",
+    "@react-navigation/bottom-tabs": "^6.2.0",
+    "@react-navigation/material-bottom-tabs": "^6.1.1",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "@reduxjs/toolkit": "^1.7.1",

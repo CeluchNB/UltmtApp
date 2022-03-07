@@ -6,6 +6,8 @@ export interface ColorPalette {
     success: string
     error: string
     gray: string
+    darkGray: string
+    darkPrimary: string
 }
 
 export const lightColors: ColorPalette = {
@@ -16,6 +18,8 @@ export const lightColors: ColorPalette = {
     success: '#40dd50',
     error: '#ff0000',
     gray: '#707070',
+    darkGray: '#303030',
+    darkPrimary: '#cccccc',
 }
 
 export const darkColors: ColorPalette = {
@@ -26,4 +30,6 @@ export const darkColors: ColorPalette = {
     success: '#40dd50',
     error: '#ff0000',
     gray: '#ababab',
+    darkGray: '#ebebeb',
+    darkPrimary: '#2a2a2a',
 }
