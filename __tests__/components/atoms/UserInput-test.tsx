@@ -1,12 +1,18 @@
-import React from 'react'
+import * as React from 'react'
 import UserInput from '../../../src/components/atoms/UserInput'
-
-// Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer'
 
 it('test snapshot', () => {
-    const tree = renderer
+    const snapshot = renderer
         .create(<UserInput placeholder="Placeholder" />)
         .toJSON()
-    expect(tree).toMatchSnapshot()
+    expect(snapshot).toMatchSnapshot()
+})
+
+it('test with right icon', () => {
+    const snapshot = renderer
+        .create(<UserInput placeholder="Placeholder" rightIcon={true} />)
+        .toJSON()
+
+    expect(snapshot).toMatchSnapshot()
 })

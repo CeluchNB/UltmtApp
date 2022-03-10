@@ -5,7 +5,7 @@ import { useColors } from '../../hooks'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
-interface UserListItemProps {
+export interface UserListItemProps {
     user: DisplayUser
     showDelete: boolean
     showAccept: boolean
@@ -96,6 +96,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
                     color={colors.success}
                     icon="plus"
                     onPress={onAccept}
+                    testID="accept-button"
                 />
             )}
             {showDelete && (
@@ -104,6 +105,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
                     color={colors.error}
                     icon="close"
                     onPress={onDelete}
+                    testID="delete-button"
                 />
             )}
             {onPress && (
@@ -112,6 +114,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
                     color={colors.textPrimary}
                     icon="chevron-right"
                     onPress={onPress}
+                    testID="go-button"
                 />
             )}
         </View>

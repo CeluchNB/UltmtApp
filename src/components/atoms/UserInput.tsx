@@ -13,7 +13,15 @@ interface UserInputProps {
     onRightPress?: () => {}
 }
 
-const UserInput: React.FC<UserInputProps> = props => {
+const UserInput: React.FC<UserInputProps> = ({
+    placeholder,
+    isPassword,
+    onChangeText,
+    value,
+    style,
+    rightIcon,
+    onRightPress,
+}) => {
     const { colors } = useColors()
 
     const styles = StyleSheet.create({
@@ -28,21 +36,22 @@ const UserInput: React.FC<UserInputProps> = props => {
 
     return (
         <TextInput
-            style={[styles.inputStyle, props.style]}
-            placeholder={props.placeholder}
+            style={[styles.inputStyle, style]}
+            placeholder={placeholder}
             mode="outlined"
             outlineColor={colors.textSecondary}
             activeOutlineColor={colors.textPrimary}
-            secureTextEntry={props.isPassword}
-            onChangeText={props.onChangeText}
-            value={props.value}
+            secureTextEntry={isPassword}
+            onChangeText={onChangeText}
+            value={value}
             right={
-                props.rightIcon && (
+                rightIcon && (
                     <TextInput.Icon
                         name="eye"
                         color={colors.textPrimary}
-                        onPressIn={props.onRightPress}
-                        onPressOut={props.onRightPress}
+                        onPressIn={onRightPress}
+                        onPressOut={onRightPress}
+                        testID="right-button"
                     />
                 )
             }

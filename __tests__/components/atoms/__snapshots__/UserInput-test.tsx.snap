@@ -88,3 +88,200 @@ exports[`test snapshot 1`] = `
   </View>
 </View>
 `;
+
+exports[`test with right icon 1`] = `
+<View
+  style={
+    Object {
+      "placeholderTextColor": "#303030",
+    }
+  }
+>
+  <View
+    pointerEvents="none"
+    style={
+      Array [
+        Object {
+          "bottom": 0,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 6,
+        },
+        Object {
+          "backgroundColor": "#ffffff",
+          "borderColor": "#ffd600",
+          "borderRadius": 4,
+          "borderWidth": 1,
+        },
+      ]
+    }
+    testID="text-input-outline"
+  />
+  <View>
+    <View
+      style={
+        Array [
+          Object {
+            "paddingBottom": 0,
+          },
+          Object {
+            "minHeight": 64,
+            "paddingTop": 8,
+          },
+        ]
+      }
+    >
+      <TextInput
+        editable={true}
+        multiline={false}
+        onBlur={[Function]}
+        onChangeText={[Function]}
+        onFocus={[Function]}
+        placeholder="Placeholder"
+        placeholderTextColor="#303030"
+        selectionColor="#3183ff"
+        style={
+          Array [
+            Object {
+              "flexGrow": 1,
+              "margin": 0,
+              "paddingHorizontal": 14,
+              "zIndex": 1,
+            },
+            Object {
+              "height": 56,
+            },
+            Object {
+              "paddingBottom": 0,
+              "paddingTop": 0,
+            },
+            Object {
+              "color": "#3183ff",
+              "fontFamily": "System",
+              "fontSize": 16,
+              "fontWeight": undefined,
+              "textAlign": "left",
+              "textAlignVertical": "center",
+            },
+            false,
+            Object {
+              "marginRight": 44,
+              "paddingRight": 0,
+            },
+          ]
+        }
+        testID="text-input-outlined"
+        underlineColorAndroid="transparent"
+      />
+    </View>
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "height": 24,
+            "justifyContent": "center",
+            "position": "absolute",
+            "width": 24,
+          },
+          Object {
+            "right": 12,
+            "top": 23,
+          },
+        ]
+      }
+    >
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": false,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        hitSlop={
+          Object {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6,
+          }
+        }
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Array [
+              Object {
+                "alignItems": "center",
+                "justifyContent": "center",
+                "margin": 6,
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 18,
+                "height": 36,
+                "width": 36,
+              },
+              undefined,
+              Object {
+                "margin": 0,
+              },
+            ],
+          ]
+        }
+        testID="right-button"
+      >
+        <View>
+          <Text
+            accessibilityElementsHidden={true}
+            allowFontScaling={false}
+            importantForAccessibility="no-hide-descendants"
+            pointerEvents="none"
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "#3183ff",
+                  "fontSize": 24,
+                },
+                Array [
+                  Object {
+                    "lineHeight": 24,
+                    "transform": Array [
+                      Object {
+                        "scaleX": 1,
+                      },
+                    ],
+                  },
+                  Object {
+                    "backgroundColor": "transparent",
+                  },
+                ],
+                Object {
+                  "fontFamily": "Material Design Icons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            󰈈
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;

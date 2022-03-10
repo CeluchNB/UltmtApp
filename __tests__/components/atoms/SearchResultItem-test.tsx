@@ -48,3 +48,16 @@ it('test item press', () => {
 
     expect(mockFn).toBeCalled()
 })
+
+it('test error exists', () => {
+    const { getByText } = render(
+        <SearchResultItem
+            header="item"
+            loading={false}
+            onPress={() => {}}
+            error="Test error"
+        />,
+    )
+    const errorView = getByText('Test error')
+    expect(errorView).toBeTruthy()
+})
