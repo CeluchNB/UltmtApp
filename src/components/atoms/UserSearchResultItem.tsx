@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
-interface UserSearchResultItemProps {
+export interface UserSearchResultItemProps {
     name: string
     username: string
     loading: boolean
@@ -80,6 +80,7 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
                         size="small"
                         color={colors.gray}
                         animating={loading}
+                        testID="loading-spinner"
                     />
                 )}
             </TouchableOpacity>
