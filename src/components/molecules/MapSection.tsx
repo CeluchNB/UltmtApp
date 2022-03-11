@@ -73,6 +73,7 @@ const MapSection = <T,>({
                         style={styles.createButton}
                         onPress={onCreatePress}
                         icon="plus"
+                        testID="create-button"
                     />
                 )}
             </View>
@@ -93,7 +94,8 @@ const MapSection = <T,>({
                     mode="text"
                     style={styles.button}
                     color={colors.textPrimary}
-                    onPress={onButtonPress}>
+                    onPress={onButtonPress}
+                    testID="more-button">
                     {buttonText}
                 </Button>
             )}

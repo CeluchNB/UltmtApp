@@ -75,6 +75,8 @@ const Section: React.FC<SectionProps> = ({
                     style={styles.createButton}
                     onPress={onCreatePress}
                     icon="plus"
+                    disabled={!showCreateButton}
+                    testID="create-button"
                 />
             </View>
             {error ? (

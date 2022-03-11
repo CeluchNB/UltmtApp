@@ -1,11 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`matches snapshot 1`] = `
+exports[`test matches snapshot 1`] = `
 <View
   style={
     Object {
-      "flex": 0,
-      "flexShrink": 1,
       "width": "100%",
     }
   }
@@ -40,7 +38,7 @@ exports[`matches snapshot 1`] = `
         }
       }
       accessible={true}
-      focusable={true}
+      focusable={false}
       hitSlop={
         Object {
           "bottom": 6,
@@ -73,13 +71,11 @@ exports[`matches snapshot 1`] = `
               "height": 36,
               "width": 36,
             },
-            Object {
-              "opacity": 0.32,
-            },
+            undefined,
             Object {
               "backgroundColor": "#3183ff",
               "borderRadius": 5,
-              "display": "none",
+              "display": "flex",
               "flexWrap": "nowrap",
             },
           ],
@@ -127,28 +123,11 @@ exports[`matches snapshot 1`] = `
       </View>
     </View>
   </View>
-  <RCTScrollView
-    data={Array []}
-    getItem={[Function]}
-    getItemCount={[Function]}
-    keyExtractor={[Function]}
-    listKey="title"
-    onContentSizeChange={[Function]}
-    onLayout={[Function]}
-    onMomentumScrollBegin={[Function]}
-    onMomentumScrollEnd={[Function]}
-    onScroll={[Function]}
-    onScrollBeginDrag={[Function]}
-    onScrollEndDrag={[Function]}
-    removeClippedSubviews={false}
-    renderItem={[Function]}
-    scrollEnabled={false}
-    scrollEventThrottle={50}
-    stickyHeaderIndices={Array []}
-    viewabilityConfigCallbackPairs={Array []}
-  >
-    <View />
-  </RCTScrollView>
+  <ActivityIndicator
+    animating={true}
+    color="#3183ff"
+    size="large"
+  />
   <View
     collapsable={false}
     nativeID="animatedComponent"
@@ -170,11 +149,11 @@ exports[`matches snapshot 1`] = `
       accessibilityRole="button"
       accessibilityState={
         Object {
-          "disabled": false,
+          "disabled": true,
         }
       }
       accessible={true}
-      focusable={true}
+      focusable={false}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
@@ -192,6 +171,7 @@ exports[`matches snapshot 1`] = `
           },
         ]
       }
+      testID="more-button"
     >
       <View
         style={
@@ -242,9 +222,7 @@ exports[`matches snapshot 1`] = `
               ],
             ]
           }
-        >
-          button
-        </Text>
+        />
       </View>
     </View>
   </View>
