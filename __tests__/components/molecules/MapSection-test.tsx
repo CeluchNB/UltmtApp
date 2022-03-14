@@ -11,7 +11,7 @@ it('test matches snapshot', () => {
             title="title"
             listData={['item1', 'item2']}
             renderItem={item => {
-                return <Text>{item}</Text>
+                return <Text key={item}>{item}</Text>
             }}
             showButton={true}
             showCreateButton={true}
@@ -28,7 +28,7 @@ it('test displays items correctly', () => {
             title="title"
             listData={['item1', 'item2']}
             renderItem={item => {
-                return <Text>{item}</Text>
+                return <Text key={item}>{item}</Text>
             }}
             showButton={true}
             showCreateButton={true}
@@ -48,7 +48,7 @@ it('test button press fires', () => {
             title="title"
             listData={['item1', 'item2']}
             renderItem={item => {
-                return <Text>{item}</Text>
+                return <Text key={item}>{item}</Text>
             }}
             showButton={true}
             onButtonPress={fn}
@@ -71,7 +71,7 @@ it('test create button fires', () => {
             title="title"
             listData={['item1', 'item2']}
             renderItem={item => {
-                return <Text>{item}</Text>
+                return <Text key={item}>{item}</Text>
             }}
             showButton={true}
             showCreateButton={true}
