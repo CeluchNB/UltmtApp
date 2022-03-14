@@ -9,77 +9,52 @@
  */
 
 import * as React from 'react'
-import CreateAccountScreen from './src/screens/CreateAccountScreen'
-import CreateTeamScreen from './src/screens/CreateTeamScreen'
-import LoginScreen from './src/screens/LoginScreen'
-import ManageTeamDetailsScreen from './src/screens/ManageTeamDetailsScreen'
-import ManageTeamsScreen from './src/screens/ManageTeamsScreen'
+import AccountNavigator from './src/navigation/AccountNavigator'
+import GameNavigator from './src/navigation/GameNavigator'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { NavigationContainer } from '@react-navigation/native'
-import ProfileScreen from './src/screens/ProfileScreen'
-import PublicTeamScreen from './src/screens/PublicTeamScreen'
-import PublicUserScreen from './src/screens/PublicUserScreen'
-import RequestTeamScreen from './src/screens/RequestTeamScreen'
-import RequestUserScreen from './src/screens/RequestUserScreen'
-import RolloverTeamScreen from './src/screens/RolloverTeamScreen'
-import { RootStackParamList } from './src/types/navigation'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { useColors } from './src/hooks'
 
-const Stack = createNativeStackNavigator<RootStackParamList>()
+const Tab = createMaterialBottomTabNavigator()
 
 const App: React.FC<{}> = () => {
+    const { colors } = useColors()
     return (
         <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName={'Login'}
-                screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="Profile" component={ProfileScreen} />
-                <Stack.Screen
-                    name="CreateAccount"
-                    component={CreateAccountScreen}
-                />
-                <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
-                <Stack.Screen
-                    name="ManageTeams"
-                    component={ManageTeamsScreen}
-                />
-                <Stack.Screen
-                    name="RequestTeam"
-                    component={RequestTeamScreen}
-                />
-                <Stack.Screen
-                    name="ManagedTeamDetails"
-                    component={ManageTeamDetailsScreen}
-                    initialParams={{ id: '', place: '', name: '' }}
-                />
-                <Stack.Screen
-                    name="PublicTeamDetails"
-                    component={PublicTeamScreen}
-                    initialParams={{ id: '', place: '', name: '' }}
-                />
-                <Stack.Screen
-                    name="RequestUser"
-                    component={RequestUserScreen}
-                    initialParams={{ id: '' }}
-                />
-                <Stack.Screen
-                    name="RolloverTeam"
-                    component={RolloverTeamScreen}
-                    initialParams={{ id: '' }}
-                />
-                <Stack.Screen
-                    name="PublicUserDetails"
-                    component={PublicUserScreen}
-                    initialParams={{
-                        user: {
-                            _id: '',
-                            firstName: '',
-                            lastName: '',
-                            username: '',
-                        },
+            <Tab.Navigator
+                activeColor={colors.textPrimary}
+                inactiveColor={colors.gray}
+                barStyle={{ backgroundColor: colors.darkPrimary }}>
+                <Tab.Screen
+                    name="Account"
+                    component={AccountNavigator}
+                    options={{
+                        tabBarLabel: 'Account',
+                        tabBarIcon: ({ color }) => (
+                            <MaterialCommunityIcons
+                                name="account"
+                                color={color}
+                                size={26}
+                            />
+                        ),
                     }}
                 />
-            </Stack.Navigator>
+                <Tab.Screen
+                    name="Games"
+                    component={GameNavigator}
+                    options={{
+                        tabBarLabel: 'Games',
+                        tabBarIcon: ({ color }) => (
+                            <MaterialCommunityIcons
+                                name="home"
+                                color={color}
+                                size={26}
+                            />
+                        ),
+                    }}
+                />
+            </Tab.Navigator>
         </NavigationContainer>
     )
 }

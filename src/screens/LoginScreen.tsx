@@ -43,7 +43,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
             const token = await UserData.login(username, password)
             dispatch(setToken(token))
             setLoading(false)
-            navigation.navigate('Profile')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Profile' }],
+            })
         } catch (e: any) {
             setLoading(false)
             setError(e.message ?? 'Unable to login')
@@ -55,7 +58,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
             UserData.getLocalToken()
                 .then(token => {
                     dispatch(setToken(token))
-                    navigation.navigate('Profile')
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Profile' }],
+                    })
                 })
                 .catch(_e => {
                     // No error handling here, user just needs

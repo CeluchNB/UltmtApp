@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { DisplayTeam } from '../../../src/types/team'
 import TeamListItem from '../../../src/components/atoms/TeamListItem'
-import { render } from '@testing-library/react-native'
 import renderer from 'react-test-renderer'
+import { fireEvent, render } from '@testing-library/react-native'
 
 const team: DisplayTeam = {
     _id: 'id1',
@@ -32,4 +32,17 @@ it('displays team in different year', () => {
 
     expect(getByText(`${team.place} ${team.name}`)).toBeTruthy()
     expect(getByText(`${team.seasonStart} - ${team.seasonEnd}`)).toBeTruthy()
+})
+
+it('test on press', () => {
+    const onPress = jest.fn()
+    const { getByText, getByTestId } = render(
+        <TeamListItem team={team} onPress={onPress} />,
+    )
+    const userDisplay = getByText('Place1 Name1')
+    fireEvent.press(userDisplay)
+
+    const goButton = getByTestId('go-button')
+    fireEvent.press(goButton)
+    expect(onPress).toHaveBeenCalledTimes(2)
 })

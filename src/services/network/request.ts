@@ -1,3 +1,4 @@
+import { API_URL } from 'react-native-dotenv'
 import axios, { AxiosResponse } from 'axios'
 
 export const requestTeam = async (
@@ -5,7 +6,7 @@ export const requestTeam = async (
     teamId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `https://ultmt-dev.herokuapp.com/request/user?team=${teamId}`,
+        `${API_URL}/request/user?team=${teamId}`,
         {},
         {
             headers: {
@@ -21,7 +22,7 @@ export const requestUser = async (
     teamId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `https://ultmt-dev.herokuapp.com/request/team/${teamId}?user=${userId}`,
+        `${API_URL}/request/team/${teamId}?user=${userId}`,
         {},
         {
             headers: {
@@ -35,14 +36,11 @@ export const getRequest = async (
     token: string,
     requestId: string,
 ): Promise<AxiosResponse> => {
-    return await axios.get(
-        `https://ultmt-dev.herokuapp.com/request/${requestId}`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+    return await axios.get(`${API_URL}/request/${requestId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
         },
-    )
+    })
 }
 
 export const respondToPlayerRequest = async (
@@ -51,9 +49,7 @@ export const respondToPlayerRequest = async (
     accept: boolean,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `https://ultmt-dev.herokuapp.com/request/team/${
-            accept ? 'accept' : 'deny'
-        }/${requestId}`,
+        `${API_URL}/request/team/${accept ? 'accept' : 'deny'}/${requestId}`,
         {},
         {
             headers: {
@@ -68,7 +64,7 @@ export const deleteTeamRequest = async (
     requestId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `https://ultmt-dev.herokuapp.com/request/team/delete/${requestId}`,
+        `${API_URL}/request/team/delete/${requestId}`,
         {},
         {
             headers: {
@@ -84,9 +80,7 @@ export const respondToTeamRequest = async (
     accept: boolean,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `https://ultmt-dev.herokuapp.com/request/user/${
-            accept ? 'accept' : 'deny'
-        }/${requestId}`,
+        `${API_URL}/request/user/${accept ? 'accept' : 'deny'}/${requestId}`,
         {},
         {
             headers: {
@@ -101,7 +95,7 @@ export const deleteUserRequest = async (
     requestId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `https://ultmt-dev.herokuapp.com/request/user/delete/${requestId}`,
+        `${API_URL}/request/user/delete/${requestId}`,
         {},
         {
             headers: {

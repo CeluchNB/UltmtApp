@@ -1,3 +1,4 @@
+import { API_URL } from 'react-native-dotenv'
 import { ApiResponse } from '../../types/services'
 import { CreateUserData } from '../../types/user'
 import EncryptedStorage from 'react-native-encrypted-storage'
@@ -7,14 +8,14 @@ export const login = async (
     username: string,
     password: string,
 ): Promise<AxiosResponse> => {
-    return await axios.post('https://ultmt-dev.herokuapp.com/user/login', {
+    return await axios.post(`${API_URL}/user/login`, {
         password,
         email: username,
     })
 }
 
 export const fetchProfile = async (token: string): Promise<AxiosResponse> => {
-    return await axios.get('https://ultmt-dev.herokuapp.com/user/me', {
+    return await axios.get(`${API_URL}/user/me`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -24,14 +25,14 @@ export const fetchProfile = async (token: string): Promise<AxiosResponse> => {
 export const createAccount = async (
     profileData: CreateUserData,
 ): Promise<AxiosResponse> => {
-    return await axios.post('https://ultmt-dev.herokuapp.com/user', {
+    return await axios.post(`${API_URL}/user`, {
         ...profileData,
     })
 }
 
 export const logout = async (token: string): Promise<AxiosResponse> => {
     return await axios.post(
-        'https://ultmt-dev.herokuapp.com/user/logout',
+        `${API_URL}/user/logout`,
         {},
         {
             headers: {
@@ -54,9 +55,7 @@ export const getLocalToken = async (): Promise<ApiResponse> => {
 }
 
 export const searchUsers = async (term: string): Promise<AxiosResponse> => {
-    return await axios.get(
-        `https://ultmt-dev.herokuapp.com/user/search?q=${term}`,
-    )
+    return await axios.get(`${API_URL}/user/search?q=${term}`)
 }
 
 export const leaveTeam = async (
@@ -64,7 +63,7 @@ export const leaveTeam = async (
     teamId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `https://ultmt-dev.herokuapp.com/user/leave/team?team=${teamId}`,
+        `${API_URL}/user/leave/team?team=${teamId}`,
         {},
         {
             headers: {
@@ -75,5 +74,5 @@ export const leaveTeam = async (
 }
 
 export const getPublicUser = async (id: string): Promise<AxiosResponse> => {
-    return await axios.get(`https://ultmt-dev.herokuapp.com/user/${id}`)
+    return await axios.get(`${API_URL}/user/${id}`)
 }
