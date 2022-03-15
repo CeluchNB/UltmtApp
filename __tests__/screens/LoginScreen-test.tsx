@@ -1,4 +1,5 @@
 import * as UserData from '../../src/services/data/user'
+import { ApiError } from '../../src/types/services'
 import LoginScreen from '../../src/screens/LoginScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { Props } from '../../src/types/navigation'
@@ -6,17 +7,25 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import renderer from 'react-test-renderer'
 import store from '../../src/store/store'
-import { act, fireEvent, render } from '@testing-library/react-native'
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
+const reset = jest.fn()
+const navigate = jest.fn()
+
 const props: Props = {
     navigation: {
-        navigate: jest.fn(),
-        reset: jest.fn(),
+        navigate,
+        reset,
     } as any,
     route: {} as any,
 }
+
+beforeEach(() => {
+    reset.mockReset()
+    navigate.mockReset()
+})
 
 it('test matches snapshot', () => {
     const tree = renderer
@@ -47,5 +56,61 @@ it('test successful login', async () => {
         fireEvent.press(getAllByText('Login')[1])
     })
 
-    expect(props.navigation.reset).toHaveBeenCalled()
+    expect(reset).toHaveBeenCalled()
+})
+
+it('should handle login error', async () => {
+    jest.spyOn(UserData, 'login').mockImplementationOnce(async () => {
+        throw new ApiError('error')
+    })
+
+    const { getAllByText, getByPlaceholderText, getByText } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <LoginScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+    await act(async () => {
+        fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
+        fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
+        fireEvent.press(getAllByText('Login')[1])
+    })
+
+    expect(reset).not.toHaveBeenCalled()
+    expect(getByText('error')).toBeTruthy()
+})
+
+it('should handle get local token success', async () => {
+    jest.spyOn(UserData, 'getLocalToken').mockImplementationOnce(async () => {
+        return '1324.1234.1fgas'
+    })
+
+    await waitFor(async () => {
+        render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <LoginScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
+    })
+
+    expect(reset).toHaveBeenCalled()
+})
+
+it('should handle create profile button press', async () => {
+    const { getByText } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <LoginScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    await act(async () => {
+        fireEvent.press(getByText('Create Account'))
+    })
+
+    expect(navigate).toHaveBeenCalled()
 })
