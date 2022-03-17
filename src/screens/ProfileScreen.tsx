@@ -82,6 +82,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                 data={[]}
                 renderItem={() => <View />}
                 showsVerticalScrollIndicator={false}
+                testID="profile-flat-list"
                 refreshControl={
                     <RefreshControl
                         colors={[colors.textSecondary]}
