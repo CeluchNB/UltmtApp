@@ -55,9 +55,11 @@ it('should match snapshot', () => {
 })
 
 it('should handle successful create account', async () => {
-    jest.spyOn(UserData, 'createAccount').mockReturnValueOnce(
-        Promise.resolve({ user, token: '1234.234.fsg234' }),
-    )
+    const spy = jest
+        .spyOn(UserData, 'createAccount')
+        .mockReturnValueOnce(
+            Promise.resolve({ user, token: '1234.234.fsg234' }),
+        )
     const { getByPlaceholderText, getAllByText } = render(
         <Provider store={store}>
             <NavigationContainer>
@@ -85,12 +87,13 @@ it('should handle successful create account', async () => {
     })
 
     expect(navigate).toHaveBeenCalledWith('Profile')
+    spy.mockRestore()
 })
 
 it('should handle unsuccessful create account', async () => {
-    jest.spyOn(UserData, 'createAccount').mockReturnValueOnce(
-        Promise.reject({ message: 'there was an error' }),
-    )
+    const spy = jest
+        .spyOn(UserData, 'createAccount')
+        .mockReturnValueOnce(Promise.reject({ message: 'there was an error' }))
     const { getByPlaceholderText, getAllByText } = render(
         <Provider store={store}>
             <NavigationContainer>
@@ -109,6 +112,7 @@ it('should handle unsuccessful create account', async () => {
     })
 
     expect(navigate).not.toHaveBeenCalled()
+    spy.mockRestore()
 })
 
 it('should handle back button', async () => {

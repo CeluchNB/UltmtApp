@@ -15,8 +15,9 @@ it('matches snapshot', () => {
 })
 
 it('renders correctly in dark mode', () => {
-    jest.spyOn(ReactNative, 'useColorScheme').mockImplementationOnce(
-        () => 'dark',
-    )
+    const spy = jest
+        .spyOn(ReactNative, 'useColorScheme')
+        .mockImplementationOnce(() => 'dark')
     renderer.create(<ScreenTitle title="Login" />)
+    spy.mockRestore()
 })

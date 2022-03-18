@@ -19,15 +19,16 @@ it('test snapshot', () => {
 
 it('test in dark mode', () => {
     const text = 'Text'
-    jest.spyOn(ReactNative, 'useColorScheme').mockImplementationOnce(
-        () => 'dark',
-    )
+    const spy = jest
+        .spyOn(ReactNative, 'useColorScheme')
+        .mockImplementationOnce(() => 'dark')
 
     const { getByText } = render(
         <PrimaryButton text={text} onPress={() => ({})} loading={false} />,
     )
 
     expect(getByText(text)).toBeDefined()
+    spy.mockRestore()
 })
 
 it('test text displays', () => {

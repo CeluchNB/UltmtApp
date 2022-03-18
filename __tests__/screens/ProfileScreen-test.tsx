@@ -193,7 +193,9 @@ it('should handle create team click', async () => {
 
 it('should handle swipe functionality', async () => {
     const mockFn = jest.fn()
-    jest.spyOn(AccountReducer, 'fetchProfile').mockImplementation(mockFn)
+    const spy = jest
+        .spyOn(AccountReducer, 'fetchProfile')
+        .mockImplementation(mockFn)
 
     const { getByTestId } = render(
         <Provider store={store}>
@@ -211,4 +213,5 @@ it('should handle swipe functionality', async () => {
     })
 
     expect(mockFn).toHaveBeenCalled()
+    spy.mockRestore()
 })

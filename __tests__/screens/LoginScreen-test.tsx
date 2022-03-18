@@ -39,9 +39,11 @@ it('test matches snapshot', () => {
 })
 
 it('test successful login', async () => {
-    jest.spyOn(UserData, 'login').mockImplementationOnce(async () => {
-        return 'asdf.asdf.asdf'
-    })
+    const spy = jest
+        .spyOn(UserData, 'login')
+        .mockImplementationOnce(async () => {
+            return 'asdf.asdf.asdf'
+        })
     const { getByPlaceholderText, getAllByText } = render(
         <Provider store={store}>
             <NavigationContainer>
@@ -57,12 +59,15 @@ it('test successful login', async () => {
     })
 
     expect(reset).toHaveBeenCalled()
+    spy.mockRestore()
 })
 
 it('should handle login error', async () => {
-    jest.spyOn(UserData, 'login').mockImplementationOnce(async () => {
-        throw new ApiError('error')
-    })
+    const spy = jest
+        .spyOn(UserData, 'login')
+        .mockImplementationOnce(async () => {
+            throw new ApiError('error')
+        })
 
     const { getAllByText, getByPlaceholderText, getByText } = render(
         <Provider store={store}>
@@ -79,12 +84,15 @@ it('should handle login error', async () => {
 
     expect(reset).not.toHaveBeenCalled()
     expect(getByText('error')).toBeTruthy()
+    spy.mockRestore()
 })
 
 it('should handle get local token success', async () => {
-    jest.spyOn(UserData, 'getLocalToken').mockImplementationOnce(async () => {
-        return '1324.1234.1fgas'
-    })
+    const spy = jest
+        .spyOn(UserData, 'getLocalToken')
+        .mockImplementationOnce(async () => {
+            return '1324.1234.1fgas'
+        })
 
     await waitFor(async () => {
         render(
@@ -97,6 +105,7 @@ it('should handle get local token success', async () => {
     })
 
     expect(reset).toHaveBeenCalled()
+    spy.mockRestore()
 })
 
 it('should handle create profile button press', async () => {

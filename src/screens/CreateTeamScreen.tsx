@@ -7,7 +7,7 @@ import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
-import { selectAccount } from '../store/reducers/features/account/accountReducer'
+import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
 import validator from 'validator'
@@ -23,7 +23,7 @@ interface CreateTeamFormData {
 }
 
 const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
-    const account = useSelector(selectAccount)
+    const token = useSelector(selectToken)
     const [loading, setLoading] = React.useState(false)
     const currentYear = new Date().getFullYear()
     const years = [
@@ -59,7 +59,7 @@ const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
         }
 
         try {
-            await TeamData.createTeam(account.token, createTeamData)
+            await TeamData.createTeam(token, createTeamData)
             setLoading(false)
             navigation.goBack()
         } catch (e: any) {

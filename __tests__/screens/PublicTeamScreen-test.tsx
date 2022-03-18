@@ -70,7 +70,9 @@ it('should display team name', async () => {
 })
 
 it('should handle player click', async () => {
-    jest.spyOn(TeamData, 'getTeam').mockReturnValueOnce(Promise.resolve(team))
+    const spy = jest
+        .spyOn(TeamData, 'getTeam')
+        .mockReturnValueOnce(Promise.resolve(team))
     const { getByText, getByTestId } = render(
         <NavigationContainer>
             <PublicTeamScreen {...props} />
@@ -88,12 +90,13 @@ it('should handle player click', async () => {
 
     fireEvent.press(playerView)
     expect(navigate).toHaveBeenCalled()
+    spy.mockRestore()
 })
 
 it('should handle error get team error', async () => {
-    jest.spyOn(TeamData, 'getTeam').mockReturnValueOnce(
-        Promise.reject({ message: 'error' }),
-    )
+    const spy = jest
+        .spyOn(TeamData, 'getTeam')
+        .mockReturnValueOnce(Promise.reject({ message: 'error' }))
     const { getByText, getByTestId } = render(
         <NavigationContainer>
             <PublicTeamScreen {...props} />
@@ -108,4 +111,5 @@ it('should handle error get team error', async () => {
 
     const errorText = getByText('error')
     expect(errorText).toBeTruthy()
+    spy.mockRestore()
 })
