@@ -203,7 +203,8 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                             setRefreshing(false)
                         }}
                     />
-                }>
+                }
+                testID="mtd-flat-list">
                 <View style={styles.headerContainer}>
                     <ScreenTitle
                         title={`${place} ${name}`}
