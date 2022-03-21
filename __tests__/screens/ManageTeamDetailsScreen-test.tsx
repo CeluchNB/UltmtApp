@@ -185,12 +185,14 @@ it('should handle swipe to refresh', async () => {
     expect(teamname).toBeTruthy()
 
     // player displayed correctly
-    // const player = getByText('@first1last1')
-    // expect(player).toBeTruthy()
+    const player = getByText('@first1last1')
+    expect(player).toBeTruthy()
 
-    // const teamRequest = getByText('@first2last2')
-    // expect(teamRequest).toBeTruthy()
+    // test team request displayed correctly
+    const teamRequest = getByText('@first2last2')
+    expect(teamRequest).toBeTruthy()
 
-    // const playerRequest = getByText('@first3last3')
-    // expect(playerRequest).toBeTruthy()
+    // test player request displayed correctly
+    const playerRequest = getByText('@first3last3')
+    expect(playerRequest).toBeTruthy()
 })
