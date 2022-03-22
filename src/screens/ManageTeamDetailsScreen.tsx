@@ -36,7 +36,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     route,
 }: ManagedTeamDetailsProps) => {
     const { id, place, name } = route.params
-
     const dispatch = useDispatch()
     const token = useSelector(selectToken)
     const team = useSelector(selectTeam)
@@ -179,13 +178,29 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     if (error) {
         return (
             <View style={styles.screen}>
-                <View style={styles.headerContainer}>
-                    <ScreenTitle
-                        title={`${place} ${name}`}
-                        style={styles.title}
-                    />
-                    <Text style={styles.error}>{error}</Text>
-                </View>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            colors={[colors.textSecondary]}
+                            refreshing={refreshing}
+                            onRefresh={async () => {
+                                if (isMounted.current) {
+                                    setRefreshing(true)
+                                    await initializeScreen()
+                                    setRefreshing(false)
+                                }
+                            }}
+                        />
+                    }
+                    testID="mtd-flat-list">
+                    <View style={styles.headerContainer}>
+                        <ScreenTitle
+                            title={`${place} ${name}`}
+                            style={styles.title}
+                        />
+                        <Text style={styles.error}>{error}</Text>
+                    </View>
+                </ScrollView>
             </View>
         )
     }
@@ -198,9 +213,11 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                         colors={[colors.textSecondary]}
                         refreshing={refreshing}
                         onRefresh={async () => {
-                            setRefreshing(true)
-                            await initializeScreen()
-                            setRefreshing(false)
+                            if (isMounted.current) {
+                                setRefreshing(true)
+                                await initializeScreen()
+                                setRefreshing(false)
+                            }
                         }}
                     />
                 }

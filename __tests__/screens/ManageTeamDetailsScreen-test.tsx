@@ -18,6 +18,31 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const navigate = jest.fn()
 const goBack = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
+const token = '123.1234.gfads23'
+const getManagedTeamResponse: Team = {
+    _id: 'id1',
+    place: 'place',
+    name: 'name',
+    teamname: 'placename',
+    players: [
+        {
+            _id: 'playerid1',
+            firstName: 'first1',
+            lastName: 'last1',
+            username: 'first1last1',
+        },
+    ],
+    requests: ['request1', 'request2'],
+    managers: [],
+    seasonNumber: 1,
+    seasonStart: '2022',
+    seasonEnd: '2022',
+    continuationId: 'id1234',
+    rosterOpen: false,
+    games: [],
+}
+
+let requestObject: DetailedRequest
 
 const props: ManagedTeamDetailsProps = {
     navigation: {
@@ -35,7 +60,7 @@ const props: ManagedTeamDetailsProps = {
 }
 
 beforeAll(() => {
-    store.dispatch(setToken('123.1234.gfads23'))
+    store.dispatch(setToken(token))
     jest.useFakeTimers()
 })
 
@@ -43,6 +68,29 @@ beforeEach(() => {
     navigate.mockClear()
     goBack.mockClear()
     addListener.mockClear()
+    jest.clearAllMocks()
+
+    requestObject = {
+        _id: 'request1',
+        team: 'id1',
+        user: 'playerid1',
+        requestSource: 'team',
+        teamDetails: {
+            _id: 'id1',
+            place: 'place',
+            name: 'name',
+            teamname: 'placename',
+            seasonStart: '2022',
+            seasonEnd: '2022',
+        },
+        userDetails: {
+            _id: 'playerid1',
+            firstName: 'first1',
+            lastName: 'last1',
+            username: 'first1last1',
+        },
+        status: 'pending',
+    }
 })
 
 afterAll(() => {
@@ -72,15 +120,18 @@ it('should navigate to rollover a team', async () => {
 
     const button = getByText('Start New Season')
 
-    fireEvent.press(button)
-
+    await act(async () => {
+        fireEvent.press(button)
+    })
     expect(navigate).toHaveBeenCalledTimes(1)
 })
 
 it('should toggle roster status', async () => {
-    const dataFn = jest.fn().mockImplementationOnce(async (token, id, open) => {
-        return { rosterOpen: open } as Team
-    })
+    const dataFn = jest
+        .fn()
+        .mockImplementationOnce(async (_token, id, open) => {
+            return { rosterOpen: open } as Team
+        })
     const spy = jest.spyOn(ManagedTeamReducer, 'toggleRosterStatus')
 
     jest.spyOn(TeamData, 'toggleRosterStatus').mockImplementationOnce(dataFn)
@@ -106,64 +157,37 @@ it('should toggle roster status', async () => {
 
 it('should handle swipe to refresh', async () => {
     jest.spyOn(RequestData, 'getRequest').mockImplementation(
-        async (token, requestId) => {
-            const requestObject: DetailedRequest = {
-                _id: 'request1',
-                team: 'id1',
-                user: 'playerid1',
-                requestSource: 'team',
-                teamDetails: {
-                    _id: 'id1',
-                    place: 'place',
-                    name: 'name',
-                    teamname: 'placename',
-                    seasonStart: '2022',
-                    seasonEnd: '2022',
-                },
-                userDetails: {
-                    _id: 'playerid1',
-                    firstName: 'first1',
-                    lastName: 'last1',
-                    username: 'first1last1',
-                },
-                status: 'pending',
-            }
+        async (_token, requestId) => {
             if (requestId === 'request1') {
-                requestObject.requestSource = 'team'
-                requestObject.userDetails = {
-                    _id: 'playerid2',
-                    firstName: 'first2',
-                    lastName: 'last2',
-                    username: 'first2last2',
+                return {
+                    ...requestObject,
+                    _id: 'request1',
+                    requestSource: 'team',
+                    userDetails: {
+                        _id: 'playerid2',
+                        firstName: 'first2',
+                        lastName: 'last2',
+                        username: 'first2last2',
+                    },
                 }
             } else if (requestId === 'request2') {
-                requestObject.requestSource = 'player'
-                requestObject.userDetails = {
-                    _id: 'playerid3',
-                    firstName: 'first3',
-                    lastName: 'last3',
-                    username: 'first3last3',
+                return {
+                    ...requestObject,
+                    _id: 'request2',
+                    requestSource: 'player',
+                    userDetails: {
+                        _id: 'playerid3',
+                        firstName: 'first3',
+                        lastName: 'last3',
+                        username: 'first3last3',
+                    },
                 }
             }
             return requestObject
         },
     )
     jest.spyOn(TeamData, 'getManagedTeam').mockReturnValueOnce(
-        Promise.resolve({
-            _id: 'id1',
-            place: 'place',
-            name: 'name',
-            teamname: 'placename',
-            players: [
-                {
-                    _id: 'playerid1',
-                    firstName: 'first1',
-                    lastName: 'last1',
-                    username: 'first1last1',
-                },
-            ],
-            requests: ['request1', 'request2'],
-        } as Team),
+        Promise.resolve(getManagedTeamResponse),
     )
 
     const { getByText, getByTestId } = render(
@@ -195,4 +219,124 @@ it('should handle swipe to refresh', async () => {
     // test player request displayed correctly
     const playerRequest = getByText('@first3last3')
     expect(playerRequest).toBeTruthy()
+})
+
+it('should handle a page load error', async () => {
+    jest.spyOn(TeamData, 'getManagedTeam').mockReturnValueOnce(
+        Promise.reject({ message: 'test error' }),
+    )
+
+    const { getByText, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamDetailsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mtd-flat-list')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        await refreshControl.props.onRefresh()
+    })
+
+    const errorText = getByText('test error')
+    expect(errorText).toBeTruthy()
+})
+
+it('should not throw error on unmounted load', async () => {
+    const requestSpy = jest.spyOn(RequestData, 'getRequest')
+    const teamSpy = jest.spyOn(TeamData, 'getManagedTeam')
+
+    const { getByTestId, unmount } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamDetailsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mtd-flat-list')
+    const { refreshControl } = scrollView.props
+    unmount()
+    await act(async () => {
+        await refreshControl.props.onRefresh()
+    })
+
+    expect(teamSpy).not.toHaveBeenCalled()
+    expect(requestSpy).not.toHaveBeenCalled()
+})
+
+it('should respond to request correctly', async () => {
+    jest.spyOn(RequestData, 'getRequest').mockImplementation(
+        async (_token, requestId) => {
+            if (requestId === 'request1') {
+                return {
+                    ...requestObject,
+                    _id: 'request1',
+                    requestSource: 'team',
+                    userDetails: {
+                        _id: 'playerid2',
+                        firstName: 'first2',
+                        lastName: 'last2',
+                        username: 'first2last2',
+                    },
+                }
+            } else if (requestId === 'request2') {
+                return {
+                    ...requestObject,
+                    _id: 'request2',
+                    requestSource: 'player',
+                    userDetails: {
+                        _id: 'playerid3',
+                        firstName: 'first3',
+                        lastName: 'last3',
+                        username: 'first3last3',
+                    },
+                }
+            }
+            return requestObject
+        },
+    )
+    const teamSpy = jest
+        .spyOn(TeamData, 'getManagedTeam')
+        .mockReturnValue(Promise.resolve(getManagedTeamResponse))
+
+    const responseSpy = jest
+        .spyOn(RequestData, 'respondToPlayerRequest')
+        .mockReturnValueOnce(
+            Promise.resolve({
+                ...requestObject,
+                requestSource: 'player',
+                userDetails: {
+                    _id: 'playerid3',
+                    firstName: 'first3',
+                    lastName: 'last3',
+                    username: 'first3last3',
+                },
+            }),
+        )
+
+    const { queryByText, getByTestId, getAllByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamDetailsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mtd-flat-list')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    const acceptButtons = getAllByTestId('accept-button')
+    await act(async () => {
+        fireEvent.press(acceptButtons[0])
+    })
+    expect(queryByText('@first3last3')).toBeNull()
+
+    expect(responseSpy).toHaveBeenCalledWith(token, 'request2', true)
+    expect(teamSpy).toHaveBeenCalled()
 })
