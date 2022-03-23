@@ -177,7 +177,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 
     if (error) {
         return (
-            <View style={styles.screen}>
+            <SafeAreaView style={styles.screen}>
                 <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -201,7 +201,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                         <Text style={styles.error}>{error}</Text>
                     </View>
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         )
     }
 
