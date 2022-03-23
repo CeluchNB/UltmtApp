@@ -87,6 +87,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     return (
         <SafeAreaView style={styles.screen}>
             <ScrollView
+                testID="public-team-scroll-view"
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
