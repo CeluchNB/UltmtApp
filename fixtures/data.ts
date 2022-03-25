@@ -1,3 +1,4 @@
+import { DetailedRequest } from '../src/types/request'
 import { User } from '../src/types/user'
 
 export const fetchProfileData: User = {
@@ -46,4 +47,26 @@ export const fetchProfileData: User = {
     stats: [],
     openToRequests: false,
     private: false,
+}
+
+export const requestObject: DetailedRequest = {
+    _id: 'request1',
+    team: 'id1',
+    user: 'playerid1',
+    requestSource: 'team',
+    teamDetails: {
+        _id: 'id1',
+        place: 'place',
+        name: 'name',
+        teamname: 'placename',
+        seasonStart: '2022',
+        seasonEnd: '2022',
+    },
+    userDetails: {
+        _id: 'playerid1',
+        firstName: 'first1',
+        lastName: 'last1',
+        username: 'first1last1',
+    },
+    status: 'pending',
 }

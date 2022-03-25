@@ -1,4 +1,4 @@
-import * as AccountRedecure from '../../src/store/reducers/features/account/accountReducer'
+import * as AccountReducer from '../../src/store/reducers/features/account/accountReducer'
 import * as RequestData from '../../src/services/data/request'
 import * as UserData from '../../src/services/data/user'
 import ManageTeamsScreen from '../../src/screens/ManageTeamsScreen'
@@ -7,17 +7,23 @@ import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { User } from '../../src/types/user'
-import { fetchProfileData } from '../../fixtures/data'
 import renderer from 'react-test-renderer'
 import store from '../../src/store/store'
-import { act, fireEvent, render } from '@testing-library/react-native'
+import {
+    act,
+    fireEvent,
+    render,
+    waitFor,
+    waitForElementToBeRemoved,
+} from '@testing-library/react-native'
+import { fetchProfileData, requestObject } from '../../fixtures/data'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const loginData = { token: 'sample.1234.token' }
 
 const navigate = jest.fn()
-const addListener = jest.fn()
+const addListener = jest.fn().mockReturnValue(() => {})
 
 const props: Props = {
     navigation: {
@@ -27,17 +33,55 @@ const props: Props = {
     route: {} as any,
 }
 
-beforeAll(async () => {
-    store.dispatch(AccountRedecure.setToken(loginData))
-    store.dispatch(AccountRedecure.setProfile(fetchProfileData))
+beforeAll(() => {
+    jest.useFakeTimers()
 })
 
 beforeEach(async () => {
+    store.dispatch(AccountReducer.setToken(loginData))
+    store.dispatch(AccountReducer.setProfile(fetchProfileData))
     jest.clearAllMocks()
+    jest.spyOn(RequestData, 'getRequest').mockImplementation(
+        async (_token, requestId) => {
+            if (requestId === 'request1') {
+                return {
+                    ...requestObject,
+                    _id: 'request1',
+                    requestSource: 'team',
+                    teamDetails: {
+                        _id: 'id5',
+                        place: 'place5',
+                        name: 'name5',
+                        teamname: 'place5name5',
+                        seasonStart: '2022',
+                        seasonEnd: '2022',
+                    },
+                }
+            } else if (requestId === 'request2') {
+                return {
+                    ...requestObject,
+                    _id: 'request2',
+                    requestSource: 'player',
+                    teamDetails: {
+                        _id: 'id6',
+                        place: 'place6',
+                        name: 'name6',
+                        teamname: 'place6name6',
+                        seasonStart: '2022',
+                        seasonEnd: '2022',
+                    },
+                }
+            }
+            return requestObject
+        },
+    )
+})
+
+afterAll(() => {
+    jest.useRealTimers()
 })
 
 it('should match snapshot', async () => {
-    jest.useFakeTimers()
     const snapshot = renderer.create(
         <Provider store={store}>
             <NavigationContainer>
@@ -83,9 +127,7 @@ it('should navigate to public team screen on playing team click', async () => {
     const team = fetchProfileData.playerTeams[0]
     const playingTeam = getByText(`@${team.teamname}`)
 
-    await act(async () => {
-        fireEvent.press(playingTeam)
-    })
+    fireEvent.press(playingTeam)
 
     expect(navigate).toHaveBeenCalledWith('PublicTeamDetails', {
         id: team._id,
@@ -106,9 +148,7 @@ it('should navigate to managed team screen on managing team click', async () => 
     const team = fetchProfileData.managerTeams[0]
     const managingTeam = getByText(`@${team.teamname}`)
 
-    await act(async () => {
-        fireEvent.press(managingTeam)
-    })
+    fireEvent.press(managingTeam)
 
     expect(navigate).toHaveBeenCalledWith('ManagedTeamDetails', {
         id: team._id,
@@ -126,9 +166,7 @@ it('should navigate to create team', async () => {
         </Provider>,
     )
 
-    await act(async () => {
-        fireEvent.press(getByText('create team'))
-    })
+    fireEvent.press(getByText('create team'))
 
     expect(navigate).toHaveBeenCalledWith('CreateTeam')
 })
@@ -142,9 +180,7 @@ it('should navigate to request team', async () => {
         </Provider>,
     )
 
-    await act(async () => {
-        fireEvent.press(getByText('request team'))
-    })
+    fireEvent.press(getByText('request team'))
 
     expect(navigate).toHaveBeenCalledWith('RequestTeam')
 })
@@ -204,13 +240,93 @@ it('should handle leave team', async () => {
     )
 
     const deleteButtons = getAllByTestId('delete-button')
-    await act(async () => {
-        fireEvent.press(deleteButtons[0])
-    })
+    fireEvent.press(deleteButtons[0])
 
     expect(leaveTeamSpy).toHaveBeenCalled()
-
-    expect(
+    await waitForElementToBeRemoved(() =>
         queryByText(`@${fetchProfileData.playerTeams[0].teamname}`),
-    ).toBeNull()
+    )
+})
+
+it('should accept request correctly', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'respondToTeamRequest')
+        .mockReturnValue(Promise.resolve(requestObject))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place5name5')).not.toBeNull()
+    const acceptButtons = getAllByTestId('accept-button')
+    fireEvent.press(acceptButtons[0])
+
+    expect(requestSpy).toHaveBeenCalled()
+    await waitForElementToBeRemoved(() => queryByText('@place5name5'))
+})
+
+it('should deny request correctly', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'respondToTeamRequest')
+        .mockReturnValueOnce(Promise.resolve(requestObject))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place5name5')).not.toBeNull()
+    const deleteButtons = getAllByTestId('delete-button')
+    fireEvent.press(deleteButtons[3])
+
+    await waitForElementToBeRemoved(() => queryByText('@place5name5'))
+    expect(requestSpy).toHaveBeenCalled()
+})
+
+it('should handle request response error correctly', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'respondToTeamRequest')
+        .mockReturnValueOnce(Promise.reject({ message: 'test error message' }))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+            ,
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place5name5')).not.toBeNull()
+    const acceptButtons = getAllByTestId('accept-button')
+    fireEvent.press(acceptButtons[0])
+
+    expect(requestSpy).toHaveBeenCalled()
+    await waitFor(() => queryByText('test error message'))
+    expect(queryByText('@place5name5')).not.toBeNull()
 })

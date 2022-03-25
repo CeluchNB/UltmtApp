@@ -91,7 +91,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
             setRespondRequestId(requestId)
             setRespondRequestError('')
             await RequestData.respondToTeamRequest(token, requestId, accept)
-            dispatch(removeRequest(requestId))
+            // dispatch(removeRequest(requestId))
             setRequests(requests.filter(req => req._id !== requestId))
         } catch (e: any) {
             setRespondRequestError(e.message ?? 'Unable to respond to request')
@@ -151,7 +151,8 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                 setRefreshing(false)
                             }}
                         />
-                    }>
+                    }
+                    testID="mt-scroll-view">
                     <ScreenTitle style={styles.title} title="Manage Teams" />
                     <Text style={styles.error}>{fetchError}</Text>
                 </ScrollView>
@@ -172,7 +173,8 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                             setRefreshing(false)
                         }}
                     />
-                }>
+                }
+                testID="mt-scroll-view">
                 <ScreenTitle style={styles.title} title="Manage Teams" />
                 <View style={styles.container}>
                     <MapSection

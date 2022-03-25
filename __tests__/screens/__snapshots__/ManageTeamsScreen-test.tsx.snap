@@ -22,6 +22,7 @@ exports[`should match snapshot 1`] = `
         refreshing={false}
       />
     }
+    testID="mt-scroll-view"
   >
     <RCTRefreshControl />
     <View>
