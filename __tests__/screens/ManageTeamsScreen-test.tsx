@@ -7,15 +7,8 @@ import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { User } from '../../src/types/user'
-import renderer from 'react-test-renderer'
 import store from '../../src/store/store'
-import {
-    act,
-    fireEvent,
-    render,
-    waitFor,
-    waitForElementToBeRemoved,
-} from '@testing-library/react-native'
+import { act, fireEvent, render } from '@testing-library/react-native'
 import { fetchProfileData, requestObject } from '../../fixtures/data'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -82,13 +75,13 @@ afterAll(() => {
 })
 
 it('should match snapshot', async () => {
-    const snapshot = renderer.create(
+    const snapshot = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamsScreen {...props} />
             </NavigationContainer>
         </Provider>,
-    )
+    ).toJSON()
 
     expect(snapshot).toMatchSnapshot()
 })
@@ -240,12 +233,16 @@ it('should handle leave team', async () => {
     )
 
     const deleteButtons = getAllByTestId('delete-button')
-    fireEvent.press(deleteButtons[0])
 
-    expect(leaveTeamSpy).toHaveBeenCalled()
-    await waitForElementToBeRemoved(() =>
+    fireEvent.press(deleteButtons[0])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(
         queryByText(`@${fetchProfileData.playerTeams[0].teamname}`),
-    )
+    ).toBeNull()
+    expect(leaveTeamSpy).toHaveBeenCalled()
 })
 
 it('should accept request correctly', async () => {
@@ -270,9 +267,12 @@ it('should accept request correctly', async () => {
     expect(queryByText('@place5name5')).not.toBeNull()
     const acceptButtons = getAllByTestId('accept-button')
     fireEvent.press(acceptButtons[0])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
 
+    expect(queryByText('@place5name5')).toBeNull()
     expect(requestSpy).toHaveBeenCalled()
-    await waitForElementToBeRemoved(() => queryByText('@place5name5'))
 })
 
 it('should deny request correctly', async () => {
@@ -297,8 +297,11 @@ it('should deny request correctly', async () => {
     expect(queryByText('@place5name5')).not.toBeNull()
     const deleteButtons = getAllByTestId('delete-button')
     fireEvent.press(deleteButtons[3])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
 
-    await waitForElementToBeRemoved(() => queryByText('@place5name5'))
+    expect(queryByText('@place5name5')).toBeNull()
     expect(requestSpy).toHaveBeenCalled()
 })
 
@@ -325,8 +328,11 @@ it('should handle request response error correctly', async () => {
     expect(queryByText('@place5name5')).not.toBeNull()
     const acceptButtons = getAllByTestId('accept-button')
     fireEvent.press(acceptButtons[0])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
 
     expect(requestSpy).toHaveBeenCalled()
-    await waitFor(() => queryByText('test error message'))
+    expect(queryByText('test error message')).not.toBeNull()
     expect(queryByText('@place5name5')).not.toBeNull()
 })

@@ -8,10 +8,9 @@ import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { Team } from '../../src/types/team'
-import renderer from 'react-test-renderer'
 import { setToken } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
-import { act, fireEvent, render } from '@testing-library/react-native'
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -128,13 +127,13 @@ afterAll(() => {
 })
 
 it('should match snapshot', async () => {
-    const snapshot = renderer.create(
+    const snapshot = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamDetailsScreen {...props} />
             </NavigationContainer>
         </Provider>,
-    )
+    ).toJSON()
 
     expect(snapshot).toMatchSnapshot()
 })
@@ -150,9 +149,8 @@ it('should navigate to rollover a team', async () => {
 
     const button = getByText('Start New Season')
 
-    await act(async () => {
-        fireEvent.press(button)
-    })
+    fireEvent.press(button)
+
     expect(navigate).toHaveBeenCalledTimes(1)
 })
 
@@ -166,7 +164,7 @@ it('should toggle roster status', async () => {
 
     jest.spyOn(TeamData, 'toggleRosterStatus').mockImplementationOnce(dataFn)
 
-    const { getByText } = render(
+    const { getByText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamDetailsScreen {...props} />
@@ -175,14 +173,11 @@ it('should toggle roster status', async () => {
     )
 
     const button = getByText('Open Roster')
-    await act(async () => {
-        fireEvent.press(button)
-    })
+    fireEvent.press(button)
 
+    waitFor(() => queryByText('Close Roster'))
     expect(spy).toHaveBeenCalledTimes(1)
     expect(dataFn).toHaveBeenCalledTimes(1)
-    const closeButton = getByText('Close Roster')
-    expect(closeButton).toBeTruthy()
 })
 
 it('should handle swipe to refresh', async () => {
@@ -284,7 +279,7 @@ it('should respond to request correctly', async () => {
             }),
         )
 
-    const { queryByText, getByTestId, getAllByTestId } = render(
+    const { getByTestId, getAllByTestId, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamDetailsScreen {...props} />
@@ -299,11 +294,25 @@ it('should respond to request correctly', async () => {
     })
 
     const acceptButtons = getAllByTestId('accept-button')
-    await act(async () => {
-        fireEvent.press(acceptButtons[0])
-    })
-    expect(queryByText('@first3last3')).toBeNull()
+    expect(queryByText('@first3last3')).not.toBeNull()
+    /* 
+        Should not need act() after fireEvent, however test fails if I don't.
+        The alternative, preferred method of
 
+        fireEvent.press(acceptButtons[0])
+        await waitFor(() => queryByText('@first3last3'))
+
+        gives an error of:
+        You called act(async () => ...) without await...
+
+        Explore fix in the future
+        Another option is wrapping fireEvent in act, but
+        this makes it more obvious something weird is going on
+    */
+    fireEvent.press(acceptButtons[0])
+    await act(async () => {})
+
+    expect(queryByText('@first3last3')).toBeNull()
     expect(responseSpy).toHaveBeenCalledWith(token, 'request2', true)
 })
 
@@ -329,9 +338,10 @@ it('should handle respond to request error', async () => {
     })
 
     const acceptButtons = getAllByTestId('accept-button')
-    await act(async () => {
-        fireEvent.press(acceptButtons[0])
-    })
+    fireEvent.press(acceptButtons[0])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
 
     const errorText = queryByText('respond test error')
     expect(errorText).not.toBeNull()
@@ -368,9 +378,10 @@ it('should handle deny request', async () => {
     })
 
     const deleteButtons = getAllByTestId('delete-button')
-    await act(async () => {
-        fireEvent.press(deleteButtons[1])
-    })
+    fireEvent.press(deleteButtons[1])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
 
     expect(queryByText('@first3last3')).toBeNull()
 
@@ -396,9 +407,10 @@ it('should remove player correctly', async () => {
     const username = '@first1last1'
     expect(queryByText(username)).not.toBeNull()
     const deleteButtons = getAllByTestId('delete-button')
-    await act(async () => {
-        fireEvent.press(deleteButtons[0])
-    })
+    fireEvent.press(deleteButtons[0])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
 
     expect(removeSpy).toHaveBeenCalled()
     expect(queryByText(username)).toBeNull()
@@ -427,9 +439,10 @@ it('should handle delete request correctly', async () => {
     const username = '@first2last2'
     expect(queryByText(username)).not.toBeNull()
     const deleteButtons = getAllByTestId('delete-button')
-    await act(async () => {
-        fireEvent.press(deleteButtons[2])
-    })
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    fireEvent.press(deleteButtons[2])
+    await act(async () => {})
 
     expect(deleteSpy).toHaveBeenCalled()
     expect(queryByText(username)).toBeNull()
@@ -458,9 +471,10 @@ it('should handle delete request error correctly', async () => {
     const username = '@first2last2'
     expect(queryByText(username)).not.toBeNull()
     const deleteButtons = getAllByTestId('delete-button')
-    await act(async () => {
-        fireEvent.press(deleteButtons[2])
-    })
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    fireEvent.press(deleteButtons[2])
+    await act(async () => {})
 
     expect(queryByText(username)).not.toBeNull()
     expect(queryByText('delete error message')).not.toBeNull()
@@ -499,7 +513,7 @@ it('should handle error swipe', async () => {
 })
 
 it('should navigate to public user', async () => {
-    const { queryByText, getByTestId } = render(
+    const { getByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamDetailsScreen {...props} />
@@ -512,12 +526,8 @@ it('should navigate to public user', async () => {
         refreshControl.props.onRefresh()
     })
 
-    const username = queryByText('@first1last1')
-    await act(async () => {
-        if (username) {
-            fireEvent.press(username)
-        }
-    })
+    const username = getByText('@first1last1')
+    fireEvent.press(username)
 
     expect(navigate).toHaveBeenCalled()
 })
@@ -532,9 +542,7 @@ it('should handle add players text', async () => {
     )
 
     const button = getByText('Add Players')
-    await act(async () => {
-        fireEvent.press(button)
-    })
+    fireEvent.press(button)
 
     expect(navigate).toHaveBeenCalled()
 })
