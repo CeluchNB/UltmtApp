@@ -108,6 +108,28 @@ it('should display teams correctly', async () => {
     ).not.toBeNull()
 })
 
+it('should display error', async () => {
+    jest.spyOn(RequestData, 'getRequest').mockReturnValueOnce(
+        Promise.reject({}),
+    )
+
+    const { queryByText, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('Unable to get team details')).not.toBeNull()
+})
+
 it('should navigate to public team screen on playing team click', async () => {
     const { getByText } = render(
         <Provider store={store}>
@@ -335,4 +357,65 @@ it('should handle request response error correctly', async () => {
     expect(requestSpy).toHaveBeenCalled()
     expect(queryByText('test error message')).not.toBeNull()
     expect(queryByText('@place5name5')).not.toBeNull()
+})
+
+it('should handle successful delete request', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'deleteUserRequest')
+        .mockReturnValueOnce(Promise.resolve(requestObject))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place6name6')).not.toBeNull()
+    const deleteButtons = getAllByTestId('delete-button')
+    fireEvent.press(deleteButtons[4])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(queryByText('@place6name6')).toBeNull()
+    expect(requestSpy).toHaveBeenCalled()
+})
+
+it('should handle failed delete request', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'deleteUserRequest')
+        .mockReturnValueOnce(Promise.reject({}))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place6name6')).not.toBeNull()
+    const deleteButtons = getAllByTestId('delete-button')
+    fireEvent.press(deleteButtons[4])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(queryByText('@place6name6')).not.toBeNull()
+    expect(queryByText('Unable to delete request')).not.toBeNull()
+    expect(requestSpy).toHaveBeenCalled()
 })

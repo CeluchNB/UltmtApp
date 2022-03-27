@@ -49,8 +49,10 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                 reqIds.map(req => {
                     return RequestData.getRequest(token, req)
                 }),
-            )
-            if (isMounted.current) {
+            ).catch((e: any) => {
+                setFetchError(e.message ?? 'Unable to get team details')
+            })
+            if (reqResponses && isMounted.current) {
                 setRequests(
                     reqResponses.filter(
                         req => req !== undefined,
@@ -67,9 +69,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
             setFetchError('')
             setRespondRequestError('')
             setDeleteRequestError('')
-            getRequests(requestIds).catch((e: any) => {
-                setFetchError(e.message ?? 'Unable to get team details.')
-            })
+            getRequests(requestIds)
         })
         return () => {
             isMounted.current = false
@@ -91,7 +91,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
             setRespondRequestId(requestId)
             setRespondRequestError('')
             await RequestData.respondToTeamRequest(token, requestId, accept)
-            // dispatch(removeRequest(requestId))
+            dispatch(removeRequest(requestId))
             setRequests(requests.filter(req => req._id !== requestId))
         } catch (e: any) {
             setRespondRequestError(e.message ?? 'Unable to respond to request')
