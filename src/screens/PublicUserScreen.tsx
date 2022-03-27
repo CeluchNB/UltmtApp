@@ -86,7 +86,8 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                             setRefreshing(false)
                         }}
                     />
-                }>
+                }
+                testID="public-user-scroll-view">
                 <ScreenTitle
                     style={styles.titleText}
                     title={`${initialUser.firstName} ${initialUser.lastName}`}
