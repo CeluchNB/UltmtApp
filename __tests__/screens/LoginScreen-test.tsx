@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import renderer from 'react-test-renderer'
 import store from '../../src/store/store'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -52,13 +52,14 @@ it('test successful login', async () => {
         </Provider>,
     )
 
-    await act(async () => {
-        fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
-        fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
-        fireEvent.press(getAllByText('Login')[1])
+    fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
+    fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
+    fireEvent.press(getAllByText('Login')[1])
+
+    await waitFor(() => {
+        expect(reset).toHaveBeenCalled()
     })
 
-    expect(reset).toHaveBeenCalled()
     spy.mockRestore()
 })
 
@@ -69,21 +70,20 @@ it('should handle login error', async () => {
             throw new ApiError('error')
         })
 
-    const { getAllByText, getByPlaceholderText, getByText } = render(
+    const { getAllByText, getByPlaceholderText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <LoginScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
-    await act(async () => {
-        fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
-        fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
-        fireEvent.press(getAllByText('Login')[1])
-    })
 
+    fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
+    fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
+    fireEvent.press(getAllByText('Login')[1])
+
+    await waitFor(() => queryByText('error'))
     expect(reset).not.toHaveBeenCalled()
-    expect(getByText('error')).toBeTruthy()
     spy.mockRestore()
 })
 
@@ -117,9 +117,7 @@ it('should handle create profile button press', async () => {
         </Provider>,
     )
 
-    await act(async () => {
-        fireEvent.press(getByText('Create Account'))
-    })
+    fireEvent.press(getByText('Create Account'))
 
     expect(navigate).toHaveBeenCalled()
 })

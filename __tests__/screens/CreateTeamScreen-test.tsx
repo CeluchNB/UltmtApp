@@ -7,7 +7,7 @@ import React from 'react'
 import renderer from 'react-test-renderer'
 import { setToken } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
-import { act, fireEvent, render } from '@testing-library/react-native'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -63,14 +63,14 @@ it('should handle create team correctly', async () => {
     const teamHandleText = getByPlaceholderText('Team Handle')
     const button = getByText('Create')
 
-    await act(async () => {
-        fireEvent.changeText(teamPlaceText, 'place')
-        fireEvent.changeText(teamNameText, 'name')
-        fireEvent.changeText(teamHandleText, 'handle')
-        fireEvent.press(button)
-    })
+    fireEvent.changeText(teamPlaceText, 'place')
+    fireEvent.changeText(teamNameText, 'name')
+    fireEvent.changeText(teamHandleText, 'handle')
+    fireEvent.press(button)
 
-    expect(mockFn).toHaveBeenCalled()
+    await waitFor(() => {
+        expect(mockFn).toHaveBeenCalled()
+    })
     expect(goBack).toHaveBeenCalledTimes(1)
     spy.mockRestore()
 })
@@ -81,7 +81,7 @@ it('should not call create team without input values', async () => {
         .spyOn(TeamData, 'createTeam')
         .mockImplementationOnce(mockFn)
 
-    const { getByText } = render(
+    const { getByText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <CreateTeamScreen {...props} />
@@ -91,10 +91,9 @@ it('should not call create team without input values', async () => {
 
     const button = getByText('Create')
 
-    await act(async () => {
-        fireEvent.press(button)
-    })
+    fireEvent.press(button)
 
+    await waitFor(() => queryByText('Team place is required'))
     expect(mockFn).not.toHaveBeenCalled()
     expect(goBack).not.toHaveBeenCalled()
     spy.mockRestore()
@@ -108,7 +107,7 @@ it('should handle create team error correctly', async () => {
         .spyOn(TeamData, 'createTeam')
         .mockImplementationOnce(mockFn)
 
-    const { getByPlaceholderText, getByText } = render(
+    const { getByPlaceholderText, getByText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <CreateTeamScreen {...props} />
@@ -121,15 +120,12 @@ it('should handle create team error correctly', async () => {
     const teamHandleText = getByPlaceholderText('Team Handle')
     const button = getByText('Create')
 
-    await act(async () => {
-        fireEvent.changeText(teamPlaceText, 'place')
-        fireEvent.changeText(teamNameText, 'name')
-        fireEvent.changeText(teamHandleText, 'handle')
-        fireEvent.press(button)
-    })
+    fireEvent.changeText(teamPlaceText, 'place')
+    fireEvent.changeText(teamNameText, 'name')
+    fireEvent.changeText(teamHandleText, 'handle')
+    fireEvent.press(button)
 
-    const errorText = getByText('error')
-    expect(errorText).toBeTruthy()
+    await waitFor(() => queryByText('error'))
     expect(mockFn).toHaveBeenCalled()
     expect(goBack).not.toHaveBeenCalled()
     spy.mockRestore()

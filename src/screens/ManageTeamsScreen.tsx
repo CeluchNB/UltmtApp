@@ -49,8 +49,10 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                 reqIds.map(req => {
                     return RequestData.getRequest(token, req)
                 }),
-            )
-            if (isMounted.current) {
+            ).catch((e: any) => {
+                setFetchError(e.message ?? 'Unable to get team details')
+            })
+            if (reqResponses && isMounted.current) {
                 setRequests(
                     reqResponses.filter(
                         req => req !== undefined,
@@ -67,9 +69,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
             setFetchError('')
             setRespondRequestError('')
             setDeleteRequestError('')
-            getRequests(requestIds).catch((e: any) => {
-                setFetchError(e.message ?? 'Unable to get team details.')
-            })
+            getRequests(requestIds)
         })
         return () => {
             isMounted.current = false
@@ -151,7 +151,8 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                 setRefreshing(false)
                             }}
                         />
-                    }>
+                    }
+                    testID="mt-scroll-view">
                     <ScreenTitle style={styles.title} title="Manage Teams" />
                     <Text style={styles.error}>{fetchError}</Text>
                 </ScrollView>
@@ -172,7 +173,8 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                             setRefreshing(false)
                         }}
                     />
-                }>
+                }
+                testID="mt-scroll-view">
                 <ScreenTitle style={styles.title} title="Manage Teams" />
                 <View style={styles.container}>
                     <MapSection
