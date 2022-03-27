@@ -167,7 +167,7 @@ it('should request team when pressed', async () => {
 
     expect(spy).toHaveBeenCalledWith(token, 'team1')
     const state = store.getState()
-    expect(state.account.requests).toHaveLength(1)
+    expect(state.account.requests[0]).toBe('request1')
     expect(goBack).toHaveBeenCalled()
 })
 

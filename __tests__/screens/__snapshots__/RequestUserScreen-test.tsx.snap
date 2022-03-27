@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#ffffff",
+      "height": "100%",
+    }
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "#3183ff",
+          "fontSize": 82.1917808219178,
+          "fontWeight": "bold",
+        },
+        Object {
+          "alignSelf": "center",
+        },
+      ]
+    }
+  >
+    Add Players
+  </Text>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "rgb(231, 231, 231)",
+          "borderTopLeftRadius": 4,
+          "borderTopRightRadius": 4,
+        },
+        Object {
+          "alignSelf": "center",
+          "backgroundColor": "#ffffff",
+          "color": "#3183ff",
+          "marginBottom": 5,
+          "width": "75%",
+        },
+      ]
+    }
+  >
+    <View
+      collapsable={false}
+      nativeID="animatedComponent"
+      style={
+        Object {
+          "backgroundColor": "#3183ff",
+          "bottom": 0,
+          "height": 2,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "transform": Array [
+            Object {
+              "scaleY": 0.5,
+            },
+          ],
+          "zIndex": 1,
+        }
+      }
+    />
+    <View
+      style={
+        Array [
+          Object {
+            "paddingBottom": 0,
+            "paddingTop": 0,
+          },
+          Object {
+            "minHeight": 64,
+          },
+        ]
+      }
+    >
+      <TextInput
+        editable={true}
+        multiline={false}
+        onBlur={[Function]}
+        onChangeText={[Function]}
+        onFocus={[Function]}
+        placeholder="Search players..."
+        placeholderTextColor="#707070"
+        selectionColor="#3183ff"
+        style={
+          Array [
+            Object {
+              "flexGrow": 1,
+              "margin": 0,
+            },
+            Object {
+              "paddingLeft": 12,
+              "paddingRight": 12,
+            },
+            Object {
+              "height": 64,
+            },
+            Object {
+              "paddingBottom": 0,
+              "paddingTop": 0,
+            },
+            Object {
+              "color": "#3183ff",
+              "fontFamily": "System",
+              "fontSize": 16,
+              "fontWeight": undefined,
+              "textAlign": "left",
+              "textAlignVertical": "center",
+            },
+            false,
+            Array [
+              Object {},
+            ],
+          ]
+        }
+        underlineColorAndroid="transparent"
+      />
+    </View>
+  </View>
+  <RCTScrollView
+    data={Array []}
+    getItem={[Function]}
+    getItemCount={[Function]}
+    keyExtractor={[Function]}
+    onContentSizeChange={[Function]}
+    onLayout={[Function]}
+    onMomentumScrollBegin={[Function]}
+    onMomentumScrollEnd={[Function]}
+    onScroll={[Function]}
+    onScrollBeginDrag={[Function]}
+    onScrollEndDrag={[Function]}
+    removeClippedSubviews={false}
+    renderItem={[Function]}
+    scrollEventThrottle={50}
+    stickyHeaderIndices={Array []}
+    style={
+      Object {
+        "alignSelf": "center",
+        "flexGrow": 0,
+        "width": "75%",
+      }
+    }
+    viewabilityConfigCallbackPairs={Array []}
+  >
+    <View />
+  </RCTScrollView>
+  <RCTScrollView
+    data={Array []}
+    getItem={[Function]}
+    getItemCount={[Function]}
+    keyExtractor={[Function]}
+    onContentSizeChange={[Function]}
+    onLayout={[Function]}
+    onMomentumScrollBegin={[Function]}
+    onMomentumScrollEnd={[Function]}
+    onScroll={[Function]}
+    onScrollBeginDrag={[Function]}
+    onScrollEndDrag={[Function]}
+    removeClippedSubviews={false}
+    renderItem={[Function]}
+    scrollEventThrottle={50}
+    stickyHeaderIndices={Array []}
+    style={
+      Object {
+        "alignSelf": "center",
+        "flexGrow": 0,
+        "width": "75%",
+      }
+    }
+    viewabilityConfigCallbackPairs={Array []}
+  >
+    <View />
+  </RCTScrollView>
+</View>
+`;
