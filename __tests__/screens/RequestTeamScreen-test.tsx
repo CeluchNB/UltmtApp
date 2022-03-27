@@ -188,6 +188,8 @@ it('should display error when request is unsuccessful', async () => {
 
     const team1 = await findByText('@place1name1')
     fireEvent.press(team1)
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
     await act(async () => {})
 
     expect(spy).toHaveBeenCalled()
