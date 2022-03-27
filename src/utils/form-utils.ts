@@ -38,9 +38,7 @@ export const getFormFieldRules = (
         rules.validate = {
             validate: (value: string) => {
                 for (const v of validate) {
-                    if (v.test(value)) {
-                        return true
-                    } else {
+                    if (!v.test(value)) {
                         return v.message
                     }
                 }
