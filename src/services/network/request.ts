@@ -1,4 +1,4 @@
-import { API_URL } from 'react-native-dotenv'
+import { API_URL_V1 } from 'react-native-dotenv'
 import axios, { AxiosResponse } from 'axios'
 
 export const requestTeam = async (
@@ -6,7 +6,7 @@ export const requestTeam = async (
     teamId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/request/user?team=${teamId}`,
+        `${API_URL_V1}/request/user?team=${teamId}`,
         {},
         {
             headers: {
@@ -22,7 +22,7 @@ export const requestUser = async (
     teamId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/request/team/${teamId}?user=${userId}`,
+        `${API_URL_V1}/request/team/${teamId}?user=${userId}`,
         {},
         {
             headers: {
@@ -36,7 +36,7 @@ export const getRequest = async (
     token: string,
     requestId: string,
 ): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL}/request/${requestId}`, {
+    return await axios.get(`${API_URL_V1}/request/${requestId}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -49,7 +49,7 @@ export const respondToPlayerRequest = async (
     accept: boolean,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/request/team/${accept ? 'accept' : 'deny'}/${requestId}`,
+        `${API_URL_V1}/request/team/${accept ? 'accept' : 'deny'}/${requestId}`,
         {},
         {
             headers: {
@@ -64,7 +64,7 @@ export const deleteTeamRequest = async (
     requestId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/request/team/delete/${requestId}`,
+        `${API_URL_V1}/request/team/delete/${requestId}`,
         {},
         {
             headers: {
@@ -80,7 +80,7 @@ export const respondToTeamRequest = async (
     accept: boolean,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/request/user/${accept ? 'accept' : 'deny'}/${requestId}`,
+        `${API_URL_V1}/request/user/${accept ? 'accept' : 'deny'}/${requestId}`,
         {},
         {
             headers: {
@@ -95,7 +95,7 @@ export const deleteUserRequest = async (
     requestId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/request/user/delete/${requestId}`,
+        `${API_URL_V1}/request/user/delete/${requestId}`,
         {},
         {
             headers: {
