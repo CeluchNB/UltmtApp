@@ -1,4 +1,4 @@
-import { API_URL } from 'react-native-dotenv'
+import { API_URL_V1 } from 'react-native-dotenv'
 import { ApiResponse } from '../../types/services'
 import { CreateUserData } from '../../types/user'
 import EncryptedStorage from 'react-native-encrypted-storage'
@@ -8,14 +8,14 @@ export const login = async (
     username: string,
     password: string,
 ): Promise<AxiosResponse> => {
-    return await axios.post(`${API_URL}/user/login`, {
+    return await axios.post(`${API_URL_V1}/user/login`, {
         password,
         email: username,
     })
 }
 
 export const fetchProfile = async (token: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL}/user/me`, {
+    return await axios.get(`${API_URL_V1}/user/me`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -25,14 +25,14 @@ export const fetchProfile = async (token: string): Promise<AxiosResponse> => {
 export const createAccount = async (
     profileData: CreateUserData,
 ): Promise<AxiosResponse> => {
-    return await axios.post(`${API_URL}/user`, {
+    return await axios.post(`${API_URL_V1}/user`, {
         ...profileData,
     })
 }
 
 export const logout = async (token: string): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/user/logout`,
+        `${API_URL_V1}/user/logout`,
         {},
         {
             headers: {
@@ -55,7 +55,7 @@ export const getLocalToken = async (): Promise<ApiResponse> => {
 }
 
 export const searchUsers = async (term: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL}/user/search?q=${term}`)
+    return await axios.get(`${API_URL_V1}/user/search?q=${term}`)
 }
 
 export const leaveTeam = async (
@@ -63,7 +63,7 @@ export const leaveTeam = async (
     teamId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/user/leave/team?team=${teamId}`,
+        `${API_URL_V1}/user/leave/team?team=${teamId}`,
         {},
         {
             headers: {
@@ -74,5 +74,5 @@ export const leaveTeam = async (
 }
 
 export const getPublicUser = async (id: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL}/user/${id}`)
+    return await axios.get(`${API_URL_V1}/user/${id}`)
 }

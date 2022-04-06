@@ -1,4 +1,4 @@
-import { API_URL } from 'react-native-dotenv'
+import { API_URL_V1 } from 'react-native-dotenv'
 import { CreateTeam } from '../../types/team'
 import axios, { AxiosResponse } from 'axios'
 
@@ -7,7 +7,7 @@ export const createTeam = async (
     data: CreateTeam,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/team`,
+        `${API_URL_V1}/team`,
         {
             team: { ...data },
         },
@@ -20,14 +20,14 @@ export const createTeam = async (
 }
 
 export const searchTeam = async (term: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL}/team/search?q=${term}`)
+    return await axios.get(`${API_URL_V1}/team/search?q=${term}`)
 }
 
 export const getManagedTeam = async (
     token: string,
     id: string,
 ): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL}/team/managing/${id}`, {
+    return await axios.get(`${API_URL_V1}/team/managing/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -35,7 +35,7 @@ export const getManagedTeam = async (
 }
 
 export const getTeam = async (id: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL}/team/${id}`)
+    return await axios.get(`${API_URL_V1}/team/${id}`)
 }
 
 export const toggleRosterStatus = async (
@@ -44,7 +44,7 @@ export const toggleRosterStatus = async (
     open: boolean,
 ): Promise<AxiosResponse> => {
     return await axios.put(
-        `${API_URL}/team/open/${id}?open=${open}`,
+        `${API_URL_V1}/team/open/${id}?open=${open}`,
         {},
         {
             headers: {
@@ -60,7 +60,7 @@ export const removePlayer = async (
     userId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/team/remove/player/${teamId}?user=${userId}`,
+        `${API_URL_V1}/team/remove/player/${teamId}?user=${userId}`,
         {},
         {
             headers: {
@@ -78,7 +78,7 @@ export const rollover = async (
     seasonEnd: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL}/team/rollover/${teamId}`,
+        `${API_URL_V1}/team/rollover/${teamId}`,
         {
             copyPlayers,
             seasonStart,
