@@ -12,7 +12,7 @@ export type AccountStackParamList = {
     PublicTeamDetails: { id: string; place: string; name: string }
     PublicUserDetails: { user: DisplayUser }
     RequestUser: { id: string }
-    RolloverTeam: { id: string }
+    RolloverTeam: { hasPendingRequests: boolean }
 }
 
 export type GameStackParamList = {
@@ -37,4 +37,9 @@ export type PublicTeamDetailsProps = NativeStackScreenProps<
 export type PublicUserDetailsProps = NativeStackScreenProps<
     AccountStackParamList,
     'PublicUserDetails'
+>
+
+export type RolloverTeamProps = NativeStackScreenProps<
+    AccountStackParamList,
+    'RolloverTeam'
 >

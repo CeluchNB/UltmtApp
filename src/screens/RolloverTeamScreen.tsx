@@ -3,7 +3,7 @@ import * as TeamData from '../services/data/team'
 import CheckBox from '@react-native-community/checkbox'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { Props } from '../types/navigation'
+import { RolloverTeamProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
@@ -21,8 +21,12 @@ interface RolloverTeamFormData {
     season: string
 }
 
-const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
+const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({
+    navigation,
+    route,
+}) => {
     const { colors } = useColors()
+    const { hasPendingRequests } = route.params
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
     const dispatch = useDispatch()
@@ -164,6 +168,11 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
                 Warning: You will not be able to edit the current season after
                 starting the new season.
             </Text>
+            {hasPendingRequests && (
+                <Text style={styles.warning}>
+                    Pending requests for this team will all be deleted.
+                </Text>
+            )}
             {error.length > 0 && <Text style={styles.error}>{error}</Text>}
             <PrimaryButton
                 text="Submit"

@@ -101,7 +101,10 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 
     const rolloverSeason = async () => {
         // navigate to rollover screen
-        navigation.navigate('RolloverTeam', { id })
+        navigation.navigate('RolloverTeam', {
+            hasPendingRequests:
+                requests.filter(req => req.status === 'pending').length > 0,
+        })
     }
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
