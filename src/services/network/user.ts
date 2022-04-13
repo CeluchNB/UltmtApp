@@ -76,3 +76,18 @@ export const leaveTeam = async (
 export const getPublicUser = async (id: string): Promise<AxiosResponse> => {
     return await axios.get(`${API_URL_V1}/user/${id}`)
 }
+
+export const leaveManagerRole = async (
+    token: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/user/managerLeave?team=${teamId}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

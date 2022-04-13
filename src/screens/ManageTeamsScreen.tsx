@@ -17,8 +17,10 @@ import {
     View,
 } from 'react-native'
 import {
+    leaveManagerRole,
     leaveTeam,
     removeRequest,
+    selectLeaveManagerError,
     selectManagerTeams,
     selectPlayerTeams,
     selectRequests,
@@ -33,6 +35,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const managerTeams = useSelector(selectManagerTeams)
     const requestIds = useSelector(selectRequests)
     const token = useSelector(selectToken)
+    const leaveManagerError = useSelector(selectLeaveManagerError)
 
     const isMounted = React.useRef(false)
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
@@ -42,6 +45,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const [respondRequestId, setRespondRequestId] = React.useState('')
     const [deleteRequestError, setDeleteRequestError] = React.useState('')
     const [deleteRequestId, setDeleteRequestId] = React.useState('')
+    const [leaveManagerTeamId, setLeaveManagerTeamId] = React.useState('')
 
     const getRequests = React.useCallback(
         async (reqIds: string[]) => {
@@ -115,6 +119,11 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     // 'eventError' in redux vs. 'pageError'?
     const onLeaveTeam = (teamId: string) => {
         dispatch(leaveTeam({ token, teamId }))
+    }
+
+    const onLeaveManagerRole = (teamId: string) => {
+        setLeaveManagerTeamId(teamId)
+        dispatch(leaveManagerRole({ token, teamId }))
     }
 
     const styles = StyleSheet.create({
@@ -234,6 +243,16 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                     key={team._id}
                                     team={team}
                                     onPress={() => openTeamDetails(team)}
+                                    showDelete={true}
+                                    onDelete={async () => {
+                                        onLeaveManagerRole(team._id)
+                                    }}
+                                    error={
+                                        leaveManagerError &&
+                                        team._id === leaveManagerTeamId
+                                            ? leaveManagerError
+                                            : undefined
+                                    }
                                 />
                             )
                         }}
