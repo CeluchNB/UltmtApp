@@ -3,6 +3,7 @@ import { ApiError } from '../../types/services'
 import { throwApiError } from '../../utils/service-utils'
 import { CreateTeam, Team } from '../../types/team'
 import {
+    addManager as networkAddManager,
     createTeam as networkCreateTeam,
     getManagedTeam as networkGetManagedTeam,
     getTeam as networkGetTeam,
@@ -156,6 +157,20 @@ export const rollover = async (
             seasonStart,
             seasonEnd,
         )
+        const { team } = response.data
+        return team
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_TEAM_ERROR)
+    }
+}
+
+export const addManager = async (
+    token: string,
+    teamId: string,
+    managerId: string,
+): Promise<Team> => {
+    try {
+        const response = await networkAddManager(token, teamId, managerId)
         const { team } = response.data
         return team
     } catch (error) {

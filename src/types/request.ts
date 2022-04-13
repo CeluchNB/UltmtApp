@@ -10,3 +10,8 @@ export interface DetailedRequest {
     teamDetails: DisplayTeam
     userDetails: DisplayUser
 }
+
+export enum RequestType {
+    PLAYER,
+    MANAGER,
+}

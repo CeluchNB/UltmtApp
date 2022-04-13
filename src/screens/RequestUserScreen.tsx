@@ -1,7 +1,9 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
+import * as TeamData from '../services/data/team'
 import { DisplayUser } from '../types/user'
-import { Props } from '../types/navigation'
+import { RequestType } from '../types/request'
+import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
 import { searchUsers } from '../services/data/user'
@@ -13,7 +15,8 @@ import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { IconButton, TextInput } from 'react-native-paper'
 import { size, weight } from '../theme/fonts'
 
-const RequestUserScreen: React.FC<Props> = () => {
+const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
+    const { type } = route.params
     const { colors } = useColors()
     const team = useSelector(selectTeam)
     const token = useSelector(selectToken)
@@ -51,7 +54,18 @@ const RequestUserScreen: React.FC<Props> = () => {
             setError('')
             setRequestLoading(true)
             setSelectedId(user._id)
-            await RequestData.requestUser(token, user._id, team?._id || '')
+            switch (type) {
+                case RequestType.PLAYER:
+                    await RequestData.requestUser(
+                        token,
+                        user._id,
+                        team?._id || '',
+                    )
+                    break
+                case RequestType.MANAGER:
+                    await TeamData.addManager(token, team?._id || '', user._id)
+                    break
+            }
             setSelectedPlayers([user, ...selectedPlayers])
         } catch (e: any) {
             setError(e.message)

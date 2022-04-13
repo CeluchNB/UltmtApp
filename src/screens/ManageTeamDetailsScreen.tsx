@@ -1,7 +1,6 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
-import { DetailedRequest } from '../types/request'
 import { ManagedTeamDetailsProps } from '../types/navigation'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
@@ -10,6 +9,7 @@ import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserListItem from '../components/atoms/UserListItem'
 import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
+import { DetailedRequest, RequestType } from '../types/request'
 import {
     RefreshControl,
     SafeAreaView,
@@ -258,6 +258,30 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                 </View>
                 <View style={styles.listContainer}>
                     <MapSection
+                        title="Managers"
+                        listData={team?.managers || []}
+                        renderItem={manager => (
+                            <UserListItem
+                                key={manager._id}
+                                user={manager}
+                                onPress={async () => {
+                                    navigation.navigate('PublicUserDetails', {
+                                        user: manager,
+                                    })
+                                }}
+                            />
+                        )}
+                        loading={teamLoading}
+                        showButton={true}
+                        showCreateButton={false}
+                        buttonText="Add Managers"
+                        onButtonPress={() => {
+                            navigation.navigate('RequestUser', {
+                                type: RequestType.MANAGER,
+                            })
+                        }}
+                    />
+                    <MapSection
                         title="Players"
                         listData={team?.players || []}
                         renderItem={user => (
@@ -279,7 +303,9 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                         showCreateButton={false}
                         buttonText="Add Players"
                         onButtonPress={() => {
-                            navigation.navigate('RequestUser', { id })
+                            navigation.navigate('RequestUser', {
+                                type: RequestType.PLAYER,
+                            })
                         }}
                         error={
                             team?.players && team.players.length <= 0

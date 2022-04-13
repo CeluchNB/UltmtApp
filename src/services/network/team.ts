@@ -91,3 +91,19 @@ export const rollover = async (
         },
     )
 }
+
+export const addManager = async (
+    token: string,
+    teamId: string,
+    managerId: string,
+): Promise<AxiosResponse> => {
+    return await axios.post(
+        `${API_URL_V1}/team/${teamId}/addManager?manager=${managerId}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

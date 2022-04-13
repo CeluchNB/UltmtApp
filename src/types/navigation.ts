@@ -1,5 +1,6 @@
 import { DisplayUser } from './user'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RequestType } from './request'
 
 export type AccountStackParamList = {
     Login: undefined
@@ -11,7 +12,7 @@ export type AccountStackParamList = {
     ManagedTeamDetails: { id: string; place: string; name: string }
     PublicTeamDetails: { id: string; place: string; name: string }
     PublicUserDetails: { user: DisplayUser }
-    RequestUser: { id: string }
+    RequestUser: { type: RequestType }
     RolloverTeam: { hasPendingRequests: boolean }
 }
 
@@ -42,4 +43,9 @@ export type PublicUserDetailsProps = NativeStackScreenProps<
 export type RolloverTeamProps = NativeStackScreenProps<
     AccountStackParamList,
     'RolloverTeam'
+>
+
+export type RequestUserProps = NativeStackScreenProps<
+    AccountStackParamList,
+    'RequestUser'
 >
