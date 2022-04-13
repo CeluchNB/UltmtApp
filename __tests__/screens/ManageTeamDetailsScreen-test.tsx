@@ -58,7 +58,14 @@ beforeEach(() => {
             },
         ],
         requests: ['request1', 'request2'],
-        managers: [],
+        managers: [
+            {
+                _id: 'playerid4',
+                firstName: 'first4',
+                lastName: 'last4',
+                username: 'first4last4',
+            },
+        ],
         seasonNumber: 1,
         seasonStart: '2022',
         seasonEnd: '2022',
@@ -138,7 +145,7 @@ it('should match snapshot', async () => {
     expect(snapshot).toMatchSnapshot()
 })
 
-it('should navigate to rollover a team', async () => {
+it('should navigate to rollover a team with no pending requests', async () => {
     const { getByText } = render(
         <Provider store={store}>
             <NavigationContainer>
@@ -151,7 +158,33 @@ it('should navigate to rollover a team', async () => {
 
     fireEvent.press(button)
 
-    expect(navigate).toHaveBeenCalledTimes(1)
+    expect(navigate).toHaveBeenCalledWith('RolloverTeam', {
+        hasPendingRequests: false,
+    })
+})
+
+it('should navigate to rollover a team with pending requests', async () => {
+    const { getByText, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamDetailsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mtd-flat-list')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    const button = getByText('Start New Season')
+
+    fireEvent.press(button)
+
+    expect(navigate).toHaveBeenCalledWith('RolloverTeam', {
+        hasPendingRequests: true,
+    })
 })
 
 it('should toggle roster status', async () => {
@@ -296,7 +329,7 @@ it('should respond to request correctly', async () => {
     const acceptButtons = getAllByTestId('accept-button')
     expect(queryByText('@first3last3')).not.toBeNull()
     /* 
-        Should not need act() after fireEvent, however test fails if I don't.
+        Should not need act() after fireEvent, however test fails if it's not there.
         The alternative, preferred method of
 
         fireEvent.press(acceptButtons[0])
@@ -542,6 +575,36 @@ it('should handle add players text', async () => {
     )
 
     const button = getByText('Add Players')
+    fireEvent.press(button)
+
+    expect(navigate).toHaveBeenCalled()
+})
+
+it('should navigate to public user screen on manager click', async () => {
+    const { getByText } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamDetailsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const button = getByText('@first4last4')
+    fireEvent.press(button)
+
+    expect(navigate).toHaveBeenCalled()
+})
+
+it('should navigate to request manager screen', async () => {
+    const { getByText } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamDetailsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const button = getByText('Add Managers')
     fireEvent.press(button)
 
     expect(navigate).toHaveBeenCalled()

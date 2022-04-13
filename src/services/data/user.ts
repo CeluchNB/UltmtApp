@@ -7,6 +7,7 @@ import {
     createAccount as networkCreateAccount,
     fetchProfile as networkFetchProfile,
     getPublicUser as networkGetPublicUser,
+    leaveManagerRole as networkLeaveManagerRole,
     leaveTeam as networkLeaveTeam,
     login as networkLogin,
     logout as networkLogout,
@@ -152,5 +153,24 @@ export const getPublicUser = async (id: string): Promise<User> => {
         return user
     } catch (error) {
         return throwApiError(error, Constants.GENERIC_FETCH_PROFILE_ERROR)
+    }
+}
+
+/**
+ * Method for user to remove himself as manager of a team
+ * @param token auth token of user
+ * @param teamId team id to leave
+ * @returns updated user
+ */
+export const leaveManagerRole = async (
+    token: string,
+    teamId: string,
+): Promise<User> => {
+    try {
+        const response = await networkLeaveManagerRole(token, teamId)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_TEAM_ERROR)
     }
 }

@@ -312,6 +312,137 @@ exports[`should match snapshot 1`] = `
                 }
               }
             >
+              Managers
+            </Text>
+          </View>
+          <View
+            collapsable={false}
+            nativeID="animatedComponent"
+            style={
+              Object {
+                "alignSelf": "center",
+                "backgroundColor": "transparent",
+                "borderColor": "transparent",
+                "borderRadius": 4,
+                "borderStyle": "solid",
+                "borderWidth": 0,
+                "elevation": 0,
+                "marginTop": 10,
+                "minWidth": 64,
+              }
+            }
+          >
+            <View
+              accessibilityRole="button"
+              accessibilityState={
+                Object {
+                  "disabled": false,
+                }
+              }
+              accessible={true}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Array [
+                  Object {
+                    "overflow": "hidden",
+                  },
+                  Object {
+                    "borderRadius": 4,
+                  },
+                ]
+              }
+              testID="more-button"
+            >
+              <View
+                style={
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "flexDirection": "row",
+                      "justifyContent": "center",
+                    },
+                    undefined,
+                  ]
+                }
+              >
+                <Text
+                  numberOfLines={1}
+                  selectable={false}
+                  style={
+                    Array [
+                      Object {
+                        "color": "#000000",
+                        "fontFamily": "System",
+                        "fontWeight": "400",
+                      },
+                      Object {
+                        "textAlign": "left",
+                      },
+                      Array [
+                        Object {
+                          "letterSpacing": 1,
+                          "marginHorizontal": 16,
+                          "marginVertical": 9,
+                          "textAlign": "center",
+                        },
+                        undefined,
+                        Object {
+                          "textTransform": "uppercase",
+                        },
+                        Object {
+                          "color": "#3183ff",
+                          "fontFamily": "System",
+                          "fontWeight": "500",
+                        },
+                        Object {
+                          "fontFamily": "System",
+                          "fontWeight": "500",
+                        },
+                        undefined,
+                      ],
+                    ]
+                  }
+                >
+                  Add Managers
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            Object {
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "display": "flex",
+                "flex": 1,
+                "flexDirection": "row",
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "#3183ff",
+                  "flex": 1,
+                  "fontSize": 61.64383561643835,
+                  "fontWeight": "bold",
+                  "marginBottom": 10,
+                }
+              }
+            >
               Players
             </Text>
           </View>

@@ -1,6 +1,7 @@
 import * as TeamServices from '../../../src/services/network/team'
 import { CreateTeam, Team } from '../../../src/types/team'
 import {
+    addManager,
     createTeam,
     getManagedTeam,
     getTeam,
@@ -174,5 +175,19 @@ describe('test team services', () => {
         )
 
         expect(toggleRosterStatus('', '', true)).rejects.toThrow()
+    })
+
+    it('should handle network add manager success', async () => {
+        jest.spyOn(TeamServices, 'addManager').mockReturnValueOnce(teamSuccess)
+        const result = await addManager('', '', '')
+        expect(result).toEqual(team)
+    })
+
+    it('should handle network add manager failure', async () => {
+        jest.spyOn(TeamServices, 'toggleRosterStatus').mockReturnValueOnce(
+            teamError,
+        )
+
+        expect(addManager('', '', '')).rejects.toThrow()
     })
 })

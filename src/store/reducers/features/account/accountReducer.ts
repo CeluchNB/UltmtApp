@@ -10,6 +10,7 @@ export interface AccountSlice {
     username: string
     token: string
     error?: string
+    leaveManagerError?: string
     privateProfile: boolean
     openToRequests: boolean
     playerTeams: DisplayTeam[]
@@ -24,6 +25,7 @@ const initialState: AccountSlice = {
     username: '',
     token: '',
     error: undefined,
+    leaveManagerError: undefined,
     privateProfile: false,
     openToRequests: true,
     playerTeams: [],
@@ -125,6 +127,18 @@ const accountSlice = createSlice({
             .addCase(leaveTeam.rejected, (state, action) => {
                 state.error = action.error.message
             })
+
+        builder
+            .addCase(leaveManagerRole.pending, state => {
+                state.leaveManagerError = undefined
+            })
+            .addCase(leaveManagerRole.fulfilled, (state, action) => {
+                const { managerTeams } = action.payload
+                state.managerTeams = managerTeams
+            })
+            .addCase(leaveManagerRole.rejected, (state, action) => {
+                state.leaveManagerError = action.error.message
+            })
     },
 })
 
@@ -150,12 +164,22 @@ export const leaveTeam = createAsyncThunk(
     },
 )
 
+export const leaveManagerRole = createAsyncThunk(
+    'account/leaveManagerRole',
+    async (data: { token: string; teamId: string }, _thunkAPI) => {
+        const { token, teamId } = data
+        return await UserData.leaveManagerRole(token, teamId)
+    },
+)
+
 export const selectAccount = (state: RootState) => state.account
 export const selectToken = (state: RootState) => state.account.token
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
 export const selectManagerTeams = (state: RootState) =>
     state.account.managerTeams
 export const selectRequests = (state: RootState) => state.account.requests
+export const selectLeaveManagerError = (state: RootState) =>
+    state.account.leaveManagerError
 export const {
     addRequest,
     removeRequest,

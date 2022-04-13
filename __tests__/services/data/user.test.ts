@@ -6,6 +6,7 @@ import {
     fetchProfile,
     getLocalToken,
     getPublicUser,
+    leaveManagerRole,
     leaveTeam,
     login,
     logout,
@@ -291,5 +292,32 @@ describe('test user data calls', () => {
         )
 
         expect(getPublicUser('')).rejects.toThrow()
+    })
+
+    it('should handle network leave manager role success', async () => {
+        jest.spyOn(UserServices, 'leaveManagerRole').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await leaveManagerRole('', '')
+        expect(result).toEqual(user)
+    })
+
+    it('should handle network leave manager role failure', async () => {
+        jest.spyOn(UserServices, 'leaveManagerRole').mockReturnValueOnce(
+            Promise.reject({
+                data: { message: errorText },
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+        expect(leaveManagerRole('', '')).rejects.toThrow()
     })
 })

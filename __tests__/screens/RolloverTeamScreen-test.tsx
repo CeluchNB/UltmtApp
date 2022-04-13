@@ -2,9 +2,9 @@ import * as AccountReducer from '../../src/store/reducers/features/account/accou
 import * as ManagedTeamReducer from '../../src/store/reducers/features/team/managedTeamReducer'
 import * as TeamData from '../../src/services/data/team'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { RolloverTeamProps } from '../../src/types/navigation'
 import RolloverTeamScreen from '../../src/screens/RolloverTeamScreen'
 import { Team } from '../../src/types/team'
 import store from '../../src/store/store'
@@ -15,11 +15,11 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const goBack = jest.fn()
 
 const token = '1234.asdf.6543'
-const props: Props = {
+const props: RolloverTeamProps = {
     navigation: {
         goBack,
     } as any,
-    route: {} as any,
+    route: { params: { hasPendingRequests: false } } as any,
 }
 
 beforeAll(() => {
@@ -32,6 +32,24 @@ it('should match snapshot', async () => {
         <Provider store={store}>
             <NavigationContainer>
                 <RolloverTeamScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    ).toJSON()
+
+    expect(snapshot).toMatchSnapshot()
+})
+
+it('should match snapshot with open requests', async () => {
+    const pendingReqProps: RolloverTeamProps = {
+        navigation: {
+            goBack,
+        } as any,
+        route: { params: { hasPendingRequests: true } } as any,
+    }
+    const snapshot = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <RolloverTeamScreen {...pendingReqProps} />
             </NavigationContainer>
         </Provider>,
     ).toJSON()

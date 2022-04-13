@@ -267,6 +267,98 @@ it('should handle leave team', async () => {
     expect(leaveTeamSpy).toHaveBeenCalled()
 })
 
+it('should handle leave manager role', async () => {
+    const leaveTeamSpy = jest
+        .spyOn(UserData, 'leaveManagerRole')
+        .mockImplementationOnce(async (_token: string, _teamId: string) => {
+            const newUser: User = {
+                _id: 'testid',
+                firstName: 'first',
+                lastName: 'last',
+                email: 'test@email.com',
+                username: 'testuser',
+                playerTeams: [
+                    {
+                        _id: 'id2',
+                        place: 'Place2',
+                        name: 'Name2',
+                        teamname: 'place2name2',
+                        seasonStart: '2020',
+                        seasonEnd: '2020',
+                    },
+                    {
+                        _id: 'id3',
+                        place: 'Place3',
+                        name: 'Name3',
+                        teamname: 'place3name3',
+                        seasonStart: '2021',
+                        seasonEnd: '2021',
+                    },
+                ],
+                requests: ['request1', 'request2'],
+                managerTeams: [],
+                stats: [],
+                openToRequests: false,
+                private: false,
+            }
+            return newUser
+        })
+
+    const { queryByText, getAllByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const deleteButtons = getAllByTestId('delete-button')
+
+    fireEvent.press(deleteButtons[3])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(
+        queryByText(`@${fetchProfileData.managerTeams[0].teamname}`),
+    ).toBeNull()
+    expect(leaveTeamSpy).toHaveBeenCalled()
+})
+
+it('should handle leave manager role error', async () => {
+    const leaveTeamSpy = jest
+        .spyOn(UserData, 'leaveManagerRole')
+        .mockReturnValueOnce(
+            Promise.reject({
+                message:
+                    'Unable to leave manager role. You are the last manager.',
+            }),
+        )
+
+    const { queryByText, getAllByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const deleteButtons = getAllByTestId('delete-button')
+
+    fireEvent.press(deleteButtons[3])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(
+        queryByText(`@${fetchProfileData.managerTeams[0].teamname}`),
+    ).not.toBeNull()
+    expect(
+        queryByText('Unable to leave manager role. You are the last manager.'),
+    ).not.toBeNull()
+    expect(leaveTeamSpy).toHaveBeenCalled()
+})
+
 it('should accept request correctly', async () => {
     const requestSpy = jest
         .spyOn(RequestData, 'respondToTeamRequest')
@@ -318,7 +410,7 @@ it('should deny request correctly', async () => {
 
     expect(queryByText('@place5name5')).not.toBeNull()
     const deleteButtons = getAllByTestId('delete-button')
-    fireEvent.press(deleteButtons[3])
+    fireEvent.press(deleteButtons[4])
     // Not optimal solution, see
     // ManageTeamDetailsScreen-test.tsx for further details
     await act(async () => {})
@@ -380,7 +472,7 @@ it('should handle successful delete request', async () => {
 
     expect(queryByText('@place6name6')).not.toBeNull()
     const deleteButtons = getAllByTestId('delete-button')
-    fireEvent.press(deleteButtons[4])
+    fireEvent.press(deleteButtons[5])
     // Not optimal solution, see
     // ManageTeamDetailsScreen-test.tsx for further details
     await act(async () => {})
@@ -410,7 +502,7 @@ it('should handle failed delete request', async () => {
 
     expect(queryByText('@place6name6')).not.toBeNull()
     const deleteButtons = getAllByTestId('delete-button')
-    fireEvent.press(deleteButtons[4])
+    fireEvent.press(deleteButtons[5])
     // Not optimal solution, see
     // ManageTeamDetailsScreen-test.tsx for further details
     await act(async () => {})
