@@ -44,6 +44,16 @@ export const fetchProfileData: User = {
             seasonEnd: '2022',
         },
     ],
+    archiveTeams: [
+        {
+            _id: 'id7',
+            place: 'Place7',
+            name: 'Name7',
+            teamname: 'place7name7',
+            seasonStart: '2019',
+            seasonEnd: '2019',
+        },
+    ],
     stats: [],
     openToRequests: false,
     private: false,

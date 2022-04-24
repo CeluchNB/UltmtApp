@@ -106,6 +106,10 @@ it('should display teams correctly', async () => {
     expect(
         queryByText(`@${fetchProfileData.playerTeams[1].teamname}`),
     ).not.toBeNull()
+
+    expect(
+        queryByText(`@${fetchProfileData.archiveTeams[0].teamname}`),
+    ).not.toBeNull()
 })
 
 it('should display error', async () => {
@@ -172,6 +176,28 @@ it('should navigate to managed team screen on managing team click', async () => 
     })
 })
 
+it('should navigate to public team screen', async () => {
+    const { getByText } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const team = fetchProfileData.archiveTeams[0]
+    const archiveTeam = getByText(`@${team.teamname}`)
+
+    fireEvent.press(archiveTeam)
+
+    expect(navigate).toHaveBeenCalledWith('PublicTeamDetails', {
+        id: team._id,
+        place: team.place,
+        name: team.name,
+        archive: true,
+    })
+})
+
 it('should navigate to create team', async () => {
     const { getByText } = render(
         <Provider store={store}>
@@ -228,6 +254,7 @@ it('should handle leave team', async () => {
                         seasonEnd: '2021',
                     },
                 ],
+                archiveTeams: [],
                 requests: ['request1', 'request2'],
                 managerTeams: [
                     {
@@ -297,6 +324,7 @@ it('should handle leave manager role', async () => {
                 ],
                 requests: ['request1', 'request2'],
                 managerTeams: [],
+                archiveTeams: [],
                 stats: [],
                 openToRequests: false,
                 private: false,

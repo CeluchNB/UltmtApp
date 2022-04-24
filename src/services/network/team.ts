@@ -107,3 +107,9 @@ export const addManager = async (
         },
     )
 }
+
+export const getArchivedTeam = async (
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(`${API_URL_V1}/archiveTeam/${teamId}`)
+}

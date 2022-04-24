@@ -20,6 +20,7 @@ export interface User extends DisplayUser {
     requests: string[]
     playerTeams: DisplayTeam[]
     managerTeams: DisplayTeam[]
+    archiveTeams: DisplayTeam[]
     stats: string[]
     openToRequests: boolean
     private: boolean

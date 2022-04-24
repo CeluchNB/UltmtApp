@@ -10,7 +10,12 @@ export type AccountStackParamList = {
     ManageTeams: undefined
     RequestTeam: undefined
     ManagedTeamDetails: { id: string; place: string; name: string }
-    PublicTeamDetails: { id: string; place: string; name: string }
+    PublicTeamDetails: {
+        id: string
+        place: string
+        name: string
+        archive?: boolean
+    }
     PublicUserDetails: { user: DisplayUser }
     RequestUser: { type: RequestType }
     RolloverTeam: { hasPendingRequests: boolean }
