@@ -15,6 +15,7 @@ export interface AccountSlice {
     openToRequests: boolean
     playerTeams: DisplayTeam[]
     managerTeams: DisplayTeam[]
+    archiveTeams: DisplayTeam[]
     requests: string[]
 }
 
@@ -30,6 +31,7 @@ const initialState: AccountSlice = {
     openToRequests: true,
     playerTeams: [],
     managerTeams: [],
+    archiveTeams: [],
     requests: [],
 }
 
@@ -50,6 +52,7 @@ const accountSlice = createSlice({
                 username,
                 playerTeams,
                 managerTeams,
+                archiveTeams,
                 requests,
             } = action.payload
 
@@ -58,6 +61,7 @@ const accountSlice = createSlice({
             state.username = username
             state.playerTeams = playerTeams
             state.managerTeams = managerTeams
+            state.archiveTeams = archiveTeams
             state.requests = requests
         },
         removeRequest(state, action) {
@@ -83,6 +87,7 @@ const accountSlice = createSlice({
                     username,
                     playerTeams,
                     managerTeams,
+                    archiveTeams,
                     requests,
                 } = action.payload
 
@@ -92,6 +97,7 @@ const accountSlice = createSlice({
                 state.username = username
                 state.playerTeams = playerTeams as DisplayTeam[]
                 state.managerTeams = managerTeams as DisplayTeam[]
+                state.archiveTeams = archiveTeams as DisplayTeam[]
                 state.requests = requests
 
                 state.playerTeams.sort(
@@ -177,6 +183,8 @@ export const selectToken = (state: RootState) => state.account.token
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
 export const selectManagerTeams = (state: RootState) =>
     state.account.managerTeams
+export const selectArchiveTeams = (state: RootState) =>
+    state.account.archiveTeams
 export const selectRequests = (state: RootState) => state.account.requests
 export const selectLeaveManagerError = (state: RootState) =>
     state.account.leaveManagerError

@@ -21,14 +21,21 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     navigation,
 }) => {
     const { colors } = useColors()
-    const { id, place, name } = route.params
+    const { id, place, name, archive } = route.params
     const [team, setTeam] = React.useState({} as Team)
     const [refreshing, setRefreshing] = React.useState(false)
     const [error, setError] = React.useState<string>('')
 
     const initializeScreen = React.useCallback(async () => {
+        const getTeam = async (): Promise<Team> => {
+            if (archive) {
+                return TeamData.getArchivedTeam(id)
+            }
+            return TeamData.getTeam(id)
+        }
+
         setError('')
-        TeamData.getTeam(id)
+        getTeam()
             .then(teamResponse => {
                 setTeam(teamResponse)
             })
@@ -38,7 +45,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                         'An error occurred looking for this team. Please try again',
                 )
             })
-    }, [id])
+    }, [archive, id])
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {

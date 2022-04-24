@@ -5,6 +5,7 @@ import { CreateTeam, Team } from '../../types/team'
 import {
     addManager as networkAddManager,
     createTeam as networkCreateTeam,
+    getArchivedTeam as networkGetArchivedTeam,
     getManagedTeam as networkGetManagedTeam,
     getTeam as networkGetTeam,
     removePlayer as networkRemovePlayer,
@@ -164,6 +165,13 @@ export const rollover = async (
     }
 }
 
+/**
+ * Method to add manager to a team
+ * @param token token of current manager
+ * @param teamId team to add manager to
+ * @param managerId manager to add to team
+ * @returns team with updated manager
+ */
 export const addManager = async (
     token: string,
     teamId: string,
@@ -175,5 +183,19 @@ export const addManager = async (
         return team
     } catch (error) {
         return throwApiError(error, Constants.EDIT_TEAM_ERROR)
+    }
+}
+
+/**
+ * Method to get archived team
+ *
+ */
+export const getArchivedTeam = async (teamId: string): Promise<Team> => {
+    try {
+        const response = await networkGetArchivedTeam(teamId)
+        const { team } = response.data
+        return team
+    } catch (error) {
+        return throwApiError(error, Constants.GET_TEAM_ERROR)
     }
 }

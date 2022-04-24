@@ -3,6 +3,7 @@ import { CreateTeam, Team } from '../../../src/types/team'
 import {
     addManager,
     createTeam,
+    getArchivedTeam,
     getManagedTeam,
     getTeam,
     removePlayer,
@@ -189,5 +190,20 @@ describe('test team services', () => {
         )
 
         expect(addManager('', '', '')).rejects.toThrow()
+    })
+
+    it('should handle network get archived team success', async () => {
+        jest.spyOn(TeamServices, 'getArchivedTeam').mockReturnValueOnce(
+            teamSuccess,
+        )
+        const result = await getArchivedTeam('')
+        expect(result).toEqual(team)
+    })
+
+    it('should handle network get archived team failure', async () => {
+        jest.spyOn(TeamServices, 'getArchivedTeam').mockReturnValueOnce(
+            teamError,
+        )
+        expect(getArchivedTeam('')).rejects.toThrow()
     })
 })

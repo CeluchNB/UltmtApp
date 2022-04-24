@@ -20,6 +20,7 @@ import {
     leaveManagerRole,
     leaveTeam,
     removeRequest,
+    selectArchiveTeams,
     selectLeaveManagerError,
     selectManagerTeams,
     selectPlayerTeams,
@@ -33,6 +34,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const dispatch = useDispatch()
     const playerTeams = useSelector(selectPlayerTeams)
     const managerTeams = useSelector(selectManagerTeams)
+    const archiveTeams = useSelector(selectArchiveTeams)
     const requestIds = useSelector(selectRequests)
     const token = useSelector(selectToken)
     const leaveManagerError = useSelector(selectLeaveManagerError)
@@ -253,6 +255,33 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                                             ? leaveManagerError
                                             : undefined
                                     }
+                                />
+                            )
+                        }}
+                    />
+                    <MapSection
+                        title="Old Teams"
+                        showButton={false}
+                        showCreateButton={false}
+                        listData={archiveTeams}
+                        renderItem={team => {
+                            return (
+                                <TeamListItem
+                                    key={team._id}
+                                    team={team}
+                                    onPress={async () => {
+                                        navigation.navigate(
+                                            'PublicTeamDetails',
+                                            {
+                                                id: team._id,
+                                                place: team.place,
+                                                name: team.name,
+                                                archive: true,
+                                            },
+                                        )
+                                    }}
+                                    showDelete={false}
+                                    showAccept={false}
                                 />
                             )
                         }}
