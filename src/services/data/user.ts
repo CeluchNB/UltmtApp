@@ -11,6 +11,7 @@ import {
     leaveTeam as networkLeaveTeam,
     login as networkLogin,
     logout as networkLogout,
+    requestPasswordRecovery as networkRequestPasswordRecovery,
     searchUsers as networkSearchUsers,
 } from '../network/user'
 
@@ -27,6 +28,7 @@ export const login = async (
 ): Promise<string> => {
     try {
         const response = await networkLogin(username, password)
+        console.log('response', response)
 
         const token = response.data.token
         await EncryptedStorage.setItem('jwt_token', token)
@@ -172,5 +174,13 @@ export const leaveManagerRole = async (
         return user
     } catch (error) {
         return throwApiError(error, Constants.EDIT_TEAM_ERROR)
+    }
+}
+
+export const requestPasswordRecovery = async (email: string) => {
+    try {
+        await networkRequestPasswordRecovery(email)
+    } catch (error) {
+        return throwApiError(error, Constants.UNABLE_TO_EMAIL)
     }
 }

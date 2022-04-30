@@ -7,6 +7,7 @@ export type AccountStackParamList = {
     Profile: undefined
     CreateAccount: undefined
     CreateTeam: undefined
+    ForgotPasswordScreen: undefined
     ManageTeams: undefined
     RequestTeam: undefined
     ManagedTeamDetails: { id: string; place: string; name: string }
