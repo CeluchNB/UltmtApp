@@ -10,6 +10,7 @@ import {
     leaveTeam,
     login,
     logout,
+    requestPasswordRecovery,
     searchUsers,
 } from '../../../src/services/data/user'
 
@@ -24,6 +25,7 @@ const user: User = {
     requests: [],
     playerTeams: [],
     managerTeams: [],
+    archiveTeams: [],
     stats: [],
     openToRequests: true,
     private: false,
@@ -319,5 +321,32 @@ describe('test user data calls', () => {
             }),
         )
         expect(leaveManagerRole('', '')).rejects.toThrow()
+    })
+
+    it('should handle request password recovery network success', async () => {
+        jest.spyOn(UserServices, 'requestPasswordRecovery').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await requestPasswordRecovery('')
+        expect(result).toBeUndefined()
+    })
+
+    it('should handle request password recovery network failure', async () => {
+        jest.spyOn(UserServices, 'requestPasswordRecovery').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+        expect(requestPasswordRecovery('')).rejects.toThrow()
     })
 })

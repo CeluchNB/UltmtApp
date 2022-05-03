@@ -177,7 +177,7 @@ export const leaveManagerRole = async (
     }
 }
 
-export const requestPasswordRecovery = async (email: string) => {
+export const requestPasswordRecovery = async (email: string): Promise<void> => {
     try {
         await networkRequestPasswordRecovery(email)
     } catch (error) {

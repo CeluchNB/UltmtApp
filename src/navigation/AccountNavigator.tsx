@@ -12,6 +12,7 @@ import PublicUserScreen from './../screens/PublicUserScreen'
 import RequestTeamScreen from './../screens/RequestTeamScreen'
 import { RequestType } from './../types/request'
 import RequestUserScreen from './../screens/RequestUserScreen'
+import ResetPasswordScreen from '../screens/ResetPasswordScreen'
 import RolloverTeamScreen from './../screens/RolloverTeamScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
@@ -66,6 +67,10 @@ const AccountNavigator: React.FC<{}> = () => {
             <Stack.Screen
                 name="ForgotPasswordScreen"
                 component={ForgotPasswordScreen}
+            />
+            <Stack.Screen
+                name="ResetPasswordScreen"
+                component={ResetPasswordScreen}
             />
         </Stack.Navigator>
     )

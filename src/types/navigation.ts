@@ -19,6 +19,7 @@ export type AccountStackParamList = {
     }
     PublicUserDetails: { user: DisplayUser }
     RequestUser: { type: RequestType }
+    ResetPasswordScreen: undefined
     RolloverTeam: { hasPendingRequests: boolean }
 }
 

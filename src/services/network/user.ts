@@ -95,7 +95,7 @@ export const leaveManagerRole = async (
 export const requestPasswordRecovery = async (
     email: string,
 ): Promise<AxiosResponse> => {
-    return await axios.put(`${API_URL_V1}/user/requestPasswordRecovery`, {
+    return await axios.post(`${API_URL_V1}/user/requestPasswordRecovery`, {
         email,
     })
 }
