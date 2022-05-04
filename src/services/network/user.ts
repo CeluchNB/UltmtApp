@@ -99,3 +99,13 @@ export const requestPasswordRecovery = async (
         email,
     })
 }
+
+export const resetPassword = async (
+    passcode: string,
+    newEmail: string,
+): Promise<AxiosResponse> => {
+    return await axios.post(`${API_URL_V1}/user/resetPassword`, {
+        passcode,
+        newEmail,
+    })
+}

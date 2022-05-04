@@ -11,6 +11,7 @@ import {
     login,
     logout,
     requestPasswordRecovery,
+    resetPassword,
     searchUsers,
 } from '../../../src/services/data/user'
 
@@ -348,5 +349,33 @@ describe('test user data calls', () => {
             }),
         )
         expect(requestPasswordRecovery('')).rejects.toThrow()
+    })
+
+    it('should handle reset password network success', async () => {
+        jest.spyOn(UserServices, 'resetPassword').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user, token: validToken },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await resetPassword('', '')
+        expect(result.user).toBe(user)
+        expect(result.token).toBe(validToken)
+    })
+
+    it('should handle reset password network failure', async () => {
+        jest.spyOn(UserServices, 'resetPassword').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+        expect(resetPassword('', '')).rejects.toThrow()
     })
 })

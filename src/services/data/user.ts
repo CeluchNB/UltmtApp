@@ -12,6 +12,7 @@ import {
     login as networkLogin,
     logout as networkLogout,
     requestPasswordRecovery as networkRequestPasswordRecovery,
+    resetPassword as networkResetPassword,
     searchUsers as networkSearchUsers,
 } from '../network/user'
 
@@ -28,7 +29,6 @@ export const login = async (
 ): Promise<string> => {
     try {
         const response = await networkLogin(username, password)
-        console.log('response', response)
 
         const token = response.data.token
         await EncryptedStorage.setItem('jwt_token', token)
@@ -177,10 +177,28 @@ export const leaveManagerRole = async (
     }
 }
 
+/**
+ * Method for user to request a code to recover their password
+ * @param email email associated with account
+ * @returns void
+ */
 export const requestPasswordRecovery = async (email: string): Promise<void> => {
     try {
         await networkRequestPasswordRecovery(email)
     } catch (error) {
         return throwApiError(error, Constants.UNABLE_TO_EMAIL)
+    }
+}
+
+export const resetPassword = async (
+    passcode: string,
+    newPassword: string,
+): Promise<{ token: string; user: User }> => {
+    try {
+        const response = await networkResetPassword(passcode, newPassword)
+        const { token, user } = response.data
+        return { token, user }
+    } catch (error) {
+        return throwApiError(error, Constants.RESET_PASSWORD_ERROR)
     }
 }
