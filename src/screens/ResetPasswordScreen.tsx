@@ -1,16 +1,22 @@
 import * as React from 'react'
 import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
+import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
 import { resetPassword } from '../services/data/user'
 import { useColors } from '../hooks'
+import { useDispatch } from 'react-redux'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
+import {
+    setProfile,
+    setToken,
+} from '../store/reducers/features/account/accountReducer'
 
-const ResetPasswordScreen: React.FC<{}> = () => {
+const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
     const { colors } = useColors()
     const {
         control,
@@ -23,21 +29,27 @@ const ResetPasswordScreen: React.FC<{}> = () => {
             newPassword: '',
         },
     })
+    const dispatch = useDispatch()
 
     const [passwordHidden, setPasswordHidden] = React.useState(true)
     const [loading, setLoading] = React.useState(false)
+    const [error, setError] = React.useState('')
 
     const submitReset = async (data: {
         passcode: string
         newPassword: string
     }) => {
+        setError('')
         setLoading(true)
         const { passcode, newPassword } = data
         try {
             const { token, user } = await resetPassword(passcode, newPassword)
             reset({ passcode: '', newPassword: '' })
-            console.log(token, user)
-        } catch (error) {
+            dispatch(setToken(token))
+            dispatch(setProfile(user))
+            navigation.navigate('Profile')
+        } catch (e: any) {
+            setError(e.message)
         } finally {
             setLoading(false)
         }
@@ -85,7 +97,7 @@ const ResetPasswordScreen: React.FC<{}> = () => {
                             style={styles.input}
                             onChangeText={onChange}
                             value={value}
-                            placeholder="Recovery code"
+                            placeholder="Recovery Code"
                         />
                     )
                 }}
@@ -137,6 +149,7 @@ const ResetPasswordScreen: React.FC<{}> = () => {
             {errors.newPassword && (
                 <Text style={styles.error}>{errors.newPassword.message}</Text>
             )}
+            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
             <PrimaryButton
                 text="Submit"
                 loading={loading}

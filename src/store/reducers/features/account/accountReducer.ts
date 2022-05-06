@@ -72,9 +72,8 @@ const accountSlice = createSlice({
         addRequest(state, action) {
             state.requests.push(action.payload)
         },
-        resetState(state) {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            state = initialState
+        resetState() {
+            return initialState
         },
     },
     extraReducers: builder => {
