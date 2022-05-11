@@ -15,3 +15,4 @@ export const LEAVE_TEAM_ERROR = 'Unable to leave team right now. Please try agai
 export const UNABLE_TO_EMAIL = `Unable to request this password recovery right now.  Please try again later. \
 Or email product@theultmtapp.com for help.`
 export const RESET_PASSWORD_ERROR = 'Unable to reset password right now. Please try again later.'
+export const TOGGLE_ROSTER_STATUS_ERROR = 'Unable to change your roster status right now. Please try again later.'

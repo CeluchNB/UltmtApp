@@ -109,3 +109,18 @@ export const resetPassword = async (
         newPassword,
     })
 }
+
+export const setOpenToRequests = async (
+    token: string,
+    open: boolean,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/user/open?open=${open}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

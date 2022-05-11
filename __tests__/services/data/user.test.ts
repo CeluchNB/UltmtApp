@@ -13,6 +13,7 @@ import {
     requestPasswordRecovery,
     resetPassword,
     searchUsers,
+    setOpenToRequests,
 } from '../../../src/services/data/user'
 
 const validToken = 'token1'
@@ -368,7 +369,7 @@ describe('test user data calls', () => {
 
     it('should handle reset password network failure', async () => {
         jest.spyOn(UserServices, 'resetPassword').mockReturnValueOnce(
-            Promise.resolve({
+            Promise.reject({
                 data: {},
                 status: 400,
                 statusText: 'Bad',
@@ -377,5 +378,32 @@ describe('test user data calls', () => {
             }),
         )
         expect(resetPassword('', '')).rejects.toThrow()
+    })
+
+    it('should handle set open to requests network success', async () => {
+        jest.spyOn(UserServices, 'setOpenToRequests').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await setOpenToRequests('', true)
+        expect(result).toBe(user)
+    })
+
+    it('should handle set open to requests network failure', async () => {
+        jest.spyOn(UserServices, 'setOpenToRequests').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+        expect(setOpenToRequests('', true)).rejects.toThrow()
     })
 })

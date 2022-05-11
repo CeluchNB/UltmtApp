@@ -18,8 +18,12 @@ import {
 } from 'react-native'
 import {
     removeRequest,
+    selectError,
+    selectOpenToRequests,
     selectRequests,
+    selectToggleLoading,
     selectToken,
+    setOpenToRequests,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -28,9 +32,11 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     const dispatch = useDispatch()
     const requestIds = useSelector(selectRequests)
     const token = useSelector(selectToken)
+    const toggleLoading = useSelector(selectToggleLoading)
+    const openToRequests = useSelector(selectOpenToRequests)
+    const error = useSelector(selectError)
 
     const isMounted = React.useRef(false)
-    const [toggleLoading, setToggleLoading] = React.useState(false)
     const [refreshing, setRefreshing] = React.useState(false)
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
     const [fetchError, setFetchError] = React.useState('')
@@ -100,7 +106,7 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     }
 
     const toggleRosterOpen = () => {
-        setToggleLoading(true)
+        dispatch(setOpenToRequests({ token, open: !openToRequests }))
     }
 
     const styles = StyleSheet.create({
@@ -116,6 +122,11 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
             alignSelf: 'center',
             fontSize: size.fontLarge,
             color: colors.gray,
+        },
+        toggleError: {
+            alignSelf: 'center',
+            fontSize: size.fontFifteen,
+            color: colors.error,
         },
         container: {
             width: '75%',
@@ -158,17 +169,23 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                         }}
                         refreshing={refreshing}
                     />
-                }>
+                }
+                testID="mt-scroll-view">
                 <ScreenTitle style={styles.title} title="My Requests" />
                 <View style={styles.container}>
                     <PrimaryButton
-                        text={'allow requests'}
+                        text={`${
+                            openToRequests ? 'prevent' : 'allow'
+                        } requests`}
                         onPress={async () => {
                             toggleRosterOpen()
                         }}
                         loading={toggleLoading}
                         style={styles.title}
                     />
+                    {error && error?.length > 0 && (
+                        <Text style={styles.toggleError}>{error}</Text>
+                    )}
                     <MapSection
                         title="Requests From Teams"
                         showButton={false}

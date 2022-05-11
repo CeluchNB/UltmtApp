@@ -17,6 +17,7 @@ export interface AccountSlice {
     managerTeams: DisplayTeam[]
     archiveTeams: DisplayTeam[]
     requests: string[]
+    toggleRosterStatusLoading: boolean
 }
 
 const initialState: AccountSlice = {
@@ -33,6 +34,7 @@ const initialState: AccountSlice = {
     managerTeams: [],
     archiveTeams: [],
     requests: [],
+    toggleRosterStatusLoading: false,
 }
 
 const accountSlice = createSlice({
@@ -54,6 +56,7 @@ const accountSlice = createSlice({
                 managerTeams,
                 archiveTeams,
                 requests,
+                openToRequests,
             } = action.payload
 
             state.firstName = firstName
@@ -63,6 +66,7 @@ const accountSlice = createSlice({
             state.managerTeams = managerTeams
             state.archiveTeams = archiveTeams
             state.requests = requests
+            state.openToRequests = openToRequests
         },
         removeRequest(state, action) {
             state.requests = state.requests.filter(
@@ -144,6 +148,20 @@ const accountSlice = createSlice({
             .addCase(leaveManagerRole.rejected, (state, action) => {
                 state.leaveManagerError = action.error.message
             })
+
+        builder
+            .addCase(setOpenToRequests.pending, state => {
+                state.toggleRosterStatusLoading = true
+            })
+            .addCase(setOpenToRequests.fulfilled, (state, action) => {
+                const user = action.payload
+                state.openToRequests = user.openToRequests
+                state.toggleRosterStatusLoading = false
+            })
+            .addCase(setOpenToRequests.rejected, (state, action) => {
+                state.error = action.error.message
+                state.toggleRosterStatusLoading = false
+            })
     },
 })
 
@@ -177,6 +195,14 @@ export const leaveManagerRole = createAsyncThunk(
     },
 )
 
+export const setOpenToRequests = createAsyncThunk(
+    'account/setOpenToRequests',
+    async (data: { token: string; open: boolean }, _thunkAPI) => {
+        const { token, open } = data
+        return await UserData.setOpenToRequests(token, open)
+    },
+)
+
 export const selectAccount = (state: RootState) => state.account
 export const selectToken = (state: RootState) => state.account.token
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
@@ -187,6 +213,11 @@ export const selectArchiveTeams = (state: RootState) =>
 export const selectRequests = (state: RootState) => state.account.requests
 export const selectLeaveManagerError = (state: RootState) =>
     state.account.leaveManagerError
+export const selectError = (state: RootState) => state.account.error
+export const selectToggleLoading = (state: RootState) =>
+    state.account.toggleRosterStatusLoading
+export const selectOpenToRequests = (state: RootState) =>
+    state.account.openToRequests
 export const {
     addRequest,
     removeRequest,

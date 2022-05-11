@@ -14,6 +14,7 @@ import {
     requestPasswordRecovery as networkRequestPasswordRecovery,
     resetPassword as networkResetPassword,
     searchUsers as networkSearchUsers,
+    setOpenToRequests as networkSetOpenToRequests,
 } from '../network/user'
 
 /**
@@ -200,5 +201,18 @@ export const resetPassword = async (
         return { token, user }
     } catch (error) {
         return throwApiError(error, Constants.RESET_PASSWORD_ERROR)
+    }
+}
+
+export const setOpenToRequests = async (
+    token: string,
+    open: boolean,
+): Promise<User> => {
+    try {
+        const response = await networkSetOpenToRequests(token, open)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.TOGGLE_ROSTER_STATUS_ERROR)
     }
 }

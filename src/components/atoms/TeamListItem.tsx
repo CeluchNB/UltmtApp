@@ -28,7 +28,7 @@ const TeamListItem: React.FC<TeamListItemProps> = props => {
         },
         teamname: {
             color: colors.textPrimary,
-            fontSize: size.fontMedium,
+            fontSize: size.fontFifteen,
             fontWeight: weight.bold,
         },
         season: {

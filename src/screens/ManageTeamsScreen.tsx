@@ -56,6 +56,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         },
         title: {
             flex: 1,
+            textAlignVertical: 'center',
         },
         error: {
             width: '75%',
@@ -71,6 +72,10 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
             display: 'flex',
             flexDirection: 'row',
             margin: 10,
+            marginBottom: 20,
+        },
+        requestsButton: {
+            marginTop: 10,
         },
     })
 
@@ -80,6 +85,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                 <View style={styles.headerContainer}>
                     <ScreenTitle style={styles.title} title="Manage Teams" />
                     <IconButtonText
+                        style={styles.requestsButton}
                         text="Requests"
                         icon="email-outline"
                         onPress={() => {

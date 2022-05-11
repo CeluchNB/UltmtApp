@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IconButton } from 'react-native-paper'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useColors } from '../../hooks'
 import {
     StyleProp,
@@ -28,27 +28,25 @@ const IconButtonText: React.FC<IconButtonTextProps> = ({
         container: {
             flexDirection: 'column',
         },
-        button: {
+        icon: {
+            alignSelf: 'center',
             padding: 0,
             margin: 0,
-            alignSelf: 'center',
         },
         text: {
             padding: 0,
             margin: 0,
-            alignSelf: 'center',
-            alignContent: 'center',
             color: colors.textPrimary,
         },
     })
 
     return (
         <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
-            <IconButton
-                style={styles.button}
+            <Icon
+                style={styles.icon}
+                name={icon}
                 color={colors.textPrimary}
-                icon={icon}
-                onPress={onPress}
+                size={30}
             />
             <Text style={styles.text}>{text}</Text>
         </TouchableOpacity>
