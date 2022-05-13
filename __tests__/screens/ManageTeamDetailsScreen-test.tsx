@@ -1,4 +1,3 @@
-import * as ManagedTeamReducer from '../../src/store/reducers/features/team/managedTeamReducer'
 import * as RequestData from '../../src/services/data/request'
 import * as TeamData from '../../src/services/data/team'
 import { DetailedRequest } from '../../src/types/request'
@@ -10,7 +9,7 @@ import React from 'react'
 import { Team } from '../../src/types/team'
 import { setToken } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -186,32 +185,6 @@ it('should navigate to rollover a team with pending requests', async () => {
         hasPendingRequests: true,
     })
 })
-
-// it('should toggle roster status', async () => {
-//     const dataFn = jest
-//         .fn()
-//         .mockImplementationOnce(async (_token, id, open) => {
-//             return { rosterOpen: open } as Team
-//         })
-//     const spy = jest.spyOn(ManagedTeamReducer, 'toggleRosterStatus')
-
-//     jest.spyOn(TeamData, 'toggleRosterStatus').mockImplementationOnce(dataFn)
-
-//     const { getByText, queryByText } = render(
-//         <Provider store={store}>
-//             <NavigationContainer>
-//                 <ManageTeamDetailsScreen {...props} />
-//             </NavigationContainer>
-//         </Provider>,
-//     )
-
-//     const button = getByText('Open Roster')
-//     fireEvent.press(button)
-
-//     waitFor(() => queryByText('Close Roster'))
-//     expect(spy).toHaveBeenCalledTimes(1)
-//     expect(dataFn).toHaveBeenCalledTimes(1)
-// })
 
 it('should handle swipe to refresh', async () => {
     const teamSpy = jest.spyOn(TeamData, 'getManagedTeam')
