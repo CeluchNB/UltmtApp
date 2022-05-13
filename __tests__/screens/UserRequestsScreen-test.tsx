@@ -1,12 +1,13 @@
+import * as RequestData from '../../src/services/data/request'
 import * as UserData from '../../src/services/data/user'
 import { NavigationContainer } from '@react-navigation/native'
 import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import UserRequestsScreen from '../../src/screens/UserRequestsScreen'
-import { fetchProfileData } from '../../fixtures/data'
 import store from '../../src/store/store'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { fetchProfileData, requestObject } from '../../fixtures/data'
 import {
     setProfile,
     setToken,
@@ -26,13 +27,44 @@ const props: Props = {
     route: {} as any,
 }
 
-beforeAll(() => {
+beforeEach(() => {
     store.dispatch(setProfile(fetchProfileData))
     store.dispatch(setToken(token))
-})
-
-beforeEach(() => {
     jest.clearAllMocks()
+    jest.spyOn(RequestData, 'getRequest').mockImplementation(
+        async (_token, requestId) => {
+            if (requestId === 'request1') {
+                return {
+                    ...requestObject,
+                    _id: 'request1',
+                    requestSource: 'team',
+                    teamDetails: {
+                        _id: 'id5',
+                        place: 'place5',
+                        name: 'name5',
+                        teamname: 'place5name5',
+                        seasonStart: '2022',
+                        seasonEnd: '2022',
+                    },
+                }
+            } else if (requestId === 'request2') {
+                return {
+                    ...requestObject,
+                    _id: 'request2',
+                    requestSource: 'player',
+                    teamDetails: {
+                        _id: 'id6',
+                        place: 'place6',
+                        name: 'name6',
+                        teamname: 'place6name6',
+                        seasonStart: '2022',
+                        seasonEnd: '2022',
+                    },
+                }
+            }
+            return requestObject
+        },
+    )
 })
 
 it('should match snapshot', async () => {
@@ -63,4 +95,225 @@ it('should handle toggle roster status click', async () => {
     fireEvent.press(getByText('allow requests'))
     await waitFor(() => queryByText('prevent requests'))
     expect(spy).toHaveBeenCalledWith(token, true)
+})
+
+it('should handle navigate to request team page', async () => {
+    const { getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <UserRequestsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    fireEvent.press(getByTestId('create-button'))
+    expect(navigate).toHaveBeenCalledWith('RequestTeam')
+})
+
+it('should handle fetch requests error', async () => {
+    const spy = jest
+        .spyOn(RequestData, 'getRequest')
+        .mockReturnValueOnce(Promise.reject({}))
+
+    const { queryByText, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <UserRequestsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('Unable to get request details')).not.toBeNull()
+    expect(spy).toHaveBeenCalled()
+})
+
+it('should handle fetch after error', async () => {
+    const spy = jest
+        .spyOn(RequestData, 'getRequest')
+        .mockReturnValueOnce(Promise.reject({}))
+
+    const { queryByText, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <UserRequestsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('Unable to get request details')).not.toBeNull()
+    expect(spy).toHaveBeenCalledTimes(2)
+
+    const errorScrollView = getByTestId('mt-scroll-view')
+    const { refreshControl: errorRefreshControl } = errorScrollView.props
+    await act(async () => {
+        errorRefreshControl.props.onRefresh()
+    })
+
+    expect(spy).toHaveBeenCalledTimes(4)
+    expect(queryByText('@place5name5')).not.toBeNull()
+})
+
+it('should accept request correctly', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'respondToTeamRequest')
+        .mockReturnValue(Promise.resolve(requestObject))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <UserRequestsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place5name5')).not.toBeNull()
+    const acceptButtons = getAllByTestId('accept-button')
+    fireEvent.press(acceptButtons[0])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(queryByText('@place5name5')).toBeNull()
+    expect(requestSpy).toHaveBeenCalled()
+})
+
+it('should deny request correctly', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'respondToTeamRequest')
+        .mockReturnValueOnce(Promise.resolve(requestObject))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <UserRequestsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place5name5')).not.toBeNull()
+    const deleteButtons = getAllByTestId('delete-button')
+    fireEvent.press(deleteButtons[0])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(queryByText('@place5name5')).toBeNull()
+    expect(requestSpy).toHaveBeenCalled()
+})
+
+it('should handle request response error correctly', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'respondToTeamRequest')
+        .mockReturnValueOnce(Promise.reject({ message: 'test error message' }))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <UserRequestsScreen {...props} />
+            </NavigationContainer>
+            ,
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place5name5')).not.toBeNull()
+    const acceptButtons = getAllByTestId('accept-button')
+    fireEvent.press(acceptButtons[0])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(requestSpy).toHaveBeenCalled()
+    expect(queryByText('test error message')).not.toBeNull()
+    expect(queryByText('@place5name5')).not.toBeNull()
+})
+
+it('should handle successful delete request', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'deleteUserRequest')
+        .mockReturnValueOnce(Promise.resolve(requestObject))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <UserRequestsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place6name6')).not.toBeNull()
+    const deleteButtons = getAllByTestId('delete-button')
+    fireEvent.press(deleteButtons[1])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(queryByText('@place6name6')).toBeNull()
+    expect(requestSpy).toHaveBeenCalled()
+})
+
+it('should handle failed delete request', async () => {
+    const requestSpy = jest
+        .spyOn(RequestData, 'deleteUserRequest')
+        .mockReturnValueOnce(Promise.reject({}))
+
+    const { queryByText, getAllByTestId, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <UserRequestsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(queryByText('@place6name6')).not.toBeNull()
+    const deleteButtons = getAllByTestId('delete-button')
+    fireEvent.press(deleteButtons[1])
+    // Not optimal solution, see
+    // ManageTeamDetailsScreen-test.tsx for further details
+    await act(async () => {})
+
+    expect(queryByText('@place6name6')).not.toBeNull()
+    expect(queryByText('Unable to delete request')).not.toBeNull()
+    expect(requestSpy).toHaveBeenCalled()
 })

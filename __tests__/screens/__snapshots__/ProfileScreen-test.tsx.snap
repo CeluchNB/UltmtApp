@@ -248,6 +248,7 @@ exports[`profile screen matches snapshot 1`] = `
                     Object {},
                   ]
                 }
+                testID="icon-button"
               >
                 󰇰
               </Text>

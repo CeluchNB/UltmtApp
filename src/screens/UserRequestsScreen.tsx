@@ -47,12 +47,13 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
 
     const getRequests = React.useCallback(
         async (reqIds: string[]) => {
+            setFetchError('')
             const reqResponses = await Promise.all(
                 reqIds.map(req => {
                     return RequestData.getRequest(token, req)
                 }),
             ).catch((e: any) => {
-                setFetchError(e.message ?? 'Unable to get team details')
+                setFetchError(e.message ?? 'Unable to get request details')
             })
             if (reqResponses && isMounted.current) {
                 setRequests(

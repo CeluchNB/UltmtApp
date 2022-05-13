@@ -80,6 +80,7 @@ exports[`should match snapshot 1`] = `
                 Object {},
               ]
             }
+            testID="icon-button"
           >
             󰇰
           </Text>

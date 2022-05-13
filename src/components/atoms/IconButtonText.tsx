@@ -47,6 +47,7 @@ const IconButtonText: React.FC<IconButtonTextProps> = ({
                 name={icon}
                 color={colors.textPrimary}
                 size={30}
+                testID="icon-button"
             />
             <Text style={styles.text}>{text}</Text>
         </TouchableOpacity>
