@@ -18,8 +18,8 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
 
     return (
         <Button
-            style={style}
-            mode="text"
+            style={[{ borderColor: colors.textPrimary }, style]}
+            mode="outlined"
             color={colors.textPrimary}
             onPress={onPress}>
             {text}

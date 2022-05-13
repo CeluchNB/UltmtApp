@@ -21,12 +21,10 @@ import {
 import {
     getManagedTeam,
     removePlayer,
-    selectOpenLoading,
     selectTeam,
     selectTeamLoading,
     setTeam,
     setTeamLoading,
-    toggleRosterStatus,
 } from '../store/reducers/features/team/managedTeamReducer'
 import { size, weight } from '../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
@@ -40,7 +38,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     const token = useSelector(selectToken)
     const team = useSelector(selectTeam)
     const teamLoading = useSelector(selectTeamLoading)
-    const openLoading = useSelector(selectOpenLoading)
 
     const { colors } = useColors()
     const isMounted = React.useRef(false)
@@ -94,10 +91,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
             isMounted.current = false
         }
     })
-
-    const onToggleRosterStatus = async (open: boolean) => {
-        dispatch(toggleRosterStatus({ token, id, open }))
-    }
 
     const rolloverSeason = async () => {
         // navigate to rollover screen
@@ -176,6 +169,9 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
             color: colors.error,
             fontSize: size.fontLarge,
         },
+        newSeasonButton: {
+            marginTop: 10,
+        },
     })
 
     if (error) {
@@ -247,11 +243,14 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     )}
                     <Text style={styles.teamname}>@{team?.teamname}</Text>
                     <PrimaryButton
-                        text={`${team?.rosterOpen ? 'Close' : 'Open'} Roster`}
-                        loading={openLoading}
-                        onPress={() => onToggleRosterStatus(!team?.rosterOpen)}
+                        text="manage requests"
+                        loading={false}
+                        onPress={async () => {
+                            navigation.navigate('TeamRequestsScreen')
+                        }}
                     />
                     <SecondaryButton
+                        style={styles.newSeasonButton}
                         text="Start New Season"
                         onPress={rolloverSeason}
                     />
@@ -272,10 +271,9 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                             />
                         )}
                         loading={teamLoading}
-                        showButton={true}
-                        showCreateButton={false}
-                        buttonText="Add Managers"
-                        onButtonPress={() => {
+                        showButton={false}
+                        showCreateButton={true}
+                        onCreatePress={() => {
                             navigation.navigate('RequestUser', {
                                 type: RequestType.MANAGER,
                             })
@@ -299,10 +297,9 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                             />
                         )}
                         loading={teamLoading}
-                        showButton={true}
-                        showCreateButton={false}
-                        buttonText="Add Players"
-                        onButtonPress={() => {
+                        showButton={false}
+                        showCreateButton={true}
+                        onCreatePress={() => {
                             navigation.navigate('RequestUser', {
                                 type: RequestType.PLAYER,
                             })

@@ -123,7 +123,12 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle style={styles.title} title="Add Players" />
+            <ScreenTitle
+                style={styles.title}
+                title={`Add ${
+                    type === RequestType.PLAYER ? 'Players' : 'Managers'
+                }`}
+            />
             <TextInput
                 mode="flat"
                 style={[styles.input]}
@@ -136,7 +141,9 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                         text: colors.textPrimary,
                     },
                 }}
-                placeholder="Search players..."
+                placeholder={`Search ${
+                    type === RequestType.PLAYER ? 'players' : 'managers'
+                }...`}
             />
             {searchError.length > 0 && (
                 <Text style={styles.error}>{searchError}</Text>

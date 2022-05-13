@@ -210,7 +210,7 @@ it('should correctly add manager', async () => {
         </Provider>,
     )
 
-    const searchInput = getByPlaceholderText('Search players...')
+    const searchInput = getByPlaceholderText('Search managers...')
     fireEvent.changeText(searchInput, 'first')
 
     const user1 = await findByText('@first1last1')
@@ -246,7 +246,7 @@ it('should handle add manager failure', async () => {
         </Provider>,
     )
 
-    const searchInput = getByPlaceholderText('Search players...')
+    const searchInput = getByPlaceholderText('Search managers...')
     fireEvent.changeText(searchInput, 'first')
 
     const user1 = await findByText('@first1last1')

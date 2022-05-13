@@ -14,6 +14,7 @@ import { RequestType } from './../types/request'
 import RequestUserScreen from './../screens/RequestUserScreen'
 import ResetPasswordScreen from '../screens/ResetPasswordScreen'
 import RolloverTeamScreen from './../screens/RolloverTeamScreen'
+import TeamRequestsScreen from '../screens/TeamRequestsScreen'
 import UserRequestsScreen from '../screens/UserRequestsScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
@@ -76,6 +77,10 @@ const AccountNavigator: React.FC<{}> = () => {
             <Stack.Screen
                 name="UserRequestsScreen"
                 component={UserRequestsScreen}
+            />
+            <Stack.Screen
+                name="TeamRequestsScreen"
+                component={TeamRequestsScreen}
             />
         </Stack.Navigator>
     )

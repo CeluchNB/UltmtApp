@@ -22,6 +22,7 @@ export type AccountStackParamList = {
     ResetPasswordScreen: undefined
     RolloverTeam: { hasPendingRequests: boolean }
     UserRequestsScreen: undefined
+    TeamRequestsScreen: undefined
 }
 
 export type GameStackParamList = {
