@@ -34,7 +34,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
 
     const isMounted = React.useRef(false)
     const [refresh, setRefresh] = React.useState(false)
-    const [error, setError] = React.useState(undefined)
+    const [error, setError] = React.useState<string>('')
     const [requestsLoading, setRequestsLoading] = React.useState(false)
     const [requests, setRequests] = React.useState([] as DetailedRequest[])
     const [deleteRequestError, setDeleteRequestError] = React.useState('')
@@ -44,7 +44,9 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
 
     const initializeScreen = React.useCallback(async () => {
         try {
+            setError('')
             if (!team) {
+                setError('No team data. Please refresh or try again later.')
                 return
             }
             setRequestsLoading(true)
@@ -135,12 +137,13 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             setRefresh(false)
                         }}
                     />
-                }>
+                }
+                testID="mtd-flat-list">
                 <ScreenTitle
                     title={`${team?.place} ${team?.name} Requests`}
                     style={styles.title}
                 />
-                {error && <Text style={styles.error}>{error}</Text>}
+                {error.length > 0 && <Text style={styles.error}>{error}</Text>}
                 <PrimaryButton
                     text={`${team?.rosterOpen ? 'Close' : 'Open'} Roster`}
                     loading={openLoading}

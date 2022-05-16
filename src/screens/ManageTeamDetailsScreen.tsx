@@ -75,9 +75,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 
     const rolloverSeason = async () => {
         // navigate to rollover screen
-        navigation.navigate('RolloverTeam', {
-            hasPendingRequests: true,
-        })
+        navigation.navigate('RolloverTeam')
     }
 
     const onRemovePlayer = async (userId: string) => {

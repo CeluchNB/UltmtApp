@@ -18,6 +18,7 @@ exports[`should match snapshot 1`] = `
         refreshing={false}
       />
     }
+    testID="mtd-flat-list"
   >
     <RCTRefreshControl />
     <View>
@@ -35,7 +36,7 @@ exports[`should match snapshot 1`] = `
           ]
         }
       >
-        undefined undefined Requests
+        place name Requests
       </Text>
       <View
         style={

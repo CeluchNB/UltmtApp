@@ -144,24 +144,6 @@ it('should match snapshot', async () => {
     expect(snapshot).toMatchSnapshot()
 })
 
-it('should navigate to rollover a team with no pending requests', async () => {
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const button = getByText('Start New Season')
-
-    fireEvent.press(button)
-
-    expect(navigate).toHaveBeenCalledWith('RolloverTeam', {
-        hasPendingRequests: false,
-    })
-})
-
 it('should navigate to rollover a team with pending requests', async () => {
     const { getByText, getByTestId } = render(
         <Provider store={store}>
@@ -181,9 +163,7 @@ it('should navigate to rollover a team with pending requests', async () => {
 
     fireEvent.press(button)
 
-    expect(navigate).toHaveBeenCalledWith('RolloverTeam', {
-        hasPendingRequests: true,
-    })
+    expect(navigate).toHaveBeenCalledWith('RolloverTeam')
 })
 
 it('should handle swipe to refresh', async () => {
@@ -213,14 +193,6 @@ it('should handle swipe to refresh', async () => {
     // player displayed correctly
     const player = getByText('@first1last1')
     expect(player).toBeTruthy()
-
-    // test team request displayed correctly
-    const teamRequest = getByText('@first2last2')
-    expect(teamRequest).toBeTruthy()
-
-    // test player request displayed correctly
-    const playerRequest = getByText('@first3last3')
-    expect(playerRequest).toBeTruthy()
 })
 
 it('should handle a page load error', async () => {
@@ -269,23 +241,14 @@ it('should not throw error on unmounted load', async () => {
     expect(requestSpy).not.toHaveBeenCalled()
 })
 
-it('should respond to request correctly', async () => {
-    const responseSpy = jest
-        .spyOn(RequestData, 'respondToPlayerRequest')
-        .mockReturnValueOnce(
-            Promise.resolve({
-                ...requestObject,
-                requestSource: 'player',
-                userDetails: {
-                    _id: 'playerid3',
-                    firstName: 'first3',
-                    lastName: 'last3',
-                    username: 'first3last3',
-                },
-            }),
-        )
+it('should remove player correctly', async () => {
+    const removeSpy = jest
+        .spyOn(TeamData, 'removePlayer')
+        .mockImplementationOnce(async () => {
+            return { ...getManagedTeamResponse, players: [] }
+        })
 
-    const { getByTestId, getAllByTestId, queryByText } = render(
+    const { queryByText, getAllByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamDetailsScreen {...props} />
@@ -293,15 +256,17 @@ it('should respond to request correctly', async () => {
         </Provider>,
     )
 
-    const scrollView = getByTestId('mtd-flat-list')
+    const scrollView = getAllByTestId('mtd-flat-list')[0]
     const { refreshControl } = scrollView.props
     await act(async () => {
         refreshControl.props.onRefresh()
     })
 
-    const acceptButtons = getAllByTestId('accept-button')
-    expect(queryByText('@first3last3')).not.toBeNull()
-    /* 
+    const username = '@first1last1'
+    expect(queryByText(username)).not.toBeNull()
+    const deleteButtons = getAllByTestId('delete-button')
+    fireEvent.press(deleteButtons[0])
+    /*
         Should not need act() after fireEvent, however test fails if it's not there.
         The alternative, preferred method of
 
@@ -315,175 +280,10 @@ it('should respond to request correctly', async () => {
         Another option is wrapping fireEvent in act, but
         this makes it more obvious something weird is going on
     */
-    fireEvent.press(acceptButtons[0])
-    await act(async () => {})
-
-    expect(queryByText('@first3last3')).toBeNull()
-    expect(responseSpy).toHaveBeenCalledWith(token, 'request2', true)
-})
-
-it('should handle respond to request error', async () => {
-    jest.spyOn(RequestData, 'respondToPlayerRequest').mockReturnValueOnce(
-        Promise.reject({
-            message: 'respond test error',
-        }),
-    )
-
-    const { queryByText, getByTestId, getAllByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
-
-    const acceptButtons = getAllByTestId('accept-button')
-    fireEvent.press(acceptButtons[0])
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    await act(async () => {})
-
-    const errorText = queryByText('respond test error')
-    expect(errorText).not.toBeNull()
-})
-
-it('should handle deny request', async () => {
-    const responseSpy = jest
-        .spyOn(RequestData, 'respondToPlayerRequest')
-        .mockReturnValueOnce(
-            Promise.resolve({
-                ...requestObject,
-                requestSource: 'player',
-                userDetails: {
-                    _id: 'playerid3',
-                    firstName: 'first3',
-                    lastName: 'last3',
-                    username: 'first3last3',
-                },
-            }),
-        )
-
-    const { queryByText, getByTestId, getAllByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
-
-    const deleteButtons = getAllByTestId('delete-button')
-    fireEvent.press(deleteButtons[1])
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    await act(async () => {})
-
-    expect(queryByText('@first3last3')).toBeNull()
-
-    expect(responseSpy).toHaveBeenCalledWith(token, 'request2', false)
-})
-
-it('should remove player correctly', async () => {
-    const removeSpy = jest
-        .spyOn(TeamData, 'removePlayer')
-        .mockImplementationOnce(async () => {
-            getManagedTeamResponse.players = []
-            return getManagedTeamResponse
-        })
-
-    const { queryByText, getAllByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const username = '@first1last1'
-    expect(queryByText(username)).not.toBeNull()
-    const deleteButtons = getAllByTestId('delete-button')
-    fireEvent.press(deleteButtons[0])
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
     await act(async () => {})
 
     expect(removeSpy).toHaveBeenCalled()
     expect(queryByText(username)).toBeNull()
-})
-
-it('should handle delete request correctly', async () => {
-    const deleteSpy = jest
-        .spyOn(RequestData, 'deleteTeamRequest')
-        .mockImplementationOnce(async () => {
-            return requestObject
-        })
-
-    const { queryByText, getByTestId, getAllByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
-
-    const username = '@first2last2'
-    expect(queryByText(username)).not.toBeNull()
-    const deleteButtons = getAllByTestId('delete-button')
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    fireEvent.press(deleteButtons[2])
-    await act(async () => {})
-
-    expect(deleteSpy).toHaveBeenCalled()
-    expect(queryByText(username)).toBeNull()
-})
-
-it('should handle delete request error correctly', async () => {
-    jest.spyOn(RequestData, 'deleteTeamRequest').mockReturnValueOnce(
-        Promise.reject({
-            message: 'delete error message',
-        }),
-    )
-
-    const { queryByText, getByTestId, getAllByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
-
-    const username = '@first2last2'
-    expect(queryByText(username)).not.toBeNull()
-    const deleteButtons = getAllByTestId('delete-button')
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    fireEvent.press(deleteButtons[2])
-    await act(async () => {})
-
-    expect(queryByText(username)).not.toBeNull()
-    expect(queryByText('delete error message')).not.toBeNull()
 })
 
 it('should handle error swipe', async () => {

@@ -20,7 +20,7 @@ export type AccountStackParamList = {
     PublicUserDetails: { user: DisplayUser }
     RequestUser: { type: RequestType }
     ResetPasswordScreen: undefined
-    RolloverTeam: { hasPendingRequests: boolean }
+    RolloverTeam: undefined
     UserRequestsScreen: undefined
     TeamRequestsScreen: undefined
 }
@@ -47,11 +47,6 @@ export type PublicTeamDetailsProps = NativeStackScreenProps<
 export type PublicUserDetailsProps = NativeStackScreenProps<
     AccountStackParamList,
     'PublicUserDetails'
->
-
-export type RolloverTeamProps = NativeStackScreenProps<
-    AccountStackParamList,
-    'RolloverTeam'
 >
 
 export type RequestUserProps = NativeStackScreenProps<
