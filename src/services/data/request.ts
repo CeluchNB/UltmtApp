@@ -5,6 +5,8 @@ import {
     deleteTeamRequest as networkDeleteTeamRequest,
     deleteUserRequest as networkDeleteUserRequest,
     getRequest as networkGetRequest,
+    getRequestsByTeam as networkGetRequestsByTeam,
+    getRequestsByUser as networkGetRequestsByUser,
     requestTeam as networkRequestTeam,
     requestUser as networkRequestUser,
     respondToPlayerRequest as networkRespondToPlayerRequest,
@@ -162,6 +164,42 @@ export const deleteUserRequest = async (
         const response = await networkDeleteUserRequest(token, requestId)
         const { request } = response.data
         return request
+    } catch (error) {
+        return throwApiError(error, Constants.REQUEST_RESPONSE_ERROR)
+    }
+}
+
+/**
+ * Get all requests belonging to a team
+ * @param token token of team manager
+ * @param teamId id of team to get requests from
+ * @returns list of detailed requests
+ */
+export const getRequestsByTeam = async (
+    token: string,
+    teamId: string,
+): Promise<DetailedRequest[]> => {
+    try {
+        const response = await networkGetRequestsByTeam(token, teamId)
+        const { requests } = response.data
+        return requests
+    } catch (error) {
+        return throwApiError(error, Constants.REQUEST_RESPONSE_ERROR)
+    }
+}
+
+/**
+ * Get all requests beloinging to a user
+ * @param token token of user to get requests for
+ * @returns list of detailed requests
+ */
+export const getRequestsByUser = async (
+    token: string,
+): Promise<DetailedRequest[]> => {
+    try {
+        const response = await networkGetRequestsByUser(token)
+        const { requests } = response.data
+        return requests
     } catch (error) {
         return throwApiError(error, Constants.REQUEST_RESPONSE_ERROR)
     }

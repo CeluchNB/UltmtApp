@@ -83,35 +83,31 @@ beforeEach(() => {
         },
         status: 'pending',
     }
-    jest.spyOn(RequestData, 'getRequest').mockImplementation(
-        async (_token, requestId) => {
-            if (requestId === 'request1') {
-                return {
-                    ...requestObject,
-                    _id: 'request1',
-                    requestSource: 'team',
-                    userDetails: {
-                        _id: 'playerid2',
-                        firstName: 'first2',
-                        lastName: 'last2',
-                        username: 'first2last2',
-                    },
-                }
-            } else if (requestId === 'request2') {
-                return {
-                    ...requestObject,
-                    _id: 'request2',
-                    requestSource: 'player',
-                    userDetails: {
-                        _id: 'playerid3',
-                        firstName: 'first3',
-                        lastName: 'last3',
-                        username: 'first3last3',
-                    },
-                }
-            }
-            return requestObject
-        },
+    jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
+        Promise.resolve([
+            {
+                ...requestObject,
+                _id: 'request1',
+                requestSource: 'team',
+                userDetails: {
+                    _id: 'playerid2',
+                    firstName: 'first2',
+                    lastName: 'last2',
+                    username: 'first2last2',
+                },
+            },
+            {
+                ...requestObject,
+                _id: 'request2',
+                requestSource: 'player',
+                userDetails: {
+                    _id: 'playerid3',
+                    firstName: 'first3',
+                    lastName: 'last3',
+                    username: 'first3last3',
+                },
+            },
+        ]),
     )
     jest.spyOn(TeamData, 'getManagedTeam').mockReturnValue(
         Promise.resolve(getManagedTeamResponse),
@@ -155,7 +151,7 @@ it('should handle null team case', async () => {
 
 it('should handle get request error', async () => {
     const spy = jest
-        .spyOn(RequestData, 'getRequest')
+        .spyOn(RequestData, 'getRequestsByTeam')
         .mockReturnValueOnce(Promise.reject({ message: 'test error' }))
 
     const { queryByText, getByTestId } = render(

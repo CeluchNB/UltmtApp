@@ -31,39 +31,35 @@ beforeEach(() => {
     store.dispatch(setProfile(fetchProfileData))
     store.dispatch(setToken(token))
     jest.clearAllMocks()
-    jest.spyOn(RequestData, 'getRequest').mockImplementation(
-        async (_token, requestId) => {
-            if (requestId === 'request1') {
-                return {
-                    ...requestObject,
-                    _id: 'request1',
-                    requestSource: 'team',
-                    teamDetails: {
-                        _id: 'id5',
-                        place: 'place5',
-                        name: 'name5',
-                        teamname: 'place5name5',
-                        seasonStart: '2022',
-                        seasonEnd: '2022',
-                    },
-                }
-            } else if (requestId === 'request2') {
-                return {
-                    ...requestObject,
-                    _id: 'request2',
-                    requestSource: 'player',
-                    teamDetails: {
-                        _id: 'id6',
-                        place: 'place6',
-                        name: 'name6',
-                        teamname: 'place6name6',
-                        seasonStart: '2022',
-                        seasonEnd: '2022',
-                    },
-                }
-            }
-            return requestObject
-        },
+    jest.spyOn(RequestData, 'getRequestsByUser').mockReturnValue(
+        Promise.resolve([
+            {
+                ...requestObject,
+                _id: 'request1',
+                requestSource: 'team',
+                teamDetails: {
+                    _id: 'id5',
+                    place: 'place5',
+                    name: 'name5',
+                    teamname: 'place5name5',
+                    seasonStart: '2022',
+                    seasonEnd: '2022',
+                },
+            },
+            {
+                ...requestObject,
+                _id: 'request2',
+                requestSource: 'player',
+                teamDetails: {
+                    _id: 'id6',
+                    place: 'place6',
+                    name: 'name6',
+                    teamname: 'place6name6',
+                    seasonStart: '2022',
+                    seasonEnd: '2022',
+                },
+            },
+        ]),
     )
 })
 
@@ -112,7 +108,7 @@ it('should handle navigate to request team page', async () => {
 
 it('should handle fetch requests error', async () => {
     const spy = jest
-        .spyOn(RequestData, 'getRequest')
+        .spyOn(RequestData, 'getRequestsByUser')
         .mockReturnValueOnce(Promise.reject({}))
 
     const { queryByText, getByTestId } = render(
@@ -135,7 +131,7 @@ it('should handle fetch requests error', async () => {
 
 it('should handle fetch after error', async () => {
     const spy = jest
-        .spyOn(RequestData, 'getRequest')
+        .spyOn(RequestData, 'getRequestsByUser')
         .mockReturnValueOnce(Promise.reject({}))
 
     const { queryByText, getByTestId } = render(
@@ -153,7 +149,7 @@ it('should handle fetch after error', async () => {
     })
 
     expect(queryByText('Unable to get request details')).not.toBeNull()
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(spy).toHaveBeenCalledTimes(1)
 
     const errorScrollView = getByTestId('mt-scroll-view')
     const { refreshControl: errorRefreshControl } = errorScrollView.props
@@ -161,7 +157,7 @@ it('should handle fetch after error', async () => {
         errorRefreshControl.props.onRefresh()
     })
 
-    expect(spy).toHaveBeenCalledTimes(4)
+    expect(spy).toHaveBeenCalledTimes(2)
     expect(queryByText('@place5name5')).not.toBeNull()
 })
 

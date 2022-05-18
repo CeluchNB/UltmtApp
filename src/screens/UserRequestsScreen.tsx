@@ -20,7 +20,6 @@ import {
     removeRequest,
     selectError,
     selectOpenToRequests,
-    selectRequests,
     selectToggleLoading,
     selectToken,
     setOpenToRequests,
@@ -30,7 +29,6 @@ import { useDispatch, useSelector } from 'react-redux'
 const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     const { colors } = useColors()
     const dispatch = useDispatch()
-    const requestIds = useSelector(selectRequests)
     const token = useSelector(selectToken)
     const toggleLoading = useSelector(selectToggleLoading)
     const openToRequests = useSelector(selectOpenToRequests)
@@ -45,16 +43,11 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     const [deleteRequestError, setDeleteRequestError] = React.useState('')
     const [deleteRequestId, setDeleteRequestId] = React.useState('')
 
-    const getRequests = React.useCallback(
-        async (reqIds: string[]) => {
+    const getRequests = React.useCallback(async () => {
+        try {
             setFetchError('')
-            const reqResponses = await Promise.all(
-                reqIds.map(req => {
-                    return RequestData.getRequest(token, req)
-                }),
-            ).catch((e: any) => {
-                setFetchError(e.message ?? 'Unable to get request details')
-            })
+            const reqResponses = await RequestData.getRequestsByUser(token)
+
             if (reqResponses && isMounted.current) {
                 setRequests(
                     reqResponses.filter(
@@ -62,9 +55,10 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                     ) as DetailedRequest[],
                 )
             }
-        },
-        [token, isMounted],
-    )
+        } catch (e: any) {
+            setFetchError(e.message ?? 'Unable to get request details')
+        }
+    }, [token, isMounted])
 
     React.useEffect(() => {
         isMounted.current = true
@@ -72,13 +66,13 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
             setFetchError('')
             setRespondRequestError('')
             setDeleteRequestError('')
-            getRequests(requestIds)
+            getRequests()
         })
         return () => {
             isMounted.current = false
             unsubscribe()
         }
-    }, [getRequests, navigation, requestIds])
+    }, [getRequests, navigation])
 
     // Strictly through redux?
     const respondToRequest = async (requestId: string, accept: boolean) => {
@@ -145,7 +139,7 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             refreshing={refreshing}
                             onRefresh={async () => {
                                 setRefreshing(true)
-                                await getRequests(requestIds)
+                                await getRequests()
                                 setRefreshing(false)
                             }}
                         />
@@ -165,7 +159,7 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                     <RefreshControl
                         onRefresh={async () => {
                             setRefreshing(true)
-                            await getRequests(requestIds)
+                            await getRequests()
                             setRefreshing(false)
                         }}
                         refreshing={refreshing}

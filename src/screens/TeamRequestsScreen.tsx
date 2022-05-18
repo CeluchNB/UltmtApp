@@ -15,6 +15,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    View,
 } from 'react-native'
 import {
     getManagedTeam,
@@ -50,11 +51,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                 return
             }
             setRequestsLoading(true)
-            const reqs = await Promise.all(
-                team.requests.map((req: string) => {
-                    return RequestData.getRequest(token, req)
-                }),
-            )
+            const reqs = await RequestData.getRequestsByTeam(token, team._id)
             if (isMounted.current) {
                 setRequests(reqs)
             }
@@ -123,6 +120,13 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
             color: colors.error,
             fontSize: size.fontLarge,
         },
+        toggleRosterButton: {
+            alignSelf: 'center',
+        },
+        container: {
+            alignSelf: 'center',
+            width: '75%',
+        },
     })
 
     return (
@@ -140,11 +144,12 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                 }
                 testID="mtd-flat-list">
                 <ScreenTitle
-                    title={`${team?.place} ${team?.name} Requests`}
+                    title={`${team?.name} Requests`}
                     style={styles.title}
                 />
                 {error.length > 0 && <Text style={styles.error}>{error}</Text>}
                 <PrimaryButton
+                    style={styles.toggleRosterButton}
                     text={`${team?.rosterOpen ? 'Close' : 'Open'} Roster`}
                     loading={openLoading}
                     onPress={async () => {
@@ -157,83 +162,87 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                         )
                     }}
                 />
-                <MapSection
-                    title="Request From Players"
-                    listData={requests.filter(
-                        item => item.requestSource !== 'team',
-                    )}
-                    renderItem={item => {
-                        return (
-                            <UserListItem
-                                key={item._id}
-                                user={item.userDetails}
-                                showDelete={true}
-                                showAccept={true}
-                                onDelete={() =>
-                                    respondToRequest(item._id, false)
-                                }
-                                onAccept={() =>
-                                    respondToRequest(item._id, true)
-                                }
-                                error={
-                                    respondRequestError.length > 0 &&
-                                    item._id === respondRequestId
-                                        ? respondRequestError
-                                        : undefined
-                                }
-                            />
-                        )
-                    }}
-                    loading={requestsLoading}
-                    showButton={false}
-                    showCreateButton={false}
-                    buttonText=""
-                    onButtonPress={() => {}}
-                    error={
-                        requests.filter(item => item.requestSource !== 'team')
-                            .length <= 0
-                            ? 'No open requests from players'
-                            : undefined
-                    }
-                />
-                <MapSection
-                    title="Requests To Players"
-                    listData={requests.filter(
-                        item => item.requestSource !== 'player',
-                    )}
-                    renderItem={item => {
-                        return (
-                            <UserListItem
-                                key={item._id}
-                                user={item.userDetails}
-                                showDelete={true}
-                                showAccept={false}
-                                requestStatus={item.status}
-                                onDelete={() => deleteRequest(item._id)}
-                                error={
-                                    item._id === deleteRequestId &&
-                                    deleteRequestError.length > 0
-                                        ? deleteRequestError
-                                        : undefined
-                                }
-                            />
-                        )
-                    }}
-                    loading={requestsLoading}
-                    showButton={false}
-                    showCreateButton={true}
-                    onCreatePress={() => {
-                        navigation.navigate('RequestUser', {
-                            type: RequestType.PLAYER,
-                        })
-                    }}
-                    error={
-                        requests.filter(item => item.requestSource !== 'player')
-                            .length <= 0
-                            ? 'No open requests to players'
-                            : undefined
-                    }
-                />
+                <View style={styles.container}>
+                    <MapSection
+                        title="Request From Players"
+                        listData={requests.filter(
+                            item => item.requestSource !== 'team',
+                        )}
+                        renderItem={item => {
+                            return (
+                                <UserListItem
+                                    key={item._id}
+                                    user={item.userDetails}
+                                    showDelete={true}
+                                    showAccept={true}
+                                    onDelete={() =>
+                                        respondToRequest(item._id, false)
+                                    }
+                                    onAccept={() =>
+                                        respondToRequest(item._id, true)
+                                    }
+                                    error={
+                                        respondRequestError.length > 0 &&
+                                        item._id === respondRequestId
+                                            ? respondRequestError
+                                            : undefined
+                                    }
+                                />
+                            )
+                        }}
+                        loading={requestsLoading}
+                        showButton={false}
+                        showCreateButton={false}
+                        buttonText=""
+                        onButtonPress={() => {}}
+                        error={
+                            requests.filter(
+                                item => item.requestSource !== 'team',
+                            ).length <= 0
+                                ? 'No open requests from players'
+                                : undefined
+                        }
+                    />
+                    <MapSection
+                        title="Requests To Players"
+                        listData={requests.filter(
+                            item => item.requestSource !== 'player',
+                        )}
+                        renderItem={item => {
+                            return (
+                                <UserListItem
+                                    key={item._id}
+                                    user={item.userDetails}
+                                    showDelete={true}
+                                    showAccept={false}
+                                    requestStatus={item.status}
+                                    onDelete={() => deleteRequest(item._id)}
+                                    error={
+                                        item._id === deleteRequestId &&
+                                        deleteRequestError.length > 0
+                                            ? deleteRequestError
+                                            : undefined
+                                    }
+                                />
+                            )
+                        }}
+                        loading={requestsLoading}
+                        showButton={false}
+                        showCreateButton={true}
+                        onCreatePress={() => {
+                            navigation.navigate('RequestUser', {
+                                type: RequestType.PLAYER,
+                            })
+                        }}
+                        error={
+                            requests.filter(
+                                item => item.requestSource !== 'player',
+                            ).length <= 0
+                                ? 'No open requests to players'
+                                : undefined
+                        }
+                    />
+                </View>
             </ScrollView>
         </SafeAreaView>
     )
