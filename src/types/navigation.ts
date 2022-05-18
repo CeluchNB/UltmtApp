@@ -7,6 +7,7 @@ export type AccountStackParamList = {
     Profile: undefined
     CreateAccount: undefined
     CreateTeam: undefined
+    ForgotPasswordScreen: undefined
     ManageTeams: undefined
     RequestTeam: undefined
     ManagedTeamDetails: { id: string; place: string; name: string }
@@ -18,7 +19,10 @@ export type AccountStackParamList = {
     }
     PublicUserDetails: { user: DisplayUser }
     RequestUser: { type: RequestType }
-    RolloverTeam: { hasPendingRequests: boolean }
+    ResetPasswordScreen: undefined
+    RolloverTeam: undefined
+    UserRequestsScreen: undefined
+    TeamRequestsScreen: undefined
 }
 
 export type GameStackParamList = {
@@ -43,11 +47,6 @@ export type PublicTeamDetailsProps = NativeStackScreenProps<
 export type PublicUserDetailsProps = NativeStackScreenProps<
     AccountStackParamList,
     'PublicUserDetails'
->
-
-export type RolloverTeamProps = NativeStackScreenProps<
-    AccountStackParamList,
-    'RolloverTeam'
 >
 
 export type RequestUserProps = NativeStackScreenProps<

@@ -700,10 +700,10 @@ exports[`should match snapshot 1`] = `
       Object {
         "alignSelf": "center",
         "backgroundColor": "transparent",
-        "borderColor": "transparent",
+        "borderColor": "#3183ff",
         "borderRadius": 4,
         "borderStyle": "solid",
-        "borderWidth": 0,
+        "borderWidth": 0.5,
         "elevation": 0,
         "marginTop": 10,
         "minWidth": 64,

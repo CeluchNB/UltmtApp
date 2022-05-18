@@ -10,7 +10,10 @@ import {
     leaveTeam,
     login,
     logout,
+    requestPasswordRecovery,
+    resetPassword,
     searchUsers,
+    setOpenToRequests,
 } from '../../../src/services/data/user'
 
 const validToken = 'token1'
@@ -24,6 +27,7 @@ const user: User = {
     requests: [],
     playerTeams: [],
     managerTeams: [],
+    archiveTeams: [],
     stats: [],
     openToRequests: true,
     private: false,
@@ -319,5 +323,87 @@ describe('test user data calls', () => {
             }),
         )
         expect(leaveManagerRole('', '')).rejects.toThrow()
+    })
+
+    it('should handle request password recovery network success', async () => {
+        jest.spyOn(UserServices, 'requestPasswordRecovery').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await requestPasswordRecovery('')
+        expect(result).toBeUndefined()
+    })
+
+    it('should handle request password recovery network failure', async () => {
+        jest.spyOn(UserServices, 'requestPasswordRecovery').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+        expect(requestPasswordRecovery('')).rejects.toThrow()
+    })
+
+    it('should handle reset password network success', async () => {
+        jest.spyOn(UserServices, 'resetPassword').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user, token: validToken },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await resetPassword('', '')
+        expect(result.user).toBe(user)
+        expect(result.token).toBe(validToken)
+    })
+
+    it('should handle reset password network failure', async () => {
+        jest.spyOn(UserServices, 'resetPassword').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+        expect(resetPassword('', '')).rejects.toThrow()
+    })
+
+    it('should handle set open to requests network success', async () => {
+        jest.spyOn(UserServices, 'setOpenToRequests').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await setOpenToRequests('', true)
+        expect(result).toBe(user)
+    })
+
+    it('should handle set open to requests network failure', async () => {
+        jest.spyOn(UserServices, 'setOpenToRequests').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+        expect(setOpenToRequests('', true)).rejects.toThrow()
     })
 })

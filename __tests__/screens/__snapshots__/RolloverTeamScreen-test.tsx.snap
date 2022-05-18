@@ -162,6 +162,18 @@ exports[`should match snapshot 1`] = `
   >
     Warning: You will not be able to edit the current season after starting the new season.
   </Text>
+  <Text
+    style={
+      Object {
+        "alignSelf": "center",
+        "color": "#ffd600",
+        "marginBottom": 10,
+        "width": "75%",
+      }
+    }
+  >
+    Pending requests for this team will all be deleted.
+  </Text>
   <View
     style={
       Object {

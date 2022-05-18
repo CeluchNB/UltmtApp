@@ -87,9 +87,34 @@ exports[`profile screen matches snapshot 1`] = `
           }
         }
       >
-        <ScreenTitle
-          title="first last"
-        />
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+              "textAlign": "right",
+              "width": "75%",
+            }
+          }
+        >
+          <ScreenTitle
+            style={
+              Object {
+                "flex": 1,
+              }
+            }
+            title="first last"
+          />
+          <IconButtonText
+            icon="email-outline"
+            onPress={[Function]}
+            style={
+              Object {
+                "marginTop": 10,
+              }
+            }
+            text="Requests"
+          />
+        </View>
         <Text
           style={
             Object {
@@ -157,20 +182,89 @@ exports[`profile screen matches snapshot 1`] = `
             }
           }
         >
-          <Text
+          <View
             style={
-              Array [
-                Object {
-                  "color": "#3183ff",
-                  "fontSize": 82.1917808219178,
-                  "fontWeight": "bold",
-                },
-                undefined,
-              ]
+              Object {
+                "flexDirection": "row",
+                "textAlign": "right",
+                "width": "75%",
+              }
             }
           >
-            first last
-          </Text>
+            <Text
+              style={
+                Array [
+                  Object {
+                    "color": "#3183ff",
+                    "fontSize": 82.1917808219178,
+                    "fontWeight": "bold",
+                  },
+                  Object {
+                    "flex": 1,
+                  },
+                ]
+              }
+            >
+              first last
+            </Text>
+            <View
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              nativeID="animatedComponent"
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "flexDirection": "column",
+                  "marginTop": 10,
+                  "opacity": 1,
+                }
+              }
+            >
+              <Text
+                allowFontScaling={false}
+                style={
+                  Array [
+                    Object {
+                      "color": "#3183ff",
+                      "fontSize": 30,
+                    },
+                    Object {
+                      "alignSelf": "center",
+                      "margin": 0,
+                      "padding": 0,
+                    },
+                    Object {
+                      "fontFamily": "Material Design Icons",
+                      "fontStyle": "normal",
+                      "fontWeight": "normal",
+                    },
+                    Object {},
+                  ]
+                }
+                testID="icon-button"
+              >
+                󰇰
+              </Text>
+              <Text
+                style={
+                  Object {
+                    "color": "#3183ff",
+                    "margin": 0,
+                    "padding": 0,
+                  }
+                }
+              >
+                Requests
+              </Text>
+            </View>
+          </View>
           <Text
             style={
               Object {
@@ -642,7 +736,7 @@ exports[`profile screen matches snapshot 1`] = `
                     style={
                       Object {
                         "color": "#3183ff",
-                        "fontSize": 41.0958904109589,
+                        "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
                       }
                     }
@@ -804,7 +898,7 @@ exports[`profile screen matches snapshot 1`] = `
                     style={
                       Object {
                         "color": "#3183ff",
-                        "fontSize": 41.0958904109589,
+                        "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
                       }
                     }
@@ -966,7 +1060,7 @@ exports[`profile screen matches snapshot 1`] = `
                     style={
                       Object {
                         "color": "#3183ff",
-                        "fontSize": 41.0958904109589,
+                        "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
                       }
                     }

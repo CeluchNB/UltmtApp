@@ -4,6 +4,8 @@ import {
     deleteTeamRequest,
     deleteUserRequest,
     getRequest,
+    getRequestsByTeam,
+    getRequestsByUser,
     requestTeam,
     requestUser,
     respondToPlayerRequest,
@@ -167,5 +169,51 @@ describe('test request data calls', () => {
         )
 
         expect(respondToTeamRequest('', '', true)).rejects.toThrow()
+    })
+
+    it('should handle network get requests by team success', async () => {
+        jest.spyOn(RequestServices, 'getRequestsByTeam').mockReturnValueOnce(
+            Promise.resolve({
+                data: { requests: [request] },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await getRequestsByTeam('', '')
+        expect(result).toEqual([request])
+    })
+
+    it('should handle network get requests by team failure', async () => {
+        jest.spyOn(RequestServices, 'getRequestsByTeam').mockReturnValueOnce(
+            requestError,
+        )
+
+        expect(getRequestsByTeam('', '')).rejects.toThrow()
+    })
+
+    it('should handle network get requests by user success', async () => {
+        jest.spyOn(RequestServices, 'getRequestsByUser').mockReturnValueOnce(
+            Promise.resolve({
+                data: { requests: [request] },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await getRequestsByUser('')
+        expect(result).toEqual([request])
+    })
+
+    it('should handle network get requests by user failure', async () => {
+        jest.spyOn(RequestServices, 'getRequestsByUser').mockReturnValueOnce(
+            requestError,
+        )
+
+        expect(getRequestsByUser('')).rejects.toThrow()
     })
 })

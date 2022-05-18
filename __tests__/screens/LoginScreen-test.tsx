@@ -121,3 +121,17 @@ it('should handle create profile button press', async () => {
 
     expect(navigate).toHaveBeenCalled()
 })
+
+it('should handle forgot password button press', async () => {
+    const { getByText } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <LoginScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    fireEvent.press(getByText('Forgot Password?'))
+
+    expect(navigate).toHaveBeenCalledWith('ForgotPasswordScreen')
+})

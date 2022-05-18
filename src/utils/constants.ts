@@ -12,3 +12,7 @@ export const CREATE_REQUEST_ERROR = 'Unable to create request. Please try again.
 export const GET_REQUEST_ERROR = 'Unable to get request.'
 export const REQUEST_RESPONSE_ERROR = 'Error responding to request.'
 export const LEAVE_TEAM_ERROR = 'Unable to leave team right now. Please try again.'
+export const UNABLE_TO_EMAIL = `Unable to request this password recovery right now.  Please try again later. \
+Or email product@theultmtapp.com for help.`
+export const RESET_PASSWORD_ERROR = 'Unable to reset password right now. Please try again later.'
+export const TOGGLE_ROSTER_STATUS_ERROR = 'Unable to change your roster status right now. Please try again later.'

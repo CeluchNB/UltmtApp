@@ -51,7 +51,7 @@ exports[`matches snapshot 1`] = `
         style={
           Object {
             "color": "#3183ff",
-            "fontSize": 41.0958904109589,
+            "fontSize": 30.821917808219176,
             "fontWeight": "bold",
           }
         }

@@ -33,6 +33,7 @@ const user: User = {
     requests: [],
     managerTeams: [],
     playerTeams: [],
+    archiveTeams: [],
     stats: [],
     openToRequests: true,
     private: false,

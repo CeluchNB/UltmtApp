@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<View
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  nativeID="animatedComponent"
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "flexDirection": "column",
+      "opacity": 1,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      Array [
+        Object {
+          "color": "#3183ff",
+          "fontSize": 30,
+        },
+        Object {
+          "alignSelf": "center",
+          "margin": 0,
+          "padding": 0,
+        },
+        Object {
+          "fontFamily": "Material Design Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        Object {},
+      ]
+    }
+    testID="icon-button"
+  >
+    󰇰
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "#3183ff",
+        "margin": 0,
+        "padding": 0,
+      }
+    }
+  >
+    text
+  </Text>
+</View>
+`;

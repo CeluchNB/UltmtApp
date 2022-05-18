@@ -91,3 +91,36 @@ export const leaveManagerRole = async (
         },
     )
 }
+
+export const requestPasswordRecovery = async (
+    email: string,
+): Promise<AxiosResponse> => {
+    return await axios.post(`${API_URL_V1}/user/requestPasswordRecovery`, {
+        email,
+    })
+}
+
+export const resetPassword = async (
+    passcode: string,
+    newPassword: string,
+): Promise<AxiosResponse> => {
+    return await axios.post(`${API_URL_V1}/user/resetPassword`, {
+        passcode,
+        newPassword,
+    })
+}
+
+export const setOpenToRequests = async (
+    token: string,
+    open: boolean,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/user/open?open=${open}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

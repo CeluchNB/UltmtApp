@@ -11,7 +11,10 @@ import {
     leaveTeam as networkLeaveTeam,
     login as networkLogin,
     logout as networkLogout,
+    requestPasswordRecovery as networkRequestPasswordRecovery,
+    resetPassword as networkResetPassword,
     searchUsers as networkSearchUsers,
+    setOpenToRequests as networkSetOpenToRequests,
 } from '../network/user'
 
 /**
@@ -172,5 +175,44 @@ export const leaveManagerRole = async (
         return user
     } catch (error) {
         return throwApiError(error, Constants.EDIT_TEAM_ERROR)
+    }
+}
+
+/**
+ * Method for user to request a code to recover their password
+ * @param email email associated with account
+ * @returns void
+ */
+export const requestPasswordRecovery = async (email: string): Promise<void> => {
+    try {
+        await networkRequestPasswordRecovery(email)
+    } catch (error) {
+        return throwApiError(error, Constants.UNABLE_TO_EMAIL)
+    }
+}
+
+export const resetPassword = async (
+    passcode: string,
+    newPassword: string,
+): Promise<{ token: string; user: User }> => {
+    try {
+        const response = await networkResetPassword(passcode, newPassword)
+        const { token, user } = response.data
+        return { token, user }
+    } catch (error) {
+        return throwApiError(error, Constants.RESET_PASSWORD_ERROR)
+    }
+}
+
+export const setOpenToRequests = async (
+    token: string,
+    open: boolean,
+): Promise<User> => {
+    try {
+        const response = await networkSetOpenToRequests(token, open)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.TOGGLE_ROSTER_STATUS_ERROR)
     }
 }

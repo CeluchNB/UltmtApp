@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Button } from 'react-native-paper'
 import GameListItem from '../components/atoms/GameListItem'
+import IconButtonText from '../components/atoms/IconButtonText'
 import MapSection from '../components/molecules/MapSection'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
@@ -64,6 +65,14 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
             minHeight: '100%',
             backgroundColor: colors.primary,
         },
+        titleContainer: {
+            flexDirection: 'row',
+            width: '75%',
+            textAlign: 'right',
+        },
+        title: {
+            flex: 1,
+        },
         headerContainer: {
             alignItems: 'center',
         },
@@ -73,6 +82,9 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
         },
         signOutButton: {
             marginTop: 5,
+        },
+        requestsButton: {
+            marginTop: 10,
         },
     })
 
@@ -96,13 +108,24 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                 }
                 ListHeaderComponent={
                     <View style={styles.headerContainer}>
-                        <ScreenTitle
-                            title={
-                                account.firstName.length > 0
-                                    ? `${account.firstName} ${account.lastName}`
-                                    : 'My Profile'
-                            }
-                        />
+                        <View style={styles.titleContainer}>
+                            <ScreenTitle
+                                style={styles.title}
+                                title={
+                                    account.firstName.length > 0
+                                        ? `${account.firstName} ${account.lastName}`
+                                        : 'My Profile'
+                                }
+                            />
+                            <IconButtonText
+                                style={styles.requestsButton}
+                                icon="email-outline"
+                                text="Requests"
+                                onPress={() => {
+                                    navigation.navigate('UserRequestsScreen')
+                                }}
+                            />
+                        </View>
                         <Text
                             style={{
                                 color: colors.textPrimary,

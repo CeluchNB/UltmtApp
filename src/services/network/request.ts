@@ -104,3 +104,24 @@ export const deleteUserRequest = async (
         },
     )
 }
+
+export const getRequestsByTeam = async (
+    token: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(`${API_URL_V1}/request/team/${teamId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+}
+
+export const getRequestsByUser = async (
+    token: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(`${API_URL_V1}/request/userRequests`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+}
