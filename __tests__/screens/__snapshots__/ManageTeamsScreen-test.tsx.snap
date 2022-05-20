@@ -10,7 +10,16 @@ exports[`should match snapshot 1`] = `
     }
   }
 >
-  <RCTScrollView>
+  <RCTScrollView
+    refreshControl={
+      <RefreshControlMock
+        onRefresh={[Function]}
+        refreshing={false}
+      />
+    }
+    testID="mt-scroll-view"
+  >
+    <RCTRefreshControl />
     <View>
       <View
         style={
