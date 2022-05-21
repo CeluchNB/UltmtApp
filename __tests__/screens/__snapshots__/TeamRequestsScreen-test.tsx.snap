@@ -23,11 +23,12 @@ exports[`should match snapshot 1`] = `
     <RCTRefreshControl />
     <View>
       <Text
+        numberOfLines={1}
         style={
           Array [
             Object {
               "color": "#3183ff",
-              "fontSize": 82.1917808219178,
+              "fontSize": 61.64383561643835,
               "fontWeight": "bold",
             },
             Object {

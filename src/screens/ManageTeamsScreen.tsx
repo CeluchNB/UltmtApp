@@ -86,11 +86,11 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         headerContainer: {
             display: 'flex',
             flexDirection: 'row',
-            margin: 10,
+            marginLeft: 10,
             marginBottom: 20,
         },
         requestsButton: {
-            marginTop: 10,
+            margin: 10,
         },
     })
 

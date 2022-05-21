@@ -76,6 +76,9 @@ const accountSlice = createSlice({
         addRequest(state, action) {
             state.requests.push(action.payload)
         },
+        setPrivate(state, action) {
+            state.privateProfile = action.payload
+        },
         resetState() {
             return initialState
         },
@@ -225,5 +228,6 @@ export const {
     setError,
     setProfile,
     setToken,
+    setPrivate,
 } = accountSlice.actions
 export default accountSlice.reducer

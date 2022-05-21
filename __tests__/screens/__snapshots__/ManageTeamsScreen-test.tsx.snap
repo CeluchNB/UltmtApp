@@ -26,17 +26,18 @@ exports[`should match snapshot 1`] = `
           Object {
             "display": "flex",
             "flexDirection": "row",
-            "margin": 10,
             "marginBottom": 20,
+            "marginLeft": 10,
           }
         }
       >
         <Text
+          numberOfLines={1}
           style={
             Array [
               Object {
                 "color": "#3183ff",
-                "fontSize": 82.1917808219178,
+                "fontSize": 61.64383561643835,
                 "fontWeight": "bold",
               },
               Object {
@@ -63,7 +64,7 @@ exports[`should match snapshot 1`] = `
           style={
             Object {
               "flexDirection": "column",
-              "marginTop": 10,
+              "margin": 10,
               "opacity": 1,
             }
           }
@@ -74,7 +75,7 @@ exports[`should match snapshot 1`] = `
               Array [
                 Object {
                   "color": "#3183ff",
-                  "fontSize": 30,
+                  "fontSize": 25,
                 },
                 Object {
                   "alignSelf": "center",

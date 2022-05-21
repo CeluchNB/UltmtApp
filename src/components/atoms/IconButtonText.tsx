@@ -46,7 +46,7 @@ const IconButtonText: React.FC<IconButtonTextProps> = ({
                 style={styles.icon}
                 name={icon}
                 color={colors.textPrimary}
-                size={30}
+                size={25}
                 testID="icon-button"
             />
             <Text style={styles.text}>{text}</Text>

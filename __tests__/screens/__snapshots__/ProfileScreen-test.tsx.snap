@@ -91,8 +91,9 @@ exports[`profile screen matches snapshot 1`] = `
           style={
             Object {
               "flexDirection": "row",
+              "marginBottom": 0,
+              "marginLeft": 10,
               "textAlign": "right",
-              "width": "75%",
             }
           }
         >
@@ -100,6 +101,7 @@ exports[`profile screen matches snapshot 1`] = `
             style={
               Object {
                 "flex": 1,
+                "textAlignVertical": "center",
               }
             }
             title="first last"
@@ -109,10 +111,21 @@ exports[`profile screen matches snapshot 1`] = `
             onPress={[Function]}
             style={
               Object {
-                "marginTop": 10,
+                "margin": 10,
               }
             }
             text="Requests"
+          />
+          <IconButtonText
+            icon="cog-outline"
+            onPress={[Function]}
+            style={
+              Object {
+                "marginRight": 10,
+                "marginTop": 10,
+              }
+            }
+            text="Settings"
           />
         </View>
         <Text
@@ -186,21 +199,24 @@ exports[`profile screen matches snapshot 1`] = `
             style={
               Object {
                 "flexDirection": "row",
+                "marginBottom": 0,
+                "marginLeft": 10,
                 "textAlign": "right",
-                "width": "75%",
               }
             }
           >
             <Text
+              numberOfLines={1}
               style={
                 Array [
                   Object {
                     "color": "#3183ff",
-                    "fontSize": 82.1917808219178,
+                    "fontSize": 61.64383561643835,
                     "fontWeight": "bold",
                   },
                   Object {
                     "flex": 1,
+                    "textAlignVertical": "center",
                   },
                 ]
               }
@@ -222,7 +238,7 @@ exports[`profile screen matches snapshot 1`] = `
               style={
                 Object {
                   "flexDirection": "column",
-                  "marginTop": 10,
+                  "margin": 10,
                   "opacity": 1,
                 }
               }
@@ -233,7 +249,7 @@ exports[`profile screen matches snapshot 1`] = `
                   Array [
                     Object {
                       "color": "#3183ff",
-                      "fontSize": 30,
+                      "fontSize": 25,
                     },
                     Object {
                       "alignSelf": "center",
@@ -262,6 +278,64 @@ exports[`profile screen matches snapshot 1`] = `
                 }
               >
                 Requests
+              </Text>
+            </View>
+            <View
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              nativeID="animatedComponent"
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "flexDirection": "column",
+                  "marginRight": 10,
+                  "marginTop": 10,
+                  "opacity": 1,
+                }
+              }
+            >
+              <Text
+                allowFontScaling={false}
+                style={
+                  Array [
+                    Object {
+                      "color": "#3183ff",
+                      "fontSize": 25,
+                    },
+                    Object {
+                      "alignSelf": "center",
+                      "margin": 0,
+                      "padding": 0,
+                    },
+                    Object {
+                      "fontFamily": "Material Design Icons",
+                      "fontStyle": "normal",
+                      "fontWeight": "normal",
+                    },
+                    Object {},
+                  ]
+                }
+                testID="icon-button"
+              >
+                󰢻
+              </Text>
+              <Text
+                style={
+                  Object {
+                    "color": "#3183ff",
+                    "margin": 0,
+                    "padding": 0,
+                  }
+                }
+              >
+                Settings
               </Text>
             </View>
           </View>

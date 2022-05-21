@@ -26,7 +26,7 @@ exports[`should match snapshot 1`] = `
       Array [
         Object {
           "color": "#3183ff",
-          "fontSize": 30,
+          "fontSize": 25,
         },
         Object {
           "alignSelf": "center",

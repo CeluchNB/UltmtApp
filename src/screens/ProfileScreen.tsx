@@ -67,11 +67,13 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
         },
         titleContainer: {
             flexDirection: 'row',
-            width: '75%',
             textAlign: 'right',
+            marginLeft: 10,
+            marginBottom: 0,
         },
         title: {
             flex: 1,
+            textAlignVertical: 'center',
         },
         headerContainer: {
             alignItems: 'center',
@@ -84,7 +86,11 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
             marginTop: 5,
         },
         requestsButton: {
+            margin: 10,
+        },
+        settingsButton: {
             marginTop: 10,
+            marginRight: 10,
         },
     })
 
@@ -123,6 +129,14 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                                 text="Requests"
                                 onPress={() => {
                                     navigation.navigate('UserRequestsScreen')
+                                }}
+                            />
+                            <IconButtonText
+                                style={styles.settingsButton}
+                                icon="cog-outline"
+                                text="Settings"
+                                onPress={() => {
+                                    navigation.navigate('SettingsScreen')
                                 }}
                             />
                         </View>

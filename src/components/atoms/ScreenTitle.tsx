@@ -15,7 +15,7 @@ const ScreenTitle: React.FC<{
 }> = ({ title, style }) => {
     const selfStyle = StyleSheet.create({
         title: {
-            fontSize: size.fontExtraLarge,
+            fontSize: size.fontLarge,
             color:
                 useColorScheme() === 'dark'
                     ? darkColors.textPrimary
@@ -24,7 +24,11 @@ const ScreenTitle: React.FC<{
         },
     })
 
-    return <Text style={[selfStyle.title, style]}>{title}</Text>
+    return (
+        <Text style={[selfStyle.title, style]} numberOfLines={1}>
+            {title}
+        </Text>
+    )
 }
 
 export default ScreenTitle

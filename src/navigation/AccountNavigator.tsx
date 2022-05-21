@@ -14,6 +14,7 @@ import { RequestType } from './../types/request'
 import RequestUserScreen from './../screens/RequestUserScreen'
 import ResetPasswordScreen from '../screens/ResetPasswordScreen'
 import RolloverTeamScreen from './../screens/RolloverTeamScreen'
+import SettingsScreen from '../screens/SettingsScreen'
 import TeamRequestsScreen from '../screens/TeamRequestsScreen'
 import UserRequestsScreen from '../screens/UserRequestsScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -49,11 +50,7 @@ const AccountNavigator: React.FC<{}> = () => {
                 component={RequestUserScreen}
                 initialParams={{ type: RequestType.PLAYER }}
             />
-            <Stack.Screen
-                name="RolloverTeam"
-                component={RolloverTeamScreen}
-                initialParams={{ hasPendingRequests: false }}
-            />
+            <Stack.Screen name="RolloverTeam" component={RolloverTeamScreen} />
             <Stack.Screen
                 name="PublicUserDetails"
                 component={PublicUserScreen}
@@ -82,6 +79,7 @@ const AccountNavigator: React.FC<{}> = () => {
                 name="TeamRequestsScreen"
                 component={TeamRequestsScreen}
             />
+            <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
         </Stack.Navigator>
     )
 }
