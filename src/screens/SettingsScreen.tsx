@@ -93,6 +93,13 @@ const SettingsScreen: React.FC<{}> = () => {
                         onSubmit={async () => {}}
                     />
                     <Button
+                        mode="text"
+                        color={colors.error}
+                        onPress={() => {}}
+                        loading={false}>
+                        Sign Out All Devices
+                    </Button>
+                    <Button
                         mode="contained"
                         color={colors.error}
                         onPress={() => {}}

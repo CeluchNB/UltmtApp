@@ -56,6 +56,7 @@ const EditField: React.FC<EditFieldProps> = (props: EditFieldProps) => {
                     onPress={() => {
                         onEdit ? onEdit() : setActive(!active)
                     }}
+                    testID="ef-edit-button"
                 />
             </View>
             <View style={styles.editContainer}>
@@ -71,7 +72,11 @@ const EditField: React.FC<EditFieldProps> = (props: EditFieldProps) => {
                         style={styles.button}
                         color={colors.textPrimary}
                         icon="check"
-                        onPress={onSubmit}
+                        onPress={() => {
+                            onSubmit()
+                            setActive(false)
+                        }}
+                        testID="ef-submit-button"
                     />
                 )}
             </View>
