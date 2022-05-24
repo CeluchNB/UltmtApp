@@ -18,6 +18,7 @@ export interface AccountSlice {
     archiveTeams: DisplayTeam[]
     requests: string[]
     toggleRosterStatusLoading: boolean
+    editLoading: boolean
 }
 
 const initialState: AccountSlice = {
@@ -35,6 +36,7 @@ const initialState: AccountSlice = {
     archiveTeams: [],
     requests: [],
     toggleRosterStatusLoading: false,
+    editLoading: false,
 }
 
 const accountSlice = createSlice({
@@ -51,22 +53,26 @@ const accountSlice = createSlice({
             const {
                 firstName,
                 lastName,
+                email,
                 username,
                 playerTeams,
                 managerTeams,
                 archiveTeams,
                 requests,
                 openToRequests,
+                privateProfile,
             } = action.payload
 
             state.firstName = firstName
             state.lastName = lastName
+            state.email = email
             state.username = username
             state.playerTeams = playerTeams
             state.managerTeams = managerTeams
             state.archiveTeams = archiveTeams
             state.requests = requests
             state.openToRequests = openToRequests
+            state.privateProfile = privateProfile
         },
         removeRequest(state, action) {
             state.requests = state.requests.filter(

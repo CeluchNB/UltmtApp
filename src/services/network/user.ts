@@ -124,3 +124,22 @@ export const setOpenToRequests = async (
         },
     )
 }
+
+export const changeName = async (
+    token: string,
+    newFirstName: string,
+    newLastName: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/user/changeName`,
+        {
+            newFirstName,
+            newLastName,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

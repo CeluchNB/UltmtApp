@@ -2,6 +2,7 @@ import * as UserServices from '../../../src/services/network/user'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { CreateUserData, DisplayUser, User } from '../../../src/types/user'
 import {
+    changeName,
     createAccount,
     fetchProfile,
     getLocalToken,
@@ -405,5 +406,33 @@ describe('test user data calls', () => {
             }),
         )
         expect(setOpenToRequests('', true)).rejects.toThrow()
+    })
+
+    it('should handle change name network success', async () => {
+        jest.spyOn(UserServices, 'changeName').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await changeName('', '', '')
+        expect(result).toBe(user)
+    })
+
+    it('should handle change name network failure', async () => {
+        jest.spyOn(UserServices, 'changeName').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(changeName('', '', '')).rejects.toThrow()
     })
 })

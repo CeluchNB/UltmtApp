@@ -4,6 +4,7 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 import { throwApiError } from '../../utils/service-utils'
 import { CreateUserData, DisplayUser, User } from '../../types/user'
 import {
+    changeName as networkChangeName,
     createAccount as networkCreateAccount,
     fetchProfile as networkFetchProfile,
     getPublicUser as networkGetPublicUser,
@@ -191,6 +192,12 @@ export const requestPasswordRecovery = async (email: string): Promise<void> => {
     }
 }
 
+/**
+ * Method for user to reset their password
+ * @param passcode 6 digit passcode user can redeem
+ * @param newPassword new password
+ * @returns new jwt and user profile
+ */
 export const resetPassword = async (
     passcode: string,
     newPassword: string,
@@ -204,6 +211,12 @@ export const resetPassword = async (
     }
 }
 
+/**
+ * Method to change user's ability to receive requests
+ * @param token auth token of user
+ * @param open boolean if user wishes to receive requests
+ * @returns updated user profile
+ */
 export const setOpenToRequests = async (
     token: string,
     open: boolean,
@@ -214,5 +227,19 @@ export const setOpenToRequests = async (
         return user
     } catch (error) {
         return throwApiError(error, Constants.TOGGLE_ROSTER_STATUS_ERROR)
+    }
+}
+
+export const changeName = async (
+    token: string,
+    firstName: string,
+    lastName: string,
+): Promise<User> => {
+    try {
+        const response = await networkChangeName(token, firstName, lastName)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_USER_ERROR)
     }
 }
