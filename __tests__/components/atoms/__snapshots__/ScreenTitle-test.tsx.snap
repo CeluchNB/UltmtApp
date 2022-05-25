@@ -6,7 +6,7 @@ exports[`matches snapshot 1`] = `
   style={
     Array [
       Object {
-        "color": "#3183ff",
+        "color": "#ffd600",
         "fontSize": 61.64383561643835,
         "fontWeight": "bold",
       },

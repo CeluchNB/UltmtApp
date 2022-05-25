@@ -4,7 +4,7 @@ exports[`test snapshot 1`] = `
 <View
   style={
     Object {
-      "placeholderTextColor": "#303030",
+      "placeholderTextColor": "#ffffff",
     }
   }
 >
@@ -20,8 +20,8 @@ exports[`test snapshot 1`] = `
           "top": 6,
         },
         Object {
-          "backgroundColor": "#ffffff",
-          "borderColor": "#ffd600",
+          "backgroundColor": "#303030",
+          "borderColor": "#31adff",
           "borderRadius": 4,
           "borderWidth": 1,
         },
@@ -50,8 +50,8 @@ exports[`test snapshot 1`] = `
         onChangeText={[Function]}
         onFocus={[Function]}
         placeholder="Placeholder"
-        placeholderTextColor="#303030"
-        selectionColor="#3183ff"
+        placeholderTextColor="#ffffff"
+        selectionColor="#ffd600"
         style={
           Array [
             Object {
@@ -68,7 +68,7 @@ exports[`test snapshot 1`] = `
               "paddingTop": 0,
             },
             Object {
-              "color": "#3183ff",
+              "color": "#ffd600",
               "fontFamily": "System",
               "fontSize": 16,
               "fontWeight": undefined,
@@ -93,7 +93,7 @@ exports[`test with right icon 1`] = `
 <View
   style={
     Object {
-      "placeholderTextColor": "#303030",
+      "placeholderTextColor": "#ffffff",
     }
   }
 >
@@ -109,8 +109,8 @@ exports[`test with right icon 1`] = `
           "top": 6,
         },
         Object {
-          "backgroundColor": "#ffffff",
-          "borderColor": "#ffd600",
+          "backgroundColor": "#303030",
+          "borderColor": "#31adff",
           "borderRadius": 4,
           "borderWidth": 1,
         },
@@ -139,8 +139,8 @@ exports[`test with right icon 1`] = `
         onChangeText={[Function]}
         onFocus={[Function]}
         placeholder="Placeholder"
-        placeholderTextColor="#303030"
-        selectionColor="#3183ff"
+        placeholderTextColor="#ffffff"
+        selectionColor="#ffd600"
         style={
           Array [
             Object {
@@ -157,7 +157,7 @@ exports[`test with right icon 1`] = `
               "paddingTop": 0,
             },
             Object {
-              "color": "#3183ff",
+              "color": "#ffd600",
               "fontFamily": "System",
               "fontSize": 16,
               "fontWeight": undefined,
@@ -252,7 +252,7 @@ exports[`test with right icon 1`] = `
             style={
               Array [
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "fontSize": 24,
                 },
                 Array [

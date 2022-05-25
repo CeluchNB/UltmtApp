@@ -293,7 +293,7 @@ exports[`test matches snapshot 1`] = `
         style={
           Array [
             Object {
-              "color": "#3183ff",
+              "color": "#ffd600",
               "fontSize": 24,
             },
             Array [

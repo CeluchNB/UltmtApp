@@ -5,7 +5,7 @@ exports[`should match snapshot 1`] = `
   emulateUnlessSupported={true}
   style={
     Object {
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#303030",
       "height": "100%",
     }
   }
@@ -36,7 +36,7 @@ exports[`should match snapshot 1`] = `
           style={
             Array [
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "fontSize": 61.64383561643835,
                 "fontWeight": "bold",
               },
@@ -74,7 +74,7 @@ exports[`should match snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "fontSize": 25,
                 },
                 Object {
@@ -97,7 +97,7 @@ exports[`should match snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "margin": 0,
                 "padding": 0,
               }
@@ -134,7 +134,7 @@ exports[`should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "flex": 1,
                   "fontSize": 61.64383561643835,
                   "fontWeight": "bold",
@@ -187,7 +187,7 @@ exports[`should match snapshot 1`] = `
                     },
                     undefined,
                     Object {
-                      "backgroundColor": "#3183ff",
+                      "backgroundColor": "#ffd600",
                       "borderRadius": 5,
                       "display": "flex",
                       "flexWrap": "nowrap",
@@ -207,7 +207,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#ffffff",
+                        "color": "#303030",
                         "fontSize": 24,
                       },
                       Array [
@@ -275,7 +275,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -286,7 +286,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -298,7 +298,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -459,7 +459,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [
@@ -527,7 +527,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -538,7 +538,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -550,7 +550,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -711,7 +711,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [
@@ -779,7 +779,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -790,7 +790,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -802,7 +802,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -963,7 +963,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [
@@ -1013,7 +1013,7 @@ exports[`should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "flex": 1,
                   "fontSize": 61.64383561643835,
                   "fontWeight": "bold",
@@ -1066,7 +1066,7 @@ exports[`should match snapshot 1`] = `
                     },
                     undefined,
                     Object {
-                      "backgroundColor": "#3183ff",
+                      "backgroundColor": "#ffd600",
                       "borderRadius": 5,
                       "display": "flex",
                       "flexWrap": "nowrap",
@@ -1086,7 +1086,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#ffffff",
+                        "color": "#303030",
                         "fontSize": 24,
                       },
                       Array [
@@ -1154,7 +1154,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -1165,7 +1165,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -1177,7 +1177,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -1338,7 +1338,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [
@@ -1388,7 +1388,7 @@ exports[`should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "flex": 1,
                   "fontSize": 61.64383561643835,
                   "fontWeight": "bold",
@@ -1437,7 +1437,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -1448,7 +1448,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -1460,7 +1460,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -1531,7 +1531,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [

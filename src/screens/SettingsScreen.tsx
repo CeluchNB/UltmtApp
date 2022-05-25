@@ -1,3 +1,4 @@
+import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import * as UserData from '../services/data/user'
 import { Button } from 'react-native-paper'
@@ -24,7 +25,7 @@ import { size, weight } from '../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
 const SettingsScreen: React.FC<Props> = ({ navigation }) => {
-    const { colors } = useColors()
+    const { colors, isDarkMode } = useColors()
 
     const dispatch = useDispatch()
     const account = useSelector(selectAccount)
@@ -32,6 +33,9 @@ const SettingsScreen: React.FC<Props> = ({ navigation }) => {
 
     const [firstError, setFirstError] = React.useState('')
     const [lastError, setLastError] = React.useState('')
+
+    const [, updateState] = React.useState<any>()
+    const forceUpdate = React.useCallback(() => updateState({}), [])
 
     const styles = StyleSheet.create({
         screen: {
@@ -89,9 +93,30 @@ const SettingsScreen: React.FC<Props> = ({ navigation }) => {
                                 false: colors.gray,
                                 true: colors.textSecondary,
                             }}
-                            value={account.privateProfile}
+                            value={!account.privateProfile}
                             onValueChange={() => {
-                                dispatch(setPrivate(!account.privateProfile))
+                                dispatch(
+                                    setPrivate({
+                                        token,
+                                        privateAccount: !account.privateProfile,
+                                    }),
+                                )
+                            }}
+                        />
+                    </View>
+                    <View style={styles.publicContainer}>
+                        <Text style={styles.publicText}>Dark Mode</Text>
+                        <Switch
+                            thumbColor={colors.textPrimary}
+                            trackColor={{
+                                false: colors.gray,
+                                true: colors.textSecondary,
+                            }}
+                            value={isDarkMode}
+                            onValueChange={async () => {
+                                await Preferences.setDarkMode(!isDarkMode)
+                                // force re-render in new color scheme
+                                forceUpdate()
                             }}
                         />
                     </View>

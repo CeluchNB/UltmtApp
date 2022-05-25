@@ -13,7 +13,7 @@ exports[`should match snapshot 1`] = `
     <Text
       style={
         Object {
-          "color": "#3183ff",
+          "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "bold",
           "textAlignVertical": "center",
@@ -80,7 +80,7 @@ exports[`should match snapshot 1`] = `
           style={
             Array [
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "fontSize": 24,
               },
               Array [
@@ -129,7 +129,7 @@ exports[`should match snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#707070",
+            "color": "#ababab",
             "fontSize": 41.0958904109589,
           }
         }

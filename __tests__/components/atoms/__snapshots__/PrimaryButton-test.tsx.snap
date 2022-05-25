@@ -6,7 +6,7 @@ exports[`test snapshot 1`] = `
   nativeID="animatedComponent"
   style={
     Object {
-      "backgroundColor": "#3183ff",
+      "backgroundColor": "#ffd600",
       "borderColor": "transparent",
       "borderRadius": 4,
       "borderStyle": "solid",
@@ -89,7 +89,7 @@ exports[`test snapshot 1`] = `
                 "textTransform": "uppercase",
               },
               Object {
-                "color": "#ffffff",
+                "color": "#000000",
                 "fontFamily": "System",
                 "fontWeight": "500",
               },

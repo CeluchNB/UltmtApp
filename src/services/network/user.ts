@@ -143,3 +143,18 @@ export const changeName = async (
         },
     )
 }
+
+export const setPrivate = async (
+    token: string,
+    privateAccount: boolean,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/user/setPrivate?private=${privateAccount}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

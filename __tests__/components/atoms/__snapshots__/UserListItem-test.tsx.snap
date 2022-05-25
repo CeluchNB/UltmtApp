@@ -39,7 +39,7 @@ exports[`matches snapshot with all props 1`] = `
       <Text
         style={
           Object {
-            "color": "#707070",
+            "color": "#ababab",
             "fontSize": 41.0958904109589,
             "fontWeight": "bold",
           }
@@ -50,7 +50,7 @@ exports[`matches snapshot with all props 1`] = `
       <Text
         style={
           Object {
-            "color": "#3183ff",
+            "color": "#ffd600",
             "fontSize": 30.821917808219176,
             "fontWeight": "normal",
           }
@@ -313,7 +313,7 @@ exports[`matches snapshot with all props 1`] = `
         style={
           Array [
             Object {
-              "color": "#3183ff",
+              "color": "#ffd600",
               "fontSize": 24,
             },
             Array [

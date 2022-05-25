@@ -32,7 +32,7 @@ exports[`test matches snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#707070",
+            "color": "#ababab",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
           }
@@ -43,7 +43,7 @@ exports[`test matches snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#3183ff",
+            "color": "#ffd600",
             "fontSize": 30.821917808219176,
             "fontWeight": "900",
           }
@@ -54,14 +54,14 @@ exports[`test matches snapshot 1`] = `
     </View>
     <ActivityIndicator
       animating={false}
-      color="#3183ff"
+      color="#ffd600"
       size="small"
     />
   </View>
   <View
     style={
       Object {
-        "backgroundColor": "#ffd600",
+        "backgroundColor": "#31adff",
         "height": 1,
         "marginBottom": 10,
         "marginTop": 10,
@@ -103,7 +103,7 @@ exports[`test matches snapshot with loading 1`] = `
       <Text
         style={
           Object {
-            "color": "#707070",
+            "color": "#ababab",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
           }
@@ -114,7 +114,7 @@ exports[`test matches snapshot with loading 1`] = `
       <Text
         style={
           Object {
-            "color": "#3183ff",
+            "color": "#ffd600",
             "fontSize": 30.821917808219176,
             "fontWeight": "900",
           }
@@ -125,14 +125,14 @@ exports[`test matches snapshot with loading 1`] = `
     </View>
     <ActivityIndicator
       animating={true}
-      color="#3183ff"
+      color="#ffd600"
       size="small"
     />
   </View>
   <View
     style={
       Object {
-        "backgroundColor": "#ffd600",
+        "backgroundColor": "#31adff",
         "height": 1,
         "marginBottom": 10,
         "marginTop": 10,
@@ -174,7 +174,7 @@ exports[`test matches snapshot without subheader 1`] = `
       <Text
         style={
           Object {
-            "color": "#707070",
+            "color": "#ababab",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
           }
@@ -185,14 +185,14 @@ exports[`test matches snapshot without subheader 1`] = `
     </View>
     <ActivityIndicator
       animating={true}
-      color="#3183ff"
+      color="#ffd600"
       size="small"
     />
   </View>
   <View
     style={
       Object {
-        "backgroundColor": "#ffd600",
+        "backgroundColor": "#31adff",
         "height": 1,
         "marginBottom": 10,
         "marginTop": 10,

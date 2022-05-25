@@ -39,7 +39,7 @@ exports[`matches snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#707070",
+            "color": "#ababab",
             "fontSize": 41.0958904109589,
             "fontWeight": "bold",
           }
@@ -50,7 +50,7 @@ exports[`matches snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#3183ff",
+            "color": "#ffd600",
             "fontSize": 30.821917808219176,
             "fontWeight": "bold",
           }
@@ -62,7 +62,7 @@ exports[`matches snapshot 1`] = `
       <Text
         style={
           Object {
-            "color": "#3183ff",
+            "color": "#ffd600",
             "fontSize": 20.54794520547945,
             "fontWeight": "bold",
           }

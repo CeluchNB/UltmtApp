@@ -15,6 +15,7 @@ import {
     resetPassword,
     searchUsers,
     setOpenToRequests,
+    setPrivate,
 } from '../../../src/services/data/user'
 
 const validToken = 'token1'
@@ -434,5 +435,33 @@ describe('test user data calls', () => {
         )
 
         expect(changeName('', '', '')).rejects.toThrow()
+    })
+
+    it('should handle set private network success', async () => {
+        jest.spyOn(UserServices, 'setPrivate').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await setPrivate('', true)
+        expect(result).toBe(user)
+    })
+
+    it('should handle set private network failure', async () => {
+        jest.spyOn(UserServices, 'setPrivate').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(setPrivate('', true)).rejects.toThrow()
     })
 })

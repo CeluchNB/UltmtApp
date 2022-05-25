@@ -82,9 +82,6 @@ const accountSlice = createSlice({
         addRequest(state, action) {
             state.requests.push(action.payload)
         },
-        setPrivate(state, action) {
-            state.privateProfile = action.payload
-        },
         resetState() {
             return initialState
         },
@@ -171,6 +168,15 @@ const accountSlice = createSlice({
                 state.error = action.error.message
                 state.toggleRosterStatusLoading = false
             })
+
+        builder
+            .addCase(setPrivate.fulfilled, (state, action) => {
+                const user = action.payload
+                state.privateProfile = user.private
+            })
+            .addCase(setPrivate.rejected, (state, action) => {
+                state.error = action.error.message
+            })
     },
 })
 
@@ -212,6 +218,14 @@ export const setOpenToRequests = createAsyncThunk(
     },
 )
 
+export const setPrivate = createAsyncThunk(
+    'account/setPrivate',
+    async (data: { token: string; privateAccount: boolean }, _thunkAPI) => {
+        const { token, privateAccount } = data
+        return await UserData.setPrivate(token, privateAccount)
+    },
+)
+
 export const selectAccount = (state: RootState) => state.account
 export const selectToken = (state: RootState) => state.account.token
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
@@ -234,6 +248,5 @@ export const {
     setError,
     setProfile,
     setToken,
-    setPrivate,
 } = accountSlice.actions
 export default accountSlice.reducer

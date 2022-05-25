@@ -20,7 +20,7 @@ exports[`test matches snapshot 1`] = `
     <Text
       style={
         Object {
-          "color": "#3183ff",
+          "color": "#ffd600",
           "flex": 1,
           "fontSize": 61.64383561643835,
           "fontWeight": "bold",
@@ -73,7 +73,7 @@ exports[`test matches snapshot 1`] = `
             },
             undefined,
             Object {
-              "backgroundColor": "#3183ff",
+              "backgroundColor": "#ffd600",
               "borderRadius": 5,
               "display": "flex",
               "flexWrap": "nowrap",
@@ -93,7 +93,7 @@ exports[`test matches snapshot 1`] = `
           style={
             Array [
               Object {
-                "color": "#ffffff",
+                "color": "#303030",
                 "fontSize": 24,
               },
               Array [
@@ -125,7 +125,7 @@ exports[`test matches snapshot 1`] = `
   </View>
   <ActivityIndicator
     animating={true}
-    color="#3183ff"
+    color="#ffd600"
     size="large"
   />
   <View
@@ -210,7 +210,7 @@ exports[`test matches snapshot 1`] = `
                   "textTransform": "uppercase",
                 },
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "fontFamily": "System",
                   "fontWeight": "500",
                 },

@@ -16,6 +16,7 @@ import {
     resetPassword as networkResetPassword,
     searchUsers as networkSearchUsers,
     setOpenToRequests as networkSetOpenToRequests,
+    setPrivate as networkSetPrivate,
 } from '../network/user'
 
 /**
@@ -230,6 +231,13 @@ export const setOpenToRequests = async (
     }
 }
 
+/**
+ * Method to update a user's first and last name
+ * @param token auth token of user
+ * @param firstName first name of user
+ * @param lastName last name of user
+ * @returns updated user value
+ */
 export const changeName = async (
     token: string,
     firstName: string,
@@ -237,6 +245,25 @@ export const changeName = async (
 ): Promise<User> => {
     try {
         const response = await networkChangeName(token, firstName, lastName)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_USER_ERROR)
+    }
+}
+
+/**
+ * Method to set a user's private status
+ * @param token auth token of user
+ * @param privateAccount user's private status
+ * @returns updated user value
+ */
+export const setPrivate = async (
+    token: string,
+    privateAccount: boolean,
+): Promise<User> => {
+    try {
+        const response = await networkSetPrivate(token, privateAccount)
         const { user } = response.data
         return user
     } catch (error) {

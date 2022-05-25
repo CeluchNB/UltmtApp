@@ -5,7 +5,7 @@ exports[`should match snapshot 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#303030",
       "height": "100%",
     }
   }
@@ -15,7 +15,7 @@ exports[`should match snapshot 1`] = `
     style={
       Array [
         Object {
-          "color": "#3183ff",
+          "color": "#ffd600",
           "fontSize": 61.64383561643835,
           "fontWeight": "bold",
         },
@@ -38,7 +38,7 @@ exports[`should match snapshot 1`] = `
       style={
         Object {
           "alignSelf": "center",
-          "color": "#3183ff",
+          "color": "#ffd600",
           "flex": 1,
           "fontSize": 41.0958904109589,
           "fontWeight": "bold",
@@ -62,8 +62,8 @@ exports[`should match snapshot 1`] = `
     >
       <RNCCheckbox
         forwardedRef={null}
-        onCheckColor="#3183ff"
-        onFillColor="#3183ff"
+        onCheckColor="#ffd600"
+        onFillColor="#ffd600"
         onValueChange={[Function]}
         style={
           Array [
@@ -80,8 +80,8 @@ exports[`should match snapshot 1`] = `
         }
         tintColors={
           Object {
-            "false": "#707070",
-            "true": "#3183ff",
+            "false": "#ababab",
+            "true": "#ffd600",
           }
         }
         value={false}
@@ -95,7 +95,7 @@ exports[`should match snapshot 1`] = `
     style={
       Object {
         "alignSelf": "center",
-        "color": "#3183ff",
+        "color": "#ffd600",
         "fontSize": 41.0958904109589,
         "fontWeight": "bold",
         "marginTop": 20,
@@ -109,8 +109,8 @@ exports[`should match snapshot 1`] = `
     style={
       Object {
         "alignSelf": "center",
-        "backgroundColor": "#ffffff",
-        "color": "#3183ff",
+        "backgroundColor": "#303030",
+        "color": "#ffd600",
         "width": "75%",
       }
     }
@@ -155,7 +155,7 @@ exports[`should match snapshot 1`] = `
     style={
       Object {
         "alignSelf": "center",
-        "color": "#ffd600",
+        "color": "#31adff",
         "marginBottom": 10,
         "width": "75%",
       }
@@ -167,7 +167,7 @@ exports[`should match snapshot 1`] = `
     style={
       Object {
         "alignSelf": "center",
-        "color": "#ffd600",
+        "color": "#31adff",
         "marginBottom": 10,
         "width": "75%",
       }
@@ -178,7 +178,7 @@ exports[`should match snapshot 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "#3183ff",
+        "backgroundColor": "#ffd600",
         "borderColor": "transparent",
         "borderRadius": 4,
         "borderStyle": "solid",
@@ -261,7 +261,7 @@ exports[`should match snapshot 1`] = `
                   "textTransform": "uppercase",
                 },
                 Object {
-                  "color": "#ffffff",
+                  "color": "#000000",
                   "fontFamily": "System",
                   "fontWeight": "500",
                 },
@@ -287,7 +287,7 @@ exports[`should match snapshot with open requests 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#303030",
       "height": "100%",
     }
   }
@@ -297,7 +297,7 @@ exports[`should match snapshot with open requests 1`] = `
     style={
       Array [
         Object {
-          "color": "#3183ff",
+          "color": "#ffd600",
           "fontSize": 61.64383561643835,
           "fontWeight": "bold",
         },
@@ -320,7 +320,7 @@ exports[`should match snapshot with open requests 1`] = `
       style={
         Object {
           "alignSelf": "center",
-          "color": "#3183ff",
+          "color": "#ffd600",
           "flex": 1,
           "fontSize": 41.0958904109589,
           "fontWeight": "bold",
@@ -344,8 +344,8 @@ exports[`should match snapshot with open requests 1`] = `
     >
       <RNCCheckbox
         forwardedRef={null}
-        onCheckColor="#3183ff"
-        onFillColor="#3183ff"
+        onCheckColor="#ffd600"
+        onFillColor="#ffd600"
         onValueChange={[Function]}
         style={
           Array [
@@ -362,8 +362,8 @@ exports[`should match snapshot with open requests 1`] = `
         }
         tintColors={
           Object {
-            "false": "#707070",
-            "true": "#3183ff",
+            "false": "#ababab",
+            "true": "#ffd600",
           }
         }
         value={false}
@@ -377,7 +377,7 @@ exports[`should match snapshot with open requests 1`] = `
     style={
       Object {
         "alignSelf": "center",
-        "color": "#3183ff",
+        "color": "#ffd600",
         "fontSize": 41.0958904109589,
         "fontWeight": "bold",
         "marginTop": 20,
@@ -391,8 +391,8 @@ exports[`should match snapshot with open requests 1`] = `
     style={
       Object {
         "alignSelf": "center",
-        "backgroundColor": "#ffffff",
-        "color": "#3183ff",
+        "backgroundColor": "#303030",
+        "color": "#ffd600",
         "width": "75%",
       }
     }
@@ -437,7 +437,7 @@ exports[`should match snapshot with open requests 1`] = `
     style={
       Object {
         "alignSelf": "center",
-        "color": "#ffd600",
+        "color": "#31adff",
         "marginBottom": 10,
         "width": "75%",
       }
@@ -449,7 +449,7 @@ exports[`should match snapshot with open requests 1`] = `
     style={
       Object {
         "alignSelf": "center",
-        "color": "#ffd600",
+        "color": "#31adff",
         "marginBottom": 10,
         "width": "75%",
       }
@@ -460,7 +460,7 @@ exports[`should match snapshot with open requests 1`] = `
   <View
     style={
       Object {
-        "backgroundColor": "#3183ff",
+        "backgroundColor": "#ffd600",
         "borderColor": "transparent",
         "borderRadius": 4,
         "borderStyle": "solid",
@@ -543,7 +543,7 @@ exports[`should match snapshot with open requests 1`] = `
                   "textTransform": "uppercase",
                 },
                 Object {
-                  "color": "#ffffff",
+                  "color": "#000000",
                   "fontFamily": "System",
                   "fontWeight": "500",
                 },

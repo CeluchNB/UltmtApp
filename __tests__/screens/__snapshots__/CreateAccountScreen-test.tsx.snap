@@ -5,7 +5,7 @@ exports[`should match snapshot 1`] = `
   style={
     Object {
       "alignContent": "center",
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#303030",
       "height": "100%",
     }
   }
@@ -15,7 +15,7 @@ exports[`should match snapshot 1`] = `
     style={
       Array [
         Object {
-          "color": "#3183ff",
+          "color": "#ffd600",
           "fontSize": 61.64383561643835,
           "fontWeight": "bold",
         },
@@ -32,7 +32,7 @@ exports[`should match snapshot 1`] = `
       Object {
         "alignSelf": "center",
         "marginTop": 20,
-        "placeholderTextColor": "#303030",
+        "placeholderTextColor": "#ffffff",
         "width": "75%",
       }
     }
@@ -49,8 +49,8 @@ exports[`should match snapshot 1`] = `
             "top": 6,
           },
           Object {
-            "backgroundColor": "#ffffff",
-            "borderColor": "#ffd600",
+            "backgroundColor": "#303030",
+            "borderColor": "#31adff",
             "borderRadius": 4,
             "borderWidth": 1,
           },
@@ -79,8 +79,8 @@ exports[`should match snapshot 1`] = `
           onChangeText={[Function]}
           onFocus={[Function]}
           placeholder="First Name"
-          placeholderTextColor="#303030"
-          selectionColor="#3183ff"
+          placeholderTextColor="#ffffff"
+          selectionColor="#ffd600"
           style={
             Array [
               Object {
@@ -97,7 +97,7 @@ exports[`should match snapshot 1`] = `
                 "paddingTop": 0,
               },
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 16,
                 "fontWeight": undefined,
@@ -122,7 +122,7 @@ exports[`should match snapshot 1`] = `
       Object {
         "alignSelf": "center",
         "marginTop": 20,
-        "placeholderTextColor": "#303030",
+        "placeholderTextColor": "#ffffff",
         "width": "75%",
       }
     }
@@ -139,8 +139,8 @@ exports[`should match snapshot 1`] = `
             "top": 6,
           },
           Object {
-            "backgroundColor": "#ffffff",
-            "borderColor": "#ffd600",
+            "backgroundColor": "#303030",
+            "borderColor": "#31adff",
             "borderRadius": 4,
             "borderWidth": 1,
           },
@@ -169,8 +169,8 @@ exports[`should match snapshot 1`] = `
           onChangeText={[Function]}
           onFocus={[Function]}
           placeholder="Last Name"
-          placeholderTextColor="#303030"
-          selectionColor="#3183ff"
+          placeholderTextColor="#ffffff"
+          selectionColor="#ffd600"
           style={
             Array [
               Object {
@@ -187,7 +187,7 @@ exports[`should match snapshot 1`] = `
                 "paddingTop": 0,
               },
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 16,
                 "fontWeight": undefined,
@@ -212,7 +212,7 @@ exports[`should match snapshot 1`] = `
       Object {
         "alignSelf": "center",
         "marginTop": 20,
-        "placeholderTextColor": "#303030",
+        "placeholderTextColor": "#ffffff",
         "width": "75%",
       }
     }
@@ -229,8 +229,8 @@ exports[`should match snapshot 1`] = `
             "top": 6,
           },
           Object {
-            "backgroundColor": "#ffffff",
-            "borderColor": "#ffd600",
+            "backgroundColor": "#303030",
+            "borderColor": "#31adff",
             "borderRadius": 4,
             "borderWidth": 1,
           },
@@ -259,8 +259,8 @@ exports[`should match snapshot 1`] = `
           onChangeText={[Function]}
           onFocus={[Function]}
           placeholder="Username"
-          placeholderTextColor="#303030"
-          selectionColor="#3183ff"
+          placeholderTextColor="#ffffff"
+          selectionColor="#ffd600"
           style={
             Array [
               Object {
@@ -277,7 +277,7 @@ exports[`should match snapshot 1`] = `
                 "paddingTop": 0,
               },
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 16,
                 "fontWeight": undefined,
@@ -302,7 +302,7 @@ exports[`should match snapshot 1`] = `
       Object {
         "alignSelf": "center",
         "marginTop": 20,
-        "placeholderTextColor": "#303030",
+        "placeholderTextColor": "#ffffff",
         "width": "75%",
       }
     }
@@ -319,8 +319,8 @@ exports[`should match snapshot 1`] = `
             "top": 6,
           },
           Object {
-            "backgroundColor": "#ffffff",
-            "borderColor": "#ffd600",
+            "backgroundColor": "#303030",
+            "borderColor": "#31adff",
             "borderRadius": 4,
             "borderWidth": 1,
           },
@@ -349,8 +349,8 @@ exports[`should match snapshot 1`] = `
           onChangeText={[Function]}
           onFocus={[Function]}
           placeholder="Email"
-          placeholderTextColor="#303030"
-          selectionColor="#3183ff"
+          placeholderTextColor="#ffffff"
+          selectionColor="#ffd600"
           style={
             Array [
               Object {
@@ -367,7 +367,7 @@ exports[`should match snapshot 1`] = `
                 "paddingTop": 0,
               },
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 16,
                 "fontWeight": undefined,
@@ -392,7 +392,7 @@ exports[`should match snapshot 1`] = `
       Object {
         "alignSelf": "center",
         "marginTop": 20,
-        "placeholderTextColor": "#303030",
+        "placeholderTextColor": "#ffffff",
         "width": "75%",
       }
     }
@@ -409,8 +409,8 @@ exports[`should match snapshot 1`] = `
             "top": 6,
           },
           Object {
-            "backgroundColor": "#ffffff",
-            "borderColor": "#ffd600",
+            "backgroundColor": "#303030",
+            "borderColor": "#31adff",
             "borderRadius": 4,
             "borderWidth": 1,
           },
@@ -439,9 +439,9 @@ exports[`should match snapshot 1`] = `
           onChangeText={[Function]}
           onFocus={[Function]}
           placeholder="Password"
-          placeholderTextColor="#303030"
+          placeholderTextColor="#ffffff"
           secureTextEntry={true}
-          selectionColor="#3183ff"
+          selectionColor="#ffd600"
           style={
             Array [
               Object {
@@ -458,7 +458,7 @@ exports[`should match snapshot 1`] = `
                 "paddingTop": 0,
               },
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 16,
                 "fontWeight": undefined,
@@ -554,7 +554,7 @@ exports[`should match snapshot 1`] = `
               style={
                 Array [
                   Object {
-                    "color": "#3183ff",
+                    "color": "#ffd600",
                     "fontSize": 24,
                   },
                   Array [
@@ -592,7 +592,7 @@ exports[`should match snapshot 1`] = `
     style={
       Object {
         "alignSelf": "center",
-        "backgroundColor": "#3183ff",
+        "backgroundColor": "#ffd600",
         "borderColor": "transparent",
         "borderRadius": 4,
         "borderStyle": "solid",
@@ -676,7 +676,7 @@ exports[`should match snapshot 1`] = `
                   "textTransform": "uppercase",
                 },
                 Object {
-                  "color": "#ffffff",
+                  "color": "#000000",
                   "fontFamily": "System",
                   "fontWeight": "500",
                 },
@@ -701,7 +701,7 @@ exports[`should match snapshot 1`] = `
       Object {
         "alignSelf": "center",
         "backgroundColor": "transparent",
-        "borderColor": "#3183ff",
+        "borderColor": "#ffd600",
         "borderRadius": 4,
         "borderStyle": "solid",
         "borderWidth": 0.5,
@@ -775,7 +775,7 @@ exports[`should match snapshot 1`] = `
                   "textTransform": "uppercase",
                 },
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "fontFamily": "System",
                   "fontWeight": "500",
                 },
