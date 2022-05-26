@@ -1,9 +1,9 @@
 import * as React from 'react'
+import { AllScreenProps } from '../types/navigation'
 import { Button } from 'react-native-paper'
 import GameListItem from '../components/atoms/GameListItem'
 import IconButtonText from '../components/atoms/IconButtonText'
 import MapSection from '../components/molecules/MapSection'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
@@ -28,7 +28,9 @@ import {
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
+const ProfileScreen: React.FC<AllScreenProps> = ({
+    navigation,
+}: AllScreenProps) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
     const token = useSelector(selectToken)

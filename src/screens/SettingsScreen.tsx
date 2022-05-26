@@ -1,9 +1,9 @@
 import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import * as UserData from '../services/data/user'
+import { AllScreenProps } from '../types/navigation'
 import { Button } from 'react-native-paper'
 import EditField from '../components/molecules/EditField'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import { useColors } from '../hooks'
 import {
@@ -24,7 +24,7 @@ import {
 import { size, weight } from '../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
-const SettingsScreen: React.FC<Props> = ({ navigation }) => {
+const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     const { colors, isDarkMode } = useColors()
 
     const dispatch = useDispatch()

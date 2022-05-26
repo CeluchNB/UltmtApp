@@ -2,6 +2,11 @@ import { DisplayUser } from './user'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RequestType } from './request'
 
+export type TopLevelParamList = {
+    Tabs: undefined
+    SettingsScreen: undefined
+}
+
 export type AccountStackParamList = {
     Login: undefined
     Profile: undefined
@@ -23,14 +28,24 @@ export type AccountStackParamList = {
     RolloverTeam: undefined
     UserRequestsScreen: undefined
     TeamRequestsScreen: undefined
-    SettingsScreen: undefined
 }
 
 export type GameStackParamList = {
     GameSearch: undefined
 }
 
+export type AllScreenProps = NativeStackScreenProps<
+    AccountStackParamList & TopLevelParamList,
+    'Tabs'
+>
+
+export type TopLevelProps = NativeStackScreenProps<
+    TopLevelParamList,
+    'SettingsScreen'
+>
+
 export type Props = NativeStackScreenProps<AccountStackParamList, 'Login'>
+
 export type CreateTeamProps = NativeStackScreenProps<
     AccountStackParamList,
     'CreateTeam'
