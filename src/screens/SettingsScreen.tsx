@@ -1,11 +1,11 @@
 import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import * as UserData from '../services/data/user'
-import { AllScreenProps } from '../types/navigation'
 import { Button } from 'react-native-paper'
 import EditField from '../components/molecules/EditField'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import { useColors } from '../hooks'
+import { AllScreenProps, SecureEditField } from '../types/navigation'
 import {
     SafeAreaView,
     ScrollView,
@@ -153,11 +153,25 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                     <EditField
                         label="Email"
                         initialValue={account.email}
+                        onEdit={() => {
+                            navigation.navigate('SecureEditScreen', {
+                                title: 'email',
+                                value: account.email,
+                                field: SecureEditField.EMAIL,
+                            })
+                        }}
                         onSubmit={async () => {}}
                     />
                     <EditField
                         label="Password"
                         initialValue="*****"
+                        onEdit={() => {
+                            navigation.navigate('SecureEditScreen', {
+                                title: 'password',
+                                value: 'New password',
+                                field: SecureEditField.PASSWORD,
+                            })
+                        }}
                         onSubmit={async () => {}}
                     />
                     <Button

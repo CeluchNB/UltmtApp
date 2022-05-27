@@ -1,4 +1,4 @@
-interface Rules {
+export interface Rules {
     required?: { value: boolean; message: string }
     minLength?: { value: number; message: string }
     maxLength?: { value: number; message: string }
@@ -47,4 +47,8 @@ export const getFormFieldRules = (
         }
     }
     return rules
+}
+
+export const capitalizeFirstLetter = (value: string) => {
+    return value.charAt(0).toUpperCase() + value.substring(1)
 }

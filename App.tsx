@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
+import SecureEditScreen from './src/screens/SecureEditScreen'
 import SettingsScreen from './src/screens/SettingsScreen'
 import TabNavigator from './src/navigation/TabNavigator'
 import { TopLevelParamList } from './src/types/navigation'
@@ -16,6 +17,10 @@ const App: React.FC<{}> = () => {
                 <Stack.Screen
                     name="SettingsScreen"
                     component={SettingsScreen}
+                />
+                <Stack.Screen
+                    name="SecureEditScreen"
+                    component={SecureEditScreen}
                 />
                 <Stack.Screen name="Tabs" component={TabNavigator} />
             </Stack.Navigator>
