@@ -6,6 +6,7 @@ import { CreateUserData, DisplayUser, User } from '../../types/user'
 import {
     changeEmail as networkChangeEmail,
     changeName as networkChangeName,
+    changePassword as networkChangePassword,
     createAccount as networkCreateAccount,
     fetchProfile as networkFetchProfile,
     getPublicUser as networkGetPublicUser,
@@ -286,6 +287,31 @@ export const changeEmail = async (
 ): Promise<User> => {
     try {
         const response = await networkChangeEmail(email, password, newEmail)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_USER_ERROR)
+    }
+}
+
+/**
+ * Method to change a user's password
+ * @param email current email to fulfill email/password login requirement
+ * @param password current password
+ * @param newPassword updated password
+ * @returns updated user value
+ */
+export const changePassword = async (
+    email: string,
+    password: string,
+    newPassword: string,
+): Promise<User> => {
+    try {
+        const response = await networkChangePassword(
+            email,
+            password,
+            newPassword,
+        )
         const { user } = response.data
         return user
     } catch (error) {

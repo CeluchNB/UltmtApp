@@ -170,3 +170,15 @@ export const changeEmail = async (
         newEmail,
     })
 }
+
+export const changePassword = async (
+    email: string,
+    password: string,
+    newPassword: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(`${API_URL_V1}/user/changePassword`, {
+        email,
+        password,
+        newPassword,
+    })
+}

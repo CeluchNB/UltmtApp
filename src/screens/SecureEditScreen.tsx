@@ -92,7 +92,7 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
         const { value, password } = data
         try {
             const user = await handleDataSubmit(account.email, password, value)
-            dispatch(setProfile(user))
+            if (user) dispatch(setProfile(user))
             navigation.goBack()
         } catch (error: any) {
             setDataError(error.message ?? Constants)
@@ -105,14 +105,16 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
         email: string,
         password: string,
         value: string,
-    ): Promise<User> => {
-        let user
+    ): Promise<User | null> => {
+        let user = null
         switch (field) {
             case SecureEditField.EMAIL:
                 user = await UserData.changeEmail(email, password, value)
                 break
+            case SecureEditField.PASSWORD:
+                user = await UserData.changePassword(email, password, value)
+                break
             default:
-                user = await UserData.changeEmail(email, password, value)
                 break
         }
         return user

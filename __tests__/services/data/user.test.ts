@@ -4,6 +4,7 @@ import { CreateUserData, DisplayUser, User } from '../../../src/types/user'
 import {
     changeEmail,
     changeName,
+    changePassword,
     createAccount,
     fetchProfile,
     getLocalToken,
@@ -493,5 +494,34 @@ describe('test user data calls', () => {
         )
 
         expect(changeEmail('', '', '')).rejects.toThrow()
+    })
+
+    it('should handle change password network success', async () => {
+        jest.spyOn(UserServices, 'changePassword').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await changePassword('', '', '')
+        expect(result).toBe(user)
+    })
+
+    it('should handle change password network failure', async () => {
+        jest.spyOn(UserServices, 'changePassword').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(changePassword('', '', '')).rejects.toThrow()
     })
 })
