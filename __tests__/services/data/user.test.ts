@@ -2,6 +2,7 @@ import * as UserServices from '../../../src/services/network/user'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { CreateUserData, DisplayUser, User } from '../../../src/types/user'
 import {
+    changeEmail,
     changeName,
     createAccount,
     fetchProfile,
@@ -463,5 +464,34 @@ describe('test user data calls', () => {
         )
 
         expect(setPrivate('', true)).rejects.toThrow()
+    })
+
+    it('should handle change email network success', async () => {
+        jest.spyOn(UserServices, 'changeEmail').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await changeEmail('', '', '')
+        expect(result).toBe(user)
+    })
+
+    it('should handle change email network failure', async () => {
+        jest.spyOn(UserServices, 'changeEmail').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(changeEmail('', '', '')).rejects.toThrow()
     })
 })

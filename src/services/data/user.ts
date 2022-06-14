@@ -4,6 +4,7 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 import { throwApiError } from '../../utils/service-utils'
 import { CreateUserData, DisplayUser, User } from '../../types/user'
 import {
+    changeEmail as networkChangeEmail,
     changeName as networkChangeName,
     createAccount as networkCreateAccount,
     fetchProfile as networkFetchProfile,
@@ -264,6 +265,27 @@ export const setPrivate = async (
 ): Promise<User> => {
     try {
         const response = await networkSetPrivate(token, privateAccount)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_USER_ERROR)
+    }
+}
+
+/**
+ * Method to change a user's email
+ * @param email current email to fulfill email/password login requirement
+ * @param password current password
+ * @param newEmail new email
+ * @returns updated user value
+ */
+export const changeEmail = async (
+    email: string,
+    password: string,
+    newEmail: string,
+): Promise<User> => {
+    try {
+        const response = await networkChangeEmail(email, password, newEmail)
         const { user } = response.data
         return user
     } catch (error) {

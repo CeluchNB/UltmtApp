@@ -158,3 +158,15 @@ export const setPrivate = async (
         },
     )
 }
+
+export const changeEmail = async (
+    email: string,
+    password: string,
+    newEmail: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(`${API_URL_V1}/user/changeEmail`, {
+        email,
+        password,
+        newEmail,
+    })
+}

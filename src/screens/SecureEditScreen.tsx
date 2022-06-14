@@ -1,8 +1,10 @@
+import * as Constants from '../utils/constants'
 import * as React from 'react'
-// import * as UserData from '../services/data/user'
+import * as UserData from '../services/data/user'
 import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import { User } from '../types/user'
 import UserInput from '../components/atoms/UserInput'
 import { useColors } from '../hooks'
 import validator from 'validator'
@@ -14,13 +16,19 @@ import {
 } from '../utils/form-utils'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { SecureEditField, SecureEditProps } from '../types/navigation'
+import {
+    selectAccount,
+    setProfile,
+} from '../store/reducers/features/account/accountReducer'
 import { size, weight } from '../theme/fonts'
-// import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-const SecureEditScreen: React.FC<SecureEditProps> = ({ route }) => {
+const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
     const { title, value: currentValue, field } = route.params
 
     const { colors } = useColors()
+    const account = useSelector(selectAccount)
+    const dispatch = useDispatch()
     const {
         control,
         handleSubmit,
@@ -33,7 +41,12 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ route }) => {
     })
 
     const [passwordHidden, setPasswordHidden] = React.useState(true)
+    const [dataError, setDataError] = React.useState('')
+    const [loading, setLoading] = React.useState(false)
 
+    // Potential to pass field rules determination to calling component
+    // but that requires many extra dependencies in calling component.
+    // Invert this control if this list grows too large
     const fieldRules: Rules = React.useMemo(() => {
         switch (field) {
             case SecureEditField.EMAIL:
@@ -73,8 +86,36 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ route }) => {
         }
     }, [field])
 
-    const onSubmit = (data: { value: string; password: string }) => {
-        console.log(data)
+    const onSubmit = async (data: { value: string; password: string }) => {
+        setLoading(true)
+        setDataError('')
+        const { value, password } = data
+        try {
+            const user = await handleDataSubmit(account.email, password, value)
+            dispatch(setProfile(user))
+            navigation.goBack()
+        } catch (error: any) {
+            setDataError(error.message ?? Constants)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleDataSubmit = async (
+        email: string,
+        password: string,
+        value: string,
+    ): Promise<User> => {
+        let user
+        switch (field) {
+            case SecureEditField.EMAIL:
+                user = await UserData.changeEmail(email, password, value)
+                break
+            default:
+                user = await UserData.changeEmail(email, password, value)
+                break
+        }
+        return user
     }
 
     const styles = StyleSheet.create({
@@ -157,10 +198,13 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ route }) => {
                 {errors.password && (
                     <Text style={styles.error}>{errors.password.message}</Text>
                 )}
+                {dataError.length > 1 && (
+                    <Text style={styles.error}>{dataError}</Text>
+                )}
                 <PrimaryButton
                     style={styles.button}
                     text={`Change ${title}`}
-                    loading={false}
+                    loading={loading}
                     onPress={handleSubmit(onSubmit)}
                 />
             </View>
