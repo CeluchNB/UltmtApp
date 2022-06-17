@@ -48,6 +48,11 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
             backgroundColor: colors.primary,
             opacity: modalVisible ? 0.85 : 1.0,
         },
+        screenTitle: {
+            flex: 1,
+            alignSelf: 'center',
+            margin: 10,
+        },
         container: {
             width: '75%',
             alignSelf: 'center',
@@ -68,7 +73,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
             marginTop: 2,
         },
         deleteButton: {
-            marginTop: 5,
+            marginTop: 10,
         },
         modalContainer: {
             flex: 1,
@@ -101,6 +106,14 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
         modalButton: {
             margin: 10,
         },
+        title: {
+            flex: 1,
+            fontSize: size.fontLarge,
+            color: colors.textPrimary,
+            fontWeight: weight.bold,
+            marginTop: 10,
+            marginBottom: 10,
+        },
     })
 
     const onLogout = async () => {
@@ -116,7 +129,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.screen}>
             <ScrollView>
-                <ScreenTitle title="Settings" />
+                <ScreenTitle style={styles.screenTitle} title="Settings" />
                 <View style={styles.container}>
                     <Button
                         mode="text"
@@ -125,6 +138,24 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                         loading={false}>
                         Sign Out
                     </Button>
+                    <Text style={styles.title}>Device</Text>
+                    <View style={styles.publicContainer}>
+                        <Text style={styles.publicText}>Dark Mode</Text>
+                        <Switch
+                            thumbColor={colors.textPrimary}
+                            trackColor={{
+                                false: colors.gray,
+                                true: colors.textSecondary,
+                            }}
+                            value={isDarkMode}
+                            onValueChange={async () => {
+                                await Preferences.setDarkMode(!isDarkMode)
+                                // force re-render in new color scheme
+                                forceUpdate()
+                            }}
+                        />
+                    </View>
+                    <Text style={styles.title}>Account</Text>
                     <View style={styles.publicContainer}>
                         <Text style={styles.publicText}>Public</Text>
                         <Switch
@@ -141,22 +172,6 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                                         privateAccount: !account.privateProfile,
                                     }),
                                 )
-                            }}
-                        />
-                    </View>
-                    <View style={styles.publicContainer}>
-                        <Text style={styles.publicText}>Dark Mode</Text>
-                        <Switch
-                            thumbColor={colors.textPrimary}
-                            trackColor={{
-                                false: colors.gray,
-                                true: colors.textSecondary,
-                            }}
-                            value={isDarkMode}
-                            onValueChange={async () => {
-                                await Preferences.setDarkMode(!isDarkMode)
-                                // force re-render in new color scheme
-                                forceUpdate()
                             }}
                         />
                     </View>
