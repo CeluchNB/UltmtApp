@@ -196,3 +196,11 @@ export const logoutAllDevices = async (
         },
     )
 }
+
+export const deleteAccount = async (token: string): Promise<AxiosResponse> => {
+    return await axios.delete(`${API_URL_V1}/user/me`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+}

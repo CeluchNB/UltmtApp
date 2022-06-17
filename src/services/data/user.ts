@@ -8,6 +8,7 @@ import {
     changeName as networkChangeName,
     changePassword as networkChangePassword,
     createAccount as networkCreateAccount,
+    deleteAccount as networkDeleteAccount,
     fetchProfile as networkFetchProfile,
     getPublicUser as networkGetPublicUser,
     leaveManagerRole as networkLeaveManagerRole,
@@ -331,5 +332,19 @@ export const logoutAllDevices = async (token: string): Promise<void> => {
         await networkLogoutAllDevices(token)
     } catch (error) {
         return throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
+    }
+}
+
+/**
+ * Method to delete a user's account
+ * @param token user's auth toen
+ * @returns nothing
+ */
+export const deleteAccount = async (token: string): Promise<void> => {
+    try {
+        await EncryptedStorage.removeItem('jwt_token')
+        await networkDeleteAccount(token)
+    } catch (error) {
+        return throwApiError(error, Constants.DELETE_USER_ERROR)
     }
 }

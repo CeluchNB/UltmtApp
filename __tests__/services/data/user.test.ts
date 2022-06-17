@@ -6,6 +6,7 @@ import {
     changeName,
     changePassword,
     createAccount,
+    deleteAccount,
     fetchProfile,
     getLocalToken,
     getPublicUser,
@@ -553,6 +554,36 @@ describe('test user data calls', () => {
         )
 
         expect(logoutAllDevices('')).rejects.toThrow()
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+    })
+
+    it('should handle delete account network success', async () => {
+        jest.spyOn(UserServices, 'deleteAccount').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(deleteAccount('')).resolves.toEqual(undefined)
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+    })
+
+    it('should handle delete account network failure', async () => {
+        jest.spyOn(UserServices, 'deleteAccount').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(deleteAccount('')).rejects.toThrow()
         expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
     })
 })

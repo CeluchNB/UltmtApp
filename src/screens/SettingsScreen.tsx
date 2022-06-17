@@ -1,3 +1,4 @@
+import * as Constants from '../utils/constants'
 import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import * as UserData from '../services/data/user'
@@ -7,6 +8,7 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import { useColors } from '../hooks'
 import { AllScreenProps, SecureEditField } from '../types/navigation'
 import {
+    Modal,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -33,6 +35,9 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
 
     const [firstError, setFirstError] = React.useState('')
     const [lastError, setLastError] = React.useState('')
+    const [logoutAllError, setLogoutAllError] = React.useState('')
+    const [deleteError, setDeleteError] = React.useState('')
+    const [modalVisible, setModalVisible] = React.useState(false)
 
     const [, updateState] = React.useState<any>()
     const forceUpdate = React.useCallback(() => updateState({}), [])
@@ -41,6 +46,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
         screen: {
             height: '100%',
             backgroundColor: colors.primary,
+            opacity: modalVisible ? 0.85 : 1.0,
         },
         container: {
             width: '75%',
@@ -60,6 +66,40 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
             width: '75%',
             alignSelf: 'center',
             marginTop: 2,
+        },
+        deleteButton: {
+            marginTop: 5,
+        },
+        modalContainer: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 30,
+        },
+        modalView: {
+            margin: 20,
+            backgroundColor: colors.darkGray,
+            borderRadius: 10,
+            padding: 25,
+            alignItems: 'center',
+            shadowColor: colors.darkPrimary,
+            shadowOffset: {
+                width: 5,
+                height: 5,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
+        },
+        modalText: {
+            fontSize: size.fontMedium,
+            color: colors.error,
+        },
+        modalButtonContainer: {
+            flexDirection: 'row',
+        },
+        modalButton: {
+            margin: 10,
         },
     })
 
@@ -178,19 +218,79 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                         mode="text"
                         color={colors.error}
                         onPress={async () => {
-                            await UserData.logoutAllDevices(token)
-                            navigation.navigate('Login')
+                            try {
+                                await UserData.logoutAllDevices(token)
+                                navigation.navigate('Login')
+                            } catch (e: any) {
+                                setLogoutAllError(e.message ?? Constants)
+                            }
                         }}
                         loading={false}>
                         Sign Out All Devices
                     </Button>
+                    {logoutAllError.length > 0 && (
+                        <Text style={styles.error}>{logoutAllError}</Text>
+                    )}
                     <Button
                         mode="contained"
                         color={colors.error}
-                        onPress={() => {}}
+                        style={styles.deleteButton}
+                        onPress={async () => {
+                            setModalVisible(true)
+                        }}
                         loading={false}>
                         Delete Account
                     </Button>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            setModalVisible(false)
+                        }}>
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalText}>
+                                    Are you sure you want to delete your
+                                    account? This is irreversible.
+                                </Text>
+                                <View style={styles.modalButtonContainer}>
+                                    <Button
+                                        mode="contained"
+                                        color={colors.success}
+                                        style={styles.modalButton}
+                                        onPress={() => {
+                                            setModalVisible(false)
+                                        }}>
+                                        No
+                                    </Button>
+                                    <Button
+                                        mode="contained"
+                                        color={colors.error}
+                                        style={styles.modalButton}
+                                        onPress={async () => {
+                                            try {
+                                                await UserData.deleteAccount(
+                                                    token,
+                                                )
+                                                setModalVisible(false)
+                                                navigation.navigate('Login')
+                                            } catch (e: any) {
+                                                setDeleteError(
+                                                    e.message ??
+                                                        Constants.DELETE_USER_ERROR,
+                                                )
+                                            }
+                                        }}>
+                                        Yes
+                                    </Button>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+                    {deleteError.length > 0 && (
+                        <Text style={styles.error}>{deleteError}</Text>
+                    )}
                 </View>
             </ScrollView>
         </SafeAreaView>
