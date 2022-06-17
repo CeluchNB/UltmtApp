@@ -182,3 +182,17 @@ export const changePassword = async (
         newPassword,
     })
 }
+
+export const logoutAllDevices = async (
+    token: string,
+): Promise<AxiosResponse> => {
+    return await axios.post(
+        `${API_URL_V1}/user/logoutAll`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

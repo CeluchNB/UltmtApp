@@ -14,6 +14,7 @@ import {
     leaveTeam as networkLeaveTeam,
     login as networkLogin,
     logout as networkLogout,
+    logoutAllDevices as networkLogoutAllDevices,
     requestPasswordRecovery as networkRequestPasswordRecovery,
     resetPassword as networkResetPassword,
     searchUsers as networkSearchUsers,
@@ -316,5 +317,19 @@ export const changePassword = async (
         return user
     } catch (error) {
         return throwApiError(error, Constants.EDIT_USER_ERROR)
+    }
+}
+
+/**
+ * Method to remove all user token's from the whitelist
+ * @param token user's auth token
+ * @returns nothing
+ */
+export const logoutAllDevices = async (token: string): Promise<void> => {
+    try {
+        await EncryptedStorage.removeItem('jwt_token')
+        await networkLogoutAllDevices(token)
+    } catch (error) {
+        return throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
     }
 }

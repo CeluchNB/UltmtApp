@@ -177,7 +177,10 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                     <Button
                         mode="text"
                         color={colors.error}
-                        onPress={() => {}}
+                        onPress={async () => {
+                            await UserData.logoutAllDevices(token)
+                            navigation.navigate('Login')
+                        }}
                         loading={false}>
                         Sign Out All Devices
                     </Button>

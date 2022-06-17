@@ -13,6 +13,7 @@ import {
     leaveTeam,
     login,
     logout,
+    logoutAllDevices,
     requestPasswordRecovery,
     resetPassword,
     searchUsers,
@@ -523,5 +524,35 @@ describe('test user data calls', () => {
         )
 
         expect(changePassword('', '', '')).rejects.toThrow()
+    })
+
+    it('should handle logout all devices network success', async () => {
+        jest.spyOn(UserServices, 'logoutAllDevices').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(logoutAllDevices('')).resolves.toEqual(undefined)
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+    })
+
+    it('should handle logout all devices network failure', async () => {
+        jest.spyOn(UserServices, 'logoutAllDevices').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(logoutAllDevices('')).rejects.toThrow()
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
     })
 })
