@@ -95,7 +95,7 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
             if (user) dispatch(setProfile(user))
             navigation.goBack()
         } catch (error: any) {
-            setDataError(error.message ?? Constants)
+            setDataError(error.message ?? Constants.EDIT_USER_ERROR)
         } finally {
             setLoading(false)
         }
@@ -183,7 +183,7 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
                     rules={{
                         required: {
                             value: true,
-                            message: 'Current password is required',
+                            message: 'Current password is required.',
                         },
                     }}
                     render={({ field: { onChange, value } }) => {

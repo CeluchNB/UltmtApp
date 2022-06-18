@@ -1,7 +1,7 @@
 import '@testing-library/jest-native/extend-expect'
 import * as React from 'react'
 import EditField from '../../../src/components/molecules/EditField'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -31,6 +31,7 @@ it('should toggle with edit button', async () => {
 
     const editButton = getByTestId('ef-edit-button')
     fireEvent.press(editButton)
+    await act(async () => {})
 
     const submitButton2 = await queryByTestId('ef-submit-button')
     expect(submitButton2).not.toBeNull()
@@ -38,6 +39,7 @@ it('should toggle with edit button', async () => {
     expect(input2).not.toBeNull()
 
     fireEvent.press(editButton)
+    await act(async () => {})
 
     const submitButton3 = await queryByTestId('ef-submit-button')
     expect(submitButton3).toBeNull()

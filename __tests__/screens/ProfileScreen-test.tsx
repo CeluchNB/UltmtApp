@@ -1,8 +1,8 @@
 import * as AccountReducer from '../../src/store/reducers/features/account/accountReducer'
 import * as UserData from '../../src/services/data/user'
+import { AllScreenProps } from '../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from '../../src/screens/ProfileScreen'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { fetchProfileData } from '../../fixtures/data'
@@ -18,7 +18,7 @@ const loginData = { token: 'sample.1234.token' }
 const navigate = jest.fn()
 const addListener = jest.fn()
 
-const props: Props = {
+const props: AllScreenProps = {
     navigation: {
         navigate,
         addListener,
