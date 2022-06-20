@@ -5,29 +5,39 @@ exports[`should match snapshot 1`] = `
   emulateUnlessSupported={true}
   style={
     Object {
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#303030",
       "height": "100%",
     }
   }
 >
-  <RCTScrollView>
+  <RCTScrollView
+    refreshControl={
+      <RefreshControlMock
+        onRefresh={[Function]}
+        refreshing={false}
+      />
+    }
+    testID="mt-scroll-view"
+  >
+    <RCTRefreshControl />
     <View>
       <View
         style={
           Object {
             "display": "flex",
             "flexDirection": "row",
-            "margin": 10,
             "marginBottom": 20,
+            "marginLeft": 10,
           }
         }
       >
         <Text
+          numberOfLines={1}
           style={
             Array [
               Object {
-                "color": "#3183ff",
-                "fontSize": 82.1917808219178,
+                "color": "#ffd600",
+                "fontSize": 61.64383561643835,
                 "fontWeight": "bold",
               },
               Object {
@@ -43,7 +53,6 @@ exports[`should match snapshot 1`] = `
           accessible={true}
           collapsable={false}
           focusable={true}
-          nativeID="animatedComponent"
           onClick={[Function]}
           onResponderGrant={[Function]}
           onResponderMove={[Function]}
@@ -54,7 +63,7 @@ exports[`should match snapshot 1`] = `
           style={
             Object {
               "flexDirection": "column",
-              "marginTop": 10,
+              "margin": 10,
               "opacity": 1,
             }
           }
@@ -64,8 +73,8 @@ exports[`should match snapshot 1`] = `
             style={
               Array [
                 Object {
-                  "color": "#3183ff",
-                  "fontSize": 30,
+                  "color": "#ffd600",
+                  "fontSize": 25,
                 },
                 Object {
                   "alignSelf": "center",
@@ -87,7 +96,7 @@ exports[`should match snapshot 1`] = `
           <Text
             style={
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "margin": 0,
                 "padding": 0,
               }
@@ -124,7 +133,7 @@ exports[`should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "flex": 1,
                   "fontSize": 61.64383561643835,
                   "fontWeight": "bold",
@@ -177,7 +186,7 @@ exports[`should match snapshot 1`] = `
                     },
                     undefined,
                     Object {
-                      "backgroundColor": "#3183ff",
+                      "backgroundColor": "#ffd600",
                       "borderRadius": 5,
                       "display": "flex",
                       "flexWrap": "nowrap",
@@ -197,7 +206,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#ffffff",
+                        "color": "#303030",
                         "fontSize": 24,
                       },
                       Array [
@@ -248,7 +257,6 @@ exports[`should match snapshot 1`] = `
                 accessible={true}
                 collapsable={false}
                 focusable={true}
-                nativeID="animatedComponent"
                 onClick={[Function]}
                 onResponderGrant={[Function]}
                 onResponderMove={[Function]}
@@ -265,7 +273,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -276,7 +284,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -288,7 +296,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -449,7 +457,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [
@@ -500,7 +508,6 @@ exports[`should match snapshot 1`] = `
                 accessible={true}
                 collapsable={false}
                 focusable={true}
-                nativeID="animatedComponent"
                 onClick={[Function]}
                 onResponderGrant={[Function]}
                 onResponderMove={[Function]}
@@ -517,7 +524,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -528,7 +535,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -540,7 +547,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -701,7 +708,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [
@@ -752,7 +759,6 @@ exports[`should match snapshot 1`] = `
                 accessible={true}
                 collapsable={false}
                 focusable={true}
-                nativeID="animatedComponent"
                 onClick={[Function]}
                 onResponderGrant={[Function]}
                 onResponderMove={[Function]}
@@ -769,7 +775,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -780,7 +786,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -792,7 +798,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -953,7 +959,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [
@@ -1003,7 +1009,7 @@ exports[`should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "flex": 1,
                   "fontSize": 61.64383561643835,
                   "fontWeight": "bold",
@@ -1056,7 +1062,7 @@ exports[`should match snapshot 1`] = `
                     },
                     undefined,
                     Object {
-                      "backgroundColor": "#3183ff",
+                      "backgroundColor": "#ffd600",
                       "borderRadius": 5,
                       "display": "flex",
                       "flexWrap": "nowrap",
@@ -1076,7 +1082,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#ffffff",
+                        "color": "#303030",
                         "fontSize": 24,
                       },
                       Array [
@@ -1127,7 +1133,6 @@ exports[`should match snapshot 1`] = `
                 accessible={true}
                 collapsable={false}
                 focusable={true}
-                nativeID="animatedComponent"
                 onClick={[Function]}
                 onResponderGrant={[Function]}
                 onResponderMove={[Function]}
@@ -1144,7 +1149,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -1155,7 +1160,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -1167,7 +1172,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -1328,7 +1333,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [
@@ -1378,7 +1383,7 @@ exports[`should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "flex": 1,
                   "fontSize": 61.64383561643835,
                   "fontWeight": "bold",
@@ -1410,7 +1415,6 @@ exports[`should match snapshot 1`] = `
                 accessible={true}
                 collapsable={false}
                 focusable={true}
-                nativeID="animatedComponent"
                 onClick={[Function]}
                 onResponderGrant={[Function]}
                 onResponderMove={[Function]}
@@ -1427,7 +1431,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#707070",
+                      "color": "#ababab",
                       "fontSize": 41.0958904109589,
                       "fontWeight": "bold",
                     }
@@ -1438,7 +1442,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 30.821917808219176,
                       "fontWeight": "bold",
                     }
@@ -1450,7 +1454,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     Object {
-                      "color": "#3183ff",
+                      "color": "#ffd600",
                       "fontSize": 20.54794520547945,
                       "fontWeight": "bold",
                     }
@@ -1521,7 +1525,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 24,
                       },
                       Array [

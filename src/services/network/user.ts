@@ -124,3 +124,83 @@ export const setOpenToRequests = async (
         },
     )
 }
+
+export const changeName = async (
+    token: string,
+    newFirstName: string,
+    newLastName: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/user/changeName`,
+        {
+            newFirstName,
+            newLastName,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}
+
+export const setPrivate = async (
+    token: string,
+    privateAccount: boolean,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/user/setPrivate?private=${privateAccount}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}
+
+export const changeEmail = async (
+    email: string,
+    password: string,
+    newEmail: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(`${API_URL_V1}/user/changeEmail`, {
+        email,
+        password,
+        newEmail,
+    })
+}
+
+export const changePassword = async (
+    email: string,
+    password: string,
+    newPassword: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(`${API_URL_V1}/user/changePassword`, {
+        email,
+        password,
+        newPassword,
+    })
+}
+
+export const logoutAllDevices = async (
+    token: string,
+): Promise<AxiosResponse> => {
+    return await axios.post(
+        `${API_URL_V1}/user/logoutAll`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}
+
+export const deleteAccount = async (token: string): Promise<AxiosResponse> => {
+    return await axios.delete(`${API_URL_V1}/user/me`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+}

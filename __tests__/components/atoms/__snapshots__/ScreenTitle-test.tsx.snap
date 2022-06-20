@@ -2,11 +2,12 @@
 
 exports[`matches snapshot 1`] = `
 <Text
+  numberOfLines={1}
   style={
     Array [
       Object {
-        "color": "#3183ff",
-        "fontSize": 82.1917808219178,
+        "color": "#ffd600",
+        "fontSize": 61.64383561643835,
         "fontWeight": "bold",
       },
       undefined,

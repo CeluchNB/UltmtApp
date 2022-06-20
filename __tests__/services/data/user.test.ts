@@ -2,7 +2,11 @@ import * as UserServices from '../../../src/services/network/user'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { CreateUserData, DisplayUser, User } from '../../../src/types/user'
 import {
+    changeEmail,
+    changeName,
+    changePassword,
     createAccount,
+    deleteAccount,
     fetchProfile,
     getLocalToken,
     getPublicUser,
@@ -10,10 +14,12 @@ import {
     leaveTeam,
     login,
     logout,
+    logoutAllDevices,
     requestPasswordRecovery,
     resetPassword,
     searchUsers,
     setOpenToRequests,
+    setPrivate,
 } from '../../../src/services/data/user'
 
 const validToken = 'token1'
@@ -405,5 +411,179 @@ describe('test user data calls', () => {
             }),
         )
         expect(setOpenToRequests('', true)).rejects.toThrow()
+    })
+
+    it('should handle change name network success', async () => {
+        jest.spyOn(UserServices, 'changeName').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await changeName('', '', '')
+        expect(result).toBe(user)
+    })
+
+    it('should handle change name network failure', async () => {
+        jest.spyOn(UserServices, 'changeName').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(changeName('', '', '')).rejects.toThrow()
+    })
+
+    it('should handle set private network success', async () => {
+        jest.spyOn(UserServices, 'setPrivate').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await setPrivate('', true)
+        expect(result).toBe(user)
+    })
+
+    it('should handle set private network failure', async () => {
+        jest.spyOn(UserServices, 'setPrivate').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(setPrivate('', true)).rejects.toThrow()
+    })
+
+    it('should handle change email network success', async () => {
+        jest.spyOn(UserServices, 'changeEmail').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await changeEmail('', '', '')
+        expect(result).toBe(user)
+    })
+
+    it('should handle change email network failure', async () => {
+        jest.spyOn(UserServices, 'changeEmail').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(changeEmail('', '', '')).rejects.toThrow()
+    })
+
+    it('should handle change password network success', async () => {
+        jest.spyOn(UserServices, 'changePassword').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await changePassword('', '', '')
+        expect(result).toBe(user)
+    })
+
+    it('should handle change password network failure', async () => {
+        jest.spyOn(UserServices, 'changePassword').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(changePassword('', '', '')).rejects.toThrow()
+    })
+
+    it('should handle logout all devices network success', async () => {
+        jest.spyOn(UserServices, 'logoutAllDevices').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(logoutAllDevices('')).resolves.toEqual(undefined)
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+    })
+
+    it('should handle logout all devices network failure', async () => {
+        jest.spyOn(UserServices, 'logoutAllDevices').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(logoutAllDevices('')).rejects.toThrow()
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+    })
+
+    it('should handle delete account network success', async () => {
+        jest.spyOn(UserServices, 'deleteAccount').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(deleteAccount('')).resolves.toEqual(undefined)
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+    })
+
+    it('should handle delete account network failure', async () => {
+        jest.spyOn(UserServices, 'deleteAccount').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(deleteAccount('')).rejects.toThrow()
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
     })
 })

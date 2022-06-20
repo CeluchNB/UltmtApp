@@ -4,17 +4,23 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 import { throwApiError } from '../../utils/service-utils'
 import { CreateUserData, DisplayUser, User } from '../../types/user'
 import {
+    changeEmail as networkChangeEmail,
+    changeName as networkChangeName,
+    changePassword as networkChangePassword,
     createAccount as networkCreateAccount,
+    deleteAccount as networkDeleteAccount,
     fetchProfile as networkFetchProfile,
     getPublicUser as networkGetPublicUser,
     leaveManagerRole as networkLeaveManagerRole,
     leaveTeam as networkLeaveTeam,
     login as networkLogin,
     logout as networkLogout,
+    logoutAllDevices as networkLogoutAllDevices,
     requestPasswordRecovery as networkRequestPasswordRecovery,
     resetPassword as networkResetPassword,
     searchUsers as networkSearchUsers,
     setOpenToRequests as networkSetOpenToRequests,
+    setPrivate as networkSetPrivate,
 } from '../network/user'
 
 /**
@@ -191,6 +197,12 @@ export const requestPasswordRecovery = async (email: string): Promise<void> => {
     }
 }
 
+/**
+ * Method for user to reset their password
+ * @param passcode 6 digit passcode user can redeem
+ * @param newPassword new password
+ * @returns new jwt and user profile
+ */
 export const resetPassword = async (
     passcode: string,
     newPassword: string,
@@ -204,6 +216,12 @@ export const resetPassword = async (
     }
 }
 
+/**
+ * Method to change user's ability to receive requests
+ * @param token auth token of user
+ * @param open boolean if user wishes to receive requests
+ * @returns updated user profile
+ */
 export const setOpenToRequests = async (
     token: string,
     open: boolean,
@@ -214,5 +232,119 @@ export const setOpenToRequests = async (
         return user
     } catch (error) {
         return throwApiError(error, Constants.TOGGLE_ROSTER_STATUS_ERROR)
+    }
+}
+
+/**
+ * Method to update a user's first and last name
+ * @param token auth token of user
+ * @param firstName first name of user
+ * @param lastName last name of user
+ * @returns updated user value
+ */
+export const changeName = async (
+    token: string,
+    firstName: string,
+    lastName: string,
+): Promise<User> => {
+    try {
+        const response = await networkChangeName(token, firstName, lastName)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_USER_ERROR)
+    }
+}
+
+/**
+ * Method to set a user's private status
+ * @param token auth token of user
+ * @param privateAccount user's private status
+ * @returns updated user value
+ */
+export const setPrivate = async (
+    token: string,
+    privateAccount: boolean,
+): Promise<User> => {
+    try {
+        const response = await networkSetPrivate(token, privateAccount)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_USER_ERROR)
+    }
+}
+
+/**
+ * Method to change a user's email
+ * @param email current email to fulfill email/password login requirement
+ * @param password current password
+ * @param newEmail new email
+ * @returns updated user value
+ */
+export const changeEmail = async (
+    email: string,
+    password: string,
+    newEmail: string,
+): Promise<User> => {
+    try {
+        const response = await networkChangeEmail(email, password, newEmail)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_USER_ERROR)
+    }
+}
+
+/**
+ * Method to change a user's password
+ * @param email current email to fulfill email/password login requirement
+ * @param password current password
+ * @param newPassword updated password
+ * @returns updated user value
+ */
+export const changePassword = async (
+    email: string,
+    password: string,
+    newPassword: string,
+): Promise<User> => {
+    try {
+        const response = await networkChangePassword(
+            email,
+            password,
+            newPassword,
+        )
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_USER_ERROR)
+    }
+}
+
+/**
+ * Method to remove all user token's from the whitelist
+ * @param token user's auth token
+ * @returns nothing
+ */
+export const logoutAllDevices = async (token: string): Promise<void> => {
+    try {
+        await EncryptedStorage.removeItem('jwt_token')
+        await networkLogoutAllDevices(token)
+    } catch (error) {
+        return throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
+    }
+}
+
+/**
+ * Method to delete a user's account
+ * @param token user's auth toen
+ * @returns nothing
+ */
+export const deleteAccount = async (token: string): Promise<void> => {
+    try {
+        await EncryptedStorage.removeItem('jwt_token')
+        await networkDeleteAccount(token)
+    } catch (error) {
+        return throwApiError(error, Constants.DELETE_USER_ERROR)
     }
 }

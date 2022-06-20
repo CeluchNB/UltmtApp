@@ -4,17 +4,18 @@ exports[`should match snapshot 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#303030",
       "height": "100%",
     }
   }
 >
   <Text
+    numberOfLines={1}
     style={
       Array [
         Object {
-          "color": "#3183ff",
-          "fontSize": 82.1917808219178,
+          "color": "#ffd600",
+          "fontSize": 61.64383561643835,
           "fontWeight": "bold",
         },
         Object {
@@ -35,8 +36,8 @@ exports[`should match snapshot 1`] = `
         },
         Object {
           "alignSelf": "center",
-          "backgroundColor": "#ffffff",
-          "color": "#3183ff",
+          "backgroundColor": "#303030",
+          "color": "#ffd600",
           "marginBottom": 5,
           "width": "75%",
         },
@@ -45,10 +46,9 @@ exports[`should match snapshot 1`] = `
   >
     <View
       collapsable={false}
-      nativeID="animatedComponent"
       style={
         Object {
-          "backgroundColor": "#3183ff",
+          "backgroundColor": "#ffd600",
           "bottom": 0,
           "height": 2,
           "left": 0,
@@ -83,8 +83,8 @@ exports[`should match snapshot 1`] = `
         onChangeText={[Function]}
         onFocus={[Function]}
         placeholder="Search teams..."
-        placeholderTextColor="#707070"
-        selectionColor="#3183ff"
+        placeholderTextColor="#ababab"
+        selectionColor="#ffd600"
         style={
           Array [
             Object {
@@ -103,7 +103,7 @@ exports[`should match snapshot 1`] = `
               "paddingTop": 0,
             },
             Object {
-              "color": "#3183ff",
+              "color": "#ffd600",
               "fontFamily": "System",
               "fontSize": 16,
               "fontWeight": undefined,

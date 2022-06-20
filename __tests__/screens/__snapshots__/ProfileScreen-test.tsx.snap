@@ -5,7 +5,7 @@ exports[`profile screen matches snapshot 1`] = `
   emulateUnlessSupported={true}
   style={
     Object {
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#303030",
       "minHeight": "100%",
     }
   }
@@ -91,8 +91,9 @@ exports[`profile screen matches snapshot 1`] = `
           style={
             Object {
               "flexDirection": "row",
+              "marginBottom": 0,
+              "marginLeft": 10,
               "textAlign": "right",
-              "width": "75%",
             }
           }
         >
@@ -100,6 +101,7 @@ exports[`profile screen matches snapshot 1`] = `
             style={
               Object {
                 "flex": 1,
+                "textAlignVertical": "center",
               }
             }
             title="first last"
@@ -109,16 +111,27 @@ exports[`profile screen matches snapshot 1`] = `
             onPress={[Function]}
             style={
               Object {
-                "marginTop": 10,
+                "margin": 10,
               }
             }
             text="Requests"
+          />
+          <IconButtonText
+            icon="cog-outline"
+            onPress={[Function]}
+            style={
+              Object {
+                "marginRight": 10,
+                "marginTop": 10,
+              }
+            }
+            text="Settings"
           />
         </View>
         <Text
           style={
             Object {
-              "color": "#3183ff",
+              "color": "#ffd600",
               "fontSize": 41.0958904109589,
             }
           }
@@ -155,7 +168,7 @@ exports[`profile screen matches snapshot 1`] = `
       <RefreshControlMock
         colors={
           Array [
-            "#ffd600",
+            "#31adff",
           ]
         }
         onRefresh={[Function]}
@@ -186,21 +199,24 @@ exports[`profile screen matches snapshot 1`] = `
             style={
               Object {
                 "flexDirection": "row",
+                "marginBottom": 0,
+                "marginLeft": 10,
                 "textAlign": "right",
-                "width": "75%",
               }
             }
           >
             <Text
+              numberOfLines={1}
               style={
                 Array [
                   Object {
-                    "color": "#3183ff",
-                    "fontSize": 82.1917808219178,
+                    "color": "#ffd600",
+                    "fontSize": 61.64383561643835,
                     "fontWeight": "bold",
                   },
                   Object {
                     "flex": 1,
+                    "textAlignVertical": "center",
                   },
                 ]
               }
@@ -211,7 +227,6 @@ exports[`profile screen matches snapshot 1`] = `
               accessible={true}
               collapsable={false}
               focusable={true}
-              nativeID="animatedComponent"
               onClick={[Function]}
               onResponderGrant={[Function]}
               onResponderMove={[Function]}
@@ -222,7 +237,7 @@ exports[`profile screen matches snapshot 1`] = `
               style={
                 Object {
                   "flexDirection": "column",
-                  "marginTop": 10,
+                  "margin": 10,
                   "opacity": 1,
                 }
               }
@@ -232,8 +247,8 @@ exports[`profile screen matches snapshot 1`] = `
                 style={
                   Array [
                     Object {
-                      "color": "#3183ff",
-                      "fontSize": 30,
+                      "color": "#ffd600",
+                      "fontSize": 25,
                     },
                     Object {
                       "alignSelf": "center",
@@ -255,7 +270,7 @@ exports[`profile screen matches snapshot 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#3183ff",
+                    "color": "#ffd600",
                     "margin": 0,
                     "padding": 0,
                   }
@@ -264,11 +279,68 @@ exports[`profile screen matches snapshot 1`] = `
                 Requests
               </Text>
             </View>
+            <View
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "flexDirection": "column",
+                  "marginRight": 10,
+                  "marginTop": 10,
+                  "opacity": 1,
+                }
+              }
+            >
+              <Text
+                allowFontScaling={false}
+                style={
+                  Array [
+                    Object {
+                      "color": "#ffd600",
+                      "fontSize": 25,
+                    },
+                    Object {
+                      "alignSelf": "center",
+                      "margin": 0,
+                      "padding": 0,
+                    },
+                    Object {
+                      "fontFamily": "Material Design Icons",
+                      "fontStyle": "normal",
+                      "fontWeight": "normal",
+                    },
+                    Object {},
+                  ]
+                }
+                testID="icon-button"
+              >
+                󰢻
+              </Text>
+              <Text
+                style={
+                  Object {
+                    "color": "#ffd600",
+                    "margin": 0,
+                    "padding": 0,
+                  }
+                }
+              >
+                Settings
+              </Text>
+            </View>
           </View>
           <Text
             style={
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "fontSize": 41.0958904109589,
               }
             }
@@ -277,7 +349,6 @@ exports[`profile screen matches snapshot 1`] = `
           </Text>
           <View
             collapsable={false}
-            nativeID="animatedComponent"
             style={
               Object {
                 "backgroundColor": "transparent",
@@ -407,7 +478,7 @@ exports[`profile screen matches snapshot 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#3183ff",
+                    "color": "#ffd600",
                     "flex": 1,
                     "fontSize": 61.64383561643835,
                     "fontWeight": "bold",
@@ -462,7 +533,7 @@ exports[`profile screen matches snapshot 1`] = `
                         "opacity": 0.32,
                       },
                       Object {
-                        "backgroundColor": "#3183ff",
+                        "backgroundColor": "#ffd600",
                         "borderRadius": 5,
                         "display": "none",
                         "flexWrap": "nowrap",
@@ -482,7 +553,7 @@ exports[`profile screen matches snapshot 1`] = `
                     style={
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#303030",
                           "fontSize": 24,
                         },
                         Array [
@@ -515,6 +586,7 @@ exports[`profile screen matches snapshot 1`] = `
             <Text
               style={
                 Object {
+                  "color": "#ffd600",
                   "fontSize": 41.0958904109589,
                   "marginBottom": 50,
                 }
@@ -542,7 +614,7 @@ exports[`profile screen matches snapshot 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#3183ff",
+                    "color": "#ffd600",
                     "flex": 1,
                     "fontSize": 61.64383561643835,
                     "fontWeight": "bold",
@@ -556,6 +628,7 @@ exports[`profile screen matches snapshot 1`] = `
             <Text
               style={
                 Object {
+                  "color": "#ffd600",
                   "fontSize": 41.0958904109589,
                   "marginBottom": 50,
                 }
@@ -583,7 +656,7 @@ exports[`profile screen matches snapshot 1`] = `
               <Text
                 style={
                   Object {
-                    "color": "#3183ff",
+                    "color": "#ffd600",
                     "flex": 1,
                     "fontSize": 61.64383561643835,
                     "fontWeight": "bold",
@@ -636,7 +709,7 @@ exports[`profile screen matches snapshot 1`] = `
                       },
                       undefined,
                       Object {
-                        "backgroundColor": "#3183ff",
+                        "backgroundColor": "#ffd600",
                         "borderRadius": 5,
                         "display": "flex",
                         "flexWrap": "nowrap",
@@ -656,7 +729,7 @@ exports[`profile screen matches snapshot 1`] = `
                     style={
                       Array [
                         Object {
-                          "color": "#ffffff",
+                          "color": "#303030",
                           "fontSize": 24,
                         },
                         Array [
@@ -707,7 +780,6 @@ exports[`profile screen matches snapshot 1`] = `
                   accessible={true}
                   collapsable={false}
                   focusable={true}
-                  nativeID="animatedComponent"
                   onClick={[Function]}
                   onResponderGrant={[Function]}
                   onResponderMove={[Function]}
@@ -724,7 +796,7 @@ exports[`profile screen matches snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#707070",
+                        "color": "#ababab",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -735,7 +807,7 @@ exports[`profile screen matches snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
                       }
@@ -747,7 +819,7 @@ exports[`profile screen matches snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 20.54794520547945,
                         "fontWeight": "bold",
                       }
@@ -818,7 +890,7 @@ exports[`profile screen matches snapshot 1`] = `
                     style={
                       Array [
                         Object {
-                          "color": "#3183ff",
+                          "color": "#ffd600",
                           "fontSize": 24,
                         },
                         Array [
@@ -869,7 +941,6 @@ exports[`profile screen matches snapshot 1`] = `
                   accessible={true}
                   collapsable={false}
                   focusable={true}
-                  nativeID="animatedComponent"
                   onClick={[Function]}
                   onResponderGrant={[Function]}
                   onResponderMove={[Function]}
@@ -886,7 +957,7 @@ exports[`profile screen matches snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#707070",
+                        "color": "#ababab",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -897,7 +968,7 @@ exports[`profile screen matches snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
                       }
@@ -909,7 +980,7 @@ exports[`profile screen matches snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 20.54794520547945,
                         "fontWeight": "bold",
                       }
@@ -980,7 +1051,7 @@ exports[`profile screen matches snapshot 1`] = `
                     style={
                       Array [
                         Object {
-                          "color": "#3183ff",
+                          "color": "#ffd600",
                           "fontSize": 24,
                         },
                         Array [
@@ -1031,7 +1102,6 @@ exports[`profile screen matches snapshot 1`] = `
                   accessible={true}
                   collapsable={false}
                   focusable={true}
-                  nativeID="animatedComponent"
                   onClick={[Function]}
                   onResponderGrant={[Function]}
                   onResponderMove={[Function]}
@@ -1048,7 +1118,7 @@ exports[`profile screen matches snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#707070",
+                        "color": "#ababab",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -1059,7 +1129,7 @@ exports[`profile screen matches snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
                       }
@@ -1071,7 +1141,7 @@ exports[`profile screen matches snapshot 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "#3183ff",
+                        "color": "#ffd600",
                         "fontSize": 20.54794520547945,
                         "fontWeight": "bold",
                       }
@@ -1142,7 +1212,7 @@ exports[`profile screen matches snapshot 1`] = `
                     style={
                       Array [
                         Object {
-                          "color": "#3183ff",
+                          "color": "#ffd600",
                           "fontSize": 24,
                         },
                         Array [
@@ -1174,7 +1244,6 @@ exports[`profile screen matches snapshot 1`] = `
             </View>
             <View
               collapsable={false}
-              nativeID="animatedComponent"
               style={
                 Object {
                   "alignSelf": "center",
@@ -1254,7 +1323,7 @@ exports[`profile screen matches snapshot 1`] = `
                             "textTransform": "uppercase",
                           },
                           Object {
-                            "color": "#3183ff",
+                            "color": "#ffd600",
                             "fontFamily": "System",
                             "fontWeight": "500",
                           },

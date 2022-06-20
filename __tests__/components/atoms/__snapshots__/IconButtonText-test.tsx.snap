@@ -5,7 +5,6 @@ exports[`should match snapshot 1`] = `
   accessible={true}
   collapsable={false}
   focusable={true}
-  nativeID="animatedComponent"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -25,8 +24,8 @@ exports[`should match snapshot 1`] = `
     style={
       Array [
         Object {
-          "color": "#3183ff",
-          "fontSize": 30,
+          "color": "#ffd600",
+          "fontSize": 25,
         },
         Object {
           "alignSelf": "center",
@@ -48,7 +47,7 @@ exports[`should match snapshot 1`] = `
   <Text
     style={
       Object {
-        "color": "#3183ff",
+        "color": "#ffd600",
         "margin": 0,
         "padding": 0,
       }

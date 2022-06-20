@@ -1,62 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test matches snapshot 1`] = `
+exports[`should match snapshot 1`] = `
 <View>
   <View
-    accessibilityState={
-      Object {
-        "disabled": false,
-      }
-    }
-    accessible={true}
-    collapsable={false}
-    focusable={true}
-    onClick={[Function]}
-    onResponderGrant={[Function]}
-    onResponderMove={[Function]}
-    onResponderRelease={[Function]}
-    onResponderTerminate={[Function]}
-    onResponderTerminationRequest={[Function]}
-    onStartShouldSetResponder={[Function]}
     style={
       Object {
         "display": "flex",
         "flexDirection": "row",
-        "opacity": 1,
       }
     }
   >
-    <View
+    <Text
       style={
         Object {
-          "alignSelf": "center",
-          "flex": 1,
+          "color": "#ffd600",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "bold",
+          "textAlignVertical": "center",
         }
       }
     >
-      <Text
-        style={
-          Object {
-            "color": "#ababab",
-            "fontSize": 41.0958904109589,
-            "fontWeight": "900",
-          }
-        }
-      >
-        first last
-      </Text>
-      <Text
-        style={
-          Object {
-            "color": "#ffd600",
-            "fontSize": 30.821917808219176,
-            "fontWeight": "900",
-          }
-        }
-      >
-        firstlast
-      </Text>
-    </View>
+      test
+    </Text>
     <View
       accessibilityRole="button"
       accessibilityState={
@@ -99,13 +64,11 @@ exports[`test matches snapshot 1`] = `
               "width": 36,
             },
             undefined,
-            Object {
-              "alignItems": "center",
-              "justifyContent": "center",
-            },
+            undefined,
           ],
         ]
       }
+      testID="ef-edit-button"
     >
       <View>
         <Text
@@ -117,7 +80,7 @@ exports[`test matches snapshot 1`] = `
           style={
             Array [
               Object {
-                "color": "#40dd50",
+                "color": "#ffd600",
                 "fontSize": 24,
               },
               Array [
@@ -142,44 +105,23 @@ exports[`test matches snapshot 1`] = `
             ]
           }
         >
-          󰐕
+          󰏫
         </Text>
       </View>
     </View>
   </View>
-</View>
-`;
-
-exports[`test matches snapshot while loading displays 1`] = `
-<View>
   <View
-    accessibilityState={
-      Object {
-        "disabled": true,
-      }
-    }
-    accessible={true}
-    collapsable={false}
-    focusable={true}
-    onClick={[Function]}
-    onResponderGrant={[Function]}
-    onResponderMove={[Function]}
-    onResponderRelease={[Function]}
-    onResponderTerminate={[Function]}
-    onResponderTerminationRequest={[Function]}
-    onStartShouldSetResponder={[Function]}
     style={
       Object {
         "display": "flex",
         "flexDirection": "row",
-        "opacity": 1,
+        "width": "100%",
       }
     }
   >
     <View
       style={
         Object {
-          "alignSelf": "center",
           "flex": 1,
         }
       }
@@ -189,30 +131,12 @@ exports[`test matches snapshot while loading displays 1`] = `
           Object {
             "color": "#ababab",
             "fontSize": 41.0958904109589,
-            "fontWeight": "900",
           }
         }
       >
-        first last
-      </Text>
-      <Text
-        style={
-          Object {
-            "color": "#ffd600",
-            "fontSize": 30.821917808219176,
-            "fontWeight": "900",
-          }
-        }
-      >
-        firstlast
+        test
       </Text>
     </View>
-    <ActivityIndicator
-      animating={true}
-      color="#ababab"
-      size="small"
-      testID="loading-spinner"
-    />
   </View>
 </View>
 `;

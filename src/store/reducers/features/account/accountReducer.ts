@@ -18,6 +18,7 @@ export interface AccountSlice {
     archiveTeams: DisplayTeam[]
     requests: string[]
     toggleRosterStatusLoading: boolean
+    editLoading: boolean
 }
 
 const initialState: AccountSlice = {
@@ -35,6 +36,7 @@ const initialState: AccountSlice = {
     archiveTeams: [],
     requests: [],
     toggleRosterStatusLoading: false,
+    editLoading: false,
 }
 
 const accountSlice = createSlice({
@@ -51,22 +53,26 @@ const accountSlice = createSlice({
             const {
                 firstName,
                 lastName,
+                email,
                 username,
                 playerTeams,
                 managerTeams,
                 archiveTeams,
                 requests,
                 openToRequests,
+                privateProfile,
             } = action.payload
 
             state.firstName = firstName
             state.lastName = lastName
+            state.email = email
             state.username = username
             state.playerTeams = playerTeams
             state.managerTeams = managerTeams
             state.archiveTeams = archiveTeams
             state.requests = requests
             state.openToRequests = openToRequests
+            state.privateProfile = privateProfile
         },
         removeRequest(state, action) {
             state.requests = state.requests.filter(
@@ -162,6 +168,15 @@ const accountSlice = createSlice({
                 state.error = action.error.message
                 state.toggleRosterStatusLoading = false
             })
+
+        builder
+            .addCase(setPrivate.fulfilled, (state, action) => {
+                const user = action.payload
+                state.privateProfile = user.private
+            })
+            .addCase(setPrivate.rejected, (state, action) => {
+                state.error = action.error.message
+            })
     },
 })
 
@@ -200,6 +215,14 @@ export const setOpenToRequests = createAsyncThunk(
     async (data: { token: string; open: boolean }, _thunkAPI) => {
         const { token, open } = data
         return await UserData.setOpenToRequests(token, open)
+    },
+)
+
+export const setPrivate = createAsyncThunk(
+    'account/setPrivate',
+    async (data: { token: string; privateAccount: boolean }, _thunkAPI) => {
+        const { token, privateAccount } = data
+        return await UserData.setPrivate(token, privateAccount)
     },
 )
 

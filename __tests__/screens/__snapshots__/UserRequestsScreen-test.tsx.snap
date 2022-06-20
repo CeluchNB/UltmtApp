@@ -5,7 +5,7 @@ exports[`should match snapshot 1`] = `
   emulateUnlessSupported={true}
   style={
     Object {
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#303030",
       "height": "100%",
     }
   }
@@ -22,11 +22,12 @@ exports[`should match snapshot 1`] = `
     <RCTRefreshControl />
     <View>
       <Text
+        numberOfLines={1}
         style={
           Array [
             Object {
-              "color": "#3183ff",
-              "fontSize": 82.1917808219178,
+              "color": "#ffd600",
+              "fontSize": 61.64383561643835,
               "fontWeight": "bold",
             },
             Object {
@@ -46,10 +47,11 @@ exports[`should match snapshot 1`] = `
         }
       >
         <View
+          collapsable={false}
           style={
             Object {
               "alignSelf": "center",
-              "backgroundColor": "#3183ff",
+              "backgroundColor": "#ffd600",
               "borderColor": "transparent",
               "borderRadius": 4,
               "borderStyle": "solid",
@@ -132,7 +134,7 @@ exports[`should match snapshot 1`] = `
                         "textTransform": "uppercase",
                       },
                       Object {
-                        "color": "#ffffff",
+                        "color": "#000000",
                         "fontFamily": "System",
                         "fontWeight": "500",
                       },
@@ -169,7 +171,7 @@ exports[`should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "flex": 1,
                   "fontSize": 61.64383561643835,
                   "fontWeight": "bold",
@@ -183,6 +185,7 @@ exports[`should match snapshot 1`] = `
           <Text
             style={
               Object {
+                "color": "#ffd600",
                 "fontSize": 41.0958904109589,
                 "marginBottom": 50,
               }
@@ -210,7 +213,7 @@ exports[`should match snapshot 1`] = `
             <Text
               style={
                 Object {
-                  "color": "#3183ff",
+                  "color": "#ffd600",
                   "flex": 1,
                   "fontSize": 61.64383561643835,
                   "fontWeight": "bold",
@@ -263,7 +266,7 @@ exports[`should match snapshot 1`] = `
                     },
                     undefined,
                     Object {
-                      "backgroundColor": "#3183ff",
+                      "backgroundColor": "#ffd600",
                       "borderRadius": 5,
                       "display": "flex",
                       "flexWrap": "nowrap",
@@ -283,7 +286,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     Array [
                       Object {
-                        "color": "#ffffff",
+                        "color": "#303030",
                         "fontSize": 24,
                       },
                       Array [
@@ -316,6 +319,7 @@ exports[`should match snapshot 1`] = `
           <Text
             style={
               Object {
+                "color": "#ffd600",
                 "fontSize": 41.0958904109589,
                 "marginBottom": 50,
               }

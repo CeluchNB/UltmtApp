@@ -1,60 +1,29 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
 import * as React from 'react'
-import AccountNavigator from './src/navigation/AccountNavigator'
-import GameNavigator from './src/navigation/GameNavigator'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { NavigationContainer } from '@react-navigation/native'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { useColors } from './src/hooks'
+import SecureEditScreen from './src/screens/SecureEditScreen'
+import SettingsScreen from './src/screens/SettingsScreen'
+import TabNavigator from './src/navigation/TabNavigator'
+import { TopLevelParamList } from './src/types/navigation'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-const Tab = createMaterialBottomTabNavigator()
+const Stack = createNativeStackNavigator<TopLevelParamList>()
 
 const App: React.FC<{}> = () => {
-    const { colors } = useColors()
     return (
         <NavigationContainer>
-            <Tab.Navigator
-                activeColor={colors.textPrimary}
-                inactiveColor={colors.gray}
-                barStyle={{ backgroundColor: colors.darkPrimary }}>
-                <Tab.Screen
-                    name="Account"
-                    component={AccountNavigator}
-                    options={{
-                        tabBarLabel: 'Account',
-                        tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons
-                                name="account"
-                                color={color}
-                                size={26}
-                            />
-                        ),
-                    }}
+            <Stack.Navigator
+                initialRouteName={'Tabs'}
+                screenOptions={{ headerShown: false }}>
+                <Stack.Screen
+                    name="SettingsScreen"
+                    component={SettingsScreen}
                 />
-                <Tab.Screen
-                    name="Games"
-                    component={GameNavigator}
-                    options={{
-                        tabBarLabel: 'Games',
-                        tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons
-                                name="home"
-                                color={color}
-                                size={26}
-                            />
-                        ),
-                    }}
+                <Stack.Screen
+                    name="SecureEditScreen"
+                    component={SecureEditScreen}
                 />
-            </Tab.Navigator>
+                <Stack.Screen name="Tabs" component={TabNavigator} />
+            </Stack.Navigator>
         </NavigationContainer>
     )
 }

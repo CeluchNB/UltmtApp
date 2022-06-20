@@ -3,11 +3,10 @@
 exports[`test match snapshot 1`] = `
 <View
   collapsable={false}
-  nativeID="animatedComponent"
   style={
     Object {
       "backgroundColor": "transparent",
-      "borderColor": "#3183ff",
+      "borderColor": "#ffd600",
       "borderRadius": 4,
       "borderStyle": "solid",
       "borderWidth": 0.5,
@@ -80,7 +79,7 @@ exports[`test match snapshot 1`] = `
                 "textTransform": "uppercase",
               },
               Object {
-                "color": "#3183ff",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontWeight": "500",
               },

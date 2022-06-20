@@ -7,8 +7,15 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks/index'
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import {
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    View,
+} from 'react-native'
+import {
+    fetchProfile,
     leaveManagerRole,
     leaveTeam,
     selectArchiveTeams,
@@ -29,6 +36,14 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const leaveManagerError = useSelector(selectLeaveManagerError)
 
     const [leaveManagerTeamId, setLeaveManagerTeamId] = React.useState('')
+    const [refreshing, setRefreshing] = React.useState(false)
+
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            dispatch(fetchProfile(token))
+        })
+        return unsubscribe
+    })
 
     const openTeamDetails = async (item: DisplayTeam) => {
         navigation.navigate('ManagedTeamDetails', {
@@ -71,17 +86,28 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
         headerContainer: {
             display: 'flex',
             flexDirection: 'row',
-            margin: 10,
+            marginLeft: 10,
             marginBottom: 20,
         },
         requestsButton: {
-            marginTop: 10,
+            margin: 10,
         },
     })
 
     return (
         <SafeAreaView style={styles.screen}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={async () => {
+                            setRefreshing(true)
+                            dispatch(fetchProfile(token))
+                            setRefreshing(false)
+                        }}
+                    />
+                }
+                testID="mt-scroll-view">
                 <View style={styles.headerContainer}>
                     <ScreenTitle style={styles.title} title="Manage Teams" />
                     <IconButtonText

@@ -60,6 +60,7 @@ const MapSection = <T,>({
         error: {
             fontSize: size.fontMedium,
             marginBottom: 50,
+            color: colors.textPrimary,
         },
     })
 

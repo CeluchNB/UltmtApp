@@ -1,5 +1,4 @@
 import * as AccountReducer from '../../src/store/reducers/features/account/accountReducer'
-import * as RequestData from '../../src/services/data/request'
 import * as UserData from '../../src/services/data/user'
 import ManageTeamsScreen from '../../src/screens/ManageTeamsScreen'
 import { NavigationContainer } from '@react-navigation/native'
@@ -7,9 +6,9 @@ import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { User } from '../../src/types/user'
+import { fetchProfileData } from '../../fixtures/data'
 import store from '../../src/store/store'
-import { act, fireEvent, render } from '@testing-library/react-native'
-import { fetchProfileData, requestObject } from '../../fixtures/data'
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -34,40 +33,6 @@ beforeEach(async () => {
     store.dispatch(AccountReducer.setToken(loginData))
     store.dispatch(AccountReducer.setProfile(fetchProfileData))
     jest.clearAllMocks()
-    jest.spyOn(RequestData, 'getRequest').mockImplementation(
-        async (_token, requestId) => {
-            if (requestId === 'request1') {
-                return {
-                    ...requestObject,
-                    _id: 'request1',
-                    requestSource: 'team',
-                    teamDetails: {
-                        _id: 'id5',
-                        place: 'place5',
-                        name: 'name5',
-                        teamname: 'place5name5',
-                        seasonStart: '2022',
-                        seasonEnd: '2022',
-                    },
-                }
-            } else if (requestId === 'request2') {
-                return {
-                    ...requestObject,
-                    _id: 'request2',
-                    requestSource: 'player',
-                    teamDetails: {
-                        _id: 'id6',
-                        place: 'place6',
-                        name: 'name6',
-                        teamname: 'place6name6',
-                        seasonStart: '2022',
-                        seasonEnd: '2022',
-                    },
-                }
-            }
-            return requestObject
-        },
-    )
 })
 
 afterAll(() => {
@@ -377,4 +342,31 @@ it('should handle leave manager role error', async () => {
         queryByText('Unable to leave manager role. You are the last manager.'),
     ).not.toBeNull()
     expect(leaveTeamSpy).toHaveBeenCalled()
+})
+
+it('test update on refresh', async () => {
+    const spy = jest
+        .spyOn(UserData, 'fetchProfile')
+        .mockReturnValueOnce(
+            Promise.resolve({ ...fetchProfileData, username: 'username2' }),
+        )
+
+    const { queryByText, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <ManageTeamsScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    expect(queryByText('username2')).toBeNull()
+
+    const scrollView = getByTestId('mt-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(spy).toHaveBeenCalled()
+    await waitFor(async () => await queryByText('@username2'))
 })

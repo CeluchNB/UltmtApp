@@ -1,9 +1,9 @@
 import * as React from 'react'
+import { AllScreenProps } from '../types/navigation'
 import { Button } from 'react-native-paper'
 import GameListItem from '../components/atoms/GameListItem'
 import IconButtonText from '../components/atoms/IconButtonText'
 import MapSection from '../components/molecules/MapSection'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
@@ -28,7 +28,9 @@ import {
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
+const ProfileScreen: React.FC<AllScreenProps> = ({
+    navigation,
+}: AllScreenProps) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
     const token = useSelector(selectToken)
@@ -67,11 +69,13 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
         },
         titleContainer: {
             flexDirection: 'row',
-            width: '75%',
             textAlign: 'right',
+            marginLeft: 10,
+            marginBottom: 0,
         },
         title: {
             flex: 1,
+            textAlignVertical: 'center',
         },
         headerContainer: {
             alignItems: 'center',
@@ -84,7 +88,11 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
             marginTop: 5,
         },
         requestsButton: {
+            margin: 10,
+        },
+        settingsButton: {
             marginTop: 10,
+            marginRight: 10,
         },
     })
 
@@ -123,6 +131,14 @@ const ProfileScreen: React.FC<Props> = ({ navigation }: Props) => {
                                 text="Requests"
                                 onPress={() => {
                                     navigation.navigate('UserRequestsScreen')
+                                }}
+                            />
+                            <IconButtonText
+                                style={styles.settingsButton}
+                                icon="cog-outline"
+                                text="Settings"
+                                onPress={() => {
+                                    navigation.navigate('SettingsScreen')
                                 }}
                             />
                         </View>
