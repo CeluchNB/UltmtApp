@@ -227,7 +227,6 @@ exports[`profile screen matches snapshot 1`] = `
               accessible={true}
               collapsable={false}
               focusable={true}
-              nativeID="animatedComponent"
               onClick={[Function]}
               onResponderGrant={[Function]}
               onResponderMove={[Function]}
@@ -284,7 +283,6 @@ exports[`profile screen matches snapshot 1`] = `
               accessible={true}
               collapsable={false}
               focusable={true}
-              nativeID="animatedComponent"
               onClick={[Function]}
               onResponderGrant={[Function]}
               onResponderMove={[Function]}
@@ -351,7 +349,6 @@ exports[`profile screen matches snapshot 1`] = `
           </Text>
           <View
             collapsable={false}
-            nativeID="animatedComponent"
             style={
               Object {
                 "backgroundColor": "transparent",
@@ -783,7 +780,6 @@ exports[`profile screen matches snapshot 1`] = `
                   accessible={true}
                   collapsable={false}
                   focusable={true}
-                  nativeID="animatedComponent"
                   onClick={[Function]}
                   onResponderGrant={[Function]}
                   onResponderMove={[Function]}
@@ -945,7 +941,6 @@ exports[`profile screen matches snapshot 1`] = `
                   accessible={true}
                   collapsable={false}
                   focusable={true}
-                  nativeID="animatedComponent"
                   onClick={[Function]}
                   onResponderGrant={[Function]}
                   onResponderMove={[Function]}
@@ -1107,7 +1102,6 @@ exports[`profile screen matches snapshot 1`] = `
                   accessible={true}
                   collapsable={false}
                   focusable={true}
-                  nativeID="animatedComponent"
                   onClick={[Function]}
                   onResponderGrant={[Function]}
                   onResponderMove={[Function]}
@@ -1250,7 +1244,6 @@ exports[`profile screen matches snapshot 1`] = `
             </View>
             <View
               collapsable={false}
-              nativeID="animatedComponent"
               style={
                 Object {
                   "alignSelf": "center",

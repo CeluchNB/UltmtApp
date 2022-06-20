@@ -588,7 +588,6 @@ exports[`should match snapshot 1`] = `
   </View>
   <View
     collapsable={false}
-    nativeID="animatedComponent"
     style={
       Object {
         "alignSelf": "center",
@@ -696,7 +695,6 @@ exports[`should match snapshot 1`] = `
   </View>
   <View
     collapsable={false}
-    nativeID="animatedComponent"
     style={
       Object {
         "alignSelf": "center",

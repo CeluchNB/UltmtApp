@@ -40,6 +40,7 @@ exports[`should match snapshot 1`] = `
         name Requests
       </Text>
       <View
+        collapsable={false}
         style={
           Object {
             "alignSelf": "center",

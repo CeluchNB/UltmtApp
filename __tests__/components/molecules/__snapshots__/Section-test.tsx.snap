@@ -151,7 +151,6 @@ exports[`matches snapshot 1`] = `
   </RCTScrollView>
   <View
     collapsable={false}
-    nativeID="animatedComponent"
     style={
       Object {
         "alignSelf": "center",

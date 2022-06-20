@@ -130,7 +130,6 @@ exports[`test matches snapshot 1`] = `
   />
   <View
     collapsable={false}
-    nativeID="animatedComponent"
     style={
       Object {
         "alignSelf": "center",

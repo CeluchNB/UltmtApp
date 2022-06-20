@@ -3,7 +3,6 @@
 exports[`test snapshot 1`] = `
 <View
   collapsable={false}
-  nativeID="animatedComponent"
   style={
     Object {
       "backgroundColor": "#ffd600",

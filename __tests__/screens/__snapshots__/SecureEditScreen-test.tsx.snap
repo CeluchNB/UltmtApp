@@ -236,6 +236,7 @@ exports[`should match snapshot 1`] = `
       </View>
     </View>
     <View
+      collapsable={false}
       style={
         Object {
           "alignSelf": "center",

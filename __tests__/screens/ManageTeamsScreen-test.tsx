@@ -361,12 +361,12 @@ it('test update on refresh', async () => {
 
     expect(queryByText('username2')).toBeNull()
 
-    const scrollView = await getByTestId('mt-scroll-view')
+    const scrollView = getByTestId('mt-scroll-view')
     const { refreshControl } = scrollView.props
     await act(async () => {
         refreshControl.props.onRefresh()
     })
 
-    await waitFor(() => queryByText('@username2'))
     expect(spy).toHaveBeenCalled()
+    await waitFor(async () => await queryByText('@username2'))
 })

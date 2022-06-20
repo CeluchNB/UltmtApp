@@ -56,6 +56,7 @@ beforeAll(() => {
             openToRequests: false,
             managerTeams: [],
             stats: [],
+            archiveTeams: [],
             private: false,
         } as User),
     )

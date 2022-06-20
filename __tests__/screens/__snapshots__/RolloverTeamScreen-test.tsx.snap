@@ -176,6 +176,7 @@ exports[`should match snapshot 1`] = `
     Pending requests for this team will all be deleted.
   </Text>
   <View
+    collapsable={false}
     style={
       Object {
         "backgroundColor": "#ffd600",
@@ -458,6 +459,7 @@ exports[`should match snapshot with open requests 1`] = `
     Pending requests for this team will all be deleted.
   </Text>
   <View
+    collapsable={false}
     style={
       Object {
         "backgroundColor": "#ffd600",

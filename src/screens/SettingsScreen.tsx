@@ -127,7 +127,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView style={styles.screen}>
+        <SafeAreaView style={styles.screen} testID="screen">
             <ScrollView>
                 <ScreenTitle style={styles.screenTitle} title="Settings" />
                 <View style={styles.container}>
@@ -153,6 +153,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                                 // force re-render in new color scheme
                                 forceUpdate()
                             }}
+                            testID="dark-mode-switch"
                         />
                     </View>
                     <Text style={styles.title}>Account</Text>
@@ -173,6 +174,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                                     }),
                                 )
                             }}
+                            testID="private-switch"
                         />
                     </View>
                     <EditField
