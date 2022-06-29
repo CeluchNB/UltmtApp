@@ -4,6 +4,7 @@ import { throwApiError } from '../../utils/service-utils'
 import { CreateTeam, Team } from '../../types/team'
 import {
     addManager as networkAddManager,
+    createBulkJoinCode as networkCreateBulkJoinCode,
     createTeam as networkCreateTeam,
     getArchivedTeam as networkGetArchivedTeam,
     getManagedTeam as networkGetManagedTeam,
@@ -188,7 +189,8 @@ export const addManager = async (
 
 /**
  * Method to get archived team
- *
+ * @param teamId id of team
+ * @returns archived team object
  */
 export const getArchivedTeam = async (teamId: string): Promise<Team> => {
     try {
@@ -197,5 +199,24 @@ export const getArchivedTeam = async (teamId: string): Promise<Team> => {
         return team
     } catch (error) {
         return throwApiError(error, Constants.GET_TEAM_ERROR)
+    }
+}
+
+/**
+ * Method to create a code users' can join the team with
+ * @param teamId id of team to create code for
+ * @param token auth token of manager
+ * @returns 6 digit code to be shared with team
+ */
+export const createBulkJoinCode = async (
+    teamId: string,
+    token: string,
+): Promise<string> => {
+    try {
+        const response = await networkCreateBulkJoinCode(teamId, token)
+        const { code } = response.data
+        return code
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_TEAM_ERROR)
     }
 }

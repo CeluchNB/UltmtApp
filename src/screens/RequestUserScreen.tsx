@@ -5,6 +5,7 @@ import { DisplayUser } from '../types/user'
 import { RequestType } from '../types/request'
 import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+// import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
 import { searchUsers } from '../services/data/user'
 import { selectTeam } from '../store/reducers/features/team/managedTeamReducer'
@@ -148,6 +149,12 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             {searchError.length > 0 && (
                 <Text style={styles.error}>{searchError}</Text>
             )}
+            {/* <SecondaryButton
+                text="create bulk join code"
+                onPress={async () => {
+
+                }}
+            /> */}
             <FlatList
                 style={styles.list}
                 data={players}

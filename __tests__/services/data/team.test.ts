@@ -2,6 +2,7 @@ import * as TeamServices from '../../../src/services/network/team'
 import { CreateTeam, Team } from '../../../src/types/team'
 import {
     addManager,
+    createBulkJoinCode,
     createTeam,
     getArchivedTeam,
     getManagedTeam,
@@ -205,5 +206,34 @@ describe('test team services', () => {
             teamError,
         )
         expect(getArchivedTeam('')).rejects.toThrow()
+    })
+
+    it('should handle network create bulk join code success', async () => {
+        jest.spyOn(TeamServices, 'createBulkJoinCode').mockReturnValueOnce(
+            Promise.resolve({
+                data: { code: '123456' },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await createBulkJoinCode('', '')
+        expect(result).toEqual('123456')
+    })
+
+    it('should handle network create bulk join code failure', async () => {
+        jest.spyOn(TeamServices, 'createBulkJoinCode').mockReturnValueOnce(
+            Promise.reject({
+                data: { message: 'Bad request' },
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(createBulkJoinCode('', '')).rejects.toThrow()
     })
 })
