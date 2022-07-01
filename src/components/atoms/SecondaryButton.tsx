@@ -7,12 +7,14 @@ interface SecondaryButtonProps {
     text: string
     onPress: () => {}
     style?: StyleProp<ViewStyle>
+    loading?: boolean
 }
 
 const SecondaryButton: React.FC<SecondaryButtonProps> = ({
     text,
     onPress,
     style,
+    loading = false,
 }) => {
     const { colors } = useColors()
 
@@ -21,7 +23,8 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
             style={[{ borderColor: colors.textPrimary }, style]}
             mode="outlined"
             color={colors.textPrimary}
-            onPress={onPress}>
+            onPress={onPress}
+            loading={loading}>
             {text}
         </Button>
     )
