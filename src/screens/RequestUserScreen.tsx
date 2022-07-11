@@ -90,13 +90,13 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                 token,
             )
             setBulkJoinCode(code)
-            setDisplayCodeModal(true)
         } catch (e: any) {
             setBulkJoinError(
                 e.message ??
                     'Cannot create a code right now. Please try again later.',
             )
         } finally {
+            setDisplayCodeModal(true)
             setBulkCodeLoading(false)
         }
     }

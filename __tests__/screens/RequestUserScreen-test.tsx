@@ -14,6 +14,7 @@ import { DetailedRequest, RequestType } from '../../src/types/request'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 const token = '1234.asdf.1234'
 const goBack = jest.fn()
@@ -255,4 +256,83 @@ it('should handle add manager failure', async () => {
 
     expect(spy).toHaveBeenCalledWith(token, 'team1', 'user1')
     expect(queryByText('add manager error')).not.toBeNull()
+})
+
+it('should get bulk code', async () => {
+    const spy = jest
+        .spyOn(TeamData, 'createBulkJoinCode')
+        .mockReturnValueOnce(Promise.resolve('123456'))
+
+    const { getByText, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <RequestUserScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const button = getByText('create bulk join code')
+    fireEvent.press(button)
+
+    expect(spy).toHaveBeenCalled()
+
+    const modal = getByTestId('bulk-code-modal')
+    await act(async () => {})
+    expect(modal.props.visible).toBe(true)
+})
+
+it('should handle get bulk code error', async () => {
+    const spy = jest
+        .spyOn(TeamData, 'createBulkJoinCode')
+        .mockReturnValueOnce(Promise.reject({ message: 'bulk code error' }))
+
+    const { getByText, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <RequestUserScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const button = getByText('create bulk join code')
+    fireEvent.press(button)
+
+    expect(spy).toHaveBeenCalled()
+
+    const modal = getByTestId('bulk-code-modal')
+    await act(async () => {})
+    expect(modal.props.visible).toBe(true)
+
+    const error = getByText('bulk code error')
+    expect(error).toBeTruthy()
+})
+
+it('should close bulk code modal', async () => {
+    const spy = jest
+        .spyOn(TeamData, 'createBulkJoinCode')
+        .mockReturnValueOnce(Promise.resolve('123456'))
+
+    const { getByText, getByTestId } = render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <RequestUserScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const button = getByText('create bulk join code')
+    fireEvent.press(button)
+
+    expect(spy).toHaveBeenCalled()
+
+    const modal = getByTestId('bulk-code-modal')
+    await act(async () => {})
+    expect(modal.props.visible).toBe(true)
+
+    const doneButton = getByText('done')
+    fireEvent.press(doneButton)
+
+    const closedModal = getByTestId('bulk-code-modal')
+    await act(async () => {})
+    expect(closedModal.props.visible).toBe(false)
 })

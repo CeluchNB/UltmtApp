@@ -77,7 +77,8 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
             animationType="slide"
             transparent={true}
             visible={visible}
-            onRequestClose={onClose}>
+            onRequestClose={onClose}
+            testID="bulk-code-modal">
             <View style={styles.modalContainer}>
                 <View style={styles.modalView}>
                     {code.length > 0 && (
