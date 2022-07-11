@@ -113,3 +113,18 @@ export const getArchivedTeam = async (
 ): Promise<AxiosResponse> => {
     return await axios.get(`${API_URL_V1}/archiveTeam/${teamId}`)
 }
+
+export const createBulkJoinCode = async (
+    teamId: string,
+    token: string,
+): Promise<AxiosResponse> => {
+    return await axios.post(
+        `${API_URL_V1}/team/getBulkCode?id=${teamId}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

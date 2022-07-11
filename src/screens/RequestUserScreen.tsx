@@ -1,10 +1,12 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
+import BulkCodeModal from '../components/molecules/BulkCodeModal'
 import { DisplayUser } from '../types/user'
 import { RequestType } from '../types/request'
 import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
 import { searchUsers } from '../services/data/user'
 import { selectTeam } from '../store/reducers/features/team/managedTeamReducer'
@@ -28,6 +30,10 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const [selectedId, setSelectedId] = React.useState('')
     const [error, setError] = React.useState('')
     const [searchError, setSearchError] = React.useState('')
+    const [bulkCodeLoading, setBulkCodeLoading] = React.useState(false)
+    const [displayCodeModal, setDisplayCodeModal] = React.useState(false)
+    const [bulkJoinCode, setBulkJoinCode] = React.useState('')
+    const [bulkJoinError, setBulkJoinError] = React.useState('')
 
     const search = async (term: string) => {
         setError('')
@@ -71,6 +77,27 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             setError(e.message)
         } finally {
             setRequestLoading(false)
+        }
+    }
+
+    const requestBulkCode = async () => {
+        try {
+            setBulkJoinCode('')
+            setBulkJoinError('')
+            setBulkCodeLoading(true)
+            const code = await TeamData.createBulkJoinCode(
+                team?._id || '',
+                token,
+            )
+            setBulkJoinCode(code)
+        } catch (e: any) {
+            setBulkJoinError(
+                e.message ??
+                    'Cannot create a code right now. Please try again later.',
+            )
+        } finally {
+            setDisplayCodeModal(true)
+            setBulkCodeLoading(false)
         }
     }
 
@@ -119,6 +146,9 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             flex: 1,
             alignSelf: 'center',
         },
+        bulkCodeButton: {
+            alignSelf: 'center',
+        },
     })
 
     return (
@@ -148,6 +178,22 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             {searchError.length > 0 && (
                 <Text style={styles.error}>{searchError}</Text>
             )}
+            <SecondaryButton
+                style={styles.bulkCodeButton}
+                text="create bulk join code"
+                loading={bulkCodeLoading}
+                onPress={async () => {
+                    await requestBulkCode()
+                }}
+            />
+            <BulkCodeModal
+                code={bulkJoinCode}
+                error={bulkJoinError}
+                visible={displayCodeModal}
+                onClose={() => {
+                    setDisplayCodeModal(false)
+                }}
+            />
             <FlatList
                 style={styles.list}
                 data={players}
