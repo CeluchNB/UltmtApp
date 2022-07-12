@@ -94,6 +94,9 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
                                     testID="create-button"
                                 />
                             </View>
+                            <Text style={styles.codeIntro}>
+                                This code is valid for 30 minutes.
+                            </Text>
                         </View>
                     )}
                     {error.length > 0 && (

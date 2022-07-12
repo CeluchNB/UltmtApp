@@ -161,6 +161,18 @@ exports[`should match snapshot when visible 1`] = `
             </View>
           </View>
         </View>
+        <Text
+          style={
+            Object {
+              "alignSelf": "center",
+              "color": "#31adff",
+              "fontSize": 30.821917808219176,
+              "fontWeight": "900",
+            }
+          }
+        >
+          This code is valid for 30 minutes.
+        </Text>
       </View>
       <View
         collapsable={false}

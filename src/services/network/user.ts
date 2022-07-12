@@ -204,3 +204,18 @@ export const deleteAccount = async (token: string): Promise<AxiosResponse> => {
         },
     })
 }
+
+export const joinTeamByCode = async (
+    token: string,
+    code: string,
+): Promise<AxiosResponse> => {
+    return await axios.post(
+        `${API_URL_V1}/user/joinTeamByCode?code=${code}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

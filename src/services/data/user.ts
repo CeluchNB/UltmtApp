@@ -11,6 +11,7 @@ import {
     deleteAccount as networkDeleteAccount,
     fetchProfile as networkFetchProfile,
     getPublicUser as networkGetPublicUser,
+    joinTeamByCode as networkJoinTeamByCode,
     leaveManagerRole as networkLeaveManagerRole,
     leaveTeam as networkLeaveTeam,
     login as networkLogin,
@@ -337,7 +338,7 @@ export const logoutAllDevices = async (token: string): Promise<void> => {
 
 /**
  * Method to delete a user's account
- * @param token user's auth toen
+ * @param token user's auth token
  * @returns nothing
  */
 export const deleteAccount = async (token: string): Promise<void> => {
@@ -346,5 +347,24 @@ export const deleteAccount = async (token: string): Promise<void> => {
         await networkDeleteAccount(token)
     } catch (error) {
         return throwApiError(error, Constants.DELETE_USER_ERROR)
+    }
+}
+
+/**
+ * Method to join a team by a 6 digit bulk code
+ * @param token user's auth token
+ * @param code 6 digit bulk team join code
+ * @returns updated user profile
+ */
+export const joinTeamByCode = async (
+    token: string,
+    code: string,
+): Promise<User> => {
+    try {
+        const response = await networkJoinTeamByCode(token, code)
+        const { user } = response.data
+        return user
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_USER_ERROR)
     }
 }
