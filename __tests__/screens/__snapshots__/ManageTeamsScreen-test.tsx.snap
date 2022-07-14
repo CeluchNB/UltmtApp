@@ -1391,7 +1391,7 @@ exports[`should match snapshot 1`] = `
                 }
               }
             >
-              Old Teams
+              Past Teams
             </Text>
           </View>
           <View

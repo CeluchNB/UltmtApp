@@ -171,7 +171,7 @@ exports[`should match snapshot when visible 1`] = `
             }
           }
         >
-          This code is valid for 30 minutes.
+          This code is valid for 1 hour.
         </Text>
       </View>
       <View
@@ -184,6 +184,7 @@ exports[`should match snapshot when visible 1`] = `
             "borderStyle": "solid",
             "borderWidth": 0,
             "elevation": 2,
+            "marginTop": 10,
             "minWidth": "auto",
             "shadowColor": "#000000",
             "shadowOffset": Object {
@@ -343,6 +344,7 @@ exports[`should match snapshot with error 1`] = `
             "borderStyle": "solid",
             "borderWidth": 0,
             "elevation": 2,
+            "marginTop": 10,
             "minWidth": "auto",
             "shadowColor": "#000000",
             "shadowOffset": Object {

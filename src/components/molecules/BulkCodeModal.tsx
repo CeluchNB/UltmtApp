@@ -45,6 +45,9 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
             color: colors.error,
             marginBottom: 10,
         },
+        doneButton: {
+            marginTop: 10,
+        },
         modalContainer: {
             flex: 1,
             justifyContent: 'center',
@@ -95,7 +98,7 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
                                 />
                             </View>
                             <Text style={styles.codeIntro}>
-                                This code is valid for 30 minutes.
+                                This code is valid for 1 hour.
                             </Text>
                         </View>
                     )}
@@ -103,6 +106,7 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
                         <Text style={styles.error}>{error}</Text>
                     )}
                     <PrimaryButton
+                        style={styles.doneButton}
                         text="done"
                         loading={false}
                         onPress={async () => {
