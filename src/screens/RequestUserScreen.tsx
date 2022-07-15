@@ -175,9 +175,6 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                     type === RequestType.PLAYER ? 'players' : 'managers'
                 }...`}
             />
-            {searchError.length > 0 && (
-                <Text style={styles.error}>{searchError}</Text>
-            )}
             <SecondaryButton
                 style={styles.bulkCodeButton}
                 text="create bulk join code"
@@ -186,6 +183,9 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                     await requestBulkCode()
                 }}
             />
+            {searchError.length > 0 && (
+                <Text style={styles.error}>{searchError}</Text>
+            )}
             <BulkCodeModal
                 code={bulkJoinCode}
                 error={bulkJoinError}

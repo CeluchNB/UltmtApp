@@ -172,7 +172,13 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             return (
                                 <UserListItem
                                     key={item._id}
-                                    user={item.userDetails}
+                                    user={
+                                        item.userDetails || {
+                                            firstName: 'User no',
+                                            lastName: 'longer exists',
+                                            username: 'deleteme',
+                                        }
+                                    }
                                     showDelete={true}
                                     showAccept={true}
                                     onDelete={() =>
@@ -212,7 +218,13 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             return (
                                 <UserListItem
                                     key={item._id}
-                                    user={item.userDetails}
+                                    user={
+                                        item.userDetails || {
+                                            firstName: 'User no',
+                                            lastName: 'longer exists',
+                                            username: 'deleteme',
+                                        }
+                                    }
                                     showDelete={true}
                                     showAccept={false}
                                     requestStatus={item.status}

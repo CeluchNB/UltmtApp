@@ -198,7 +198,13 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             return (
                                 <TeamListItem
                                     key={item._id}
-                                    team={item.teamDetails}
+                                    team={
+                                        item.teamDetails || {
+                                            place: 'Team no',
+                                            name: 'longer exists',
+                                            teamname: 'deleteme',
+                                        }
+                                    }
                                     showAccept={true}
                                     showDelete={true}
                                     onAccept={async () => {
@@ -238,7 +244,13 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             return (
                                 <TeamListItem
                                     key={item._id}
-                                    team={item.teamDetails}
+                                    team={
+                                        item.teamDetails || {
+                                            place: 'Team no',
+                                            name: 'longer exists',
+                                            teamname: 'deleteme',
+                                        }
+                                    }
                                     showAccept={false}
                                     showDelete={true}
                                     onDelete={async () => {
