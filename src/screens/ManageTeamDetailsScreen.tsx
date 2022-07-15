@@ -114,6 +114,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         error: {
             color: colors.error,
             fontSize: size.fontLarge,
+            width: '75%',
         },
         newSeasonButton: {
             marginTop: 10,

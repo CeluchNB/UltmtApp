@@ -34,6 +34,7 @@ export type AccountStackParamList = {
     RolloverTeam: undefined
     UserRequestsScreen: undefined
     TeamRequestsScreen: undefined
+    JoinByCodeScreen: undefined
 }
 
 export type GameStackParamList = {

@@ -11,6 +11,7 @@ import TeamListItem from '../components/atoms/TeamListItem'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
 import {
+    ActivityIndicator,
     FlatList,
     RefreshControl,
     SafeAreaView,
@@ -22,6 +23,7 @@ import {
     fetchProfile,
     logout,
     selectAccount,
+    selectFetchProfileLoading,
     selectPlayerTeams,
     selectToken,
     setError,
@@ -35,6 +37,8 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     const account = useSelector(selectAccount)
     const token = useSelector(selectToken)
     const playerTeams = useSelector(selectPlayerTeams)
+    const fetchProfileLoading = useSelector(selectFetchProfileLoading)
+
     const [loading, setLoading] = React.useState(false)
     const [refreshing, setRefreshing] = React.useState(false)
 
@@ -94,7 +98,31 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
             marginTop: 10,
             marginRight: 10,
         },
+        indicatorStyle: {
+            width: '80%',
+            height: '50%',
+        },
     })
+
+    if (fetchProfileLoading) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <View style={styles.headerContainer}>
+                    <View style={styles.titleContainer}>
+                        <ScreenTitle
+                            style={styles.title}
+                            title={'My Profile'}
+                        />
+                        <ActivityIndicator
+                            size="large"
+                            color={colors.textPrimary}
+                            animating={true}
+                        />
+                    </View>
+                </View>
+            </SafeAreaView>
+        )
+    }
 
     return (
         <SafeAreaView style={styles.container}>

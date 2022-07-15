@@ -3,6 +3,7 @@ import { AccountStackParamList } from './../types/navigation'
 import CreateAccountScreen from './../screens/CreateAccountScreen'
 import CreateTeamScreen from './../screens/CreateTeamScreen'
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen'
+import JoinByCodeScreen from '../screens/JoinByCodeScreen'
 import LoginScreen from './../screens/LoginScreen'
 import ManageTeamDetailsScreen from './../screens/ManageTeamDetailsScreen'
 import ManageTeamsScreen from './../screens/ManageTeamsScreen'
@@ -77,6 +78,10 @@ const AccountNavigator: React.FC<{}> = () => {
             <Stack.Screen
                 name="TeamRequestsScreen"
                 component={TeamRequestsScreen}
+            />
+            <Stack.Screen
+                name="JoinByCodeScreen"
+                component={JoinByCodeScreen}
             />
         </Stack.Navigator>
     )

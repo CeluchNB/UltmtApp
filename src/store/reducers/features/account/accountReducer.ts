@@ -19,6 +19,7 @@ export interface AccountSlice {
     requests: string[]
     toggleRosterStatusLoading: boolean
     editLoading: boolean
+    fetchProfileLoading: boolean
 }
 
 const initialState: AccountSlice = {
@@ -37,6 +38,7 @@ const initialState: AccountSlice = {
     requests: [],
     toggleRosterStatusLoading: false,
     editLoading: false,
+    fetchProfileLoading: false,
 }
 
 const accountSlice = createSlice({
@@ -88,7 +90,11 @@ const accountSlice = createSlice({
     },
     extraReducers: builder => {
         builder
+            .addCase(fetchProfile.pending, state => {
+                state.fetchProfileLoading = true
+            })
             .addCase(fetchProfile.fulfilled, (state, action) => {
+                state.fetchProfileLoading = false
                 const {
                     firstName,
                     lastName,
@@ -116,6 +122,7 @@ const accountSlice = createSlice({
                 )
             })
             .addCase(fetchProfile.rejected, (state, action) => {
+                state.fetchProfileLoading = false
                 state.error = action.error.message
                 state.token = ''
             })
@@ -241,6 +248,8 @@ export const selectToggleLoading = (state: RootState) =>
     state.account.toggleRosterStatusLoading
 export const selectOpenToRequests = (state: RootState) =>
     state.account.openToRequests
+export const selectFetchProfileLoading = (state: RootState) =>
+    state.account.fetchProfileLoading
 export const {
     addRequest,
     removeRequest,

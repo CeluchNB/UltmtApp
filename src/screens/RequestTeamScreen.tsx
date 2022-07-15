@@ -4,6 +4,7 @@ import * as TeamData from '../services/data/team'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SearchResultItem from '../components/atoms/SearchResultItem'
+import SecondaryButton from '../components/atoms/SecondaryButton'
 import { Team } from '../types/team'
 import { TextInput } from 'react-native-paper'
 import { size } from '../theme/fonts'
@@ -63,6 +64,9 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
         title: {
             alignSelf: 'center',
         },
+        joinButton: {
+            alignSelf: 'center',
+        },
         input: {
             backgroundColor: colors.primary,
             color: colors.textPrimary,
@@ -98,6 +102,13 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
                     },
                 }}
                 placeholder="Search teams..."
+            />
+            <SecondaryButton
+                style={styles.joinButton}
+                text="join by code"
+                onPress={async () => {
+                    navigation.navigate('JoinByCodeScreen')
+                }}
             />
             {searchError.length > 0 ? (
                 <Text style={styles.error}>{searchError}</Text>

@@ -18,3 +18,4 @@ export const RESET_PASSWORD_ERROR = 'Unable to reset password right now. Please 
 export const TOGGLE_ROSTER_STATUS_ERROR = 'Unable to change your roster status right now. Please try again later.'
 export const EDIT_USER_ERROR = 'Unable to edit user. Please try again later.'
 export const DELETE_USER_ERROR = 'Unable to delete your account. Please try again later.'
+export const JOIN_TEAM_ERROR = 'Unable to join team with this code. Please try again later.'

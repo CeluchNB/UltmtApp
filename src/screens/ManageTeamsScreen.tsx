@@ -190,7 +190,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                         }}
                     />
                     <MapSection
-                        title="Old Teams"
+                        title="Past Teams"
                         showButton={false}
                         showCreateButton={false}
                         error={

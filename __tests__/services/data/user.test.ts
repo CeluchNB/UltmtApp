@@ -10,6 +10,7 @@ import {
     fetchProfile,
     getLocalToken,
     getPublicUser,
+    joinTeamByCode,
     leaveManagerRole,
     leaveTeam,
     login,
@@ -585,5 +586,34 @@ describe('test user data calls', () => {
 
         expect(deleteAccount('')).rejects.toThrow()
         expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+    })
+
+    it('should handle join team by code network success', async () => {
+        jest.spyOn(UserServices, 'joinTeamByCode').mockReturnValueOnce(
+            Promise.resolve({
+                data: { user },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await joinTeamByCode('', '')
+        expect(result).toEqual(user)
+    })
+
+    it('should hanlde join team by code network failure', async () => {
+        jest.spyOn(UserServices, 'joinTeamByCode').mockReturnValueOnce(
+            Promise.reject({
+                data: { message: 'error' },
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(joinTeamByCode('', '')).rejects.toThrow()
     })
 })
