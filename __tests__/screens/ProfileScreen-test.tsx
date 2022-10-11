@@ -1,4 +1,5 @@
 import * as AccountReducer from '../../src/store/reducers/features/account/accountReducer'
+import * as AuthData from '../../src/services/data/auth'
 import * as UserData from '../../src/services/data/user'
 import { AllScreenProps } from '../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
@@ -27,7 +28,7 @@ const props: AllScreenProps = {
 }
 
 beforeAll(async () => {
-    jest.spyOn(UserData, 'login').mockImplementation(
+    jest.spyOn(AuthData, 'login').mockImplementation(
         async (_username: string, _password: string) => {
             return loginData.token
         },

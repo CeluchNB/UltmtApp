@@ -1,23 +1,12 @@
-import { API_URL_V1 } from 'react-native-dotenv'
-import { ApiResponse } from '../../types/services'
 import { CreateUserData } from '../../types/user'
-import EncryptedStorage from 'react-native-encrypted-storage'
+import { API_KEY, API_URL_V1 } from 'react-native-dotenv'
 import axios, { AxiosResponse } from 'axios'
-
-export const login = async (
-    username: string,
-    password: string,
-): Promise<AxiosResponse> => {
-    return await axios.post(`${API_URL_V1}/user/login`, {
-        password,
-        email: username,
-    })
-}
 
 export const fetchProfile = async (token: string): Promise<AxiosResponse> => {
     return await axios.get(`${API_URL_V1}/user/me`, {
         headers: {
             Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
         },
     })
 }
@@ -25,37 +14,19 @@ export const fetchProfile = async (token: string): Promise<AxiosResponse> => {
 export const createAccount = async (
     profileData: CreateUserData,
 ): Promise<AxiosResponse> => {
-    return await axios.post(`${API_URL_V1}/user`, {
-        ...profileData,
-    })
-}
-
-export const logout = async (token: string): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL_V1}/user/logout`,
-        {},
+        `${API_URL_V1}/user`,
         {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            ...profileData,
         },
+        { headers: { 'X-API-Key': API_KEY } },
     )
 }
 
-export const getLocalToken = async (): Promise<ApiResponse> => {
-    try {
-        const token = await EncryptedStorage.getItem('jwt_token')
-        if (token) {
-            return { data: token }
-        }
-    } catch (error) {
-        throw error
-    }
-    throw new Error('No token available')
-}
-
 export const searchUsers = async (term: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL_V1}/user/search?q=${term}`)
+    return await axios.get(`${API_URL_V1}/user/search?q=${term}`, {
+        headers: { 'X-API-Key': API_KEY },
+    })
 }
 
 export const leaveTeam = async (
@@ -68,13 +39,16 @@ export const leaveTeam = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
 }
 
 export const getPublicUser = async (id: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL_V1}/user/${id}`)
+    return await axios.get(`${API_URL_V1}/user/${id}`, {
+        headers: { 'X-API-Key': API_KEY },
+    })
 }
 
 export const leaveManagerRole = async (
@@ -87,6 +61,7 @@ export const leaveManagerRole = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -95,19 +70,35 @@ export const leaveManagerRole = async (
 export const requestPasswordRecovery = async (
     email: string,
 ): Promise<AxiosResponse> => {
-    return await axios.post(`${API_URL_V1}/user/requestPasswordRecovery`, {
-        email,
-    })
+    return await axios.post(
+        `${API_URL_V1}/user/requestPasswordRecovery`,
+        {
+            email,
+        },
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
 }
 
 export const resetPassword = async (
     passcode: string,
     newPassword: string,
 ): Promise<AxiosResponse> => {
-    return await axios.post(`${API_URL_V1}/user/resetPassword`, {
-        passcode,
-        newPassword,
-    })
+    return await axios.post(
+        `${API_URL_V1}/user/resetPassword`,
+        {
+            passcode,
+            newPassword,
+        },
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
 }
 
 export const setOpenToRequests = async (
@@ -120,6 +111,7 @@ export const setOpenToRequests = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -139,6 +131,7 @@ export const changeName = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -154,6 +147,7 @@ export const setPrivate = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -164,11 +158,19 @@ export const changeEmail = async (
     password: string,
     newEmail: string,
 ): Promise<AxiosResponse> => {
-    return await axios.put(`${API_URL_V1}/user/changeEmail`, {
-        email,
-        password,
-        newEmail,
-    })
+    return await axios.put(
+        `${API_URL_V1}/user/changeEmail`,
+        {
+            email,
+            password,
+            newEmail,
+        },
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
 }
 
 export const changePassword = async (
@@ -176,31 +178,41 @@ export const changePassword = async (
     password: string,
     newPassword: string,
 ): Promise<AxiosResponse> => {
-    return await axios.put(`${API_URL_V1}/user/changePassword`, {
-        email,
-        password,
-        newPassword,
-    })
-}
-
-export const logoutAllDevices = async (
-    token: string,
-): Promise<AxiosResponse> => {
-    return await axios.post(
-        `${API_URL_V1}/user/logoutAll`,
-        {},
+    return await axios.put(
+        `${API_URL_V1}/user/changePassword`,
+        {
+            email,
+            password,
+            newPassword,
+        },
         {
             headers: {
-                Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
 }
 
+// export const logoutAllDevices = async (
+//     token: string,
+// ): Promise<AxiosResponse> => {
+//     return await axios.post(
+//         `${API_URL_V1}/user/logoutAll`,
+//         {},
+//         {
+//             headers: {
+//                 Authorization: `Bearer ${token}`,
+//                 'X-API-Key': API_KEY,
+//             },
+//         },
+//     )
+// }
+
 export const deleteAccount = async (token: string): Promise<AxiosResponse> => {
     return await axios.delete(`${API_URL_V1}/user/me`, {
         headers: {
             Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
         },
     })
 }
@@ -215,6 +227,7 @@ export const joinTeamByCode = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )

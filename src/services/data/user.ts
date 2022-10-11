@@ -14,37 +14,12 @@ import {
     joinTeamByCode as networkJoinTeamByCode,
     leaveManagerRole as networkLeaveManagerRole,
     leaveTeam as networkLeaveTeam,
-    login as networkLogin,
-    logout as networkLogout,
-    logoutAllDevices as networkLogoutAllDevices,
     requestPasswordRecovery as networkRequestPasswordRecovery,
     resetPassword as networkResetPassword,
     searchUsers as networkSearchUsers,
     setOpenToRequests as networkSetOpenToRequests,
     setPrivate as networkSetPrivate,
 } from '../network/user'
-
-/**
- * Method to login
- * @param username username or email
- * @param password password
- * @returns user token
- * @throws error if backend returns an error
- */
-export const login = async (
-    username: string,
-    password: string,
-): Promise<string> => {
-    try {
-        const response = await networkLogin(username, password)
-
-        const token = response.data.token
-        await EncryptedStorage.setItem('jwt_token', token)
-        return token
-    } catch (error: any) {
-        return throwApiError(error, Constants.GENERIC_LOGIN_ERROR)
-    }
-}
 
 /**
  * Method to get a user's profile by their jwt
@@ -55,7 +30,7 @@ export const login = async (
 export const fetchProfile = async (token: string): Promise<User> => {
     try {
         const response = await networkFetchProfile(token)
-        const user = response.data
+        const { user } = response.data
         return user
     } catch (error: any) {
         return throwApiError(error, Constants.GENERIC_FETCH_PROFILE_ERROR)
@@ -73,42 +48,13 @@ export const createAccount = async (
 ): Promise<{ user: User; token: string }> => {
     try {
         const response = await networkCreateAccount(profileData)
-        const { user, token } = response.data
-        await EncryptedStorage.setItem('jwt_token', token)
-        return { user, token }
+        const { user, tokens } = response.data
+        const { access, refresh } = tokens
+        await EncryptedStorage.setItem('access_token', access)
+        await EncryptedStorage.setItem('refresh_token', refresh)
+        return { user, token: access }
     } catch (error: any) {
         return throwApiError(error, Constants.GENERIC_CREATE_ACCOUNT_ERROR)
-    }
-}
-
-/**
- * Logout current user
- * @param token token of current user
- * @throws error if backend returns an error
- */
-export const logout = async (token: string) => {
-    try {
-        await EncryptedStorage.removeItem('jwt_token')
-        await networkLogout(token)
-    } catch (error: any) {
-        throw throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
-    }
-}
-
-/**
- * Get current token from local storage
- * @returns token from local storage
- * @throws error if backend returns an error
- */
-export const getLocalToken = async (): Promise<string> => {
-    try {
-        const token = await EncryptedStorage.getItem('jwt_token')
-        if (!token) {
-            throw new ApiError(Constants.GENERIC_GET_TOKEN_ERROR)
-        }
-        return token
-    } catch (error) {
-        throw throwApiError(error, Constants.GENERIC_GET_TOKEN_ERROR)
     }
 }
 
@@ -210,8 +156,11 @@ export const resetPassword = async (
 ): Promise<{ token: string; user: User }> => {
     try {
         const response = await networkResetPassword(passcode, newPassword)
-        const { token, user } = response.data
-        return { token, user }
+        const { tokens, user } = response.data
+        const { access, refresh } = tokens
+        await EncryptedStorage.setItem('access_token', access)
+        await EncryptedStorage.setItem('refresh_token', refresh)
+        return { token: access, user }
     } catch (error) {
         return throwApiError(error, Constants.RESET_PASSWORD_ERROR)
     }
@@ -327,14 +276,14 @@ export const changePassword = async (
  * @param token user's auth token
  * @returns nothing
  */
-export const logoutAllDevices = async (token: string): Promise<void> => {
-    try {
-        await EncryptedStorage.removeItem('jwt_token')
-        await networkLogoutAllDevices(token)
-    } catch (error) {
-        return throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
-    }
-}
+// export const logoutAllDevices = async (token: string): Promise<void> => {
+//     try {
+//         await EncryptedStorage.removeItem('access_token')
+//         await networkLogoutAllDevices(token)
+//     } catch (error) {
+//         return throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
+//     }
+// }
 
 /**
  * Method to delete a user's account
@@ -343,7 +292,7 @@ export const logoutAllDevices = async (token: string): Promise<void> => {
  */
 export const deleteAccount = async (token: string): Promise<void> => {
     try {
-        await EncryptedStorage.removeItem('jwt_token')
+        await EncryptedStorage.removeItem('access_token')
         await networkDeleteAccount(token)
     } catch (error) {
         return throwApiError(error, Constants.DELETE_USER_ERROR)

@@ -1,3 +1,4 @@
+import * as AuthData from '../../../../services/data/auth'
 import * as UserData from '../../../../services/data/user'
 import { DisplayTeam } from '../../../../types/team'
 import { RootState } from '../../../store'
@@ -197,7 +198,7 @@ export const fetchProfile = createAsyncThunk(
 export const logout = createAsyncThunk(
     'account/logout',
     async (data: string, _thunkAPI) => {
-        return await UserData.logout(data)
+        return await AuthData.logout(data)
     },
 )
 

@@ -1,5 +1,5 @@
+import * as AuthData from '../services/data/auth'
 import * as React from 'react'
-import * as UserData from '../services/data/user'
 import { LoginData } from '../types/reducers'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
@@ -40,7 +40,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                 password: '',
             })
             const { username, password } = data
-            const token = await UserData.login(username, password)
+            const token = await AuthData.login(username, password)
             dispatch(setToken(token))
             setLoading(false)
             navigation.reset({
@@ -55,7 +55,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 
     React.useEffect(() => {
         if (!hasCheckedLocalToken.current) {
-            UserData.getLocalToken()
+            AuthData.getAccessToken()
                 .then(token => {
                     dispatch(setToken(token))
                     navigation.reset({

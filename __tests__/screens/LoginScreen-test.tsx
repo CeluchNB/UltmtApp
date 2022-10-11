@@ -1,4 +1,4 @@
-import * as UserData from '../../src/services/data/user'
+import * as AuthData from '../../src/services/data/auth'
 import { ApiError } from '../../src/types/services'
 import LoginScreen from '../../src/screens/LoginScreen'
 import { NavigationContainer } from '@react-navigation/native'
@@ -40,7 +40,7 @@ it('test matches snapshot', () => {
 
 it('test successful login', async () => {
     const spy = jest
-        .spyOn(UserData, 'login')
+        .spyOn(AuthData, 'login')
         .mockImplementationOnce(async () => {
             return 'asdf.asdf.asdf'
         })
@@ -65,7 +65,7 @@ it('test successful login', async () => {
 
 it('should handle login error', async () => {
     const spy = jest
-        .spyOn(UserData, 'login')
+        .spyOn(AuthData, 'login')
         .mockImplementationOnce(async () => {
             throw new ApiError('error')
         })
@@ -89,7 +89,7 @@ it('should handle login error', async () => {
 
 it('should handle get local token success', async () => {
     const spy = jest
-        .spyOn(UserData, 'getLocalToken')
+        .spyOn(AuthData, 'getAccessToken')
         .mockImplementationOnce(async () => {
             return '1324.1234.1fgas'
         })

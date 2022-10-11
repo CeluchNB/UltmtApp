@@ -35,7 +35,6 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
 
     const [firstError, setFirstError] = React.useState('')
     const [lastError, setLastError] = React.useState('')
-    const [logoutAllError, setLogoutAllError] = React.useState('')
     const [deleteError, setDeleteError] = React.useState('')
     const [modalVisible, setModalVisible] = React.useState(false)
 
@@ -231,23 +230,6 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                         }}
                         onSubmit={async () => {}}
                     />
-                    <Button
-                        mode="text"
-                        color={colors.error}
-                        onPress={async () => {
-                            try {
-                                await UserData.logoutAllDevices(token)
-                                navigation.navigate('Login')
-                            } catch (e: any) {
-                                setLogoutAllError(e.message ?? Constants)
-                            }
-                        }}
-                        loading={false}>
-                        Sign Out All Devices
-                    </Button>
-                    {logoutAllError.length > 0 && (
-                        <Text style={styles.error}>{logoutAllError}</Text>
-                    )}
                     <Button
                         mode="contained"
                         color={colors.error}

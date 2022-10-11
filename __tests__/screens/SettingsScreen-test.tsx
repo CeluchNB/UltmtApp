@@ -1,3 +1,4 @@
+import * as AuthData from '../../src/services/data/auth'
 import * as Preferences from '../../src/services/data/preferences'
 import * as UserData from '../../src/services/data/user'
 import { NavigationContainer } from '@react-navigation/native'
@@ -36,7 +37,7 @@ it('should match snapshot', () => {
 })
 
 it('should handle logout press', async () => {
-    const spy = jest.spyOn(UserData, 'logout')
+    const spy = jest.spyOn(AuthData, 'logout')
 
     const { getByText } = render(
         <Provider store={store}>
@@ -235,50 +236,6 @@ it('should navigate to edit password', async () => {
         value: 'New password',
         field: SecureEditField.PASSWORD,
     })
-})
-
-it('should logout all devices', async () => {
-    const spy = jest
-        .spyOn(UserData, 'logoutAllDevices')
-        .mockReturnValueOnce(Promise.resolve())
-
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <SettingsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const button = getByText('Sign Out All Devices')
-    fireEvent.press(button)
-    await act(async () => {})
-
-    expect(spy).toHaveBeenCalled()
-    expect(navigate).toHaveBeenCalledWith('Login')
-})
-
-it('should handle logout all devices error', async () => {
-    const spy = jest
-        .spyOn(UserData, 'logoutAllDevices')
-        .mockReturnValueOnce(Promise.reject({ message: 'Error message' }))
-
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <SettingsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const button = getByText('Sign Out All Devices')
-    fireEvent.press(button)
-    await act(async () => {})
-
-    expect(spy).toHaveBeenCalled()
-    const errorMessage = getByText('Error message')
-    expect(errorMessage).toBeTruthy()
-    expect(navigate).not.toHaveBeenCalled()
 })
 
 it('should delete account', async () => {

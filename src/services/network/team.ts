@@ -1,5 +1,5 @@
-import { API_URL_V1 } from 'react-native-dotenv'
 import { CreateTeam } from '../../types/team'
+import { API_KEY, API_URL_V1 } from 'react-native-dotenv'
 import axios, { AxiosResponse } from 'axios'
 
 export const createTeam = async (
@@ -14,13 +14,16 @@ export const createTeam = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
 }
 
 export const searchTeam = async (term: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL_V1}/team/search?q=${term}`)
+    return await axios.get(`${API_URL_V1}/team/search?q=${term}`, {
+        headers: { 'X-API-Key': API_KEY },
+    })
 }
 
 export const getManagedTeam = async (
@@ -30,12 +33,15 @@ export const getManagedTeam = async (
     return await axios.get(`${API_URL_V1}/team/managing/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
         },
     })
 }
 
 export const getTeam = async (id: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL_V1}/team/${id}`)
+    return await axios.get(`${API_URL_V1}/team/${id}`, {
+        headers: { 'X-API-Key': API_KEY },
+    })
 }
 
 export const toggleRosterStatus = async (
@@ -49,6 +55,7 @@ export const toggleRosterStatus = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -65,6 +72,7 @@ export const removePlayer = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -87,6 +95,7 @@ export const rollover = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -103,6 +112,7 @@ export const addManager = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -111,7 +121,11 @@ export const addManager = async (
 export const getArchivedTeam = async (
     teamId: string,
 ): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL_V1}/archiveTeam/${teamId}`)
+    return await axios.get(`${API_URL_V1}/archiveTeam/${teamId}`, {
+        headers: {
+            'X-API-Key': API_KEY,
+        },
+    })
 }
 
 export const createBulkJoinCode = async (
@@ -124,6 +138,7 @@ export const createBulkJoinCode = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )

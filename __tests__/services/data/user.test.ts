@@ -8,14 +8,10 @@ import {
     createAccount,
     deleteAccount,
     fetchProfile,
-    getLocalToken,
     getPublicUser,
     joinTeamByCode,
     leaveManagerRole,
     leaveTeam,
-    login,
-    logout,
-    logoutAllDevices,
     requestPasswordRecovery,
     resetPassword,
     searchUsers,
@@ -69,42 +65,10 @@ describe('test user data calls', () => {
         RNEncryptedStorage.removeItem.mockReset()
     })
 
-    it('should handle network login success', async () => {
-        jest.spyOn(UserServices, 'login').mockReturnValue(
-            Promise.resolve({
-                data: {
-                    token: validToken,
-                },
-                status: 200,
-                statusText: 'Good',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        const token = await login('', '')
-        expect(token).toEqual(validToken)
-        expect(RNEncryptedStorage.setItem).toHaveBeenCalled()
-    })
-
-    it('should handle network login failures', async () => {
-        jest.spyOn(UserServices, 'login').mockReturnValue(
-            Promise.reject({
-                data: { message: errorText },
-                status: 400,
-                statusText: 'Bad',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        expect(login('', '')).rejects.toThrow()
-    })
-
     it('should handle network fetch profile success', async () => {
         jest.spyOn(UserServices, 'fetchProfile').mockReturnValueOnce(
             Promise.resolve({
-                data: user,
+                data: { user },
                 status: 200,
                 statusText: 'Good',
                 headers: {},
@@ -133,7 +97,10 @@ describe('test user data calls', () => {
     it('should handle network create account success', async () => {
         jest.spyOn(UserServices, 'createAccount').mockReturnValueOnce(
             Promise.resolve({
-                data: { user, token: validToken },
+                data: {
+                    user,
+                    tokens: { access: validToken, refresh: validToken },
+                },
                 status: 200,
                 statusText: 'Good',
                 headers: {},
@@ -159,59 +126,6 @@ describe('test user data calls', () => {
 
         expect(createAccount(createUser)).rejects.toThrow()
         expect(RNEncryptedStorage.setItem).not.toHaveBeenCalled()
-    })
-
-    it('should handle network logout success', async () => {
-        jest.spyOn(UserServices, 'logout').mockReturnValueOnce(
-            Promise.resolve({
-                data: {},
-                status: 200,
-                statusText: 'Good',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        await logout(validToken)
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
-    })
-
-    it('should handle network logout failure', async () => {
-        jest.spyOn(UserServices, 'logout').mockReturnValueOnce(
-            Promise.reject({
-                data: {},
-                status: 400,
-                statusText: 'Bad',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        expect(logout(validToken)).rejects.toThrow()
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
-    })
-
-    it('should handle get local token success', async () => {
-        RNEncryptedStorage.getItem.mockReturnValueOnce(
-            Promise.resolve(validToken),
-        )
-
-        const result = await getLocalToken()
-        expect(result).toBe(validToken)
-    })
-
-    it('should handle unfound local token', async () => {
-        RNEncryptedStorage.getItem.mockReturnValueOnce(Promise.reject(null))
-
-        expect(getLocalToken()).rejects.toThrow()
-    })
-
-    it('should handle get local token failure', () => {
-        jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
-            Promise.reject(validToken),
-        )
-
-        expect(getLocalToken()).rejects.toThrow()
     })
 
     it('should handle too few search characters correctly', () => {
@@ -362,7 +276,10 @@ describe('test user data calls', () => {
     it('should handle reset password network success', async () => {
         jest.spyOn(UserServices, 'resetPassword').mockReturnValueOnce(
             Promise.resolve({
-                data: { user, token: validToken },
+                data: {
+                    user,
+                    tokens: { access: validToken, refresh: validToken },
+                },
                 status: 200,
                 statusText: 'Good',
                 headers: {},
@@ -526,36 +443,6 @@ describe('test user data calls', () => {
         )
 
         expect(changePassword('', '', '')).rejects.toThrow()
-    })
-
-    it('should handle logout all devices network success', async () => {
-        jest.spyOn(UserServices, 'logoutAllDevices').mockReturnValueOnce(
-            Promise.resolve({
-                data: {},
-                status: 200,
-                statusText: 'Good',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        expect(logoutAllDevices('')).resolves.toEqual(undefined)
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
-    })
-
-    it('should handle logout all devices network failure', async () => {
-        jest.spyOn(UserServices, 'logoutAllDevices').mockReturnValueOnce(
-            Promise.reject({
-                data: {},
-                status: 400,
-                statusText: 'Bad',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        expect(logoutAllDevices('')).rejects.toThrow()
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
     })
 
     it('should handle delete account network success', async () => {
