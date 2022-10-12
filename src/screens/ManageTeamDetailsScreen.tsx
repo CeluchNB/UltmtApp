@@ -7,7 +7,6 @@ import { RequestType } from '../types/request'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserListItem from '../components/atoms/UserListItem'
-import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import {
     RefreshControl,
@@ -33,7 +32,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 }: ManagedTeamDetailsProps) => {
     const { id, place, name } = route.params
     const dispatch = useDispatch()
-    const token = useSelector(selectToken)
     const team = useSelector(selectTeam)
     const teamLoading = useSelector(selectTeamLoading)
 
@@ -45,7 +43,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     const initializeScreen = React.useCallback(async () => {
         try {
             dispatch(setTeamLoading(true))
-            const teamResponse = await TeamData.getManagedTeam(token, id)
+            const teamResponse = await TeamData.getManagedTeam(id)
             if (!isMounted.current) {
                 return
             }
@@ -60,7 +58,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                 dispatch(setTeamLoading(false))
             }
         }
-    }, [dispatch, token, id])
+    }, [dispatch, id])
 
     React.useEffect(() => {
         isMounted.current = true
@@ -79,7 +77,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     }
 
     const onRemovePlayer = async (userId: string) => {
-        dispatch(removePlayer({ token, id, userId }))
+        dispatch(removePlayer({ id, userId }))
     }
 
     const styles = StyleSheet.create({

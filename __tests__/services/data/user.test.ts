@@ -76,7 +76,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        const result = await fetchProfile('')
+        const result = await fetchProfile()
         expect(result).toEqual(user)
     })
 
@@ -91,7 +91,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(fetchProfile('')).rejects.toThrow()
+        expect(fetchProfile()).rejects.toThrow()
     })
 
     it('should handle network create account success', async () => {
@@ -109,7 +109,7 @@ describe('test user data calls', () => {
         )
 
         const result = await createAccount(createUser)
-        expect(result).toEqual({ user, token: validToken })
+        expect(result).toEqual({ user })
         expect(RNEncryptedStorage.setItem).toHaveBeenCalled()
     })
 
@@ -172,7 +172,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        const result = await leaveTeam('', '')
+        const result = await leaveTeam('')
         expect(result).toEqual(user)
     })
 
@@ -187,7 +187,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(leaveTeam('', '')).rejects.toThrow()
+        expect(leaveTeam('')).rejects.toThrow()
     })
 
     it('should handle network get public user success', async () => {
@@ -229,7 +229,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        const result = await leaveManagerRole('', '')
+        const result = await leaveManagerRole('')
         expect(result).toEqual(user)
     })
 
@@ -243,7 +243,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        expect(leaveManagerRole('', '')).rejects.toThrow()
+        expect(leaveManagerRole('')).rejects.toThrow()
     })
 
     it('should handle request password recovery network success', async () => {
@@ -288,7 +288,7 @@ describe('test user data calls', () => {
         )
         const result = await resetPassword('', '')
         expect(result.user).toBe(user)
-        expect(result.token).toBe(validToken)
+        expect(RNEncryptedStorage.setItem).toBeCalledTimes(2)
     })
 
     it('should handle reset password network failure', async () => {
@@ -314,7 +314,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        const result = await setOpenToRequests('', true)
+        const result = await setOpenToRequests(true)
         expect(result).toBe(user)
     })
 
@@ -328,7 +328,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        expect(setOpenToRequests('', true)).rejects.toThrow()
+        expect(setOpenToRequests(true)).rejects.toThrow()
     })
 
     it('should handle change name network success', async () => {
@@ -341,7 +341,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        const result = await changeName('', '', '')
+        const result = await changeName('', '')
         expect(result).toBe(user)
     })
 
@@ -356,7 +356,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(changeName('', '', '')).rejects.toThrow()
+        expect(changeName('', '')).rejects.toThrow()
     })
 
     it('should handle set private network success', async () => {
@@ -369,7 +369,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        const result = await setPrivate('', true)
+        const result = await setPrivate(true)
         expect(result).toBe(user)
     })
 
@@ -384,7 +384,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(setPrivate('', true)).rejects.toThrow()
+        expect(setPrivate(true)).rejects.toThrow()
     })
 
     it('should handle change email network success', async () => {
@@ -456,8 +456,8 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(deleteAccount('')).resolves.toEqual(undefined)
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+        await expect(deleteAccount()).resolves.toEqual(undefined)
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalledTimes(2)
     })
 
     it('should handle delete account network failure', async () => {
@@ -471,8 +471,8 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(deleteAccount('')).rejects.toThrow()
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+        await expect(deleteAccount()).rejects.toBeDefined()
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalledTimes(2)
     })
 
     it('should handle join team by code network success', async () => {
@@ -486,7 +486,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        const result = await joinTeamByCode('', '')
+        const result = await joinTeamByCode('')
         expect(result).toEqual(user)
     })
 
@@ -501,6 +501,6 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(joinTeamByCode('', '')).rejects.toThrow()
+        expect(joinTeamByCode('')).rejects.toThrow()
     })
 })

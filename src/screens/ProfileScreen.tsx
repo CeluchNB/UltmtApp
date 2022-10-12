@@ -25,7 +25,6 @@ import {
     selectAccount,
     selectFetchProfileLoading,
     selectPlayerTeams,
-    selectToken,
     setError,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -35,7 +34,6 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
 }: AllScreenProps) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
-    const token = useSelector(selectToken)
     const playerTeams = useSelector(selectPlayerTeams)
     const fetchProfileLoading = useSelector(selectFetchProfileLoading)
 
@@ -46,7 +44,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            dispatch(fetchProfile(token))
+            dispatch(fetchProfile())
         })
         return unsubscribe
     })
@@ -54,7 +52,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     const onLogout = async () => {
         try {
             setLoading(true)
-            dispatch(logout(token))
+            dispatch(logout())
             setLoading(false)
             navigation.navigate('Login')
         } catch (error: any) {
@@ -137,7 +135,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                         refreshing={refreshing}
                         onRefresh={async () => {
                             setRefreshing(true)
-                            dispatch(fetchProfile(token))
+                            dispatch(fetchProfile())
                             setRefreshing(false)
                         }}
                     />

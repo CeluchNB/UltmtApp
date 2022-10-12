@@ -9,7 +9,6 @@ export interface AccountSlice {
     lastName: string
     email: string
     username: string
-    token: string
     error?: string
     leaveManagerError?: string
     privateProfile: boolean
@@ -28,7 +27,6 @@ const initialState: AccountSlice = {
     lastName: '',
     email: '',
     username: '',
-    token: '',
     error: undefined,
     leaveManagerError: undefined,
     privateProfile: false,
@@ -46,9 +44,6 @@ const accountSlice = createSlice({
     name: 'account',
     initialState,
     reducers: {
-        setToken(state, action) {
-            state.token = action.payload
-        },
         setError(state, action) {
             state.error = action.payload
         },
@@ -125,7 +120,6 @@ const accountSlice = createSlice({
             .addCase(fetchProfile.rejected, (state, action) => {
                 state.fetchProfileLoading = false
                 state.error = action.error.message
-                state.token = ''
             })
 
         builder
@@ -136,7 +130,6 @@ const accountSlice = createSlice({
                 state.username = ''
                 state.privateProfile = false
                 state.openToRequests = false
-                state.token = ''
             })
             .addCase(logout.rejected, (state, action) => {
                 state.error = action.error.message
@@ -190,52 +183,48 @@ const accountSlice = createSlice({
 
 export const fetchProfile = createAsyncThunk(
     'account/fetchProfile',
-    async (data: string, _thunkAPI) => {
-        return await UserData.fetchProfile(data)
+    async () => {
+        return await UserData.fetchProfile()
     },
 )
 
-export const logout = createAsyncThunk(
-    'account/logout',
-    async (data: string, _thunkAPI) => {
-        return await AuthData.logout(data)
-    },
-)
+export const logout = createAsyncThunk('account/logout', async () => {
+    return await AuthData.logout()
+})
 
 export const leaveTeam = createAsyncThunk(
     'account/leaveTeam',
-    async (data: { token: string; teamId: string }, _thunkAPI) => {
-        const { token, teamId } = data
-        return await UserData.leaveTeam(token, teamId)
+    async (data: { teamId: string }, _thunkAPI) => {
+        const { teamId } = data
+        return await UserData.leaveTeam(teamId)
     },
 )
 
 export const leaveManagerRole = createAsyncThunk(
     'account/leaveManagerRole',
-    async (data: { token: string; teamId: string }, _thunkAPI) => {
-        const { token, teamId } = data
-        return await UserData.leaveManagerRole(token, teamId)
+    async (data: { teamId: string }, _thunkAPI) => {
+        const { teamId } = data
+        return await UserData.leaveManagerRole(teamId)
     },
 )
 
 export const setOpenToRequests = createAsyncThunk(
     'account/setOpenToRequests',
-    async (data: { token: string; open: boolean }, _thunkAPI) => {
-        const { token, open } = data
-        return await UserData.setOpenToRequests(token, open)
+    async (data: { open: boolean }, _thunkAPI) => {
+        const { open } = data
+        return await UserData.setOpenToRequests(open)
     },
 )
 
 export const setPrivate = createAsyncThunk(
     'account/setPrivate',
-    async (data: { token: string; privateAccount: boolean }, _thunkAPI) => {
-        const { token, privateAccount } = data
-        return await UserData.setPrivate(token, privateAccount)
+    async (data: { privateAccount: boolean }, _thunkAPI) => {
+        const { privateAccount } = data
+        return await UserData.setPrivate(privateAccount)
     },
 )
 
 export const selectAccount = (state: RootState) => state.account
-export const selectToken = (state: RootState) => state.account.token
 export const selectPlayerTeams = (state: RootState) => state.account.playerTeams
 export const selectManagerTeams = (state: RootState) =>
     state.account.managerTeams
@@ -251,12 +240,6 @@ export const selectOpenToRequests = (state: RootState) =>
     state.account.openToRequests
 export const selectFetchProfileLoading = (state: RootState) =>
     state.account.fetchProfileLoading
-export const {
-    addRequest,
-    removeRequest,
-    resetState,
-    setError,
-    setProfile,
-    setToken,
-} = accountSlice.actions
+export const { addRequest, removeRequest, resetState, setError, setProfile } =
+    accountSlice.actions
 export default accountSlice.reducer

@@ -6,7 +6,6 @@ import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
-import { setToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { useDispatch } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
@@ -40,8 +39,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                 password: '',
             })
             const { username, password } = data
-            const token = await AuthData.login(username, password)
-            dispatch(setToken(token))
+            await AuthData.login(username, password)
             setLoading(false)
             navigation.reset({
                 index: 0,
@@ -55,13 +53,14 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 
     React.useEffect(() => {
         if (!hasCheckedLocalToken.current) {
-            AuthData.getAccessToken()
-                .then(token => {
-                    dispatch(setToken(token))
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'Profile' }],
-                    })
+            AuthData.isLoggedIn()
+                .then(loggedIn => {
+                    if (loggedIn) {
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'Profile' }],
+                        })
+                    }
                 })
                 .catch(_e => {
                     // No error handling here, user just needs

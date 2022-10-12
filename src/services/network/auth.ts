@@ -1,5 +1,3 @@
-import { ApiResponse } from '../../types/services'
-import EncryptedStorage from 'react-native-encrypted-storage'
 import { API_KEY, API_URL_V1 } from 'react-native-dotenv'
 import axios, { AxiosResponse } from 'axios'
 
@@ -45,16 +43,4 @@ export const refreshToken = async (token: string): Promise<AxiosResponse> => {
             },
         },
     )
-}
-
-export const getAccessToken = async (): Promise<ApiResponse> => {
-    try {
-        const token = await EncryptedStorage.getItem('access_token')
-        if (token) {
-            return { data: token }
-        }
-    } catch (error) {
-        throw error
-    }
-    throw new Error('No token available')
 }

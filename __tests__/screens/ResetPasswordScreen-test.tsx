@@ -60,7 +60,6 @@ describe('test reset password screen', () => {
         fireEvent.press(getByText('Submit'))
         await act(async () => {})
 
-        expect(store.getState().account.token).toBe(token)
         expect(store.getState().account.username).toBe(
             fetchProfileData.username,
         )

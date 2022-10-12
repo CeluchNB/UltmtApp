@@ -71,7 +71,7 @@ it('should handle private account switch press', async () => {
         fireEvent(switchEl, 'valueChange')
     })
 
-    expect(spy).toHaveBeenCalledWith('', true)
+    expect(spy).toHaveBeenCalledWith(true)
 })
 
 it('should handle first name edit', async () => {
@@ -101,7 +101,7 @@ it('should handle first name edit', async () => {
     fireEvent.press(submitButton)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith('', 'newfirst', 'last')
+    expect(spy).toHaveBeenCalledWith('newfirst', 'last')
     const newFirstText = getByText('newfirst')
     expect(newFirstText).toBeTruthy()
 })
@@ -131,7 +131,7 @@ it('should handle first name edit error', async () => {
     fireEvent.press(submitButton)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith('', 'newfirst', 'last')
+    expect(spy).toHaveBeenCalledWith('newfirst', 'last')
     const errorMessage = getByText('Error message')
     expect(errorMessage).toBeTruthy()
 })
@@ -163,7 +163,7 @@ it('should handle last name edit', async () => {
     fireEvent.press(submitButton)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith('', 'first', 'newlast')
+    expect(spy).toHaveBeenCalledWith('first', 'newlast')
     const newLastText = getByText('newlast')
     expect(newLastText).toBeTruthy()
 })
@@ -193,7 +193,7 @@ it('should handle last name edit error', async () => {
     fireEvent.press(submitButton)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith('', 'first', 'newlast')
+    expect(spy).toHaveBeenCalledWith('first', 'newlast')
     const errorMessage = getByText('Error message')
     expect(errorMessage).toBeTruthy()
 })

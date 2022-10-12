@@ -1,4 +1,3 @@
-import * as AccountReducer from '../../src/store/reducers/features/account/accountReducer'
 import * as ManagedTeamReducer from '../../src/store/reducers/features/team/managedTeamReducer'
 import * as RequestData from '../../src/services/data/request'
 import * as TeamData from '../../src/services/data/team'
@@ -16,7 +15,6 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
-const token = '1234.asdf.1234'
 const goBack = jest.fn()
 const props: RequestUserProps = {
     navigation: {
@@ -28,7 +26,6 @@ const props: RequestUserProps = {
 }
 
 beforeAll(() => {
-    store.dispatch(AccountReducer.setToken(token))
     store.dispatch(
         ManagedTeamReducer.setTeam({
             _id: 'team1',
@@ -159,7 +156,7 @@ it('should correctly request user join', async () => {
 
     const users = getAllByText('first1 last1')
     expect(users).toHaveLength(2)
-    expect(spy).toHaveBeenCalledWith(token, 'user1', 'team1')
+    expect(spy).toHaveBeenCalledWith('user1', 'team1')
 })
 
 it('should handle request error', async () => {
@@ -183,7 +180,7 @@ it('should handle request error', async () => {
     fireEvent.press(user1)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith(token, 'user1', 'team1')
+    expect(spy).toHaveBeenCalledWith('user1', 'team1')
     expect(queryByText('request error')).not.toBeNull()
 })
 
@@ -220,7 +217,7 @@ it('should correctly add manager', async () => {
 
     const users = getAllByText('first1 last1')
     expect(users).toHaveLength(2)
-    expect(spy).toHaveBeenCalledWith(token, 'team1', 'user1')
+    expect(spy).toHaveBeenCalledWith('team1', 'user1')
 })
 
 it('should handle add manager failure', async () => {
@@ -254,7 +251,7 @@ it('should handle add manager failure', async () => {
     fireEvent.press(user1)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith(token, 'team1', 'user1')
+    expect(spy).toHaveBeenCalledWith('team1', 'user1')
     expect(queryByText('add manager error')).not.toBeNull()
 })
 

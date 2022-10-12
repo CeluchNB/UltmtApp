@@ -5,7 +5,6 @@ import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
-import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
@@ -27,7 +26,6 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
     const [error, setError] = React.useState('')
     const dispatch = useDispatch()
     const team = useSelector(selectTeam)
-    const token = useSelector(selectToken)
     const currentYear = new Date().getFullYear()
     const years = [
         currentYear.toString(),
@@ -48,7 +46,6 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
         const seasonEnd = seasonArray[seasonArray.length - 1]
         try {
             const newTeam = await TeamData.rollover(
-                token,
                 team?._id || '',
                 data.copyPlayers,
                 seasonStart,

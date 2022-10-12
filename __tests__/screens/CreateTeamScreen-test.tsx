@@ -5,7 +5,6 @@ import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import renderer from 'react-test-renderer'
-import { setToken } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
@@ -22,9 +21,7 @@ const props: Props = {
     route: {} as any,
 }
 
-beforeAll(() => {
-    store.dispatch(setToken('1234.fdas.42fd'))
-})
+beforeAll(() => {})
 
 beforeEach(async () => {
     navigate.mockReset()

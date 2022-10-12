@@ -129,8 +129,8 @@ export const getArchivedTeam = async (
 }
 
 export const createBulkJoinCode = async (
-    teamId: string,
     token: string,
+    teamId: string,
 ): Promise<AxiosResponse> => {
     return await axios.post(
         `${API_URL_V1}/team/getBulkCode?id=${teamId}`,

@@ -2,6 +2,7 @@ import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { throwApiError } from '../../utils/service-utils'
+import { withToken } from './auth'
 import { CreateUserData, DisplayUser, User } from '../../types/user'
 import {
     changeEmail as networkChangeEmail,
@@ -23,13 +24,12 @@ import {
 
 /**
  * Method to get a user's profile by their jwt
- * @param token jwt of the user
  * @returns a user object
  * @throws error if backend returns an error
  */
-export const fetchProfile = async (token: string): Promise<User> => {
+export const fetchProfile = async (): Promise<User> => {
     try {
-        const response = await networkFetchProfile(token)
+        const response = await withToken(networkFetchProfile)
         const { user } = response.data
         return user
     } catch (error: any) {
@@ -45,14 +45,14 @@ export const fetchProfile = async (token: string): Promise<User> => {
  */
 export const createAccount = async (
     profileData: CreateUserData,
-): Promise<{ user: User; token: string }> => {
+): Promise<{ user: User }> => {
     try {
         const response = await networkCreateAccount(profileData)
         const { user, tokens } = response.data
         const { access, refresh } = tokens
         await EncryptedStorage.setItem('access_token', access)
         await EncryptedStorage.setItem('refresh_token', refresh)
-        return { user, token: access }
+        return { user }
     } catch (error: any) {
         return throwApiError(error, Constants.GENERIC_CREATE_ACCOUNT_ERROR)
     }
@@ -78,17 +78,13 @@ export const searchUsers = async (term: string): Promise<DisplayUser[]> => {
 
 /**
  * Method for user to leave team
- * @param token jwt of current user
  * @param teamId id of team to leave
  * @returns updated user profile
  * @throws error if backend returns an error
  */
-export const leaveTeam = async (
-    token: string,
-    teamId: string,
-): Promise<User> => {
+export const leaveTeam = async (teamId: string): Promise<User> => {
     try {
-        const response = await networkLeaveTeam(token, teamId)
+        const response = await withToken(networkLeaveTeam, teamId)
         const { user } = response.data
         return user
     } catch (error) {
@@ -114,16 +110,12 @@ export const getPublicUser = async (id: string): Promise<User> => {
 
 /**
  * Method for user to remove himself as manager of a team
- * @param token auth token of user
  * @param teamId team id to leave
  * @returns updated user
  */
-export const leaveManagerRole = async (
-    token: string,
-    teamId: string,
-): Promise<User> => {
+export const leaveManagerRole = async (teamId: string): Promise<User> => {
     try {
-        const response = await networkLeaveManagerRole(token, teamId)
+        const response = await withToken(networkLeaveManagerRole, teamId)
         const { user } = response.data
         return user
     } catch (error) {
@@ -153,14 +145,14 @@ export const requestPasswordRecovery = async (email: string): Promise<void> => {
 export const resetPassword = async (
     passcode: string,
     newPassword: string,
-): Promise<{ token: string; user: User }> => {
+): Promise<{ user: User }> => {
     try {
         const response = await networkResetPassword(passcode, newPassword)
         const { tokens, user } = response.data
         const { access, refresh } = tokens
         await EncryptedStorage.setItem('access_token', access)
         await EncryptedStorage.setItem('refresh_token', refresh)
-        return { token: access, user }
+        return { user }
     } catch (error) {
         return throwApiError(error, Constants.RESET_PASSWORD_ERROR)
     }
@@ -168,16 +160,12 @@ export const resetPassword = async (
 
 /**
  * Method to change user's ability to receive requests
- * @param token auth token of user
  * @param open boolean if user wishes to receive requests
  * @returns updated user profile
  */
-export const setOpenToRequests = async (
-    token: string,
-    open: boolean,
-): Promise<User> => {
+export const setOpenToRequests = async (open: boolean): Promise<User> => {
     try {
-        const response = await networkSetOpenToRequests(token, open)
+        const response = await withToken(networkSetOpenToRequests, open)
         const { user } = response.data
         return user
     } catch (error) {
@@ -187,18 +175,16 @@ export const setOpenToRequests = async (
 
 /**
  * Method to update a user's first and last name
- * @param token auth token of user
  * @param firstName first name of user
  * @param lastName last name of user
  * @returns updated user value
  */
 export const changeName = async (
-    token: string,
     firstName: string,
     lastName: string,
 ): Promise<User> => {
     try {
-        const response = await networkChangeName(token, firstName, lastName)
+        const response = await withToken(networkChangeName, firstName, lastName)
         const { user } = response.data
         return user
     } catch (error) {
@@ -208,16 +194,12 @@ export const changeName = async (
 
 /**
  * Method to set a user's private status
- * @param token auth token of user
  * @param privateAccount user's private status
  * @returns updated user value
  */
-export const setPrivate = async (
-    token: string,
-    privateAccount: boolean,
-): Promise<User> => {
+export const setPrivate = async (privateAccount: boolean): Promise<User> => {
     try {
-        const response = await networkSetPrivate(token, privateAccount)
+        const response = await withToken(networkSetPrivate, privateAccount)
         const { user } = response.data
         return user
     } catch (error) {
@@ -287,30 +269,28 @@ export const changePassword = async (
 
 /**
  * Method to delete a user's account
- * @param token user's auth token
  * @returns nothing
  */
-export const deleteAccount = async (token: string): Promise<void> => {
+export const deleteAccount = async (): Promise<void> => {
     try {
+        await withToken(networkDeleteAccount)
         await EncryptedStorage.removeItem('access_token')
-        await networkDeleteAccount(token)
+        await EncryptedStorage.removeItem('refresh_token')
     } catch (error) {
+        await EncryptedStorage.removeItem('access_token')
+        await EncryptedStorage.removeItem('refresh_token')
         return throwApiError(error, Constants.DELETE_USER_ERROR)
     }
 }
 
 /**
  * Method to join a team by a 6 digit bulk code
- * @param token user's auth token
  * @param code 6 digit bulk team join code
  * @returns updated user profile
  */
-export const joinTeamByCode = async (
-    token: string,
-    code: string,
-): Promise<User> => {
+export const joinTeamByCode = async (code: string): Promise<User> => {
     try {
-        const response = await networkJoinTeamByCode(token, code)
+        const response = await withToken(networkJoinTeamByCode, code)
         const { user } = response.data
         return user
     } catch (error) {

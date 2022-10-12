@@ -7,7 +7,6 @@ import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { Team } from '../../src/types/team'
-import { setToken } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
@@ -17,7 +16,6 @@ const navigate = jest.fn()
 const goBack = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
 
-const token = '123.1234.gfads23'
 let getManagedTeamResponse: Team
 let requestObject: DetailedRequest
 
@@ -37,7 +35,6 @@ const props: ManagedTeamDetailsProps = {
 }
 
 beforeAll(() => {
-    store.dispatch(setToken(token))
     jest.useFakeTimers()
 })
 
@@ -94,7 +91,7 @@ beforeEach(() => {
         status: 'pending',
     }
     jest.spyOn(RequestData, 'getRequest').mockImplementation(
-        async (_token, requestId) => {
+        async requestId => {
             if (requestId === 'request1') {
                 return {
                     ...requestObject,

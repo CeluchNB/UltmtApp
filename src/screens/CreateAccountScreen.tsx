@@ -8,16 +8,13 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
-import { setToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
-import { useDispatch } from 'react-redux'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
 const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
-    const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState(undefined)
     const [passwordHidden, setPasswordHidden] = React.useState(true)
@@ -68,9 +65,8 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
     const dispatchCreateAccount = async (data: CreateUserData) => {
         try {
             setLoading(true)
-            const { token } = await UserData.createAccount(data)
+            await UserData.createAccount(data)
             setLoading(false)
-            dispatch(setToken(token))
             navigation.navigate('Profile')
         } catch (e: any) {
             setLoading(false)

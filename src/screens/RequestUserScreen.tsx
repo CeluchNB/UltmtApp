@@ -10,7 +10,6 @@ import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
 import { searchUsers } from '../services/data/user'
 import { selectTeam } from '../store/reducers/features/team/managedTeamReducer'
-import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
@@ -21,7 +20,6 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const { type } = route.params
     const { colors } = useColors()
     const team = useSelector(selectTeam)
-    const token = useSelector(selectToken)
     const [players, setPlayers] = React.useState<DisplayUser[]>([])
     const [selectedPlayers, setSelectedPlayers] = React.useState<DisplayUser[]>(
         [],
@@ -62,14 +60,10 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             setSelectedId(user._id)
             switch (type) {
                 case RequestType.PLAYER:
-                    await RequestData.requestUser(
-                        token,
-                        user._id,
-                        team?._id || '',
-                    )
+                    await RequestData.requestUser(user._id, team?._id || '')
                     break
                 case RequestType.MANAGER:
-                    await TeamData.addManager(token, team?._id || '', user._id)
+                    await TeamData.addManager(team?._id || '', user._id)
                     break
             }
             setSelectedPlayers([user, ...selectedPlayers])
@@ -85,10 +79,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             setBulkJoinCode('')
             setBulkJoinError('')
             setBulkCodeLoading(true)
-            const code = await TeamData.createBulkJoinCode(
-                team?._id || '',
-                token,
-            )
+            const code = await TeamData.createBulkJoinCode(team?._id || '')
             setBulkJoinCode(code)
         } catch (e: any) {
             setBulkJoinError(

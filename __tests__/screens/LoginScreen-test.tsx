@@ -42,7 +42,7 @@ it('test successful login', async () => {
     const spy = jest
         .spyOn(AuthData, 'login')
         .mockImplementationOnce(async () => {
-            return 'asdf.asdf.asdf'
+            return
         })
     const { getByPlaceholderText, getAllByText } = render(
         <Provider store={store}>
@@ -89,9 +89,9 @@ it('should handle login error', async () => {
 
 it('should handle get local token success', async () => {
     const spy = jest
-        .spyOn(AuthData, 'getAccessToken')
+        .spyOn(AuthData, 'isLoggedIn')
         .mockImplementationOnce(async () => {
-            return '1324.1234.1fgas'
+            return true
         })
 
     await waitFor(async () => {

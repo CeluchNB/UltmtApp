@@ -1,6 +1,7 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import { throwApiError } from '../../utils/service-utils'
+import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
 import {
     addManager as networkAddManager,
@@ -17,17 +18,13 @@ import {
 
 /**
  * Method to create team
- * @param token token of user creating team
  * @param data create team data
  * @returns created team
  * @throws error if team is not created successfully
  */
-export const createTeam = async (
-    token: string,
-    data: CreateTeam,
-): Promise<Team> => {
+export const createTeam = async (data: CreateTeam): Promise<Team> => {
     try {
-        const response = await networkCreateTeam(token, data)
+        const response = await withToken(networkCreateTeam, data)
         const { team } = response.data
         return team
     } catch (error) {
@@ -55,17 +52,13 @@ export const searchTeam = async (term: string): Promise<Team[]> => {
 
 /**
  * Method to get team that the current user manages
- * @param token jwt of current user
  * @param id team id
  * @returns team object
  * @throws error if backend returns error
  */
-export const getManagedTeam = async (
-    token: string,
-    id: string,
-): Promise<Team> => {
+export const getManagedTeam = async (id: string): Promise<Team> => {
     try {
-        const response = await networkGetManagedTeam(token, id)
+        const response = await withToken(networkGetManagedTeam, id)
         const { team } = response.data
         return team
     } catch (error) {
@@ -91,19 +84,17 @@ export const getTeam = async (id: string): Promise<Team> => {
 
 /**
  * Method to change a team's roster status
- * @param token jwt of user changing team
  * @param id id of team to update
  * @param open boolean for team's roster status
  * @returns updated team object
  * @throws error if backend returns error
  */
 export const toggleRosterStatus = async (
-    token: string,
     id: string,
     open: boolean,
 ): Promise<Team> => {
     try {
-        const response = await networkToggleRosterStatus(token, id, open)
+        const response = await withToken(networkToggleRosterStatus, id, open)
         const { team } = response.data
         return team
     } catch (error) {
@@ -113,19 +104,17 @@ export const toggleRosterStatus = async (
 
 /**
  * Method to remove a player from a team
- * @param token token of current user
  * @param teamId team player is on
  * @param userId id of player to remove
  * @returns updated team object
  * @throws error if backend returns an error
  */
 export const removePlayer = async (
-    token: string,
     teamId: string,
     userId: string,
 ): Promise<Team> => {
     try {
-        const response = await networkRemovePlayer(token, teamId, userId)
+        const response = await withToken(networkRemovePlayer, teamId, userId)
         const { team } = response.data
         return team
     } catch (error) {
@@ -136,7 +125,6 @@ export const removePlayer = async (
 /**
  * Method to start a new season for a team. After this method is called,
  * the old team is no longer editable.
- * @param token jwt of manager of team
  * @param teamId id of team to move over
  * @param copyPlayers boolean for deciding if current roster should be kept
  * @param seasonStart start year for season
@@ -145,15 +133,14 @@ export const removePlayer = async (
  * @throws error if backend returns an error
  */
 export const rollover = async (
-    token: string,
     teamId: string,
     copyPlayers: boolean,
     seasonStart: string,
     seasonEnd: string,
 ): Promise<Team> => {
     try {
-        const response = await networkRollover(
-            token,
+        const response = await withToken(
+            networkRollover,
             teamId,
             copyPlayers,
             seasonStart,
@@ -168,18 +155,16 @@ export const rollover = async (
 
 /**
  * Method to add manager to a team
- * @param token token of current manager
  * @param teamId team to add manager to
  * @param managerId manager to add to team
  * @returns team with updated manager
  */
 export const addManager = async (
-    token: string,
     teamId: string,
     managerId: string,
 ): Promise<Team> => {
     try {
-        const response = await networkAddManager(token, teamId, managerId)
+        const response = await withToken(networkAddManager, teamId, managerId)
         const { team } = response.data
         return team
     } catch (error) {
@@ -208,12 +193,9 @@ export const getArchivedTeam = async (teamId: string): Promise<Team> => {
  * @param token auth token of manager
  * @returns 6 digit code to be shared with team
  */
-export const createBulkJoinCode = async (
-    teamId: string,
-    token: string,
-): Promise<string> => {
+export const createBulkJoinCode = async (teamId: string): Promise<string> => {
     try {
-        const response = await networkCreateBulkJoinCode(teamId, token)
+        const response = await withToken(networkCreateBulkJoinCode, teamId)
         const { code } = response.data
         return code
     } catch (error) {

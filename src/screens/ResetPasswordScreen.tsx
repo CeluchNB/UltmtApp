@@ -6,15 +6,12 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
 import { resetPassword } from '../services/data/user'
+import { setProfile } from '../store/reducers/features/account/accountReducer'
 import { useColors } from '../hooks'
 import { useDispatch } from 'react-redux'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
-import {
-    setProfile,
-    setToken,
-} from '../store/reducers/features/account/accountReducer'
 
 const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
     const { colors } = useColors()
@@ -43,9 +40,8 @@ const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
         setLoading(true)
         const { passcode, newPassword } = data
         try {
-            const { token, user } = await resetPassword(passcode, newPassword)
+            const { user } = await resetPassword(passcode, newPassword)
             reset({ passcode: '', newPassword: '' })
-            dispatch(setToken(token))
             dispatch(setProfile(user))
             navigation.navigate('Profile')
         } catch (e: any) {

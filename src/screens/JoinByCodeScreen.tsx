@@ -6,19 +6,15 @@ import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
+import { setProfile } from '../store/reducers/features/account/accountReducer'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
+import { useDispatch } from 'react-redux'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { Modal, StyleSheet, Text, View } from 'react-native'
-import {
-    selectToken,
-    setProfile,
-} from '../store/reducers/features/account/accountReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
 const JoinByCodeScreen: React.FC<Props> = ({ navigation }: Props) => {
-    const token = useSelector(selectToken)
     const dispatch = useDispatch()
 
     const { colors } = useColors()
@@ -93,7 +89,7 @@ const JoinByCodeScreen: React.FC<Props> = ({ navigation }: Props) => {
         setLoading(true)
         try {
             const { code } = value
-            const user = await UserData.joinTeamByCode(token, code)
+            const user = await UserData.joinTeamByCode(code)
             dispatch(setProfile(user))
             setModalVisible(true)
         } catch (e: any) {

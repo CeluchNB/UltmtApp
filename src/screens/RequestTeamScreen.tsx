@@ -7,19 +7,15 @@ import SearchResultItem from '../components/atoms/SearchResultItem'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import { Team } from '../types/team'
 import { TextInput } from 'react-native-paper'
+import { addRequest } from '../store/reducers/features/account/accountReducer'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
+import { useDispatch } from 'react-redux'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import {
-    addRequest,
-    selectToken,
-} from '../store/reducers/features/account/accountReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
 const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
     const [teams, setTeams] = React.useState<Team[]>([])
-    const token = useSelector(selectToken)
     const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
     const [selectedId, setSelectedId] = React.useState('')
@@ -45,7 +41,7 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             setError('')
             setLoading(true)
             setSelectedId(id)
-            const request = await RequestData.requestTeam(token, id)
+            const request = await RequestData.requestTeam(id)
             dispatch(addRequest(request._id))
 
             setLoading(false)
