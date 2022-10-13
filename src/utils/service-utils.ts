@@ -9,3 +9,12 @@ export const throwApiError = (error: any, message: string) => {
         throw new ApiError(message)
     }
 }
+
+export const isTokenExpired = (exp?: number): boolean => {
+    const currentTime = Math.floor(new Date().getTime() / 1000)
+
+    if (!exp || exp <= currentTime) {
+        return true
+    }
+    return false
+}

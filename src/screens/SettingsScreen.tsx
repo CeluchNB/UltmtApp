@@ -5,6 +5,7 @@ import * as UserData from '../services/data/user'
 import { Button } from 'react-native-paper'
 import EditField from '../components/molecules/EditField'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import { logout } from '../services/data/auth'
 import { useColors } from '../hooks'
 import { AllScreenProps, SecureEditField } from '../types/navigation'
 import {
@@ -17,7 +18,6 @@ import {
     View,
 } from 'react-native'
 import {
-    logout,
     selectAccount,
     setPrivate,
     setProfile,
@@ -114,7 +114,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     })
 
     const onLogout = async () => {
-        dispatch(logout())
+        await logout()
         navigation.navigate('Login')
     }
 

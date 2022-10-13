@@ -2,7 +2,8 @@ import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { throwApiError } from '../../utils/service-utils'
+import jwt_decode from 'jwt-decode'
+import { isTokenExpired, throwApiError } from '../../utils/service-utils'
 import {
     login as networkLogin,
     logout as networkLogout,
@@ -43,6 +44,8 @@ export const logout = async () => {
         await EncryptedStorage.removeItem('access_token')
         await EncryptedStorage.removeItem('refresh_token')
     } catch (error: any) {
+        await EncryptedStorage.removeItem('access_token')
+        await EncryptedStorage.removeItem('refresh_token')
         throw throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
     }
 }
@@ -64,6 +67,8 @@ export const refreshToken = async (): Promise<string> => {
         await EncryptedStorage.setItem('refresh_token', refresh)
         return access
     } catch (error: any) {
+        await EncryptedStorage.removeItem('access_token')
+        await EncryptedStorage.removeItem('refresh_token')
         throw throwApiError(error, Constants.GENERIC_GET_TOKEN_ERROR)
     }
 }
@@ -75,7 +80,7 @@ export const withToken = async (
     try {
         const currentToken =
             (await EncryptedStorage.getItem('access_token')) || ''
-        const response = await networkCall(currentToken, args)
+        const response = await networkCall(currentToken, ...args)
         return response
     } catch (error: any) {
         if (error.status !== 401) {
@@ -83,7 +88,7 @@ export const withToken = async (
         }
         try {
             const newToken = await refreshToken()
-            return await networkCall(newToken, args)
+            return await networkCall(newToken, ...args)
         } catch (error2) {
             throw throwApiError(error2, Constants.GENERIC_GET_TOKEN_ERROR)
         }
@@ -97,8 +102,18 @@ export const withToken = async (
  */
 export const isLoggedIn = async (): Promise<boolean> => {
     try {
-        const token = await EncryptedStorage.getItem('access_token')
-        if (!token) {
+        const rToken = await EncryptedStorage.getItem('refresh_token')
+        if (!rToken) {
+            throw new ApiError(Constants.GENERIC_GET_TOKEN_ERROR)
+        }
+
+        const { exp: rExp } = jwt_decode(rToken) as any
+        if (isTokenExpired(rExp)) {
+            throw new ApiError(Constants.GENERIC_GET_TOKEN_ERROR)
+        }
+
+        const accessToken = await EncryptedStorage.getItem('access_token')
+        if (!accessToken) {
             throw new ApiError(Constants.GENERIC_GET_TOKEN_ERROR)
         }
         return true

@@ -51,6 +51,7 @@ export const respondToPlayerRequest = async (
     requestId: string,
     accept: boolean,
 ): Promise<AxiosResponse> => {
+    console.log('token', token, 'request id', requestId, 'accept', accept)
     return await axios.post(
         `${API_URL_V1}/request/team/${accept ? 'accept' : 'deny'}/${requestId}`,
         {},

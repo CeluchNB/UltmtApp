@@ -1,5 +1,6 @@
 import * as AuthServices from '../../../src/services/network/auth'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
+import jwt from 'jsonwebtoken'
 import {
     isLoggedIn,
     login,
@@ -8,8 +9,13 @@ import {
     withToken,
 } from '../../../src/services/data/auth'
 
-const validToken = 'token1'
+const validToken = jwt.sign({}, 'secret', { expiresIn: '1 hour' })
 const errorText = 'Bad network call in test'
+
+afterEach(() => {
+    RNEncryptedStorage.getItem.mockReset()
+    RNEncryptedStorage.setItem.mockReset()
+})
 
 it('should handle network login success', async () => {
     jest.spyOn(AuthServices, 'login').mockReturnValue(
@@ -72,25 +78,35 @@ it('should handle network logout failure', async () => {
     expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
 })
 
-it('should handle get local token success', async () => {
-    RNEncryptedStorage.getItem.mockReturnValueOnce(Promise.resolve(validToken))
+describe('should handle is logged in', () => {
+    it('should handle is logged in success', async () => {
+        RNEncryptedStorage.getItem.mockReturnValue(Promise.resolve(validToken))
 
-    const result = await isLoggedIn()
-    expect(result).toBe(true)
-})
+        const result = await isLoggedIn()
+        expect(result).toBe(true)
+    })
 
-it('should handle unfound local token', async () => {
-    RNEncryptedStorage.getItem.mockReturnValueOnce(Promise.reject(null))
+    it('with unfound refresh token', async () => {
+        RNEncryptedStorage.getItem.mockReturnValueOnce(Promise.resolve(null))
 
-    expect(isLoggedIn()).rejects.toThrow()
-})
+        expect(isLoggedIn()).rejects.toThrow()
+    })
 
-it('should handle get local token failure', () => {
-    jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
-        Promise.reject(validToken),
-    )
+    it('with expired refresh token', async () => {
+        const expToken = jwt.sign({ exp: 10 }, 'test')
+        RNEncryptedStorage.getItem.mockReturnValueOnce(
+            Promise.resolve(expToken),
+        )
+        expect(isLoggedIn()).rejects.toThrow()
+    })
 
-    expect(isLoggedIn()).rejects.toThrow()
+    it('with unfound access token', async () => {
+        RNEncryptedStorage.getItem
+            .mockReturnValueOnce(Promise.resolve(validToken))
+            .mockReturnValueOnce(Promise.resolve(null))
+
+        expect(isLoggedIn()).rejects.toThrow()
+    })
 })
 
 it('should handle refresh token with refresh token', async () => {
@@ -152,6 +168,9 @@ describe('should handle with token wrapper', () => {
         networkCall.mockReset()
     })
     it('with no refresh', async () => {
+        RNEncryptedStorage.getItem.mockReturnValueOnce(
+            Promise.resolve(validToken),
+        )
         networkCall.mockReturnValueOnce(
             Promise.resolve({
                 data: {
@@ -165,7 +184,7 @@ describe('should handle with token wrapper', () => {
         )
 
         const result = await withToken(networkCall, 'test')
-        expect(networkCall).toBeCalledWith('', ['test'])
+        expect(networkCall).toBeCalledWith(validToken, 'test')
         expect(result.status).toBe(200)
         expect(result.data.account).toBe('valid')
     })

@@ -90,6 +90,7 @@ export const respondToPlayerRequest = async (
         const { request } = response.data
         return request
     } catch (error) {
+        console.log('in data', error)
         return throwApiError(error, Constants.REQUEST_RESPONSE_ERROR)
     }
 }

@@ -8,6 +8,8 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
 import TeamListItem from '../components/atoms/TeamListItem'
+import { fetchProfile } from '../services/data/user'
+import { logout } from '../services/data/auth'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
 import {
@@ -20,12 +22,9 @@ import {
     View,
 } from 'react-native'
 import {
-    fetchProfile,
-    logout,
     selectAccount,
-    selectFetchProfileLoading,
     selectPlayerTeams,
-    setError,
+    setProfile,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -35,16 +34,25 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     const { colors } = useColors()
     const account = useSelector(selectAccount)
     const playerTeams = useSelector(selectPlayerTeams)
-    const fetchProfileLoading = useSelector(selectFetchProfileLoading)
 
     const [loading, setLoading] = React.useState(false)
+    const [profileLoading, setProfileLoading] = React.useState(false)
     const [refreshing, setRefreshing] = React.useState(false)
+    const [error, setError] = React.useState('')
 
     const dispatch = useDispatch()
 
     React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            dispatch(fetchProfile())
+        const unsubscribe = navigation.addListener('focus', async () => {
+            try {
+                setProfileLoading(true)
+                const profile = await fetchProfile()
+                dispatch(setProfile(profile))
+            } catch (e: any) {
+                setError(e.message ?? 'Unable to get profile')
+            } finally {
+                setProfileLoading(false)
+            }
         })
         return unsubscribe
     })
@@ -52,11 +60,11 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     const onLogout = async () => {
         try {
             setLoading(true)
-            dispatch(logout())
+            await logout()
             setLoading(false)
+        } catch (e: any) {
+        } finally {
             navigation.navigate('Login')
-        } catch (error: any) {
-            dispatch(setError(error.message ?? 'Unable to logout'))
         }
     }
 
@@ -100,9 +108,16 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
             width: '80%',
             height: '50%',
         },
+        error: {
+            width: '75%',
+            alignSelf: 'center',
+            textAlign: 'center',
+            fontSize: size.fontLarge,
+            color: colors.gray,
+        },
     })
 
-    if (fetchProfileLoading) {
+    if (profileLoading) {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerContainer}>
@@ -134,9 +149,15 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                         colors={[colors.textSecondary]}
                         refreshing={refreshing}
                         onRefresh={async () => {
-                            setRefreshing(true)
-                            dispatch(fetchProfile())
-                            setRefreshing(false)
+                            try {
+                                setRefreshing(true)
+                                const profile = await fetchProfile()
+                                dispatch(setProfile(profile))
+                                setRefreshing(false)
+                            } catch (e: any) {
+                            } finally {
+                                setRefreshing(false)
+                            }
                         }}
                     />
                 }
@@ -173,7 +194,11 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                                 color: colors.textPrimary,
                                 fontSize: size.fontMedium,
                             }}>
-                            {`@${account.username}`}
+                            {`@${
+                                account.username
+                                    ? account.username
+                                    : 'myaccount'
+                            }`}
                         </Text>
                         <Button
                             mode="text"
@@ -186,66 +211,74 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                     </View>
                 }
                 ListFooterComponent={
-                    <View style={styles.footerContainer}>
-                        <Section
-                            title="Stats"
-                            showButton={false}
-                            onButtonPress={() => ({})}
-                            buttonText="see all stats"
-                            error="No stats available"
-                            listData={[]}
-                            numColumns={2}
-                            renderItem={({ item }) => {
-                                return <StatListItem stat={item} />
-                            }}
-                        />
-                        <MapSection
-                            title="Games"
-                            showButton={false}
-                            showCreateButton={false}
-                            onButtonPress={() => ({})}
-                            buttonText="see all games"
-                            listData={[]}
-                            renderItem={item => {
-                                return <GameListItem key={item} game={item} />
-                            }}
-                            error="No games available"
-                        />
-                        <MapSection
-                            title="Teams"
-                            showButton={true}
-                            onButtonPress={() => {
-                                navigation.navigate('ManageTeams')
-                            }}
-                            buttonText="manage teams"
-                            listData={playerTeams}
-                            renderItem={team => {
-                                return (
-                                    <TeamListItem
-                                        key={team._id}
-                                        team={team}
-                                        onPress={async () => {
-                                            navigation.navigate(
-                                                'PublicTeamDetails',
-                                                {
-                                                    id: team._id,
-                                                    place: team.place,
-                                                    name: team.name,
-                                                },
-                                            )
-                                        }}
-                                    />
-                                )
-                            }}
-                            error={
-                                playerTeams.length === 0
-                                    ? 'No teams available'
-                                    : undefined
-                            }
-                            showCreateButton={true}
-                            onCreatePress={onCreateTeam}
-                        />
-                    </View>
+                    error.length ? (
+                        <View style={styles.footerContainer}>
+                            <Text style={styles.error}>{error}</Text>
+                        </View>
+                    ) : (
+                        <View style={styles.footerContainer}>
+                            <Section
+                                title="Stats"
+                                showButton={false}
+                                onButtonPress={() => ({})}
+                                buttonText="see all stats"
+                                error="No stats available"
+                                listData={[]}
+                                numColumns={2}
+                                renderItem={({ item }) => {
+                                    return <StatListItem stat={item} />
+                                }}
+                            />
+                            <MapSection
+                                title="Games"
+                                showButton={false}
+                                showCreateButton={false}
+                                onButtonPress={() => ({})}
+                                buttonText="see all games"
+                                listData={[]}
+                                renderItem={item => {
+                                    return (
+                                        <GameListItem key={item} game={item} />
+                                    )
+                                }}
+                                error="No games available"
+                            />
+                            <MapSection
+                                title="Teams"
+                                showButton={true}
+                                onButtonPress={() => {
+                                    navigation.navigate('ManageTeams')
+                                }}
+                                buttonText="manage teams"
+                                listData={playerTeams}
+                                renderItem={team => {
+                                    return (
+                                        <TeamListItem
+                                            key={team._id}
+                                            team={team}
+                                            onPress={async () => {
+                                                navigation.navigate(
+                                                    'PublicTeamDetails',
+                                                    {
+                                                        id: team._id,
+                                                        place: team.place,
+                                                        name: team.name,
+                                                    },
+                                                )
+                                            }}
+                                        />
+                                    )
+                                }}
+                                error={
+                                    playerTeams.length === 0
+                                        ? 'No teams available'
+                                        : undefined
+                                }
+                                showCreateButton={true}
+                                onCreatePress={onCreateTeam}
+                            />
+                        </View>
+                    )
                 }
             />
         </SafeAreaView>

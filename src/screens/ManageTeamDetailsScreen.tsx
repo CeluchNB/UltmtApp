@@ -62,8 +62,8 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 
     React.useEffect(() => {
         isMounted.current = true
-        const unsubscribe = navigation.addListener('focus', () => {
-            initializeScreen()
+        const unsubscribe = navigation.addListener('focus', async () => {
+            await initializeScreen()
         })
         return () => {
             unsubscribe()

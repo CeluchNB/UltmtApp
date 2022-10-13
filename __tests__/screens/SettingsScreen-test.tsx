@@ -37,7 +37,9 @@ it('should match snapshot', () => {
 })
 
 it('should handle logout press', async () => {
-    const spy = jest.spyOn(AuthData, 'logout')
+    const spy = jest
+        .spyOn(AuthData, 'logout')
+        .mockReturnValue(Promise.resolve())
 
     const { getByText } = render(
         <Provider store={store}>
@@ -51,6 +53,8 @@ it('should handle logout press', async () => {
 
     fireEvent.press(button)
     expect(spy).toHaveBeenCalled()
+    // should not need this
+    await act(async () => {})
     expect(navigate).toHaveBeenCalledWith('Login')
 })
 
