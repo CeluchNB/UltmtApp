@@ -5,6 +5,7 @@ import * as UserData from '../services/data/user'
 import { Button } from 'react-native-paper'
 import EditField from '../components/molecules/EditField'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import { logout } from '../services/data/auth'
 import { useColors } from '../hooks'
 import { AllScreenProps, SecureEditField } from '../types/navigation'
 import {
@@ -17,9 +18,7 @@ import {
     View,
 } from 'react-native'
 import {
-    logout,
     selectAccount,
-    selectToken,
     setPrivate,
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
@@ -31,11 +30,9 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
 
     const dispatch = useDispatch()
     const account = useSelector(selectAccount)
-    const token = useSelector(selectToken)
 
     const [firstError, setFirstError] = React.useState('')
     const [lastError, setLastError] = React.useState('')
-    const [logoutAllError, setLogoutAllError] = React.useState('')
     const [deleteError, setDeleteError] = React.useState('')
     const [modalVisible, setModalVisible] = React.useState(false)
 
@@ -117,12 +114,12 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     })
 
     const onLogout = async () => {
-        dispatch(logout(token))
+        await logout()
         navigation.navigate('Login')
     }
 
     const onChangeName = async (firstName: string, lastName: string) => {
-        const user = await UserData.changeName(token, firstName, lastName)
+        const user = await UserData.changeName(firstName, lastName)
         dispatch(setProfile(user))
     }
 
@@ -169,7 +166,6 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                             onValueChange={() => {
                                 dispatch(
                                     setPrivate({
-                                        token,
                                         privateAccount: !account.privateProfile,
                                     }),
                                 )
@@ -232,23 +228,6 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                         onSubmit={async () => {}}
                     />
                     <Button
-                        mode="text"
-                        color={colors.error}
-                        onPress={async () => {
-                            try {
-                                await UserData.logoutAllDevices(token)
-                                navigation.navigate('Login')
-                            } catch (e: any) {
-                                setLogoutAllError(e.message ?? Constants)
-                            }
-                        }}
-                        loading={false}>
-                        Sign Out All Devices
-                    </Button>
-                    {logoutAllError.length > 0 && (
-                        <Text style={styles.error}>{logoutAllError}</Text>
-                    )}
-                    <Button
                         mode="contained"
                         color={colors.error}
                         style={styles.deleteButton}
@@ -287,9 +266,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                                         style={styles.modalButton}
                                         onPress={async () => {
                                             try {
-                                                await UserData.deleteAccount(
-                                                    token,
-                                                )
+                                                await UserData.deleteAccount()
                                                 setModalVisible(false)
                                                 navigation.navigate('Login')
                                             } catch (e: any) {

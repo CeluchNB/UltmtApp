@@ -1,4 +1,3 @@
-import * as AccountReducer from '../../src/store/reducers/features/account/accountReducer'
 import * as ManagedTeamReducer from '../../src/store/reducers/features/team/managedTeamReducer'
 import * as TeamData from '../../src/services/data/team'
 import { NavigationContainer } from '@react-navigation/native'
@@ -14,7 +13,6 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const goBack = jest.fn()
 
-const token = '1234.asdf.6543'
 const props: Props = {
     navigation: {
         goBack,
@@ -23,7 +21,6 @@ const props: Props = {
 }
 
 beforeAll(() => {
-    store.dispatch(AccountReducer.setToken(token))
     store.dispatch(ManagedTeamReducer.setTeam({ _id: 'team1' }))
 })
 
@@ -79,7 +76,6 @@ it('should handle successful rollover', async () => {
 
     const currentYear = new Date().getFullYear()
     expect(spy).toHaveBeenCalledWith(
-        token,
         'team1',
         false,
         currentYear.toString(),

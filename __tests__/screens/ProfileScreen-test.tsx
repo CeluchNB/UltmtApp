@@ -1,4 +1,4 @@
-import * as AccountReducer from '../../src/store/reducers/features/account/accountReducer'
+import * as AuthData from '../../src/services/data/auth'
 import * as UserData from '../../src/services/data/user'
 import { AllScreenProps } from '../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
@@ -13,8 +13,6 @@ import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
-const loginData = { token: 'sample.1234.token' }
-
 const navigate = jest.fn()
 const addListener = jest.fn()
 
@@ -27,17 +25,15 @@ const props: AllScreenProps = {
 }
 
 beforeAll(async () => {
-    jest.spyOn(UserData, 'login').mockImplementation(
+    jest.spyOn(AuthData, 'login').mockImplementation(
         async (_username: string, _password: string) => {
-            return loginData.token
+            return
         },
     )
 
-    jest.spyOn(UserData, 'fetchProfile').mockImplementation(
-        async (_token: string) => {
-            return fetchProfileData
-        },
-    )
+    jest.spyOn(UserData, 'fetchProfile').mockImplementation(async () => {
+        return fetchProfileData
+    })
     store.dispatch(setProfile(fetchProfileData))
 })
 
@@ -95,6 +91,7 @@ it('contains correct text from response', async () => {
 })
 
 it('should handle logout click', async () => {
+    jest.spyOn(AuthData, 'logout').mockReturnValueOnce(Promise.resolve())
     const { getByText } = render(
         <Provider store={store}>
             <NavigationContainer>
@@ -105,6 +102,8 @@ it('should handle logout click', async () => {
 
     const button = getByText('Sign Out')
     fireEvent.press(button)
+    // should not need this
+    await act(async () => {})
 
     expect(navigate).toHaveBeenCalledTimes(1)
 })
@@ -155,9 +154,7 @@ it('should handle create team click', async () => {
 
 it('should handle swipe functionality', async () => {
     const mockFn = jest.fn()
-    const spy = jest
-        .spyOn(AccountReducer, 'fetchProfile')
-        .mockImplementation(mockFn)
+    const spy = jest.spyOn(UserData, 'fetchProfile').mockImplementation(mockFn)
 
     const { getByTestId } = render(
         <Provider store={store}>

@@ -12,8 +12,6 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
-const loginData = { token: 'sample.1234.token' }
-
 const navigate = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
 
@@ -30,7 +28,6 @@ beforeAll(() => {
 })
 
 beforeEach(async () => {
-    store.dispatch(AccountReducer.setToken(loginData))
     store.dispatch(AccountReducer.setProfile(fetchProfileData))
     jest.clearAllMocks()
 })
@@ -186,7 +183,7 @@ it('should navigate to user requests screen', async () => {
 it('should handle leave team', async () => {
     const leaveTeamSpy = jest
         .spyOn(UserData, 'leaveTeam')
-        .mockImplementationOnce(async (_token: string, _teamId: string) => {
+        .mockImplementationOnce(async (_teamId: string) => {
             const newUser: User = {
                 _id: 'testid',
                 firstName: 'first',
@@ -254,7 +251,7 @@ it('should handle leave team', async () => {
 it('should handle leave manager role', async () => {
     const leaveTeamSpy = jest
         .spyOn(UserData, 'leaveManagerRole')
-        .mockImplementationOnce(async (_token: string, _teamId: string) => {
+        .mockImplementationOnce(async (_teamId: string) => {
             const newUser: User = {
                 _id: 'testid',
                 firstName: 'first',

@@ -22,7 +22,6 @@ import {
     selectLeaveManagerError,
     selectManagerTeams,
     selectPlayerTeams,
-    selectToken,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -32,7 +31,6 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const playerTeams = useSelector(selectPlayerTeams)
     const managerTeams = useSelector(selectManagerTeams)
     const archiveTeams = useSelector(selectArchiveTeams)
-    const token = useSelector(selectToken)
     const leaveManagerError = useSelector(selectLeaveManagerError)
 
     const [leaveManagerTeamId, setLeaveManagerTeamId] = React.useState('')
@@ -40,7 +38,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            dispatch(fetchProfile(token))
+            dispatch(fetchProfile())
         })
         return unsubscribe
     })
@@ -56,12 +54,12 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     // Do it outside of redux?
     // 'eventError' in redux vs. 'pageError'?
     const onLeaveTeam = (teamId: string) => {
-        dispatch(leaveTeam({ token, teamId }))
+        dispatch(leaveTeam({ teamId }))
     }
 
     const onLeaveManagerRole = (teamId: string) => {
         setLeaveManagerTeamId(teamId)
-        dispatch(leaveManagerRole({ token, teamId }))
+        dispatch(leaveManagerRole({ teamId }))
     }
 
     const styles = StyleSheet.create({
@@ -102,7 +100,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                         refreshing={refreshing}
                         onRefresh={async () => {
                             setRefreshing(true)
-                            dispatch(fetchProfile(token))
+                            dispatch(fetchProfile())
                             setRefreshing(false)
                         }}
                     />

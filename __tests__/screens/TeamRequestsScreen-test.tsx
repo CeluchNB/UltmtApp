@@ -10,7 +10,6 @@ import { RequestType } from '../../src/types/request'
 import { Team } from '../../src/types/team'
 import TeamRequestsScreen from '../../src/screens/TeamRequestsScreen'
 import { setTeam } from '../../src/store/reducers/features/team/managedTeamReducer'
-import { setToken } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
@@ -27,7 +26,6 @@ const props: Props = {
     route: {} as any,
 }
 
-const token = '123.1234.gfads23'
 let getManagedTeamResponse: Team
 let requestObject: DetailedRequest
 
@@ -113,7 +111,6 @@ beforeEach(() => {
         Promise.resolve(getManagedTeamResponse),
     )
     store.dispatch(setTeam(getManagedTeamResponse))
-    store.dispatch(setToken(token))
 })
 
 it('should match snapshot', () => {
@@ -237,7 +234,7 @@ it('should respond to request correctly', async () => {
     await act(async () => {})
 
     expect(queryByText('@first3last3')).toBeNull()
-    expect(responseSpy).toHaveBeenCalledWith(token, 'request2', true)
+    expect(responseSpy).toHaveBeenCalledWith('request2', true)
 })
 
 it('should handle respond to request error', async () => {
@@ -309,7 +306,7 @@ it('should handle deny request', async () => {
 
     expect(queryByText('@first3last3')).toBeNull()
 
-    expect(responseSpy).toHaveBeenCalledWith(token, 'request2', false)
+    expect(responseSpy).toHaveBeenCalledWith('request2', false)
 })
 
 it('should handle delete request correctly', async () => {

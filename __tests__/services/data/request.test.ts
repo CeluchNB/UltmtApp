@@ -56,7 +56,7 @@ describe('test request data calls', () => {
             requestSuccess,
         )
 
-        const result = await deleteTeamRequest('', '')
+        const result = await deleteTeamRequest('')
         expect(result).toEqual(request)
     })
 
@@ -65,7 +65,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(deleteTeamRequest('', '')).rejects.toThrow()
+        expect(deleteTeamRequest('')).rejects.toThrow()
     })
 
     it('should handle network delete user request success', async () => {
@@ -73,7 +73,7 @@ describe('test request data calls', () => {
             requestSuccess,
         )
 
-        const result = await deleteUserRequest('', '')
+        const result = await deleteUserRequest('')
         expect(result).toEqual(request)
     })
 
@@ -82,7 +82,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(deleteUserRequest('', '')).rejects.toThrow()
+        expect(deleteUserRequest('')).rejects.toThrow()
     })
 
     it('should handle network get request success', async () => {
@@ -90,7 +90,7 @@ describe('test request data calls', () => {
             requestSuccess,
         )
 
-        const result = await getRequest('', '')
+        const result = await getRequest('')
         expect(result).toEqual(request)
     })
 
@@ -99,7 +99,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(getRequest('', '')).rejects.toThrow()
+        expect(getRequest('')).rejects.toThrow()
     })
 
     it('should handle network request team success', async () => {
@@ -107,7 +107,7 @@ describe('test request data calls', () => {
             requestSuccess,
         )
 
-        const result = await requestTeam('', '')
+        const result = await requestTeam('')
         expect(result).toEqual(request)
     })
 
@@ -116,7 +116,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(requestTeam('', '')).rejects.toThrow()
+        expect(requestTeam('')).rejects.toThrow()
     })
 
     it('should handle network request user success', async () => {
@@ -124,7 +124,7 @@ describe('test request data calls', () => {
             requestSuccess,
         )
 
-        const result = await requestUser('', '', '')
+        const result = await requestUser('', '')
         expect(result).toEqual(request)
     })
 
@@ -132,7 +132,7 @@ describe('test request data calls', () => {
         jest.spyOn(RequestServices, 'requestUser').mockReturnValueOnce(
             requestError,
         )
-        expect(requestUser('', '', '')).rejects.toThrow()
+        expect(requestUser('', '')).rejects.toThrow()
     })
 
     it('should handle network respond to player success', async () => {
@@ -141,7 +141,7 @@ describe('test request data calls', () => {
             'respondToPlayerRequest',
         ).mockReturnValueOnce(requestSuccess)
 
-        const result = await respondToPlayerRequest('', '', true)
+        const result = await respondToPlayerRequest('', true)
         expect(result).toEqual(request)
     })
 
@@ -151,7 +151,7 @@ describe('test request data calls', () => {
             'respondToPlayerRequest',
         ).mockReturnValueOnce(requestError)
 
-        expect(respondToPlayerRequest('', '', true)).rejects.toThrow()
+        expect(respondToPlayerRequest('', true)).rejects.toThrow()
     })
 
     it('should handle network respond to team success', async () => {
@@ -159,7 +159,7 @@ describe('test request data calls', () => {
             requestSuccess,
         )
 
-        const result = await respondToTeamRequest('', '', true)
+        const result = await respondToTeamRequest('', true)
         expect(result).toEqual(request)
     })
 
@@ -168,7 +168,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(respondToTeamRequest('', '', true)).rejects.toThrow()
+        expect(respondToTeamRequest('', true)).rejects.toThrow()
     })
 
     it('should handle network get requests by team success', async () => {
@@ -182,7 +182,7 @@ describe('test request data calls', () => {
             }),
         )
 
-        const result = await getRequestsByTeam('', '')
+        const result = await getRequestsByTeam('')
         expect(result).toEqual([request])
     })
 
@@ -191,7 +191,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(getRequestsByTeam('', '')).rejects.toThrow()
+        expect(getRequestsByTeam('')).rejects.toThrow()
     })
 
     it('should handle network get requests by user success', async () => {
@@ -205,7 +205,7 @@ describe('test request data calls', () => {
             }),
         )
 
-        const result = await getRequestsByUser('')
+        const result = await getRequestsByUser()
         expect(result).toEqual([request])
     })
 
@@ -214,6 +214,6 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(getRequestsByUser('')).rejects.toThrow()
+        expect(getRequestsByUser()).rejects.toThrow()
     })
 })

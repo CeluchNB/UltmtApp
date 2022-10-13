@@ -1,3 +1,4 @@
+import * as AuthData from '../../src/services/data/auth'
 import * as Preferences from '../../src/services/data/preferences'
 import * as UserData from '../../src/services/data/user'
 import { NavigationContainer } from '@react-navigation/native'
@@ -36,7 +37,9 @@ it('should match snapshot', () => {
 })
 
 it('should handle logout press', async () => {
-    const spy = jest.spyOn(UserData, 'logout')
+    const spy = jest
+        .spyOn(AuthData, 'logout')
+        .mockReturnValue(Promise.resolve())
 
     const { getByText } = render(
         <Provider store={store}>
@@ -50,6 +53,8 @@ it('should handle logout press', async () => {
 
     fireEvent.press(button)
     expect(spy).toHaveBeenCalled()
+    // should not need this
+    await act(async () => {})
     expect(navigate).toHaveBeenCalledWith('Login')
 })
 
@@ -70,7 +75,7 @@ it('should handle private account switch press', async () => {
         fireEvent(switchEl, 'valueChange')
     })
 
-    expect(spy).toHaveBeenCalledWith('', true)
+    expect(spy).toHaveBeenCalledWith(true)
 })
 
 it('should handle first name edit', async () => {
@@ -100,7 +105,7 @@ it('should handle first name edit', async () => {
     fireEvent.press(submitButton)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith('', 'newfirst', 'last')
+    expect(spy).toHaveBeenCalledWith('newfirst', 'last')
     const newFirstText = getByText('newfirst')
     expect(newFirstText).toBeTruthy()
 })
@@ -130,7 +135,7 @@ it('should handle first name edit error', async () => {
     fireEvent.press(submitButton)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith('', 'newfirst', 'last')
+    expect(spy).toHaveBeenCalledWith('newfirst', 'last')
     const errorMessage = getByText('Error message')
     expect(errorMessage).toBeTruthy()
 })
@@ -162,7 +167,7 @@ it('should handle last name edit', async () => {
     fireEvent.press(submitButton)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith('', 'first', 'newlast')
+    expect(spy).toHaveBeenCalledWith('first', 'newlast')
     const newLastText = getByText('newlast')
     expect(newLastText).toBeTruthy()
 })
@@ -192,7 +197,7 @@ it('should handle last name edit error', async () => {
     fireEvent.press(submitButton)
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith('', 'first', 'newlast')
+    expect(spy).toHaveBeenCalledWith('first', 'newlast')
     const errorMessage = getByText('Error message')
     expect(errorMessage).toBeTruthy()
 })
@@ -235,50 +240,6 @@ it('should navigate to edit password', async () => {
         value: 'New password',
         field: SecureEditField.PASSWORD,
     })
-})
-
-it('should logout all devices', async () => {
-    const spy = jest
-        .spyOn(UserData, 'logoutAllDevices')
-        .mockReturnValueOnce(Promise.resolve())
-
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <SettingsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const button = getByText('Sign Out All Devices')
-    fireEvent.press(button)
-    await act(async () => {})
-
-    expect(spy).toHaveBeenCalled()
-    expect(navigate).toHaveBeenCalledWith('Login')
-})
-
-it('should handle logout all devices error', async () => {
-    const spy = jest
-        .spyOn(UserData, 'logoutAllDevices')
-        .mockReturnValueOnce(Promise.reject({ message: 'Error message' }))
-
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <SettingsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const button = getByText('Sign Out All Devices')
-    fireEvent.press(button)
-    await act(async () => {})
-
-    expect(spy).toHaveBeenCalled()
-    const errorMessage = getByText('Error message')
-    expect(errorMessage).toBeTruthy()
-    expect(navigate).not.toHaveBeenCalled()
 })
 
 it('should delete account', async () => {

@@ -8,14 +8,10 @@ import {
     createAccount,
     deleteAccount,
     fetchProfile,
-    getLocalToken,
     getPublicUser,
     joinTeamByCode,
     leaveManagerRole,
     leaveTeam,
-    login,
-    logout,
-    logoutAllDevices,
     requestPasswordRecovery,
     resetPassword,
     searchUsers,
@@ -69,42 +65,10 @@ describe('test user data calls', () => {
         RNEncryptedStorage.removeItem.mockReset()
     })
 
-    it('should handle network login success', async () => {
-        jest.spyOn(UserServices, 'login').mockReturnValue(
-            Promise.resolve({
-                data: {
-                    token: validToken,
-                },
-                status: 200,
-                statusText: 'Good',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        const token = await login('', '')
-        expect(token).toEqual(validToken)
-        expect(RNEncryptedStorage.setItem).toHaveBeenCalled()
-    })
-
-    it('should handle network login failures', async () => {
-        jest.spyOn(UserServices, 'login').mockReturnValue(
-            Promise.reject({
-                data: { message: errorText },
-                status: 400,
-                statusText: 'Bad',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        expect(login('', '')).rejects.toThrow()
-    })
-
     it('should handle network fetch profile success', async () => {
         jest.spyOn(UserServices, 'fetchProfile').mockReturnValueOnce(
             Promise.resolve({
-                data: user,
+                data: { user },
                 status: 200,
                 statusText: 'Good',
                 headers: {},
@@ -112,7 +76,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        const result = await fetchProfile('')
+        const result = await fetchProfile()
         expect(result).toEqual(user)
     })
 
@@ -127,13 +91,16 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(fetchProfile('')).rejects.toThrow()
+        expect(fetchProfile()).rejects.toThrow()
     })
 
     it('should handle network create account success', async () => {
         jest.spyOn(UserServices, 'createAccount').mockReturnValueOnce(
             Promise.resolve({
-                data: { user, token: validToken },
+                data: {
+                    user,
+                    tokens: { access: validToken, refresh: validToken },
+                },
                 status: 200,
                 statusText: 'Good',
                 headers: {},
@@ -142,7 +109,7 @@ describe('test user data calls', () => {
         )
 
         const result = await createAccount(createUser)
-        expect(result).toEqual({ user, token: validToken })
+        expect(result).toEqual({ user })
         expect(RNEncryptedStorage.setItem).toHaveBeenCalled()
     })
 
@@ -159,59 +126,6 @@ describe('test user data calls', () => {
 
         expect(createAccount(createUser)).rejects.toThrow()
         expect(RNEncryptedStorage.setItem).not.toHaveBeenCalled()
-    })
-
-    it('should handle network logout success', async () => {
-        jest.spyOn(UserServices, 'logout').mockReturnValueOnce(
-            Promise.resolve({
-                data: {},
-                status: 200,
-                statusText: 'Good',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        await logout(validToken)
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
-    })
-
-    it('should handle network logout failure', async () => {
-        jest.spyOn(UserServices, 'logout').mockReturnValueOnce(
-            Promise.reject({
-                data: {},
-                status: 400,
-                statusText: 'Bad',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        expect(logout(validToken)).rejects.toThrow()
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
-    })
-
-    it('should handle get local token success', async () => {
-        RNEncryptedStorage.getItem.mockReturnValueOnce(
-            Promise.resolve(validToken),
-        )
-
-        const result = await getLocalToken()
-        expect(result).toBe(validToken)
-    })
-
-    it('should handle unfound local token', async () => {
-        RNEncryptedStorage.getItem.mockReturnValueOnce(Promise.reject(null))
-
-        expect(getLocalToken()).rejects.toThrow()
-    })
-
-    it('should handle get local token failure', () => {
-        jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
-            Promise.reject(validToken),
-        )
-
-        expect(getLocalToken()).rejects.toThrow()
     })
 
     it('should handle too few search characters correctly', () => {
@@ -258,7 +172,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        const result = await leaveTeam('', '')
+        const result = await leaveTeam('')
         expect(result).toEqual(user)
     })
 
@@ -273,7 +187,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(leaveTeam('', '')).rejects.toThrow()
+        expect(leaveTeam('')).rejects.toThrow()
     })
 
     it('should handle network get public user success', async () => {
@@ -315,7 +229,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        const result = await leaveManagerRole('', '')
+        const result = await leaveManagerRole('')
         expect(result).toEqual(user)
     })
 
@@ -329,7 +243,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        expect(leaveManagerRole('', '')).rejects.toThrow()
+        expect(leaveManagerRole('')).rejects.toThrow()
     })
 
     it('should handle request password recovery network success', async () => {
@@ -362,7 +276,10 @@ describe('test user data calls', () => {
     it('should handle reset password network success', async () => {
         jest.spyOn(UserServices, 'resetPassword').mockReturnValueOnce(
             Promise.resolve({
-                data: { user, token: validToken },
+                data: {
+                    user,
+                    tokens: { access: validToken, refresh: validToken },
+                },
                 status: 200,
                 statusText: 'Good',
                 headers: {},
@@ -371,7 +288,7 @@ describe('test user data calls', () => {
         )
         const result = await resetPassword('', '')
         expect(result.user).toBe(user)
-        expect(result.token).toBe(validToken)
+        expect(RNEncryptedStorage.setItem).toBeCalledTimes(2)
     })
 
     it('should handle reset password network failure', async () => {
@@ -397,7 +314,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        const result = await setOpenToRequests('', true)
+        const result = await setOpenToRequests(true)
         expect(result).toBe(user)
     })
 
@@ -411,7 +328,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        expect(setOpenToRequests('', true)).rejects.toThrow()
+        expect(setOpenToRequests(true)).rejects.toThrow()
     })
 
     it('should handle change name network success', async () => {
@@ -424,7 +341,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        const result = await changeName('', '', '')
+        const result = await changeName('', '')
         expect(result).toBe(user)
     })
 
@@ -439,7 +356,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(changeName('', '', '')).rejects.toThrow()
+        expect(changeName('', '')).rejects.toThrow()
     })
 
     it('should handle set private network success', async () => {
@@ -452,7 +369,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        const result = await setPrivate('', true)
+        const result = await setPrivate(true)
         expect(result).toBe(user)
     })
 
@@ -467,7 +384,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(setPrivate('', true)).rejects.toThrow()
+        expect(setPrivate(true)).rejects.toThrow()
     })
 
     it('should handle change email network success', async () => {
@@ -528,36 +445,6 @@ describe('test user data calls', () => {
         expect(changePassword('', '', '')).rejects.toThrow()
     })
 
-    it('should handle logout all devices network success', async () => {
-        jest.spyOn(UserServices, 'logoutAllDevices').mockReturnValueOnce(
-            Promise.resolve({
-                data: {},
-                status: 200,
-                statusText: 'Good',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        expect(logoutAllDevices('')).resolves.toEqual(undefined)
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
-    })
-
-    it('should handle logout all devices network failure', async () => {
-        jest.spyOn(UserServices, 'logoutAllDevices').mockReturnValueOnce(
-            Promise.reject({
-                data: {},
-                status: 400,
-                statusText: 'Bad',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        expect(logoutAllDevices('')).rejects.toThrow()
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
-    })
-
     it('should handle delete account network success', async () => {
         jest.spyOn(UserServices, 'deleteAccount').mockReturnValueOnce(
             Promise.resolve({
@@ -569,8 +456,8 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(deleteAccount('')).resolves.toEqual(undefined)
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+        await expect(deleteAccount()).resolves.toEqual(undefined)
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalledTimes(2)
     })
 
     it('should handle delete account network failure', async () => {
@@ -584,8 +471,8 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(deleteAccount('')).rejects.toThrow()
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
+        await expect(deleteAccount()).rejects.toBeDefined()
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalledTimes(2)
     })
 
     it('should handle join team by code network success', async () => {
@@ -599,7 +486,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        const result = await joinTeamByCode('', '')
+        const result = await joinTeamByCode('')
         expect(result).toEqual(user)
     })
 
@@ -614,6 +501,6 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(joinTeamByCode('', '')).rejects.toThrow()
+        expect(joinTeamByCode('')).rejects.toThrow()
     })
 })

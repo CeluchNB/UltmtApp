@@ -82,24 +82,24 @@ const managedTeamSlice = createSlice({
 export const getManagedTeam = createAsyncThunk(
     'managedTeam/getTeam',
     async (data: TeamRequestData, _thunkAPI) => {
-        const { token, id } = data
-        return await TeamData.getManagedTeam(token, id)
+        const { id } = data
+        return await TeamData.getManagedTeam(id)
     },
 )
 
 export const toggleRosterStatus = createAsyncThunk(
     'managedTeam/toggleRosterStatus',
     async (data: ToggleRosterStatusData, _thunkAPI) => {
-        const { token, id, open } = data
-        return await TeamData.toggleRosterStatus(token, id, open)
+        const { id, open } = data
+        return await TeamData.toggleRosterStatus(id, open)
     },
 )
 
 export const removePlayer = createAsyncThunk(
     'managedTeam/removePlayer',
     async (data: RemovePlayerData, _thunkAPI) => {
-        const { token, id, userId } = data
-        return await TeamData.removePlayer(token, id, userId)
+        const { id, userId } = data
+        return await TeamData.removePlayer(id, userId)
     },
 )
 

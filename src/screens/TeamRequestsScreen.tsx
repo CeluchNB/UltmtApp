@@ -5,7 +5,6 @@ import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserListItem from '../components/atoms/UserListItem'
-import { selectToken } from '../store/reducers/features/account/accountReducer'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
 import { DetailedRequest, RequestType } from '../types/request'
@@ -31,7 +30,6 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
 
     const team = useSelector(selectTeam)
     const openLoading = useSelector(selectOpenLoading)
-    const token = useSelector(selectToken)
 
     const isMounted = React.useRef(false)
     const [refresh, setRefresh] = React.useState(false)
@@ -51,7 +49,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                 return
             }
             setRequestsLoading(true)
-            const reqs = await RequestData.getRequestsByTeam(token, team._id)
+            const reqs = await RequestData.getRequestsByTeam(team._id)
             if (isMounted.current) {
                 setRequests(reqs)
             }
@@ -62,7 +60,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                 setRequestsLoading(false)
             }
         }
-    }, [team, token])
+    }, [team])
 
     React.useEffect(() => {
         isMounted.current = true
@@ -79,13 +77,14 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
         try {
             setRespondRequestError('')
             setResponseRequestId(requestId)
-            await RequestData.respondToPlayerRequest(token, requestId, accept)
+            await RequestData.respondToPlayerRequest(requestId, accept)
             setRequests(requests.filter(r => r._id !== requestId))
 
             if (accept) {
-                dispatch(getManagedTeam({ token, id: team?._id || '' }))
+                dispatch(getManagedTeam({ id: team?._id || '' }))
             }
         } catch (e: any) {
+            console.log('in screen', e)
             setRespondRequestError(
                 e.message ?? 'Unable to respond to this request',
             )
@@ -96,10 +95,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
         try {
             setDeleteRequestError('')
             setDeleteRequestId(requestId)
-            const request = await RequestData.deleteTeamRequest(
-                token,
-                requestId,
-            )
+            const request = await RequestData.deleteTeamRequest(requestId)
             // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
             setRequests(requests.filter(r => r._id !== request._id))
         } catch (e: any) {
@@ -155,7 +151,6 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                     onPress={async () => {
                         dispatch(
                             toggleRosterStatus({
-                                token,
                                 id: team?._id || '',
                                 open: !team?.rosterOpen,
                             }),
@@ -172,7 +167,13 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             return (
                                 <UserListItem
                                     key={item._id}
-                                    user={item.userDetails}
+                                    user={
+                                        item.userDetails || {
+                                            firstName: 'User no',
+                                            lastName: 'longer exists',
+                                            username: 'deleteme',
+                                        }
+                                    }
                                     showDelete={true}
                                     showAccept={true}
                                     onDelete={() =>
@@ -212,7 +213,13 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             return (
                                 <UserListItem
                                     key={item._id}
-                                    user={item.userDetails}
+                                    user={
+                                        item.userDetails || {
+                                            firstName: 'User no',
+                                            lastName: 'longer exists',
+                                            username: 'deleteme',
+                                        }
+                                    }
                                     showDelete={true}
                                     showAccept={false}
                                     requestStatus={item.status}

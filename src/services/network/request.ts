@@ -1,4 +1,4 @@
-import { API_URL_V1 } from 'react-native-dotenv'
+import { API_KEY, API_URL_V1 } from 'react-native-dotenv'
 import axios, { AxiosResponse } from 'axios'
 
 export const requestTeam = async (
@@ -11,6 +11,7 @@ export const requestTeam = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -27,6 +28,7 @@ export const requestUser = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -39,6 +41,7 @@ export const getRequest = async (
     return await axios.get(`${API_URL_V1}/request/${requestId}`, {
         headers: {
             Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
         },
     })
 }
@@ -48,12 +51,14 @@ export const respondToPlayerRequest = async (
     requestId: string,
     accept: boolean,
 ): Promise<AxiosResponse> => {
+    console.log('token', token, 'request id', requestId, 'accept', accept)
     return await axios.post(
         `${API_URL_V1}/request/team/${accept ? 'accept' : 'deny'}/${requestId}`,
         {},
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -69,6 +74,7 @@ export const deleteTeamRequest = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -85,6 +91,7 @@ export const respondToTeamRequest = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -100,6 +107,7 @@ export const deleteUserRequest = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )
@@ -112,6 +120,7 @@ export const getRequestsByTeam = async (
     return await axios.get(`${API_URL_V1}/request/team/${teamId}`, {
         headers: {
             Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
         },
     })
 }
@@ -122,6 +131,7 @@ export const getRequestsByUser = async (
     return await axios.get(`${API_URL_V1}/request/userRequests`, {
         headers: {
             Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
         },
     })
 }

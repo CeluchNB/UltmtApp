@@ -28,7 +28,6 @@ export interface Team extends DisplayTeam {
 }
 
 export interface TeamRequestData {
-    token: string
     id: string
 }
 

@@ -21,7 +21,6 @@ import {
     selectError,
     selectOpenToRequests,
     selectToggleLoading,
-    selectToken,
     setOpenToRequests,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -29,7 +28,6 @@ import { useDispatch, useSelector } from 'react-redux'
 const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     const { colors } = useColors()
     const dispatch = useDispatch()
-    const token = useSelector(selectToken)
     const toggleLoading = useSelector(selectToggleLoading)
     const openToRequests = useSelector(selectOpenToRequests)
     const error = useSelector(selectError)
@@ -46,7 +44,7 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     const getRequests = React.useCallback(async () => {
         try {
             setFetchError('')
-            const reqResponses = await RequestData.getRequestsByUser(token)
+            const reqResponses = await RequestData.getRequestsByUser()
 
             if (reqResponses && isMounted.current) {
                 setRequests(
@@ -58,7 +56,7 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
         } catch (e: any) {
             setFetchError(e.message ?? 'Unable to get request details')
         }
-    }, [token, isMounted])
+    }, [isMounted])
 
     React.useEffect(() => {
         isMounted.current = true
@@ -79,7 +77,7 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
         try {
             setRespondRequestId(requestId)
             setRespondRequestError('')
-            await RequestData.respondToTeamRequest(token, requestId, accept)
+            await RequestData.respondToTeamRequest(requestId, accept)
             dispatch(removeRequest(requestId))
             setRequests(requests.filter(req => req._id !== requestId))
         } catch (e: any) {
@@ -92,7 +90,7 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
         try {
             setDeleteRequestId(requestId)
             setDeleteRequestError('')
-            await RequestData.deleteUserRequest(token, requestId)
+            await RequestData.deleteUserRequest(requestId)
             dispatch(removeRequest(requestId))
             setRequests(requests.filter(req => req._id !== requestId))
         } catch (e: any) {
@@ -101,7 +99,7 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     }
 
     const toggleRosterOpen = () => {
-        dispatch(setOpenToRequests({ token, open: !openToRequests }))
+        dispatch(setOpenToRequests({ open: !openToRequests }))
     }
 
     const styles = StyleSheet.create({
@@ -198,7 +196,13 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             return (
                                 <TeamListItem
                                     key={item._id}
-                                    team={item.teamDetails}
+                                    team={
+                                        item.teamDetails || {
+                                            place: 'Team no',
+                                            name: 'longer exists',
+                                            teamname: 'deleteme',
+                                        }
+                                    }
                                     showAccept={true}
                                     showDelete={true}
                                     onAccept={async () => {
@@ -238,7 +242,13 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             return (
                                 <TeamListItem
                                     key={item._id}
-                                    team={item.teamDetails}
+                                    team={
+                                        item.teamDetails || {
+                                            place: 'Team no',
+                                            name: 'longer exists',
+                                            teamname: 'deleteme',
+                                        }
+                                    }
                                     showAccept={false}
                                     showDelete={true}
                                     onDelete={async () => {

@@ -1,4 +1,3 @@
-import * as AccountReducer from '../../src/store/reducers/features/account/accountReducer'
 import * as RequestData from '../../src/services/data/request'
 import * as TeamData from '../../src/services/data/team'
 import { DetailedRequest } from '../../src/types/request'
@@ -12,7 +11,6 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
-const token = '1234.asdf.1234'
 const goBack = jest.fn()
 const props: Props = {
     navigation: {
@@ -22,7 +20,6 @@ const props: Props = {
 }
 
 beforeAll(async () => {
-    store.dispatch(AccountReducer.setToken(token))
     jest.spyOn(TeamData, 'searchTeam').mockResolvedValue(
         Promise.resolve([
             {
@@ -165,7 +162,7 @@ it('should request team when pressed', async () => {
     // ManageTeamDetailsScreen-test.tsx for further details
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith(token, 'team1')
+    expect(spy).toHaveBeenCalledWith('team1')
     const state = store.getState()
     expect(state.account.requests[0]).toBe('request1')
     expect(goBack).toHaveBeenCalled()

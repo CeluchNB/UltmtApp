@@ -5,19 +5,15 @@ import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import UserRequestsScreen from '../../src/screens/UserRequestsScreen'
+import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 import { fetchProfileData, requestObject } from '../../fixtures/data'
-import {
-    setProfile,
-    setToken,
-} from '../../src/store/reducers/features/account/accountReducer'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const navigate = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
-const token = 'token.1234.token'
 
 const props: Props = {
     navigation: {
@@ -29,7 +25,6 @@ const props: Props = {
 
 beforeEach(() => {
     store.dispatch(setProfile(fetchProfileData))
-    store.dispatch(setToken(token))
     jest.clearAllMocks()
     jest.spyOn(RequestData, 'getRequestsByUser').mockReturnValue(
         Promise.resolve([
@@ -90,7 +85,7 @@ it('should handle toggle roster status click', async () => {
     )
     fireEvent.press(getByText('allow requests'))
     await waitFor(() => queryByText('prevent requests'))
-    expect(spy).toHaveBeenCalledWith(token, true)
+    expect(spy).toHaveBeenCalledWith(true)
 })
 
 it('should handle navigate to request team page', async () => {
