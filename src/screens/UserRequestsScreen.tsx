@@ -32,7 +32,6 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     const openToRequests = useSelector(selectOpenToRequests)
     const error = useSelector(selectError)
 
-    const isMounted = React.useRef(false)
     const [respondRequestId, setRespondRequestId] = React.useState('')
     const [deleteRequestId, setDeleteRequestId] = React.useState('')
 
@@ -50,14 +49,12 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
         useLazyData<DetailedRequest>(RequestData.respondToTeamRequest)
 
     React.useEffect(() => {
-        isMounted.current = true
         const unsubscribe = navigation.addListener('focus', () => {
             if (!loading) {
                 refetch()
             }
         })
         return () => {
-            isMounted.current = false
             unsubscribe()
         }
     }, [navigation, loading, refetch])

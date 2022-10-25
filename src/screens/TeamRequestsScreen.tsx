@@ -84,7 +84,6 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                 dispatch(getManagedTeam({ id: team?._id || '' }))
             }
         } catch (e: any) {
-            console.log('in screen', e)
             setRespondRequestError(
                 e.message ?? 'Unable to respond to this request',
             )

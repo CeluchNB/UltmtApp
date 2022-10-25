@@ -25,8 +25,8 @@ export function useData<T>(
 
     const refetch = useCallback(async () => {
         setLoading(true)
+        setError(undefined)
         try {
-            console.log('calling refetch')
             const result = await method(...args)
             setData(result)
         } catch (e) {
