@@ -68,6 +68,7 @@ export function useLazyData<T>(
     })
 
     const fetch = async (...args: any[]) => {
+        setError(undefined)
         if (!isMounted.current) {
             return
         }
