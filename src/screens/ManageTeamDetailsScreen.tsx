@@ -44,7 +44,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
-            if (!teamLoading) {
+            if (!teamData && !teamLoading) {
                 refetch()
             }
         })
@@ -54,7 +54,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     })
 
     React.useEffect(() => {
-        // TODO: consider refactoring out of redux
         if (teamData) {
             dispatch(setTeam(teamData))
         }

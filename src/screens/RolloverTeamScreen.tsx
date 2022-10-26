@@ -38,22 +38,31 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
         },
     })
 
-    const { fetch, loading, error } = useLazyData<Team>(TeamData.rollover)
+    const {
+        data: teamData,
+        fetch,
+        loading,
+        error,
+    } = useLazyData<Team>(TeamData.rollover)
 
     const rolloverTeam = async (data: RolloverTeamFormData) => {
         const seasonArray = data.season.split(' - ')
         const seasonStart = seasonArray[0]
         const seasonEnd = seasonArray[seasonArray.length - 1]
 
-        const teamData = await fetch(
-            team?._id || '',
-            data.copyPlayers,
-            seasonStart,
-            seasonEnd,
-        )
-        dispatch(setTeam(teamData))
-        navigation.goBack()
+        await fetch(team?._id || '', data.copyPlayers, seasonStart, seasonEnd)
     }
+
+    React.useEffect(() => {
+        if (teamData) {
+            dispatch(setTeam(teamData))
+            navigation.navigate('ManagedTeamDetails', {
+                id: teamData._id,
+                name: teamData.name,
+                place: teamData.place,
+            })
+        }
+    })
 
     const styles = StyleSheet.create({
         screen: {
