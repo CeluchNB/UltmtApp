@@ -62,7 +62,7 @@ exports[`should match snapshot 1`] = `
             }
           }
         >
-          NaN
+          2022
         </Text>
         <Text
           style={
@@ -75,6 +75,7 @@ exports[`should match snapshot 1`] = `
           }
         >
           @
+          placename
         </Text>
         <View
           collapsable={false}
@@ -409,6 +410,156 @@ exports[`should match snapshot 1`] = `
               </View>
             </View>
           </View>
+          <View
+            style={
+              Object {
+                "display": "flex",
+                "flexDirection": "row",
+                "marginBottom": 5,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "flex": 1,
+                }
+              }
+            >
+              <View
+                accessible={true}
+                collapsable={false}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "opacity": 1,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#ababab",
+                      "fontSize": 41.0958904109589,
+                      "fontWeight": "bold",
+                    }
+                  }
+                >
+                  first4 last4
+                </Text>
+                <Text
+                  style={
+                    Object {
+                      "color": "#ffd600",
+                      "fontSize": 30.821917808219176,
+                      "fontWeight": "normal",
+                    }
+                  }
+                >
+                  @
+                  first4last4
+                </Text>
+              </View>
+            </View>
+            <View
+              accessibilityRole="button"
+              accessibilityState={
+                Object {
+                  "disabled": false,
+                }
+              }
+              accessible={true}
+              focusable={true}
+              hitSlop={
+                Object {
+                  "bottom": 6,
+                  "left": 6,
+                  "right": 6,
+                  "top": 6,
+                }
+              }
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Array [
+                  Object {
+                    "overflow": "hidden",
+                  },
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                      "margin": 6,
+                      "overflow": "hidden",
+                    },
+                    Object {
+                      "borderRadius": 18,
+                      "height": 36,
+                      "width": 36,
+                    },
+                    undefined,
+                    Object {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                  ],
+                ]
+              }
+              testID="go-button"
+            >
+              <View>
+                <Text
+                  accessibilityElementsHidden={true}
+                  allowFontScaling={false}
+                  importantForAccessibility="no-hide-descendants"
+                  pointerEvents="none"
+                  selectable={false}
+                  style={
+                    Array [
+                      Object {
+                        "color": "#ffd600",
+                        "fontSize": 24,
+                      },
+                      Array [
+                        Object {
+                          "lineHeight": 24,
+                          "transform": Array [
+                            Object {
+                              "scaleX": 1,
+                            },
+                          ],
+                        },
+                        Object {
+                          "backgroundColor": "transparent",
+                        },
+                      ],
+                      Object {
+                        "fontFamily": "Material Design Icons",
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                      },
+                      Object {},
+                    ]
+                  }
+                >
+                  󰅂
+                </Text>
+              </View>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -528,6 +679,246 @@ exports[`should match snapshot 1`] = `
                   }
                 >
                   󰐕
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              Object {
+                "display": "flex",
+                "flexDirection": "row",
+                "marginBottom": 5,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "flex": 1,
+                }
+              }
+            >
+              <View
+                accessible={true}
+                collapsable={false}
+                focusable={true}
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Object {
+                    "opacity": 1,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "color": "#ababab",
+                      "fontSize": 41.0958904109589,
+                      "fontWeight": "bold",
+                    }
+                  }
+                >
+                  first1 last1
+                </Text>
+                <Text
+                  style={
+                    Object {
+                      "color": "#ffd600",
+                      "fontSize": 30.821917808219176,
+                      "fontWeight": "normal",
+                    }
+                  }
+                >
+                  @
+                  first1last1
+                </Text>
+              </View>
+            </View>
+            <View
+              accessibilityRole="button"
+              accessibilityState={
+                Object {
+                  "disabled": false,
+                }
+              }
+              accessible={true}
+              focusable={true}
+              hitSlop={
+                Object {
+                  "bottom": 6,
+                  "left": 6,
+                  "right": 6,
+                  "top": 6,
+                }
+              }
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Array [
+                  Object {
+                    "overflow": "hidden",
+                  },
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                      "margin": 6,
+                      "overflow": "hidden",
+                    },
+                    Object {
+                      "borderRadius": 18,
+                      "height": 36,
+                      "width": 36,
+                    },
+                    undefined,
+                    Object {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                  ],
+                ]
+              }
+              testID="delete-button"
+            >
+              <View>
+                <Text
+                  accessibilityElementsHidden={true}
+                  allowFontScaling={false}
+                  importantForAccessibility="no-hide-descendants"
+                  pointerEvents="none"
+                  selectable={false}
+                  style={
+                    Array [
+                      Object {
+                        "color": "#ff0000",
+                        "fontSize": 24,
+                      },
+                      Array [
+                        Object {
+                          "lineHeight": 24,
+                          "transform": Array [
+                            Object {
+                              "scaleX": 1,
+                            },
+                          ],
+                        },
+                        Object {
+                          "backgroundColor": "transparent",
+                        },
+                      ],
+                      Object {
+                        "fontFamily": "Material Design Icons",
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                      },
+                      Object {},
+                    ]
+                  }
+                >
+                  󰅖
+                </Text>
+              </View>
+            </View>
+            <View
+              accessibilityRole="button"
+              accessibilityState={
+                Object {
+                  "disabled": false,
+                }
+              }
+              accessible={true}
+              focusable={true}
+              hitSlop={
+                Object {
+                  "bottom": 6,
+                  "left": 6,
+                  "right": 6,
+                  "top": 6,
+                }
+              }
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Array [
+                  Object {
+                    "overflow": "hidden",
+                  },
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                      "margin": 6,
+                      "overflow": "hidden",
+                    },
+                    Object {
+                      "borderRadius": 18,
+                      "height": 36,
+                      "width": 36,
+                    },
+                    undefined,
+                    Object {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                  ],
+                ]
+              }
+              testID="go-button"
+            >
+              <View>
+                <Text
+                  accessibilityElementsHidden={true}
+                  allowFontScaling={false}
+                  importantForAccessibility="no-hide-descendants"
+                  pointerEvents="none"
+                  selectable={false}
+                  style={
+                    Array [
+                      Object {
+                        "color": "#ffd600",
+                        "fontSize": 24,
+                      },
+                      Array [
+                        Object {
+                          "lineHeight": 24,
+                          "transform": Array [
+                            Object {
+                              "scaleX": 1,
+                            },
+                          ],
+                        },
+                        Object {
+                          "backgroundColor": "transparent",
+                        },
+                      ],
+                      Object {
+                        "fontFamily": "Material Design Icons",
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                      },
+                      Object {},
+                    ]
+                  }
+                >
+                  󰅂
                 </Text>
               </View>
             </View>

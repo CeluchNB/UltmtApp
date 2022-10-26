@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
-import { useColors } from '../hooks'
+import { Team } from '../types/team'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 import {
@@ -13,6 +13,7 @@ import {
     setTeam,
 } from '../store/reducers/features/team/managedTeamReducer'
 import { size, weight } from '../theme/fonts'
+import { useColors, useLazyData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 interface RolloverTeamFormData {
@@ -22,8 +23,6 @@ interface RolloverTeamFormData {
 
 const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
     const { colors } = useColors()
-    const [loading, setLoading] = React.useState(false)
-    const [error, setError] = React.useState('')
     const dispatch = useDispatch()
     const team = useSelector(selectTeam)
     const currentYear = new Date().getFullYear()
@@ -39,27 +38,31 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
         },
     })
 
+    const {
+        data: teamData,
+        fetch,
+        loading,
+        error,
+    } = useLazyData<Team>(TeamData.rollover)
+
     const rolloverTeam = async (data: RolloverTeamFormData) => {
-        setLoading(true)
         const seasonArray = data.season.split(' - ')
         const seasonStart = seasonArray[0]
         const seasonEnd = seasonArray[seasonArray.length - 1]
-        try {
-            const newTeam = await TeamData.rollover(
-                team?._id || '',
-                data.copyPlayers,
-                seasonStart,
-                seasonEnd,
-            )
-            dispatch(setTeam(newTeam))
-            setLoading(false)
-            navigation.goBack()
-        } catch (e: any) {
-            setError(e.message ?? 'Unable to rollover team')
-        } finally {
-            setLoading(false)
-        }
+
+        await fetch(team?._id || '', data.copyPlayers, seasonStart, seasonEnd)
     }
+
+    React.useEffect(() => {
+        if (teamData) {
+            dispatch(setTeam(teamData))
+            navigation.navigate('ManagedTeamDetails', {
+                id: teamData._id,
+                name: teamData.name,
+                place: teamData.place,
+            })
+        }
+    })
 
     const styles = StyleSheet.create({
         screen: {
@@ -133,7 +136,9 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
                     )}
                 />
             </View>
-            <Text>You can always add and drop players later</Text>
+            <Text style={styles.warning}>
+                You can always add and drop players later
+            </Text>
             <Text style={styles.sectionTitle}>Season</Text>
             <Controller
                 name="season"
@@ -143,6 +148,7 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
                     <Picker
                         style={styles.picker}
                         selectedValue={value}
+                        dropdownIconColor={colors.textPrimary}
                         prompt="Season"
                         onValueChange={onChange}>
                         {years.map(year => {
@@ -164,7 +170,7 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.warning}>
                 Pending requests for this team will all be deleted.
             </Text>
-            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+            {error && <Text style={styles.error}>{error.message}</Text>}
             <PrimaryButton
                 text="Submit"
                 loading={loading}

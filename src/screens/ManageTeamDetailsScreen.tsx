@@ -6,8 +6,8 @@ import PrimaryButton from '../components/atoms/PrimaryButton'
 import { RequestType } from '../types/request'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
+import { Team } from '../types/team'
 import UserListItem from '../components/atoms/UserListItem'
-import { useColors } from '../hooks'
 import {
     RefreshControl,
     SafeAreaView,
@@ -19,11 +19,10 @@ import {
 import {
     removePlayer,
     selectTeam,
-    selectTeamLoading,
     setTeam,
-    setTeamLoading,
 } from '../store/reducers/features/team/managedTeamReducer'
 import { size, weight } from '../theme/fonts'
+import { useColors, useData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
@@ -33,43 +32,32 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     const { id, place, name } = route.params
     const dispatch = useDispatch()
     const team = useSelector(selectTeam)
-    const teamLoading = useSelector(selectTeamLoading)
 
     const { colors } = useColors()
-    const isMounted = React.useRef(false)
-    const [error, setError] = React.useState(undefined)
-    const [refreshing, setRefreshing] = React.useState(false)
 
-    const initializeScreen = React.useCallback(async () => {
-        try {
-            dispatch(setTeamLoading(true))
-            const teamResponse = await TeamData.getManagedTeam(id)
-            if (!isMounted.current) {
-                return
-            }
-            dispatch(setTeam(teamResponse))
-        } catch (e: any) {
-            if (isMounted.current) {
-                dispatch(setTeam(undefined))
-                setError(e.message)
-            }
-        } finally {
-            if (isMounted.current) {
-                dispatch(setTeamLoading(false))
-            }
-        }
-    }, [dispatch, id])
+    const {
+        data: teamData,
+        loading: teamLoading,
+        refetch,
+        error,
+    } = useData<Team>(TeamData.getManagedTeam, id)
 
     React.useEffect(() => {
-        isMounted.current = true
         const unsubscribe = navigation.addListener('focus', async () => {
-            await initializeScreen()
+            if (!teamData && !teamLoading) {
+                refetch()
+            }
         })
         return () => {
             unsubscribe()
-            isMounted.current = false
         }
     })
+
+    React.useEffect(() => {
+        if (teamData) {
+            dispatch(setTeam(teamData))
+        }
+    }, [dispatch, teamData])
 
     const rolloverSeason = async () => {
         // navigate to rollover screen
@@ -126,13 +114,9 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     refreshControl={
                         <RefreshControl
                             colors={[colors.textSecondary]}
-                            refreshing={refreshing}
+                            refreshing={teamLoading}
                             onRefresh={async () => {
-                                if (isMounted.current) {
-                                    setRefreshing(true)
-                                    await initializeScreen()
-                                    setRefreshing(false)
-                                }
+                                refetch()
                             }}
                         />
                     }
@@ -142,7 +126,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                             title={`${place} ${name}`}
                             style={styles.title}
                         />
-                        <Text style={styles.error}>{error}</Text>
+                        <Text style={styles.error}>{error.message}</Text>
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -155,13 +139,9 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                 refreshControl={
                     <RefreshControl
                         colors={[colors.textSecondary]}
-                        refreshing={refreshing}
+                        refreshing={teamLoading}
                         onRefresh={async () => {
-                            if (isMounted.current) {
-                                setRefreshing(true)
-                                await initializeScreen()
-                                setRefreshing(false)
-                            }
+                            refetch()
                         }}
                     />
                 }

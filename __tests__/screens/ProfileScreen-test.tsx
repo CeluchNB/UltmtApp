@@ -6,9 +6,9 @@ import ProfileScreen from '../../src/screens/ProfileScreen'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { fetchProfileData } from '../../fixtures/data'
-import renderer from 'react-test-renderer'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
+import { waitUntilRefreshComplete } from '../../fixtures/utils'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -44,7 +44,7 @@ beforeEach(() => {
 
 it('profile screen matches snapshot', async () => {
     jest.useFakeTimers()
-    const snapshot = renderer.create(
+    const snapshot = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ProfileScreen {...props} />
@@ -52,17 +52,20 @@ it('profile screen matches snapshot', async () => {
         </Provider>,
     )
 
-    expect(snapshot).toMatchSnapshot()
+    await waitUntilRefreshComplete(snapshot.getByTestId('profile-flat-list'))
+
+    expect(snapshot.toJSON()).toMatchSnapshot()
 })
 
 it('contains correct text from response', async () => {
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ProfileScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
+    await waitUntilRefreshComplete(getByTestId('profile-flat-list'))
 
     await act(async () => {
         const title = getByText(
@@ -92,13 +95,15 @@ it('contains correct text from response', async () => {
 
 it('should handle logout click', async () => {
     jest.spyOn(AuthData, 'logout').mockReturnValueOnce(Promise.resolve())
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ProfileScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
+
+    await waitUntilRefreshComplete(getByTestId('profile-flat-list'))
 
     const button = getByText('Sign Out')
     fireEvent.press(button)
@@ -109,13 +114,15 @@ it('should handle logout click', async () => {
 })
 
 it('should handle manage teams click', async () => {
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ProfileScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
+
+    await waitUntilRefreshComplete(getByTestId('profile-flat-list'))
 
     const button = getByText('manage teams')
     fireEvent.press(button)
@@ -123,13 +130,15 @@ it('should handle manage teams click', async () => {
 })
 
 it('should handle player team click', async () => {
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ProfileScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
+
+    await waitUntilRefreshComplete(getByTestId('profile-flat-list'))
 
     const team = getByText(
         `${fetchProfileData.playerTeams[0].place} ${fetchProfileData.playerTeams[0].name}`,
@@ -139,13 +148,15 @@ it('should handle player team click', async () => {
 })
 
 it('should handle create team click', async () => {
-    const { getAllByTestId } = render(
+    const { getAllByTestId, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ProfileScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
+
+    await waitUntilRefreshComplete(getByTestId('profile-flat-list'))
 
     const buttons = getAllByTestId('create-button')
     fireEvent.press(buttons[1])
@@ -163,6 +174,7 @@ it('should handle swipe functionality', async () => {
             </NavigationContainer>
         </Provider>,
     )
+    await waitUntilRefreshComplete(getByTestId('profile-flat-list'))
 
     // refactor once it is possible to fire swipe event
     const scrollView = getByTestId('profile-flat-list')

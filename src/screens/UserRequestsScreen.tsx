@@ -7,7 +7,6 @@ import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { size } from '../theme/fonts'
-import { useColors } from '../hooks'
 import {
     RefreshControl,
     SafeAreaView,
@@ -23,6 +22,7 @@ import {
     selectToggleLoading,
     setOpenToRequests,
 } from '../store/reducers/features/account/accountReducer'
+import { useColors, useData, useLazyData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
@@ -32,70 +32,47 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     const openToRequests = useSelector(selectOpenToRequests)
     const error = useSelector(selectError)
 
-    const isMounted = React.useRef(false)
-    const [refreshing, setRefreshing] = React.useState(false)
-    const [requests, setRequests] = React.useState([] as DetailedRequest[])
-    const [fetchError, setFetchError] = React.useState('')
-    const [respondRequestError, setRespondRequestError] = React.useState('')
     const [respondRequestId, setRespondRequestId] = React.useState('')
-    const [deleteRequestError, setDeleteRequestError] = React.useState('')
     const [deleteRequestId, setDeleteRequestId] = React.useState('')
 
-    const getRequests = React.useCallback(async () => {
-        try {
-            setFetchError('')
-            const reqResponses = await RequestData.getRequestsByUser()
+    const {
+        data: requestData,
+        loading,
+        error: fetchError,
+        refetch,
+    } = useData<DetailedRequest[]>(RequestData.getRequestsByUser)
 
-            if (reqResponses && isMounted.current) {
-                setRequests(
-                    reqResponses.filter(
-                        req => req !== undefined,
-                    ) as DetailedRequest[],
-                )
-            }
-        } catch (e: any) {
-            setFetchError(e.message ?? 'Unable to get request details')
-        }
-    }, [isMounted])
+    const { error: deleteRequestError, fetch: callDelete } =
+        useLazyData<DetailedRequest>(RequestData.deleteUserRequest)
+
+    const { error: respondRequestError, fetch: callRespond } =
+        useLazyData<DetailedRequest>(RequestData.respondToTeamRequest)
 
     React.useEffect(() => {
-        isMounted.current = true
         const unsubscribe = navigation.addListener('focus', () => {
-            setFetchError('')
-            setRespondRequestError('')
-            setDeleteRequestError('')
-            getRequests()
+            if (!loading) {
+                refetch()
+            }
         })
         return () => {
-            isMounted.current = false
             unsubscribe()
         }
-    }, [getRequests, navigation])
+    }, [navigation, loading, refetch])
 
     // Strictly through redux?
     const respondToRequest = async (requestId: string, accept: boolean) => {
-        try {
-            setRespondRequestId(requestId)
-            setRespondRequestError('')
-            await RequestData.respondToTeamRequest(requestId, accept)
-            dispatch(removeRequest(requestId))
-            setRequests(requests.filter(req => req._id !== requestId))
-        } catch (e: any) {
-            setRespondRequestError(e.message ?? 'Unable to respond to request')
-        }
+        setRespondRequestId(requestId)
+        await callRespond(requestId, accept)
+        dispatch(removeRequest(requestId))
+        refetch()
     }
 
     // Strictly through redux?
     const deleteRequest = async (requestId: string) => {
-        try {
-            setDeleteRequestId(requestId)
-            setDeleteRequestError('')
-            await RequestData.deleteUserRequest(requestId)
-            dispatch(removeRequest(requestId))
-            setRequests(requests.filter(req => req._id !== requestId))
-        } catch (e: any) {
-            setDeleteRequestError(e.message ?? 'Unable to delete request')
-        }
+        setDeleteRequestId(requestId)
+        await callDelete(requestId)
+        dispatch(removeRequest(requestId))
+        refetch()
     }
 
     const toggleRosterOpen = () => {
@@ -127,24 +104,22 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
         },
     })
 
-    if (fetchError.length > 0) {
+    if (fetchError) {
         return (
             <SafeAreaView style={styles.screen}>
                 <ScrollView
                     refreshControl={
                         <RefreshControl
                             colors={[colors.textSecondary]}
-                            refreshing={refreshing}
+                            refreshing={loading}
                             onRefresh={async () => {
-                                setRefreshing(true)
-                                await getRequests()
-                                setRefreshing(false)
+                                refetch()
                             }}
                         />
                     }
                     testID="mt-scroll-view">
                     <ScreenTitle style={styles.title} title="My Requests" />
-                    <Text style={styles.error}>{fetchError}</Text>
+                    <Text style={styles.error}>{fetchError.message}</Text>
                 </ScrollView>
             </SafeAreaView>
         )
@@ -156,11 +131,9 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                 refreshControl={
                     <RefreshControl
                         onRefresh={async () => {
-                            setRefreshing(true)
-                            await getRequests()
-                            setRefreshing(false)
+                            refetch()
                         }}
-                        refreshing={refreshing}
+                        refreshing={loading}
                     />
                 }
                 testID="mt-scroll-view">
@@ -183,12 +156,15 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                         title="Requests From Teams"
                         showButton={false}
                         showCreateButton={false}
-                        listData={requests.filter(
-                            req => req.requestSource === 'team',
-                        )}
+                        listData={
+                            requestData?.filter(
+                                req => req.requestSource === 'team',
+                            ) || []
+                        }
                         error={
-                            requests.filter(req => req.requestSource === 'team')
-                                .length === 0
+                            requestData?.filter(
+                                req => req.requestSource === 'team',
+                            ).length === 0
                                 ? 'You are all caught up on requests!'
                                 : undefined
                         }
@@ -212,9 +188,9 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                                         await respondToRequest(item._id, false)
                                     }}
                                     error={
-                                        respondRequestError.length > 0 &&
+                                        respondRequestError &&
                                         respondRequestId === item._id
-                                            ? respondRequestError
+                                            ? respondRequestError.message
                                             : undefined
                                     }
                                 />
@@ -228,11 +204,13 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                         onCreatePress={() => {
                             navigation.navigate('RequestTeam')
                         }}
-                        listData={requests.filter(
-                            req => req.requestSource === 'player',
-                        )}
+                        listData={
+                            requestData?.filter(
+                                req => req.requestSource === 'player',
+                            ) || []
+                        }
                         error={
-                            requests.filter(
+                            requestData?.filter(
                                 req => req.requestSource === 'player',
                             ).length === 0
                                 ? 'You have no open requests!'
@@ -256,9 +234,9 @@ const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
                                     }}
                                     requestStatus={item.status}
                                     error={
-                                        deleteRequestError.length > 0 &&
+                                        deleteRequestError &&
                                         deleteRequestId === item._id
-                                            ? deleteRequestError
+                                            ? deleteRequestError.message
                                             : undefined
                                     }
                                 />

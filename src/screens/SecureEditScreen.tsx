@@ -105,19 +105,16 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
         email: string,
         password: string,
         value: string,
-    ): Promise<User | null> => {
-        let user = null
+    ): Promise<User | undefined> => {
         switch (field) {
             case SecureEditField.EMAIL:
-                user = await UserData.changeEmail(email, password, value)
-                break
+                return await UserData.changeEmail(email, password, value)
             case SecureEditField.PASSWORD:
-                user = await UserData.changePassword(email, password, value)
-                break
+                return await UserData.changePassword(email, password, value)
             default:
                 break
         }
-        return user
+        return undefined
     }
 
     const styles = StyleSheet.create({

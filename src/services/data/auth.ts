@@ -73,6 +73,13 @@ export const refreshToken = async (): Promise<string> => {
     }
 }
 
+/**
+ * Method to make an API call with an authentication token that could be expired.
+ * Will make the refresh call and try again if the token is expired.
+ * @param networkCall method to call
+ * @param args arguments of method
+ * @returns expected response of network call
+ */
 export const withToken = async (
     networkCall: (token: string, ...args: any[]) => Promise<AxiosResponse>,
     ...args: any[]

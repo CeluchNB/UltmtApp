@@ -1,18 +1,18 @@
-import * as Constants from '../utils/constants'
 import * as React from 'react'
 import * as UserData from '../services/data/user'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import { User } from '../types/user'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
 import { setProfile } from '../store/reducers/features/account/accountReducer'
 import { size } from '../theme/fonts'
-import { useColors } from '../hooks'
 import { useDispatch } from 'react-redux'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { Modal, StyleSheet, Text, View } from 'react-native'
+import { useColors, useLazyData } from '../hooks'
 
 const JoinByCodeScreen: React.FC<Props> = ({ navigation }: Props) => {
     const dispatch = useDispatch()
@@ -25,9 +25,24 @@ const JoinByCodeScreen: React.FC<Props> = ({ navigation }: Props) => {
         formState: { errors },
     } = useForm({ defaultValues: { code: '' } })
 
-    const [error, setError] = React.useState('')
-    const [loading, setLoading] = React.useState(false)
     const [modalVisible, setModalVisible] = React.useState(false)
+
+    const { data, loading, error, fetch } = useLazyData<User>(
+        UserData.joinTeamByCode,
+    )
+
+    const onSubmit = async (value: { code: string }) => {
+        reset({ code: '' })
+        const { code } = value
+        await fetch(code)
+    }
+
+    React.useEffect(() => {
+        if (data && !loading) {
+            dispatch(setProfile(data))
+            setModalVisible(true)
+        }
+    }, [data, loading, dispatch])
 
     const styles = StyleSheet.create({
         screen: {
@@ -83,22 +98,6 @@ const JoinByCodeScreen: React.FC<Props> = ({ navigation }: Props) => {
         },
     })
 
-    const onSubmit = async (value: { code: string }) => {
-        reset({ code: '' })
-        setError('')
-        setLoading(true)
-        try {
-            const { code } = value
-            const user = await UserData.joinTeamByCode(code)
-            dispatch(setProfile(user))
-            setModalVisible(true)
-        } catch (e: any) {
-            setError(e.message ?? Constants.JOIN_TEAM_ERROR)
-        } finally {
-            setLoading(false)
-        }
-    }
-
     return (
         <View style={styles.screen}>
             <ScreenTitle style={styles.title} title="Join By Code" />
@@ -149,7 +148,7 @@ const JoinByCodeScreen: React.FC<Props> = ({ navigation }: Props) => {
             {errors.code && (
                 <Text style={styles.error}>{errors.code.message}</Text>
             )}
-            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+            {error && <Text style={styles.error}>{error.message}</Text>}
             <PrimaryButton
                 style={styles.joinButton}
                 text="join"

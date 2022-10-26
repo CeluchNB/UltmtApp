@@ -4,6 +4,7 @@ import { PublicUserDetailsProps } from '../../src/types/navigation'
 import PublicUserScreen from '../../src/screens/PublicUserScreen'
 import React from 'react'
 import { User } from '../../src/types/user'
+import { waitUntilRefreshComplete } from '../../fixtures/utils'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 const navigate = jest.fn()
@@ -26,7 +27,7 @@ const props: PublicUserDetailsProps = {
     } as any,
 }
 
-beforeAll(() => {
+beforeEach(() => {
     jest.spyOn(UserData, 'getPublicUser').mockResolvedValue(
         Promise.resolve({
             _id: 'id1',
@@ -62,14 +63,41 @@ beforeAll(() => {
     )
 })
 
+afterEach(() => {
+    jest.clearAllMocks()
+})
+
 it('should match snapshot', async () => {
     const snapshot = render(
         <NavigationContainer>
             <PublicUserScreen {...props} />
         </NavigationContainer>,
-    ).toJSON()
+    )
 
-    expect(snapshot).toMatchSnapshot()
+    await waitUntilRefreshComplete(
+        snapshot.getByTestId('public-user-scroll-view'),
+    )
+
+    expect(snapshot.toJSON()).toMatchSnapshot()
+})
+
+it('should call refetch', async () => {
+    const spy = jest.spyOn(UserData, 'getPublicUser')
+    const { getByTestId } = render(
+        <NavigationContainer>
+            <PublicUserScreen {...props} />
+        </NavigationContainer>,
+    )
+
+    await waitUntilRefreshComplete(getByTestId('public-user-scroll-view'))
+
+    const scrollView = getByTestId('public-user-scroll-view')
+    const { refreshControl } = scrollView.props
+    await act(async () => {
+        refreshControl.props.onRefresh()
+    })
+
+    expect(spy).toHaveBeenCalled()
 })
 
 it("should display user's teams", async () => {
@@ -79,11 +107,7 @@ it("should display user's teams", async () => {
         </NavigationContainer>,
     )
 
-    const scrollView = getByTestId('public-user-scroll-view')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('public-user-scroll-view'))
 
     expect(queryByText('@place1name1')).not.toBeNull()
     expect(queryByText('@place2name2')).not.toBeNull()
@@ -96,11 +120,7 @@ it('should navigate to a public team', async () => {
         </NavigationContainer>,
     )
 
-    const scrollView = getByTestId('public-user-scroll-view')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('public-user-scroll-view'))
 
     const teamView = getByText('@place1name1')
     fireEvent.press(teamView)
@@ -124,11 +144,7 @@ it('should handle get user error', async () => {
         </NavigationContainer>,
     )
 
-    const scrollView = getByTestId('public-user-scroll-view')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('public-user-scroll-view'))
 
     expect(queryByText('Error getting user')).not.toBeNull()
 })
