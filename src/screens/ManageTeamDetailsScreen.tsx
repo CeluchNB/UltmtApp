@@ -54,6 +54,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     })
 
     React.useEffect(() => {
+        // TODO: consider refactoring out of redux
         if (teamData) {
             dispatch(setTeam(teamData))
         }

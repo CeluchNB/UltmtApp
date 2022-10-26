@@ -87,7 +87,9 @@ it('should handle successful rollover', async () => {
 it('should handle rollover error', async () => {
     const spy = jest
         .spyOn(TeamData, 'rollover')
-        .mockReturnValueOnce(Promise.reject({}))
+        .mockReturnValueOnce(
+            Promise.reject({ message: 'Unable to rollover team' }),
+        )
 
     const { getByText } = render(
         <Provider store={store}>

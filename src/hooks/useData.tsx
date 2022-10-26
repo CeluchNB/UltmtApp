@@ -56,10 +56,21 @@ export function useLazyData<T>(
     method: (...methodArgs: any[]) => Promise<T>,
 ): UseLazyData<T> {
     const [data, setData] = useState<T>()
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [error, setError] = useState<ApiError | undefined>(undefined)
+    const isMounted = useRef(false)
+
+    useEffect(() => {
+        isMounted.current = true
+        return () => {
+            isMounted.current = false
+        }
+    })
 
     const fetch = async (...args: any[]) => {
+        if (!isMounted.current) {
+            return
+        }
         setLoading(true)
         try {
             const result = await method(...args)
