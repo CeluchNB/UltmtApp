@@ -22,6 +22,7 @@ import {
     selectTeam,
     toggleRosterStatus,
 } from '../store/reducers/features/team/managedTeamReducer'
+import { useData, useLazyData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
@@ -31,75 +32,46 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
     const team = useSelector(selectTeam)
     const openLoading = useSelector(selectOpenLoading)
 
-    const isMounted = React.useRef(false)
-    const [refresh, setRefresh] = React.useState(false)
-    const [error, setError] = React.useState<string>('')
-    const [requestsLoading, setRequestsLoading] = React.useState(false)
-    const [requests, setRequests] = React.useState([] as DetailedRequest[])
-    const [deleteRequestError, setDeleteRequestError] = React.useState('')
     const [deleteRequestId, setDeleteRequestId] = React.useState('')
-    const [respondRequestError, setRespondRequestError] = React.useState('')
     const [respondRequestId, setResponseRequestId] = React.useState('')
 
-    const initializeScreen = React.useCallback(async () => {
-        try {
-            setError('')
-            if (!team) {
-                setError('No team data. Please refresh or try again later.')
-                return
-            }
-            setRequestsLoading(true)
-            const reqs = await RequestData.getRequestsByTeam(team._id)
-            if (isMounted.current) {
-                setRequests(reqs)
-            }
-        } catch (e: any) {
-            setError(e.message)
-        } finally {
-            if (isMounted.current) {
-                setRequestsLoading(false)
-            }
-        }
-    }, [team])
+    const {
+        data: requests,
+        loading: requestsLoading,
+        refetch,
+        error,
+    } = useData<DetailedRequest[]>(RequestData.getRequestsByTeam, team?._id)
+
+    const { fetch: callDelete, error: deleteRequestError } =
+        useLazyData<DetailedRequest>(RequestData.deleteTeamRequest)
+
+    const { fetch: callRespond, error: respondRequestError } =
+        useLazyData<DetailedRequest>(RequestData.respondToPlayerRequest)
 
     React.useEffect(() => {
-        isMounted.current = true
         const unsubscribe = navigation.addListener('focus', () => {
-            initializeScreen()
+            if (!requestsLoading) {
+                refetch()
+            }
         })
         return () => {
             unsubscribe()
-            isMounted.current = false
         }
     })
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
-        try {
-            setRespondRequestError('')
-            setResponseRequestId(requestId)
-            await RequestData.respondToPlayerRequest(requestId, accept)
-            setRequests(requests.filter(r => r._id !== requestId))
-
-            if (accept) {
-                dispatch(getManagedTeam({ id: team?._id || '' }))
-            }
-        } catch (e: any) {
-            setRespondRequestError(
-                e.message ?? 'Unable to respond to this request',
-            )
+        setResponseRequestId(requestId)
+        await callRespond(requestId, accept)
+        refetch()
+        if (accept) {
+            dispatch(getManagedTeam({ id: team?._id || '' }))
         }
     }
 
     const deleteRequest = async (requestId: string) => {
-        try {
-            setDeleteRequestError('')
-            setDeleteRequestId(requestId)
-            const request = await RequestData.deleteTeamRequest(requestId)
-            // ONLY FILTERING LOCALLY, SHOULD I RE-CALL 'getTeam'?
-            setRequests(requests.filter(r => r._id !== request._id))
-        } catch (e: any) {
-            setDeleteRequestError(e.message ?? 'Unable to delete this request.')
-        }
+        setDeleteRequestId(requestId)
+        await callDelete(requestId)
+        refetch()
     }
 
     const styles = StyleSheet.create({
@@ -129,11 +101,9 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
             <ScrollView
                 refreshControl={
                     <RefreshControl
-                        refreshing={refresh}
-                        onRefresh={async () => {
-                            setRefresh(true)
-                            await initializeScreen()
-                            setRefresh(false)
+                        refreshing={requestsLoading}
+                        onRefresh={() => {
+                            refetch()
                         }}
                     />
                 }
@@ -142,7 +112,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                     title={`${team?.name} Requests`}
                     style={styles.title}
                 />
-                {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+                {error && <Text style={styles.error}>{error.message}</Text>}
                 <PrimaryButton
                     style={styles.toggleRosterButton}
                     text={`${team?.rosterOpen ? 'Close' : 'Open'} Roster`}
@@ -159,7 +129,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                 <View style={styles.container}>
                     <MapSection
                         title="Request From Players"
-                        listData={requests.filter(
+                        listData={requests?.filter(
                             item => item.requestSource !== 'team',
                         )}
                         renderItem={item => {
@@ -182,9 +152,9 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                                         respondToRequest(item._id, true)
                                     }
                                     error={
-                                        respondRequestError.length > 0 &&
+                                        respondRequestError &&
                                         item._id === respondRequestId
-                                            ? respondRequestError
+                                            ? respondRequestError.message
                                             : undefined
                                     }
                                 />
@@ -196,6 +166,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                         buttonText=""
                         onButtonPress={() => {}}
                         error={
+                            requests &&
                             requests.filter(
                                 item => item.requestSource !== 'team',
                             ).length <= 0
@@ -205,7 +176,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                     />
                     <MapSection
                         title="Requests To Players"
-                        listData={requests.filter(
+                        listData={requests?.filter(
                             item => item.requestSource !== 'player',
                         )}
                         renderItem={item => {
@@ -225,8 +196,8 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                                     onDelete={() => deleteRequest(item._id)}
                                     error={
                                         item._id === deleteRequestId &&
-                                        deleteRequestError.length > 0
-                                            ? deleteRequestError
+                                        deleteRequestError
+                                            ? deleteRequestError.message
                                             : undefined
                                     }
                                 />
@@ -241,6 +212,7 @@ const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
                             })
                         }}
                         error={
+                            requests &&
                             requests.filter(
                                 item => item.requestSource !== 'player',
                             ).length <= 0

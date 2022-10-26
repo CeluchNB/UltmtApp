@@ -6,7 +6,7 @@ import { size, weight } from '../../theme/fonts'
 
 interface MapSectionProps<T> {
     title: string
-    listData: T[]
+    listData?: T[]
     renderItem: (item: T) => JSX.Element
     showButton: boolean
     showCreateButton: boolean

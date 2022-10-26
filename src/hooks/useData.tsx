@@ -1,5 +1,5 @@
 import { ApiError } from '../types/services'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface UseData<R> {
     loading: boolean
@@ -22,8 +22,12 @@ export function useData<T>(
     const [data, setData] = useState<T>()
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<ApiError | undefined>(undefined)
+    const isMounted = useRef(false)
 
     const refetch = useCallback(async () => {
+        if (!isMounted.current) {
+            return
+        }
         setLoading(true)
         setError(undefined)
         try {
@@ -38,7 +42,11 @@ export function useData<T>(
     }, [])
 
     useEffect(() => {
+        isMounted.current = true
         refetch()
+        return () => {
+            isMounted.current = false
+        }
     }, [refetch])
 
     return { data, loading, error, refetch }

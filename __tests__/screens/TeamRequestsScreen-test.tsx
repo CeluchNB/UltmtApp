@@ -11,6 +11,7 @@ import { Team } from '../../src/types/team'
 import TeamRequestsScreen from '../../src/screens/TeamRequestsScreen'
 import { setTeam } from '../../src/store/reducers/features/team/managedTeamReducer'
 import store from '../../src/store/store'
+import { waitUntilRefreshComplete } from '../../fixtures/utils'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -113,21 +114,8 @@ beforeEach(() => {
     store.dispatch(setTeam(getManagedTeamResponse))
 })
 
-it('should match snapshot', () => {
+it('should match snapshot', async () => {
     const snapshot = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    ).toJSON()
-
-    expect(snapshot).toMatchSnapshot()
-})
-
-it('should handle null team case', async () => {
-    store.dispatch(setTeam(undefined))
-    const { queryByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <TeamRequestsScreen {...props} />
@@ -135,15 +123,9 @@ it('should handle null team case', async () => {
         </Provider>,
     )
 
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(snapshot.getByTestId('mtd-flat-list'))
 
-    expect(
-        queryByText('No team data. Please refresh or try again later.'),
-    ).not.toBeNull()
+    expect(snapshot.toJSON()).toMatchSnapshot()
 })
 
 it('should handle get request error', async () => {
@@ -159,11 +141,7 @@ it('should handle get request error', async () => {
         </Provider>,
     )
 
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     expect(spy).toHaveBeenCalled()
     expect(queryByText('test error')).not.toBeNull()
@@ -179,13 +157,15 @@ it('should toggle roster status', async () => {
 
     jest.spyOn(TeamData, 'toggleRosterStatus').mockImplementationOnce(dataFn)
 
-    const { getByText, queryByText } = render(
+    const { getByText, queryByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <TeamRequestsScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
+
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const button = getByText('Open Roster')
     fireEvent.press(button)
@@ -219,11 +199,23 @@ it('should respond to request correctly', async () => {
         </Provider>,
     )
 
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+    jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
+        Promise.resolve([
+            {
+                ...requestObject,
+                _id: 'request1',
+                requestSource: 'team',
+                userDetails: {
+                    _id: 'playerid2',
+                    firstName: 'first2',
+                    lastName: 'last2',
+                    username: 'first2last2',
+                },
+            },
+        ]),
+    )
 
     const acceptButtons = getAllByTestId('accept-button')
     expect(queryByText('@first3last3')).not.toBeNull()
@@ -252,11 +244,7 @@ it('should handle respond to request error', async () => {
         </Provider>,
     )
 
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const acceptButtons = getAllByTestId('accept-button')
     fireEvent.press(acceptButtons[0])
@@ -292,11 +280,23 @@ it('should handle deny request', async () => {
         </Provider>,
     )
 
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+    jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
+        Promise.resolve([
+            {
+                ...requestObject,
+                _id: 'request1',
+                requestSource: 'team',
+                userDetails: {
+                    _id: 'playerid2',
+                    firstName: 'first2',
+                    lastName: 'last2',
+                    username: 'first2last2',
+                },
+            },
+        ]),
+    )
 
     const deleteButtons = getAllByTestId('delete-button')
     fireEvent.press(deleteButtons[0])
@@ -323,11 +323,24 @@ it('should handle delete request correctly', async () => {
             </NavigationContainer>
         </Provider>,
     )
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+    jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
+        Promise.resolve([
+            {
+                ...requestObject,
+                _id: 'request2',
+                requestSource: 'player',
+                userDetails: {
+                    _id: 'playerid3',
+                    firstName: 'first3',
+                    lastName: 'last3',
+                    username: 'first3last3',
+                },
+            },
+        ]),
+    )
 
     const username = '@first2last2'
     expect(queryByText(username)).not.toBeNull()
@@ -355,11 +368,8 @@ it('should handle delete request error correctly', async () => {
             </NavigationContainer>
         </Provider>,
     )
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const username = '@first2last2'
     expect(queryByText(username)).not.toBeNull()
@@ -381,6 +391,8 @@ it('should handle navigate to request player', async () => {
             </NavigationContainer>
         </Provider>,
     )
+
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const button = getByTestId('create-button')
     fireEvent.press(button)
