@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import { Team } from '../../src/types/team'
 import store from '../../src/store/store'
+import { waitUntilRefreshComplete } from '../../fixtures/utils'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -136,9 +137,11 @@ it('should match snapshot', async () => {
                 <ManageTeamDetailsScreen {...props} />
             </NavigationContainer>
         </Provider>,
-    ).toJSON()
+    )
 
-    expect(snapshot).toMatchSnapshot()
+    await waitUntilRefreshComplete(snapshot.getByTestId('mtd-flat-list'))
+
+    expect(snapshot.toJSON()).toMatchSnapshot()
 })
 
 it('should navigate to rollover a team with pending requests', async () => {
@@ -150,11 +153,7 @@ it('should navigate to rollover a team with pending requests', async () => {
         </Provider>,
     )
 
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const button = getByText('Start New Season')
 
@@ -174,11 +173,7 @@ it('should handle swipe to refresh', async () => {
         </Provider>,
     )
 
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     // expect getManagedTeam to be called
     expect(teamSpy).toHaveBeenCalled()
@@ -205,37 +200,10 @@ it('should handle a page load error', async () => {
         </Provider>,
     )
 
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        await refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const errorText = getByText('test error')
     expect(errorText).toBeTruthy()
-})
-
-it('should not throw error on unmounted load', async () => {
-    const requestSpy = jest.spyOn(RequestData, 'getRequest')
-    const teamSpy = jest.spyOn(TeamData, 'getManagedTeam')
-
-    const { getByTestId, unmount } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    unmount()
-    await act(async () => {
-        await refreshControl.props.onRefresh()
-    })
-
-    expect(teamSpy).not.toHaveBeenCalled()
-    expect(requestSpy).not.toHaveBeenCalled()
 })
 
 it('should remove player correctly', async () => {
@@ -245,7 +213,7 @@ it('should remove player correctly', async () => {
             return { ...getManagedTeamResponse, players: [] }
         })
 
-    const { queryByText, getAllByTestId } = render(
+    const { queryByText, getAllByTestId, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamDetailsScreen {...props} />
@@ -253,11 +221,7 @@ it('should remove player correctly', async () => {
         </Provider>,
     )
 
-    const scrollView = getAllByTestId('mtd-flat-list')[0]
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const username = '@first1last1'
     expect(queryByText(username)).not.toBeNull()
@@ -285,7 +249,8 @@ it('should remove player correctly', async () => {
 
 it('should handle error swipe', async () => {
     jest.spyOn(TeamData, 'getManagedTeam').mockClear()
-    jest.spyOn(TeamData, 'getManagedTeam')
+    const spy = jest
+        .spyOn(TeamData, 'getManagedTeam')
         .mockReturnValueOnce(
             Promise.reject({ message: 'test error getting team' }),
         )
@@ -298,11 +263,8 @@ it('should handle error swipe', async () => {
             </NavigationContainer>
         </Provider>,
     )
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     expect(queryByText('test error getting team')).not.toBeNull()
 
@@ -312,7 +274,7 @@ it('should handle error swipe', async () => {
         refreshControlError.props.onRefresh()
     })
 
-    expect(queryByText('@placename')).toBeNull()
+    expect(spy).toHaveBeenCalled()
 })
 
 it('should navigate to public user', async () => {
@@ -323,11 +285,8 @@ it('should navigate to public user', async () => {
             </NavigationContainer>
         </Provider>,
     )
-    const scrollView = getByTestId('mtd-flat-list')
-    const { refreshControl } = scrollView.props
-    await act(async () => {
-        refreshControl.props.onRefresh()
-    })
+
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const username = getByText('@first1last1')
     fireEvent.press(username)
@@ -336,13 +295,15 @@ it('should navigate to public user', async () => {
 })
 
 it('should handle add players text', async () => {
-    const { getAllByTestId } = render(
+    const { getAllByTestId, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamDetailsScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
+
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const buttons = getAllByTestId('create-button')
     fireEvent.press(buttons[1])
@@ -351,13 +312,15 @@ it('should handle add players text', async () => {
 })
 
 it('should navigate to public user screen on manager click', async () => {
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamDetailsScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
+
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const button = getByText('@first4last4')
     fireEvent.press(button)
@@ -366,13 +329,15 @@ it('should navigate to public user screen on manager click', async () => {
 })
 
 it('should navigate to request manager screen', async () => {
-    const { getAllByTestId } = render(
+    const { getAllByTestId, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <ManageTeamDetailsScreen {...props} />
             </NavigationContainer>
         </Provider>,
     )
+
+    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
     const buttons = getAllByTestId('create-button')
     fireEvent.press(buttons[0])

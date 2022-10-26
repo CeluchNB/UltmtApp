@@ -133,7 +133,9 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
                     )}
                 />
             </View>
-            <Text>You can always add and drop players later</Text>
+            <Text style={styles.warning}>
+                You can always add and drop players later
+            </Text>
             <Text style={styles.sectionTitle}>Season</Text>
             <Controller
                 name="season"
@@ -143,6 +145,7 @@ const RolloverTeamScreen: React.FC<Props> = ({ navigation }) => {
                     <Picker
                         style={styles.picker}
                         selectedValue={value}
+                        dropdownIconColor={colors.textPrimary}
                         prompt="Season"
                         onValueChange={onChange}>
                         {years.map(year => {
