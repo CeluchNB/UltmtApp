@@ -6,7 +6,6 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { User } from '../types/user'
 import { size } from '../theme/fonts'
-import { useColors } from './../hooks'
 import {
     RefreshControl,
     SafeAreaView,
@@ -15,6 +14,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import { useColors, useData } from './../hooks'
 
 const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     route,
@@ -22,37 +22,23 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 }) => {
     const { user: initialUser } = route.params
     const { colors } = useColors()
-    const [user, setUser] = React.useState<User>()
-    const [refreshing, setRefreshing] = React.useState<boolean>(false)
-    const [loading, setLoading] = React.useState<boolean>(false)
-    const [error, setError] = React.useState<string>('')
-    const isMounted = React.useRef(false)
 
-    const initializeScreen = React.useCallback(async () => {
-        try {
-            setLoading(true)
-            const responseUser = await UserData.getPublicUser(initialUser._id)
-            if (isMounted.current) {
-                setLoading(false)
-                setUser(responseUser)
-            }
-        } catch (e: any) {
-            setError(e.message ?? 'Unable to get this user.')
-        }
-    }, [initialUser])
+    const {
+        data: user,
+        loading,
+        error,
+        refetch,
+    } = useData<User>(UserData.getPublicUser, initialUser._id)
 
     React.useEffect(() => {
-        isMounted.current = true
         const unsubscribe = navigation.addListener('focus', () => {
-            setError('')
-            initializeScreen()
+            if (!loading && !user) {
+                refetch()
+            }
         })
 
-        return () => {
-            unsubscribe()
-            isMounted.current = false
-        }
-    }, [initializeScreen, navigation])
+        return unsubscribe
+    }, [navigation, loading, user, refetch])
 
     const styles = StyleSheet.create({
         screen: {
@@ -79,11 +65,9 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
             <ScrollView
                 refreshControl={
                     <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={async () => {
-                            setRefreshing(true)
-                            await initializeScreen()
-                            setRefreshing(false)
+                        refreshing={loading}
+                        onRefresh={() => {
+                            refetch()
                         }}
                     />
                 }
@@ -93,8 +77,8 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     title={`${initialUser.firstName} ${initialUser.lastName}`}
                 />
                 <Text style={styles.titleText}>@{initialUser.username}</Text>
-                {error.length > 0 ? (
-                    <Text style={styles.error}>{error}</Text>
+                {error ? (
+                    <Text style={styles.error}>{error.message}</Text>
                 ) : (
                     <View style={styles.sectionContainer}>
                         <MapSection
