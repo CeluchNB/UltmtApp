@@ -8,12 +8,11 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
 import TeamListItem from '../components/atoms/TeamListItem'
+import { User } from '../types/user'
 import { fetchProfile } from '../services/data/user'
 import { logout } from '../services/data/auth'
 import { size } from '../theme/fonts'
-import { useColors } from '../hooks'
 import {
-    ActivityIndicator,
     FlatList,
     RefreshControl,
     SafeAreaView,
@@ -26,6 +25,7 @@ import {
     selectPlayerTeams,
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
+import { useColors, useData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const ProfileScreen: React.FC<AllScreenProps> = ({
@@ -36,26 +36,30 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     const playerTeams = useSelector(selectPlayerTeams)
 
     const [loading, setLoading] = React.useState(false)
-    const [profileLoading, setProfileLoading] = React.useState(false)
-    const [refreshing, setRefreshing] = React.useState(false)
-    const [error, setError] = React.useState('')
 
     const dispatch = useDispatch()
 
+    const {
+        data: profile,
+        loading: profileLoading,
+        error,
+        refetch,
+    } = useData<User>(fetchProfile)
+
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
-            try {
-                setProfileLoading(true)
-                const profile = await fetchProfile()
-                dispatch(setProfile(profile))
-            } catch (e: any) {
-                setError(e.message ?? 'Unable to get profile')
-            } finally {
-                setProfileLoading(false)
+            if (!profileLoading) {
+                refetch()
             }
         })
         return unsubscribe
     })
+
+    React.useEffect(() => {
+        if (!profileLoading && profile) {
+            dispatch(setProfile(profile))
+        }
+    }, [profileLoading, profile, dispatch])
 
     const onLogout = async () => {
         try {
@@ -117,26 +121,6 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
         },
     })
 
-    if (profileLoading) {
-        return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.headerContainer}>
-                    <View style={styles.titleContainer}>
-                        <ScreenTitle
-                            style={styles.title}
-                            title={'My Profile'}
-                        />
-                        <ActivityIndicator
-                            size="large"
-                            color={colors.textPrimary}
-                            animating={true}
-                        />
-                    </View>
-                </View>
-            </SafeAreaView>
-        )
-    }
-
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -147,17 +131,9 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                 refreshControl={
                     <RefreshControl
                         colors={[colors.textSecondary]}
-                        refreshing={refreshing}
+                        refreshing={profileLoading}
                         onRefresh={async () => {
-                            try {
-                                setRefreshing(true)
-                                const profile = await fetchProfile()
-                                dispatch(setProfile(profile))
-                                setRefreshing(false)
-                            } catch (e: any) {
-                            } finally {
-                                setRefreshing(false)
-                            }
+                            refetch()
                         }}
                     />
                 }
@@ -211,9 +187,9 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                     </View>
                 }
                 ListFooterComponent={
-                    error.length ? (
+                    error ? (
                         <View style={styles.footerContainer}>
-                            <Text style={styles.error}>{error}</Text>
+                            <Text style={styles.error}>{error.message}</Text>
                         </View>
                     ) : (
                         <View style={styles.footerContainer}>
