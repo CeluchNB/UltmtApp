@@ -1,21 +1,49 @@
 import { IconButton } from 'react-native-paper'
-import React from 'react'
 import { useColors } from '../../hooks'
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
 import { DisplayTeam, GuestTeam } from '../../types/team'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect } from 'react'
 
-interface GameCardProps {
+export interface GameCardProps {
+    id: string
     teamOne: DisplayTeam
     teamTwo: GuestTeam
     teamOneScore: number
     teamTwoScore: number
     scoreLimit: number
+    onPress: (id: string) => void
 }
 
 const GameCard: React.FC<GameCardProps> = props => {
     const { colors } = useColors()
+    const liveOpacity = React.useRef(new Animated.Value(0)).current
 
-    const { teamOne, teamTwo, teamOneScore, teamTwoScore, scoreLimit } = props
+    const {
+        id,
+        teamOne,
+        teamTwo,
+        teamOneScore,
+        teamTwoScore,
+        scoreLimit,
+        onPress,
+    } = props
+
+    useEffect(() => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(liveOpacity, {
+                    toValue: 1,
+                    duration: 750,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(liveOpacity, {
+                    toValue: 0,
+                    duration: 750,
+                    useNativeDriver: true,
+                }),
+            ]),
+        ).start()
+    }, [liveOpacity])
 
     const styles = StyleSheet.create({
         container: {
@@ -60,11 +88,28 @@ const GameCard: React.FC<GameCardProps> = props => {
             flexDirection: 'row',
             alignSelf: 'flex-end',
         },
+        circle: {
+            width: 10,
+            height: 10,
+            borderRadius: 5,
+            marginTop: 5,
+            marginRight: 5,
+            backgroundColor: 'red',
+            alignSelf: 'flex-end',
+        },
     })
 
     return (
         <View style={styles.container}>
-            <Pressable android_ripple={{ color: colors.textPrimary }}>
+            <Pressable
+                android_ripple={{ color: colors.textPrimary }}
+                onPress={() => {
+                    onPress(id)
+                }}
+                testID="game-card-pressable">
+                <Animated.View
+                    style={[styles.circle, { opacity: liveOpacity }]}
+                />
                 <View style={styles.teamContainer}>
                     <View style={styles.teamNameContainer}>
                         <Text style={styles.teamText}>{teamOne.name}</Text>

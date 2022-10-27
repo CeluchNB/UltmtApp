@@ -90,7 +90,8 @@ export const withToken = async (
         const response = await networkCall(currentToken, ...args)
         return response
     } catch (error: any) {
-        if (error.status !== 401) {
+        const errorJson = error.toJSON()
+        if (errorJson.status !== 401) {
             throw error
         }
         try {

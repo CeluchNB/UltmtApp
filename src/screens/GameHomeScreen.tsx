@@ -1,38 +1,46 @@
 import { Game } from '../types/game'
 import GameCard from '../components/atoms/GameCard'
 import MapSection from '../components/molecules/MapSection'
-import React from 'react'
 import { TextInput } from 'react-native-paper'
 import { searchGames } from '../services/data/game'
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native'
+import { size } from '../theme/fonts'
+import React, { useMemo } from 'react'
+import {
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+} from 'react-native'
 import { useColors, useData } from '../hooks'
 
 const GameHomeScreen: React.FC<{}> = () => {
     const { colors } = useColors()
 
-    const { data: liveGames, loading: liveLoading } = useData<Game[]>(
-        searchGames,
-        undefined,
-        true,
-    )
-    const { data: recentGames, loading: recentLoading } = useData<Game[]>(
-        searchGames,
-        undefined,
-        false,
-    )
+    const { data, loading, refetch } = useData<Game[]>(searchGames)
 
     const renderGame = (game: Game) => {
         return (
             <GameCard
                 key={game._id}
+                id={game._id}
                 teamOne={game.teamOne}
                 teamTwo={game.teamTwo}
                 teamOneScore={game.teamOneScore}
                 teamTwoScore={game.teamTwoScore}
                 scoreLimit={game.scoreLimit}
+                onPress={() => {}}
             />
         )
     }
+
+    const liveGames = useMemo(() => {
+        return data?.filter(g => g.teamOneActive)
+    }, [data])
+
+    const recentGames = useMemo(() => {
+        return data?.filter(g => !g.teamOneActive)
+    }, [data])
 
     const styles = StyleSheet.create({
         screen: {
@@ -46,11 +54,16 @@ const GameHomeScreen: React.FC<{}> = () => {
             width: '90%',
             alignSelf: 'center',
             marginBottom: 5,
-            fontSize: 20,
+            fontSize: size.fontMedium,
         },
         container: {
             width: '90%',
             alignSelf: 'center',
+        },
+        errorText: {
+            alignSelf: 'center',
+            fontSize: size.fontLarge,
+            color: colors.gray,
         },
     })
 
@@ -69,15 +82,23 @@ const GameHomeScreen: React.FC<{}> = () => {
                 }}
                 placeholder={`Search games...`}
             />
-            <ScrollView style={styles.container}>
-                <MapSection
-                    title="Live Games"
-                    showButton={false}
-                    showCreateButton={false}
-                    listData={liveGames}
-                    renderItem={renderGame}
-                    loading={liveLoading}
-                />
+            <ScrollView
+                style={styles.container}
+                testID="game-home-scroll-view"
+                refreshControl={
+                    <RefreshControl onRefresh={refetch} refreshing={loading} />
+                }>
+                {liveGames && liveGames.length > 0 && (
+                    <MapSection
+                        title="Live Games"
+                        showButton={true}
+                        showCreateButton={false}
+                        listData={liveGames}
+                        renderItem={renderGame}
+                        loading={false}
+                        buttonText="explore live games"
+                    />
+                )}
                 {recentGames && recentGames.length > 0 && (
                     <MapSection
                         title="Recent Games"
@@ -85,9 +106,15 @@ const GameHomeScreen: React.FC<{}> = () => {
                         showCreateButton={false}
                         listData={recentGames}
                         renderItem={renderGame}
-                        loading={recentLoading}
-                        buttonText="explore more games"
+                        loading={false}
+                        buttonText="explore recent games"
                     />
+                )}
+                {(!data || data?.length < 1) && (
+                    <Text style={styles.errorText}>
+                        No games available currently. Try refreshing or
+                        searching.
+                    </Text>
                 )}
             </ScrollView>
         </SafeAreaView>
