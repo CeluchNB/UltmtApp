@@ -20,7 +20,7 @@ export const isTokenExpired = (exp?: number): boolean => {
 }
 
 export const addQueryParam = (url: string, name: string, value?: any) => {
-    if (!value) {
+    if (value === undefined || value === null) {
         return url
     }
     if (!url.includes('?')) {

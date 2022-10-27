@@ -38,7 +38,7 @@ export type AccountStackParamList = {
 }
 
 export type GameStackParamList = {
-    GameSearch: undefined
+    GameHome: undefined
 }
 
 export type AllScreenProps = NativeStackScreenProps<
