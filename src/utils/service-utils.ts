@@ -18,3 +18,13 @@ export const isTokenExpired = (exp?: number): boolean => {
     }
     return false
 }
+
+export const addQueryParam = (url: string, name: string, value?: any) => {
+    if (!value) {
+        return url
+    }
+    if (!url.includes('?')) {
+        return `${url}?${name}=${value}`
+    }
+    return `${url}&${name}=${value}`
+}

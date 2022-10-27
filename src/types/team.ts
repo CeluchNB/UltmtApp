@@ -38,3 +38,12 @@ export interface ToggleRosterStatusData extends TeamRequestData {
 export interface RemovePlayerData extends TeamRequestData {
     userId: string
 }
+
+export interface GuestTeam {
+    _id?: string
+    place?: string
+    name: string
+    teamname?: string
+    seasonStart?: string
+    seasonEnd?: string
+}

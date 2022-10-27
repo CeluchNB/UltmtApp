@@ -1,4 +1,5 @@
 import { DetailedRequest } from '../src/types/request'
+import { Game } from '../src/types/game'
 import { User } from '../src/types/user'
 
 export const fetchProfileData: User = {
@@ -79,4 +80,51 @@ export const requestObject: DetailedRequest = {
         username: 'first1last1',
     },
     status: 'pending',
+}
+
+const teamOne = {
+    _id: 'team1',
+    name: 'Temper',
+    place: 'Pittsburgh',
+    teamname: 'pghtemper',
+    seasonStart: '2022',
+    seasonEnd: '2022',
+}
+
+const tourney = {
+    _id: 'tourney1',
+    name: 'Club Nationals 2022',
+    startDate: new Date('2022-10-20'),
+    endDate: new Date('2022-10-23'),
+    eventId: 'nationals22',
+}
+
+export const game: Game = {
+    _id: 'game1',
+    creator: {
+        _id: 'user1',
+        firstName: 'First 1',
+        lastName: 'Last 1',
+        username: 'first1last1',
+    },
+    teamOne: teamOne,
+    teamTwo: { name: 'Sockeye' },
+    teamTwoDefined: false,
+    scoreLimit: 15,
+    halfScore: 8,
+    teamOneScore: 3,
+    teamTwoScore: 0,
+    startTime: new Date('2022-10-12'),
+    softcapMins: 75,
+    hardcapMins: 90,
+    teamOneActive: true,
+    teamTwoActive: false,
+    playersPerPoint: 7,
+    resolveCode: '111111',
+    timeoutPerHalf: 1,
+    floaterTimeout: true,
+    teamOnePlayers: [],
+    teamTwoPlayers: [],
+    tournament: tourney,
+    points: [],
 }

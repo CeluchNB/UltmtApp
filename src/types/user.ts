@@ -25,3 +25,10 @@ export interface User extends DisplayUser {
     openToRequests: boolean
     private: boolean
 }
+
+export interface GuestUser {
+    _id?: string
+    firstName: string
+    lastName: string
+    username?: string
+}
