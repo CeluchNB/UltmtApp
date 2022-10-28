@@ -11,6 +11,13 @@ jest.mock('../../src/components/atoms/GameCard', () => () => {
     return <div>Game</div>
 })
 
+const props = {
+    navigation: {
+        navigate: jest.fn(),
+    } as any,
+    route: {} as any,
+}
+
 beforeEach(() => {
     jest.spyOn(GameServices, 'searchGames').mockReturnValueOnce(
         Promise.resolve([
@@ -28,7 +35,7 @@ beforeEach(() => {
 it('should match snapshot with live and recent data', async () => {
     const snapshot = render(
         <NavigationContainer>
-            <GameHomeScreen />
+            <GameHomeScreen {...props} />
         </NavigationContainer>,
     )
 
@@ -46,7 +53,7 @@ it('should match snapshot with no data', async () => {
 
     const snapshot = render(
         <NavigationContainer>
-            <GameHomeScreen />
+            <GameHomeScreen {...props} />
         </NavigationContainer>,
     )
 

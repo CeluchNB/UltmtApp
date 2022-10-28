@@ -3,16 +3,17 @@ import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
 import BulkCodeModal from '../components/molecules/BulkCodeModal'
 import { DisplayUser } from '../types/user'
+import { IconButton } from 'react-native-paper'
 import { RequestType } from '../types/request'
 import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import SearchBar from '../components/atoms/SearchBar'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
 import { searchUsers } from '../services/data/user'
 import { selectTeam } from '../store/reducers/features/team/managedTeamReducer'
 import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import { IconButton, TextInput } from 'react-native-paper'
 import { size, weight } from '../theme/fonts'
 import { useColors, useLazyData } from '../hooks'
 
@@ -92,11 +93,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             alignSelf: 'center',
         },
         input: {
-            backgroundColor: colors.primary,
-            color: colors.textPrimary,
             width: '75%',
-            alignSelf: 'center',
-            marginBottom: 5,
         },
         error: {
             color: colors.gray,
@@ -141,7 +138,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                     type === RequestType.PLAYER ? 'Players' : 'Managers'
                 }`}
             />
-            <TextInput
+            {/* <TextInput
                 mode="flat"
                 style={[styles.input]}
                 underlineColor={colors.textPrimary}
@@ -156,6 +153,13 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                 placeholder={`Search ${
                     type === RequestType.PLAYER ? 'players' : 'managers'
                 }...`}
+            /> */}
+            <SearchBar
+                placeholder={`Search ${
+                    type === RequestType.PLAYER ? 'players' : 'managers'
+                }...`}
+                style={styles.input}
+                onChangeText={search}
             />
             <SecondaryButton
                 style={styles.bulkCodeButton}

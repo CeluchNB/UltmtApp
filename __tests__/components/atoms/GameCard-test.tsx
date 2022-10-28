@@ -8,24 +8,41 @@ const fn = jest.fn()
 
 beforeEach(() => {
     props = {
-        id: 'game1',
-        teamOne: {
-            _id: 'team1',
-            place: 'Place 1',
-            name: 'Name 1',
-            teamname: 'placename1',
-            seasonStart: '2022',
-            seasonEnd: '2022',
+        game: {
+            _id: 'game1',
+            teamOne: {
+                _id: 'team1',
+                place: 'Place 1',
+                name: 'Name 1',
+                teamname: 'placename1',
+                seasonStart: '2022',
+                seasonEnd: '2022',
+            },
+            teamTwo: {
+                _id: 'team2',
+                place: 'Place 2',
+                name: 'Name 2',
+                teamname: 'placename2',
+            },
+            teamOneScore: 10,
+            teamTwoScore: 7,
+            scoreLimit: 15,
+            teamOneActive: true,
+            creator: {} as any,
+            teamTwoDefined: false,
+            halfScore: 8,
+            startTime: new Date('2022'),
+            softcapMins: 90,
+            hardcapMins: 105,
+            playersPerPoint: 7,
+            timeoutPerHalf: 1,
+            floaterTimeout: true,
+            teamTwoActive: false,
+            teamOnePlayers: [],
+            teamTwoPlayers: [],
+            resolveCode: '111111',
+            points: [],
         },
-        teamTwo: {
-            _id: 'team2',
-            place: 'Place 2',
-            name: 'Name 2',
-            teamname: 'placename2',
-        },
-        teamOneScore: 10,
-        teamTwoScore: 7,
-        scoreLimit: 15,
         onPress: fn,
     }
 })

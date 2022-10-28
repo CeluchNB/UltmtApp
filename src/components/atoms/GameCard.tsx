@@ -1,16 +1,11 @@
+import { Game } from '../../types/game'
 import { IconButton } from 'react-native-paper'
 import { useColors } from '../../hooks'
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
-import { DisplayTeam, GuestTeam } from '../../types/team'
 import React, { useEffect } from 'react'
 
 export interface GameCardProps {
-    id: string
-    teamOne: DisplayTeam
-    teamTwo: GuestTeam
-    teamOneScore: number
-    teamTwoScore: number
-    scoreLimit: number
+    game: Game
     onPress: (id: string) => void
 }
 
@@ -18,15 +13,16 @@ const GameCard: React.FC<GameCardProps> = props => {
     const { colors } = useColors()
     const liveOpacity = React.useRef(new Animated.Value(0)).current
 
+    const { game, onPress } = props
     const {
-        id,
+        _id,
         teamOne,
         teamTwo,
         teamOneScore,
         teamTwoScore,
         scoreLimit,
-        onPress,
-    } = props
+        teamOneActive,
+    } = game
 
     useEffect(() => {
         Animated.loop(
@@ -104,12 +100,14 @@ const GameCard: React.FC<GameCardProps> = props => {
             <Pressable
                 android_ripple={{ color: colors.textPrimary }}
                 onPress={() => {
-                    onPress(id)
+                    onPress(_id)
                 }}
                 testID="game-card-pressable">
-                <Animated.View
-                    style={[styles.circle, { opacity: liveOpacity }]}
-                />
+                {teamOneActive && (
+                    <Animated.View
+                        style={[styles.circle, { opacity: liveOpacity }]}
+                    />
+                )}
                 <View style={styles.teamContainer}>
                     <View style={styles.teamNameContainer}>
                         <Text style={styles.teamText}>{teamOne.name}</Text>
@@ -126,10 +124,15 @@ const GameCard: React.FC<GameCardProps> = props => {
                         <Text style={styles.teamText}>{teamTwo.name}</Text>
                         {teamTwo.teamname && <Text>@{teamTwo.teamname}</Text>}
                     </View>
+
                     <Text style={styles.teamText}>{teamTwoScore}</Text>
                 </View>
                 <View style={styles.footer}>
-                    <Text style={styles.scoreLimit}>Game to {scoreLimit}</Text>
+                    {teamOneActive && (
+                        <Text style={styles.scoreLimit}>
+                            Game to {scoreLimit}
+                        </Text>
+                    )}
                     <IconButton
                         color={colors.textPrimary}
                         icon="chevron-right"

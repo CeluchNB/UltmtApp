@@ -1,7 +1,8 @@
+import { AllScreenProps } from '../types/navigation'
 import { Game } from '../types/game'
 import GameCard from '../components/atoms/GameCard'
 import MapSection from '../components/molecules/MapSection'
-import { TextInput } from 'react-native-paper'
+import SearchBar from '../components/atoms/SearchBar'
 import { searchGames } from '../services/data/game'
 import { size } from '../theme/fonts'
 import React, { useMemo } from 'react'
@@ -14,24 +15,17 @@ import {
 } from 'react-native'
 import { useColors, useData } from '../hooks'
 
-const GameHomeScreen: React.FC<{}> = () => {
+const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     const { colors } = useColors()
 
     const { data, loading, refetch } = useData<Game[]>(searchGames)
 
     const renderGame = (game: Game) => {
-        return (
-            <GameCard
-                key={game._id}
-                id={game._id}
-                teamOne={game.teamOne}
-                teamTwo={game.teamTwo}
-                teamOneScore={game.teamOneScore}
-                teamTwoScore={game.teamTwoScore}
-                scoreLimit={game.scoreLimit}
-                onPress={() => {}}
-            />
-        )
+        return <GameCard key={game._id} game={game} onPress={() => {}} />
+    }
+
+    const navigateToSearch = (live?: boolean) => {
+        navigation.navigate('GameSearch', { live })
     }
 
     const liveGames = useMemo(() => {
@@ -48,14 +42,6 @@ const GameHomeScreen: React.FC<{}> = () => {
             backgroundColor: colors.primary,
         },
         title: { alignSelf: 'center' },
-        input: {
-            backgroundColor: colors.primary,
-            color: colors.textPrimary,
-            width: '90%',
-            alignSelf: 'center',
-            marginBottom: 5,
-            fontSize: size.fontMedium,
-        },
         container: {
             width: '90%',
             alignSelf: 'center',
@@ -69,18 +55,9 @@ const GameHomeScreen: React.FC<{}> = () => {
 
     return (
         <SafeAreaView style={styles.screen}>
-            <TextInput
-                mode="flat"
-                style={[styles.input]}
-                underlineColor={colors.textPrimary}
-                activeUnderlineColor={colors.textPrimary}
-                placeholderTextColor={colors.gray}
-                theme={{
-                    colors: {
-                        text: colors.textPrimary,
-                    },
-                }}
-                placeholder={`Search games...`}
+            <SearchBar
+                placeholder="Search games..."
+                onPress={navigateToSearch}
             />
             <ScrollView
                 style={styles.container}
@@ -97,6 +74,9 @@ const GameHomeScreen: React.FC<{}> = () => {
                         renderItem={renderGame}
                         loading={false}
                         buttonText="explore live games"
+                        onButtonPress={() => {
+                            navigateToSearch(true)
+                        }}
                     />
                 )}
                 {recentGames && recentGames.length > 0 && (
@@ -108,6 +88,9 @@ const GameHomeScreen: React.FC<{}> = () => {
                         renderItem={renderGame}
                         loading={false}
                         buttonText="explore recent games"
+                        onButtonPress={() => {
+                            navigateToSearch(false)
+                        }}
                     />
                 )}
                 {(!data || data?.length < 1) && (
