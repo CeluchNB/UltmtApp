@@ -37,6 +37,7 @@ const TextDateInput: React.FC<TextDateInputProps> = ({ value, onChange }) => {
                         setOpen(true)
                     }}
                     focusable={false}
+                    testID="date-text-input"
                 />
             </View>
             <DatePicker
