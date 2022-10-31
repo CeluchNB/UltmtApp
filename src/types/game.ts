@@ -31,3 +31,10 @@ export interface Game {
     resolveCode: string
     points: string[]
 }
+
+export interface SearchParams {
+    q?: string
+    live?: boolean
+    after?: Date
+    before?: Date
+}

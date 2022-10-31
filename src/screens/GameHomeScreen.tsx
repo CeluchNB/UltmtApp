@@ -24,7 +24,7 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
         return <GameCard key={game._id} game={game} onPress={() => {}} />
     }
 
-    const navigateToSearch = (live?: boolean) => {
+    const navigateToSearch = (live: string) => {
         navigation.navigate('GameSearch', { live })
     }
 
@@ -57,11 +57,12 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
         <SafeAreaView style={styles.screen}>
             <SearchBar
                 placeholder="Search games..."
-                onPress={navigateToSearch}
+                onPress={() => navigateToSearch('undefined')}
             />
             <ScrollView
                 style={styles.container}
                 testID="game-home-scroll-view"
+                showsVerticalScrollIndicator={false}
                 refreshControl={
                     <RefreshControl onRefresh={refetch} refreshing={loading} />
                 }>
@@ -75,7 +76,7 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                         loading={false}
                         buttonText="explore live games"
                         onButtonPress={() => {
-                            navigateToSearch(true)
+                            navigateToSearch('true')
                         }}
                     />
                 )}
@@ -89,7 +90,7 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                         loading={false}
                         buttonText="explore recent games"
                         onButtonPress={() => {
-                            navigateToSearch(false)
+                            navigateToSearch('false')
                         }}
                     />
                 )}
