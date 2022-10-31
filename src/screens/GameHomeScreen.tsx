@@ -73,7 +73,7 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                         showCreateButton={false}
                         listData={liveGames}
                         renderItem={renderGame}
-                        loading={false}
+                        loading={loading}
                         buttonText="explore live games"
                         onButtonPress={() => {
                             navigateToSearch('true')

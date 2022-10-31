@@ -123,6 +123,7 @@ exports[`should match snapshot with live and recent data 1`] = `
         refreshing={false}
       />
     }
+    showsVerticalScrollIndicator={false}
     style={
       Object {
         "alignSelf": "center",
@@ -397,6 +398,7 @@ exports[`should match snapshot with no data 1`] = `
         refreshing={false}
       />
     }
+    showsVerticalScrollIndicator={false}
     style={
       Object {
         "alignSelf": "center",

@@ -22,6 +22,7 @@ export const searchGames = async (
         )
 
         const { games } = response.data
+
         return games
     } catch (e) {
         return throwApiError(e, Constants.SEARCH_ERROR)
