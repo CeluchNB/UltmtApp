@@ -193,13 +193,15 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ route }) => {
                 onEndReached={loadMore}
                 onEndReachedThreshold={0.1}
                 ListFooterComponent={() => {
-                    return isFetchingNextPage ? (
+                    return isLoading || isFetchingNextPage ? (
                         <ActivityIndicator
                             color={colors.textPrimary}
                             size="large"
+                            testID="infinite-scroll-indicator"
                         />
                     ) : null
                 }}
+                testID="game-search-list"
             />
         </SafeAreaView>
     )

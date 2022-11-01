@@ -2,6 +2,9 @@ import FilterModal from '../../../src/components/molecules/FilterModal'
 import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
+import MockDate from 'mockdate'
+MockDate.set('2022-10-01')
+
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 it('should match snapshot', () => {
