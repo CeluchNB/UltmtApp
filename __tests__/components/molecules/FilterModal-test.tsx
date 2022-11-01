@@ -3,7 +3,7 @@ import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 import MockDate from 'mockdate'
-MockDate.set('2022-10-01')
+MockDate.set('01 October 2022 00:00 UTC')
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -51,7 +51,7 @@ it('should handle clear press', async () => {
             visible={true}
             defaultValues={{
                 live: 'true',
-                after: new Date('2022-01-02'),
+                after: new Date('2022-01-01'),
                 before: new Date('2022-06-01'),
             }}
             onClose={onClose}

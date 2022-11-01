@@ -2,6 +2,9 @@ import React from 'react'
 import TextDateInput from '../../../src/components/atoms/TextDateInput'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
+import MockDate from 'mockdate'
+MockDate.set('01 October 2022 00:00 UTC')
+
 it('should match snapshot while closed', () => {
     const snapshot = render(
         <TextDateInput value={new Date('2022-01-01')} onChange={() => {}} />,

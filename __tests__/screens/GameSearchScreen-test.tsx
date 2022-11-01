@@ -13,6 +13,7 @@ import {
 } from '@testing-library/react-native'
 
 import MockDate from 'mockdate'
+MockDate.set('01 October 2022 00:00 UTC')
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('../../src/components/atoms/GameCard', () => () => {
@@ -27,7 +28,6 @@ const client = new QueryClient()
 
 beforeAll(() => {
     jest.useFakeTimers()
-    MockDate.set('2022-10-01')
 })
 
 beforeEach(() => {

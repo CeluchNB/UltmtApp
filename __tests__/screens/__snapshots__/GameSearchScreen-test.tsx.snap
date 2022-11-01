@@ -687,7 +687,7 @@ exports[`should match snapshot 1`] = `
                     }
                   >
                     After: 
-                    1/1/2022
+                    1/2/2022
                   </Text>
                 </Text>
               </View>
@@ -801,7 +801,7 @@ exports[`should match snapshot 1`] = `
                     }
                   >
                     Before: 
-                    9/30/2022
+                    10/1/2022
                   </Text>
                 </Text>
               </View>
