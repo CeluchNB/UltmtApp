@@ -75,11 +75,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
             animationType="slide"
             visible={visible}
             onRequestClose={() => {
-                console.log('request')
                 onClose({})
             }}
             transparent={true}
-            style={styles.modal}>
+            style={styles.modal}
+            testID="filter-modal">
             <View style={styles.modalContainer}>
                 <View style={styles.modalView}>
                     <View style={styles.titleContainer}>
