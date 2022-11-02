@@ -7,6 +7,22 @@ export interface DisplayGame {
     opponentScore: number
 }
 
+export interface CreateGame {
+    creator: DisplayUser
+    teamOne: DisplayTeam
+    teamTwo: DisplayTeam
+    teamTwoDefined: boolean
+    scoreLimit: number
+    halfScore: number
+    startTime: Date
+    softcapMins: number
+    hardcapMins: number
+    playersPerPoint: number
+    timeoutPerHalf: number
+    floaterTimeout: boolean
+    tournament?: Tournament
+}
+
 export interface Game {
     _id: string
     creator: DisplayUser
