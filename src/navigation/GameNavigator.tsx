@@ -1,4 +1,5 @@
 import * as React from 'react'
+import CreateGameScreen from '../screens/CreateGameScreen'
 import GameHomeScreen from '../screens/GameHomeScreen'
 import GameSearchScreen from '../screens/GameSearchScreen'
 import { GameStackParamList } from '../types/navigation'
@@ -13,6 +14,7 @@ const GameNavigator: React.FC<{}> = () => {
             screenOptions={{ headerShown: false }}>
             <Stack.Screen name="GameHome" component={GameHomeScreen} />
             <Stack.Screen name="GameSearch" component={GameSearchScreen} />
+            <Stack.Screen name="CreateGame" component={CreateGameScreen} />
         </Stack.Navigator>
     )
 }

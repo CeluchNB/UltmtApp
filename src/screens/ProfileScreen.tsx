@@ -76,6 +76,10 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
         navigation.navigate('CreateTeam')
     }
 
+    const onCreateGame = () => {
+        navigation.navigate('CreateGame', { teamOne: undefined })
+    }
+
     const styles = StyleSheet.create({
         container: {
             minHeight: '100%',
@@ -208,7 +212,8 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                             <MapSection
                                 title="Games"
                                 showButton={false}
-                                showCreateButton={false}
+                                showCreateButton={true}
+                                onCreatePress={onCreateGame}
                                 onButtonPress={() => ({})}
                                 buttonText="see all games"
                                 listData={[]}

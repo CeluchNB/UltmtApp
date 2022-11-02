@@ -10,7 +10,7 @@ export interface DisplayGame {
 export interface CreateGame {
     creator: DisplayUser
     teamOne: DisplayTeam
-    teamTwo: DisplayTeam
+    teamTwo: GuestTeam
     teamTwoDefined: boolean
     scoreLimit: number
     halfScore: number
