@@ -47,7 +47,6 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
         floaterTimeout: boolean
         tournament: Tournament
     }) => {
-        console.log('in on create')
         const data: CreateGame = {
             ...formData,
             teamTwoDefined: false,
@@ -98,20 +97,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                     <ScreenTitle title="New Game" />
                 )}
                 <ScreenTitle title="vs." />
-                <Controller
-                    name="teamTwo"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Opponent"
-                                onChange={onChange}
-                                value={value}
-                            />
-                        )
-                    }}
-                />
+                <ScreenTitle title="Team Two" />
                 <Controller
                     name="scoreLimit"
                     control={control}

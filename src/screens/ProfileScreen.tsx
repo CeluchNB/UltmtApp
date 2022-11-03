@@ -77,7 +77,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     }
 
     const onCreateGame = () => {
-        navigation.navigate('CreateGame', { teamOne: undefined })
+        navigation.navigate('SelectOpponent')
     }
 
     const styles = StyleSheet.create({

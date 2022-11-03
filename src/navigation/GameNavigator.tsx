@@ -3,6 +3,7 @@ import CreateGameScreen from '../screens/CreateGameScreen'
 import GameHomeScreen from '../screens/GameHomeScreen'
 import GameSearchScreen from '../screens/GameSearchScreen'
 import { GameStackParamList } from '../types/navigation'
+import SelectOpponentScreen from '../screens/SelectOpponentScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 const Stack = createNativeStackNavigator<GameStackParamList>()
@@ -15,6 +16,10 @@ const GameNavigator: React.FC<{}> = () => {
             <Stack.Screen name="GameHome" component={GameHomeScreen} />
             <Stack.Screen name="GameSearch" component={GameSearchScreen} />
             <Stack.Screen name="CreateGame" component={CreateGameScreen} />
+            <Stack.Screen
+                name="SelectOpponent"
+                component={SelectOpponentScreen}
+            />
         </Stack.Navigator>
     )
 }

@@ -20,10 +20,16 @@ export const createTeam = async (
     )
 }
 
-export const searchTeam = async (term: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL_V1}/team/search?q=${term}`, {
-        headers: { 'X-API-Key': API_KEY },
-    })
+export const searchTeam = async (
+    term: string,
+    rosterOpen?: boolean,
+): Promise<AxiosResponse> => {
+    return await axios.get(
+        `${API_URL_V1}/team/search?q=${term}&rosterOpen=${rosterOpen}`,
+        {
+            headers: { 'X-API-Key': API_KEY },
+        },
+    )
 }
 
 export const getManagedTeam = async (

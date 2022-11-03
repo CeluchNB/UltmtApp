@@ -9,6 +9,7 @@ interface SearchBarProps {
     style?: StyleProp<TextStyle>
     focusable?: boolean
     filter?: boolean
+    value?: string
     onChangeText?: (text: string) => void
     onPress?: () => void
     onFilterPress?: () => void
@@ -21,6 +22,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         style,
         focusable = true,
         filter = false,
+        value,
         onChangeText,
         onPress,
         onFilterPress,
@@ -67,6 +69,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
                         onPress()
                     }
                 }}
+                value={value}
                 focusable={focusable}
             />
             {filter && (

@@ -29,7 +29,7 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             return
         }
         try {
-            const teamsResponse = await TeamData.searchTeam(text)
+            const teamsResponse = await TeamData.searchTeam(text, true)
             setTeams(teamsResponse)
         } catch (e: any) {
             setSearchError(e.message ?? 'No search results from this query.')

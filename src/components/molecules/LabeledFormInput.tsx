@@ -30,7 +30,7 @@ const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
             alignItems: 'center',
         },
         labelText: {
-            fontSize: size.fontLarge,
+            fontSize: size.fontMedium,
             fontWeight: weight.bold,
             color: colors.textPrimary,
             width: '50%',
@@ -39,7 +39,7 @@ const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
             width: unit ? '30%' : '50%',
         },
         unitText: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontFifteen,
             fontWeight: weight.bold,
             color: colors.gray,
             marginLeft: 10,
