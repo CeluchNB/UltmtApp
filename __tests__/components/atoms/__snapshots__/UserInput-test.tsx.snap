@@ -45,6 +45,7 @@ exports[`test snapshot 1`] = `
     >
       <TextInput
         editable={true}
+        keyboardType="default"
         multiline={false}
         onBlur={[Function]}
         onChangeText={[Function]}
@@ -134,6 +135,7 @@ exports[`test with right icon 1`] = `
     >
       <TextInput
         editable={true}
+        keyboardType="default"
         multiline={false}
         onBlur={[Function]}
         onChangeText={[Function]}

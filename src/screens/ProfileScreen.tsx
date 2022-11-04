@@ -77,7 +77,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     }
 
     const onCreateGame = () => {
-        navigation.navigate('SelectOpponent')
+        navigation.navigate('SelectMyTeam')
     }
 
     const styles = StyleSheet.create({

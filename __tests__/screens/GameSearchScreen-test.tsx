@@ -1,6 +1,6 @@
 import * as GameServices from '../../src/services/network/game'
 import { GameSearchProps } from '../../src/types/navigation'
-import GameSearchScreen from '../../src/screens/GameSearchScreen'
+import GameSearchScreen from '../../src/screens/games/GameSearchScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
 import { game } from '../../fixtures/data'

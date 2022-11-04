@@ -8,6 +8,7 @@ interface PrimaryButtonProps {
     onPress: () => {}
     loading: boolean
     style?: StyleProp<ViewStyle>
+    disabled?: boolean
 }
 
 const PrimaryButton: React.FC<PrimaryButtonProps> = ({
@@ -15,6 +16,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     onPress,
     loading,
     style,
+    disabled = false,
 }) => {
     const { colors, isDarkMode } = useColors()
 
@@ -29,6 +31,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
             mode="contained"
             compact={true}
             dark={!isDarkMode}
+            disabled={disabled}
             style={[selfStyle.button, style]}
             onPress={onPress}
             loading={loading}>

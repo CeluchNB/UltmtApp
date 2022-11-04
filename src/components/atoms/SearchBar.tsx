@@ -1,7 +1,7 @@
-import React from 'react'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
 import { Button, TextInput } from 'react-native-paper'
+import React, { useState } from 'react'
 import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
 
 interface SearchBarProps {
@@ -10,6 +10,7 @@ interface SearchBarProps {
     focusable?: boolean
     filter?: boolean
     value?: string
+    width?: string
     onChangeText?: (text: string) => void
     onPress?: () => void
     onFilterPress?: () => void
@@ -23,16 +24,19 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         focusable = true,
         filter = false,
         value,
+        width = '90%',
         onChangeText,
         onPress,
         onFilterPress,
     } = props
 
+    const [searchText, setSearchText] = useState(value || '')
+
     const styles = StyleSheet.create({
         container: {
             display: 'flex',
             flexDirection: 'row',
-            width: '90%',
+            width: width,
             alignSelf: 'center',
         },
         input: {
@@ -63,13 +67,18 @@ const SearchBar: React.FC<SearchBarProps> = props => {
                     },
                 }}
                 placeholder={placeholder}
-                onChangeText={onChangeText}
+                onChangeText={text => {
+                    setSearchText(text)
+                    if (onChangeText) {
+                        onChangeText(text)
+                    }
+                }}
                 onPressOut={() => {
                     if (onPress) {
                         onPress()
                     }
                 }}
-                value={value}
+                value={searchText}
                 focusable={focusable}
             />
             {filter && (

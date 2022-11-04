@@ -28,6 +28,8 @@ const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            marginTop: 5,
+            marginBottom: 5,
         },
         labelText: {
             fontSize: size.fontMedium,

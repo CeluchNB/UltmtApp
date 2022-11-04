@@ -103,6 +103,7 @@ exports[`should match snapshot 1`] = `
           ]
         }
         underlineColorAndroid="transparent"
+        value=""
       />
     </View>
   </View>
@@ -310,6 +311,7 @@ exports[`should match snapshot with minimal props 1`] = `
           ]
         }
         underlineColorAndroid="transparent"
+        value=""
       />
     </View>
   </View>

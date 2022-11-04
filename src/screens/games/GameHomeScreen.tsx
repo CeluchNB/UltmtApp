@@ -1,10 +1,10 @@
-import { AllScreenProps } from '../types/navigation'
-import { Game } from '../types/game'
-import GameCard from '../components/atoms/GameCard'
-import MapSection from '../components/molecules/MapSection'
-import SearchBar from '../components/atoms/SearchBar'
-import { searchGames } from '../services/data/game'
-import { size } from '../theme/fonts'
+import { AllScreenProps } from '../../types/navigation'
+import { Game } from '../../types/game'
+import GameCard from '../../components/atoms/GameCard'
+import MapSection from '../../components/molecules/MapSection'
+import SearchBar from '../../components/atoms/SearchBar'
+import { searchGames } from '../../services/data/game'
+import { size } from '../../theme/fonts'
 import React, { useMemo } from 'react'
 import {
     RefreshControl,
@@ -13,7 +13,7 @@ import {
     StyleSheet,
     Text,
 } from 'react-native'
-import { useColors, useData } from '../hooks'
+import { useColors, useData } from '../../hooks'
 
 const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     const { colors } = useColors()

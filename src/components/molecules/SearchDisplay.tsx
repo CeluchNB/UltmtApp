@@ -1,30 +1,37 @@
-import BaseScreen from '../atoms/BaseScreen'
 import React from 'react'
 import SearchBar from '../atoms/SearchBar'
 import { useColors } from '../../hooks/useColors'
 import { useLazyData } from '../../hooks'
-import { ActivityIndicator, FlatList, ListRenderItem } from 'react-native'
+import { ActivityIndicator, FlatList, ListRenderItem, View } from 'react-native'
 
 interface SearchDisplayProps<T> {
+    value?: string
     search: (q: string) => Promise<T[]>
     renderItem: ListRenderItem<T>
+    onChangeText?: (text: string) => void
 }
 
 const SearchDisplay = <R,>(props: SearchDisplayProps<R>) => {
-    const { search, renderItem } = props
+    const { value, search, renderItem, onChangeText } = props
     const { colors } = useColors()
     const { data, loading, fetch } = useLazyData(search)
 
     const onSearch = (q: string) => {
+        if (onChangeText) onChangeText(q)
         fetch(q)
     }
 
     return (
-        <BaseScreen containerWidth="80%">
-            <SearchBar placeholder="Search teams..." onChangeText={onSearch} />
+        <View>
+            <SearchBar
+                placeholder="Search teams..."
+                onChangeText={onSearch}
+                value={value}
+                width="100%"
+            />
             {loading && <ActivityIndicator color={colors.textPrimary} />}
             {data && <FlatList data={data} renderItem={renderItem} />}
-        </BaseScreen>
+        </View>
     )
 }
 

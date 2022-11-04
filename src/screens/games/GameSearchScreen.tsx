@@ -1,14 +1,14 @@
 import { Chip } from 'react-native-paper'
-import FilterModal from '../components/molecules/FilterModal'
-import { Game } from '../types/game'
-import GameCard from '../components/atoms/GameCard'
-import { GameSearchProps } from '../types/navigation'
-import SearchBar from '../components/atoms/SearchBar'
-import { parseLiveValue } from '../utils/form-utils'
-import { searchGames } from '../services/data/game'
-import { useColors } from '../hooks'
+import FilterModal from '../../components/molecules/FilterModal'
+import { Game } from '../../types/game'
+import GameCard from '../../components/atoms/GameCard'
+import { GameSearchProps } from '../../types/navigation'
+import SearchBar from '../../components/atoms/SearchBar'
+import { parseLiveValue } from '../../utils/form-utils'
+import { searchGames } from '../../services/data/game'
+import { useColors } from '../../hooks'
 import { useInfiniteQuery } from 'react-query'
-import { weight } from '../theme/fonts'
+import { weight } from '../../theme/fonts'
 import {
     ActivityIndicator,
     FlatList,

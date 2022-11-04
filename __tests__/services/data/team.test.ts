@@ -128,23 +128,13 @@ describe('test team services', () => {
     })
 
     it('should handle search not enough characters failure', async () => {
-        jest.spyOn(TeamServices, 'searchTeam').mockReturnValueOnce(
-            Promise.resolve({
-                data: [team, team],
-                status: 200,
-                statusText: 'Good',
-                headers: {},
-                config: {},
-            }),
-        )
-
         expect(searchTeam('12')).rejects.toThrow()
     })
 
     it('should handle network search success', async () => {
         jest.spyOn(TeamServices, 'searchTeam').mockReturnValueOnce(
             Promise.resolve({
-                data: [team, team],
+                data: { teams: [team, team] },
                 status: 200,
                 statusText: 'Good',
                 headers: {},

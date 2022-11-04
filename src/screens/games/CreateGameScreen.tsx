@@ -1,22 +1,28 @@
-import { CreateGame } from '../types/game'
-import { CreateGameProps } from '../types/navigation'
+import { CreateGame } from '../../types/game'
+import { CreateGameProps } from '../../types/navigation'
 // import { GuestTeam } from '../types/team'
-import LabeledFormInput from '../components/molecules/LabeledFormInput'
-import PrimaryButton from '../components/atoms/PrimaryButton'
-import React from 'react'
-import ScreenTitle from '../components/atoms/ScreenTitle'
-import { Tournament } from '../types/tournament'
-// import { createGame } from '../services/data/game'
-import { selectAccount } from '../store/reducers/features/account/accountReducer'
-import { useColors } from '../hooks'
+import LabeledFormInput from '../../components/molecules/LabeledFormInput'
+import PrimaryButton from '../../components/atoms/PrimaryButton'
+import ScreenTitle from '../../components/atoms/ScreenTitle'
+import { Tournament } from '../../types/tournament'
+import { createGame } from '../../services/data/game'
+import { selectAccount } from '../../store/reducers/features/account/accountReducer'
+import { useColors } from '../../hooks'
+import { useLazyData } from '../../hooks'
 import { useSelector } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
+import React, { useEffect } from 'react'
 import { SafeAreaView, StyleSheet, Switch, View } from 'react-native'
 
 const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
-    const { teamOne } = route.params
+    // Team One and Team Two are populated through
+    // SelectMyTeamScreen and SelectOpponentScreen
+    // Flow SelectMyTeamScreen -> SelectOpponentScreen -> CreateGameScreen
+    const { teamOne, teamTwo } = route.params
     const { colors } = useColors()
     const account = useSelector(selectAccount)
+
+    const { data, fetch } = useLazyData(createGame)
 
     const { control, handleSubmit } = useForm({
         defaultValues: {
@@ -47,21 +53,12 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
         floaterTimeout: boolean
         tournament: Tournament
     }) => {
-        const data: CreateGame = {
+        const createGameData: CreateGame = {
             ...formData,
-            teamTwoDefined: false,
+            teamTwoDefined: teamTwo._id !== undefined,
             startTime: new Date(),
-            teamTwo: {
-                name: formData.teamTwo,
-            },
-            teamOne: teamOne || {
-                _id: 'dummy1',
-                place: 'Place1',
-                name: 'Name1',
-                teamname: 'teamname1',
-                seasonStart: '2022',
-                seasonEnd: '2023',
-            },
+            teamTwo: teamTwo,
+            teamOne: teamOne,
             creator: {
                 _id: account.email,
                 firstName: account.firstName,
@@ -69,9 +66,11 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 username: account.username,
             },
         }
-        console.log('creating with data', data)
-        // await createGame(data)
+
+        fetch(createGameData)
     }
+
+    useEffect(() => {}, [data])
 
     const styles = StyleSheet.create({
         screen: {
@@ -91,13 +90,11 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
     return (
         <SafeAreaView style={styles.screen}>
             <View style={styles.container}>
-                {teamOne ? (
+                <View>
                     <ScreenTitle title={teamOne.name} />
-                ) : (
-                    <ScreenTitle title="New Game" />
-                )}
-                <ScreenTitle title="vs." />
-                <ScreenTitle title="Team Two" />
+                    <ScreenTitle title="vs." />
+                    <ScreenTitle title={teamTwo.name} />
+                </View>
                 <Controller
                     name="scoreLimit"
                     control={control}
@@ -261,7 +258,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                         )
                     }}
                 />
-                <Controller
+                {/* <Controller
                     name="tournament"
                     control={control}
                     rules={{
@@ -276,7 +273,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                             />
                         )
                     }}
-                />
+                /> */}
                 <PrimaryButton
                     text="start"
                     loading={false}

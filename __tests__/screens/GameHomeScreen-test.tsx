@@ -1,5 +1,5 @@
 import * as GameServices from '../../src/services/data/game'
-import GameHomeScreen from '../../src/screens/GameHomeScreen'
+import GameHomeScreen from '../../src/screens/games/GameHomeScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
 import { game } from '../../fixtures/data'
