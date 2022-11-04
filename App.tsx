@@ -1,4 +1,5 @@
 import * as React from 'react'
+import GameCreationNavigator from './src/navigation/GameCreationNavigator'
 import { NavigationContainer } from '@react-navigation/native'
 import SecureEditScreen from './src/screens/SecureEditScreen'
 import SettingsScreen from './src/screens/SettingsScreen'
@@ -27,6 +28,10 @@ const App: React.FC<{}> = () => {
                         component={SecureEditScreen}
                     />
                     <Stack.Screen name="Tabs" component={TabNavigator} />
+                    <Stack.Screen
+                        name="GameCreationFlow"
+                        component={GameCreationNavigator}
+                    />
                 </Stack.Navigator>
             </QueryClientProvider>
         </NavigationContainer>

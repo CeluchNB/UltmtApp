@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator<GameStackParamList>()
 
 const GameCreationNavigator: React.FC<{}> = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="SelectMyTeam" component={SelectMyTeamScreen} />
             <Stack.Screen
                 name="SelectOpponent"
