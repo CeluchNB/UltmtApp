@@ -1,6 +1,6 @@
 import React from 'react'
 import SearchBar from '../../../src/components/atoms/SearchBar'
-import { fireEvent, render } from '@testing-library/react-native'
+import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -45,7 +45,7 @@ it('should fire on press button', () => {
     expect(onPress).toHaveBeenCalled()
 })
 
-it('should fire change text', () => {
+it('should fire change text', async () => {
     const onChangeText = jest.fn()
     const { getByPlaceholderText } = render(
         <SearchBar
@@ -60,6 +60,7 @@ it('should fire change text', () => {
 
     const bar = getByPlaceholderText('Search stuff...')
     fireEvent.changeText(bar, 'test')
+    await act(async () => {})
     expect(onChangeText).toHaveBeenCalledWith('test')
 })
 

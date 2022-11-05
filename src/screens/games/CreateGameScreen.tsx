@@ -1,6 +1,5 @@
 import { CreateGame } from '../../types/game'
 import { CreateGameProps } from '../../types/navigation'
-// import { GuestTeam } from '../types/team'
 import LabeledFormInput from '../../components/molecules/LabeledFormInput'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
@@ -22,11 +21,10 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
 
-    const { data, fetch } = useLazyData(createGame)
+    const { loading, data, fetch } = useLazyData(createGame)
 
     const { control, handleSubmit } = useForm({
         defaultValues: {
-            teamTwo: '',
             scoreLimit: 15,
             halfScore: 8,
             softcapMins: 75,
@@ -43,7 +41,6 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
     }
 
     const onCreate = async (formData: {
-        teamTwo: string
         scoreLimit: number
         halfScore: number
         softcapMins: number
@@ -60,7 +57,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
             teamTwo: teamTwo,
             teamOne: teamOne,
             creator: {
-                _id: account.email,
+                _id: account._id,
                 firstName: account.firstName,
                 lastName: account.lastName,
                 username: account.username,
@@ -276,7 +273,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 /> */}
                 <PrimaryButton
                     text="start"
-                    loading={false}
+                    loading={loading}
                     onPress={handleSubmit(onCreate)}
                 />
             </View>
