@@ -88,7 +88,16 @@ exports[`should match snapshot 1`] = `
       />
     </View>
   </View>
-  <Text>
+  <Text
+    style={
+      Object {
+        "alignSelf": "center",
+        "color": "#31adff",
+        "marginBottom": 10,
+        "width": "75%",
+      }
+    }
+  >
     You can always add and drop players later
   </Text>
   <Text
@@ -371,7 +380,16 @@ exports[`should match snapshot with open requests 1`] = `
       />
     </View>
   </View>
-  <Text>
+  <Text
+    style={
+      Object {
+        "alignSelf": "center",
+        "color": "#31adff",
+        "marginBottom": 10,
+        "width": "75%",
+      }
+    }
+  >
     You can always add and drop players later
   </Text>
   <Text

@@ -11,6 +11,7 @@ interface UserInputProps {
     style?: StyleProp<ViewStyle>
     rightIcon?: boolean
     onRightPress?: () => {}
+    keyboardType?: 'default' | 'number-pad'
 }
 
 const UserInput: React.FC<UserInputProps> = ({
@@ -21,6 +22,7 @@ const UserInput: React.FC<UserInputProps> = ({
     style,
     rightIcon,
     onRightPress,
+    keyboardType = 'default',
 }) => {
     const { colors } = useColors()
 
@@ -44,6 +46,7 @@ const UserInput: React.FC<UserInputProps> = ({
             secureTextEntry={isPassword}
             onChangeText={onChangeText}
             value={value}
+            keyboardType={keyboardType}
             right={
                 rightIcon && (
                     <TextInput.Icon

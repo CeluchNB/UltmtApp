@@ -28,96 +28,110 @@ exports[`should match snapshot 1`] = `
   </Text>
   <View
     style={
-      Array [
-        Object {
-          "backgroundColor": "rgb(231, 231, 231)",
-          "borderTopLeftRadius": 4,
-          "borderTopRightRadius": 4,
-        },
-        Object {
-          "alignSelf": "center",
-          "backgroundColor": "#303030",
-          "color": "#ffd600",
-          "marginBottom": 5,
-          "width": "75%",
-        },
-      ]
+      Object {
+        "alignSelf": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "width": "90%",
+      }
     }
   >
-    <View
-      collapsable={false}
-      style={
-        Object {
-          "backgroundColor": "#ffd600",
-          "bottom": 0,
-          "height": 2,
-          "left": 0,
-          "position": "absolute",
-          "right": 0,
-          "transform": Array [
-            Object {
-              "scaleY": 0.5,
-            },
-          ],
-          "zIndex": 1,
-        }
-      }
-    />
     <View
       style={
         Array [
           Object {
-            "paddingBottom": 0,
-            "paddingTop": 0,
+            "backgroundColor": "rgb(231, 231, 231)",
+            "borderTopLeftRadius": 4,
+            "borderTopRightRadius": 4,
           },
           Object {
-            "minHeight": 64,
+            "backgroundColor": "#303030",
+            "color": "#ffd600",
+            "flex": 1,
+            "marginBottom": 5,
+            "width": "75%",
           },
         ]
       }
     >
-      <TextInput
-        editable={true}
-        multiline={false}
-        onBlur={[Function]}
-        onChangeText={[Function]}
-        onFocus={[Function]}
-        placeholder="Search teams..."
-        placeholderTextColor="#ababab"
-        selectionColor="#ffd600"
+      <View
+        collapsable={false}
+        style={
+          Object {
+            "backgroundColor": "#ffd600",
+            "bottom": 0,
+            "height": 2,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "transform": Array [
+              Object {
+                "scaleY": 0.5,
+              },
+            ],
+            "zIndex": 1,
+          }
+        }
+      />
+      <View
         style={
           Array [
-            Object {
-              "flexGrow": 1,
-              "margin": 0,
-            },
-            Object {
-              "paddingLeft": 12,
-              "paddingRight": 12,
-            },
-            Object {
-              "height": 64,
-            },
             Object {
               "paddingBottom": 0,
               "paddingTop": 0,
             },
             Object {
-              "color": "#ffd600",
-              "fontFamily": "System",
-              "fontSize": 16,
-              "fontWeight": undefined,
-              "textAlign": "left",
-              "textAlignVertical": "center",
+              "minHeight": 64,
             },
-            false,
-            Array [
-              Object {},
-            ],
           ]
         }
-        underlineColorAndroid="transparent"
-      />
+      >
+        <TextInput
+          editable={true}
+          focusable={true}
+          multiline={false}
+          onBlur={[Function]}
+          onChangeText={[Function]}
+          onFocus={[Function]}
+          onPressOut={[Function]}
+          placeholder="Search teams..."
+          placeholderTextColor="#ababab"
+          selectionColor="#ffd600"
+          style={
+            Array [
+              Object {
+                "flexGrow": 1,
+                "margin": 0,
+              },
+              Object {
+                "paddingLeft": 12,
+                "paddingRight": 12,
+              },
+              Object {
+                "height": 64,
+              },
+              Object {
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              },
+              Object {
+                "color": "#ffd600",
+                "fontFamily": "System",
+                "fontSize": 41.0958904109589,
+                "fontWeight": undefined,
+                "textAlign": "left",
+                "textAlignVertical": "center",
+              },
+              false,
+              Array [
+                Object {},
+              ],
+            ]
+          }
+          underlineColorAndroid="transparent"
+          value=""
+        />
+      </View>
     </View>
   </View>
   <View

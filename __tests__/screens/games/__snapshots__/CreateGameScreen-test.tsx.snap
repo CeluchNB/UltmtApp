@@ -1,0 +1,965 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<RCTSafeAreaView
+  emulateUnlessSupported={true}
+  style={
+    Object {
+      "backgroundColor": "#303030",
+      "height": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignSelf": "center",
+        "width": "80%",
+      }
+    }
+  >
+    <View>
+      <Text
+        numberOfLines={1}
+        style={
+          Array [
+            Object {
+              "color": "#ffd600",
+              "fontSize": 61.64383561643835,
+              "fontWeight": "bold",
+            },
+            undefined,
+          ]
+        }
+      >
+        Name 1
+      </Text>
+      <Text
+        numberOfLines={1}
+        style={
+          Array [
+            Object {
+              "color": "#ffd600",
+              "fontSize": 61.64383561643835,
+              "fontWeight": "bold",
+            },
+            undefined,
+          ]
+        }
+      >
+        vs.
+      </Text>
+      <Text
+        numberOfLines={1}
+        style={
+          Array [
+            Object {
+              "color": "#ffd600",
+              "fontSize": 61.64383561643835,
+              "fontWeight": "bold",
+            },
+            undefined,
+          ]
+        }
+      >
+        Name 2
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 5,
+          "marginTop": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "bold",
+            "width": "50%",
+          }
+        }
+      >
+        Game to
+      </Text>
+      <View
+        style={
+          Object {
+            "placeholderTextColor": "#ffffff",
+            "width": "30%",
+          }
+        }
+      >
+        <View
+          pointerEvents="none"
+          style={
+            Array [
+              Object {
+                "bottom": 0,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 6,
+              },
+              Object {
+                "backgroundColor": "#303030",
+                "borderColor": "#31adff",
+                "borderRadius": 4,
+                "borderWidth": 1,
+              },
+            ]
+          }
+          testID="text-input-outline"
+        />
+        <View>
+          <View
+            style={
+              Array [
+                Object {
+                  "paddingBottom": 0,
+                },
+                Object {
+                  "minHeight": 64,
+                  "paddingTop": 8,
+                },
+              ]
+            }
+          >
+            <TextInput
+              editable={true}
+              keyboardType="number-pad"
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="Game to"
+              placeholderTextColor="#ffffff"
+              selectionColor="#ffd600"
+              style={
+                Array [
+                  Object {
+                    "flexGrow": 1,
+                    "margin": 0,
+                    "paddingHorizontal": 14,
+                    "zIndex": 1,
+                  },
+                  Object {
+                    "height": 56,
+                  },
+                  Object {
+                    "paddingBottom": 0,
+                    "paddingTop": 0,
+                  },
+                  Object {
+                    "color": "#ffd600",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {},
+                  ],
+                ]
+              }
+              testID="text-input-outlined"
+              underlineColorAndroid="transparent"
+              value="15"
+            />
+          </View>
+        </View>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#ababab",
+            "fontSize": 30.821917808219176,
+            "fontWeight": "bold",
+            "marginLeft": 10,
+          }
+        }
+      >
+        points
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 5,
+          "marginTop": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "bold",
+            "width": "50%",
+          }
+        }
+      >
+        Half at
+      </Text>
+      <View
+        style={
+          Object {
+            "placeholderTextColor": "#ffffff",
+            "width": "30%",
+          }
+        }
+      >
+        <View
+          pointerEvents="none"
+          style={
+            Array [
+              Object {
+                "bottom": 0,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 6,
+              },
+              Object {
+                "backgroundColor": "#303030",
+                "borderColor": "#31adff",
+                "borderRadius": 4,
+                "borderWidth": 1,
+              },
+            ]
+          }
+          testID="text-input-outline"
+        />
+        <View>
+          <View
+            style={
+              Array [
+                Object {
+                  "paddingBottom": 0,
+                },
+                Object {
+                  "minHeight": 64,
+                  "paddingTop": 8,
+                },
+              ]
+            }
+          >
+            <TextInput
+              editable={true}
+              keyboardType="number-pad"
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="Half at"
+              placeholderTextColor="#ffffff"
+              selectionColor="#ffd600"
+              style={
+                Array [
+                  Object {
+                    "flexGrow": 1,
+                    "margin": 0,
+                    "paddingHorizontal": 14,
+                    "zIndex": 1,
+                  },
+                  Object {
+                    "height": 56,
+                  },
+                  Object {
+                    "paddingBottom": 0,
+                    "paddingTop": 0,
+                  },
+                  Object {
+                    "color": "#ffd600",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {},
+                  ],
+                ]
+              }
+              testID="text-input-outlined"
+              underlineColorAndroid="transparent"
+              value="8"
+            />
+          </View>
+        </View>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#ababab",
+            "fontSize": 30.821917808219176,
+            "fontWeight": "bold",
+            "marginLeft": 10,
+          }
+        }
+      >
+        points
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 5,
+          "marginTop": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "bold",
+            "width": "50%",
+          }
+        }
+      >
+        Soft cap
+      </Text>
+      <View
+        style={
+          Object {
+            "placeholderTextColor": "#ffffff",
+            "width": "30%",
+          }
+        }
+      >
+        <View
+          pointerEvents="none"
+          style={
+            Array [
+              Object {
+                "bottom": 0,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 6,
+              },
+              Object {
+                "backgroundColor": "#303030",
+                "borderColor": "#31adff",
+                "borderRadius": 4,
+                "borderWidth": 1,
+              },
+            ]
+          }
+          testID="text-input-outline"
+        />
+        <View>
+          <View
+            style={
+              Array [
+                Object {
+                  "paddingBottom": 0,
+                },
+                Object {
+                  "minHeight": 64,
+                  "paddingTop": 8,
+                },
+              ]
+            }
+          >
+            <TextInput
+              editable={true}
+              keyboardType="number-pad"
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="Soft cap"
+              placeholderTextColor="#ffffff"
+              selectionColor="#ffd600"
+              style={
+                Array [
+                  Object {
+                    "flexGrow": 1,
+                    "margin": 0,
+                    "paddingHorizontal": 14,
+                    "zIndex": 1,
+                  },
+                  Object {
+                    "height": 56,
+                  },
+                  Object {
+                    "paddingBottom": 0,
+                    "paddingTop": 0,
+                  },
+                  Object {
+                    "color": "#ffd600",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {},
+                  ],
+                ]
+              }
+              testID="text-input-outlined"
+              underlineColorAndroid="transparent"
+              value="75"
+            />
+          </View>
+        </View>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#ababab",
+            "fontSize": 30.821917808219176,
+            "fontWeight": "bold",
+            "marginLeft": 10,
+          }
+        }
+      >
+        minutes
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 5,
+          "marginTop": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "bold",
+            "width": "50%",
+          }
+        }
+      >
+        Hard cap
+      </Text>
+      <View
+        style={
+          Object {
+            "placeholderTextColor": "#ffffff",
+            "width": "30%",
+          }
+        }
+      >
+        <View
+          pointerEvents="none"
+          style={
+            Array [
+              Object {
+                "bottom": 0,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 6,
+              },
+              Object {
+                "backgroundColor": "#303030",
+                "borderColor": "#31adff",
+                "borderRadius": 4,
+                "borderWidth": 1,
+              },
+            ]
+          }
+          testID="text-input-outline"
+        />
+        <View>
+          <View
+            style={
+              Array [
+                Object {
+                  "paddingBottom": 0,
+                },
+                Object {
+                  "minHeight": 64,
+                  "paddingTop": 8,
+                },
+              ]
+            }
+          >
+            <TextInput
+              editable={true}
+              keyboardType="number-pad"
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="Hard cap"
+              placeholderTextColor="#ffffff"
+              selectionColor="#ffd600"
+              style={
+                Array [
+                  Object {
+                    "flexGrow": 1,
+                    "margin": 0,
+                    "paddingHorizontal": 14,
+                    "zIndex": 1,
+                  },
+                  Object {
+                    "height": 56,
+                  },
+                  Object {
+                    "paddingBottom": 0,
+                    "paddingTop": 0,
+                  },
+                  Object {
+                    "color": "#ffd600",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {},
+                  ],
+                ]
+              }
+              testID="text-input-outlined"
+              underlineColorAndroid="transparent"
+              value="90"
+            />
+          </View>
+        </View>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#ababab",
+            "fontSize": 30.821917808219176,
+            "fontWeight": "bold",
+            "marginLeft": 10,
+          }
+        }
+      >
+        points
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 5,
+          "marginTop": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "bold",
+            "width": "50%",
+          }
+        }
+      >
+        Players
+      </Text>
+      <View
+        style={
+          Object {
+            "placeholderTextColor": "#ffffff",
+            "width": "30%",
+          }
+        }
+      >
+        <View
+          pointerEvents="none"
+          style={
+            Array [
+              Object {
+                "bottom": 0,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 6,
+              },
+              Object {
+                "backgroundColor": "#303030",
+                "borderColor": "#31adff",
+                "borderRadius": 4,
+                "borderWidth": 1,
+              },
+            ]
+          }
+          testID="text-input-outline"
+        />
+        <View>
+          <View
+            style={
+              Array [
+                Object {
+                  "paddingBottom": 0,
+                },
+                Object {
+                  "minHeight": 64,
+                  "paddingTop": 8,
+                },
+              ]
+            }
+          >
+            <TextInput
+              editable={true}
+              keyboardType="number-pad"
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="Players"
+              placeholderTextColor="#ffffff"
+              selectionColor="#ffd600"
+              style={
+                Array [
+                  Object {
+                    "flexGrow": 1,
+                    "margin": 0,
+                    "paddingHorizontal": 14,
+                    "zIndex": 1,
+                  },
+                  Object {
+                    "height": 56,
+                  },
+                  Object {
+                    "paddingBottom": 0,
+                    "paddingTop": 0,
+                  },
+                  Object {
+                    "color": "#ffd600",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {},
+                  ],
+                ]
+              }
+              testID="text-input-outlined"
+              underlineColorAndroid="transparent"
+              value="7"
+            />
+          </View>
+        </View>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#ababab",
+            "fontSize": 30.821917808219176,
+            "fontWeight": "bold",
+            "marginLeft": 10,
+          }
+        }
+      >
+        per point
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 5,
+          "marginTop": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "bold",
+            "width": "50%",
+          }
+        }
+      >
+        Timeouts
+      </Text>
+      <View
+        style={
+          Object {
+            "placeholderTextColor": "#ffffff",
+            "width": "30%",
+          }
+        }
+      >
+        <View
+          pointerEvents="none"
+          style={
+            Array [
+              Object {
+                "bottom": 0,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 6,
+              },
+              Object {
+                "backgroundColor": "#303030",
+                "borderColor": "#31adff",
+                "borderRadius": 4,
+                "borderWidth": 1,
+              },
+            ]
+          }
+          testID="text-input-outline"
+        />
+        <View>
+          <View
+            style={
+              Array [
+                Object {
+                  "paddingBottom": 0,
+                },
+                Object {
+                  "minHeight": 64,
+                  "paddingTop": 8,
+                },
+              ]
+            }
+          >
+            <TextInput
+              editable={true}
+              keyboardType="number-pad"
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="Timeouts"
+              placeholderTextColor="#ffffff"
+              selectionColor="#ffd600"
+              style={
+                Array [
+                  Object {
+                    "flexGrow": 1,
+                    "margin": 0,
+                    "paddingHorizontal": 14,
+                    "zIndex": 1,
+                  },
+                  Object {
+                    "height": 56,
+                  },
+                  Object {
+                    "paddingBottom": 0,
+                    "paddingTop": 0,
+                  },
+                  Object {
+                    "color": "#ffd600",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  Array [
+                    Object {},
+                  ],
+                ]
+              }
+              testID="text-input-outlined"
+              underlineColorAndroid="transparent"
+              value="1"
+            />
+          </View>
+        </View>
+      </View>
+      <Text
+        style={
+          Object {
+            "color": "#ababab",
+            "fontSize": 30.821917808219176,
+            "fontWeight": "bold",
+            "marginLeft": 10,
+          }
+        }
+      >
+        per half
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 5,
+          "marginTop": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "bold",
+            "width": "50%",
+          }
+        }
+      >
+        Floater timeout
+      </Text>
+      <RCTSwitch
+        accessibilityRole="switch"
+        onChange={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        onTintColor="#31adff"
+        style={
+          Object {
+            "height": 31,
+            "width": 51,
+          }
+        }
+        thumbTintColor="#ffd600"
+        tintColor="#ababab"
+        value={true}
+      />
+    </View>
+    <View
+      collapsable={false}
+      style={
+        Object {
+          "backgroundColor": "#ffd600",
+          "borderColor": "transparent",
+          "borderRadius": 4,
+          "borderStyle": "solid",
+          "borderWidth": 0,
+          "elevation": 2,
+          "minWidth": "auto",
+          "shadowColor": "#000000",
+          "shadowOffset": Object {
+            "height": 0.75,
+            "width": 0,
+          },
+          "shadowOpacity": 0.24,
+          "shadowRadius": 1.5,
+        }
+      }
+    >
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": false,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Object {
+              "borderRadius": 4,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            numberOfLines={1}
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "#000000",
+                  "fontFamily": "System",
+                  "fontWeight": "400",
+                },
+                Object {
+                  "textAlign": "left",
+                },
+                Array [
+                  Object {
+                    "letterSpacing": 1,
+                    "marginHorizontal": 16,
+                    "marginVertical": 9,
+                    "textAlign": "center",
+                  },
+                  Object {
+                    "marginHorizontal": 8,
+                  },
+                  Object {
+                    "textTransform": "uppercase",
+                  },
+                  Object {
+                    "color": "#000000",
+                    "fontFamily": "System",
+                    "fontWeight": "500",
+                  },
+                  Object {
+                    "fontFamily": "System",
+                    "fontWeight": "500",
+                  },
+                  undefined,
+                ],
+              ]
+            }
+          >
+            start
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</RCTSafeAreaView>
+`;

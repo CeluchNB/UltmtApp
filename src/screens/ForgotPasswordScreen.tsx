@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as constants from '../utils/constants'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
@@ -8,16 +7,14 @@ import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
 import { requestPasswordRecovery } from '../services/data/user'
 import { size } from '../theme/fonts'
-import { useColors } from '../hooks'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
+import { useColors, useLazyData } from '../hooks'
 
 const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
     const { colors } = useColors()
-    const [loading, setLoading] = React.useState(false)
     const [success, setSuccess] = React.useState(false)
-    const [error, setError] = React.useState('')
 
     const {
         control,
@@ -30,18 +27,13 @@ const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
         },
     })
 
+    const { loading, fetch, error } = useLazyData(requestPasswordRecovery)
+
     const submitRequest = async (data: { email: string }) => {
         setSuccess(false)
-        setError('')
-        try {
-            setLoading(true)
-            await requestPasswordRecovery(data.email)
-            reset({ email: '' })
-            setSuccess(true)
-        } catch (e: any) {
-            setError(e.message ?? constants.UNABLE_TO_EMAIL)
-        }
-        setLoading(false)
+        await fetch(data.email)
+        reset({ email: '' })
+        setSuccess(true)
     }
 
     const styles = StyleSheet.create({
@@ -104,8 +96,8 @@ const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
             {errors.email && (
                 <Text style={styles.error}>{errors.email.message}</Text>
             )}
-            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
-            {success && (
+            {error && <Text style={styles.error}>{error.message}</Text>}
+            {!error && success && (
                 <Text style={styles.success}>
                     Check your inbox for a recovery code!
                 </Text>

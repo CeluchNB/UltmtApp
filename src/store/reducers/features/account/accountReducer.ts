@@ -5,6 +5,7 @@ import { RootState } from '../../../store'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export interface AccountSlice {
+    _id: string
     firstName: string
     lastName: string
     email: string
@@ -23,6 +24,7 @@ export interface AccountSlice {
 }
 
 const initialState: AccountSlice = {
+    _id: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -49,6 +51,7 @@ const accountSlice = createSlice({
         },
         setProfile(state, action) {
             const {
+                _id,
                 firstName,
                 lastName,
                 email,
@@ -61,6 +64,7 @@ const accountSlice = createSlice({
                 privateProfile,
             } = action.payload
 
+            state._id = _id
             state.firstName = firstName
             state.lastName = lastName
             state.email = email
@@ -92,6 +96,7 @@ const accountSlice = createSlice({
             .addCase(fetchProfile.fulfilled, (state, action) => {
                 state.fetchProfileLoading = false
                 const {
+                    _id,
                     firstName,
                     lastName,
                     email,
@@ -102,6 +107,7 @@ const accountSlice = createSlice({
                     requests,
                 } = action.payload
 
+                state._id = _id
                 state.firstName = firstName
                 state.lastName = lastName
                 state.email = email

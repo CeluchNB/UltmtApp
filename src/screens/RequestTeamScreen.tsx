@@ -3,10 +3,10 @@ import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
 import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import SearchBar from '../components/atoms/SearchBar'
 import SearchResultItem from '../components/atoms/SearchResultItem'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import { Team } from '../types/team'
-import { TextInput } from 'react-native-paper'
 import { addRequest } from '../store/reducers/features/account/accountReducer'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
@@ -29,7 +29,7 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             return
         }
         try {
-            const teamsResponse = await TeamData.searchTeam(text)
+            const teamsResponse = await TeamData.searchTeam(text, true)
             setTeams(teamsResponse)
         } catch (e: any) {
             setSearchError(e.message ?? 'No search results from this query.')
@@ -64,11 +64,7 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
             alignSelf: 'center',
         },
         input: {
-            backgroundColor: colors.primary,
-            color: colors.textPrimary,
             width: '75%',
-            alignSelf: 'center',
-            marginBottom: 5,
         },
         error: {
             width: '75%',
@@ -85,18 +81,9 @@ const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
     return (
         <View style={styles.screen}>
             <ScreenTitle style={styles.title} title="Request Team" />
-            <TextInput
-                mode="flat"
-                style={[styles.input]}
-                underlineColor={colors.textPrimary}
-                activeUnderlineColor={colors.textPrimary}
-                placeholderTextColor={colors.gray}
+            <SearchBar
+                style={styles.input}
                 onChangeText={search}
-                theme={{
-                    colors: {
-                        text: colors.textPrimary,
-                    },
-                }}
                 placeholder="Search teams..."
             />
             <SecondaryButton

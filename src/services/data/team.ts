@@ -38,13 +38,17 @@ export const createTeam = async (data: CreateTeam): Promise<Team> => {
  * @returns list of teams matching term
  * @throws error if backend returns an error
  */
-export const searchTeam = async (term: string): Promise<Team[]> => {
+export const searchTeam = async (
+    term: string,
+    rosterOpen?: boolean,
+): Promise<Team[]> => {
     try {
         if (term.length < 3) {
             throw new ApiError('Not enough characters to search.')
         }
-        const response = await networkSearchTeam(term)
-        return response.data
+        const response = await networkSearchTeam(term, rosterOpen)
+        const { teams } = response.data
+        return teams
     } catch (error) {
         return throwApiError(error, Constants.SEARCH_ERROR)
     }

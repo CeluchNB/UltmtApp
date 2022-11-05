@@ -52,3 +52,14 @@ export const getFormFieldRules = (
 export const capitalizeFirstLetter = (value: string) => {
     return value.charAt(0).toUpperCase() + value.substring(1)
 }
+
+export const parseLiveValue = (value: string): boolean | undefined => {
+    switch (value) {
+        case 'true':
+            return true
+        case 'false':
+            return false
+        default:
+            return undefined
+    }
+}

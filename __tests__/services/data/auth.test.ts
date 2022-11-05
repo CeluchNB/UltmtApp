@@ -198,6 +198,9 @@ describe('should handle with token wrapper', () => {
                     statusText: 'Unauth',
                     headers: {},
                     config: {},
+                    toJSON: () => {
+                        return { status: 401 }
+                    },
                 }),
             )
             .mockReturnValueOnce(

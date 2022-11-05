@@ -29,6 +29,7 @@ const TabNavigator: React.FC<TopLevelProps> = ({ navigation }) => {
         <Tab.Navigator
             activeColor={colors.textPrimary}
             inactiveColor={colors.gray}
+            initialRouteName="Games"
             barStyle={{ backgroundColor: colors.darkPrimary }}>
             <Tab.Screen
                 name="Account"

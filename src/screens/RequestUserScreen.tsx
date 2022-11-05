@@ -3,18 +3,19 @@ import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
 import BulkCodeModal from '../components/molecules/BulkCodeModal'
 import { DisplayUser } from '../types/user'
+import { IconButton } from 'react-native-paper'
 import { RequestType } from '../types/request'
 import { RequestUserProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import SearchBar from '../components/atoms/SearchBar'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
 import { searchUsers } from '../services/data/user'
 import { selectTeam } from '../store/reducers/features/team/managedTeamReducer'
-import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import { IconButton, TextInput } from 'react-native-paper'
 import { size, weight } from '../theme/fonts'
+import { useColors, useLazyData } from '../hooks'
 
 const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const { type } = route.params
@@ -28,10 +29,14 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     const [selectedId, setSelectedId] = React.useState('')
     const [error, setError] = React.useState('')
     const [searchError, setSearchError] = React.useState('')
-    const [bulkCodeLoading, setBulkCodeLoading] = React.useState(false)
     const [displayCodeModal, setDisplayCodeModal] = React.useState(false)
-    const [bulkJoinCode, setBulkJoinCode] = React.useState('')
-    const [bulkJoinError, setBulkJoinError] = React.useState('')
+
+    const {
+        loading: bulkCodeLoading,
+        data: bulkJoinCode,
+        error: bulkJoinError,
+        fetch: fetchCode,
+    } = useLazyData<string>(TeamData.createBulkJoinCode)
 
     const search = async (term: string) => {
         setError('')
@@ -75,21 +80,8 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
     }
 
     const requestBulkCode = async () => {
-        try {
-            setBulkJoinCode('')
-            setBulkJoinError('')
-            setBulkCodeLoading(true)
-            const code = await TeamData.createBulkJoinCode(team?._id || '')
-            setBulkJoinCode(code)
-        } catch (e: any) {
-            setBulkJoinError(
-                e.message ??
-                    'Cannot create a code right now. Please try again later.',
-            )
-        } finally {
-            setDisplayCodeModal(true)
-            setBulkCodeLoading(false)
-        }
+        await fetchCode(team?._id || '')
+        setDisplayCodeModal(true)
     }
 
     const styles = StyleSheet.create({
@@ -101,11 +93,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
             alignSelf: 'center',
         },
         input: {
-            backgroundColor: colors.primary,
-            color: colors.textPrimary,
             width: '75%',
-            alignSelf: 'center',
-            marginBottom: 5,
         },
         error: {
             color: colors.gray,
@@ -150,7 +138,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                     type === RequestType.PLAYER ? 'Players' : 'Managers'
                 }`}
             />
-            <TextInput
+            {/* <TextInput
                 mode="flat"
                 style={[styles.input]}
                 underlineColor={colors.textPrimary}
@@ -165,6 +153,13 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                 placeholder={`Search ${
                     type === RequestType.PLAYER ? 'players' : 'managers'
                 }...`}
+            /> */}
+            <SearchBar
+                placeholder={`Search ${
+                    type === RequestType.PLAYER ? 'players' : 'managers'
+                }...`}
+                style={styles.input}
+                onChangeText={search}
             />
             <SecondaryButton
                 style={styles.bulkCodeButton}
@@ -178,8 +173,8 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                 <Text style={styles.error}>{searchError}</Text>
             )}
             <BulkCodeModal
-                code={bulkJoinCode}
-                error={bulkJoinError}
+                code={bulkJoinCode || ''}
+                error={bulkJoinError?.message || ''}
                 visible={displayCodeModal}
                 onClose={() => {
                     setDisplayCodeModal(false)

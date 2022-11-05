@@ -12,10 +12,12 @@ import { act, fireEvent, render } from '@testing-library/react-native'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const goBack = jest.fn()
+const navigate = jest.fn()
 
 const props: Props = {
     navigation: {
         goBack,
+        navigate,
     } as any,
     route: {} as any,
 }
@@ -40,6 +42,7 @@ it('should match snapshot with open requests', async () => {
     const pendingReqProps: Props = {
         navigation: {
             goBack,
+            navigate,
         } as any,
         route: {} as any,
     }
@@ -81,13 +84,15 @@ it('should handle successful rollover', async () => {
         currentYear.toString(),
         currentYear.toString(),
     )
-    expect(goBack).toHaveBeenCalled()
+    expect(navigate).toHaveBeenCalled()
 })
 
 it('should handle rollover error', async () => {
     const spy = jest
         .spyOn(TeamData, 'rollover')
-        .mockReturnValueOnce(Promise.reject({}))
+        .mockReturnValueOnce(
+            Promise.reject({ message: 'Unable to rollover team' }),
+        )
 
     const { getByText } = render(
         <Provider store={store}>

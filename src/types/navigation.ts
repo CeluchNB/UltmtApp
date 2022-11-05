@@ -1,6 +1,7 @@
 import { DisplayUser } from './user'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RequestType } from './request'
+import { DisplayTeam, GuestTeam } from './team'
 
 export enum SecureEditField {
     EMAIL,
@@ -9,6 +10,7 @@ export enum SecureEditField {
 
 export type TopLevelParamList = {
     Tabs: undefined
+    GameCreationFlow: { screen: string }
     SettingsScreen: undefined
     SecureEditScreen: { title: string; value: string; field: SecureEditField }
 }
@@ -38,11 +40,15 @@ export type AccountStackParamList = {
 }
 
 export type GameStackParamList = {
-    GameSearch: undefined
+    GameHome: undefined
+    GameSearch: { live: string }
+    CreateGame: { teamOne: DisplayTeam; teamTwo: GuestTeam }
+    SelectMyTeam: undefined
+    SelectOpponent: { initialValue?: string; teamOne: DisplayTeam }
 }
 
 export type AllScreenProps = NativeStackScreenProps<
-    AccountStackParamList & TopLevelParamList,
+    AccountStackParamList & TopLevelParamList & GameStackParamList,
     'Tabs'
 >
 
@@ -80,4 +86,19 @@ export type PublicUserDetailsProps = NativeStackScreenProps<
 export type RequestUserProps = NativeStackScreenProps<
     AccountStackParamList,
     'RequestUser'
+>
+
+export type GameSearchProps = NativeStackScreenProps<
+    GameStackParamList,
+    'GameSearch'
+>
+
+export type CreateGameProps = NativeStackScreenProps<
+    GameStackParamList,
+    'CreateGame'
+>
+
+export type SelectOpponentProps = NativeStackScreenProps<
+    GameStackParamList,
+    'SelectOpponent'
 >
