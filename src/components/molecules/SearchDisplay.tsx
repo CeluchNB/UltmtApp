@@ -29,7 +29,12 @@ const SearchDisplay = <R,>(props: SearchDisplayProps<R>) => {
                 value={value}
                 width="100%"
             />
-            {loading && <ActivityIndicator color={colors.textPrimary} />}
+            {loading && (
+                <ActivityIndicator
+                    color={colors.textPrimary}
+                    testID="search-indicator"
+                />
+            )}
             {data && <FlatList data={data} renderItem={renderItem} />}
         </View>
     )

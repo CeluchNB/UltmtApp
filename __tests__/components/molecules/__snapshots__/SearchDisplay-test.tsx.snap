@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<View>
+  <View
+    style={
+      Object {
+        "alignSelf": "center",
+        "display": "flex",
+        "flexDirection": "row",
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "backgroundColor": "rgb(231, 231, 231)",
+            "borderTopLeftRadius": 4,
+            "borderTopRightRadius": 4,
+          },
+          Object {
+            "backgroundColor": "#303030",
+            "color": "#ffd600",
+            "flex": 1,
+            "marginBottom": 5,
+          },
+        ]
+      }
+    >
+      <View
+        collapsable={false}
+        style={
+          Object {
+            "backgroundColor": "#ffd600",
+            "bottom": 0,
+            "height": 2,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "transform": Array [
+              Object {
+                "scaleY": 0.5,
+              },
+            ],
+            "zIndex": 1,
+          }
+        }
+      />
+      <View
+        style={
+          Array [
+            Object {
+              "paddingBottom": 0,
+              "paddingTop": 0,
+            },
+            Object {
+              "minHeight": 64,
+            },
+          ]
+        }
+      >
+        <TextInput
+          editable={true}
+          focusable={true}
+          multiline={false}
+          onBlur={[Function]}
+          onChangeText={[Function]}
+          onFocus={[Function]}
+          onPressOut={[Function]}
+          placeholder="Search teams..."
+          placeholderTextColor="#ababab"
+          selectionColor="#ffd600"
+          style={
+            Array [
+              Object {
+                "flexGrow": 1,
+                "margin": 0,
+              },
+              Object {
+                "paddingLeft": 12,
+                "paddingRight": 12,
+              },
+              Object {
+                "height": 64,
+              },
+              Object {
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              },
+              Object {
+                "color": "#ffd600",
+                "fontFamily": "System",
+                "fontSize": 41.0958904109589,
+                "fontWeight": undefined,
+                "textAlign": "left",
+                "textAlignVertical": "center",
+              },
+              false,
+              Array [
+                Object {},
+              ],
+            ]
+          }
+          underlineColorAndroid="transparent"
+          value="test"
+        />
+      </View>
+    </View>
+  </View>
+</View>
+`;

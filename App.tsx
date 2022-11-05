@@ -16,6 +16,7 @@ const App: React.FC<{}> = () => {
     return (
         <NavigationContainer>
             <QueryClientProvider client={queryClient}>
+                {/* Settings Screen exists here for dark mode purposes */}
                 <Stack.Navigator
                     initialRouteName={'Tabs'}
                     screenOptions={{ headerShown: false }}>
