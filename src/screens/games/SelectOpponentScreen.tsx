@@ -29,6 +29,7 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
         <BaseScreen containerWidth="80%">
             <View style={styles.searchContainer}>
                 <SearchDisplay
+                    placeholder="Search teams..."
                     value={searchText}
                     search={searchTeam}
                     renderItem={({ item }) => {
@@ -47,7 +48,7 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
                 />
             </View>
             <PrimaryButton
-                text="Continue with Guest Team"
+                text="continue with guest team"
                 onPress={async () => {
                     if (searchText) {
                         onSelect({ name: searchText })

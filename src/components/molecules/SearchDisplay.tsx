@@ -5,6 +5,7 @@ import { useLazyData } from '../../hooks'
 import { ActivityIndicator, FlatList, ListRenderItem, View } from 'react-native'
 
 interface SearchDisplayProps<T> {
+    placeholder: string
     value?: string
     search: (q: string) => Promise<T[]>
     renderItem: ListRenderItem<T>
@@ -12,7 +13,7 @@ interface SearchDisplayProps<T> {
 }
 
 const SearchDisplay = <R,>(props: SearchDisplayProps<R>) => {
-    const { value, search, renderItem, onChangeText } = props
+    const { placeholder, value, search, renderItem, onChangeText } = props
     const { colors } = useColors()
     const { data, loading, fetch } = useLazyData(search)
 
@@ -24,7 +25,7 @@ const SearchDisplay = <R,>(props: SearchDisplayProps<R>) => {
     return (
         <View>
             <SearchBar
-                placeholder="Search teams..."
+                placeholder={placeholder}
                 onChangeText={onSearch}
                 value={value}
                 width="100%"

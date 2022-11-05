@@ -12,6 +12,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 it('should match snapshot', () => {
     const snapshot = render(
         <SearchDisplay
+            placeholder="Search teams..."
             value="test"
             search={jest.fn()}
             renderItem={jest.fn()}
@@ -33,6 +34,7 @@ it('should handle search', async () => {
 
     const { getByPlaceholderText, getByText, getByTestId } = render(
         <SearchDisplay
+            placeholder="Search teams..."
             search={searchFn}
             renderItem={renderFn}
             onChangeText={onChangeFn}
