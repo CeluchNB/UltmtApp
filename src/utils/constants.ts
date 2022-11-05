@@ -21,3 +21,5 @@ export const DELETE_USER_ERROR = 'Unable to delete your account. Please try agai
 export const JOIN_TEAM_ERROR = 'Unable to join team with this code. Please try again later.'
 export const NO_GAMES_WARNING = 'There are no games matching this criteria right now.'
 export const CREATE_GAME_ERROR = 'Unable to create game. Please try again.'
+export const MANAGE_TO_CREATE = 'Manage a team to create a game.'
+export const AUTH_TO_CREATE = 'Log in to create a game.'

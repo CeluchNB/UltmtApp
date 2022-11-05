@@ -21,6 +21,7 @@ import {
     View,
 } from 'react-native'
 import {
+    resetState,
     selectAccount,
     selectPlayerTeams,
     setProfile,
@@ -65,6 +66,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
         try {
             setLoading(true)
             await logout()
+            dispatch(resetState())
             setLoading(false)
         } catch (e: any) {
         } finally {

@@ -1,4 +1,5 @@
 import { AllScreenProps } from '../../types/navigation'
+import { FAB } from 'react-native-paper'
 import { Game } from '../../types/game'
 import GameCard from '../../components/atoms/GameCard'
 import MapSection from '../../components/molecules/MapSection'
@@ -28,6 +29,10 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
         navigation.navigate('GameSearch', { live })
     }
 
+    const navigateToCreate = () => {
+        navigation.navigate('GameCreationFlow', { screen: 'SelectMyTeam' })
+    }
+
     const liveGames = useMemo(() => {
         return data?.filter(g => g.teamOneActive)
     }, [data])
@@ -50,6 +55,14 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
             alignSelf: 'center',
             fontSize: size.fontLarge,
             color: colors.gray,
+        },
+        fab: {
+            position: 'absolute',
+            margin: 20,
+            right: 0,
+            bottom: 0,
+            borderRadius: 8,
+            backgroundColor: colors.textPrimary,
         },
     })
 
@@ -101,6 +114,7 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                     </Text>
                 )}
             </ScrollView>
+            <FAB icon="plus" style={styles.fab} onPress={navigateToCreate} />
         </SafeAreaView>
     )
 }

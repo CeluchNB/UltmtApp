@@ -1,13 +1,13 @@
-import * as GameServices from '../../src/services/data/game'
-import GameHomeScreen from '../../src/screens/games/GameHomeScreen'
+import * as GameServices from '../../../src/services/data/game'
+import GameHomeScreen from '../../../src/screens/games/GameHomeScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-import { game } from '../../fixtures/data'
+import { game } from '../../../fixtures/data'
 import { render } from '@testing-library/react-native'
-import { waitUntilRefreshComplete } from '../../fixtures/utils'
+import { waitUntilRefreshComplete } from '../../../fixtures/utils'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-jest.mock('../../src/components/atoms/GameCard', () => () => {
+jest.mock('../../../src/components/atoms/GameCard', () => () => {
     return <div>Game</div>
 })
 

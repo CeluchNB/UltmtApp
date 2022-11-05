@@ -1,9 +1,9 @@
-import * as GameServices from '../../src/services/network/game'
-import { GameSearchProps } from '../../src/types/navigation'
-import GameSearchScreen from '../../src/screens/games/GameSearchScreen'
+import * as GameServices from '../../../src/services/network/game'
+import { GameSearchProps } from '../../../src/types/navigation'
+import GameSearchScreen from '../../../src/screens/games/GameSearchScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-import { game } from '../../fixtures/data'
+import { game } from '../../../fixtures/data'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     act,
@@ -16,7 +16,7 @@ import MockDate from 'mockdate'
 MockDate.set('01 October 2022 00:00 UTC')
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-jest.mock('../../src/components/atoms/GameCard', () => () => {
+jest.mock('../../../src/components/atoms/GameCard', () => () => {
     return <div>Game</div>
 })
 
