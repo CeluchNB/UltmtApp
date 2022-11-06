@@ -9,7 +9,7 @@ export enum SecureEditField {
 }
 
 export type TopLevelParamList = {
-    Tabs: undefined
+    Tabs: { screen: string; params?: { screen?: string } }
     GameCreationFlow: { screen: string }
     SettingsScreen: undefined
     SecureEditScreen: { title: string; value: string; field: SecureEditField }

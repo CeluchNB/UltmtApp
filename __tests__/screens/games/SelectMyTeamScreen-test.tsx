@@ -16,9 +16,14 @@ import {
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const navigate = jest.fn()
+const addListener = jest.fn()
+const push = jest.fn()
+
 const props: AllScreenProps = {
     navigation: {
         navigate,
+        addListener,
+        push,
     } as any,
     route: {} as any,
 }
@@ -40,7 +45,7 @@ it('should match snapshot with unauthenticated user', async () => {
     expect(snapshot.toJSON()).toMatchSnapshot()
     expect(snapshot.getByText(Constants.AUTH_TO_CREATE)).not.toBeNull()
     fireEvent.press(snapshot.getByText('log in'))
-    expect(navigate).toHaveBeenCalledWith('Account')
+    expect(navigate).toHaveBeenCalledWith('Tabs', { screen: 'Account' })
 })
 
 it('should match snapshot without manager teams', async () => {
@@ -60,7 +65,10 @@ it('should match snapshot without manager teams', async () => {
     expect(snapshot.toJSON()).toMatchSnapshot()
     expect(snapshot.getByText(Constants.MANAGE_TO_CREATE)).not.toBeNull()
     fireEvent.press(snapshot.getByText('create team'))
-    expect(navigate).toHaveBeenCalledWith('CreateTeam')
+    expect(push).toHaveBeenCalledWith('Tabs', {
+        screen: 'Account',
+        params: { screen: 'CreateTeam' },
+    })
 })
 
 it('should match snapshot with manager teams', async () => {

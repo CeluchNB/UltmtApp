@@ -6,10 +6,9 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import TeamListItem from '../../components/atoms/TeamListItem'
+import { fetchProfile } from '../../store/reducers/features/account/accountReducer'
 import { isLoggedIn } from '../../services/data/auth'
-import { selectManagerTeams } from '../../store/reducers/features/account/accountReducer'
 import { size } from '../../theme/fonts'
-import { useSelector } from 'react-redux'
 import {
     ActivityIndicator,
     FlatList,
@@ -17,24 +16,44 @@ import {
     Text,
     View,
 } from 'react-native'
+import {
+    selectFetchProfileLoading,
+    selectManagerTeams,
+} from '../../store/reducers/features/account/accountReducer'
 import { useColors, useData } from '../../hooks'
+import { useDispatch, useSelector } from 'react-redux'
 
 const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     const { colors } = useColors()
+    const dispatch = useDispatch()
     const managerTeams = useSelector(selectManagerTeams)
+    const fetchProfileLoading = useSelector(selectFetchProfileLoading)
 
-    const { data: isAuth, loading } = useData(isLoggedIn)
+    const { data: isAuth, loading, refetch } = useData(isLoggedIn)
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            refetch()
+            if (managerTeams.length < 1) {
+                dispatch(fetchProfile())
+            }
+        })
+
+        return unsubscribe
+    })
 
     const onSelect = (teamOne: DisplayTeam) => {
         navigation.navigate('SelectOpponent', { teamOne })
     }
 
     const onCreateTeam = async () => {
-        navigation.navigate('CreateTeam')
+        navigation.push('Tabs', {
+            screen: 'Account',
+            params: { screen: 'CreateTeam' },
+        })
     }
 
     const onLogin = async () => {
-        navigation.navigate('Account')
+        navigation.navigate('Tabs', { screen: 'Account' })
     }
 
     const styles = StyleSheet.create({
@@ -53,7 +72,7 @@ const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     return (
         <BaseScreen containerWidth="80%">
             <ScreenTitle style={styles.title} title="Select My Team" />
-            {loading && (
+            {(loading || fetchProfileLoading) && (
                 <ActivityIndicator
                     color={colors.textPrimary}
                     testID="select-team-loading"
@@ -69,7 +88,7 @@ const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                     />
                 </View>
             )}
-            {managerTeams.length < 1 && isAuth && (
+            {managerTeams.length < 1 && isAuth && !fetchProfileLoading && (
                 <View>
                     <Text style={styles.error}>
                         {Constants.MANAGE_TO_CREATE}

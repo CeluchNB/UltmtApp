@@ -12,7 +12,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
 const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
-    const hasCheckedLocalToken = React.useRef(false)
+    // const hasCheckedLocalToken = React.useRef(false)
     const dispatch = useDispatch()
     const { colors } = useColors()
     const [loading, setLoading] = React.useState(false)
@@ -52,7 +52,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
     }
 
     React.useEffect(() => {
-        if (!hasCheckedLocalToken.current) {
+        const unsubscribe = navigation.addListener('focus', () => {
             AuthData.isLoggedIn()
                 .then(loggedIn => {
                     if (loggedIn) {
@@ -66,7 +66,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                     // No error handling here, user just needs
                     // to sign in
                 })
-        }
+        })
+        return unsubscribe
     }, [dispatch, navigation])
 
     const styles = StyleSheet.create({
