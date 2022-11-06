@@ -8,6 +8,7 @@ const props = {
     label: 'Test field',
     value: '',
     unit: 'players',
+    error: 'test error',
     onChange,
 }
 beforeEach(() => {

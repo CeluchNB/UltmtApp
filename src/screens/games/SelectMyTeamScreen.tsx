@@ -34,7 +34,7 @@ const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     }
 
     const onLogin = async () => {
-        navigation.navigate('Login')
+        navigation.navigate('Account')
     }
 
     const styles = StyleSheet.create({

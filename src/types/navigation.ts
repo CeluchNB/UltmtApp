@@ -15,6 +15,11 @@ export type TopLevelParamList = {
     SecureEditScreen: { title: string; value: string; field: SecureEditField }
 }
 
+export type TabParamList = {
+    Account: undefined
+    Games: undefined
+}
+
 export type AccountStackParamList = {
     Login: undefined
     Profile: undefined
@@ -42,13 +47,20 @@ export type AccountStackParamList = {
 export type GameStackParamList = {
     GameHome: undefined
     GameSearch: { live: string }
+}
+
+export type GameCreationParamList = {
     CreateGame: { teamOne: DisplayTeam; teamTwo: GuestTeam }
     SelectMyTeam: undefined
     SelectOpponent: { initialValue?: string; teamOne: DisplayTeam }
 }
 
 export type AllScreenProps = NativeStackScreenProps<
-    AccountStackParamList & TopLevelParamList & GameStackParamList,
+    TopLevelParamList &
+        TabParamList &
+        AccountStackParamList &
+        GameStackParamList &
+        GameCreationParamList,
     'Tabs'
 >
 
@@ -94,11 +106,11 @@ export type GameSearchProps = NativeStackScreenProps<
 >
 
 export type CreateGameProps = NativeStackScreenProps<
-    GameStackParamList,
+    GameCreationParamList,
     'CreateGame'
 >
 
 export type SelectOpponentProps = NativeStackScreenProps<
-    GameStackParamList,
+    GameCreationParamList,
     'SelectOpponent'
 >

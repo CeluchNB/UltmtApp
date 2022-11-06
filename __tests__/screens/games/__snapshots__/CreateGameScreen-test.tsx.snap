@@ -91,89 +91,96 @@ exports[`should match snapshot 1`] = `
       <View
         style={
           Object {
-            "placeholderTextColor": "#ffffff",
             "width": "30%",
           }
         }
       >
         <View
-          pointerEvents="none"
           style={
-            Array [
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 6,
-              },
-              Object {
-                "backgroundColor": "#303030",
-                "borderColor": "#31adff",
-                "borderRadius": 4,
-                "borderWidth": 1,
-              },
-            ]
+            Object {
+              "placeholderTextColor": "#ffffff",
+            }
           }
-          testID="text-input-outline"
-        />
-        <View>
+        >
           <View
+            pointerEvents="none"
             style={
               Array [
                 Object {
-                  "paddingBottom": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 6,
                 },
                 Object {
-                  "minHeight": 64,
-                  "paddingTop": 8,
+                  "backgroundColor": "#303030",
+                  "borderColor": "#31adff",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
                 },
               ]
             }
-          >
-            <TextInput
-              editable={true}
-              keyboardType="number-pad"
-              multiline={false}
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="Game to"
-              placeholderTextColor="#ffffff"
-              selectionColor="#ffd600"
+            testID="text-input-outline"
+          />
+          <View>
+            <View
               style={
                 Array [
                   Object {
-                    "flexGrow": 1,
-                    "margin": 0,
-                    "paddingHorizontal": 14,
-                    "zIndex": 1,
-                  },
-                  Object {
-                    "height": 56,
-                  },
-                  Object {
                     "paddingBottom": 0,
-                    "paddingTop": 0,
                   },
                   Object {
-                    "color": "#ffd600",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": undefined,
-                    "textAlign": "left",
-                    "textAlignVertical": "center",
+                    "minHeight": 64,
+                    "paddingTop": 8,
                   },
-                  false,
-                  Array [
-                    Object {},
-                  ],
                 ]
               }
-              testID="text-input-outlined"
-              underlineColorAndroid="transparent"
-              value="15"
-            />
+            >
+              <TextInput
+                editable={true}
+                keyboardType="number-pad"
+                multiline={false}
+                onBlur={[Function]}
+                onChangeText={[Function]}
+                onFocus={[Function]}
+                placeholder="Game to"
+                placeholderTextColor="#ffffff"
+                selectionColor="#ffd600"
+                style={
+                  Array [
+                    Object {
+                      "flexGrow": 1,
+                      "margin": 0,
+                      "paddingHorizontal": 14,
+                      "zIndex": 1,
+                    },
+                    Object {
+                      "height": 56,
+                    },
+                    Object {
+                      "paddingBottom": 0,
+                      "paddingTop": 0,
+                    },
+                    Object {
+                      "color": "#ffd600",
+                      "fontFamily": "System",
+                      "fontSize": 16,
+                      "fontWeight": undefined,
+                      "textAlign": "left",
+                      "textAlignVertical": "center",
+                    },
+                    false,
+                    Array [
+                      Object {},
+                    ],
+                  ]
+                }
+                testID="text-input-outlined"
+                underlineColorAndroid="transparent"
+                value="15"
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -216,89 +223,96 @@ exports[`should match snapshot 1`] = `
       <View
         style={
           Object {
-            "placeholderTextColor": "#ffffff",
             "width": "30%",
           }
         }
       >
         <View
-          pointerEvents="none"
           style={
-            Array [
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 6,
-              },
-              Object {
-                "backgroundColor": "#303030",
-                "borderColor": "#31adff",
-                "borderRadius": 4,
-                "borderWidth": 1,
-              },
-            ]
+            Object {
+              "placeholderTextColor": "#ffffff",
+            }
           }
-          testID="text-input-outline"
-        />
-        <View>
+        >
           <View
+            pointerEvents="none"
             style={
               Array [
                 Object {
-                  "paddingBottom": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 6,
                 },
                 Object {
-                  "minHeight": 64,
-                  "paddingTop": 8,
+                  "backgroundColor": "#303030",
+                  "borderColor": "#31adff",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
                 },
               ]
             }
-          >
-            <TextInput
-              editable={true}
-              keyboardType="number-pad"
-              multiline={false}
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="Half at"
-              placeholderTextColor="#ffffff"
-              selectionColor="#ffd600"
+            testID="text-input-outline"
+          />
+          <View>
+            <View
               style={
                 Array [
                   Object {
-                    "flexGrow": 1,
-                    "margin": 0,
-                    "paddingHorizontal": 14,
-                    "zIndex": 1,
-                  },
-                  Object {
-                    "height": 56,
-                  },
-                  Object {
                     "paddingBottom": 0,
-                    "paddingTop": 0,
                   },
                   Object {
-                    "color": "#ffd600",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": undefined,
-                    "textAlign": "left",
-                    "textAlignVertical": "center",
+                    "minHeight": 64,
+                    "paddingTop": 8,
                   },
-                  false,
-                  Array [
-                    Object {},
-                  ],
                 ]
               }
-              testID="text-input-outlined"
-              underlineColorAndroid="transparent"
-              value="8"
-            />
+            >
+              <TextInput
+                editable={true}
+                keyboardType="number-pad"
+                multiline={false}
+                onBlur={[Function]}
+                onChangeText={[Function]}
+                onFocus={[Function]}
+                placeholder="Half at"
+                placeholderTextColor="#ffffff"
+                selectionColor="#ffd600"
+                style={
+                  Array [
+                    Object {
+                      "flexGrow": 1,
+                      "margin": 0,
+                      "paddingHorizontal": 14,
+                      "zIndex": 1,
+                    },
+                    Object {
+                      "height": 56,
+                    },
+                    Object {
+                      "paddingBottom": 0,
+                      "paddingTop": 0,
+                    },
+                    Object {
+                      "color": "#ffd600",
+                      "fontFamily": "System",
+                      "fontSize": 16,
+                      "fontWeight": undefined,
+                      "textAlign": "left",
+                      "textAlignVertical": "center",
+                    },
+                    false,
+                    Array [
+                      Object {},
+                    ],
+                  ]
+                }
+                testID="text-input-outlined"
+                underlineColorAndroid="transparent"
+                value="8"
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -341,89 +355,96 @@ exports[`should match snapshot 1`] = `
       <View
         style={
           Object {
-            "placeholderTextColor": "#ffffff",
             "width": "30%",
           }
         }
       >
         <View
-          pointerEvents="none"
           style={
-            Array [
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 6,
-              },
-              Object {
-                "backgroundColor": "#303030",
-                "borderColor": "#31adff",
-                "borderRadius": 4,
-                "borderWidth": 1,
-              },
-            ]
+            Object {
+              "placeholderTextColor": "#ffffff",
+            }
           }
-          testID="text-input-outline"
-        />
-        <View>
+        >
           <View
+            pointerEvents="none"
             style={
               Array [
                 Object {
-                  "paddingBottom": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 6,
                 },
                 Object {
-                  "minHeight": 64,
-                  "paddingTop": 8,
+                  "backgroundColor": "#303030",
+                  "borderColor": "#31adff",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
                 },
               ]
             }
-          >
-            <TextInput
-              editable={true}
-              keyboardType="number-pad"
-              multiline={false}
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="Soft cap"
-              placeholderTextColor="#ffffff"
-              selectionColor="#ffd600"
+            testID="text-input-outline"
+          />
+          <View>
+            <View
               style={
                 Array [
                   Object {
-                    "flexGrow": 1,
-                    "margin": 0,
-                    "paddingHorizontal": 14,
-                    "zIndex": 1,
-                  },
-                  Object {
-                    "height": 56,
-                  },
-                  Object {
                     "paddingBottom": 0,
-                    "paddingTop": 0,
                   },
                   Object {
-                    "color": "#ffd600",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": undefined,
-                    "textAlign": "left",
-                    "textAlignVertical": "center",
+                    "minHeight": 64,
+                    "paddingTop": 8,
                   },
-                  false,
-                  Array [
-                    Object {},
-                  ],
                 ]
               }
-              testID="text-input-outlined"
-              underlineColorAndroid="transparent"
-              value="75"
-            />
+            >
+              <TextInput
+                editable={true}
+                keyboardType="number-pad"
+                multiline={false}
+                onBlur={[Function]}
+                onChangeText={[Function]}
+                onFocus={[Function]}
+                placeholder="Soft cap"
+                placeholderTextColor="#ffffff"
+                selectionColor="#ffd600"
+                style={
+                  Array [
+                    Object {
+                      "flexGrow": 1,
+                      "margin": 0,
+                      "paddingHorizontal": 14,
+                      "zIndex": 1,
+                    },
+                    Object {
+                      "height": 56,
+                    },
+                    Object {
+                      "paddingBottom": 0,
+                      "paddingTop": 0,
+                    },
+                    Object {
+                      "color": "#ffd600",
+                      "fontFamily": "System",
+                      "fontSize": 16,
+                      "fontWeight": undefined,
+                      "textAlign": "left",
+                      "textAlignVertical": "center",
+                    },
+                    false,
+                    Array [
+                      Object {},
+                    ],
+                  ]
+                }
+                testID="text-input-outlined"
+                underlineColorAndroid="transparent"
+                value="75"
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -466,89 +487,96 @@ exports[`should match snapshot 1`] = `
       <View
         style={
           Object {
-            "placeholderTextColor": "#ffffff",
             "width": "30%",
           }
         }
       >
         <View
-          pointerEvents="none"
           style={
-            Array [
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 6,
-              },
-              Object {
-                "backgroundColor": "#303030",
-                "borderColor": "#31adff",
-                "borderRadius": 4,
-                "borderWidth": 1,
-              },
-            ]
+            Object {
+              "placeholderTextColor": "#ffffff",
+            }
           }
-          testID="text-input-outline"
-        />
-        <View>
+        >
           <View
+            pointerEvents="none"
             style={
               Array [
                 Object {
-                  "paddingBottom": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 6,
                 },
                 Object {
-                  "minHeight": 64,
-                  "paddingTop": 8,
+                  "backgroundColor": "#303030",
+                  "borderColor": "#31adff",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
                 },
               ]
             }
-          >
-            <TextInput
-              editable={true}
-              keyboardType="number-pad"
-              multiline={false}
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="Hard cap"
-              placeholderTextColor="#ffffff"
-              selectionColor="#ffd600"
+            testID="text-input-outline"
+          />
+          <View>
+            <View
               style={
                 Array [
                   Object {
-                    "flexGrow": 1,
-                    "margin": 0,
-                    "paddingHorizontal": 14,
-                    "zIndex": 1,
-                  },
-                  Object {
-                    "height": 56,
-                  },
-                  Object {
                     "paddingBottom": 0,
-                    "paddingTop": 0,
                   },
                   Object {
-                    "color": "#ffd600",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": undefined,
-                    "textAlign": "left",
-                    "textAlignVertical": "center",
+                    "minHeight": 64,
+                    "paddingTop": 8,
                   },
-                  false,
-                  Array [
-                    Object {},
-                  ],
                 ]
               }
-              testID="text-input-outlined"
-              underlineColorAndroid="transparent"
-              value="90"
-            />
+            >
+              <TextInput
+                editable={true}
+                keyboardType="number-pad"
+                multiline={false}
+                onBlur={[Function]}
+                onChangeText={[Function]}
+                onFocus={[Function]}
+                placeholder="Hard cap"
+                placeholderTextColor="#ffffff"
+                selectionColor="#ffd600"
+                style={
+                  Array [
+                    Object {
+                      "flexGrow": 1,
+                      "margin": 0,
+                      "paddingHorizontal": 14,
+                      "zIndex": 1,
+                    },
+                    Object {
+                      "height": 56,
+                    },
+                    Object {
+                      "paddingBottom": 0,
+                      "paddingTop": 0,
+                    },
+                    Object {
+                      "color": "#ffd600",
+                      "fontFamily": "System",
+                      "fontSize": 16,
+                      "fontWeight": undefined,
+                      "textAlign": "left",
+                      "textAlignVertical": "center",
+                    },
+                    false,
+                    Array [
+                      Object {},
+                    ],
+                  ]
+                }
+                testID="text-input-outlined"
+                underlineColorAndroid="transparent"
+                value="90"
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -591,89 +619,96 @@ exports[`should match snapshot 1`] = `
       <View
         style={
           Object {
-            "placeholderTextColor": "#ffffff",
             "width": "30%",
           }
         }
       >
         <View
-          pointerEvents="none"
           style={
-            Array [
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 6,
-              },
-              Object {
-                "backgroundColor": "#303030",
-                "borderColor": "#31adff",
-                "borderRadius": 4,
-                "borderWidth": 1,
-              },
-            ]
+            Object {
+              "placeholderTextColor": "#ffffff",
+            }
           }
-          testID="text-input-outline"
-        />
-        <View>
+        >
           <View
+            pointerEvents="none"
             style={
               Array [
                 Object {
-                  "paddingBottom": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 6,
                 },
                 Object {
-                  "minHeight": 64,
-                  "paddingTop": 8,
+                  "backgroundColor": "#303030",
+                  "borderColor": "#31adff",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
                 },
               ]
             }
-          >
-            <TextInput
-              editable={true}
-              keyboardType="number-pad"
-              multiline={false}
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="Players"
-              placeholderTextColor="#ffffff"
-              selectionColor="#ffd600"
+            testID="text-input-outline"
+          />
+          <View>
+            <View
               style={
                 Array [
                   Object {
-                    "flexGrow": 1,
-                    "margin": 0,
-                    "paddingHorizontal": 14,
-                    "zIndex": 1,
-                  },
-                  Object {
-                    "height": 56,
-                  },
-                  Object {
                     "paddingBottom": 0,
-                    "paddingTop": 0,
                   },
                   Object {
-                    "color": "#ffd600",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": undefined,
-                    "textAlign": "left",
-                    "textAlignVertical": "center",
+                    "minHeight": 64,
+                    "paddingTop": 8,
                   },
-                  false,
-                  Array [
-                    Object {},
-                  ],
                 ]
               }
-              testID="text-input-outlined"
-              underlineColorAndroid="transparent"
-              value="7"
-            />
+            >
+              <TextInput
+                editable={true}
+                keyboardType="number-pad"
+                multiline={false}
+                onBlur={[Function]}
+                onChangeText={[Function]}
+                onFocus={[Function]}
+                placeholder="Players"
+                placeholderTextColor="#ffffff"
+                selectionColor="#ffd600"
+                style={
+                  Array [
+                    Object {
+                      "flexGrow": 1,
+                      "margin": 0,
+                      "paddingHorizontal": 14,
+                      "zIndex": 1,
+                    },
+                    Object {
+                      "height": 56,
+                    },
+                    Object {
+                      "paddingBottom": 0,
+                      "paddingTop": 0,
+                    },
+                    Object {
+                      "color": "#ffd600",
+                      "fontFamily": "System",
+                      "fontSize": 16,
+                      "fontWeight": undefined,
+                      "textAlign": "left",
+                      "textAlignVertical": "center",
+                    },
+                    false,
+                    Array [
+                      Object {},
+                    ],
+                  ]
+                }
+                testID="text-input-outlined"
+                underlineColorAndroid="transparent"
+                value="7"
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -716,89 +751,96 @@ exports[`should match snapshot 1`] = `
       <View
         style={
           Object {
-            "placeholderTextColor": "#ffffff",
             "width": "30%",
           }
         }
       >
         <View
-          pointerEvents="none"
           style={
-            Array [
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 6,
-              },
-              Object {
-                "backgroundColor": "#303030",
-                "borderColor": "#31adff",
-                "borderRadius": 4,
-                "borderWidth": 1,
-              },
-            ]
+            Object {
+              "placeholderTextColor": "#ffffff",
+            }
           }
-          testID="text-input-outline"
-        />
-        <View>
+        >
           <View
+            pointerEvents="none"
             style={
               Array [
                 Object {
-                  "paddingBottom": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 6,
                 },
                 Object {
-                  "minHeight": 64,
-                  "paddingTop": 8,
+                  "backgroundColor": "#303030",
+                  "borderColor": "#31adff",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
                 },
               ]
             }
-          >
-            <TextInput
-              editable={true}
-              keyboardType="number-pad"
-              multiline={false}
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="Timeouts"
-              placeholderTextColor="#ffffff"
-              selectionColor="#ffd600"
+            testID="text-input-outline"
+          />
+          <View>
+            <View
               style={
                 Array [
                   Object {
-                    "flexGrow": 1,
-                    "margin": 0,
-                    "paddingHorizontal": 14,
-                    "zIndex": 1,
-                  },
-                  Object {
-                    "height": 56,
-                  },
-                  Object {
                     "paddingBottom": 0,
-                    "paddingTop": 0,
                   },
                   Object {
-                    "color": "#ffd600",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": undefined,
-                    "textAlign": "left",
-                    "textAlignVertical": "center",
+                    "minHeight": 64,
+                    "paddingTop": 8,
                   },
-                  false,
-                  Array [
-                    Object {},
-                  ],
                 ]
               }
-              testID="text-input-outlined"
-              underlineColorAndroid="transparent"
-              value="1"
-            />
+            >
+              <TextInput
+                editable={true}
+                keyboardType="number-pad"
+                multiline={false}
+                onBlur={[Function]}
+                onChangeText={[Function]}
+                onFocus={[Function]}
+                placeholder="Timeouts"
+                placeholderTextColor="#ffffff"
+                selectionColor="#ffd600"
+                style={
+                  Array [
+                    Object {
+                      "flexGrow": 1,
+                      "margin": 0,
+                      "paddingHorizontal": 14,
+                      "zIndex": 1,
+                    },
+                    Object {
+                      "height": 56,
+                    },
+                    Object {
+                      "paddingBottom": 0,
+                      "paddingTop": 0,
+                    },
+                    Object {
+                      "color": "#ffd600",
+                      "fontFamily": "System",
+                      "fontSize": 16,
+                      "fontWeight": undefined,
+                      "textAlign": "left",
+                      "textAlignVertical": "center",
+                    },
+                    false,
+                    Array [
+                      Object {},
+                    ],
+                  ]
+                }
+                testID="text-input-outlined"
+                underlineColorAndroid="transparent"
+                value="1"
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -838,22 +880,30 @@ exports[`should match snapshot 1`] = `
       >
         Floater timeout
       </Text>
-      <RCTSwitch
-        accessibilityRole="switch"
-        onChange={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
-        onTintColor="#31adff"
+      <View
         style={
           Object {
-            "height": 31,
-            "width": 51,
+            "width": "50%",
           }
         }
-        thumbTintColor="#ffd600"
-        tintColor="#ababab"
-        value={true}
-      />
+      >
+        <RCTSwitch
+          accessibilityRole="switch"
+          onChange={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          onTintColor="#31adff"
+          style={
+            Object {
+              "height": 31,
+              "width": 51,
+            }
+          }
+          thumbTintColor="#ffd600"
+          tintColor="#ababab"
+          value={true}
+        />
+      </View>
     </View>
     <View
       collapsable={false}
