@@ -33,13 +33,17 @@ const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             refetch()
-            if (managerTeams.length < 1) {
-                dispatch(fetchProfile())
-            }
         })
 
         return unsubscribe
     })
+
+    React.useEffect(() => {
+        if (isAuth && managerTeams.length < 1) {
+            dispatch(fetchProfile())
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuth])
 
     const onSelect = (teamOne: DisplayTeam) => {
         navigation.navigate('SelectOpponent', { teamOne })
@@ -53,7 +57,10 @@ const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     }
 
     const onLogin = async () => {
-        navigation.navigate('Tabs', { screen: 'Account' })
+        navigation.navigate('Tabs', {
+            screen: 'Account',
+            params: { screen: 'Login' },
+        })
     }
 
     const styles = StyleSheet.create({

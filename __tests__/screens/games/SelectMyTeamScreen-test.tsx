@@ -45,7 +45,10 @@ it('should match snapshot with unauthenticated user', async () => {
     expect(snapshot.toJSON()).toMatchSnapshot()
     expect(snapshot.getByText(Constants.AUTH_TO_CREATE)).not.toBeNull()
     fireEvent.press(snapshot.getByText('log in'))
-    expect(navigate).toHaveBeenCalledWith('Tabs', { screen: 'Account' })
+    expect(navigate).toHaveBeenCalledWith('Tabs', {
+        screen: 'Account',
+        params: { screen: 'Login' },
+    })
 })
 
 it('should match snapshot without manager teams', async () => {

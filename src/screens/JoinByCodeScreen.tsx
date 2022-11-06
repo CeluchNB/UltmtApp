@@ -127,7 +127,7 @@ const JoinByCodeScreen: React.FC<Props> = ({ navigation }: Props) => {
                     control={control}
                     rules={getFormFieldRules('Code', true, 6, 6, [
                         {
-                            test: v => {
+                            test: (v: string) => {
                                 return validator.isNumeric(v)
                             },
                             message: 'Code must be numeric',

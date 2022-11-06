@@ -4,25 +4,28 @@ import LabeledFormInput from '../../components/molecules/LabeledFormInput'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { Tournament } from '../../types/tournament'
-import { createGame } from '../../services/data/game'
+import { createGame } from '../../store/reducers/features/game/liveGameReducer'
 import { getFormFieldRules } from '../../utils/form-utils'
 import { selectAccount } from '../../store/reducers/features/account/accountReducer'
 import { useColors } from '../../hooks'
-import { useLazyData } from '../../hooks'
-import { useSelector } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import React, { useEffect } from 'react'
 import { SafeAreaView, StyleSheet, Switch, View } from 'react-native'
+import {
+    resetCreateStatus,
+    selectCreateStatus,
+} from '../../store/reducers/features/game/liveGameReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
+const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     // Team One and Team Two are populated through
     // SelectMyTeamScreen and SelectOpponentScreen
     // Flow SelectMyTeamScreen -> SelectOpponentScreen -> CreateGameScreen
     const { teamOne, teamTwo } = route.params
     const { colors } = useColors()
+    const dispatch = useDispatch()
     const account = useSelector(selectAccount)
-
-    const { loading, data, fetch } = useLazyData(createGame)
+    const createStatus = useSelector(selectCreateStatus)
 
     const {
         control,
@@ -55,6 +58,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
         floaterTimeout: boolean
         tournament: Tournament
     }) => {
+        dispatch(resetCreateStatus())
         const createGameData: CreateGame = {
             ...formData,
             teamTwoDefined: teamTwo._id !== undefined,
@@ -69,10 +73,15 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
             },
         }
 
-        fetch(createGameData)
+        dispatch(createGame(createGameData))
     }
 
-    useEffect(() => {}, [data])
+    useEffect(() => {
+        if (createStatus === 'success') {
+            navigation.navigate('LiveGame', { screen: 'FirstPoint' })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createStatus])
 
     const styles = StyleSheet.create({
         screen: {
@@ -321,7 +330,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 /> */}
                 <PrimaryButton
                     text="start"
-                    loading={loading}
+                    loading={createStatus === 'loading'}
                     onPress={handleSubmit(onCreate)}
                 />
             </View>
