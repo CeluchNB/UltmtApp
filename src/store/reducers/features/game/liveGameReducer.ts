@@ -1,5 +1,6 @@
 import * as GameData from '../../../../services/data/game'
 import { RootState } from '../../../store'
+import { Status } from '../../../../types/reducers'
 import { DisplayTeam, GuestTeam } from '../../../../types/team'
 import { DisplayUser, GuestUser } from '../../../../types/user'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
@@ -27,7 +28,7 @@ export interface LiveGameSlice {
         teamOnePlayers: GuestUser[]
         teamTwoPlayers: GuestUser[]
     }
-    createStatus: 'loading' | 'success' | 'failed' | 'idle'
+    createStatus: Status
 }
 
 const initialState: LiveGameSlice = {
