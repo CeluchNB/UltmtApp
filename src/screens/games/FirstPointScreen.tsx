@@ -37,6 +37,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = () => {
             marginTop: 10,
         },
     })
+
     return (
         <BaseScreen containerWidth="80%">
             <ScreenTitle style={styles.title} title="First Point" />

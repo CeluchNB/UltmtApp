@@ -1,10 +1,12 @@
 import * as AuthData from '../../../src/services/data/auth'
 import * as Constants from '../../../src/utils/constants'
+import * as UserData from '../../../src/services/data/user'
 import { AllScreenProps } from '../../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import SelectMyTeamScreen from '../../../src/screens/games/SelectMyTeamScreen'
+import { fetchProfileData } from '../../../fixtures/data'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
 import {
@@ -53,6 +55,9 @@ it('should match snapshot with unauthenticated user', async () => {
 
 it('should match snapshot without manager teams', async () => {
     jest.spyOn(AuthData, 'isLoggedIn').mockReturnValue(Promise.resolve(true))
+    jest.spyOn(UserData, 'fetchProfile').mockReturnValueOnce(
+        Promise.resolve({ ...fetchProfileData, managerTeams: [] }),
+    )
     const snapshot = render(
         <Provider store={store}>
             <NavigationContainer>
@@ -76,6 +81,9 @@ it('should match snapshot without manager teams', async () => {
 
 it('should match snapshot with manager teams', async () => {
     jest.spyOn(AuthData, 'isLoggedIn').mockReturnValue(Promise.resolve(true))
+    jest.spyOn(UserData, 'fetchProfile').mockReturnValueOnce(
+        Promise.resolve({ ...fetchProfileData, managerTeams: [] }),
+    )
     store.dispatch(
         setProfile({
             managerTeams: [

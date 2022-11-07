@@ -23,3 +23,4 @@ export const NO_GAMES_WARNING = 'There are no games matching this criteria right
 export const CREATE_GAME_ERROR = 'Unable to create game. Please try again.'
 export const MANAGE_TO_CREATE = 'Manage a team to create a game.'
 export const AUTH_TO_CREATE = 'Log in to create a game.'
+export const CREATE_POINT_ERROR = 'Unable to create point. Please try again.'
