@@ -28,6 +28,7 @@ export interface LiveGameSlice {
         teamOnePlayers: GuestUser[]
         teamTwoPlayers: GuestUser[]
     }
+    team: 'one' | 'two'
     createStatus: Status
 }
 
@@ -54,6 +55,7 @@ const initialState: LiveGameSlice = {
         teamOnePlayers: [],
         teamTwoPlayers: [],
     },
+    team: 'one',
     createStatus: 'idle',
 }
 
@@ -63,6 +65,9 @@ const liveGameSlice = createSlice({
     reducers: {
         resetCreateStatus(state) {
             state.createStatus = 'idle'
+        },
+        setGame(state, action) {
+            state.game = action.payload
         },
     },
     extraReducers: builder => {
@@ -74,6 +79,8 @@ const liveGameSlice = createSlice({
                 ...action.payload,
                 startTime: action.payload.startTime.toString(),
             }
+            // creator of game is always team one
+            state.team = 'one'
             state.createStatus = 'success'
         })
         builder.addCase(createGame.rejected, state => {
@@ -92,5 +99,6 @@ export const createGame = createAsyncThunk(
 export const selectCreateStatus = (state: RootState) =>
     state.liveGame.createStatus
 export const selectGame = (state: RootState) => state.liveGame.game
+export const selectTeam = (state: RootState) => state.liveGame.team
 export const { resetCreateStatus } = liveGameSlice.actions
 export default liveGameSlice.reducer

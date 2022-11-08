@@ -1,6 +1,6 @@
 import * as PointData from '../../../../services/data/point'
 import { GuestTeam } from '../../../../types/team'
-// import { GuestUser } from '../../../../types/user'
+import { GuestUser } from '../../../../types/user'
 import Point from '../../../../types/point'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
@@ -56,6 +56,20 @@ export const createPoint = createAsyncThunk(
     async (data: { pulling: boolean; pointNumber: number }) => {
         const { pulling, pointNumber } = data
         return await PointData.createPoint(pulling, pointNumber)
+    },
+)
+
+export const setPlayers = createAsyncThunk(
+    'livePoint/players',
+    async (data: { players: GuestUser[] }, thunkAPI) => {
+        const { players } = data
+        const {
+            livePoint: {
+                point: { _id },
+            },
+        } = thunkAPI.getState() as RootState
+
+        return await PointData.setPlayers(_id, players)
     },
 )
 
