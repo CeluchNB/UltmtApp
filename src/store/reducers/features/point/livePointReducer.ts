@@ -10,6 +10,8 @@ export interface LivePointSlice {
     point: Point
     createStatus: Status
     createError: string | undefined
+    setPlayersStatus: Status
+    setPlayersError: string | undefined
 }
 
 const initialState: LivePointSlice = {
@@ -29,6 +31,8 @@ const initialState: LivePointSlice = {
     },
     createStatus: 'idle',
     createError: undefined,
+    setPlayersStatus: 'idle',
+    setPlayersError: undefined,
 }
 
 const livePointSlice = createSlice({
@@ -47,6 +51,19 @@ const livePointSlice = createSlice({
         builder.addCase(createPoint.rejected, (state, action) => {
             state.createStatus = 'failed'
             state.createError = action.error.message || ''
+        })
+
+        builder.addCase(setPlayers.pending, state => {
+            state.setPlayersStatus = 'loading'
+            state.setPlayersError = undefined
+        })
+        builder.addCase(setPlayers.fulfilled, (state, action) => {
+            state.point = action.payload
+            state.setPlayersStatus = 'success'
+        })
+        builder.addCase(setPlayers.rejected, (state, action) => {
+            state.setPlayersStatus = 'failed'
+            state.setPlayersError = action.error.message
         })
     },
 })
@@ -77,5 +94,9 @@ export const selectCreateStatus = (state: RootState) =>
     state.livePoint.createStatus
 export const selectCreateError = (state: RootState) =>
     state.livePoint.createError
+export const selectSetPlayersStatus = (state: RootState) =>
+    state.livePoint.setPlayersStatus
+export const selectSetPlayersError = (state: RootState) =>
+    state.livePoint.setPlayersError
 export const selectPoint = (state: RootState) => state.livePoint.point
 export default livePointSlice.reducer
