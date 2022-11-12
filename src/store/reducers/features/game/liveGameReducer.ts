@@ -28,7 +28,7 @@ export interface LiveGameSlice {
         teamOnePlayers: GuestUser[]
         teamTwoPlayers: GuestUser[]
     }
-    team: 'one' | 'two'
+    team: 'one' | 'two' | undefined
     createStatus: Status
 }
 

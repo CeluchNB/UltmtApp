@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot with all data 1`] = `
+<View>
+  <Text
+    style={
+      Object {
+        "color": "#ffd600",
+        "fontSize": 41.0958904109589,
+        "fontWeight": "900",
+        "textAlign": "center",
+      }
+    }
+  >
+    test
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "#ffd600",
+        "fontSize": 30.821917808219176,
+        "textAlign": "center",
+      }
+    }
+  >
+    @team
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "#ffd600",
+        "fontSize": 41.0958904109589,
+        "fontWeight": "900",
+        "textAlign": "center",
+      }
+    }
+  >
+    2
+  </Text>
+</View>
+`;
+
+exports[`should match snapshot with no teamname 1`] = `
+<View>
+  <Text
+    style={
+      Object {
+        "color": "#ffd600",
+        "fontSize": 41.0958904109589,
+        "fontWeight": "900",
+        "textAlign": "center",
+      }
+    }
+  >
+    test
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "#ffd600",
+        "fontSize": 30.821917808219176,
+        "textAlign": "center",
+      }
+    }
+  >
+    guest team
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "#ffd600",
+        "fontSize": 41.0958904109589,
+        "fontWeight": "900",
+        "textAlign": "center",
+      }
+    }
+  >
+    2
+  </Text>
+</View>
+`;

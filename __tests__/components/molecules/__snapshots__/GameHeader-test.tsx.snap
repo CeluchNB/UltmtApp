@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "flexDirection": "row",
+    }
+  }
+>
+  <View>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "900",
+          "textAlign": "center",
+        }
+      }
+    >
+      Temper
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 30.821917808219176,
+          "textAlign": "center",
+        }
+      }
+    >
+      @pghtemper
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "900",
+          "textAlign": "center",
+        }
+      }
+    >
+      3
+    </Text>
+  </View>
+  <Text
+    style={
+      Object {
+        "color": "#ababab",
+        "flex": 1,
+        "fontSize": 30.821917808219176,
+        "fontWeight": "900",
+        "marginTop": 20,
+        "textAlign": "center",
+      }
+    }
+  >
+    Game to 
+    15
+  </Text>
+  <View>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "900",
+          "textAlign": "center",
+        }
+      }
+    >
+      Sockeye
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 30.821917808219176,
+          "textAlign": "center",
+        }
+      }
+    >
+      guest team
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "900",
+          "textAlign": "center",
+        }
+      }
+    >
+      0
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`should match snapshot with no description 1`] = `
+<View
+  style={
+    Object {
+      "flexDirection": "row",
+    }
+  }
+>
+  <View>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "900",
+          "textAlign": "center",
+        }
+      }
+    >
+      Temper
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 30.821917808219176,
+          "textAlign": "center",
+        }
+      }
+    >
+      @pghtemper
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "900",
+          "textAlign": "center",
+        }
+      }
+    >
+      3
+    </Text>
+  </View>
+  <View>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "900",
+          "textAlign": "center",
+        }
+      }
+    >
+      Sockeye
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 30.821917808219176,
+          "textAlign": "center",
+        }
+      }
+    >
+      guest team
+    </Text>
+    <Text
+      style={
+        Object {
+          "color": "#ffd600",
+          "fontSize": 41.0958904109589,
+          "fontWeight": "900",
+          "textAlign": "center",
+        }
+      }
+    >
+      0
+    </Text>
+  </View>
+</View>
+`;

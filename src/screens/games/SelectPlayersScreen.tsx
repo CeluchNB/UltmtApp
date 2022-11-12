@@ -1,5 +1,6 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
 import { Chip } from 'react-native-paper'
+import GameHeader from '../../components/molecules/GameHeader'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
 import { size } from '../../theme/fonts'
@@ -94,9 +95,10 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = () => {
 
     return (
         <BaseScreen containerWidth="80%">
+            <GameHeader game={game} />
             <Text style={styles.description}>
-                {game.playersPerPoint} players on next {isPulling() ? 'D' : 'O'}{' '}
-                point
+                {game.playersPerPoint} players on next {isPulling() ? 'D' : 'O'}
+                -point
             </Text>
             <FlatList
                 contentContainerStyle={styles.flatListContainer}
