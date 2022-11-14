@@ -32,13 +32,10 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = () => {
     const dispatch = useDispatch()
 
     const playerList = React.useMemo(() => {
-        const players = []
         if (team === 'one') {
-            players.push(...game.teamOnePlayers)
-        } else {
-            players.push(...game.teamTwoPlayers)
+            return game.teamOnePlayers
         }
-        return players
+        return game.teamTwoPlayers
     }, [game, team])
 
     const isPulling = (): boolean => {

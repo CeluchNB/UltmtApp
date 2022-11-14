@@ -69,6 +69,9 @@ const liveGameSlice = createSlice({
         setGame(state, action) {
             state.game = action.payload
         },
+        setTeam(state, action) {
+            state.team = action.payload
+        },
     },
     extraReducers: builder => {
         builder.addCase(createGame.pending, state => {
@@ -100,5 +103,5 @@ export const selectCreateStatus = (state: RootState) =>
     state.liveGame.createStatus
 export const selectGame = (state: RootState) => state.liveGame.game
 export const selectTeam = (state: RootState) => state.liveGame.team
-export const { resetCreateStatus, setGame } = liveGameSlice.actions
+export const { resetCreateStatus, setGame, setTeam } = liveGameSlice.actions
 export default liveGameSlice.reducer
