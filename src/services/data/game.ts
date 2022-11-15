@@ -1,10 +1,12 @@
 import * as Constants from '../../utils/constants'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { GuestUser } from '../../types/user'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
 import {
+    addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
     searchGames as networkSearchGames,
 } from '../network/game'
@@ -59,6 +61,21 @@ export const createGame = async (data: CreateGame): Promise<Game> => {
         return game
     } catch (e) {
         return throwApiError(e, Constants.CREATE_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to add a guest player to a specific team for one game
+ * @param player guest player to add to a team for a game
+ * @returns updated game
+ */
+export const addGuestPlayer = async (player: GuestUser): Promise<Game> => {
+    try {
+        const response = await withGameToken(networkAddGuestPlayer, player)
+        const { game } = response.data
+        return game
+    } catch (e) {
+        return throwApiError(e, Constants.ADD_GUEST_ERROR)
     }
 }
 
