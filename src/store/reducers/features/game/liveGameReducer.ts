@@ -1,0 +1,150 @@
+import * as GameData from '../../../../services/data/game'
+import { RootState } from '../../../store'
+import { Status } from '../../../../types/reducers'
+import { DisplayTeam, GuestTeam } from '../../../../types/team'
+import { DisplayUser, GuestUser } from '../../../../types/user'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
+export interface LiveGameSlice {
+    game: {
+        _id: string
+        resolveCode: string
+        creator: DisplayUser
+        teamOne: DisplayTeam
+        teamTwo: GuestTeam
+        teamTwoDefined: boolean
+        scoreLimit: number
+        halfScore: number
+        startTime: string
+        softcapMins: number
+        hardcapMins: number
+        playersPerPoint: number
+        timeoutPerHalf: number
+        floaterTimeout: boolean
+        teamOneScore: number
+        teamTwoScore: number
+        teamOneActive: boolean
+        teamTwoActive: boolean
+        teamOnePlayers: GuestUser[]
+        teamTwoPlayers: GuestUser[]
+        tournament: undefined
+    }
+    team: 'one' | 'two' | undefined
+    createStatus: Status
+    createError: string | undefined
+    guestPlayerStatus: Status
+    guestPlayerError: string | undefined
+}
+
+const initialState: LiveGameSlice = {
+    game: {
+        _id: '',
+        resolveCode: '',
+        creator: {} as DisplayUser,
+        teamOne: {} as DisplayTeam,
+        teamTwo: {} as DisplayTeam,
+        teamTwoDefined: false,
+        scoreLimit: 0,
+        halfScore: 0,
+        startTime: '',
+        softcapMins: 0,
+        hardcapMins: 0,
+        playersPerPoint: 0,
+        timeoutPerHalf: 0,
+        floaterTimeout: true,
+        teamOneScore: 0,
+        teamTwoScore: 0,
+        teamOneActive: false,
+        teamTwoActive: false,
+        teamOnePlayers: [],
+        teamTwoPlayers: [],
+        tournament: undefined,
+    },
+    team: 'one',
+    createStatus: 'idle',
+    createError: undefined,
+    guestPlayerStatus: 'idle',
+    guestPlayerError: undefined,
+}
+
+const liveGameSlice = createSlice({
+    name: 'liveGame',
+    initialState,
+    reducers: {
+        resetCreateStatus(state) {
+            state.createStatus = 'idle'
+            state.createError = undefined
+        },
+        setGame(state, action) {
+            state.game = action.payload
+        },
+        setTeam(state, action) {
+            state.team = action.payload
+        },
+        resetGuestPlayerStatus(state) {
+            state.guestPlayerStatus = 'idle'
+            state.guestPlayerError = undefined
+        },
+    },
+    extraReducers: builder => {
+        builder.addCase(createGame.pending, state => {
+            state.createStatus = 'loading'
+        })
+        builder.addCase(createGame.fulfilled, (state, action) => {
+            state.game = {
+                ...action.payload,
+                startTime: action.payload.startTime.toString(),
+                tournament: undefined,
+            }
+            // creator of game is always team one
+            state.team = 'one'
+            state.createStatus = 'success'
+        })
+        builder.addCase(createGame.rejected, (state, action) => {
+            state.createStatus = 'failed'
+            state.createError = action.error.message
+        })
+
+        builder.addCase(addGuestPlayer.pending, state => {
+            state.guestPlayerStatus = 'loading'
+        })
+        builder.addCase(addGuestPlayer.fulfilled, (state, action) => {
+            state.game = {
+                ...action.payload,
+                startTime: action.payload.startTime.toString(),
+                tournament: undefined,
+            }
+            state.guestPlayerStatus = 'success'
+        })
+        builder.addCase(addGuestPlayer.rejected, (state, action) => {
+            state.guestPlayerStatus = 'failed'
+            state.guestPlayerError = action.error.message
+        })
+    },
+})
+
+export const createGame = createAsyncThunk(
+    'liveGame/create',
+    async (data: any) => {
+        return await GameData.createGame(data)
+    },
+)
+
+export const addGuestPlayer = createAsyncThunk(
+    'liveGame/addGuest',
+    async (data: { firstName: string; lastName: string }) => {
+        return await GameData.addGuestPlayer(data)
+    },
+)
+
+export const selectCreateStatus = (state: RootState) =>
+    state.liveGame.createStatus
+export const selectGame = (state: RootState) => state.liveGame.game
+export const selectTeam = (state: RootState) => state.liveGame.team
+export const selectGuestPlayerStatus = (state: RootState) =>
+    state.liveGame.guestPlayerStatus
+export const selectGuestPlayerError = (state: RootState) =>
+    state.liveGame.guestPlayerError
+export const { resetCreateStatus, setGame, setTeam, resetGuestPlayerStatus } =
+    liveGameSlice.actions
+export default liveGameSlice.reducer

@@ -13,11 +13,15 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const reset = jest.fn()
 const navigate = jest.fn()
+const addListener = jest.fn().mockImplementation((event, callback) => {
+    callback()
+})
 
 const props: Props = {
     navigation: {
         navigate,
         reset,
+        addListener,
     } as any,
     route: {} as any,
 }
@@ -94,17 +98,15 @@ it('should handle get local token success', async () => {
             return true
         })
 
-    await waitFor(async () => {
-        render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <LoginScreen {...props} />
-                </NavigationContainer>
-            </Provider>,
-        )
-    })
+    render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <LoginScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
 
-    expect(reset).toHaveBeenCalled()
+    await waitFor(() => expect(reset).toHaveBeenCalled())
     spy.mockRestore()
 })
 

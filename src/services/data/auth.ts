@@ -81,8 +81,8 @@ export const refreshToken = async (): Promise<string> => {
  * @returns expected response of network call
  */
 export const withToken = async (
-    networkCall: (token: string, ...args: any[]) => Promise<AxiosResponse>,
-    ...args: any[]
+    networkCall: (token: string, ...args: any) => Promise<AxiosResponse>,
+    ...args: any
 ): Promise<AxiosResponse> => {
     try {
         const currentToken =

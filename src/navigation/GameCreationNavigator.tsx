@@ -1,11 +1,11 @@
 import CreateGameScreen from '../screens/games/CreateGameScreen'
-import { GameStackParamList } from '../types/navigation'
+import { GameCreationParamList } from '../types/navigation'
 import React from 'react'
 import SelectMyTeamScreen from '../screens/games/SelectMyTeamScreen'
 import SelectOpponentScreen from '../screens/games/SelectOpponentScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-const Stack = createNativeStackNavigator<GameStackParamList>()
+const Stack = createNativeStackNavigator<GameCreationParamList>()
 
 const GameCreationNavigator: React.FC<{}> = () => {
     return (

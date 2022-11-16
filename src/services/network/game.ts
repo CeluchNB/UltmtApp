@@ -1,4 +1,5 @@
 import { CreateGame } from '../../types/game'
+import { GuestUser } from '../../types/user'
 import { addQueryParam } from '../../utils/service-utils'
 import { API_KEY, API_URL_V1 } from 'react-native-dotenv'
 import axios, { AxiosResponse } from 'axios'
@@ -30,6 +31,17 @@ export const createGame = async (
     return await axios.post(
         `${API_URL_V1}/game`,
         { createGameData: data },
+        { headers: { 'X-API-Key': API_KEY, Authorization: `Bearer ${token}` } },
+    )
+}
+
+export const addGuestPlayer = async (
+    token: string,
+    player: GuestUser,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/game/player/guest`,
+        { player },
         { headers: { 'X-API-Key': API_KEY, Authorization: `Bearer ${token}` } },
     )
 }

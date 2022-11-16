@@ -22,7 +22,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
 
     const selfStyle = StyleSheet.create({
         button: {
-            backgroundColor: colors.textPrimary,
+            backgroundColor: disabled ? colors.gray : colors.textPrimary,
         },
     })
 

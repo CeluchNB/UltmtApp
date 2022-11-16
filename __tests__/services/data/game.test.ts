@@ -1,7 +1,21 @@
 import * as Constants from '../../../src/utils/constants'
 import * as GameServices from '../../../src/services/network/game'
+import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { game } from '../../../fixtures/data'
-import { createGame, searchGames } from '../../../src/services/data/game'
+import jwt from 'jsonwebtoken'
+import {
+    addGuestPlayer,
+    createGame,
+    searchGames,
+    withGameToken,
+} from '../../../src/services/data/game'
+
+const validToken = jwt.sign({}, 'secret', { expiresIn: '3 hours' })
+
+afterEach(() => {
+    RNEncryptedStorage.getItem.mockReset()
+    RNEncryptedStorage.setItem.mockReset()
+})
 
 describe('test search games', () => {
     it('should handle success', async () => {
@@ -65,5 +79,81 @@ describe('test create game', () => {
         expect(createGame({} as any)).rejects.toThrowError(
             Constants.CREATE_GAME_ERROR,
         )
+    })
+})
+
+describe('test add guest player', () => {
+    it('with network success', async () => {
+        RNEncryptedStorage.getItem.mockReturnValueOnce(
+            Promise.resolve(validToken),
+        )
+        const updatedGame = {
+            ...game,
+            teamOnePlayers: [
+                ...game.teamOnePlayers,
+                { firstName: 'First 1', lastName: 'Last 1' },
+            ],
+        }
+
+        jest.spyOn(GameServices, 'addGuestPlayer').mockReturnValueOnce(
+            Promise.resolve({
+                data: {
+                    game: updatedGame,
+                },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await addGuestPlayer({
+            firstName: 'First 1',
+            lastName: 'Last 1',
+        })
+        expect(result).toMatchObject(updatedGame)
+    })
+
+    it('with network failure', async () => {
+        RNEncryptedStorage.getItem.mockReturnValueOnce(
+            Promise.resolve(validToken),
+        )
+        jest.spyOn(GameServices, 'addGuestPlayer').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(
+            addGuestPlayer({ firstName: 'First 1', lastName: 'Last 1' }),
+        ).rejects.toThrowError(Constants.ADD_GUEST_ERROR)
+    })
+})
+
+describe('test with token', () => {
+    it('should make call with token', async () => {
+        RNEncryptedStorage.getItem.mockReturnValueOnce(
+            Promise.resolve(validToken),
+        )
+
+        const networkCall = jest.fn().mockReturnValueOnce(
+            Promise.resolve({
+                data: {
+                    point: 'point1',
+                },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await withGameToken(networkCall, 'test')
+        expect(networkCall).toBeCalledWith(validToken, 'test')
+        expect(result.status).toBe(200)
+        expect(result.data.point).toBe('point1')
     })
 })

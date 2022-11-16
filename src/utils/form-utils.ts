@@ -1,18 +1,18 @@
-export interface Rules {
+export interface Rules<T> {
     required?: { value: boolean; message: string }
     minLength?: { value: number; message: string }
     maxLength?: { value: number; message: string }
-    validate?: { validate: (v: string) => true | string }
+    validate?: { validate: (v: T) => true | string }
 }
 
-export const getFormFieldRules = (
+export const getFormFieldRules = <T>(
     fieldName: string,
     required?: boolean,
     minLength?: number,
     maxLength?: number,
-    validate?: [{ test: (v: string) => boolean; message: string }],
-): Rules => {
-    const rules: Rules = {}
+    validate?: [{ test: (v: T) => boolean; message: string }],
+): Rules<T> => {
+    const rules: Rules<T> = {}
     if (required) {
         rules.required = {
             value: true,
@@ -36,7 +36,7 @@ export const getFormFieldRules = (
 
     if (validate) {
         rules.validate = {
-            validate: (value: string) => {
+            validate: (value: T) => {
                 for (const v of validate) {
                     if (!v.test(value)) {
                         return v.message

@@ -1,5 +1,6 @@
 import * as React from 'react'
 import GameCreationNavigator from './src/navigation/GameCreationNavigator'
+import LiveGameNavigator from './src/navigation/LiveGameNavigator'
 import { NavigationContainer } from '@react-navigation/native'
 import SecureEditScreen from './src/screens/SecureEditScreen'
 import SettingsScreen from './src/screens/SettingsScreen'
@@ -20,6 +21,7 @@ const App: React.FC<{}> = () => {
                 <Stack.Navigator
                     initialRouteName={'Tabs'}
                     screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="Tabs" component={TabNavigator} />
                     <Stack.Screen
                         name="SettingsScreen"
                         component={SettingsScreen}
@@ -28,10 +30,13 @@ const App: React.FC<{}> = () => {
                         name="SecureEditScreen"
                         component={SecureEditScreen}
                     />
-                    <Stack.Screen name="Tabs" component={TabNavigator} />
                     <Stack.Screen
                         name="GameCreationFlow"
                         component={GameCreationNavigator}
+                    />
+                    <Stack.Screen
+                        name="LiveGame"
+                        component={LiveGameNavigator}
                     />
                 </Stack.Navigator>
             </QueryClientProvider>

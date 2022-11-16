@@ -1,18 +1,15 @@
 import { DisplayUser } from './user'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RequestType } from './request'
+import {
+    CompositeScreenProps,
+    NavigatorScreenParams,
+} from '@react-navigation/native'
 import { DisplayTeam, GuestTeam } from './team'
 
 export enum SecureEditField {
     EMAIL,
     PASSWORD,
-}
-
-export type TopLevelParamList = {
-    Tabs: undefined
-    GameCreationFlow: { screen: string }
-    SettingsScreen: undefined
-    SecureEditScreen: { title: string; value: string; field: SecureEditField }
 }
 
 export type AccountStackParamList = {
@@ -42,13 +39,39 @@ export type AccountStackParamList = {
 export type GameStackParamList = {
     GameHome: undefined
     GameSearch: { live: string }
+}
+
+export type TabParamList = {
+    Account: NavigatorScreenParams<AccountStackParamList>
+    Games: NavigatorScreenParams<GameStackParamList>
+}
+
+export type GameCreationParamList = {
     CreateGame: { teamOne: DisplayTeam; teamTwo: GuestTeam }
     SelectMyTeam: undefined
     SelectOpponent: { initialValue?: string; teamOne: DisplayTeam }
 }
 
+export type LiveGameParamList = {
+    FirstPoint: undefined
+    SelectPlayers: undefined // consider passing point id and not relying on live point reducer
+}
+
+export type TopLevelParamList = {
+    Tabs: NavigatorScreenParams<TabParamList>
+    GameCreationFlow: NavigatorScreenParams<GameCreationParamList>
+    LiveGame: NavigatorScreenParams<LiveGameParamList>
+    SettingsScreen: undefined
+    SecureEditScreen: { title: string; value: string; field: SecureEditField }
+}
+
 export type AllScreenProps = NativeStackScreenProps<
-    AccountStackParamList & TopLevelParamList & GameStackParamList,
+    TopLevelParamList &
+        TabParamList &
+        AccountStackParamList &
+        GameStackParamList &
+        GameCreationParamList &
+        LiveGameParamList,
     'Tabs'
 >
 
@@ -93,12 +116,25 @@ export type GameSearchProps = NativeStackScreenProps<
     'GameSearch'
 >
 
-export type CreateGameProps = NativeStackScreenProps<
-    GameStackParamList,
-    'CreateGame'
+export type CreateGameProps = CompositeScreenProps<
+    NativeStackScreenProps<GameCreationParamList, 'CreateGame'>,
+    CompositeScreenProps<
+        NativeStackScreenProps<TopLevelParamList>,
+        NativeStackScreenProps<LiveGameParamList>
+    >
 >
 
 export type SelectOpponentProps = NativeStackScreenProps<
-    GameStackParamList,
+    GameCreationParamList,
     'SelectOpponent'
+>
+
+export type FirstPointProps = NativeStackScreenProps<
+    LiveGameParamList,
+    'FirstPoint'
+>
+
+export type SelectPlayersProps = NativeStackScreenProps<
+    LiveGameParamList,
+    'SelectPlayers'
 >

@@ -4,26 +4,34 @@ import LabeledFormInput from '../../components/molecules/LabeledFormInput'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { Tournament } from '../../types/tournament'
-import { createGame } from '../../services/data/game'
+import { createGame } from '../../store/reducers/features/game/liveGameReducer'
+import { getFormFieldRules } from '../../utils/form-utils'
 import { selectAccount } from '../../store/reducers/features/account/accountReducer'
 import { useColors } from '../../hooks'
-import { useLazyData } from '../../hooks'
-import { useSelector } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import React, { useEffect } from 'react'
 import { SafeAreaView, StyleSheet, Switch, View } from 'react-native'
+import {
+    resetCreateStatus,
+    selectCreateStatus,
+} from '../../store/reducers/features/game/liveGameReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
+const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     // Team One and Team Two are populated through
     // SelectMyTeamScreen and SelectOpponentScreen
     // Flow SelectMyTeamScreen -> SelectOpponentScreen -> CreateGameScreen
     const { teamOne, teamTwo } = route.params
     const { colors } = useColors()
+    const dispatch = useDispatch()
     const account = useSelector(selectAccount)
+    const createStatus = useSelector(selectCreateStatus)
 
-    const { loading, data, fetch } = useLazyData(createGame)
-
-    const { control, handleSubmit } = useForm({
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             scoreLimit: 15,
             halfScore: 8,
@@ -50,6 +58,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
         floaterTimeout: boolean
         tournament: Tournament
     }) => {
+        dispatch(resetCreateStatus())
         const createGameData: CreateGame = {
             ...formData,
             teamTwoDefined: teamTwo._id !== undefined,
@@ -64,10 +73,15 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
             },
         }
 
-        fetch(createGameData)
+        dispatch(createGame(createGameData))
     }
 
-    useEffect(() => {}, [data])
+    useEffect(() => {
+        if (createStatus === 'success') {
+            navigation.navigate('LiveGame', { screen: 'FirstPoint' })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createStatus])
 
     const styles = StyleSheet.create({
         screen: {
@@ -95,12 +109,19 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 <Controller
                     name="scoreLimit"
                     control={control}
-                    rules={{
-                        required: true,
-                        minLength: 1,
-                        maxLength: 2,
-                        pattern: /\d+/,
-                    }}
+                    rules={getFormFieldRules<number>(
+                        'Score limit',
+                        true,
+                        1,
+                        2,
+                        [
+                            {
+                                test: (value: number) =>
+                                    /\d+/.test(value.toString()),
+                                message: 'Score limit must be a number',
+                            },
+                        ],
+                    )}
                     render={({ field: { onChange, value } }) => {
                         return (
                             <LabeledFormInput
@@ -111,6 +132,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                                 value={value}
                                 unit="points"
                                 keyboardType="number-pad"
+                                error={errors.scoreLimit?.message}
                             />
                         )
                     }}
@@ -118,12 +140,13 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 <Controller
                     name="halfScore"
                     control={control}
-                    rules={{
-                        required: true,
-                        minLength: 1,
-                        maxLength: 2,
-                        pattern: /\d+/,
-                    }}
+                    rules={getFormFieldRules<number>('Half score', true, 1, 2, [
+                        {
+                            test: (value: number) =>
+                                /\d+/.test(value.toString()),
+                            message: 'Half score must be a number',
+                        },
+                    ])}
                     render={({ field: { onChange, value } }) => {
                         return (
                             <LabeledFormInput
@@ -134,6 +157,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                                 value={value}
                                 unit="points"
                                 keyboardType="number-pad"
+                                error={errors.halfScore?.message}
                             />
                         )
                     }}
@@ -141,12 +165,19 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 <Controller
                     name="softcapMins"
                     control={control}
-                    rules={{
-                        required: true,
-                        minLength: 2,
-                        maxLength: 3,
-                        pattern: /\d+/,
-                    }}
+                    rules={getFormFieldRules<number>(
+                        'Softcap time',
+                        true,
+                        2,
+                        3,
+                        [
+                            {
+                                test: (value: number) =>
+                                    /\d+/.test(value.toString()),
+                                message: 'Softcap time must be a number',
+                            },
+                        ],
+                    )}
                     render={({ field: { onChange, value } }) => {
                         return (
                             <LabeledFormInput
@@ -157,6 +188,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                                 value={value}
                                 unit="minutes"
                                 keyboardType="number-pad"
+                                error={errors.softcapMins?.message}
                             />
                         )
                     }}
@@ -164,12 +196,19 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 <Controller
                     name="hardcapMins"
                     control={control}
-                    rules={{
-                        required: true,
-                        minLength: 2,
-                        maxLength: 3,
-                        pattern: /\d+/,
-                    }}
+                    rules={getFormFieldRules<number>(
+                        'Hardcap time',
+                        true,
+                        2,
+                        3,
+                        [
+                            {
+                                test: (value: number) =>
+                                    /\d+/.test(value.toString()),
+                                message: 'Hardcap time must be a number',
+                            },
+                        ],
+                    )}
                     render={({ field: { onChange, value } }) => {
                         return (
                             <LabeledFormInput
@@ -180,6 +219,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                                 value={value}
                                 unit="points"
                                 keyboardType="number-pad"
+                                error={errors.hardcapMins?.message}
                             />
                         )
                     }}
@@ -187,12 +227,19 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 <Controller
                     name="playersPerPoint"
                     control={control}
-                    rules={{
-                        required: true,
-                        minLength: 1,
-                        maxLength: 2,
-                        pattern: /\d+/,
-                    }}
+                    rules={getFormFieldRules<number>(
+                        'Players per point',
+                        true,
+                        1,
+                        2,
+                        [
+                            {
+                                test: (value: number) =>
+                                    /\d+/.test(value.toString()),
+                                message: 'Players per point must be a number',
+                            },
+                        ],
+                    )}
                     render={({ field: { onChange, value } }) => {
                         return (
                             <LabeledFormInput
@@ -203,6 +250,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                                 value={value}
                                 unit="per point"
                                 keyboardType="number-pad"
+                                error={errors.playersPerPoint?.message}
                             />
                         )
                     }}
@@ -210,12 +258,19 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 <Controller
                     name="timeoutPerHalf"
                     control={control}
-                    rules={{
-                        required: true,
-                        minLength: 1,
-                        maxLength: 2,
-                        pattern: /\d+/,
-                    }}
+                    rules={getFormFieldRules<number>(
+                        'Timeouts per half',
+                        true,
+                        1,
+                        2,
+                        [
+                            {
+                                test: (value: number) =>
+                                    /\d+/.test(value.toString()),
+                                message: 'Timeouts per half must be a number',
+                            },
+                        ],
+                    )}
                     render={({ field: { onChange, value } }) => {
                         return (
                             <LabeledFormInput
@@ -226,6 +281,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                                 value={value}
                                 unit="per half"
                                 keyboardType="number-pad"
+                                error={errors.timeoutPerHalf?.message}
                             />
                         )
                     }}
@@ -241,7 +297,8 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                             <LabeledFormInput
                                 label="Floater timeout"
                                 onChange={onChange}
-                                value={value}>
+                                value={value}
+                                error={errors.floaterTimeout?.message}>
                                 <Switch
                                     trackColor={{
                                         false: colors.gray,
@@ -273,7 +330,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ route }) => {
                 /> */}
                 <PrimaryButton
                     text="start"
-                    loading={loading}
+                    loading={createStatus === 'loading'}
                     onPress={handleSubmit(onCreate)}
                 />
             </View>

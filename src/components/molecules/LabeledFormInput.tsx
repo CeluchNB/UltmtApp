@@ -9,6 +9,7 @@ interface LabeledFormInputProps {
     value: any
     keyboardType?: 'default' | 'number-pad'
     unit?: string
+    error?: string
     onChange: (...event: any[]) => void
 }
 
@@ -20,6 +21,7 @@ const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
         value,
         keyboardType = 'default',
         unit,
+        error,
         onChange,
     } = props
 
@@ -46,21 +48,29 @@ const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
             color: colors.gray,
             marginLeft: 10,
         },
+        errorText: {
+            color: colors.error,
+            fontSize: size.fontSmall,
+        },
     })
     return (
         <View style={styles.container}>
             <Text style={styles.labelText}>{label}</Text>
-            {children ? (
-                children
-            ) : (
-                <UserInput
-                    style={styles.input}
-                    placeholder={label}
-                    onChangeText={onChange}
-                    value={value.toString()}
-                    keyboardType={keyboardType}
-                />
-            )}
+            <View style={styles.input}>
+                {children ? (
+                    children
+                ) : (
+                    <UserInput
+                        placeholder={label}
+                        onChangeText={onChange}
+                        value={value.toString()}
+                        keyboardType={keyboardType}
+                    />
+                )}
+                {error !== undefined && (
+                    <Text style={styles.errorText}>{error}</Text>
+                )}
+            </View>
             {unit && <Text style={styles.unitText}>{unit}</Text>}
         </View>
     )

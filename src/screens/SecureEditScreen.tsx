@@ -47,7 +47,7 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
     // Potential to pass field rules determination to calling component
     // but that requires many extra dependencies in calling component.
     // Invert this control if this list grows too large
-    const fieldRules: Rules = React.useMemo(() => {
+    const fieldRules: Rules<string> = React.useMemo(() => {
         switch (field) {
             case SecureEditField.EMAIL:
                 return getFormFieldRules('Email', true, undefined, undefined, [

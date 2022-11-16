@@ -1,10 +1,12 @@
 import * as AuthData from '../../../src/services/data/auth'
 import * as Constants from '../../../src/utils/constants'
+import * as UserData from '../../../src/services/data/user'
 import { AllScreenProps } from '../../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import SelectMyTeamScreen from '../../../src/screens/games/SelectMyTeamScreen'
+import { fetchProfileData } from '../../../fixtures/data'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
 import {
@@ -16,9 +18,14 @@ import {
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const navigate = jest.fn()
+const addListener = jest.fn()
+const push = jest.fn()
+
 const props: AllScreenProps = {
     navigation: {
         navigate,
+        addListener,
+        push,
     } as any,
     route: {} as any,
 }
@@ -40,11 +47,17 @@ it('should match snapshot with unauthenticated user', async () => {
     expect(snapshot.toJSON()).toMatchSnapshot()
     expect(snapshot.getByText(Constants.AUTH_TO_CREATE)).not.toBeNull()
     fireEvent.press(snapshot.getByText('log in'))
-    expect(navigate).toHaveBeenCalledWith('Login')
+    expect(navigate).toHaveBeenCalledWith('Tabs', {
+        screen: 'Account',
+        params: { screen: 'Login' },
+    })
 })
 
 it('should match snapshot without manager teams', async () => {
     jest.spyOn(AuthData, 'isLoggedIn').mockReturnValue(Promise.resolve(true))
+    jest.spyOn(UserData, 'fetchProfile').mockReturnValueOnce(
+        Promise.resolve({ ...fetchProfileData, managerTeams: [] }),
+    )
     const snapshot = render(
         <Provider store={store}>
             <NavigationContainer>
@@ -60,11 +73,17 @@ it('should match snapshot without manager teams', async () => {
     expect(snapshot.toJSON()).toMatchSnapshot()
     expect(snapshot.getByText(Constants.MANAGE_TO_CREATE)).not.toBeNull()
     fireEvent.press(snapshot.getByText('create team'))
-    expect(navigate).toHaveBeenCalledWith('CreateTeam')
+    expect(push).toHaveBeenCalledWith('Tabs', {
+        screen: 'Account',
+        params: { screen: 'CreateTeam' },
+    })
 })
 
 it('should match snapshot with manager teams', async () => {
     jest.spyOn(AuthData, 'isLoggedIn').mockReturnValue(Promise.resolve(true))
+    jest.spyOn(UserData, 'fetchProfile').mockReturnValueOnce(
+        Promise.resolve({ ...fetchProfileData, managerTeams: [] }),
+    )
     store.dispatch(
         setProfile({
             managerTeams: [

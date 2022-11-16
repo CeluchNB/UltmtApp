@@ -130,7 +130,13 @@ exports[`should match snapshot 1`] = `
         >
           Name 2
         </Text>
-        <Text>
+        <Text
+          style={
+            Object {
+              "color": "#ffd600",
+            }
+          }
+        >
           @
           placename2
         </Text>
