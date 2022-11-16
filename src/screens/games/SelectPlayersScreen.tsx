@@ -1,7 +1,9 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
 import { Chip } from 'react-native-paper'
 import GameHeader from '../../components/molecules/GameHeader'
+import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
+import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
@@ -28,8 +30,9 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = () => {
     const point = useSelector(selectPoint)
     const status = useSelector(selectSetPlayersStatus)
     const error = useSelector(selectSetPlayersError)
-    const [selectedPlayers, setSelectedPlayers] = useState<number[]>([])
     const dispatch = useDispatch()
+    const [selectedPlayers, setSelectedPlayers] = useState<number[]>([])
+    const [modalVisible, setModalVisible] = useState(false)
 
     const playerList = React.useMemo(() => {
         if (team === 'one') {
@@ -122,12 +125,25 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = () => {
             {status === 'failed' && (
                 <Text style={styles.errorText}>{error}</Text>
             )}
+            <SecondaryButton
+                style={styles.button}
+                onPress={async () => {
+                    setModalVisible(true)
+                }}
+                text="add guest"
+            />
             <PrimaryButton
                 style={styles.button}
                 text="start"
                 disabled={selectedPlayers.length !== game.playersPerPoint}
                 onPress={onSetPlayers}
                 loading={status === 'loading'}
+            />
+            <GuestPlayerModal
+                visible={modalVisible}
+                onClose={() => {
+                    setModalVisible(false)
+                }}
             />
         </BaseScreen>
     )

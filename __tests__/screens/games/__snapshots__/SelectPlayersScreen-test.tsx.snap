@@ -955,6 +955,103 @@ exports[`should match snapshot 1`] = `
       collapsable={false}
       style={
         Object {
+          "backgroundColor": "transparent",
+          "borderColor": "#ffd600",
+          "borderRadius": 4,
+          "borderStyle": "solid",
+          "borderWidth": 0.5,
+          "elevation": 0,
+          "marginTop": 10,
+          "minWidth": 64,
+        }
+      }
+    >
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": false,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Object {
+              "borderRadius": 4,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            numberOfLines={1}
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "#000000",
+                  "fontFamily": "System",
+                  "fontWeight": "400",
+                },
+                Object {
+                  "textAlign": "left",
+                },
+                Array [
+                  Object {
+                    "letterSpacing": 1,
+                    "marginHorizontal": 16,
+                    "marginVertical": 9,
+                    "textAlign": "center",
+                  },
+                  undefined,
+                  Object {
+                    "textTransform": "uppercase",
+                  },
+                  Object {
+                    "color": "#ffd600",
+                    "fontFamily": "System",
+                    "fontWeight": "500",
+                  },
+                  Object {
+                    "fontFamily": "System",
+                    "fontWeight": "500",
+                  },
+                  undefined,
+                ],
+              ]
+            }
+          >
+            add guest
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      collapsable={false}
+      style={
+        Object {
           "backgroundColor": "#ababab",
           "borderColor": "transparent",
           "borderRadius": 4,
@@ -1050,6 +1147,14 @@ exports[`should match snapshot 1`] = `
         </View>
       </View>
     </View>
+    <Modal
+      animationType="slide"
+      collapsable={true}
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      transparent={true}
+      visible={false}
+    />
   </View>
 </RCTSafeAreaView>
 `;
@@ -2009,6 +2114,103 @@ exports[`should match snapshot for team two 1`] = `
       collapsable={false}
       style={
         Object {
+          "backgroundColor": "transparent",
+          "borderColor": "#ffd600",
+          "borderRadius": 4,
+          "borderStyle": "solid",
+          "borderWidth": 0.5,
+          "elevation": 0,
+          "marginTop": 10,
+          "minWidth": 64,
+        }
+      }
+    >
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": false,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Object {
+              "borderRadius": 4,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            numberOfLines={1}
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "#000000",
+                  "fontFamily": "System",
+                  "fontWeight": "400",
+                },
+                Object {
+                  "textAlign": "left",
+                },
+                Array [
+                  Object {
+                    "letterSpacing": 1,
+                    "marginHorizontal": 16,
+                    "marginVertical": 9,
+                    "textAlign": "center",
+                  },
+                  undefined,
+                  Object {
+                    "textTransform": "uppercase",
+                  },
+                  Object {
+                    "color": "#ffd600",
+                    "fontFamily": "System",
+                    "fontWeight": "500",
+                  },
+                  Object {
+                    "fontFamily": "System",
+                    "fontWeight": "500",
+                  },
+                  undefined,
+                ],
+              ]
+            }
+          >
+            add guest
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      collapsable={false}
+      style={
+        Object {
           "backgroundColor": "#ababab",
           "borderColor": "transparent",
           "borderRadius": 4,
@@ -2104,6 +2306,14 @@ exports[`should match snapshot for team two 1`] = `
         </View>
       </View>
     </View>
+    <Modal
+      animationType="slide"
+      collapsable={true}
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      transparent={true}
+      visible={false}
+    />
   </View>
 </RCTSafeAreaView>
 `;
