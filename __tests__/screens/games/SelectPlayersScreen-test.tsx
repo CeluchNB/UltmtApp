@@ -1,10 +1,10 @@
 import * as PointData from '../../../src/services/data/point'
 import { GuestUser } from '../../../src/types/user'
+import { LiveGameProps } from '../../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
 import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
-import { SelectPlayersProps } from '../../../src/types/navigation'
 import SelectPlayersScreen from '../../../src/screens/games/SelectPlayersScreen'
 import { createPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import { game } from '../../../fixtures/data'
@@ -26,7 +26,7 @@ afterAll(() => {
     console.warn = originalWarn
 })
 
-const props: SelectPlayersProps = {
+const props: LiveGameProps = {
     navigation: {} as any,
     route: {} as any,
 }

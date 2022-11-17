@@ -1,5 +1,5 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
-import { FirstPointProps } from '../../types/navigation'
+import { LiveGameProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { createPoint } from '../../store/reducers/features/point/livePointReducer'
@@ -15,7 +15,7 @@ import {
 import { size, weight } from '../../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
-const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
+const FirstPointScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     const { colors } = useColors()
     const dispatch = useDispatch()
     const game = useSelector(selectGame)
@@ -87,6 +87,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
                 <PrimaryButton
                     style={styles.button}
                     text="receiving"
+                    disabled={createStatus === 'loading'}
                     loading={createStatus === 'loading' && pulling === false}
                     onPress={async () => {
                         await onCreate(false)
