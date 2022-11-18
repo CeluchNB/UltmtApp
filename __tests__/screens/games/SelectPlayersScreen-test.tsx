@@ -26,8 +26,11 @@ afterAll(() => {
     console.warn = originalWarn
 })
 
+const navigate = jest.fn()
 const props: LiveGameProps = {
-    navigation: {} as any,
+    navigation: {
+        navigate,
+    } as any,
     route: {} as any,
 }
 

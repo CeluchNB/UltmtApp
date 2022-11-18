@@ -1,22 +1,40 @@
-import { ClientAction } from '../../types/action'
-import { getSocket } from '../network/game-socket'
+import { ClientAction, SubscriptionObject } from '../../types/action'
+import {
+    createAction as networkCreateAction,
+    joinPoint as networkJoinPoint,
+    subscribe as networkSubscribe,
+    undoAction as networkUndoAction,
+} from '../network/live-action'
 
+/**
+ * Method to join a point
+ * @param gameId id of game to join
+ * @param pointId id of point to join
+ */
 export const joinPoint = async (gameId: string, pointId: string) => {
-    const socket = await getSocket()
-    socket.emit('join:point', gameId, pointId)
+    await networkJoinPoint(gameId, pointId)
 }
 
+/**
+ * Method to create an action
+ * @param action action data
+ * @param pointId point action belongs to
+ */
 export const addAction = async (action: ClientAction, pointId: string) => {
-    const socket = await getSocket()
-    socket.emit('action', JSON.stringify({ action, pointId }))
+    await networkCreateAction(action, pointId)
 }
 
-export const listen = async () => {
-    const socket = await getSocket()
-    socket.on('action:client', data => {
-        console.log('got action', data)
-    })
-    socket.on('action:error', data => {
-        console.log('got error', data)
-    })
+/**
+ * Method to undo an action
+ * @param pointId undo last action on point of this id
+ */
+export const undoAction = async (pointId: string) => {
+    await networkUndoAction(pointId)
+}
+/**
+ * Method to listen to specific action events
+ * @param subscriptions object containing subscription types and methods
+ */
+export const subscribe = async (subscriptions: SubscriptionObject) => {
+    await networkSubscribe(subscriptions)
 }
