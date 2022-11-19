@@ -26,9 +26,9 @@ export interface ClientAction {
     tags: string[]
 }
 
-export const ACTION_MAP = {
+export const ACTION_MAP: { [x: string]: (ActionType | 'score')[] } = {
     PULLING: [ActionType.PULL],
-    RECEIVING: [ActionType.CATCH, ActionType.PICKUP],
+    RECEIVING: [ActionType.CATCH, ActionType.PICKUP, ActionType.DROP],
     OFFENSE_WITH_POSSESSION: [ActionType.THROWAWAY],
     OFFENSE_NO_POSSESSION: [ActionType.CATCH, ActionType.DROP, 'score'],
     DEFENSE: [ActionType.BLOCK, ActionType.PICKUP, 'score'],

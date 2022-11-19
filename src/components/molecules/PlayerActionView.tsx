@@ -1,3 +1,4 @@
+import { ActionType } from '../../types/action'
 import { FlatList } from 'react-native'
 import { GuestUser } from '../../types/user'
 import PlayerActionItem from '../atoms/PlayerActionItem'
@@ -7,16 +8,18 @@ import { getPlayerValidActions } from '../../utils/actions'
 interface PlayerActionViewProps {
     players: GuestUser[]
     pulling: boolean
+    onAction: (index: number, action: ActionType | 'score') => void
 }
 
 type PlayerAction = {
     player: GuestUser
-    actions: string[]
+    actions: (ActionType | 'score')[]
 }
 
 const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     players,
     pulling,
+    onAction,
 }) => {
     const [activePlayer, setActivePlayer] = React.useState<number>(0)
     const [prevAction, setPrevAction] = React.useState<string | undefined>(
@@ -40,9 +43,10 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
         })
     }, [players, activePlayer, prevAction, pulling])
 
-    const onPress = (index: number, action: string) => {
+    const onPress = (index: number, action: ActionType | 'score') => {
         setActivePlayer(index)
         setPrevAction(action)
+        onAction(index, action)
     }
 
     return (
@@ -55,7 +59,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
                         key={index}
                         player={player}
                         actions={actions}
-                        onPress={action => {
+                        onAction={action => {
                             onPress(index, action)
                         }}
                     />

@@ -1,4 +1,5 @@
-import { ACTION_MAP, ActionType } from '../types/action'
+import { GuestUser } from '../types/user'
+import { ACTION_MAP, ActionType, ClientAction } from '../types/action'
 
 /**
  * Method to determine the next valid action options for a player
@@ -13,7 +14,7 @@ export const getPlayerValidActions = (
     actingUser: number,
     action?: string,
     pulling?: boolean,
-): ActionType[] | string[] => {
+): ('score' | ActionType)[] => {
     if (!action) {
         if (pulling) {
             return ACTION_MAP.PULLING
@@ -39,4 +40,35 @@ export const getPlayerValidActions = (
     }
 
     return ACTION_MAP.OFFENSE_NO_POSSESSION
+}
+
+export const getAction = (
+    action: ActionType | 'score',
+    playerOne?: GuestUser,
+    playerTwo?: GuestUser,
+): ClientAction => {
+    let actionType = action === 'score' ? ActionType.TEAM_ONE_SCORE : action
+    if (
+        action !== 'score' &&
+        [
+            ActionType.PULL,
+            ActionType.THROWAWAY,
+            ActionType.BLOCK,
+            ActionType.PICKUP,
+            ActionType.TIMEOUT,
+            ActionType.CALL_ON_FIELD,
+        ].includes(action)
+    ) {
+        return {
+            actionType,
+            playerOne,
+            tags: [],
+        }
+    }
+    return {
+        actionType,
+        playerOne,
+        playerTwo,
+        tags: [],
+    }
 }

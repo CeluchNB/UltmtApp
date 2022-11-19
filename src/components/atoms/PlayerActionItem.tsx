@@ -1,3 +1,4 @@
+import { ActionType } from '../../types/action'
 import { Button } from 'react-native-paper'
 import { GuestUser } from '../../types/user'
 import React from 'react'
@@ -7,14 +8,14 @@ import { StyleSheet, Text, View } from 'react-native'
 
 interface PlayerActionItemProps {
     player: GuestUser
-    actions: string[]
-    onPress: (action: string) => void
+    actions: ('score' | ActionType)[]
+    onAction: (action: ActionType | 'score') => void
 }
 
 const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
     player,
     actions,
-    onPress,
+    onAction,
 }) => {
     const { colors } = useColors()
 
@@ -71,7 +72,7 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                     collapsable={true}
                     mode="outlined"
                     onPress={() => {
-                        onPress(action)
+                        onAction(action)
                     }}>
                     {action}
                 </Button>
