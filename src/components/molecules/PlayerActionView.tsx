@@ -8,6 +8,8 @@ import { getPlayerValidActions } from '../../utils/actions'
 interface PlayerActionViewProps {
     players: GuestUser[]
     pulling: boolean
+    prevAction?: ActionType | 'score'
+    activePlayer?: number
     onAction: (index: number, action: ActionType | 'score') => void
 }
 
@@ -19,19 +21,16 @@ type PlayerAction = {
 const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     players,
     pulling,
+    prevAction,
+    activePlayer,
     onAction,
 }) => {
-    const [activePlayer, setActivePlayer] = React.useState<number>(0)
-    const [prevAction, setPrevAction] = React.useState<string | undefined>(
-        undefined,
-    )
-
     const playerActions: PlayerAction[] = React.useMemo(() => {
         const actions = []
         for (let i = 0; i < players.length; i++) {
             let action = getPlayerValidActions(
                 i,
-                activePlayer,
+                activePlayer || 0,
                 prevAction,
                 pulling,
             )
@@ -44,8 +43,6 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     }, [players, activePlayer, prevAction, pulling])
 
     const onPress = (index: number, action: ActionType | 'score') => {
-        setActivePlayer(index)
-        setPrevAction(action)
         onAction(index, action)
     }
 

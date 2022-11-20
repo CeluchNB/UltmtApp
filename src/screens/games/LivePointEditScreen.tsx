@@ -12,9 +12,12 @@ import { addAction, joinPoint, subscribe } from '../../services/data/action'
 const LivePointEditScreen: React.FC<{}> = () => {
     const game = useSelector(selectGame)
     const point = useSelector(selectPoint)
-    const [prevUser, setPrevUser] = React.useState<number | undefined>(
+    const [activePlayer, setActivePlayer] = React.useState<number | undefined>(
         undefined,
     )
+    const [prevAction, setPrevAction] = React.useState<
+        ActionType | 'score' | undefined
+    >(undefined)
 
     const subscriptions: SubscriptionObject = {
         client: data => {
@@ -39,13 +42,14 @@ const LivePointEditScreen: React.FC<{}> = () => {
     const onAction = (index: number, actionType: ActionType | 'score') => {
         const action = getAction(
             actionType,
-            prevUser
-                ? point.teamOnePlayers[prevUser]
+            activePlayer
+                ? point.teamOnePlayers[activePlayer]
                 : point.teamOnePlayers[index],
-            prevUser ? point.teamOnePlayers[index] : undefined,
+            activePlayer ? point.teamOnePlayers[index] : undefined,
         )
         addAction(action, point._id)
-        setPrevUser(index)
+        setActivePlayer(index)
+        setPrevAction(actionType)
     }
 
     return (
@@ -54,6 +58,8 @@ const LivePointEditScreen: React.FC<{}> = () => {
             <PlayerActionView
                 players={point.teamOnePlayers}
                 pulling={point.pullingTeam._id === game.teamOne._id}
+                prevAction={prevAction}
+                activePlayer={activePlayer}
                 onAction={onAction}
             />
         </BaseScreen>
