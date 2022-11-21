@@ -3,7 +3,6 @@ import GameHeader from '../../components/molecules/GameHeader'
 import PlayerActionView from '../../components/molecules/PlayerActionView'
 import React from 'react'
 import { getAction } from '../../utils/actions'
-import { selectGame } from '../../store/reducers/features/game/liveGameReducer'
 import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
 import { useSelector } from 'react-redux'
 import { ActionType, SubscriptionObject } from '../../types/action'
@@ -13,9 +12,14 @@ import {
     subscribe,
     undoAction,
 } from '../../services/data/action'
+import {
+    selectGame,
+    selectTeam,
+} from '../../store/reducers/features/game/liveGameReducer'
 
 const LivePointEditScreen: React.FC<{}> = () => {
     const game = useSelector(selectGame)
+    const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
     const [actionStack, setActionStack] = React.useState<
         { playerIndex: number; actionType: ActionType | 'score' }[]
@@ -98,12 +102,21 @@ const LivePointEditScreen: React.FC<{}> = () => {
         }
     }
 
+    const isPulling = () => {
+        if (team === 'one') {
+            return point.pullingTeam._id === game.teamOne._id
+        }
+        return point.pullingTeam._id !== game.teamOne._id
+    }
+
     return (
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
             <PlayerActionView
-                players={point.teamOnePlayers}
-                pulling={point.pullingTeam._id === game.teamOne._id}
+                players={
+                    team === 'one' ? point.teamOnePlayers : point.teamTwoPlayers
+                }
+                pulling={isPulling()}
                 prevAction={getActiveAction().actionType}
                 activePlayer={getActiveAction().playerIndex}
                 undoDisabled={actionStack.length === 0}
