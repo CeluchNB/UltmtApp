@@ -1,5 +1,5 @@
-import { ACTION_MAP } from '../../src/types/action'
-import { getPlayerValidActions } from '../../src/utils/actions'
+import { ACTION_MAP, ActionType } from '../../src/types/action'
+import { getAction, getPlayerValidActions } from '../../src/utils/actions'
 
 describe('test get player valid actions', () => {
     it('with pulling team', () => {
@@ -29,5 +29,38 @@ describe('test get player valid actions', () => {
     it('after block', () => {
         const result = getPlayerValidActions(0, 0, 'Block', true)
         expect(result).toBe(ACTION_MAP.DEFENSE_AFTER_BLOCK)
+    })
+})
+
+describe('test get action', () => {
+    const playerOne = { firstName: 'First 1', lastName: 'Last 1' }
+    const playerTwo = { firstName: 'First 2', lastName: 'Last 2' }
+    it('with team one score and two players', () => {
+        const result = getAction('score', 'one', playerOne, playerTwo)
+        expect(result).toMatchObject({
+            actionType: ActionType.TEAM_ONE_SCORE,
+            playerOne,
+            playerTwo,
+            tags: [],
+        })
+    })
+
+    it('with team two score and two players', () => {
+        const result = getAction('score', 'two', playerOne, playerTwo)
+        expect(result).toMatchObject({
+            actionType: ActionType.TEAM_TWO_SCORE,
+            playerOne,
+            playerTwo,
+            tags: [],
+        })
+    })
+
+    it('with single player action', () => {
+        const result = getAction(ActionType.PULL, 'one', playerOne, playerTwo)
+        expect(result).toMatchObject({
+            actionType: ActionType.PULL,
+            playerOne,
+            tags: [],
+        })
     })
 })

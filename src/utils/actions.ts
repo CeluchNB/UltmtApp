@@ -44,10 +44,19 @@ export const getPlayerValidActions = (
 
 export const getAction = (
     action: ActionType | 'score',
+    team: 'one' | 'two',
     playerOne?: GuestUser,
     playerTwo?: GuestUser,
 ): ClientAction => {
-    let actionType = action === 'score' ? ActionType.TEAM_ONE_SCORE : action
+    let actionType: ActionType
+    if (action === 'score' && team === 'one') {
+        actionType = ActionType.TEAM_ONE_SCORE
+    } else if (action === 'score' && team === 'two') {
+        actionType = ActionType.TEAM_TWO_SCORE
+    } else {
+        actionType = action as ActionType
+    }
+
     if (
         action !== 'score' &&
         [

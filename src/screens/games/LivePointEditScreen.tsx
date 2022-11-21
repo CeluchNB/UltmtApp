@@ -51,6 +51,7 @@ const LivePointEditScreen: React.FC<{}> = () => {
     ) => {
         const action = getAction(
             actionType,
+            team || 'one',
             actionStack.length > 0
                 ? point.teamOnePlayers[
                       actionStack[actionStack.length - 1].playerIndex
