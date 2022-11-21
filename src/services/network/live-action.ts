@@ -11,6 +11,9 @@ const getSocket = async (): Promise<Socket> => {
             extraHeaders: { Authorization: `Bearer ${token}` },
         })
     }
+    socket.on('disconnect', reason => {
+        console.log('disconnected', reason)
+    })
     return socket
 }
 

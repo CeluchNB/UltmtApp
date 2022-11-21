@@ -26,6 +26,18 @@ export interface ClientAction {
     tags: string[]
 }
 
+export interface Comment {
+    user: GuestUser
+    comment: string
+    commentNumber: number
+}
+
+export interface ServerAction extends ClientAction {
+    comments: Comment[]
+    actionNumber: number
+    teamNumber: 'one' | 'two'
+}
+
 export const ACTION_MAP: { [x: string]: (ActionType | 'score')[] } = {
     PULLING: [ActionType.PULL],
     RECEIVING: [ActionType.CATCH, ActionType.PICKUP, ActionType.DROP],

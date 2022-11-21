@@ -1,16 +1,21 @@
 import { ActionType } from '../../types/action'
-import { FlatList } from 'react-native'
 import { GuestUser } from '../../types/user'
+import { IconButton } from 'react-native-paper'
 import PlayerActionItem from '../atoms/PlayerActionItem'
 import React from 'react'
 import { getPlayerValidActions } from '../../utils/actions'
+import { useColors } from '../../hooks'
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
 
 interface PlayerActionViewProps {
     players: GuestUser[]
     pulling: boolean
     prevAction?: ActionType | 'score'
     activePlayer?: number
+    undoDisabled: boolean
+    loading: boolean
     onAction: (index: number, action: ActionType | 'score') => void
+    onUndo: () => void
 }
 
 type PlayerAction = {
@@ -23,8 +28,12 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     pulling,
     prevAction,
     activePlayer,
+    undoDisabled,
+    loading,
     onAction,
+    onUndo,
 }) => {
+    const { colors } = useColors()
     const playerActions: PlayerAction[] = React.useMemo(() => {
         const actions = []
         for (let i = 0; i < players.length; i++) {
@@ -46,23 +55,46 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
         onAction(index, action)
     }
 
+    const styles = StyleSheet.create({
+        headerContainer: {
+            flexDirection: 'row',
+            alignSelf: 'flex-end',
+        },
+    })
+
     return (
-        <FlatList
-            data={playerActions}
-            renderItem={({ item, index }) => {
-                const { player, actions } = item
-                return (
-                    <PlayerActionItem
-                        key={index}
-                        player={player}
-                        actions={actions}
-                        onAction={action => {
-                            onPress(index, action)
-                        }}
+        <View>
+            <View style={styles.headerContainer}>
+                {loading && (
+                    <ActivityIndicator
+                        color={colors.textPrimary}
+                        size="small"
                     />
-                )
-            }}
-        />
+                )}
+                <IconButton
+                    icon="undo"
+                    color={colors.textPrimary}
+                    onPress={onUndo}
+                    disabled={undoDisabled}
+                />
+            </View>
+            <FlatList
+                data={playerActions}
+                renderItem={({ item, index }) => {
+                    const { player, actions } = item
+                    return (
+                        <PlayerActionItem
+                            key={index}
+                            player={player}
+                            actions={actions}
+                            onAction={action => {
+                                onPress(index, action)
+                            }}
+                        />
+                    )
+                }}
+            />
+        </View>
     )
 }
 

@@ -5,7 +5,7 @@ import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { createPoint } from '../../store/reducers/features/point/livePointReducer'
 import { selectGame } from '../../store/reducers/features/game/liveGameReducer'
 import { useColors } from '../../hooks'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import {
     selectCreateError,
@@ -22,10 +22,8 @@ const FirstPointScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     const createStatus = useSelector(selectCreateStatus)
     const createError = useSelector(selectCreateError)
     const point = useSelector(selectPoint)
-    const [pulling, setPulling] = useState<boolean>()
 
     const onCreate = async (isPulling: boolean) => {
-        setPulling(isPulling)
         dispatch(createPoint({ pulling: isPulling, pointNumber: 1 }))
     }
 
@@ -79,7 +77,8 @@ const FirstPointScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                 <PrimaryButton
                     style={styles.button}
                     text="pulling"
-                    loading={createStatus === 'loading' && pulling === true}
+                    disabled={createStatus === 'loading'}
+                    loading={createStatus === 'loading'}
                     onPress={async () => {
                         await onCreate(true)
                     }}
@@ -88,7 +87,7 @@ const FirstPointScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                     style={styles.button}
                     text="receiving"
                     disabled={createStatus === 'loading'}
-                    loading={createStatus === 'loading' && pulling === false}
+                    loading={createStatus === 'loading'}
                     onPress={async () => {
                         await onCreate(false)
                     }}

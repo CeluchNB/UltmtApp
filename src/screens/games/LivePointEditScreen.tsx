@@ -7,24 +7,27 @@ import { selectGame } from '../../store/reducers/features/game/liveGameReducer'
 import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
 import { useSelector } from 'react-redux'
 import { ActionType, SubscriptionObject } from '../../types/action'
-import { addAction, joinPoint, subscribe } from '../../services/data/action'
+import {
+    addAction,
+    joinPoint,
+    subscribe,
+    undoAction,
+} from '../../services/data/action'
 
 const LivePointEditScreen: React.FC<{}> = () => {
     const game = useSelector(selectGame)
     const point = useSelector(selectPoint)
-    const [activePlayer, setActivePlayer] = React.useState<number | undefined>(
-        undefined,
-    )
-    const [prevAction, setPrevAction] = React.useState<
-        ActionType | 'score' | undefined
-    >(undefined)
+    const [actionStack, setActionStack] = React.useState<
+        { playerIndex: number; actionType: ActionType | 'score' }[]
+    >([])
+    const [resolvedAction, setResolvedAction] = React.useState(0)
 
     const subscriptions: SubscriptionObject = {
         client: data => {
-            console.log('data', data)
+            setResolvedAction(data.actionNumber || 0)
         },
-        undo: data => {
-            console.log('undo data', data)
+        undo: () => {
+            setResolvedAction(curr => curr - 1)
         },
         error: data => {
             console.log('error data', data)
@@ -35,21 +38,64 @@ const LivePointEditScreen: React.FC<{}> = () => {
         joinPoint(game._id, point._id).then(() => {
             subscribe(subscriptions)
         })
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const onAction = (index: number, actionType: ActionType | 'score') => {
+    const onAction = (
+        playerIndex: number,
+        actionType: ActionType | 'score',
+    ) => {
         const action = getAction(
             actionType,
-            activePlayer
-                ? point.teamOnePlayers[activePlayer]
-                : point.teamOnePlayers[index],
-            activePlayer ? point.teamOnePlayers[index] : undefined,
+            actionStack.length > 0
+                ? point.teamOnePlayers[
+                      actionStack[actionStack.length - 1].playerIndex
+                  ]
+                : point.teamOnePlayers[playerIndex],
+            actionStack.length > 0
+                ? point.teamOnePlayers[
+                      actionStack[actionStack.length - 1].playerIndex
+                  ]
+                : undefined,
         )
         addAction(action, point._id)
-        setActivePlayer(index)
-        setPrevAction(actionType)
+        setActionStack(stack => {
+            return [
+                ...stack,
+                {
+                    playerIndex,
+                    actionType,
+                },
+            ]
+        })
+    }
+
+    const onUndo = () => {
+        undoAction(point._id)
+        setActionStack(stack => {
+            return stack.filter((_item, i) => {
+                return i !== stack.length - 1
+            })
+        })
+    }
+
+    const getActiveAction = (): {
+        playerIndex?: number
+        actionType?: ActionType | 'score'
+    } => {
+        if (actionStack.length < 1) {
+            return { playerIndex: undefined, actionType: undefined }
+        }
+        if (resolvedAction > actionStack.length || resolvedAction === 0) {
+            return {
+                playerIndex: actionStack[actionStack.length - 1].playerIndex,
+                actionType: actionStack[actionStack.length - 1].actionType,
+            }
+        }
+        return {
+            playerIndex: actionStack[resolvedAction - 1].playerIndex,
+            actionType: actionStack[resolvedAction - 1].actionType,
+        }
     }
 
     return (
@@ -58,9 +104,12 @@ const LivePointEditScreen: React.FC<{}> = () => {
             <PlayerActionView
                 players={point.teamOnePlayers}
                 pulling={point.pullingTeam._id === game.teamOne._id}
-                prevAction={prevAction}
-                activePlayer={activePlayer}
+                prevAction={getActiveAction().actionType}
+                activePlayer={getActiveAction().playerIndex}
+                undoDisabled={actionStack.length === 0}
+                loading={resolvedAction !== actionStack.length}
                 onAction={onAction}
+                onUndo={onUndo}
             />
         </BaseScreen>
     )
