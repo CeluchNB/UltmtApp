@@ -76,6 +76,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
                     color={colors.textPrimary}
                     onPress={onUndo}
                     disabled={undoDisabled}
+                    testID="undo-button"
                 />
             </View>
             <FlatList
