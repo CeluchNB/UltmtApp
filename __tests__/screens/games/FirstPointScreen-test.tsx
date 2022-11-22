@@ -1,6 +1,6 @@
 import * as PointData from '../../../src/services/data/point'
-import { LiveGameProps } from '../../../src/types/navigation'
 import FirstPointScreen from '../../../src/screens/games/FirstPointScreen'
+import { LiveGameProps } from '../../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
 import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
