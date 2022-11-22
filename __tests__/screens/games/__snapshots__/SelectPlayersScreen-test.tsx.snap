@@ -1149,9 +1149,9 @@ exports[`should match snapshot 1`] = `
     </View>
     <Modal
       animationType="slide"
-      collapsable={true}
       hardwareAccelerated={false}
       onRequestClose={[Function]}
+      testID="base-modal"
       transparent={true}
       visible={false}
     />
@@ -2308,9 +2308,9 @@ exports[`should match snapshot for team two 1`] = `
     </View>
     <Modal
       animationType="slide"
-      collapsable={true}
       hardwareAccelerated={false}
       onRequestClose={[Function]}
+      testID="base-modal"
       transparent={true}
       visible={false}
     />

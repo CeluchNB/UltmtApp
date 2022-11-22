@@ -30,7 +30,9 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ route }) => {
     const [q, setQ] = useState('')
     const [live, setLive] = useState(defaultLive)
     const [after, setAfter] = useState(new Date('2022-01-02'))
-    const [before, setBefore] = useState(new Date())
+    const [before, setBefore] = useState(
+        new Date(new Date().setDate(new Date().getDate() + 1)),
+    )
 
     const { data, isLoading, isFetchingNextPage, fetchNextPage } =
         useInfiniteQuery(

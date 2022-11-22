@@ -221,8 +221,7 @@ exports[`should match snapshot 1`] = `
     animationType="slide"
     hardwareAccelerated={false}
     onRequestClose={[Function]}
-    style={Object {}}
-    testID="filter-modal"
+    testID="base-modal"
     transparent={true}
     visible={false}
   />
@@ -802,7 +801,7 @@ exports[`should match snapshot 1`] = `
                     }
                   >
                     Before: 
-                    10/1/2022
+                    10/2/2022
                   </Text>
                 </Text>
               </View>

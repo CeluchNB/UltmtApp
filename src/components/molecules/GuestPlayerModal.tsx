@@ -1,3 +1,4 @@
+import BaseModal from '../atoms/BaseModal'
 import { GuestUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
@@ -7,7 +8,7 @@ import { getFormFieldRules } from '../../utils/form-utils'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
-import { Modal, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import {
     resetGuestPlayerStatus,
     selectGuestPlayerError,
@@ -93,71 +94,58 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
     })
 
     return (
-        <Modal
-            transparent={true}
-            animationType="slide"
-            visible={visible}
-            collapsable={true}
-            onRequestClose={onClose}>
-            <View style={styles.modalContainer}>
-                <View style={styles.modalView}>
-                    <Text style={styles.title}>Add Guest Player</Text>
-                    <View style={styles.inputContainer}>
-                        <Controller
-                            control={control}
-                            name="firstName"
-                            rules={getFormFieldRules('First name', true, 1, 30)}
-                            render={({ field: { onChange, value } }) => {
-                                return (
-                                    <UserInput
-                                        style={styles.input}
-                                        placeholder="First Name"
-                                        onChangeText={onChange}
-                                        value={value}
-                                    />
-                                )
-                            }}
-                        />
-                    </View>
-                    {errors.firstName && (
-                        <Text style={styles.errorText}>
-                            {errors.firstName.message}
-                        </Text>
-                    )}
-                    <View style={styles.inputContainer}>
-                        <Controller
-                            control={control}
-                            name="lastName"
-                            rules={getFormFieldRules('Last name', true, 1, 30)}
-                            render={({ field: { onChange, value } }) => {
-                                return (
-                                    <UserInput
-                                        style={styles.input}
-                                        placeholder="Last Name"
-                                        onChangeText={onChange}
-                                        value={value}
-                                    />
-                                )
-                            }}
-                        />
-                    </View>
-                    {errors.lastName && (
-                        <Text style={styles.errorText}>
-                            {errors.lastName.message}
-                        </Text>
-                    )}
-                    {error && <Text style={styles.errorText}>{error}</Text>}
-                    <PrimaryButton
-                        style={styles.button}
-                        text="add"
-                        onPress={async () => {
-                            handleSubmit(onSubmitPlayer)()
-                        }}
-                        loading={status === 'loading'}
-                    />
-                </View>
+        <BaseModal visible={visible} onClose={onClose}>
+            <Text style={styles.title}>Add Guest Player</Text>
+            <View style={styles.inputContainer}>
+                <Controller
+                    control={control}
+                    name="firstName"
+                    rules={getFormFieldRules('First name', true, 1, 30)}
+                    render={({ field: { onChange, value } }) => {
+                        return (
+                            <UserInput
+                                style={styles.input}
+                                placeholder="First Name"
+                                onChangeText={onChange}
+                                value={value}
+                            />
+                        )
+                    }}
+                />
             </View>
-        </Modal>
+            {errors.firstName && (
+                <Text style={styles.errorText}>{errors.firstName.message}</Text>
+            )}
+            <View style={styles.inputContainer}>
+                <Controller
+                    control={control}
+                    name="lastName"
+                    rules={getFormFieldRules('Last name', true, 1, 30)}
+                    render={({ field: { onChange, value } }) => {
+                        return (
+                            <UserInput
+                                style={styles.input}
+                                placeholder="Last Name"
+                                onChangeText={onChange}
+                                value={value}
+                            />
+                        )
+                    }}
+                />
+            </View>
+            {errors.lastName && (
+                <Text style={styles.errorText}>{errors.lastName.message}</Text>
+            )}
+            {error && <Text style={styles.errorText}>{error}</Text>}
+            <PrimaryButton
+                style={styles.button}
+                text="add"
+                onPress={async () => {
+                    handleSubmit(onSubmitPlayer)()
+                }}
+                loading={status === 'loading'}
+            />
+        </BaseModal>
     )
 }
 

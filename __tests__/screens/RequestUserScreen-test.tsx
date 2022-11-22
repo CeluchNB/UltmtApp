@@ -273,7 +273,7 @@ it('should get bulk code', async () => {
 
     expect(spy).toHaveBeenCalled()
 
-    const modal = getByTestId('bulk-code-modal')
+    const modal = getByTestId('base-modal')
     await act(async () => {})
     expect(modal.props.visible).toBe(true)
 })
@@ -296,7 +296,7 @@ it('should handle get bulk code error', async () => {
 
     expect(spy).toHaveBeenCalled()
 
-    const modal = getByTestId('bulk-code-modal')
+    const modal = getByTestId('base-modal')
     await act(async () => {})
     expect(modal.props.visible).toBe(true)
 
@@ -322,14 +322,14 @@ it('should close bulk code modal', async () => {
 
     expect(spy).toHaveBeenCalled()
 
-    const modal = getByTestId('bulk-code-modal')
+    const modal = getByTestId('base-modal')
     await act(async () => {})
     expect(modal.props.visible).toBe(true)
 
     const doneButton = getByText('done')
     fireEvent.press(doneButton)
 
-    const closedModal = getByTestId('bulk-code-modal')
+    const closedModal = getByTestId('base-modal')
     await act(async () => {})
     expect(closedModal.props.visible).toBe(false)
 })

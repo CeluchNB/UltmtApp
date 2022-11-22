@@ -235,7 +235,7 @@ exports[`should match snapshot 1`] = `
     animationType="slide"
     hardwareAccelerated={false}
     onRequestClose={[Function]}
-    testID="bulk-code-modal"
+    testID="base-modal"
     transparent={true}
     visible={false}
   />

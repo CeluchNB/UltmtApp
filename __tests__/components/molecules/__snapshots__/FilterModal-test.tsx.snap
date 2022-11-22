@@ -5,8 +5,7 @@ exports[`should match snapshot 1`] = `
   animationType="slide"
   hardwareAccelerated={false}
   onRequestClose={[Function]}
-  style={Object {}}
-  testID="filter-modal"
+  testID="base-modal"
   transparent={true}
   visible={true}
 >
@@ -32,6 +31,7 @@ exports[`should match snapshot 1`] = `
           "color": "#ffd600",
           "elevation": 5,
           "flex": 1,
+          "margin": 20,
           "padding": 25,
           "shadowColor": "#ffd600",
         }
