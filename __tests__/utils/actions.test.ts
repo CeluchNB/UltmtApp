@@ -36,31 +36,37 @@ describe('test get action', () => {
     const playerOne = { firstName: 'First 1', lastName: 'Last 1' }
     const playerTwo = { firstName: 'First 2', lastName: 'Last 2' }
     it('with team one score and two players', () => {
-        const result = getAction('score', 'one', playerOne, playerTwo)
+        const result = getAction('score', 'one', ['tag'], playerOne, playerTwo)
         expect(result).toMatchObject({
             actionType: ActionType.TEAM_ONE_SCORE,
             playerOne,
             playerTwo,
-            tags: [],
+            tags: ['tag'],
         })
     })
 
     it('with team two score and two players', () => {
-        const result = getAction('score', 'two', playerOne, playerTwo)
+        const result = getAction('score', 'two', ['tag'], playerOne, playerTwo)
         expect(result).toMatchObject({
             actionType: ActionType.TEAM_TWO_SCORE,
             playerOne,
             playerTwo,
-            tags: [],
+            tags: ['tag'],
         })
     })
 
     it('with single player action', () => {
-        const result = getAction(ActionType.PULL, 'one', playerOne, playerTwo)
+        const result = getAction(
+            ActionType.PULL,
+            'one',
+            ['tag'],
+            playerOne,
+            playerTwo,
+        )
         expect(result).toMatchObject({
             actionType: ActionType.PULL,
             playerOne,
-            tags: [],
+            tags: ['tag'],
         })
     })
 })

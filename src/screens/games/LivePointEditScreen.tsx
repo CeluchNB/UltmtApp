@@ -1,6 +1,6 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
-import PlayerActionView from '../../components/molecules/PlayerActionView'
+import PlayerActionView from '../../components/organisms/PlayerActionView'
 import React from 'react'
 import { getAction } from '../../utils/actions'
 import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
@@ -48,10 +48,12 @@ const LivePointEditScreen: React.FC<{}> = () => {
     const onAction = (
         playerIndex: number,
         actionType: ActionType | 'score',
+        tags: string[],
     ) => {
         const action = getAction(
             actionType,
             team || 'one',
+            tags,
             actionStack.length > 0
                 ? point.teamOnePlayers[
                       actionStack[actionStack.length - 1].playerIndex

@@ -45,6 +45,7 @@ export const getPlayerValidActions = (
 export const getAction = (
     action: ActionType | 'score',
     team: 'one' | 'two',
+    tags: string[],
     playerOne?: GuestUser,
     playerTwo?: GuestUser,
 ): ClientAction => {
@@ -71,13 +72,13 @@ export const getAction = (
         return {
             actionType,
             playerOne,
-            tags: [],
+            tags: tags,
         }
     }
     return {
         actionType,
         playerOne,
         playerTwo,
-        tags: [],
+        tags,
     }
 }

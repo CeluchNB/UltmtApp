@@ -1,7 +1,7 @@
 import { ActionType } from '../../types/action'
 import { GuestUser } from '../../types/user'
 import { IconButton } from 'react-native-paper'
-import PlayerActionItem from '../atoms/PlayerActionItem'
+import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
 import { getPlayerValidActions } from '../../utils/actions'
 import { useColors } from '../../hooks'
@@ -14,7 +14,11 @@ interface PlayerActionViewProps {
     activePlayer?: number
     undoDisabled: boolean
     loading: boolean
-    onAction: (index: number, action: ActionType | 'score') => void
+    onAction: (
+        index: number,
+        action: ActionType | 'score',
+        tags: string[],
+    ) => void
     onUndo: () => void
 }
 
@@ -51,8 +55,12 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
         })
     }, [players, activePlayer, prevAction, pulling])
 
-    const onPress = (index: number, action: ActionType | 'score') => {
-        onAction(index, action)
+    const onPress = (
+        index: number,
+        action: ActionType | 'score',
+        tags: string[],
+    ) => {
+        onAction(index, action, tags)
     }
 
     const styles = StyleSheet.create({
@@ -88,8 +96,8 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
                             key={index}
                             player={player}
                             actions={actions}
-                            onAction={action => {
-                                onPress(index, action)
+                            onAction={(action, tags) => {
+                                onPress(index, action, tags)
                             }}
                         />
                     )

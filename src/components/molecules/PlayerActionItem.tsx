@@ -1,6 +1,7 @@
 import { ActionType } from '../../types/action'
 import { Button } from 'react-native-paper'
 import { GuestUser } from '../../types/user'
+import PlayerActionTagModal from './PlayerActionTagModal'
 import React from 'react'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
@@ -9,7 +10,7 @@ import { StyleSheet, Text, View } from 'react-native'
 interface PlayerActionItemProps {
     player: GuestUser
     actions: ('score' | ActionType)[]
-    onAction: (action: ActionType | 'score') => void
+    onAction: (action: ActionType | 'score', tags: string[]) => void
 }
 
 const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
@@ -18,6 +19,18 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
     onAction,
 }) => {
     const { colors } = useColors()
+    const [modalVisible, setModalVisible] = React.useState(false)
+    const [selectedAction, setSelectedAction] = React.useState<
+        ActionType | 'score' | undefined
+    >()
+
+    const onModalClose = (tags: string[]) => {
+        if (selectedAction) {
+            onAction(selectedAction, tags)
+        }
+        setModalVisible(false)
+        setSelectedAction(undefined)
+    }
 
     const styles = StyleSheet.create({
         container: {
@@ -72,11 +85,19 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                     collapsable={true}
                     mode="outlined"
                     onPress={() => {
-                        onAction(action)
+                        onAction(action, [])
+                    }}
+                    onLongPress={() => {
+                        setSelectedAction(action)
+                        setModalVisible(true)
                     }}>
                     {action}
                 </Button>
             ))}
+            <PlayerActionTagModal
+                visible={modalVisible}
+                onClose={onModalClose}
+            />
         </View>
     )
 }

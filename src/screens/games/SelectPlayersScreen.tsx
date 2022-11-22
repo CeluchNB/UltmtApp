@@ -59,7 +59,9 @@ const SelectPlayersScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                 return prev.filter(s => s !== i)
             })
         } else {
-            setSelectedPlayers([i, ...selectedPlayers])
+            setSelectedPlayers(prev => {
+                return [i, ...prev]
+            })
         }
     }
 
