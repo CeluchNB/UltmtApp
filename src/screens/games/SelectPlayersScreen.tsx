@@ -2,26 +2,28 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import { Chip } from 'react-native-paper'
 import GameHeader from '../../components/molecules/GameHeader'
 import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
+import { LiveGameProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
-import { SelectPlayersProps } from '../../types/navigation'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text } from 'react-native'
 import React, { useState } from 'react'
+
 import {
-    selectGame,
-    selectTeam,
-} from '../../store/reducers/features/game/liveGameReducer'
-import {
+    resetSetPlayersStatus,
     selectPoint,
     selectSetPlayersError,
     selectSetPlayersStatus,
     setPlayers,
 } from '../../store/reducers/features/point/livePointReducer'
+import {
+    selectGame,
+    selectTeam,
+} from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const SelectPlayersScreen: React.FC<SelectPlayersProps> = () => {
+const SelectPlayersScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     // ignore flatlist flex wrap warning
     LogBox.ignoreLogs(['`flexWrap: `wrap`` is'])
     const { colors } = useColors()
@@ -57,7 +59,9 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = () => {
                 return prev.filter(s => s !== i)
             })
         } else {
-            setSelectedPlayers([i, ...selectedPlayers])
+            setSelectedPlayers(prev => {
+                return [i, ...prev]
+            })
         }
     }
 
@@ -65,6 +69,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = () => {
         const players = playerList.filter((p, i) => selectedPlayers.includes(i))
         dispatch(setPlayers({ players }))
     }
+
+    React.useEffect(() => {
+        if (status === 'success') {
+            dispatch(resetSetPlayersStatus())
+            navigation.navigate('LivePointEdit')
+        }
+    }, [status, navigation, dispatch])
 
     const styles = StyleSheet.create({
         description: {
@@ -135,7 +146,10 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = () => {
             <PrimaryButton
                 style={styles.button}
                 text="start"
-                disabled={selectedPlayers.length !== game.playersPerPoint}
+                disabled={
+                    selectedPlayers.length !== game.playersPerPoint ||
+                    status === 'loading'
+                }
                 onPress={onSetPlayers}
                 loading={status === 'loading'}
             />

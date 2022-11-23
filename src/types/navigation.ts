@@ -55,6 +55,7 @@ export type GameCreationParamList = {
 export type LiveGameParamList = {
     FirstPoint: undefined
     SelectPlayers: undefined // consider passing point id and not relying on live point reducer
+    LivePointEdit: undefined
 }
 
 export type TopLevelParamList = {
@@ -129,12 +130,7 @@ export type SelectOpponentProps = NativeStackScreenProps<
     'SelectOpponent'
 >
 
-export type FirstPointProps = NativeStackScreenProps<
+export type LiveGameProps = NativeStackScreenProps<
     LiveGameParamList,
     'FirstPoint'
->
-
-export type SelectPlayersProps = NativeStackScreenProps<
-    LiveGameParamList,
-    'SelectPlayers'
 >

@@ -45,8 +45,6 @@ const TextDateInput: React.FC<TextDateInputProps> = ({ value, onChange }) => {
                 open={open}
                 date={value}
                 mode="date"
-                minimumDate={new Date('2022-01-01')}
-                maximumDate={new Date()}
                 onConfirm={date => {
                     setOpen(false)
                     onChange(date)

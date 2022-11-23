@@ -5,7 +5,7 @@ exports[`should match snapshot when visible 1`] = `
   animationType="slide"
   hardwareAccelerated={false}
   onRequestClose={[Function]}
-  testID="bulk-code-modal"
+  testID="base-modal"
   transparent={true}
   visible={true}
 >
@@ -13,9 +13,11 @@ exports[`should match snapshot when visible 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "#30303050",
+        "display": "flex",
         "flex": 1,
+        "flexDirection": "row",
         "justifyContent": "center",
-        "marginTop": 30,
       }
     }
   >
@@ -23,18 +25,15 @@ exports[`should match snapshot when visible 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#ebebeb",
+          "backgroundColor": "#303030",
+          "borderColor": "#ffd600",
           "borderRadius": 10,
+          "color": "#ffd600",
           "elevation": 5,
+          "flex": 1,
           "margin": 20,
           "padding": 25,
-          "shadowColor": "#2a2a2a",
-          "shadowOffset": Object {
-            "height": 5,
-            "width": 5,
-          },
-          "shadowOpacity": 0.25,
-          "shadowRadius": 4,
+          "shadowColor": "#ffd600",
         }
       }
     >
@@ -131,7 +130,7 @@ exports[`should match snapshot when visible 1`] = `
                 style={
                   Array [
                     Object {
-                      "color": "#2a2a2a",
+                      "color": "#ffd600",
                       "fontSize": 24,
                     },
                     Array [
@@ -290,7 +289,7 @@ exports[`should match snapshot with error 1`] = `
   animationType="slide"
   hardwareAccelerated={false}
   onRequestClose={[Function]}
-  testID="bulk-code-modal"
+  testID="base-modal"
   transparent={true}
   visible={true}
 >
@@ -298,9 +297,11 @@ exports[`should match snapshot with error 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "#30303050",
+        "display": "flex",
         "flex": 1,
+        "flexDirection": "row",
         "justifyContent": "center",
-        "marginTop": 30,
       }
     }
   >
@@ -308,18 +309,15 @@ exports[`should match snapshot with error 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "backgroundColor": "#ebebeb",
+          "backgroundColor": "#303030",
+          "borderColor": "#ffd600",
           "borderRadius": 10,
+          "color": "#ffd600",
           "elevation": 5,
+          "flex": 1,
           "margin": 20,
           "padding": 25,
-          "shadowColor": "#2a2a2a",
-          "shadowOffset": Object {
-            "height": 5,
-            "width": 5,
-          },
-          "shadowOpacity": 0.25,
-          "shadowRadius": 4,
+          "shadowColor": "#ffd600",
         }
       }
     >

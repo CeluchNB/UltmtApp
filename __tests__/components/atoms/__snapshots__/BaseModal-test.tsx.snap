@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot with minimal children 1`] = `
+<Modal
+  animationType="slide"
+  hardwareAccelerated={false}
+  onRequestClose={[MockFunction]}
+  testID="base-modal"
+  transparent={true}
+  visible={true}
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#30303050",
+        "display": "flex",
+        "flex": 1,
+        "flexDirection": "row",
+        "justifyContent": "center",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#303030",
+          "borderColor": "#ffd600",
+          "borderRadius": 10,
+          "color": "#ffd600",
+          "elevation": 5,
+          "flex": 1,
+          "margin": 20,
+          "padding": 25,
+          "shadowColor": "#ffd600",
+        }
+      }
+    >
+      <View />
+    </View>
+  </View>
+</Modal>
+`;

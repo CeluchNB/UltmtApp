@@ -1,6 +1,6 @@
 import * as PointData from '../../../src/services/data/point'
-import { FirstPointProps } from '../../../src/types/navigation'
 import FirstPointScreen from '../../../src/screens/games/FirstPointScreen'
+import { LiveGameProps } from '../../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
 import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
@@ -14,7 +14,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react-native'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const navigate = jest.fn()
-const props: FirstPointProps = {
+const props: LiveGameProps = {
     navigation: {
         navigate,
     } as any,

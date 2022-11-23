@@ -1,9 +1,10 @@
 import * as React from 'react'
+import BaseModal from '../atoms/BaseModal'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { IconButton } from 'react-native-paper'
 import PrimaryButton from '../atoms/PrimaryButton'
 import { useColors } from '../../hooks'
-import { Modal, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 interface BulkCodeModalProps {
@@ -48,27 +49,6 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
         doneButton: {
             marginTop: 10,
         },
-        modalContainer: {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 30,
-        },
-        modalView: {
-            margin: 20,
-            backgroundColor: colors.darkGray,
-            borderRadius: 10,
-            padding: 25,
-            alignItems: 'center',
-            shadowColor: colors.darkPrimary,
-            shadowOffset: {
-                width: 5,
-                height: 5,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 4,
-            elevation: 5,
-        },
     })
 
     const copyCode = () => {
@@ -76,46 +56,35 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
     }
 
     return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={visible}
-            onRequestClose={onClose}
-            testID="bulk-code-modal">
-            <View style={styles.modalContainer}>
-                <View style={styles.modalView}>
-                    {code.length > 0 && (
-                        <View>
-                            <Text style={styles.codeIntro}>Your code is</Text>
-                            <View style={styles.codeContainer}>
-                                <Text style={styles.code}>{code}</Text>
-                                <IconButton
-                                    color={colors.darkPrimary}
-                                    style={styles.copyButton}
-                                    onPress={copyCode}
-                                    icon="content-copy"
-                                    testID="create-button"
-                                />
-                            </View>
-                            <Text style={styles.codeIntro}>
-                                This code is valid for 1 hour.
-                            </Text>
-                        </View>
-                    )}
-                    {error.length > 0 && (
-                        <Text style={styles.error}>{error}</Text>
-                    )}
-                    <PrimaryButton
-                        style={styles.doneButton}
-                        text="done"
-                        loading={false}
-                        onPress={async () => {
-                            onClose()
-                        }}
-                    />
+        <BaseModal visible={visible} onClose={onClose}>
+            {code.length > 0 && (
+                <View>
+                    <Text style={styles.codeIntro}>Your code is</Text>
+                    <View style={styles.codeContainer}>
+                        <Text style={styles.code}>{code}</Text>
+                        <IconButton
+                            color={colors.textPrimary}
+                            style={styles.copyButton}
+                            onPress={copyCode}
+                            icon="content-copy"
+                            testID="create-button"
+                        />
+                    </View>
+                    <Text style={styles.codeIntro}>
+                        This code is valid for 1 hour.
+                    </Text>
                 </View>
-            </View>
-        </Modal>
+            )}
+            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+            <PrimaryButton
+                style={styles.doneButton}
+                text="done"
+                loading={false}
+                onPress={async () => {
+                    onClose()
+                }}
+            />
+        </BaseModal>
     )
 }
 

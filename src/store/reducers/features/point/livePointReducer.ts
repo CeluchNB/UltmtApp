@@ -38,7 +38,12 @@ const initialState: LivePointSlice = {
 const livePointSlice = createSlice({
     name: 'livePoint',
     initialState,
-    reducers: {},
+    reducers: {
+        resetSetPlayersStatus(state) {
+            state.setPlayersStatus = 'idle'
+            state.setPlayersError = undefined
+        },
+    },
     extraReducers: builder => {
         builder.addCase(createPoint.pending, state => {
             state.createStatus = 'loading'
@@ -99,4 +104,5 @@ export const selectSetPlayersStatus = (state: RootState) =>
 export const selectSetPlayersError = (state: RootState) =>
     state.livePoint.setPlayersError
 export const selectPoint = (state: RootState) => state.livePoint.point
+export const { resetSetPlayersStatus } = livePointSlice.actions
 export default livePointSlice.reducer

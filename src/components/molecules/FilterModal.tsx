@@ -1,3 +1,4 @@
+import BaseModal from '../atoms/BaseModal'
 import PrimaryButton from '../atoms/PrimaryButton'
 import { RadioButton } from 'react-native-paper'
 import React from 'react'
@@ -5,7 +6,7 @@ import SecondaryButton from '../atoms/SecondaryButton'
 import TextDateInput from '../atoms/TextDateInput'
 import { useColors } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
-import { Modal, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 interface FilterModalProps {
@@ -71,109 +72,85 @@ const FilterModal: React.FC<FilterModalProps> = ({
     })
 
     return (
-        <Modal
-            animationType="slide"
-            visible={visible}
-            onRequestClose={() => {
+        <BaseModal
+            onClose={() => {
                 onClose({})
             }}
-            transparent={true}
-            style={styles.modal}
-            testID="filter-modal">
-            <View style={styles.modalContainer}>
-                <View style={styles.modalView}>
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.title}>Filters</Text>
-                        <SecondaryButton
-                            text="clear"
-                            onPress={async () => {
-                                reset()
-                            }}
-                        />
-                    </View>
-                    <View>
-                        <View style={styles.container}>
-                            <Controller
-                                control={control}
-                                name="live"
-                                render={({ field: { value, onChange } }) => (
-                                    <RadioButton.Group
-                                        onValueChange={onChange}
-                                        value={value}>
-                                        <View style={styles.container}>
-                                            <Text style={styles.text}>
-                                                All Games
-                                            </Text>
-                                            <RadioButton
-                                                value="undefined"
-                                                color={colors.textPrimary}
-                                                uncheckedColor={
-                                                    colors.textSecondary
-                                                }
-                                            />
-                                        </View>
-                                        <View style={styles.container}>
-                                            <Text style={styles.text}>
-                                                Live Games
-                                            </Text>
-                                            <RadioButton
-                                                value="true"
-                                                color={colors.textPrimary}
-                                                uncheckedColor={
-                                                    colors.textSecondary
-                                                }
-                                            />
-                                        </View>
-                                        <View style={styles.container}>
-                                            <Text style={styles.text}>
-                                                Completed Games
-                                            </Text>
-                                            <RadioButton
-                                                value="false"
-                                                color={colors.textPrimary}
-                                                uncheckedColor={
-                                                    colors.textSecondary
-                                                }
-                                            />
-                                        </View>
-                                    </RadioButton.Group>
-                                )}
-                            />
-                        </View>
-                        <View style={styles.container}>
-                            <Controller
-                                control={control}
-                                name="after"
-                                render={({ field: { value, onChange } }) => (
-                                    <TextDateInput
-                                        value={value}
-                                        onChange={onChange}
+            visible={visible}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>Filters</Text>
+                <SecondaryButton
+                    text="clear"
+                    onPress={async () => {
+                        reset()
+                    }}
+                />
+            </View>
+            <View>
+                <View style={styles.container}>
+                    <Controller
+                        control={control}
+                        name="live"
+                        render={({ field: { value, onChange } }) => (
+                            <RadioButton.Group
+                                onValueChange={onChange}
+                                value={value}>
+                                <View style={styles.container}>
+                                    <Text style={styles.text}>All Games</Text>
+                                    <RadioButton
+                                        value="undefined"
+                                        color={colors.textPrimary}
+                                        uncheckedColor={colors.textSecondary}
                                     />
-                                )}
-                            />
-                            <Text style={[styles.text, styles.toText]}>to</Text>
-                            <Controller
-                                control={control}
-                                name="before"
-                                render={({ field: { value, onChange } }) => (
-                                    <TextDateInput
-                                        value={value}
-                                        onChange={onChange}
+                                </View>
+                                <View style={styles.container}>
+                                    <Text style={styles.text}>Live Games</Text>
+                                    <RadioButton
+                                        value="true"
+                                        color={colors.textPrimary}
+                                        uncheckedColor={colors.textSecondary}
                                     />
-                                )}
-                            />
-                        </View>
-                    </View>
-                    <PrimaryButton
-                        text="done"
-                        onPress={async () => {
-                            handleSubmit(onClose)()
-                        }}
-                        loading={false}
+                                </View>
+                                <View style={styles.container}>
+                                    <Text style={styles.text}>
+                                        Completed Games
+                                    </Text>
+                                    <RadioButton
+                                        value="false"
+                                        color={colors.textPrimary}
+                                        uncheckedColor={colors.textSecondary}
+                                    />
+                                </View>
+                            </RadioButton.Group>
+                        )}
+                    />
+                </View>
+                <View style={styles.container}>
+                    <Controller
+                        control={control}
+                        name="after"
+                        render={({ field: { value, onChange } }) => (
+                            <TextDateInput value={value} onChange={onChange} />
+                        )}
+                    />
+                    <Text style={[styles.text, styles.toText]}>to</Text>
+                    <Controller
+                        control={control}
+                        name="before"
+                        render={({ field: { value, onChange } }) => (
+                            <TextDateInput value={value} onChange={onChange} />
+                        )}
                     />
                 </View>
             </View>
-        </Modal>
+            <PrimaryButton
+                text="done"
+                onPress={async () => {
+                    handleSubmit(onClose)()
+                }}
+                loading={false}
+            />
+        </BaseModal>
     )
 }
 

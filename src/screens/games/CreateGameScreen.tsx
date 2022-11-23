@@ -330,6 +330,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
                 /> */}
                 <PrimaryButton
                     text="start"
+                    disabled={createStatus === 'loading'}
                     loading={createStatus === 'loading'}
                     onPress={handleSubmit(onCreate)}
                 />

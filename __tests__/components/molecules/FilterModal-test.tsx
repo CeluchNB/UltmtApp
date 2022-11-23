@@ -81,7 +81,7 @@ it('should close on request close', () => {
         />,
     )
 
-    const modal = getByTestId('filter-modal')
+    const modal = getByTestId('base-modal')
     fireEvent(modal, 'onRequestClose')
 
     expect(onClose).toHaveBeenCalled()

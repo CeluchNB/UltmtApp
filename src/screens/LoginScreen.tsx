@@ -143,6 +143,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
             <PrimaryButton
                 text="Login"
                 loading={loading}
+                disabled={loading}
                 onPress={handleSubmit(onSubmit)}
                 style={styles.loginButton}
             />
