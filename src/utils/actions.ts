@@ -1,5 +1,10 @@
 import { GuestUser } from '../types/user'
-import { ACTION_MAP, ActionType, ClientAction } from '../types/action'
+import {
+    ACTION_MAP,
+    ActionType,
+    ClientAction,
+    TEAM_ACTION_MAP,
+} from '../types/action'
 
 /**
  * Method to determine the next valid action options for a player
@@ -9,7 +14,7 @@ import { ACTION_MAP, ActionType, ClientAction } from '../types/action'
  * @param pulling handle initial case, true = pulling, false = receiving, undefined = non-pulling action
  * @returns array of valid action
  */
-export const getPlayerValidActions = (
+export const getValidPlayerActions = (
     user: number,
     actingUser: number,
     action?: string,
@@ -42,6 +47,44 @@ export const getPlayerValidActions = (
     return ACTION_MAP.OFFENSE_NO_POSSESSION
 }
 
+/**
+ * Gets the valid options for the team's next actions
+ * @param actionStack list of previous actions
+ * @returns one of TEAM_ACTION_MAP's values
+ */
+export const getValidTeamActions = (
+    actionStack: { playerIndex: number; actionType: ActionType | 'score' }[],
+) => {
+    for (const action of actionStack.slice().reverse()) {
+        console.log('action type', action)
+        if (action.actionType === 'score') {
+            return TEAM_ACTION_MAP.PREPOINT
+        } else if (
+            [ActionType.BLOCK, ActionType.PICKUP, ActionType.CATCH].includes(
+                action.actionType,
+            )
+        ) {
+            return TEAM_ACTION_MAP.OFFENSE
+        } else if (
+            [ActionType.PULL, ActionType.DROP, ActionType.THROWAWAY].includes(
+                action.actionType,
+            )
+        ) {
+            return TEAM_ACTION_MAP.DEFENSE
+        }
+    }
+    return TEAM_ACTION_MAP.PREPOINT
+}
+
+/**
+ * Get an action object based on the input parameters
+ * @param action type of action
+ * @param team team action relates to
+ * @param tags optional tags related to action
+ * @param playerOne player one of action
+ * @param playerTwo player two of action
+ * @returns action object
+ */
 export const getAction = (
     action: ActionType | 'score',
     team: 'one' | 'two',

@@ -3,7 +3,7 @@ import { GuestUser } from '../../types/user'
 import { IconButton } from 'react-native-paper'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
-import { getPlayerValidActions } from '../../utils/actions'
+import { getValidPlayerActions } from '../../utils/actions'
 import { useColors } from '../../hooks'
 import {
     ActivityIndicator,
@@ -49,7 +49,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     const playerActions: PlayerAction[] = React.useMemo(() => {
         const actions = []
         for (let i = 0; i < players.length; i++) {
-            let action = getPlayerValidActions(
+            let action = getValidPlayerActions(
                 i,
                 activePlayer || 0,
                 prevAction,

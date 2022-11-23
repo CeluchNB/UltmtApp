@@ -2,7 +2,7 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
 import PlayerActionView from '../../components/organisms/PlayerActionView'
 import React from 'react'
-import { getAction } from '../../utils/actions'
+import TeamActionView from '../../components/organisms/TeamActionView'
 import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
 import { useSelector } from 'react-redux'
 import { ActionType, SubscriptionObject } from '../../types/action'
@@ -12,6 +12,7 @@ import {
     subscribe,
     undoAction,
 } from '../../services/data/action'
+import { getAction, getValidTeamActions } from '../../utils/actions'
 import {
     selectGame,
     selectTeam,
@@ -28,7 +29,6 @@ const LivePointEditScreen: React.FC<{}> = () => {
     const [liveError, setLiveError] = React.useState<string | undefined>(
         undefined,
     )
-    console.log('rendering', actionStack, resolvedAction)
 
     const subscriptions: SubscriptionObject = {
         client: data => {
@@ -91,6 +91,10 @@ const LivePointEditScreen: React.FC<{}> = () => {
         })
     }
 
+    const onTeamAction = (action: ActionType | 'score', tags: string[]) => {
+        console.log('got action', action, tags)
+    }
+
     const getActiveAction = (): {
         playerIndex?: number
         actionType?: ActionType | 'score'
@@ -132,6 +136,10 @@ const LivePointEditScreen: React.FC<{}> = () => {
                 error={liveError}
                 onAction={onAction}
                 onUndo={onUndo}
+            />
+            <TeamActionView
+                actions={getValidTeamActions(actionStack)}
+                onAction={onTeamAction}
             />
         </BaseScreen>
     )

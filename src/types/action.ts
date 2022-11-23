@@ -46,3 +46,13 @@ export const ACTION_MAP: { [x: string]: (ActionType | 'score')[] } = {
     DEFENSE: [ActionType.BLOCK, ActionType.PICKUP, 'score'],
     DEFENSE_AFTER_BLOCK: [ActionType.PICKUP],
 }
+
+export const TEAM_ACTION_MAP: { [x: string]: (ActionType | 'score')[] } = {
+    PREPOINT: [],
+    OFFENSE: [
+        ActionType.TIMEOUT,
+        ActionType.CALL_ON_FIELD,
+        ActionType.SUBSTITUTION,
+    ],
+    DEFENSE: ['score', ActionType.CALL_ON_FIELD, ActionType.SUBSTITUTION],
+}

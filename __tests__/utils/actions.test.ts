@@ -1,33 +1,33 @@
 import { ACTION_MAP, ActionType } from '../../src/types/action'
-import { getAction, getPlayerValidActions } from '../../src/utils/actions'
+import { getAction, getValidPlayerActions } from '../../src/utils/actions'
 
 describe('test get player valid actions', () => {
     it('with pulling team', () => {
-        const result = getPlayerValidActions(0, 0, undefined, true)
+        const result = getValidPlayerActions(0, 0, undefined, true)
         expect(result).toBe(ACTION_MAP.PULLING)
     })
     it('with receiving team', () => {
-        const result = getPlayerValidActions(0, 0, undefined, false)
+        const result = getValidPlayerActions(0, 0, undefined, false)
         expect(result).toBe(ACTION_MAP.RECEIVING)
     })
     it('after pull', () => {
-        const result = getPlayerValidActions(0, 0, 'Pull', true)
+        const result = getValidPlayerActions(0, 0, 'Pull', true)
         expect(result).toBe(ACTION_MAP.DEFENSE)
     })
     it('after player catch', () => {
-        const result = getPlayerValidActions(0, 0, 'Catch', true)
+        const result = getValidPlayerActions(0, 0, 'Catch', true)
         expect(result).toBe(ACTION_MAP.OFFENSE_WITH_POSSESSION)
     })
     it('after teammate catch', () => {
-        const result = getPlayerValidActions(0, 1, 'Catch', true)
+        const result = getValidPlayerActions(0, 1, 'Catch', true)
         expect(result).toBe(ACTION_MAP.OFFENSE_NO_POSSESSION)
     })
     it('after turnover', () => {
-        const result = getPlayerValidActions(0, 0, 'Drop', true)
+        const result = getValidPlayerActions(0, 0, 'Drop', true)
         expect(result).toBe(ACTION_MAP.DEFENSE)
     })
     it('after block', () => {
-        const result = getPlayerValidActions(0, 0, 'Block', true)
+        const result = getValidPlayerActions(0, 0, 'Block', true)
         expect(result).toBe(ACTION_MAP.DEFENSE_AFTER_BLOCK)
     })
 })
