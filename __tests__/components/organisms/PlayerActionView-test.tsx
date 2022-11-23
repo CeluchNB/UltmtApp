@@ -28,6 +28,7 @@ it('should match snapshot', () => {
                 onUndo={jest.fn()}
                 prevAction={ActionType.CATCH}
                 activePlayer={2}
+                error={'test error'}
             />
         </Provider>,
     )

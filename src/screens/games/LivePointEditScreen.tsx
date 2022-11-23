@@ -25,23 +25,27 @@ const LivePointEditScreen: React.FC<{}> = () => {
         { playerIndex: number; actionType: ActionType | 'score' }[]
     >([])
     const [resolvedAction, setResolvedAction] = React.useState(0)
+    const [liveError, setLiveError] = React.useState<string | undefined>(
+        undefined,
+    )
+    console.log('rendering', actionStack, resolvedAction)
 
     const subscriptions: SubscriptionObject = {
         client: data => {
+            setLiveError(undefined)
             setResolvedAction(data.actionNumber || 0)
         },
         undo: () => {
+            setLiveError(undefined)
             setResolvedAction(curr => curr - 1)
         },
         error: data => {
-            console.log('error data', data)
+            setLiveError(data?.message)
         },
     }
 
     React.useEffect(() => {
-        joinPoint(game._id, point._id).then(() => {
-            subscribe(subscriptions)
-        })
+        joinPoint(game._id, point._id)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -50,6 +54,7 @@ const LivePointEditScreen: React.FC<{}> = () => {
         actionType: ActionType | 'score',
         tags: string[],
     ) => {
+        subscribe(subscriptions)
         const action = getAction(
             actionType,
             team || 'one',
@@ -123,7 +128,8 @@ const LivePointEditScreen: React.FC<{}> = () => {
                 prevAction={getActiveAction().actionType}
                 activePlayer={getActiveAction().playerIndex}
                 undoDisabled={actionStack.length === 0}
-                loading={resolvedAction !== actionStack.length}
+                loading={resolvedAction < actionStack.length}
+                error={liveError}
                 onAction={onAction}
                 onUndo={onUndo}
             />

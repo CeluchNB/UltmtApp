@@ -35,7 +35,13 @@ export const undoAction = async (pointId: string) => {
 export const subscribe = async (subscriptions: SubscriptionObject) => {
     const actionSocket = await getSocket()
     actionSocket.removeAllListeners()
-    actionSocket.on('action:client', subscriptions.client)
-    actionSocket.on('action:undo:client', subscriptions.undo)
-    actionSocket.on('action:error', subscriptions.error)
+    if (!actionSocket.hasListeners('action:client')) {
+        actionSocket.on('action:client', subscriptions.client)
+    }
+    if (!actionSocket.hasListeners('action:undo:client')) {
+        actionSocket.on('action:undo:client', subscriptions.undo)
+    }
+    if (!actionSocket.hasListeners('action:error')) {
+        actionSocket.on('action:error', subscriptions.error)
+    }
 }

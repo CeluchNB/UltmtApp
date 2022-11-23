@@ -5,7 +5,13 @@ import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
 import { getPlayerValidActions } from '../../utils/actions'
 import { useColors } from '../../hooks'
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
+import {
+    ActivityIndicator,
+    FlatList,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 interface PlayerActionViewProps {
     players: GuestUser[]
@@ -14,6 +20,7 @@ interface PlayerActionViewProps {
     activePlayer?: number
     undoDisabled: boolean
     loading: boolean
+    error?: string
     onAction: (
         index: number,
         action: ActionType | 'score',
@@ -34,6 +41,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     activePlayer,
     undoDisabled,
     loading,
+    error,
     onAction,
     onUndo,
 }) => {
@@ -68,12 +76,17 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
             flexDirection: 'row',
             alignSelf: 'flex-end',
         },
+        error: {
+            color: colors.error,
+            width: '80%',
+        },
     })
 
     return (
         <View>
             <View style={styles.headerContainer}>
-                {loading && (
+                <Text style={styles.error}>{error}</Text>
+                {!error && loading && (
                     <ActivityIndicator
                         color={colors.textPrimary}
                         size="small"

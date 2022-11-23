@@ -10,10 +10,16 @@ exports[`should match snapshot 1`] = `
       }
     }
   >
-    <ActivityIndicator
-      color="#ffd600"
-      size="small"
-    />
+    <Text
+      style={
+        Object {
+          "color": "#ff0000",
+          "width": "80%",
+        }
+      }
+    >
+      test error
+    </Text>
     <View
       accessibilityRole="button"
       accessibilityState={
