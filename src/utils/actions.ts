@@ -3,6 +3,7 @@ import {
     ACTION_MAP,
     ActionType,
     ClientAction,
+    ClientActionType,
     TEAM_ACTION_MAP,
 } from '../types/action'
 
@@ -53,7 +54,7 @@ export const getValidPlayerActions = (
  * @returns one of TEAM_ACTION_MAP's values
  */
 export const getValidTeamActions = (
-    actionStack: { playerIndex: number; actionType: ActionType | 'score' }[],
+    actionStack: { playerIndex: number; actionType: ClientActionType }[],
 ) => {
     for (const action of actionStack.slice().reverse()) {
         console.log('action type', action)
@@ -86,7 +87,7 @@ export const getValidTeamActions = (
  * @returns action object
  */
 export const getAction = (
-    action: ActionType | 'score',
+    action: ClientActionType,
     team: 'one' | 'two',
     tags: string[],
     playerOne?: GuestUser,
@@ -123,5 +124,21 @@ export const getAction = (
         playerOne,
         playerTwo,
         tags,
+    }
+}
+
+/**
+ * Method to get an action's appropriate display name
+ * @param action action name
+ * @returns display friendly name
+ */
+export const mapActionToDisplayName = (action: ClientActionType) => {
+    switch (action) {
+        case 'score':
+            return 'they score'
+        case ActionType.CALL_ON_FIELD:
+            return 'call on field'
+        default:
+            return action
     }
 }

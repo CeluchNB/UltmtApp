@@ -38,7 +38,9 @@ export interface ServerAction extends ClientAction {
     teamNumber: 'one' | 'two'
 }
 
-export const ACTION_MAP: { [x: string]: (ActionType | 'score')[] } = {
+export type ClientActionType = ActionType | 'score'
+
+export const ACTION_MAP: { [x: string]: ClientActionType[] } = {
     PULLING: [ActionType.PULL],
     RECEIVING: [ActionType.CATCH, ActionType.PICKUP, ActionType.DROP],
     OFFENSE_WITH_POSSESSION: [ActionType.THROWAWAY],
@@ -47,7 +49,7 @@ export const ACTION_MAP: { [x: string]: (ActionType | 'score')[] } = {
     DEFENSE_AFTER_BLOCK: [ActionType.PICKUP],
 }
 
-export const TEAM_ACTION_MAP: { [x: string]: (ActionType | 'score')[] } = {
+export const TEAM_ACTION_MAP: { [x: string]: ClientActionType[] } = {
     PREPOINT: [],
     OFFENSE: [
         ActionType.TIMEOUT,

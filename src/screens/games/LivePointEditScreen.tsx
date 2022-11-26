@@ -5,7 +5,7 @@ import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
 import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
 import { useSelector } from 'react-redux'
-import { ActionType, SubscriptionObject } from '../../types/action'
+import { ClientActionType, SubscriptionObject } from '../../types/action'
 import {
     addAction,
     joinPoint,
@@ -23,7 +23,7 @@ const LivePointEditScreen: React.FC<{}> = () => {
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
     const [actionStack, setActionStack] = React.useState<
-        { playerIndex: number; actionType: ActionType | 'score' }[]
+        { playerIndex: number; actionType: ClientActionType }[]
     >([])
     const [resolvedAction, setResolvedAction] = React.useState(0)
     const [liveError, setLiveError] = React.useState<string | undefined>(
@@ -32,6 +32,7 @@ const LivePointEditScreen: React.FC<{}> = () => {
 
     const subscriptions: SubscriptionObject = {
         client: data => {
+            console.log('got data', data)
             setLiveError(undefined)
             setResolvedAction(data.actionNumber || 0)
         },
@@ -51,7 +52,7 @@ const LivePointEditScreen: React.FC<{}> = () => {
 
     const onAction = (
         playerIndex: number,
-        actionType: ActionType | 'score',
+        actionType: ClientActionType,
         tags: string[],
     ) => {
         subscribe(subscriptions)
@@ -91,13 +92,13 @@ const LivePointEditScreen: React.FC<{}> = () => {
         })
     }
 
-    const onTeamAction = (action: ActionType | 'score', tags: string[]) => {
+    const onTeamAction = (action: ClientActionType, tags: string[]) => {
         console.log('got action', action, tags)
     }
 
     const getActiveAction = (): {
         playerIndex?: number
-        actionType?: ActionType | 'score'
+        actionType?: ClientActionType
     } => {
         if (actionStack.length < 1) {
             return { playerIndex: undefined, actionType: undefined }

@@ -1,13 +1,16 @@
-import { ActionType } from '../../types/action'
 import { Button } from 'react-native-paper'
+import { GuestUser } from '../../types/user'
 import React from 'react'
+import SubstitutionModal from '../molecules/SubstitutionModal'
+import { mapActionToDisplayName } from '../../utils/actions'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
-import { StyleSheet, View } from 'react-native'
+import { ActionType, ClientActionType } from '../../types/action'
+import { FlatList, StyleSheet, View } from 'react-native'
 
 interface TeamActionViewProps {
-    actions: (ActionType | 'score')[]
-    onAction: (action: ActionType | 'score', tags: string[]) => void
+    actions: ClientActionType[]
+    onAction: (action: ClientActionType, tags: string[]) => void
 }
 
 const TeamActionView: React.FC<TeamActionViewProps> = ({
@@ -15,11 +18,30 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
     onAction,
 }) => {
     const { colors } = useColors()
+    const [subModalVisible, setSubModalVisible] = React.useState(false)
+
+    const handleAction = (action: ClientActionType) => {
+        if (action === ActionType.SUBSTITUTION) {
+            setSubModalVisible(true)
+        } else {
+            onAction(action, [])
+        }
+    }
+
+    const closeModal = () => {
+        setSubModalVisible(false)
+    }
+
+    const handleSubstitution = (playerOne: GuestUser, playerTwo: GuestUser) => {
+        setSubModalVisible(false)
+        console.log(playerOne, playerTwo)
+        // onAction(ActionType.SUBSTITUTION, [])
+    }
 
     const styles = StyleSheet.create({
         container: {
             marginTop: 10,
-            flexDirection: 'row',
+            marginBottom: 10,
         },
         button: {
             borderColor: colors.textPrimary,
@@ -27,6 +49,7 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
             backgroundColor: colors.primary,
             flex: 1,
             marginRight: 5,
+            marginTop: 5,
         },
         buttonText: {
             fontSize: size.fontFifteen,
@@ -38,67 +61,38 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
     }
 
     return (
-        <View>
-            <View style={styles.container}>
-                <Button
-                    key={actions[0]}
-                    compact={true}
-                    style={styles.button}
-                    labelStyle={styles.buttonText}
-                    color={colors.textPrimary}
-                    collapsable={true}
-                    mode="outlined"
-                    onPress={() => {
-                        onAction(actions[0], [])
-                    }}
-                    // onLongPress={() => {
-                    //     setSelectedAction(action)
-                    //     setModalVisible(true)
-                    // }}
-                >
-                    {actions[0]}
-                </Button>
-                <Button
-                    key={actions[1]}
-                    compact={true}
-                    style={styles.button}
-                    labelStyle={styles.buttonText}
-                    color={colors.textPrimary}
-                    collapsable={true}
-                    mode="outlined"
-                    onPress={() => {
-                        onAction(actions[1], [])
-                    }}
-                    // onLongPress={() => {
-                    //     setSelectedAction(action)
-                    //     setModalVisible(true)
-                    // }}
-                >
-                    {actions[1] === ActionType.CALL_ON_FIELD
-                        ? 'call on field'
-                        : actions[1]}
-                </Button>
-            </View>
-            <View style={styles.container}>
-                <Button
-                    key={actions[2]}
-                    compact={true}
-                    style={styles.button}
-                    labelStyle={styles.buttonText}
-                    color={colors.textPrimary}
-                    collapsable={true}
-                    mode="outlined"
-                    onPress={() => {
-                        onAction(actions[1], [])
-                    }}
-                    // onLongPress={() => {
-                    //     setSelectedAction(action)
-                    //     setModalVisible(true)
-                    // }}
-                >
-                    {actions[2]}
-                </Button>
-            </View>
+        <View style={styles.container}>
+            <FlatList
+                data={actions}
+                numColumns={2}
+                renderItem={({ item }) => {
+                    return (
+                        <Button
+                            key={item}
+                            compact={true}
+                            style={styles.button}
+                            labelStyle={styles.buttonText}
+                            color={colors.textPrimary}
+                            collapsable={true}
+                            mode="outlined"
+                            onPress={() => {
+                                handleAction(item)
+                            }}
+                            // onLongPress={() => {
+                            //     setSelectedAction(action)
+                            //     setModalVisible(true)
+                            // }}
+                        >
+                            {mapActionToDisplayName(item)}
+                        </Button>
+                    )
+                }}
+            />
+            <SubstitutionModal
+                visible={subModalVisible}
+                onClose={closeModal}
+                onSubmit={handleSubstitution}
+            />
         </View>
     )
 }

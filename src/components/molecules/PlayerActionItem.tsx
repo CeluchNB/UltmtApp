@@ -1,5 +1,5 @@
-import { ActionType } from '../../types/action'
 import { Button } from 'react-native-paper'
+import { ClientActionType } from '../../types/action'
 import { GuestUser } from '../../types/user'
 import PlayerActionTagModal from './PlayerActionTagModal'
 import React from 'react'
@@ -9,8 +9,8 @@ import { StyleSheet, Text, View } from 'react-native'
 
 interface PlayerActionItemProps {
     player: GuestUser
-    actions: ('score' | ActionType)[]
-    onAction: (action: ActionType | 'score', tags: string[]) => void
+    actions: ClientActionType[]
+    onAction: (action: ClientActionType, tags: string[]) => void
 }
 
 const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
@@ -21,7 +21,7 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
     const { colors } = useColors()
     const [modalVisible, setModalVisible] = React.useState(false)
     const [selectedAction, setSelectedAction] = React.useState<
-        ActionType | 'score' | undefined
+        ClientActionType | undefined
     >()
 
     const onModalClose = (tags: string[]) => {
