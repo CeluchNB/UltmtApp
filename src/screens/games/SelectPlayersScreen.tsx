@@ -73,7 +73,7 @@ const SelectPlayersScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     React.useEffect(() => {
         if (status === 'success') {
             dispatch(resetSetPlayersStatus())
-            navigation.navigate('LivePointEdit')
+            navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
         }
     }, [status, navigation, dispatch])
 

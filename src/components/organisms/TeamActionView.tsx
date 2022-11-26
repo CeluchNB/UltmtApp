@@ -10,7 +10,12 @@ import { FlatList, StyleSheet, View } from 'react-native'
 
 interface TeamActionViewProps {
     actions: ClientActionType[]
-    onAction: (action: ClientActionType, tags: string[]) => void
+    onAction: (
+        action: ClientActionType,
+        tags: string[],
+        playerOne?: GuestUser,
+        playerTwo?: GuestUser,
+    ) => void
 }
 
 const TeamActionView: React.FC<TeamActionViewProps> = ({
@@ -33,9 +38,8 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
     }
 
     const handleSubstitution = (playerOne: GuestUser, playerTwo: GuestUser) => {
-        setSubModalVisible(false)
-        console.log(playerOne, playerTwo)
-        // onAction(ActionType.SUBSTITUTION, [])
+        closeModal()
+        onAction(ActionType.SUBSTITUTION, [], playerOne, playerTwo)
     }
 
     const styles = StyleSheet.create({

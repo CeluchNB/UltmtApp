@@ -1,5 +1,6 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
+import { GuestUser } from '../../types/user'
 import PlayerActionView from '../../components/organisms/PlayerActionView'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
@@ -29,6 +30,14 @@ const LivePointEditScreen: React.FC<{}> = () => {
     const [liveError, setLiveError] = React.useState<string | undefined>(
         undefined,
     )
+
+    const activePlayers = React.useMemo(() => {
+        if (team === 'one') {
+            return point.teamOnePlayers
+        } else {
+            return point.teamTwoPlayers
+        }
+    }, [point, team])
 
     const subscriptions: SubscriptionObject = {
         client: data => {
@@ -61,14 +70,10 @@ const LivePointEditScreen: React.FC<{}> = () => {
             team || 'one',
             tags,
             actionStack.length > 0
-                ? point.teamOnePlayers[
-                      actionStack[actionStack.length - 1].playerIndex
-                  ]
-                : point.teamOnePlayers[playerIndex],
+                ? activePlayers[actionStack[actionStack.length - 1].playerIndex]
+                : activePlayers[playerIndex],
             actionStack.length > 0
-                ? point.teamOnePlayers[
-                      actionStack[actionStack.length - 1].playerIndex
-                  ]
+                ? activePlayers[actionStack[actionStack.length - 1].playerIndex]
                 : undefined,
         )
         addAction(action, point._id)
@@ -92,8 +97,20 @@ const LivePointEditScreen: React.FC<{}> = () => {
         })
     }
 
-    const onTeamAction = (action: ClientActionType, tags: string[]) => {
-        console.log('got action', action, tags)
+    const onTeamAction = (
+        actionType: ClientActionType,
+        tags: string[],
+        playerOne?: GuestUser,
+        playerTwo?: GuestUser,
+    ) => {
+        const actionData = getAction(
+            actionType,
+            team === 'one' ? 'two' : 'one',
+            tags,
+            playerOne || activePlayers[getActiveAction().playerIndex || 0],
+            playerTwo,
+        )
+        addAction(actionData, point._id)
     }
 
     const getActiveAction = (): {
@@ -126,9 +143,7 @@ const LivePointEditScreen: React.FC<{}> = () => {
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
             <PlayerActionView
-                players={
-                    team === 'one' ? point.teamOnePlayers : point.teamTwoPlayers
-                }
+                players={activePlayers}
                 pulling={isPulling()}
                 prevAction={getActiveAction().actionType}
                 activePlayer={getActiveAction().playerIndex}

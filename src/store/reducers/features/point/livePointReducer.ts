@@ -45,9 +45,9 @@ const livePointSlice = createSlice({
         },
         substitute(state, action) {
             if (action.payload.team === 'one') {
-                state.point.teamOnePlayers = action.payload.players
+                state.point.teamOnePlayers = [...action.payload.players]
             } else {
-                state.point.teamTwoPlayers = action.payload.players
+                state.point.teamTwoPlayers = [...action.payload.players]
             }
         },
     },

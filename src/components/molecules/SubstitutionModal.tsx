@@ -71,9 +71,11 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     }, [team, game, point])
 
     const handleSubstitution = async () => {
-        if (playerOne && playerTwo && playerOneIndex) {
-            currentPlayers.splice(playerOneIndex, 1, playerTwo)
-            dispatch(substitute({ team, players: currentPlayers }))
+        if (playerOne && playerTwo && playerOneIndex !== undefined) {
+            // create new array with new player
+            const newPlayers = currentPlayers.slice()
+            newPlayers.splice(playerOneIndex, 1, playerTwo)
+            dispatch(substitute({ team, players: newPlayers }))
             onSubmit(playerOne, playerTwo)
             reset()
         }

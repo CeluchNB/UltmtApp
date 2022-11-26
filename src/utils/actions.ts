@@ -57,7 +57,6 @@ export const getValidTeamActions = (
     actionStack: { playerIndex: number; actionType: ClientActionType }[],
 ) => {
     for (const action of actionStack.slice().reverse()) {
-        console.log('action type', action)
         if (action.actionType === 'score') {
             return TEAM_ACTION_MAP.PREPOINT
         } else if (
