@@ -101,9 +101,9 @@ const SelectPlayersScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
             <Text style={styles.description}>
-                {game.playersPerPoint} players on next{' '}
-                {isPulling(point, game, team) ? 'D' : 'O'}
-                -point
+                {game.playersPerPoint} players on next{'\n'}
+                {isPulling(point, game, team) ? 'D ' : 'O '}
+                point
             </Text>
             <FlatList
                 contentContainerStyle={styles.flatListContainer}

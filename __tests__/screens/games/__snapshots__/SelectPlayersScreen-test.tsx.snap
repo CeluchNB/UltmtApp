@@ -126,9 +126,11 @@ exports[`should match snapshot 1`] = `
       }
     >
       7
-       players on next 
-      O
-      -point
+       players on next
+      
+
+      O 
+      point
     </Text>
     <RCTScrollView
       contentContainerStyle={
@@ -1285,9 +1287,11 @@ exports[`should match snapshot for team two 1`] = `
       }
     >
       7
-       players on next 
-      O
-      -point
+       players on next
+      
+
+      O 
+      point
     </Text>
     <RCTScrollView
       contentContainerStyle={
