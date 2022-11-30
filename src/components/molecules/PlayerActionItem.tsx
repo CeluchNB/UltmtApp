@@ -24,8 +24,8 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
         ClientActionType | undefined
     >()
 
-    const onModalClose = (tags: string[]) => {
-        if (selectedAction) {
+    const onModalClose = (submit: boolean, tags: string[]) => {
+        if (submit && selectedAction) {
             onAction(selectedAction, tags)
         }
         setModalVisible(false)

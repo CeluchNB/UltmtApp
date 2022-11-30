@@ -4,6 +4,7 @@ import { GuestUser } from '../../types/user'
 import PlayerActionView from '../../components/organisms/PlayerActionView'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
+import { isPulling } from '../../utils/points'
 import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
 import { useSelector } from 'react-redux'
 import { ClientActionType, SubscriptionObject } from '../../types/action'
@@ -59,11 +60,21 @@ const LivePointEditScreen: React.FC<{}> = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const onUndo = () => {
+        undoAction(point._id)
+        setActionStack(stack => {
+            return stack.filter((_item, i) => {
+                return i !== stack.length - 1
+            })
+        })
+    }
+
     const onAction = (
         playerIndex: number,
         actionType: ClientActionType,
         tags: string[],
     ) => {
+        // TODO: find new, reliable place for this
         subscribe(subscriptions)
         const action = getAction(
             actionType,
@@ -88,29 +99,21 @@ const LivePointEditScreen: React.FC<{}> = () => {
         })
     }
 
-    const onUndo = () => {
-        undoAction(point._id)
-        setActionStack(stack => {
-            return stack.filter((_item, i) => {
-                return i !== stack.length - 1
-            })
-        })
-    }
-
     const onTeamAction = (
         actionType: ClientActionType,
         tags: string[],
         playerOne?: GuestUser,
         playerTwo?: GuestUser,
     ) => {
-        const actionData = getAction(
+        subscribe(subscriptions)
+        const action = getAction(
             actionType,
             team === 'one' ? 'two' : 'one',
             tags,
             playerOne || activePlayers[getActiveAction().playerIndex || 0],
             playerTwo,
         )
-        addAction(actionData, point._id)
+        addAction(action, point._id)
     }
 
     const getActiveAction = (): {
@@ -132,19 +135,12 @@ const LivePointEditScreen: React.FC<{}> = () => {
         }
     }
 
-    const isPulling = () => {
-        if (team === 'one') {
-            return point.pullingTeam._id === game.teamOne._id
-        }
-        return point.pullingTeam._id !== game.teamOne._id
-    }
-
     return (
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
             <PlayerActionView
                 players={activePlayers}
-                pulling={isPulling()}
+                pulling={isPulling(point, game, team)}
                 prevAction={getActiveAction().actionType}
                 activePlayer={getActiveAction().playerIndex}
                 undoDisabled={actionStack.length === 0}

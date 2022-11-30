@@ -5,6 +5,7 @@ import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
 import { LiveGameProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
+import { isPulling } from '../../utils/points'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text } from 'react-native'
@@ -42,14 +43,6 @@ const SelectPlayersScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         }
         return game.teamTwoPlayers
     }, [game, team])
-
-    const isPulling = (): boolean => {
-        if (team === 'one') {
-            return point.pullingTeam._id === game.teamOne._id
-        } else {
-            return point.pullingTeam._id !== game.teamOne._id
-        }
-    }
 
     // no guaranteed unique attribute of GuestPlayer
     // must select by index
@@ -108,7 +101,8 @@ const SelectPlayersScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
             <Text style={styles.description}>
-                {game.playersPerPoint} players on next {isPulling() ? 'D' : 'O'}
+                {game.playersPerPoint} players on next{' '}
+                {isPulling(point, game, team) ? 'D' : 'O'}
                 -point
             </Text>
             <FlatList
