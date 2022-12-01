@@ -82,10 +82,6 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
         },
     })
 
-    if (actions.length < 3) {
-        return null
-    }
-
     return (
         <View style={styles.container}>
             <FlatList
