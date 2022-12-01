@@ -47,6 +47,7 @@ export const ACTION_MAP: { [x: string]: ClientActionType[] } = {
     OFFENSE_NO_POSSESSION: [ActionType.CATCH, ActionType.DROP, 'score'],
     DEFENSE: [ActionType.BLOCK, ActionType.PICKUP, 'score'],
     DEFENSE_AFTER_BLOCK: [ActionType.PICKUP],
+    AFTER_SCORE: [],
 }
 
 export const TEAM_ACTION_MAP: { [x: string]: ClientActionType[] } = {

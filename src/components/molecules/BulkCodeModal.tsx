@@ -80,9 +80,7 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
                 style={styles.doneButton}
                 text="done"
                 loading={false}
-                onPress={async () => {
-                    onClose()
-                }}
+                onPress={onClose}
             />
         </BaseModal>
     )

@@ -1,31 +1,43 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
 import { GuestUser } from '../../types/user'
+import { LiveGameProps } from '../../types/navigation'
 import PlayerActionView from '../../components/organisms/PlayerActionView'
+import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
 import { isPulling } from '../../utils/points'
-import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
-import { useSelector } from 'react-redux'
-import { ClientActionType, SubscriptionObject } from '../../types/action'
+import {
+    ActionType,
+    ClientActionType,
+    SubscriptionObject,
+} from '../../types/action'
 import {
     addAction,
     joinPoint,
     subscribe,
     undoAction,
 } from '../../services/data/action'
+import { createPoint, finishPoint } from '../../services/data/point'
 import { getAction, getValidTeamActions } from '../../utils/actions'
 import {
     selectGame,
     selectTeam,
+    updateScore,
 } from '../../store/reducers/features/game/liveGameReducer'
+import {
+    selectPoint,
+    setPoint,
+} from '../../store/reducers/features/point/livePointReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const LivePointEditScreen: React.FC<{}> = () => {
+const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
+    const dispatch = useDispatch()
     const [actionStack, setActionStack] = React.useState<
-        { playerIndex: number; actionType: ClientActionType }[]
+        { playerIndex?: number; actionType: ClientActionType }[]
     >([])
     const [resolvedAction, setResolvedAction] = React.useState(0)
     const [liveError, setLiveError] = React.useState<string | undefined>(
@@ -69,6 +81,18 @@ const LivePointEditScreen: React.FC<{}> = () => {
         })
     }
 
+    const getPlayerOne = (playerIndex: number) => {
+        return activePlayers[playerIndex]
+    }
+
+    const getPlayerTwo = () => {
+        return actionStack.length > 0
+            ? activePlayers[
+                  actionStack[actionStack.length - 1].playerIndex || 0
+              ]
+            : undefined
+    }
+
     const onAction = (
         playerIndex: number,
         actionType: ClientActionType,
@@ -80,12 +104,8 @@ const LivePointEditScreen: React.FC<{}> = () => {
             actionType,
             team || 'one',
             tags,
-            actionStack.length > 0
-                ? activePlayers[actionStack[actionStack.length - 1].playerIndex]
-                : activePlayers[playerIndex],
-            actionStack.length > 0
-                ? activePlayers[actionStack[actionStack.length - 1].playerIndex]
-                : undefined,
+            getPlayerOne(playerIndex),
+            getPlayerTwo(),
         )
         addAction(action, point._id)
         setActionStack(stack => {
@@ -93,7 +113,7 @@ const LivePointEditScreen: React.FC<{}> = () => {
                 ...stack,
                 {
                     playerIndex,
-                    actionType,
+                    actionType: action.actionType,
                 },
             ]
         })
@@ -114,6 +134,15 @@ const LivePointEditScreen: React.FC<{}> = () => {
             playerTwo,
         )
         addAction(action, point._id)
+        setActionStack(stack => {
+            return [
+                ...stack,
+                {
+                    playerIndex: undefined,
+                    actionType: action.actionType,
+                },
+            ]
+        })
     }
 
     const getActiveAction = (): {
@@ -135,6 +164,27 @@ const LivePointEditScreen: React.FC<{}> = () => {
         }
     }
 
+    const onFinishPoint = async () => {
+        const prevPoint = await finishPoint(point._id)
+        const { teamOneScore, teamTwoScore } = prevPoint
+        dispatch(updateScore({ teamOneScore, teamTwoScore }))
+        let pulling = false
+        if (
+            team === 'one' &&
+            getActiveAction().actionType === ActionType.TEAM_ONE_SCORE
+        ) {
+            pulling = true
+        } else if (
+            team === 'two' &&
+            getActiveAction().actionType === ActionType.TEAM_TWO_SCORE
+        ) {
+            pulling = true
+        }
+        const newPoint = await createPoint(pulling, point.pointNumber + 1)
+        dispatch(setPoint(newPoint))
+        navigation.reset({ index: 0, routes: [{ name: 'SelectPlayers' }] })
+    }
+
     return (
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
@@ -152,6 +202,18 @@ const LivePointEditScreen: React.FC<{}> = () => {
             <TeamActionView
                 actions={getValidTeamActions(actionStack)}
                 onAction={onTeamAction}
+            />
+            <PrimaryButton
+                onPress={onFinishPoint}
+                text="finish point"
+                loading={false}
+                disabled={
+                    actionStack.length > 0 &&
+                    actionStack[actionStack.length - 1].actionType !==
+                        ActionType.TEAM_ONE_SCORE &&
+                    actionStack[actionStack.length - 1].actionType !==
+                        ActionType.TEAM_TWO_SCORE
+                }
             />
         </BaseScreen>
     )

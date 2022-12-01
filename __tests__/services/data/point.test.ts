@@ -1,6 +1,10 @@
 import * as PointServices from '../../../src/services/network/point'
 import Point from '../../../src/types/point'
-import { createPoint } from '../../../src/services/data/point'
+import {
+    createPoint,
+    finishPoint,
+    setPlayers,
+} from '../../../src/services/data/point'
 
 const point: Point = {
     _id: 'point1',
@@ -45,5 +49,79 @@ describe('test create point', () => {
         )
 
         expect(createPoint(true, 1)).rejects.toThrow()
+    })
+})
+
+describe('test set players', () => {
+    it('should handle network success', async () => {
+        const newPoint = {
+            ...point,
+            teamOnePlayers: [{ firstName: 'First 1', lastName: 'Last 1' }],
+        }
+        jest.spyOn(PointServices, 'setPlayers').mockReturnValueOnce(
+            Promise.resolve({
+                data: {
+                    point: newPoint,
+                },
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            }),
+        )
+
+        const result = await setPlayers('point1', [
+            { firstName: 'First 1', lastName: 'Last 1' },
+        ])
+        expect(result).toMatchObject(newPoint)
+    })
+
+    it('should handle network failure', async () => {
+        jest.spyOn(PointServices, 'setPlayers').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                config: {},
+                headers: {},
+            }),
+        )
+
+        expect(
+            setPlayers('point1', [
+                { firstName: 'First 1', lastName: 'Last 1' },
+            ]),
+        ).rejects.toThrow()
+    })
+})
+
+describe('test finish point', () => {
+    it('should handle network success', async () => {
+        jest.spyOn(PointServices, 'finishPoint').mockReturnValueOnce(
+            Promise.resolve({
+                data: { point },
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            }),
+        )
+
+        const result = await finishPoint('point1')
+        expect(result).toMatchObject(point)
+    })
+
+    it('should handle network failure', async () => {
+        jest.spyOn(PointServices, 'finishPoint').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(finishPoint('point1')).rejects.toThrow()
     })
 })

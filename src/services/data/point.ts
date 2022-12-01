@@ -5,6 +5,7 @@ import { throwApiError } from '../../utils/service-utils'
 import { withGameToken } from './game'
 import {
     createPoint as networkCreatePoint,
+    finishPoint as networkFinishPoint,
     setPlayers as networkSetPlayers,
 } from '../network/point'
 
@@ -52,5 +53,20 @@ export const setPlayers = async (
         return point
     } catch (e) {
         return throwApiError(e, Constants.SET_PLAYERS_ERROR)
+    }
+}
+
+/**
+ * Method to finish a point. In the backend this moves actions out of redis and to mongo.
+ * @param pointId id of point to finish
+ * @returns updated point
+ */
+export const finishPoint = async (pointId: string): Promise<Point> => {
+    try {
+        const response = await withGameToken(networkFinishPoint, pointId)
+        const { point } = response.data
+        return point
+    } catch (e) {
+        return throwApiError(e, Constants.FINISH_POINT_ERROR)
     }
 }

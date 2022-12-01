@@ -210,6 +210,7 @@ const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
             <PrimaryButton
                 text="Create"
                 onPress={handleSubmit(dispatchCreateAccount)}
+                disabled={loading}
                 loading={loading}
                 style={styles.createButton}
             />

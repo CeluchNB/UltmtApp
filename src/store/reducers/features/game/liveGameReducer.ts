@@ -90,6 +90,11 @@ const liveGameSlice = createSlice({
         addTag(state, action) {
             state.activeTags.push(action.payload)
         },
+        updateScore(state, action) {
+            const { teamOneScore, teamTwoScore } = action.payload
+            state.game.teamOneScore = teamOneScore
+            state.game.teamTwoScore = teamTwoScore
+        },
     },
     extraReducers: builder => {
         builder.addCase(createGame.pending, state => {
@@ -157,5 +162,6 @@ export const {
     setTeam,
     resetGuestPlayerStatus,
     addTag,
+    updateScore,
 } = liveGameSlice.actions
 export default liveGameSlice.reducer

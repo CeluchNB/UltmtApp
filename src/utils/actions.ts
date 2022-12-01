@@ -20,7 +20,7 @@ export const getValidPlayerActions = (
     actingUser: number,
     action?: string,
     pulling?: boolean,
-): ('score' | ActionType)[] => {
+): ClientActionType[] => {
     if (!action) {
         if (pulling) {
             return ACTION_MAP.PULLING
@@ -43,6 +43,10 @@ export const getValidPlayerActions = (
             return ACTION_MAP.DEFENSE
         case ActionType.BLOCK:
             return ACTION_MAP.DEFENSE_AFTER_BLOCK
+        case ActionType.TEAM_ONE_SCORE:
+        case ActionType.TEAM_TWO_SCORE:
+        case 'score':
+            return ACTION_MAP.AFTER_SCORE
     }
 
     return ACTION_MAP.OFFENSE_NO_POSSESSION
@@ -54,10 +58,14 @@ export const getValidPlayerActions = (
  * @returns one of TEAM_ACTION_MAP's values
  */
 export const getValidTeamActions = (
-    actionStack: { playerIndex: number; actionType: ClientActionType }[],
+    actionStack: { playerIndex?: number; actionType: ClientActionType }[],
 ) => {
     for (const action of actionStack.slice().reverse()) {
-        if (action.actionType === 'score') {
+        if (
+            action.actionType === ActionType.TEAM_ONE_SCORE ||
+            action.actionType === ActionType.TEAM_TWO_SCORE ||
+            action.actionType === 'score'
+        ) {
             return TEAM_ACTION_MAP.PREPOINT
         } else if (
             [ActionType.BLOCK, ActionType.PICKUP, ActionType.CATCH].includes(
