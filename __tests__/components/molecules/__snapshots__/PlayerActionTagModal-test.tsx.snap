@@ -4,7 +4,7 @@ exports[`should match snapshot 1`] = `
 <Modal
   animationType="slide"
   hardwareAccelerated={false}
-  onRequestClose={[MockFunction]}
+  onRequestClose={[Function]}
   testID="base-modal"
   transparent={true}
   visible={true}

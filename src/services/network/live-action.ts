@@ -5,21 +5,38 @@ import { Socket, io } from 'socket.io-client'
 
 let socket: Socket
 const getSocket = async (): Promise<Socket> => {
-    if (!socket?.connected) {
+    if (!socket) {
         const token = (await EncryptedStorage.getItem('game_token')) || ''
         socket = io(WEBSOCKET_URL, {
             extraHeaders: { Authorization: `Bearer ${token}` },
         })
+        socket.on('disconnect', reason => {
+            console.log('disconnected', reason)
+        })
+    } else if (socket.disconnected) {
+        socket.connect()
     }
-    socket.on('disconnect', reason => {
-        console.log('disconnected', reason)
-    })
     return socket
+}
+
+const performOnceConnected = (
+    actionSocket: Socket,
+    method: (...args: any[]) => void,
+) => {
+    if (actionSocket.connected) {
+        method()
+    } else {
+        actionSocket.on('connect', () => {
+            method()
+        })
+    }
 }
 
 export const joinPoint = async (gameId: string, pointId: string) => {
     const pointSocket = await getSocket()
-    pointSocket.emit('join:point', gameId, pointId)
+    performOnceConnected(pointSocket, () =>
+        pointSocket.emit('join:point', gameId, pointId),
+    )
 }
 
 export const createAction = async (action: ClientAction, pointId: string) => {
@@ -34,14 +51,21 @@ export const undoAction = async (pointId: string) => {
 
 export const subscribe = async (subscriptions: SubscriptionObject) => {
     const actionSocket = await getSocket()
-    actionSocket.removeAllListeners()
-    if (!actionSocket.hasListeners('action:client')) {
-        actionSocket.on('action:client', subscriptions.client)
-    }
-    if (!actionSocket.hasListeners('action:undo:client')) {
-        actionSocket.on('action:undo:client', subscriptions.undo)
-    }
-    if (!actionSocket.hasListeners('action:error')) {
-        actionSocket.on('action:error', subscriptions.error)
-    }
+    performOnceConnected(actionSocket, () => {
+        actionSocket.removeAllListeners()
+        if (!actionSocket.hasListeners('action:client')) {
+            actionSocket.on('action:client', subscriptions.client)
+        }
+        if (!actionSocket.hasListeners('action:undo:client')) {
+            actionSocket.on('action:undo:client', subscriptions.undo)
+        }
+        if (!actionSocket.hasListeners('action:error')) {
+            actionSocket.on('action:error', subscriptions.error)
+        }
+    })
+}
+
+export const unsubscribe = () => {
+    socket?.removeAllListeners()
+    socket?.disconnect()
 }

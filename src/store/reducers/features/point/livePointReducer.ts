@@ -43,6 +43,16 @@ const livePointSlice = createSlice({
             state.setPlayersStatus = 'idle'
             state.setPlayersError = undefined
         },
+        substitute(state, action) {
+            if (action.payload.team === 'one') {
+                state.point.teamOnePlayers = [...action.payload.players]
+            } else {
+                state.point.teamTwoPlayers = [...action.payload.players]
+            }
+        },
+        setPoint(state, action) {
+            state.point = action.payload
+        },
     },
     extraReducers: builder => {
         builder.addCase(createPoint.pending, state => {
@@ -104,5 +114,6 @@ export const selectSetPlayersStatus = (state: RootState) =>
 export const selectSetPlayersError = (state: RootState) =>
     state.livePoint.setPlayersError
 export const selectPoint = (state: RootState) => state.livePoint.point
-export const { resetSetPlayersStatus } = livePointSlice.actions
+export const { resetSetPlayersStatus, substitute, setPoint } =
+    livePointSlice.actions
 export default livePointSlice.reducer

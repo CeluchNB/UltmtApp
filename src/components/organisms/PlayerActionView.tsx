@@ -1,9 +1,9 @@
-import { ActionType } from '../../types/action'
+import { ClientActionType } from '../../types/action'
 import { GuestUser } from '../../types/user'
 import { IconButton } from 'react-native-paper'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
-import { getPlayerValidActions } from '../../utils/actions'
+import { getValidPlayerActions } from '../../utils/actions'
 import { useColors } from '../../hooks'
 import {
     ActivityIndicator,
@@ -16,22 +16,18 @@ import {
 interface PlayerActionViewProps {
     players: GuestUser[]
     pulling: boolean
-    prevAction?: ActionType | 'score'
+    prevAction?: ClientActionType
     activePlayer?: number
     undoDisabled: boolean
     loading: boolean
     error?: string
-    onAction: (
-        index: number,
-        action: ActionType | 'score',
-        tags: string[],
-    ) => void
+    onAction: (index: number, action: ClientActionType, tags: string[]) => void
     onUndo: () => void
 }
 
 type PlayerAction = {
     player: GuestUser
-    actions: (ActionType | 'score')[]
+    actions: ClientActionType[]
 }
 
 const PlayerActionView: React.FC<PlayerActionViewProps> = ({
@@ -49,7 +45,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     const playerActions: PlayerAction[] = React.useMemo(() => {
         const actions = []
         for (let i = 0; i < players.length; i++) {
-            let action = getPlayerValidActions(
+            let action = getValidPlayerActions(
                 i,
                 activePlayer || 0,
                 prevAction,
@@ -65,7 +61,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
 
     const onPress = (
         index: number,
-        action: ActionType | 'score',
+        action: ClientActionType,
         tags: string[],
     ) => {
         onAction(index, action, tags)

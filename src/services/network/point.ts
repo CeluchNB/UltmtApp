@@ -35,3 +35,19 @@ export const setPlayers = async (
         },
     )
 }
+
+export const finishPoint = async (
+    gameToken: string,
+    pointId: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/point/${pointId}/finish`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${gameToken}`,
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}

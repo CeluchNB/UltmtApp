@@ -5,7 +5,7 @@ import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 
 interface PrimaryButtonProps {
     text: string
-    onPress: () => {}
+    onPress: () => void
     loading: boolean
     style?: StyleProp<ViewStyle>
     disabled?: boolean

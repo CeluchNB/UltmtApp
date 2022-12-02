@@ -1,37 +1,72 @@
+import * as Constants from '../../utils/constants'
+import { ApiError } from '../../types/services'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
+import { GuestUser } from '../../types/user'
+import { LiveGameProps } from '../../types/navigation'
 import PlayerActionView from '../../components/organisms/PlayerActionView'
+import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
-import { getAction } from '../../utils/actions'
-import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
-import { useSelector } from 'react-redux'
-import { ActionType, SubscriptionObject } from '../../types/action'
+import TeamActionView from '../../components/organisms/TeamActionView'
+import { size } from '../../theme/fonts'
+import { useColors } from '../../hooks'
+import {
+    ActionType,
+    ClientActionType,
+    SubscriptionObject,
+} from '../../types/action'
+import { StyleSheet, Text } from 'react-native'
 import {
     addAction,
     joinPoint,
     subscribe,
     undoAction,
+    unsubscribe,
 } from '../../services/data/action'
+import { createPoint, finishPoint } from '../../services/data/point'
+import { getAction, getValidTeamActions } from '../../utils/actions'
+import { isPulling, isPullingNext } from '../../utils/points'
 import {
     selectGame,
     selectTeam,
+    updateScore,
 } from '../../store/reducers/features/game/liveGameReducer'
+import {
+    selectPoint,
+    setPoint,
+} from '../../store/reducers/features/point/livePointReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const LivePointEditScreen: React.FC<{}> = () => {
+const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
+    // hooks
+    const { colors } = useColors()
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
+    const dispatch = useDispatch()
     const [actionStack, setActionStack] = React.useState<
-        { playerIndex: number; actionType: ActionType | 'score' }[]
+        { playerIndex?: number; actionType: ClientActionType }[]
     >([])
     const [resolvedAction, setResolvedAction] = React.useState(0)
     const [liveError, setLiveError] = React.useState<string | undefined>(
         undefined,
     )
-    console.log('rendering', actionStack, resolvedAction)
+    const [finishLoading, setFinishLoading] = React.useState(false)
+    const [finishError, setFinishError] = React.useState<string | undefined>(
+        undefined,
+    )
+
+    const activePlayers = React.useMemo(() => {
+        if (team === 'one') {
+            return point.teamOnePlayers
+        } else {
+            return point.teamTwoPlayers
+        }
+    }, [point, team])
 
     const subscriptions: SubscriptionObject = {
         client: data => {
+            console.log('got data', data)
             setLiveError(undefined)
             setResolvedAction(data.actionNumber || 0)
         },
@@ -45,43 +80,16 @@ const LivePointEditScreen: React.FC<{}> = () => {
     }
 
     React.useEffect(() => {
-        joinPoint(game._id, point._id)
+        joinPoint(game._id, point._id).then(() => {
+            subscribe(subscriptions)
+        })
+        return () => {
+            unsubscribe()
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const onAction = (
-        playerIndex: number,
-        actionType: ActionType | 'score',
-        tags: string[],
-    ) => {
-        subscribe(subscriptions)
-        const action = getAction(
-            actionType,
-            team || 'one',
-            tags,
-            actionStack.length > 0
-                ? point.teamOnePlayers[
-                      actionStack[actionStack.length - 1].playerIndex
-                  ]
-                : point.teamOnePlayers[playerIndex],
-            actionStack.length > 0
-                ? point.teamOnePlayers[
-                      actionStack[actionStack.length - 1].playerIndex
-                  ]
-                : undefined,
-        )
-        addAction(action, point._id)
-        setActionStack(stack => {
-            return [
-                ...stack,
-                {
-                    playerIndex,
-                    actionType,
-                },
-            ]
-        })
-    }
-
+    // event functions
     const onUndo = () => {
         undoAction(point._id)
         setActionStack(stack => {
@@ -89,16 +97,107 @@ const LivePointEditScreen: React.FC<{}> = () => {
                 return i !== stack.length - 1
             })
         })
+        setFinishError(undefined)
+    }
+
+    const onAction = (
+        playerIndex: number,
+        actionType: ClientActionType,
+        tags: string[],
+    ) => {
+        const action = getAction(
+            actionType,
+            team,
+            tags,
+            getPlayerOne(playerIndex),
+            getPlayerTwo(),
+        )
+        addAction(action, point._id)
+        setActionStack(stack => {
+            return [
+                ...stack,
+                {
+                    playerIndex,
+                    actionType: action.actionType,
+                },
+            ]
+        })
+        setFinishError(undefined)
+    }
+
+    const onTeamAction = (
+        actionType: ClientActionType,
+        tags: string[],
+        playerOne?: GuestUser,
+        playerTwo?: GuestUser,
+    ) => {
+        const action = getAction(
+            actionType,
+            team === 'one' ? 'two' : 'one',
+            tags,
+            playerOne || activePlayers[getActiveAction().playerIndex || 0],
+            playerTwo,
+        )
+        addAction(action, point._id)
+        setActionStack(stack => {
+            return [
+                ...stack,
+                {
+                    playerIndex: undefined,
+                    actionType: action.actionType,
+                },
+            ]
+        })
+        setFinishError(undefined)
+    }
+
+    const onFinishPoint = async () => {
+        try {
+            setFinishLoading(true)
+            setFinishError(undefined)
+            const prevPoint = await finishPoint(point._id)
+            const { teamOneScore, teamTwoScore } = prevPoint
+            dispatch(updateScore({ teamOneScore, teamTwoScore }))
+
+            const newPoint = await createPoint(
+                isPullingNext(team, getActiveAction().actionType),
+                point.pointNumber + 1,
+            )
+            dispatch(setPoint(newPoint))
+
+            navigation.reset({ index: 0, routes: [{ name: 'SelectPlayers' }] })
+        } catch (e) {
+            setFinishError(
+                (e as ApiError).message ?? Constants.FINISH_POINT_ERROR,
+            )
+        } finally {
+            setFinishLoading(false)
+        }
+    }
+
+    // util functions
+    const getPlayerOne = (playerIndex: number) => {
+        return activePlayers[playerIndex]
+    }
+
+    const getPlayerTwo = () => {
+        return actionStack.length > 0
+            ? activePlayers[
+                  actionStack[actionStack.length - 1].playerIndex || 0
+              ]
+            : undefined
     }
 
     const getActiveAction = (): {
         playerIndex?: number
-        actionType?: ActionType | 'score'
+        actionType?: ClientActionType
     } => {
         if (actionStack.length < 1) {
             return { playerIndex: undefined, actionType: undefined }
-        }
-        if (resolvedAction > actionStack.length || resolvedAction === 0) {
+        } else if (
+            resolvedAction > actionStack.length ||
+            resolvedAction === 0
+        ) {
             return {
                 playerIndex: actionStack[actionStack.length - 1].playerIndex,
                 actionType: actionStack[actionStack.length - 1].actionType,
@@ -110,21 +209,19 @@ const LivePointEditScreen: React.FC<{}> = () => {
         }
     }
 
-    const isPulling = () => {
-        if (team === 'one') {
-            return point.pullingTeam._id === game.teamOne._id
-        }
-        return point.pullingTeam._id !== game.teamOne._id
-    }
+    const styles = StyleSheet.create({
+        error: {
+            color: colors.error,
+            fontSize: size.fontFifteen,
+        },
+    })
 
     return (
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
             <PlayerActionView
-                players={
-                    team === 'one' ? point.teamOnePlayers : point.teamTwoPlayers
-                }
-                pulling={isPulling()}
+                players={activePlayers}
+                pulling={isPulling(point, game, team)}
                 prevAction={getActiveAction().actionType}
                 activePlayer={getActiveAction().playerIndex}
                 undoDisabled={actionStack.length === 0}
@@ -133,6 +230,25 @@ const LivePointEditScreen: React.FC<{}> = () => {
                 onAction={onAction}
                 onUndo={onUndo}
             />
+            <TeamActionView
+                actions={getValidTeamActions(actionStack)}
+                onAction={onTeamAction}
+            />
+            <PrimaryButton
+                onPress={onFinishPoint}
+                text="finish point"
+                loading={finishLoading}
+                disabled={
+                    finishLoading ||
+                    actionStack.length === 0 ||
+                    (actionStack.length > 0 &&
+                        actionStack[actionStack.length - 1].actionType !==
+                            ActionType.TEAM_ONE_SCORE &&
+                        actionStack[actionStack.length - 1].actionType !==
+                            ActionType.TEAM_TWO_SCORE)
+                }
+            />
+            {finishError && <Text style={styles.error}>{finishError}</Text>}
         </BaseScreen>
     )
 }

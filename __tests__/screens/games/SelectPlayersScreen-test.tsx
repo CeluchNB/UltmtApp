@@ -27,9 +27,11 @@ afterAll(() => {
 })
 
 const navigate = jest.fn()
+const reset = jest.fn()
 const props: LiveGameProps = {
     navigation: {
         navigate,
+        reset,
     } as any,
     route: {} as any,
 }

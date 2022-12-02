@@ -57,5 +57,5 @@ it('should call close correctly', async () => {
     fireEvent.press(doneBtn)
     await act(async () => {})
 
-    expect(onClose).toBeCalledWith(['huck'])
+    expect(onClose).toBeCalledWith(true, ['huck'])
 })

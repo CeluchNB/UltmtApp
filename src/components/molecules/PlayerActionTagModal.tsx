@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 interface PlayerActionTagModalProps {
     visible: boolean
-    onClose: (tags: string[]) => void
+    onClose: (submit: boolean, tags: string[]) => void
 }
 
 const PlayerActionTagModal: React.FC<PlayerActionTagModalProps> = ({
@@ -80,7 +80,11 @@ const PlayerActionTagModal: React.FC<PlayerActionTagModalProps> = ({
     })
 
     return (
-        <BaseModal visible={visible} onClose={onClose}>
+        <BaseModal
+            visible={visible}
+            onClose={() => {
+                onClose(false, [])
+            }}>
             <ScreenTitle title="Tags" />
             <View style={styles.listContainer}>
                 <FlatList
@@ -128,7 +132,7 @@ const PlayerActionTagModal: React.FC<PlayerActionTagModalProps> = ({
                 text="done"
                 loading={false}
                 onPress={async () => {
-                    onClose(selectedTags)
+                    onClose(true, selectedTags)
                     setSelectedTags([])
                 }}
             />

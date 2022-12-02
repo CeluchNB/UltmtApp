@@ -30,7 +30,7 @@ export interface LiveGameSlice {
         tournament: undefined
     }
     activeTags: string[]
-    team: 'one' | 'two' | undefined
+    team: 'one' | 'two'
     createStatus: Status
     createError: string | undefined
     guestPlayerStatus: Status
@@ -89,6 +89,11 @@ const liveGameSlice = createSlice({
         },
         addTag(state, action) {
             state.activeTags.push(action.payload)
+        },
+        updateScore(state, action) {
+            const { teamOneScore, teamTwoScore } = action.payload
+            state.game.teamOneScore = teamOneScore
+            state.game.teamTwoScore = teamTwoScore
         },
     },
     extraReducers: builder => {
@@ -157,5 +162,6 @@ export const {
     setTeam,
     resetGuestPlayerStatus,
     addTag,
+    updateScore,
 } = liveGameSlice.actions
 export default liveGameSlice.reducer
