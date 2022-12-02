@@ -17,6 +17,7 @@ import {
     joinPoint,
     subscribe,
     undoAction,
+    unsubscribe,
 } from '../../services/data/action'
 import { createPoint, finishPoint } from '../../services/data/point'
 import { getAction, getValidTeamActions } from '../../utils/actions'
@@ -54,7 +55,6 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
 
     const subscriptions: SubscriptionObject = {
         client: data => {
-            console.log('got data', data)
             setLiveError(undefined)
             setResolvedAction(data.actionNumber || 0)
         },
@@ -69,6 +69,9 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
 
     React.useEffect(() => {
         joinPoint(game._id, point._id)
+        return () => {
+            unsubscribe()
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

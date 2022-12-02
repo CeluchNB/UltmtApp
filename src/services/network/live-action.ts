@@ -45,3 +45,8 @@ export const subscribe = async (subscriptions: SubscriptionObject) => {
         actionSocket.on('action:error', subscriptions.error)
     }
 }
+
+export const unsubscribe = async () => {
+    socket.removeAllListeners()
+    socket.disconnect()
+}

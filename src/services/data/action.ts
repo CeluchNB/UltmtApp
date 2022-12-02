@@ -4,6 +4,7 @@ import {
     joinPoint as networkJoinPoint,
     subscribe as networkSubscribe,
     undoAction as networkUndoAction,
+    unsubscribe as networkUnsubscribe,
 } from '../network/live-action'
 
 /**
@@ -37,4 +38,11 @@ export const undoAction = async (pointId: string) => {
  */
 export const subscribe = async (subscriptions: SubscriptionObject) => {
     await networkSubscribe(subscriptions)
+}
+
+/**
+ * Method to unsubscribe from all action websckets
+ */
+export const unsubscribe = () => {
+    networkUnsubscribe()
 }
