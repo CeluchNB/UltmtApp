@@ -30,7 +30,7 @@ export interface LiveGameSlice {
         tournament: undefined
     }
     activeTags: string[]
-    team: 'one' | 'two' | undefined
+    team: 'one' | 'two'
     createStatus: Status
     createError: string | undefined
     guestPlayerStatus: Status

@@ -1395,20 +1395,13 @@ exports[`should match snapshot 1`] = `
       collapsable={false}
       style={
         Object {
-          "backgroundColor": "#ffd600",
+          "backgroundColor": "#ababab",
           "borderColor": "transparent",
           "borderRadius": 4,
           "borderStyle": "solid",
           "borderWidth": 0,
-          "elevation": 2,
+          "elevation": 0,
           "minWidth": "auto",
-          "shadowColor": "#000000",
-          "shadowOffset": Object {
-            "height": 0.75,
-            "width": 0,
-          },
-          "shadowOpacity": 0.24,
-          "shadowRadius": 1.5,
         }
       }
     >
@@ -1416,7 +1409,7 @@ exports[`should match snapshot 1`] = `
         accessibilityRole="button"
         accessibilityState={
           Object {
-            "disabled": false,
+            "disabled": true,
           }
         }
         accessible={true}
@@ -1478,7 +1471,7 @@ exports[`should match snapshot 1`] = `
                     "textTransform": "uppercase",
                   },
                   Object {
-                    "color": "#000000",
+                    "color": "rgba(0, 0, 0, 0.32)",
                     "fontFamily": "System",
                     "fontWeight": "500",
                   },
