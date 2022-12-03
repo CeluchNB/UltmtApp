@@ -1,6 +1,7 @@
-import { isPulling } from '../../src/utils/points'
+import { ActionType } from '../../src/types/action'
+import { isPulling, isPullingNext } from '../../src/utils/point'
 
-describe('is pulling', () => {
+describe('isPulling', () => {
     it('with undefined values', () => {
         const result1 = isPulling(
             undefined,
@@ -61,6 +62,33 @@ describe('is pulling', () => {
             'two',
         )
 
+        expect(result).toBe(false)
+    })
+})
+
+describe('isPullingNext', () => {
+    it('handles team one pulling next', () => {
+        const result = isPullingNext('one', ActionType.TEAM_ONE_SCORE)
+        expect(result).toBe(true)
+    })
+
+    it('handles team one not pulling next', () => {
+        const result = isPullingNext('one', ActionType.TEAM_TWO_SCORE)
+        expect(result).toBe(false)
+    })
+
+    it('handles team two pulling next', () => {
+        const result = isPullingNext('two', ActionType.TEAM_TWO_SCORE)
+        expect(result).toBe(true)
+    })
+
+    it('handles team two not pulling next', () => {
+        const result = isPullingNext('two', ActionType.TEAM_ONE_SCORE)
+        expect(result).toBe(false)
+    })
+
+    it('handles undefined action', () => {
+        const result = isPullingNext('two', undefined)
         expect(result).toBe(false)
     })
 })

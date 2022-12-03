@@ -24,8 +24,8 @@ import {
     unsubscribe,
 } from '../../services/data/action'
 import { createPoint, finishPoint } from '../../services/data/point'
-import { getAction, getValidTeamActions } from '../../utils/actions'
-import { isPulling, isPullingNext } from '../../utils/points'
+import { getAction, getValidTeamActions } from '../../utils/action'
+import { isPulling, isPullingNext } from '../../utils/point'
 import {
     selectGame,
     selectTeam,

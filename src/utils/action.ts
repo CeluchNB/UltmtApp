@@ -18,7 +18,7 @@ import {
 export const getValidPlayerActions = (
     user: number,
     actingUser: number,
-    action?: string,
+    action?: ClientActionType,
     pulling?: boolean,
 ): ClientActionType[] => {
     if (!action) {
