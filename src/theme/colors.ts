@@ -31,5 +31,5 @@ export const darkColors: ColorPalette = {
     error: '#ff0000',
     gray: '#ababab',
     darkGray: '#ebebeb',
-    darkPrimary: '#2a2a2a',
+    darkPrimary: '#1a1a1a',
 }

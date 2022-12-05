@@ -1,3 +1,4 @@
+import { DisplayTeam } from './team'
 import { GuestUser } from './user'
 
 export enum ActionType {
@@ -14,9 +15,9 @@ export enum ActionType {
     CALL_ON_FIELD = 'CallOnField',
 }
 
-export type SubType = 'client' | 'undo' | 'error'
+export type SubscriptionType = 'client' | 'undo' | 'error'
 export type SubscriptionObject = {
-    [x in SubType]: (data: any) => void
+    [x in SubscriptionType]: (data: any) => void
 }
 
 export interface ClientAction {
@@ -32,10 +33,17 @@ export interface Comment {
     commentNumber: number
 }
 
-export interface ServerAction extends ClientAction {
+export interface LiveServerAction extends ClientAction {
     comments: Comment[]
     actionNumber: number
     teamNumber: 'one' | 'two'
+}
+
+export interface SavedServerAction extends ClientAction {
+    _id: string
+    actionNumber: number
+    comments: Comment[]
+    team: DisplayTeam
 }
 
 export type ClientActionType = ActionType | 'score'

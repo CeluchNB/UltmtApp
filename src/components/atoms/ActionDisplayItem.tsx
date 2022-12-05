@@ -1,60 +1,111 @@
-import { ActionType } from '../../types/action'
+import { GuestUser } from '../../types/user'
 import React from 'react'
+import { SavedServerAction } from '../../types/action'
+import { mapActionToDescription } from '../../utils/action'
 import { useColors } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { Chip, IconButton } from 'react-native-paper'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { size, weight } from '../../theme/fonts'
 
-const ActionDisplayItem: React.FC<{}> = () => {
+interface ActionDisplayItemProps {
+    action: SavedServerAction
+}
+
+const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({ action }) => {
     const { colors } = useColors()
+    const { actionType, playerOne, playerTwo, tags } = action
+
+    const getName = (player?: GuestUser): string => {
+        return `${player?.firstName} ${player?.lastName}`
+    }
 
     const styles = StyleSheet.create({
         container: {
             display: 'flex',
             flexDirection: 'row',
+            backgroundColor: colors.darkPrimary,
+            shadowColor: colors.darkGray,
+            shadowRadius: 8,
+            borderRadius: 8,
+            width: '100%',
+            padding: 10,
         },
-        player: {},
+        textContainer: {
+            flex: 1,
+        },
+        lineContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+        },
+        player: {
+            color: colors.textPrimary,
+            fontWeight: weight.bold,
+            fontSize: size.fontFifteen,
+        },
+        action: {
+            color: colors.textPrimary,
+            fontWeight: weight.full,
+            fontSize: size.fontFifteen,
+        },
+        chipContainer: {
+            flex: 1,
+            flexDirection: 'row',
+        },
+        chip: {
+            borderRadius: 4,
+            margin: 2,
+            backgroundColor: colors.primary,
+            borderWidth: 1,
+        },
     })
 
-    const descriptionMap = (action: ActionType): string => {
-        switch (action) {
-            case ActionType.BLOCK:
-                return 'block'
-            case ActionType.CALL_ON_FIELD:
-                return 'There is a call on the field'
-            case ActionType.CATCH:
-                return 'from'
-            case ActionType.DROP:
-                return 'drops pass from'
-            case ActionType.PICKUP:
-                return 'picks up the disc'
-            case ActionType.PULL:
-                return 'pulls'
-            case ActionType.SUBSTITUTION:
-                return 'subs in for'
-            case ActionType.TEAM_ONE_SCORE:
-                return 'scores from'
-            case ActionType.TEAM_TWO_SCORE:
-                return 'scores from'
-            case ActionType.THROWAWAY:
-                return 'throws it away'
-            case ActionType.TIMEOUT:
-                return 'timeout'
-        }
-
-        return ''
-    }
-
     return (
-        <View style={styles.container}>
-            <View>
-                <Text>Player One</Text>
+        <Pressable
+            style={styles.container}
+            android_ripple={{ color: colors.textPrimary }}
+            onPress={() => {}}>
+            <View style={styles.textContainer}>
+                <View style={styles.lineContainer}>
+                    {playerOne && (
+                        <View>
+                            <Text style={styles.player}>
+                                {getName(playerOne)}
+                            </Text>
+                        </View>
+                    )}
+                    <View>
+                        <Text style={styles.action}>
+                            {mapActionToDescription(actionType)}
+                        </Text>
+                    </View>
+                    {playerTwo && (
+                        <View>
+                            <Text style={styles.player}>
+                                {getName(playerTwo)}
+                            </Text>
+                        </View>
+                    )}
+                </View>
+                <View style={styles.lineContainer}>
+                    {tags.map(tag => (
+                        <Chip
+                            key={tag}
+                            style={styles.chip}
+                            mode="outlined"
+                            selectedColor={colors.textPrimary}
+                            ellipsizeMode="tail">
+                            {tag}
+                        </Chip>
+                    ))}
+                    <IconButton
+                        size={15}
+                        icon="comment-text-outline"
+                        color={colors.textPrimary}
+                    />
+                </View>
             </View>
-            <View>
-                <Text>Action</Text>
-            </View>
-            <View>
-                <Text>Player Two</Text>
-            </View>
-        </View>
+        </Pressable>
     )
 }
 

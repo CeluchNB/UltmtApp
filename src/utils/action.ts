@@ -149,3 +149,35 @@ export const mapActionToDisplayName = (action: ClientActionType) => {
             return action
     }
 }
+
+/**
+ * Method to get a user friendly description from an action type.
+ * @param type action type
+ * @returns user friendly description
+ */
+export const mapActionToDescription = (type: ActionType): string => {
+    switch (type) {
+        case ActionType.BLOCK:
+            return ' block '
+        case ActionType.CALL_ON_FIELD:
+            return 'There is a call on the field'
+        case ActionType.CATCH:
+            return ' throws to '
+        case ActionType.DROP:
+            return ' drops pass from '
+        case ActionType.PICKUP:
+            return ' picks up the disc'
+        case ActionType.PULL:
+            return ' pulls'
+        case ActionType.SUBSTITUTION:
+            return ' subs in for '
+        case ActionType.TEAM_ONE_SCORE:
+            return ' scores from '
+        case ActionType.TEAM_TWO_SCORE:
+            return 'scores from'
+        case ActionType.THROWAWAY:
+            return ' throws it away'
+        case ActionType.TIMEOUT:
+            return 'Timeout called'
+    }
+}

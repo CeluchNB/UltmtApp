@@ -21,16 +21,28 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
 
     const { data, loading, refetch } = useData<Game[]>(searchGames)
 
-    const renderGame = (game: Game) => {
-        return <GameCard key={game._id} game={game} onPress={() => {}} />
-    }
-
     const navigateToSearch = (live: string) => {
         navigation.navigate('GameSearch', { live })
     }
 
     const navigateToCreate = () => {
         navigation.navigate('GameCreationFlow', { screen: 'SelectMyTeam' })
+    }
+
+    const navigateToViewGame = (gameId: string) => {
+        navigation.navigate('ViewGame', { gameId })
+    }
+
+    const renderGame = (game: Game) => {
+        return (
+            <GameCard
+                key={game._id}
+                game={game}
+                onPress={() => {
+                    navigateToViewGame(game._id)
+                }}
+            />
+        )
     }
 
     const liveGames = useMemo(() => {

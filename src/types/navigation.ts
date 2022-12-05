@@ -39,6 +39,7 @@ export type AccountStackParamList = {
 export type GameStackParamList = {
     GameHome: undefined
     GameSearch: { live: string }
+    ViewGame: { gameId: string }
 }
 
 export type TabParamList = {
@@ -115,6 +116,11 @@ export type RequestUserProps = NativeStackScreenProps<
 export type GameSearchProps = NativeStackScreenProps<
     GameStackParamList,
     'GameSearch'
+>
+
+export type ViewGameProps = NativeStackScreenProps<
+    GameStackParamList,
+    'ViewGame'
 >
 
 export type CreateGameProps = CompositeScreenProps<
