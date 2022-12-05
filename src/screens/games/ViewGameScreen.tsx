@@ -1,46 +1,84 @@
-import ActionDisplayItem from '../../components/atoms/ActionDisplayItem'
 import { ActionType } from '../../types/action'
 import BaseScreen from '../../components/atoms/BaseScreen'
+import PointAccordion from '../../components/molecules/PointAccordion'
 import React from 'react'
 import { ViewGameProps } from '../../types/navigation'
 
-const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
-    const {
-        params: { gameId },
-    } = route
+const ViewGameScreen: React.FC<ViewGameProps> = () => {
+    // const {
+    //     params: { gameId },
+    // } = route
 
     return (
-        <BaseScreen containerWidth="80%">
-            <ActionDisplayItem
-                action={{
+        <BaseScreen containerWidth="100%">
+            <PointAccordion
+                point={{
                     _id: '',
-                    actionType: ActionType.CATCH,
-                    actionNumber: 1,
-                    playerOne: { firstName: 'Noah', lastName: 'Celuch' },
-                    playerTwo: {
-                        firstName: 'Connor',
-                        lastName: 'Tipping',
-                    },
-                    tags: ['break', 'huck'],
-                    comments: [
-                        {
-                            user: {
-                                firstName: 'First',
-                                lastName: 'last',
-                            },
-                            comment: 'nice',
-                            commentNumber: 1,
-                        },
-                    ],
-                    team: {
-                        _id: '',
-                        place: 'Pittsburgh',
-                        name: 'Temper',
-                        teamname: 'temper',
-                        seasonStart: '2022',
-                        seasonEnd: '2022',
-                    },
+                    pointNumber: 1,
+                    teamOneScore: 1,
+                    teamTwoScore: 0,
+                    teamOnePlayers: [],
+                    teamTwoPlayers: [],
+                    teamOneActions: [],
+                    teamTwoActions: [],
+                    teamOneActive: false,
+                    teamTwoActive: false,
+                    pullingTeam: { name: 'Temper' },
+                    receivingTeam: { name: 'Truck Stop' },
                 }}
+                actions={[
+                    {
+                        _id: '',
+                        actionType: ActionType.CATCH,
+                        actionNumber: 1,
+                        playerOne: { firstName: 'Noah', lastName: 'Celuch' },
+                        playerTwo: {
+                            firstName: 'Connor',
+                            lastName: 'Tipping',
+                        },
+                        tags: ['break', 'huck'],
+                        comments: [
+                            {
+                                user: {
+                                    firstName: 'First',
+                                    lastName: 'last',
+                                },
+                                comment: 'nice',
+                                commentNumber: 1,
+                            },
+                        ],
+                        team: {
+                            _id: '',
+                            place: 'Pittsburgh',
+                            name: 'Temper',
+                            teamname: 'temper',
+                            seasonStart: '2022',
+                            seasonEnd: '2022',
+                        },
+                    },
+                    {
+                        _id: '',
+                        actionType: ActionType.CATCH,
+                        actionNumber: 2,
+                        playerOne: { firstName: 'Amy', lastName: 'Celuch' },
+                        playerTwo: {
+                            firstName: 'Noah',
+                            lastName: 'Celuch',
+                        },
+                        tags: ['huck'],
+                        comments: [],
+                        team: {
+                            _id: '',
+                            place: 'Pittsburgh',
+                            name: 'Temper',
+                            teamname: 'temper',
+                            seasonStart: '2022',
+                            seasonEnd: '2022',
+                        },
+                    },
+                ]}
+                teamOne={{ name: 'Temper' }}
+                teamTwo={{ name: 'Truck Stop' }}
             />
         </BaseScreen>
     )
