@@ -38,6 +38,13 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             width: '90%',
             alignSelf: 'center',
         },
+        titleContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+        },
+        teamContainer: {
+            marginRight: 10,
+        },
         titleText: {
             color: colors.textPrimary,
             fontSize: size.fontFifteen,
@@ -48,6 +55,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
     return (
         <View style={{ backgroundColor: colors.primary }}>
             <List.Accordion
+                id={point._id}
                 style={styles.accordion}
                 expanded={expanded}
                 onPress={() => {
@@ -62,8 +70,8 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                 )}
                 titleStyle={{ color: colors.textPrimary }}
                 title={
-                    <View style={{ display: 'flex', flexDirection: 'row' }}>
-                        <View style={{ marginRight: 10 }}>
+                    <View style={styles.titleContainer}>
+                        <View style={styles.teamContainer}>
                             <Text style={styles.titleText}>{teamOne.name}</Text>
                             <Text style={styles.titleText}>{teamTwo.name}</Text>
                         </View>
