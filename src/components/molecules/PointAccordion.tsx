@@ -5,12 +5,14 @@ import Point from '../../types/point'
 import React from 'react'
 import { SavedServerAction } from '../../types/action'
 import { useColors } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 interface PointAccordionProps {
     point: Point
     actions: SavedServerAction[]
+    expanded: boolean
+    loading: boolean
     teamOne: GuestTeam
     teamTwo: GuestTeam
 }
@@ -18,11 +20,14 @@ interface PointAccordionProps {
 const PointAccordion: React.FC<PointAccordionProps> = ({
     point,
     actions,
+    expanded,
+    loading,
     teamOne,
     teamTwo,
 }) => {
     const { colors } = useColors()
-    const [expanded, setExpanded] = React.useState(false)
+    console.log('expanded', point._id, expanded)
+    console.log('actions', actions)
 
     const styles = StyleSheet.create({
         accordion: {
@@ -57,10 +62,6 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             <List.Accordion
                 id={point._id}
                 style={styles.accordion}
-                expanded={expanded}
-                onPress={() => {
-                    setExpanded(curr => !curr)
-                }}
                 right={props => (
                     <List.Icon
                         {...props}
@@ -85,13 +86,20 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                         </View>
                     </View>
                 }>
-                {actions.map(action => {
-                    return (
-                        <View key={action.actionNumber} style={styles.item}>
-                            <ActionDisplayItem action={action} />
-                        </View>
-                    )
-                })}
+                {loading && (
+                    <ActivityIndicator
+                        size="small"
+                        color={colors.textPrimary}
+                    />
+                )}
+                {!loading &&
+                    actions.map(action => {
+                        return (
+                            <View key={action.actionNumber} style={styles.item}>
+                                <ActionDisplayItem action={action} />
+                            </View>
+                        )
+                    })}
             </List.Accordion>
         </View>
     )
