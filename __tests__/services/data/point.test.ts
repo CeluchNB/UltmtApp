@@ -1,8 +1,11 @@
+import * as Constants from '../../../src/utils/constants'
 import * as PointServices from '../../../src/services/network/point'
 import Point from '../../../src/types/point'
+import { ActionType, SavedServerAction } from '../../../src/types/action'
 import {
     createPoint,
     finishPoint,
+    getActionsByPoint,
     setPlayers,
 } from '../../../src/services/data/point'
 
@@ -19,6 +22,22 @@ const point: Point = {
     teamTwoPlayers: [],
     pullingTeam: { name: 'Team 1' },
     receivingTeam: { name: 'Team 2' },
+}
+
+const action: SavedServerAction = {
+    _id: 'action1',
+    actionNumber: 1,
+    comments: [],
+    team: {
+        _id: 'team1',
+        name: 'Team name',
+        place: 'Pgh',
+        teamname: 'pghteam',
+        seasonStart: '2022',
+        seasonEnd: '2022',
+    },
+    actionType: ActionType.PULL,
+    tags: [],
 }
 
 describe('test create point', () => {
@@ -123,5 +142,37 @@ describe('test finish point', () => {
         )
 
         expect(finishPoint('point1')).rejects.toThrow()
+    })
+})
+
+describe('test get actions by point', () => {
+    it('should handle network success', async () => {
+        jest.spyOn(PointServices, 'getActionsByPoint').mockReturnValueOnce(
+            Promise.resolve({
+                data: { actions: [action] },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await getActionsByPoint('one', 'point1')
+        expect(result).toEqual([action])
+    })
+
+    it('should handle network failure', () => {
+        jest.spyOn(PointServices, 'getActionsByPoint').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(getActionsByPoint('one', 'point1')).rejects.toThrowError(
+            Constants.GET_POINT_ERROR,
+        )
     })
 })

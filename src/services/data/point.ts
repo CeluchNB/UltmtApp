@@ -1,11 +1,13 @@
 import * as Constants from '../../utils/constants'
 import { GuestUser } from '../../types/user'
 import Point from '../../types/point'
+import { SavedServerAction } from '../../types/action'
 import { throwApiError } from '../../utils/service-utils'
 import { withGameToken } from './game'
 import {
     createPoint as networkCreatePoint,
     finishPoint as networkFinishPoint,
+    getActionsByPoint as networkGetActionsByPoint,
     setPlayers as networkSetPlayers,
 } from '../network/point'
 
@@ -68,5 +70,24 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
         return point
     } catch (e) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)
+    }
+}
+
+/**
+ * Method to get actions belonging to a single team related to a point
+ * @param team team 'one' or 'two'
+ * @param pointId id of point
+ * @returns List of server actions
+ */
+export const getActionsByPoint = async (
+    team: 'one' | 'two',
+    pointId: string,
+): Promise<SavedServerAction[]> => {
+    try {
+        const response = await networkGetActionsByPoint(team, pointId)
+        const { actions } = response.data
+        return actions
+    } catch (e) {
+        return throwApiError(e, Constants.GET_POINT_ERROR)
     }
 }
