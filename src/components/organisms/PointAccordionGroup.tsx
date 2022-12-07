@@ -2,9 +2,12 @@ import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import PointAccordion from '../molecules/PointAccordion'
-import React from 'react'
 import { SavedServerAction } from '../../types/action'
-import { getActionsByPoint } from '../../services/data/point'
+import React, { useEffect } from 'react'
+import {
+    deleteAllActionsByPoint,
+    getActionsByPoint,
+} from '../../services/data/point'
 
 interface PointAccordionGroupProps {
     points: Point[]
@@ -21,14 +24,31 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     const [actions, setActions] = React.useState<SavedServerAction[]>([])
     const [expandedId, setExpandedId] = React.useState('')
 
+    useEffect(() => {
+        return () => {
+            for (const point of points) {
+                deleteAllActionsByPoint(point._id)
+            }
+        }
+    }, [points])
+
     return (
         <List.AccordionGroup
             onAccordionPress={id => {
-                console.log('got press', id)
+                if (id === expandedId) {
+                    setExpandedId('')
+                    return
+                }
+                const point = points.find(p => p._id === id)
                 setLoading(true)
-                getActionsByPoint('one', id.toString())
+                getActionsByPoint(
+                    'one',
+                    id.toString(),
+                    point
+                        ? [...point.teamOneActions, ...point.teamTwoActions]
+                        : [],
+                )
                     .then(data => {
-                        console.log('got actions', data)
                         setActions(data)
                     })
                     .finally(() => {

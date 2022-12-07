@@ -26,8 +26,6 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
     teamTwo,
 }) => {
     const { colors } = useColors()
-    console.log('expanded', point._id, expanded)
-    console.log('actions', actions)
 
     const styles = StyleSheet.create({
         accordion: {

@@ -1,9 +1,11 @@
+import * as ActionLocal from '../../../src/services/local/action'
 import * as Constants from '../../../src/utils/constants'
 import * as PointServices from '../../../src/services/network/point'
 import Point from '../../../src/types/point'
 import { ActionType, SavedServerAction } from '../../../src/types/action'
 import {
     createPoint,
+    deleteAllActionsByPoint,
     finishPoint,
     getActionsByPoint,
     setPlayers,
@@ -156,11 +158,17 @@ describe('test get actions by point', () => {
                 config: {},
             }),
         )
-        const result = await getActionsByPoint('one', 'point1')
+        jest.spyOn(ActionLocal, 'getActions')
+            .mockReturnValueOnce(Promise.resolve([]))
+            .mockReturnValueOnce(Promise.resolve([action]))
+        jest.spyOn(ActionLocal, 'saveActions').mockReturnValue(
+            Promise.resolve(),
+        )
+        const result = await getActionsByPoint('one', 'point1', [])
         expect(result).toEqual([action])
     })
 
-    it('should handle network failure', () => {
+    it('should handle network failure', async () => {
         jest.spyOn(PointServices, 'getActionsByPoint').mockReturnValueOnce(
             Promise.reject({
                 data: {},
@@ -170,9 +178,37 @@ describe('test get actions by point', () => {
                 config: {},
             }),
         )
+        jest.spyOn(ActionLocal, 'getActions').mockReturnValueOnce(
+            Promise.resolve([]),
+        )
 
-        expect(getActionsByPoint('one', 'point1')).rejects.toThrowError(
+        expect(getActionsByPoint('one', 'point1', [])).rejects.toThrowError(
             Constants.GET_POINT_ERROR,
         )
+    })
+
+    it('should handle local success', async () => {
+        jest.spyOn(ActionLocal, 'getActions').mockReturnValueOnce(
+            Promise.resolve([action]),
+        )
+
+        const result = await getActionsByPoint('one', 'point1', [action._id])
+        expect(result).toEqual([action])
+    })
+})
+
+describe('test delete actions', () => {
+    it('should handle local success', async () => {
+        jest.spyOn(ActionLocal, 'deleteAllActionsByPoint').mockReturnValueOnce(
+            Promise.resolve(),
+        )
+        expect(deleteAllActionsByPoint('pointId')).resolves.toBeUndefined()
+    })
+
+    it('should handle local failure', async () => {
+        jest.spyOn(ActionLocal, 'deleteAllActionsByPoint').mockReturnValueOnce(
+            Promise.reject(),
+        )
+        expect(deleteAllActionsByPoint('pointId')).resolves.toBeUndefined()
     })
 })
