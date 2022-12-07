@@ -63,7 +63,7 @@ exports[`should match snapshot with no teamname 1`] = `
       }
     }
   >
-    guest team
+    
   </Text>
   <Text
     style={

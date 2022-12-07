@@ -99,7 +99,7 @@ exports[`should match snapshot 1`] = `
             }
           }
         >
-          guest team
+          
         </Text>
         <Text
           style={

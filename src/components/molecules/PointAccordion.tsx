@@ -91,13 +91,17 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                     />
                 )}
                 {!loading &&
-                    actions.map(action => {
-                        return (
-                            <View key={action.actionNumber} style={styles.item}>
-                                <ActionDisplayItem action={action} />
-                            </View>
-                        )
-                    })}
+                    actions
+                        .sort((a, b) => b.actionNumber - a.actionNumber)
+                        .map(action => {
+                            return (
+                                <View
+                                    key={action.actionNumber}
+                                    style={styles.item}>
+                                    <ActionDisplayItem action={action} />
+                                </View>
+                            )
+                        })}
             </List.Accordion>
         </View>
     )

@@ -1,3 +1,4 @@
+import { FlatList } from 'react-native'
 import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
@@ -57,19 +58,22 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                     })
             }}
             expandedId={expandedId}>
-            {points.map(point => {
-                return (
-                    <PointAccordion
-                        key={point._id}
-                        point={point}
-                        expanded={point._id === expandedId}
-                        actions={actions}
-                        loading={loading}
-                        teamOne={teamOne}
-                        teamTwo={teamTwo}
-                    />
-                )
-            })}
+            <FlatList
+                data={points}
+                renderItem={({ item: point }) => {
+                    return (
+                        <PointAccordion
+                            key={point._id}
+                            point={point}
+                            expanded={point._id === expandedId}
+                            actions={actions}
+                            loading={loading}
+                            teamOne={teamOne}
+                            teamTwo={teamTwo}
+                        />
+                    )
+                }}
+            />
         </List.AccordionGroup>
     )
 }

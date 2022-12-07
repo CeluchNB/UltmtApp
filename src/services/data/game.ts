@@ -9,6 +9,7 @@ import { CreateGame, Game } from '../../types/game'
 import {
     addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
+    getGameById as networkGetGameById,
     getPointsByGame as networkGetPointsByGame,
     searchGames as networkSearchGames,
 } from '../network/game'
@@ -91,6 +92,21 @@ export const getPointsByGame = async (gameId: string): Promise<Point[]> => {
         const response = await networkGetPointsByGame(gameId)
         const { points } = response.data
         return points
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to get a game by id
+ * @param gameId id of game to get
+ * @returns game object
+ */
+export const getGameById = async (gameId: string): Promise<Game> => {
+    try {
+        const response = await networkGetGameById(gameId)
+        const { game } = response.data
+        return game
     } catch (e) {
         return throwApiError(e, Constants.GET_GAME_ERROR)
     }

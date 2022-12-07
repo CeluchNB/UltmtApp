@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken'
 import {
     addGuestPlayer,
     createGame,
+    getGameById,
     getPointsByGame,
     searchGames,
     withGameToken,
@@ -135,7 +136,7 @@ describe('test add guest player', () => {
             Promise.resolve(validToken),
         )
         jest.spyOn(GameServices, 'addGuestPlayer').mockReturnValueOnce(
-            Promise.resolve({
+            Promise.reject({
                 data: {},
                 status: 400,
                 statusText: 'Bad',
@@ -178,6 +179,39 @@ describe('test get points by game', () => {
         )
 
         expect(getPointsByGame('game1')).rejects.toThrow(
+            Constants.GET_GAME_ERROR,
+        )
+    })
+})
+
+describe('test get game by id', () => {
+    it('should handle network success', async () => {
+        jest.spyOn(GameServices, 'getGameById').mockReturnValueOnce(
+            Promise.resolve({
+                data: { game },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await getGameById('gameid')
+        expect(result).toMatchObject(game)
+    })
+
+    it('should handle network failure', async () => {
+        jest.spyOn(GameServices, 'getGameById').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(getGameById('gameid')).rejects.toThrowError(
             Constants.GET_GAME_ERROR,
         )
     })
