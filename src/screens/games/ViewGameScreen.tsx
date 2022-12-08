@@ -29,6 +29,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
             {points && (
                 <View style={styles.pointsContainer}>
                     <PointAccordionGroup
+                        gameId={gameId}
                         points={points.sort(
                             (a, b) => b.pointNumber - a.pointNumber,
                         )}

@@ -3,20 +3,27 @@ import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import PointAccordion from '../molecules/PointAccordion'
-import { SavedServerAction } from '../../types/action'
+import {
+    LiveServerAction,
+    SavedServerAction,
+    SubscriptionObject,
+} from '../../types/action'
 import React, { useEffect } from 'react'
 import {
     deleteAllActionsByPoint,
     getActionsByPoint,
 } from '../../services/data/point'
+import { joinPoint, subscribe, unsubscribe } from '../../services/data/action'
 
 interface PointAccordionGroupProps {
+    gameId: string
     points: Point[]
     teamOne: GuestTeam
     teamTwo: GuestTeam
 }
 
 const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
+    gameId,
     points,
     teamOne,
     teamTwo,
@@ -24,37 +31,60 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     const [loading, setLoading] = React.useState(false)
     const [actions, setActions] = React.useState<SavedServerAction[]>([])
     const [expandedId, setExpandedId] = React.useState('')
+    const [liveActions, setLiveActions] = React.useState<LiveServerAction[]>([])
+
+    const subscriptions: SubscriptionObject = {
+        client: (data: LiveServerAction) => {
+            setLiveActions(curr => [data, ...curr])
+        },
+        undo: () => {
+            setLiveActions(curr => curr.slice(1))
+        },
+        error: () => {},
+    }
 
     useEffect(() => {
         return () => {
+            unsubscribe()
             for (const point of points) {
                 deleteAllActionsByPoint(point._id)
             }
         }
     }, [points])
 
+    const isLivePoint = (point: Point): boolean => {
+        return point.teamOneActive || point.teamTwoActive
+    }
+
     return (
         <List.AccordionGroup
-            onAccordionPress={id => {
+            onAccordionPress={async id => {
                 if (id === expandedId) {
                     setExpandedId('')
                     return
                 }
+
+                setExpandedId(id.toString())
                 const point = points.find(p => p._id === id)
+                if (!point) {
+                    return
+                }
+                if (isLivePoint(point)) {
+                    // setLiveActions([])
+                    await joinPoint(gameId, point._id)
+                    await subscribe(subscriptions)
+                    return
+                }
                 setLoading(true)
-                getActionsByPoint(
-                    'one',
-                    id.toString(),
-                    point
-                        ? [...point.teamOneActions, ...point.teamTwoActions]
-                        : [],
-                )
+                getActionsByPoint('one', id.toString(), [
+                    ...point.teamOneActions,
+                    ...point.teamTwoActions,
+                ])
                     .then(data => {
                         setActions(data)
                     })
                     .finally(() => {
                         setLoading(false)
-                        setExpandedId(id.toString())
                     })
             }}
             expandedId={expandedId}>
@@ -66,10 +96,11 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                             key={point._id}
                             point={point}
                             expanded={point._id === expandedId}
-                            actions={actions}
+                            actions={isLivePoint(point) ? liveActions : actions}
                             loading={loading}
                             teamOne={teamOne}
                             teamTwo={teamTwo}
+                            isLive={isLivePoint(point)}
                         />
                     )
                 }}

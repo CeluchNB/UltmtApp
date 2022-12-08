@@ -2,19 +2,26 @@ import ActionDisplayItem from '../atoms/ActionDisplayItem'
 import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
-import React from 'react'
-import { SavedServerAction } from '../../types/action'
 import { useColors } from '../../hooks'
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import {
+    ActivityIndicator,
+    Animated,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
+import { LiveServerAction, SavedServerAction } from '../../types/action'
+import React, { useEffect } from 'react'
 import { size, weight } from '../../theme/fonts'
 
 interface PointAccordionProps {
     point: Point
-    actions: SavedServerAction[]
+    actions: (SavedServerAction | LiveServerAction)[]
     expanded: boolean
     loading: boolean
     teamOne: GuestTeam
     teamTwo: GuestTeam
+    isLive: boolean
 }
 
 const PointAccordion: React.FC<PointAccordionProps> = ({
@@ -24,8 +31,29 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
     loading,
     teamOne,
     teamTwo,
+    isLive,
 }) => {
     const { colors } = useColors()
+    const liveOpacity = React.useRef(new Animated.Value(0)).current
+
+    useEffect(() => {
+        if (isLive) {
+            Animated.loop(
+                Animated.sequence([
+                    Animated.timing(liveOpacity, {
+                        toValue: 1,
+                        duration: 750,
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(liveOpacity, {
+                        toValue: 0,
+                        duration: 750,
+                        useNativeDriver: true,
+                    }),
+                ]),
+            ).start()
+        }
+    }, [isLive, liveOpacity])
 
     const styles = StyleSheet.create({
         accordion: {
@@ -53,6 +81,16 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             fontSize: size.fontFifteen,
             fontWeight: weight.bold,
         },
+        circleContainer: {
+            marginBottom: -10,
+        },
+        circle: {
+            width: 10,
+            height: 10,
+            borderRadius: 5,
+            backgroundColor: 'red',
+            alignSelf: 'flex-end',
+        },
     })
 
     return (
@@ -61,11 +99,25 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                 id={point._id}
                 style={styles.accordion}
                 right={props => (
-                    <List.Icon
-                        {...props}
-                        color={colors.textPrimary}
-                        icon={props.isExpanded ? 'chevron-up' : 'chevron-down'}
-                    />
+                    <View>
+                        {isLive && (
+                            <View style={styles.circleContainer}>
+                                <Animated.View
+                                    style={[
+                                        styles.circle,
+                                        { opacity: liveOpacity },
+                                    ]}
+                                />
+                            </View>
+                        )}
+                        <List.Icon
+                            {...props}
+                            color={colors.textPrimary}
+                            icon={
+                                props.isExpanded ? 'chevron-up' : 'chevron-down'
+                            }
+                        />
+                    </View>
                 )}
                 titleStyle={{ color: colors.textPrimary }}
                 title={
@@ -98,7 +150,11 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                                 <View
                                     key={action.actionNumber}
                                     style={styles.item}>
-                                    <ActionDisplayItem action={action} />
+                                    <ActionDisplayItem
+                                        action={action}
+                                        teamOne={teamOne}
+                                        teamTwo={teamTwo}
+                                    />
                                 </View>
                             )
                         })}

@@ -1,17 +1,24 @@
+import { GuestTeam } from '../../types/team'
 import { GuestUser } from '../../types/user'
 import React from 'react'
-import { SavedServerAction } from '../../types/action'
 import { mapActionToDescription } from '../../utils/action'
 import { useColors } from '../../hooks'
 import { Chip, IconButton } from 'react-native-paper'
+import { LiveServerAction, SavedServerAction } from '../../types/action'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 interface ActionDisplayItemProps {
-    action: SavedServerAction
+    action: SavedServerAction | LiveServerAction
+    teamOne: GuestTeam
+    teamTwo: GuestTeam
 }
 
-const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({ action }) => {
+const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
+    action,
+    teamOne,
+    teamTwo,
+}) => {
     const { colors } = useColors()
     const { actionType, playerOne, playerTwo, tags } = action
 
@@ -19,16 +26,29 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({ action }) => {
         return `${player?.firstName} ${player?.lastName}`
     }
 
+    const getTeamName = (): string => {
+        if ((action as any).teamNumber) {
+            return (action as any).teamNumber === 'one'
+                ? teamOne.name
+                : teamTwo.name
+        } else if ((action as any).team) {
+            return (action as any).team.name
+        }
+        return teamOne.name
+    }
+
     const styles = StyleSheet.create({
         container: {
-            display: 'flex',
-            flexDirection: 'row',
             backgroundColor: colors.darkPrimary,
             shadowColor: colors.darkGray,
             shadowRadius: 8,
             borderRadius: 8,
             width: '100%',
             padding: 10,
+        },
+        dataContainer: {
+            display: 'flex',
+            flexDirection: 'row',
         },
         textContainer: {
             flex: 1,
@@ -65,44 +85,47 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({ action }) => {
             style={styles.container}
             android_ripple={{ color: colors.textPrimary }}
             onPress={() => {}}>
-            <View style={styles.textContainer}>
-                <View style={styles.lineContainer}>
-                    {playerOne && (
+            <Text style={styles.action}>{getTeamName()}</Text>
+            <View style={styles.dataContainer}>
+                <View style={styles.textContainer}>
+                    <View style={styles.lineContainer}>
+                        {playerOne && (
+                            <View>
+                                <Text style={styles.player}>
+                                    {getName(playerOne)}
+                                </Text>
+                            </View>
+                        )}
                         <View>
-                            <Text style={styles.player}>
-                                {getName(playerOne)}
+                            <Text style={styles.action}>
+                                {mapActionToDescription(actionType)}
                             </Text>
                         </View>
-                    )}
-                    <View>
-                        <Text style={styles.action}>
-                            {mapActionToDescription(actionType)}
-                        </Text>
+                        {playerTwo && (
+                            <View>
+                                <Text style={styles.player}>
+                                    {getName(playerTwo)}
+                                </Text>
+                            </View>
+                        )}
                     </View>
-                    {playerTwo && (
-                        <View>
-                            <Text style={styles.player}>
-                                {getName(playerTwo)}
-                            </Text>
-                        </View>
-                    )}
-                </View>
-                <View style={styles.lineContainer}>
-                    {tags.map(tag => (
-                        <Chip
-                            key={tag}
-                            style={styles.chip}
-                            mode="outlined"
-                            selectedColor={colors.textPrimary}
-                            ellipsizeMode="tail">
-                            {tag}
-                        </Chip>
-                    ))}
-                    <IconButton
-                        size={15}
-                        icon="comment-text-outline"
-                        color={colors.textPrimary}
-                    />
+                    <View style={styles.lineContainer}>
+                        {tags.map(tag => (
+                            <Chip
+                                key={tag}
+                                style={styles.chip}
+                                mode="outlined"
+                                selectedColor={colors.textPrimary}
+                                ellipsizeMode="tail">
+                                {tag}
+                            </Chip>
+                        ))}
+                        <IconButton
+                            size={15}
+                            icon="comment-text-outline"
+                            color={colors.textPrimary}
+                        />
+                    </View>
                 </View>
             </View>
         </Pressable>
