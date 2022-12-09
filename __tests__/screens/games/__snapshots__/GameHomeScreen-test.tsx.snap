@@ -120,6 +120,11 @@ exports[`should match snapshot with live and recent data 1`] = `
   <RCTScrollView
     refreshControl={
       <RefreshControlMock
+        colors={
+          Array [
+            "#31adff",
+          ]
+        }
         onRefresh={[Function]}
         refreshing={false}
       />
@@ -540,6 +545,11 @@ exports[`should match snapshot with no data 1`] = `
   <RCTScrollView
     refreshControl={
       <RefreshControlMock
+        colors={
+          Array [
+            "#31adff",
+          ]
+        }
         onRefresh={[Function]}
         refreshing={false}
       />

@@ -89,7 +89,11 @@ const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                 testID="game-home-scroll-view"
                 showsVerticalScrollIndicator={false}
                 refreshControl={
-                    <RefreshControl onRefresh={refetch} refreshing={loading} />
+                    <RefreshControl
+                        onRefresh={refetch}
+                        refreshing={loading}
+                        colors={[colors.textSecondary]}
+                    />
                 }>
                 {liveGames && liveGames.length > 0 && (
                     <MapSection

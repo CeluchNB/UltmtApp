@@ -12,6 +12,7 @@ import React, { useEffect } from 'react'
 import {
     deleteAllActionsByPoint,
     getActionsByPoint,
+    getLiveActionsByPoint,
 } from '../../services/data/point'
 import { joinPoint, subscribe, unsubscribe } from '../../services/data/action'
 
@@ -70,22 +71,22 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                     return
                 }
                 if (isLivePoint(point)) {
-                    // setLiveActions([])
+                    setLoading(true)
                     await joinPoint(gameId, point._id)
                     await subscribe(subscriptions)
+                    const data = await getLiveActionsByPoint(gameId, point._id)
+                    setLiveActions(curr => [...curr, ...data])
+                    setLoading(false)
                     return
+                } else {
+                    setLoading(true)
+                    const data = await getActionsByPoint('one', id.toString(), [
+                        ...point.teamOneActions,
+                        ...point.teamTwoActions,
+                    ])
+                    setActions(data)
+                    setLoading(false)
                 }
-                setLoading(true)
-                getActionsByPoint('one', id.toString(), [
-                    ...point.teamOneActions,
-                    ...point.teamTwoActions,
-                ])
-                    .then(data => {
-                        setActions(data)
-                    })
-                    .finally(() => {
-                        setLoading(false)
-                    })
             }}
             expandedId={expandedId}>
             <FlatList

@@ -19,6 +19,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
     const styles = StyleSheet.create({
         pointsContainer: {
             marginTop: 10,
+            height: '85%',
         },
     })
 

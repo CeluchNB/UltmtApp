@@ -6,6 +6,7 @@ import { useColors } from '../../hooks'
 import {
     ActivityIndicator,
     Animated,
+    FlatList,
     StyleSheet,
     Text,
     View,
@@ -142,22 +143,26 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                         color={colors.textPrimary}
                     />
                 )}
-                {!loading &&
-                    actions
-                        .sort((a, b) => b.actionNumber - a.actionNumber)
-                        .map(action => {
+                {!loading && (
+                    <FlatList
+                        data={actions.sort(
+                            (a, b) => b.actionNumber - a.actionNumber,
+                        )}
+                        renderItem={({ item }) => {
                             return (
                                 <View
-                                    key={action.actionNumber}
+                                    key={item.actionNumber}
                                     style={styles.item}>
                                     <ActionDisplayItem
-                                        action={action}
+                                        action={item}
                                         teamOne={teamOne}
                                         teamTwo={teamTwo}
                                     />
                                 </View>
                             )
-                        })}
+                        }}
+                    />
+                )}
             </List.Accordion>
         </View>
     )
