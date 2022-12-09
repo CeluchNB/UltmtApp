@@ -3,6 +3,7 @@ import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import PointAccordion from '../molecules/PointAccordion'
+import { normalizeActions } from '../../utils/point'
 import {
     LiveServerAction,
     SavedServerAction,
@@ -34,15 +35,13 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     const [expandedId, setExpandedId] = React.useState('')
     const [liveActions, setLiveActions] = React.useState<LiveServerAction[]>([])
 
-    const subscriptions: SubscriptionObject = {
-        client: (data: LiveServerAction) => {
-            setLiveActions(curr => [data, ...curr])
+    const displayedActions = React.useCallback(
+        (point: Point) => {
+            console.log(liveActions.length)
+            return isLivePoint(point) ? normalizeActions(liveActions) : actions
         },
-        undo: () => {
-            setLiveActions(curr => curr.slice(1))
-        },
-        error: () => {},
-    }
+        [liveActions, actions],
+    )
 
     useEffect(() => {
         return () => {
@@ -57,9 +56,20 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
         return point.teamOneActive || point.teamTwoActive
     }
 
+    const subscriptions: SubscriptionObject = {
+        client: (data: LiveServerAction) => {
+            setLiveActions(curr => [data, ...curr])
+        },
+        undo: () => {
+            setLiveActions(curr => curr.slice(1))
+        },
+        error: () => {},
+    }
+
     return (
         <List.AccordionGroup
             onAccordionPress={async id => {
+                // TODO:: refactor this -> too many data decisions in here
                 if (id === expandedId) {
                     setExpandedId('')
                     return
@@ -75,9 +85,10 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                     await joinPoint(gameId, point._id)
                     await subscribe(subscriptions)
                     const data = await getLiveActionsByPoint(gameId, point._id)
+                    // TODO: if user closes and opens accordion a bunch, liveActions could grow A LOT
+                    // think of way to remedy this
                     setLiveActions(curr => [...curr, ...data])
                     setLoading(false)
-                    return
                 } else {
                     setLoading(true)
                     const data = await getActionsByPoint('one', id.toString(), [
@@ -97,7 +108,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                             key={point._id}
                             point={point}
                             expanded={point._id === expandedId}
-                            actions={isLivePoint(point) ? liveActions : actions}
+                            actions={displayedActions(point)}
                             loading={loading}
                             teamOne={teamOne}
                             teamTwo={teamTwo}
