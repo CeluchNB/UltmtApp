@@ -1,9 +1,9 @@
 import * as Constants from '../../utils/constants'
 import { GuestUser } from '../../types/user'
 import Point from '../../types/point'
-import { SavedServerAction } from '../../types/action'
 import { throwApiError } from '../../utils/service-utils'
 import { withGameToken } from './game'
+import { LiveServerAction, SavedServerAction } from '../../types/action'
 import {
     deleteAllActionsByPoint as localDeleteAllActionsByPoint,
     getActions as localGetActions,
@@ -13,6 +13,7 @@ import {
     createPoint as networkCreatePoint,
     finishPoint as networkFinishPoint,
     getActionsByPoint as networkGetActionsByPoint,
+    getLiveActionsByPoint as networkGetLiveActionsByPoint,
     setPlayers as networkSetPlayers,
 } from '../network/point'
 
@@ -120,5 +121,18 @@ export const deleteAllActionsByPoint = async (pointId: string) => {
     } catch (e) {
         // Do nothing for now
         return
+    }
+}
+
+export const getLiveActionsByPoint = async (
+    gameId: string,
+    pointId: string,
+): Promise<LiveServerAction[]> => {
+    try {
+        const response = await networkGetLiveActionsByPoint(gameId, pointId)
+        const { actions } = response.data
+        return actions
+    } catch (e) {
+        return throwApiError(e, Constants.GET_POINT_ERROR)
     }
 }

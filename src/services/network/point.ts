@@ -65,3 +65,17 @@ export const getActionsByPoint = async (
         },
     )
 }
+
+export const getLiveActionsByPoint = async (
+    gameId: string,
+    pointId: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(
+        `${API_URL_V1}/point/${pointId}/live/actions?gameId=${gameId}`,
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}
