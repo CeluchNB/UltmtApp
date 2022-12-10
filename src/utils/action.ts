@@ -162,7 +162,7 @@ export const mapActionToDescription = (type: ActionType): string => {
         case ActionType.CALL_ON_FIELD:
             return 'There is a call on the field'
         case ActionType.CATCH:
-            return ' throws to '
+            return ' catch from '
         case ActionType.DROP:
             return ' drops pass from '
         case ActionType.PICKUP:
@@ -176,7 +176,7 @@ export const mapActionToDescription = (type: ActionType): string => {
         case ActionType.TEAM_TWO_SCORE:
             return 'scores from'
         case ActionType.THROWAWAY:
-            return ' throws it away'
+            return ' throwaway'
         case ActionType.TIMEOUT:
             return 'Timeout called'
     }

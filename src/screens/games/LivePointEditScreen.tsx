@@ -1,4 +1,5 @@
 import * as Constants from '../../utils/constants'
+import ActionDisplayItem from '../../components/atoms/ActionDisplayItem'
 import { ApiError } from '../../types/services'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
@@ -8,14 +9,14 @@ import PlayerActionView from '../../components/organisms/PlayerActionView'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
-import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
 import {
     ActionType,
     ClientActionType,
+    LiveServerAction,
     SubscriptionObject,
 } from '../../types/action'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import {
     addAction,
     joinPoint,
@@ -35,6 +36,7 @@ import {
     selectPoint,
     setPoint,
 } from '../../store/reducers/features/point/livePointReducer'
+import { size, weight } from '../../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
 const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
@@ -47,7 +49,6 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     const [actionStack, setActionStack] = React.useState<
         { playerIndex?: number; actionType: ClientActionType }[]
     >([])
-    const [resolvedAction, setResolvedAction] = React.useState(0)
     const [liveError, setLiveError] = React.useState<string | undefined>(
         undefined,
     )
@@ -55,6 +56,9 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     const [finishError, setFinishError] = React.useState<string | undefined>(
         undefined,
     )
+    const [resolvedActions, setResolvedActions] = React.useState<
+        LiveServerAction[]
+    >([])
 
     const activePlayers = React.useMemo(() => {
         if (team === 'one') {
@@ -66,13 +70,12 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
 
     const subscriptions: SubscriptionObject = {
         client: data => {
-            console.log('got data', data)
             setLiveError(undefined)
-            setResolvedAction(data.actionNumber || 0)
+            setResolvedActions(curr => [...curr, data])
         },
         undo: () => {
             setLiveError(undefined)
-            setResolvedAction(curr => curr - 1)
+            setResolvedActions(curr => curr.slice(0, curr.length - 2))
         },
         error: data => {
             setLiveError(data?.message)
@@ -195,8 +198,8 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         if (actionStack.length < 1) {
             return { playerIndex: undefined, actionType: undefined }
         } else if (
-            resolvedAction > actionStack.length ||
-            resolvedAction === 0
+            resolvedActions.length > actionStack.length ||
+            resolvedActions.length === 0
         ) {
             return {
                 playerIndex: actionStack[actionStack.length - 1].playerIndex,
@@ -204,8 +207,8 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
             }
         }
         return {
-            playerIndex: actionStack[resolvedAction - 1].playerIndex,
-            actionType: actionStack[resolvedAction - 1].actionType,
+            playerIndex: actionStack[resolvedActions.length - 1].playerIndex,
+            actionType: actionStack[resolvedActions.length - 1].actionType,
         }
     }
 
@@ -213,6 +216,12 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         error: {
             color: colors.error,
             fontSize: size.fontFifteen,
+        },
+        header: {
+            color: colors.textPrimary,
+            fontSize: size.fontMedium,
+            fontWeight: weight.full,
+            margin: 5,
         },
     })
 
@@ -225,7 +234,7 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                 prevAction={getActiveAction().actionType}
                 activePlayer={getActiveAction().playerIndex}
                 undoDisabled={actionStack.length === 0}
-                loading={resolvedAction < actionStack.length}
+                loading={resolvedActions.length < actionStack.length}
                 error={liveError}
                 onAction={onAction}
                 onUndo={onUndo}
@@ -249,6 +258,16 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                 }
             />
             {finishError && <Text style={styles.error}>{finishError}</Text>}
+            {resolvedActions.length > 0 && (
+                <View>
+                    <Text style={styles.header}>Last Action</Text>
+                    <ActionDisplayItem
+                        action={resolvedActions[resolvedActions.length - 1]}
+                        teamOne={game.teamOne}
+                        teamTwo={game.teamTwo}
+                    />
+                </View>
+            )}
         </BaseScreen>
     )
 }

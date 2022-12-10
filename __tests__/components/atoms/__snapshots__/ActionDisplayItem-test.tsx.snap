@@ -83,7 +83,7 @@ exports[`match snapshot with live action 1`] = `
               }
             }
           >
-             throws to 
+             catch from 
           </Text>
         </View>
         <View>
@@ -488,7 +488,7 @@ exports[`should match snapshot with server action 1`] = `
               }
             }
           >
-             throws to 
+             catch from 
           </Text>
         </View>
         <View>

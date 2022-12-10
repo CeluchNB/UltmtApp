@@ -80,24 +80,23 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                 if (!point) {
                     return
                 }
+                setLoading(true)
                 if (isLivePoint(point)) {
-                    setLoading(true)
                     await joinPoint(gameId, point._id)
                     await subscribe(subscriptions)
                     const data = await getLiveActionsByPoint(gameId, point._id)
                     // TODO: if user closes and opens accordion a bunch, liveActions could grow A LOT
                     // think of way to remedy this
+                    // normalizeActions prevents this from being a display issue
                     setLiveActions(curr => [...curr, ...data])
-                    setLoading(false)
                 } else {
-                    setLoading(true)
                     const data = await getActionsByPoint('one', id.toString(), [
                         ...point.teamOneActions,
                         ...point.teamTwoActions,
                     ])
                     setActions(data)
-                    setLoading(false)
                 }
+                setLoading(false)
             }}
             expandedId={expandedId}>
             <FlatList

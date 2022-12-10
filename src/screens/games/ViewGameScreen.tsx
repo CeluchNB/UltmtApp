@@ -34,8 +34,8 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
                         points={points.sort(
                             (a, b) => b.pointNumber - a.pointNumber,
                         )}
-                        teamOne={{ name: 'Temper' }}
-                        teamTwo={{ name: 'Truck Stop' }}
+                        teamOne={game?.teamOne || { name: '' }}
+                        teamTwo={game?.teamTwo || { name: '' }}
                     />
                 </View>
             )}
