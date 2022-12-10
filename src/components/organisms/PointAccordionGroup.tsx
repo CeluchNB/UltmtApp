@@ -37,7 +37,6 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
 
     const displayedActions = React.useCallback(
         (point: Point) => {
-            console.log(liveActions.length)
             return isLivePoint(point) ? normalizeActions(liveActions) : actions
         },
         [liveActions, actions],
@@ -66,38 +65,47 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
         error: () => {},
     }
 
+    const getLiveActions = async (pointId: string) => {
+        await joinPoint(gameId, pointId)
+        await subscribe(subscriptions)
+        const data = await getLiveActionsByPoint(gameId, pointId)
+        // TODO: if user closes and opens accordion a bunch, liveActions could grow A LOT
+        // think of way to remedy this
+        // normalizeActions prevents this from being a display issue
+        setLiveActions(curr => [...curr, ...data])
+    }
+
+    const getSavedActions = async (point: Point) => {
+        const data = await getActionsByPoint('one', point._id.toString(), [
+            ...point.teamOneActions,
+            ...point.teamTwoActions,
+        ])
+        setActions(data)
+    }
+
+    const onAccordionPress = async (id: string | number) => {
+        if (id === expandedId) {
+            setExpandedId('')
+            return
+        }
+
+        setExpandedId(id.toString())
+        const point = points.find(p => p._id === id)
+        if (!point) {
+            return
+        }
+        setLoading(true)
+        if (isLivePoint(point)) {
+            await getLiveActions(point._id)
+        } else {
+            await getSavedActions(point)
+        }
+        setLoading(false)
+    }
+
     return (
         <List.AccordionGroup
-            onAccordionPress={async id => {
-                // TODO:: refactor this -> too many data decisions in here
-                if (id === expandedId) {
-                    setExpandedId('')
-                    return
-                }
-
-                setExpandedId(id.toString())
-                const point = points.find(p => p._id === id)
-                if (!point) {
-                    return
-                }
-                setLoading(true)
-                if (isLivePoint(point)) {
-                    await joinPoint(gameId, point._id)
-                    await subscribe(subscriptions)
-                    const data = await getLiveActionsByPoint(gameId, point._id)
-                    // TODO: if user closes and opens accordion a bunch, liveActions could grow A LOT
-                    // think of way to remedy this
-                    // normalizeActions prevents this from being a display issue
-                    setLiveActions(curr => [...curr, ...data])
-                } else {
-                    const data = await getActionsByPoint('one', id.toString(), [
-                        ...point.teamOneActions,
-                        ...point.teamTwoActions,
-                    ])
-                    setActions(data)
-                }
-                setLoading(false)
-            }}
+            onAccordionPress={onAccordionPress}
             expandedId={expandedId}>
             <FlatList
                 data={points}
