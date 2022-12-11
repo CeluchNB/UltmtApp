@@ -49,6 +49,11 @@ export const undoAction = async (pointId: string) => {
     actionSocket.emit('action:undo', JSON.stringify({ pointId }))
 }
 
+export const nextPoint = async (pointId: string) => {
+    const actionSocket = await getSocket()
+    actionSocket.emit('point:next', JSON.stringify({ pointId }))
+}
+
 export const subscribe = async (subscriptions: SubscriptionObject) => {
     const actionSocket = await getSocket()
     performOnceConnected(actionSocket, () => {
@@ -61,6 +66,9 @@ export const subscribe = async (subscriptions: SubscriptionObject) => {
         }
         if (!actionSocket.hasListeners('action:error')) {
             actionSocket.on('action:error', subscriptions.error)
+        }
+        if (!actionSocket.hasListeners('point:next:client')) {
+            actionSocket.on('point:next:client', subscriptions.point)
         }
     })
 }

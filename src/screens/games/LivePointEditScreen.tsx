@@ -20,6 +20,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import {
     addAction,
     joinPoint,
+    nextPoint,
     subscribe,
     undoAction,
     unsubscribe,
@@ -80,6 +81,7 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         error: data => {
             setLiveError(data?.message)
         },
+        point: () => {},
     }
 
     React.useEffect(() => {
@@ -167,6 +169,7 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                 point.pointNumber + 1,
             )
             dispatch(setPoint(newPoint))
+            nextPoint(prevPoint._id)
 
             navigation.reset({ index: 0, routes: [{ name: 'SelectPlayers' }] })
         } catch (e) {

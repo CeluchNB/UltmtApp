@@ -15,7 +15,7 @@ export enum ActionType {
     CALL_ON_FIELD = 'CallOnField',
 }
 
-export type SubscriptionType = 'client' | 'undo' | 'error'
+export type SubscriptionType = 'client' | 'undo' | 'error' | 'point'
 export type SubscriptionObject = {
     [x in SubscriptionType]: (data: any) => void
 }

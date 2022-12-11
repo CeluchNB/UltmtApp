@@ -22,6 +22,7 @@ interface PointAccordionGroupProps {
     points: Point[]
     teamOne: GuestTeam
     teamTwo: GuestTeam
+    onNextPoint: () => void
 }
 
 const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
@@ -29,6 +30,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     points,
     teamOne,
     teamTwo,
+    onNextPoint,
 }) => {
     const [loading, setLoading] = React.useState(false)
     const [actions, setActions] = React.useState<SavedServerAction[]>([])
@@ -63,6 +65,11 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
             setLiveActions(curr => curr.slice(1))
         },
         error: () => {},
+        point: () => {
+            setLiveActions([])
+            setExpandedId('')
+            onNextPoint()
+        },
     }
 
     const getLiveActions = async (pointId: string) => {
@@ -95,12 +102,16 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
             return
         }
         setLoading(true)
-        if (isLivePoint(point)) {
-            await getLiveActions(point._id)
-        } else {
-            await getSavedActions(point)
+        try {
+            if (isLivePoint(point)) {
+                await getLiveActions(point._id)
+            } else {
+                await getSavedActions(point)
+            }
+        } catch (e) {
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     return (

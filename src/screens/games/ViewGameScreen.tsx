@@ -13,8 +13,20 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
         params: { gameId },
     } = route
 
-    const { data: game, loading: gameLoading } = useData(getGameById, gameId)
-    const { data: points } = useData(getPointsByGame, gameId)
+    const {
+        data: game,
+        loading: gameLoading,
+        refetch: updateGame,
+    } = useData(getGameById, gameId)
+    const { data: points, refetch: updatePoints } = useData(
+        getPointsByGame,
+        gameId,
+    )
+
+    const onNextPoint = () => {
+        updateGame()
+        updatePoints()
+    }
 
     const styles = StyleSheet.create({
         pointsContainer: {
@@ -36,6 +48,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
                         )}
                         teamOne={game?.teamOne || { name: '' }}
                         teamTwo={game?.teamTwo || { name: '' }}
+                        onNextPoint={onNextPoint}
                     />
                 </View>
             )}
