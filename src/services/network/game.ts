@@ -45,3 +45,17 @@ export const addGuestPlayer = async (
         { headers: { 'X-API-Key': API_KEY, Authorization: `Bearer ${token}` } },
     )
 }
+
+export const getPointsByGame = async (
+    gameId: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(`${API_URL_V1}/game/${gameId}/points`, {
+        headers: { 'X-API-Key': API_KEY },
+    })
+}
+
+export const getGameById = async (gameId: string): Promise<AxiosResponse> => {
+    return await axios.get(`${API_URL_V1}/game/${gameId}`, {
+        headers: { 'X-API-Key': API_KEY },
+    })
+}

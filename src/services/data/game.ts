@@ -2,12 +2,15 @@ import * as Constants from '../../utils/constants'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { GuestUser } from '../../types/user'
+import Point from '../../types/point'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
 import {
     addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
+    getGameById as networkGetGameById,
+    getPointsByGame as networkGetPointsByGame,
     searchGames as networkSearchGames,
 } from '../network/game'
 
@@ -76,6 +79,36 @@ export const addGuestPlayer = async (player: GuestUser): Promise<Game> => {
         return game
     } catch (e) {
         return throwApiError(e, Constants.ADD_GUEST_ERROR)
+    }
+}
+
+/**
+ * Method to get a list of points belonging to a specific game
+ * @param gameId id of game to get points for
+ * @returns list of points
+ */
+export const getPointsByGame = async (gameId: string): Promise<Point[]> => {
+    try {
+        const response = await networkGetPointsByGame(gameId)
+        const { points } = response.data
+        return points
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to get a game by id
+ * @param gameId id of game to get
+ * @returns game object
+ */
+export const getGameById = async (gameId: string): Promise<Game> => {
+    try {
+        const response = await networkGetGameById(gameId)
+        const { game } = response.data
+        return game
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
     }
 }
 

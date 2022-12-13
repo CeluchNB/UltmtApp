@@ -1,16 +1,33 @@
 import * as Constants from '../../../src/utils/constants'
 import * as GameServices from '../../../src/services/network/game'
+import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { game } from '../../../fixtures/data'
 import jwt from 'jsonwebtoken'
 import {
     addGuestPlayer,
     createGame,
+    getGameById,
+    getPointsByGame,
     searchGames,
     withGameToken,
 } from '../../../src/services/data/game'
 
 const validToken = jwt.sign({}, 'secret', { expiresIn: '3 hours' })
+const point: Point = {
+    _id: 'point1',
+    pointNumber: 1,
+    teamOneActive: true,
+    teamTwoActive: true,
+    teamOneActions: [],
+    teamTwoActions: [],
+    teamOneScore: 0,
+    teamTwoScore: 0,
+    teamOnePlayers: [],
+    teamTwoPlayers: [],
+    pullingTeam: { name: 'Team 1' },
+    receivingTeam: { name: 'Team 2' },
+}
 
 afterEach(() => {
     RNEncryptedStorage.getItem.mockReset()
@@ -119,7 +136,7 @@ describe('test add guest player', () => {
             Promise.resolve(validToken),
         )
         jest.spyOn(GameServices, 'addGuestPlayer').mockReturnValueOnce(
-            Promise.resolve({
+            Promise.reject({
                 data: {},
                 status: 400,
                 statusText: 'Bad',
@@ -131,6 +148,72 @@ describe('test add guest player', () => {
         expect(
             addGuestPlayer({ firstName: 'First 1', lastName: 'Last 1' }),
         ).rejects.toThrowError(Constants.ADD_GUEST_ERROR)
+    })
+})
+
+describe('test get points by game', () => {
+    it('should handle network success', async () => {
+        jest.spyOn(GameServices, 'getPointsByGame').mockReturnValueOnce(
+            Promise.resolve({
+                data: { points: [point] },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await getPointsByGame('game1')
+        expect(result).toEqual([point])
+    })
+
+    it('should handle network failure', async () => {
+        jest.spyOn(GameServices, 'getPointsByGame').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(getPointsByGame('game1')).rejects.toThrow(
+            Constants.GET_GAME_ERROR,
+        )
+    })
+})
+
+describe('test get game by id', () => {
+    it('should handle network success', async () => {
+        jest.spyOn(GameServices, 'getGameById').mockReturnValueOnce(
+            Promise.resolve({
+                data: { game },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await getGameById('gameid')
+        expect(result).toMatchObject(game)
+    })
+
+    it('should handle network failure', async () => {
+        jest.spyOn(GameServices, 'getGameById').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(getGameById('gameid')).rejects.toThrowError(
+            Constants.GET_GAME_ERROR,
+        )
     })
 })
 

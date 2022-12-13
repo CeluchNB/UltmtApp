@@ -51,3 +51,31 @@ export const finishPoint = async (
         },
     )
 }
+
+export const getActionsByPoint = async (
+    team: 'one' | 'two',
+    pointId: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(
+        `${API_URL_V1}/point/${pointId}/actions?team=${team}`,
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}
+
+export const getLiveActionsByPoint = async (
+    gameId: string,
+    pointId: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(
+        `${API_URL_V1}/point/${pointId}/live/actions?gameId=${gameId}`,
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}

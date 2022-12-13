@@ -2,6 +2,7 @@ import { ClientAction, SubscriptionObject } from '../../types/action'
 import {
     createAction as networkCreateAction,
     joinPoint as networkJoinPoint,
+    nextPoint as networkNextPoint,
     subscribe as networkSubscribe,
     undoAction as networkUndoAction,
     unsubscribe as networkUnsubscribe,
@@ -32,6 +33,15 @@ export const addAction = async (action: ClientAction, pointId: string) => {
 export const undoAction = async (pointId: string) => {
     await networkUndoAction(pointId)
 }
+
+/**
+ * Method to indicate the next point has been started
+ * @param pointId id of point that was just finished
+ */
+export const nextPoint = async (pointId: string) => {
+    await networkNextPoint(pointId)
+}
+
 /**
  * Method to listen to specific action events
  * @param subscriptions object containing subscription types and methods

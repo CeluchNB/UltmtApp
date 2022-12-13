@@ -1,5 +1,6 @@
 import { GuestTeam } from './team'
 import { GuestUser } from './user'
+import { SavedServerAction } from './action'
 
 interface Point {
     _id: string
@@ -15,6 +16,10 @@ interface Point {
     teamTwoActive: boolean
     teamOneActions: string[]
     teamTwoActions: string[]
+}
+
+export interface PopulatedPoint extends Point {
+    actions: SavedServerAction[]
 }
 
 export default Point

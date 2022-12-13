@@ -29,7 +29,7 @@ const TeamScore: React.FC<TeamScoreProps> = ({ name, teamname, score }) => {
         <View>
             <Text style={styles.primaryText}>{name}</Text>
             <Text style={styles.secondaryText}>
-                {teamname ? `@${teamname}` : 'guest team'}
+                {teamname ? `@${teamname}` : ''}
             </Text>
             <Text style={styles.primaryText}>{score}</Text>
         </View>

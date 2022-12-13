@@ -3,7 +3,7 @@ import { GuestUser } from '../../types/user'
 import { IconButton } from 'react-native-paper'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
-import { getValidPlayerActions } from '../../utils/actions'
+import { getValidPlayerActions } from '../../utils/action'
 import { useColors } from '../../hooks'
 import {
     ActivityIndicator,

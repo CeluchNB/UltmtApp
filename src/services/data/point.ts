@@ -3,9 +3,17 @@ import { GuestUser } from '../../types/user'
 import Point from '../../types/point'
 import { throwApiError } from '../../utils/service-utils'
 import { withGameToken } from './game'
+import { LiveServerAction, SavedServerAction } from '../../types/action'
+import {
+    deleteAllActionsByPoint as localDeleteAllActionsByPoint,
+    getActions as localGetActions,
+    saveActions as localSaveActions,
+} from '../local/action'
 import {
     createPoint as networkCreatePoint,
     finishPoint as networkFinishPoint,
+    getActionsByPoint as networkGetActionsByPoint,
+    getLiveActionsByPoint as networkGetLiveActionsByPoint,
     setPlayers as networkSetPlayers,
 } from '../network/point'
 
@@ -68,5 +76,63 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
         return point
     } catch (e) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)
+    }
+}
+
+/**
+ * Method to get actions belonging to a single team related to a point
+ * @param team team 'one' or 'two'
+ * @param pointId id of point
+ * @returns List of server actions
+ */
+export const getActionsByPoint = async (
+    team: 'one' | 'two',
+    pointId: string,
+    actionIds: string[],
+): Promise<SavedServerAction[]> => {
+    try {
+        const localActions = await localGetActions(pointId, actionIds)
+        if (localActions.length === 0) {
+            const response = await networkGetActionsByPoint(team, pointId)
+            const { actions: networkActions } = response.data
+
+            const ids = networkActions.map(
+                (action: SavedServerAction) => action._id,
+            )
+
+            await localSaveActions(pointId, networkActions)
+
+            const actions = await localGetActions(pointId, ids)
+            return actions
+        }
+        return localActions
+    } catch (e) {
+        return throwApiError(e, Constants.GET_POINT_ERROR)
+    }
+}
+
+/**
+ * Method to delete all actions for a specific point
+ * @param pointId point id actions belong to
+ */
+export const deleteAllActionsByPoint = async (pointId: string) => {
+    try {
+        await localDeleteAllActionsByPoint(pointId)
+    } catch (e) {
+        // Do nothing for now
+        return
+    }
+}
+
+export const getLiveActionsByPoint = async (
+    gameId: string,
+    pointId: string,
+): Promise<LiveServerAction[]> => {
+    try {
+        const response = await networkGetLiveActionsByPoint(gameId, pointId)
+        const { actions } = response.data
+        return actions
+    } catch (e) {
+        return throwApiError(e, Constants.GET_POINT_ERROR)
     }
 }
