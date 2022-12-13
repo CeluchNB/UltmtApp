@@ -17,7 +17,7 @@ import {
 } from '../../services/data/point'
 import { joinPoint, subscribe, unsubscribe } from '../../services/data/action'
 
-interface PointAccordionGroupProps {
+export interface PointAccordionGroupProps {
     gameId: string
     points: Point[]
     teamOne: GuestTeam

@@ -391,7 +391,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
                       }
                     }
                   >
-                    1
+                    2
                   </Text>
                   <Text
                     style={
