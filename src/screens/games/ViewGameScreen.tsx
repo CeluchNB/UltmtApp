@@ -18,6 +18,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
         loading: gameLoading,
         refetch: updateGame,
     } = useData(getGameById, gameId)
+
     const { data: points, refetch: updatePoints } = useData(
         getPointsByGame,
         gameId,

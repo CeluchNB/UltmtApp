@@ -174,7 +174,7 @@ export const mapActionToDescription = (type: ActionType): string => {
         case ActionType.TEAM_ONE_SCORE:
             return ' scores from '
         case ActionType.TEAM_TWO_SCORE:
-            return 'scores from'
+            return ' scores from '
         case ActionType.THROWAWAY:
             return ' throwaway'
         case ActionType.TIMEOUT:
