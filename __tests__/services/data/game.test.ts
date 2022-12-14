@@ -9,6 +9,7 @@ import {
     createGame,
     getGameById,
     getPointsByGame,
+    joinGame,
     searchGames,
     withGameToken,
 } from '../../../src/services/data/game'
@@ -214,6 +215,44 @@ describe('test get game by id', () => {
         expect(getGameById('gameid')).rejects.toThrowError(
             Constants.GET_GAME_ERROR,
         )
+    })
+})
+
+describe('test join game', () => {
+    it('should handle network success', async () => {
+        jest.spyOn(GameServices, 'joinGame').mockReturnValueOnce(
+            Promise.resolve({
+                data: { game, token: validToken },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await joinGame('gameid', 'teamid', '123456')
+        expect(result).toMatchObject(game)
+        expect(RNEncryptedStorage.setItem).toHaveBeenCalledWith(
+            'game_token',
+            validToken,
+        )
+    })
+
+    it('should handle network failure', async () => {
+        jest.spyOn(GameServices, 'joinGame').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        expect(joinGame('gameid', 'teamid', '123456')).rejects.toThrowError(
+            Constants.GET_GAME_ERROR,
+        )
+        expect(RNEncryptedStorage.setItem).not.toHaveBeenCalled()
     })
 })
 
