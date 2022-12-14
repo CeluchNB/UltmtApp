@@ -8,6 +8,7 @@ import React from 'react'
 // import { createPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import { game } from '../../../fixtures/data'
 import { setGame } from '../../../src/store/reducers/features/game/liveGameReducer'
+import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
@@ -23,9 +24,25 @@ const props: LiveGameProps = {
 
 const spy = jest.spyOn(PointData, 'createPoint')
 
-beforeAll(() => {
+beforeEach(() => {
     store.dispatch(
         setGame({ ...game, startTime: '2022', tournament: undefined }),
+    )
+    store.dispatch(
+        setPoint({
+            _id: '',
+            pointNumber: 1,
+            teamOneActive: false,
+            teamTwoActive: false,
+            teamOneActions: [],
+            teamTwoActions: [],
+            teamOneScore: 0,
+            teamTwoScore: 0,
+            teamOnePlayers: [],
+            teamTwoPlayers: [],
+            pullingTeam: {},
+            receivingTeam: {},
+        }),
     )
 })
 

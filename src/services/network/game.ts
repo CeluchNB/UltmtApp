@@ -61,16 +61,18 @@ export const getGameById = async (gameId: string): Promise<AxiosResponse> => {
 }
 
 export const joinGame = async (
+    token: string,
     gameId: string,
     teamId: string,
     code: string,
 ): Promise<AxiosResponse> => {
     return await axios.put(
-        `${API_URL_V1}/game/${gameId}?team=${teamId}&code=${code}`,
+        `${API_URL_V1}/game/${gameId}/resolve?team=${teamId}&otp=${code}`,
         {},
         {
             headers: {
                 'X-API-Key': API_KEY,
+                authorization: `Bearer ${token}`,
             },
         },
     )

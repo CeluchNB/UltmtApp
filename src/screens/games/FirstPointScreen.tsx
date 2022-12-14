@@ -24,7 +24,9 @@ const FirstPointScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     const point = useSelector(selectPoint)
 
     const onCreate = async (isPulling: boolean) => {
-        dispatch(createPoint({ pulling: isPulling, pointNumber: 1 }))
+        dispatch(
+            createPoint({ pulling: isPulling, pointNumber: point.pointNumber }),
+        )
     }
 
     useEffect(() => {

@@ -17,7 +17,7 @@ export interface LivePointSlice {
 const initialState: LivePointSlice = {
     point: {
         _id: '',
-        pointNumber: 0,
+        pointNumber: 1,
         teamOneActive: false,
         teamTwoActive: false,
         teamOneActions: [],
