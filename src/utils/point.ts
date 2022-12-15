@@ -1,4 +1,9 @@
-import { ActionType, ClientActionType, LiveServerAction } from '../types/action'
+import {
+    ActionType,
+    ClientActionType,
+    LiveServerAction,
+    ServerAction,
+} from '../types/action'
 
 export const isPulling = (
     point?: { pullingTeam: { _id?: string } },
@@ -25,12 +30,9 @@ export const isPullingNext = (
 }
 
 export const normalizeActions = (
-    actions: LiveServerAction[],
-): LiveServerAction[] => {
-    // sepearate actions by team
-    const teamOneActions = actions.filter(action => action.teamNumber === 'one')
-    const teamTwoActions = actions.filter(action => action.teamNumber === 'two')
-
+    teamOneActions: ServerAction[],
+    teamTwoActions: ServerAction[],
+): ServerAction[] => {
     // dedupe actions
     const oneDeduped = [
         ...new Map(
@@ -45,7 +47,7 @@ export const normalizeActions = (
     ].sort((a, b) => a.actionNumber - b.actionNumber)
 
     // helper values
-    const result: LiveServerAction[] = []
+    const result: ServerAction[] = []
     const turnovers = [ActionType.DROP, ActionType.THROWAWAY]
     const initiating = [ActionType.CATCH, ActionType.PICKUP]
     let offense: string = 'one'
@@ -57,25 +59,25 @@ export const normalizeActions = (
     // 3) Drop from either team
     // Order of the if/else VERY IMPORTANT
     if (oneDeduped.length > 0 && oneDeduped[0].actionType === ActionType.PULL) {
-        result.push(oneDeduped.shift() as LiveServerAction)
+        result.push(oneDeduped.shift() as ServerAction)
         offense = 'two'
     } else if (
         twoDeduped.length > 0 &&
         twoDeduped[0].actionType === ActionType.PULL
     ) {
-        result.push(twoDeduped.shift() as LiveServerAction)
+        result.push(twoDeduped.shift() as ServerAction)
         offense = 'one'
     } else if (
         oneDeduped.length > 0 &&
         oneDeduped[0].actionType === ActionType.DROP
     ) {
-        result.push(oneDeduped.shift() as LiveServerAction)
+        result.push(oneDeduped.shift() as ServerAction)
         offense = 'two'
     } else if (
         twoDeduped.length > 0 &&
         twoDeduped[0].actionType === ActionType.DROP
     ) {
-        result.push(twoDeduped.shift() as LiveServerAction)
+        result.push(twoDeduped.shift() as ServerAction)
         offense = 'one'
     } else if (
         twoDeduped.length === 0 &&
@@ -94,12 +96,12 @@ export const normalizeActions = (
     // alternate offense actions until we have no more actions
     while (oneDeduped.length > 0 || twoDeduped.length > 0) {
         if (offense === 'one' && oneDeduped.length > 0) {
-            result.push(oneDeduped.shift() as LiveServerAction)
+            result.push(oneDeduped.shift() as ServerAction)
             if (turnovers.includes(result[result.length - 1].actionType)) {
                 offense = 'two'
             }
         } else if (offense === 'two' && twoDeduped.length > 0) {
-            result.push(twoDeduped.shift() as LiveServerAction)
+            result.push(twoDeduped.shift() as ServerAction)
             if (turnovers.includes(result[result.length - 1].actionType)) {
                 offense = 'one'
             }
@@ -113,4 +115,17 @@ export const normalizeActions = (
     }
 
     return result
+}
+
+export const normalizeLiveActions = (
+    liveActions: LiveServerAction[],
+): ServerAction[] => {
+    const teamOneActions = liveActions.filter(
+        action => action.teamNumber === 'one',
+    )
+    const teamTwoActions = liveActions.filter(
+        action => action.teamNumber === 'two',
+    )
+
+    return normalizeActions(teamOneActions, teamTwoActions)
 }

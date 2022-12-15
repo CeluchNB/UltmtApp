@@ -3,7 +3,6 @@ import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import PointAccordion from '../molecules/PointAccordion'
-import { normalizeActions } from '../../utils/point'
 import {
     LiveServerAction,
     SavedServerAction,
@@ -16,6 +15,7 @@ import {
     getLiveActionsByPoint,
 } from '../../services/data/point'
 import { joinPoint, subscribe, unsubscribe } from '../../services/data/action'
+import { normalizeActions, normalizeLiveActions } from '../../utils/point'
 
 export interface PointAccordionGroupProps {
     gameId: string
@@ -33,15 +33,22 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     onNextPoint,
 }) => {
     const [loading, setLoading] = React.useState(false)
-    const [actions, setActions] = React.useState<SavedServerAction[]>([])
+    const [teamOneActions, setTeamOneActions] = React.useState<
+        SavedServerAction[]
+    >([])
+    const [teamTwoActions, setTeamTwoActions] = React.useState<
+        SavedServerAction[]
+    >([])
     const [expandedId, setExpandedId] = React.useState('')
     const [liveActions, setLiveActions] = React.useState<LiveServerAction[]>([])
 
     const displayedActions = React.useCallback(
         (point: Point) => {
-            return isLivePoint(point) ? normalizeActions(liveActions) : actions
+            return isLivePoint(point)
+                ? normalizeLiveActions(liveActions)
+                : normalizeActions(teamOneActions, teamTwoActions)
         },
-        [liveActions, actions],
+        [liveActions, teamOneActions, teamTwoActions],
     )
 
     useEffect(() => {
@@ -83,11 +90,18 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     }
 
     const getSavedActions = async (point: Point) => {
-        const data = await getActionsByPoint('one', point._id.toString(), [
-            ...point.teamOneActions,
-            ...point.teamTwoActions,
-        ])
-        setActions(data)
+        const oneActions = await getActionsByPoint(
+            'one',
+            point._id,
+            point.teamOneActions,
+        )
+        setTeamOneActions(oneActions)
+        const twoActions = await getActionsByPoint(
+            'two',
+            point._id,
+            point.teamTwoActions,
+        )
+        setTeamTwoActions(twoActions)
     }
 
     const onAccordionPress = async (id: string | number) => {

@@ -47,6 +47,7 @@ const UserInput: React.FC<UserInputProps> = ({
             onChangeText={onChangeText}
             value={value}
             keyboardType={keyboardType}
+            autoCapitalize="none"
             right={
                 rightIcon && (
                     <TextInput.Icon

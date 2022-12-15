@@ -99,6 +99,7 @@ exports[`JoinByCodeModal should match snapshot 1`] = `
               }
             >
               <TextInput
+                autoCapitalize="none"
                 editable={true}
                 keyboardType="default"
                 multiline={false}

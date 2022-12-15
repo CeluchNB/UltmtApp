@@ -145,7 +145,12 @@ describe('PointAccordionGroup', () => {
         .mockReturnValue(Promise.resolve())
     const savedSpy = jest
         .spyOn(PointData, 'getActionsByPoint')
-        .mockReturnValue(Promise.resolve(savedActions))
+        .mockImplementation((team, _) => {
+            if (team === 'one') {
+                return Promise.resolve(savedActions)
+            }
+            return Promise.resolve([])
+        })
     const liveSpy = jest
         .spyOn(PointData, 'getLiveActionsByPoint')
         .mockReturnValue(Promise.resolve(liveActions))

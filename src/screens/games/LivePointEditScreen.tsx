@@ -26,7 +26,11 @@ import {
     unsubscribe,
 } from '../../services/data/action'
 import { createPoint, finishPoint } from '../../services/data/point'
-import { getAction, getValidTeamActions } from '../../utils/action'
+import {
+    getAction,
+    getTeamAction,
+    getValidTeamActions,
+} from '../../utils/action'
 import { isPulling, isPullingNext } from '../../utils/point'
 import {
     selectGame,
@@ -136,9 +140,9 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         playerOne?: GuestUser,
         playerTwo?: GuestUser,
     ) => {
-        const action = getAction(
+        const action = getTeamAction(
             actionType,
-            team === 'one' ? 'two' : 'one',
+            team,
             tags,
             playerOne || activePlayers[getActiveAction().playerIndex || 0],
             playerTwo,

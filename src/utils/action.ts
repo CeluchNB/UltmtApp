@@ -135,6 +135,43 @@ export const getAction = (
 }
 
 /**
+ * Method to get action data for a team action
+ * @param action action type
+ * @param team team number
+ * @param tags any tags
+ * @param playerOne optional player one
+ * @param playerTwo optional player two
+ * @returns action data for team
+ */
+export const getTeamAction = (
+    action: ClientActionType,
+    team: 'one' | 'two',
+    tags: string[],
+    playerOne?: GuestUser,
+    playerTwo?: GuestUser,
+): ClientAction => {
+    let actionType: ActionType
+    if (action === 'score') {
+        if (team === 'one') {
+            actionType = ActionType.TEAM_TWO_SCORE
+        } else {
+            actionType = ActionType.TEAM_ONE_SCORE
+        }
+        return {
+            actionType,
+            tags,
+        }
+    }
+
+    return {
+        actionType: action,
+        playerOne,
+        playerTwo,
+        tags,
+    }
+}
+
+/**
  * Method to get an action's appropriate display name
  * @param action action name
  * @returns display friendly name
