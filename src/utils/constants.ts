@@ -28,4 +28,5 @@ export const SET_PLAYERS_ERROR = 'Unable to set these players. Please try again.
 export const ADD_GUEST_ERROR = 'Cannot add this guest player.'
 export const FINISH_POINT_ERROR = 'Unable to finish this point. Please try again.'
 export const GET_GAME_ERROR = 'Unable to get this game. Please try again.'
-export const GET_POINT_ERROR = 'Unabled to get this point. Please try again.'
+export const GET_POINT_ERROR = 'Unable to get this point. Please try again.'
+export const JOIN_GAME_ERROR = 'Cannot join this game. Please check your join code and try again.'

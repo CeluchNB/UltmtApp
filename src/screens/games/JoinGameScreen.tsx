@@ -1,3 +1,4 @@
+import * as Constants from '../../utils/constants'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameCard from '../../components/atoms/GameCard'
 import JoinByCodeModal from '../../components/molecules/JoinByCodeModal'
@@ -23,6 +24,7 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation, route }) => {
     const [modalVisible, setModalVisible] = React.useState(false)
     const [gameId, setGameId] = React.useState('')
     const [joinLoading, setJoinLoading] = React.useState(false)
+    const [joinError, setJoinError] = React.useState('')
 
     const onSearch = async (q: string) => {
         if (q.length > 3) {
@@ -40,13 +42,23 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation, route }) => {
         return []
     }
 
-    const onClose = async (data: { code: string }) => {
+    const onModalClose = async (data: { code: string }) => {
         const { code } = data
+        if (!code) {
+            return
+        }
+        setJoinError('')
         setJoinLoading(true)
         try {
             // create game and set live game in redux
             const game = await joinGame(gameId, teamTwo._id, code)
-            dispatch(setGame(game))
+            dispatch(
+                setGame({
+                    ...game,
+                    startTime: game.startTime.toString(),
+                    tournament: undefined,
+                }),
+            )
             dispatch(setTeam('two'))
 
             // get current points, if any exist, set most recent one as current point
@@ -60,11 +72,13 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation, route }) => {
                     ),
                 )
             }
+
+            setModalVisible(false)
             navigation.navigate('LiveGame', { screen: 'FirstPoint' })
-        } catch (e) {
+        } catch (e: any) {
+            setJoinError(e?.message ?? Constants.JOIN_GAME_ERROR)
         } finally {
             setJoinLoading(false)
-            setModalVisible(false)
         }
     }
 
@@ -89,7 +103,8 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation, route }) => {
             <JoinByCodeModal
                 visible={modalVisible}
                 loading={joinLoading}
-                onClose={onClose}
+                error={joinError}
+                onClose={onModalClose}
             />
         </BaseScreen>
     )

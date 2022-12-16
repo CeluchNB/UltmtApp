@@ -131,7 +131,7 @@ export const joinGame = async (
         await EncryptedStorage.setItem('game_token', token)
         return game
     } catch (e) {
-        return throwApiError(e, Constants.GET_GAME_ERROR)
+        return throwApiError(e, Constants.JOIN_GAME_ERROR)
     }
 }
 

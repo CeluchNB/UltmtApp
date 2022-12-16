@@ -11,6 +11,7 @@ describe('JoinByCodeModal', () => {
             <JoinByCodeModal
                 visible={true}
                 onClose={jest.fn()}
+                error={''}
                 loading={false}
             />,
         )
@@ -26,6 +27,7 @@ describe('JoinByCodeModal', () => {
             <JoinByCodeModal
                 visible={true}
                 onClose={onClose}
+                error={''}
                 loading={false}
             />,
         )
@@ -47,6 +49,7 @@ describe('JoinByCodeModal', () => {
             <JoinByCodeModal
                 visible={true}
                 onClose={onClose}
+                error={''}
                 loading={false}
             />,
         )

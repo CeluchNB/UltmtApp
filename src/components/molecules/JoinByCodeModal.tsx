@@ -12,12 +12,14 @@ import { StyleSheet, Text, View } from 'react-native'
 interface JoinByCodeModalProps {
     visible: boolean
     loading: boolean
+    error: string
     onClose: (data: { code: string }) => void
 }
 
 const JoinByCodeModal: React.FC<JoinByCodeModalProps> = ({
     visible,
     loading,
+    error,
     onClose,
 }) => {
     const { colors } = useColors()
@@ -76,6 +78,7 @@ const JoinByCodeModal: React.FC<JoinByCodeModalProps> = ({
             {errors.code && (
                 <Text style={styles.errorText}>{errors.code.message}</Text>
             )}
+            {error.length > 0 && <Text style={styles.errorText}>{error}</Text>}
             <PrimaryButton
                 style={styles.button}
                 text="join"

@@ -1,5 +1,6 @@
 import { DetailedRequest } from '../src/types/request'
 import { Game } from '../src/types/game'
+import Point from '../src/types/point'
 import { User } from '../src/types/user'
 
 export const fetchProfileData: User = {
@@ -127,4 +128,55 @@ export const game: Game = {
     teamTwoPlayers: [],
     tournament: tourney,
     points: [],
+}
+
+export const reduxGame = {
+    _id: 'game1',
+    creator: {
+        _id: 'user1',
+        firstName: 'First 1',
+        lastName: 'Last 1',
+        username: 'first1last1',
+    },
+    teamOne: teamOne,
+    teamTwo: { name: 'Sockeye' },
+    teamTwoDefined: false,
+    scoreLimit: 15,
+    halfScore: 8,
+    teamOneScore: 3,
+    teamTwoScore: 0,
+    startTime: '2022-10-12',
+    softcapMins: 75,
+    hardcapMins: 90,
+    teamOneActive: true,
+    teamTwoActive: false,
+    playersPerPoint: 7,
+    resolveCode: '111111',
+    timeoutPerHalf: 1,
+    floaterTimeout: true,
+    teamOnePlayers: [],
+    teamTwoPlayers: [],
+    tournament: {
+        _id: 'tourney1',
+        name: 'Club Nationals 2022',
+        startDate: '2022-10-20',
+        endDate: '2022-10-23',
+        eventId: 'nationals22',
+    },
+    points: [],
+}
+
+export const point: Point = {
+    _id: 'point1',
+    pointNumber: 1,
+    pullingTeam: { name: 'Temper' },
+    receivingTeam: { name: 'Truck' },
+    teamOnePlayers: [],
+    teamTwoPlayers: [],
+    teamOneScore: 2,
+    teamTwoScore: 1,
+    teamOneActive: true,
+    teamTwoActive: false,
+    teamOneActions: [],
+    teamTwoActions: [],
 }
