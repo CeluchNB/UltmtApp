@@ -80,6 +80,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     }
 
     const getLiveActions = async (pointId: string) => {
+        setLiveActions([])
         await joinPoint(gameId, pointId)
         await subscribe(subscriptions)
         const data = await getLiveActionsByPoint(gameId, pointId)

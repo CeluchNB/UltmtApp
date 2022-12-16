@@ -52,8 +52,7 @@ export const normalizeActions = (
     const initiating = [ActionType.CATCH, ActionType.PICKUP]
     let offense: string = 'one'
 
-    // initiating sequence
-    // starting off could be:
+    // initiating action could be:
     // 1) Pull from either team
     // 2) Catch from either team
     // 3) Drop from either team
