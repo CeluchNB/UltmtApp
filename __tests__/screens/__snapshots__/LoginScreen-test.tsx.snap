@@ -73,6 +73,7 @@ exports[`test matches snapshot 1`] = `
         }
       >
         <TextInput
+          autoCapitalize="none"
           editable={true}
           keyboardType="default"
           multiline={false}
@@ -164,6 +165,7 @@ exports[`test matches snapshot 1`] = `
         }
       >
         <TextInput
+          autoCapitalize="none"
           editable={true}
           keyboardType="default"
           multiline={false}

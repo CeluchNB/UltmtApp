@@ -1,15 +1,15 @@
 import { GuestTeam } from '../../types/team'
 import { GuestUser } from '../../types/user'
 import React from 'react'
+import { ServerAction } from '../../types/action'
 import { mapActionToDescription } from '../../utils/action'
 import { useColors } from '../../hooks'
 import { Chip, IconButton } from 'react-native-paper'
-import { LiveServerAction, SavedServerAction } from '../../types/action'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 interface ActionDisplayItemProps {
-    action: SavedServerAction | LiveServerAction
+    action: ServerAction
     teamOne: GuestTeam
     teamTwo: GuestTeam
 }

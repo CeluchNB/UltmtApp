@@ -3,6 +3,7 @@ import { GuestTeam } from '../../types/team'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SearchDisplay from '../../components/molecules/SearchDisplay'
 import SearchResultItem from '../../components/atoms/SearchResultItem'
+import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectOpponentProps } from '../../types/navigation'
 import { searchTeam } from '../../services/data/team'
 import React, { useState } from 'react'
@@ -21,7 +22,10 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
 
     const styles = StyleSheet.create({
         searchContainer: {
-            height: '90%',
+            height: '80%',
+        },
+        button: {
+            margin: 10,
         },
     })
 
@@ -48,6 +52,7 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
                 />
             </View>
             <PrimaryButton
+                style={styles.button}
                 text="continue with guest team"
                 onPress={async () => {
                     if (searchText) {
@@ -56,6 +61,13 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
                 }}
                 loading={false}
                 disabled={(searchText?.length || 0) === 0}
+            />
+            <SecondaryButton
+                style={styles.button}
+                text="join existing game"
+                onPress={async () => {
+                    navigation.navigate('JoinGame', { teamTwo: teamOne })
+                }}
             />
         </BaseScreen>
     )

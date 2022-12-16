@@ -36,7 +36,7 @@ export const createPoint = async (
 
         const { point } = response.data
         return point
-    } catch (e) {
+    } catch (e: any) {
         return throwApiError(e, Constants.CREATE_POINT_ERROR)
     }
 }
@@ -74,7 +74,7 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
         const response = await withGameToken(networkFinishPoint, pointId)
         const { point } = response.data
         return point
-    } catch (e) {
+    } catch (e: any) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)
     }
 }

@@ -74,6 +74,7 @@ exports[`should match basic snapshot 1`] = `
           }
         >
           <TextInput
+            autoCapitalize="none"
             editable={true}
             keyboardType="default"
             multiline={false}
@@ -279,6 +280,7 @@ exports[`should match snapshot without unit 1`] = `
           }
         >
           <TextInput
+            autoCapitalize="none"
             editable={true}
             keyboardType="default"
             multiline={false}

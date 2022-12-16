@@ -33,16 +33,17 @@ export interface Comment {
     commentNumber: number
 }
 
-export interface LiveServerAction extends ClientAction {
+export interface ServerAction extends ClientAction {
     comments: Comment[]
     actionNumber: number
+}
+
+export interface LiveServerAction extends ServerAction {
     teamNumber: 'one' | 'two'
 }
 
-export interface SavedServerAction extends ClientAction {
+export interface SavedServerAction extends ServerAction {
     _id: string
-    actionNumber: number
-    comments: Comment[]
     team: DisplayTeam
 }
 

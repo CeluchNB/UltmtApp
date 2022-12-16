@@ -11,6 +11,7 @@ import {
     createGame as networkCreateGame,
     getGameById as networkGetGameById,
     getPointsByGame as networkGetPointsByGame,
+    joinGame as networkJoinGame,
     searchGames as networkSearchGames,
 } from '../network/game'
 
@@ -109,6 +110,28 @@ export const getGameById = async (gameId: string): Promise<Game> => {
         return game
     } catch (e) {
         return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to join a game as the second team.
+ * @param gameId id of game to join
+ * @param teamId id of joining team
+ * @param code join passcode for game
+ * @returns game object (and saved game token locally)
+ */
+export const joinGame = async (
+    gameId: string,
+    teamId: string,
+    code: string,
+): Promise<Game> => {
+    try {
+        const response = await withToken(networkJoinGame, gameId, teamId, code)
+        const { game, token } = response.data
+        await EncryptedStorage.setItem('game_token', token)
+        return game
+    } catch (e) {
+        return throwApiError(e, Constants.JOIN_GAME_ERROR)
     }
 }
 

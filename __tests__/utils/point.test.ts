@@ -126,7 +126,10 @@ describe('normalizeActions', () => {
     })
 
     it('team one pull -> block -> pickup', () => {
-        const result = normalizeActions([action1, action1, action3, action2])
+        const result = normalizeActions(
+            [action1, action1, action3, action2],
+            [],
+        )
         expect(result.length).toBe(3)
         expect(result[0]).toMatchObject(action1)
         expect(result[1]).toMatchObject(action2)
@@ -137,7 +140,10 @@ describe('normalizeActions', () => {
         action1.teamNumber = 'two'
         action2.teamNumber = 'two'
         action3.teamNumber = 'two'
-        const result = normalizeActions([action1, action1, action3, action2])
+        const result = normalizeActions(
+            [],
+            [action1, action1, action3, action2],
+        )
         expect(result.length).toBe(3)
         expect(result[0]).toMatchObject(action1)
         expect(result[1]).toMatchObject(action2)
@@ -149,7 +155,7 @@ describe('normalizeActions', () => {
         action2.actionType = ActionType.CATCH
         action3.actionType = ActionType.CATCH
 
-        const result = normalizeActions([action3, action2, action1])
+        const result = normalizeActions([action3, action2, action1], [])
         expect(result[0]).toMatchObject(action1)
         expect(result[1]).toMatchObject(action2)
         expect(result[2]).toMatchObject(action3)
@@ -163,7 +169,7 @@ describe('normalizeActions', () => {
         action3.actionType = ActionType.CATCH
         action3.teamNumber = 'two'
 
-        const result = normalizeActions([action3, action2, action1])
+        const result = normalizeActions([], [action3, action2, action1])
         expect(result[0]).toMatchObject(action1)
         expect(result[1]).toMatchObject(action2)
         expect(result[2]).toMatchObject(action3)
@@ -174,7 +180,7 @@ describe('normalizeActions', () => {
         action2.actionType = ActionType.PICKUP
         action3.actionType = ActionType.CATCH
 
-        const result = normalizeActions([action3, action2, action1])
+        const result = normalizeActions([action3, action2, action1], [])
         expect(result[0]).toMatchObject(action1)
         expect(result[1]).toMatchObject(action2)
         expect(result[2]).toMatchObject(action3)
@@ -188,7 +194,7 @@ describe('normalizeActions', () => {
         action3.actionType = ActionType.CATCH
         action3.teamNumber = 'two'
 
-        const result = normalizeActions([action3, action2, action1])
+        const result = normalizeActions([action3, action2, action1], [])
         expect(result[0]).toMatchObject(action1)
         expect(result[1]).toMatchObject(action2)
         expect(result[2]).toMatchObject(action3)
@@ -238,7 +244,7 @@ describe('normalizeActions', () => {
             comments: [],
         }
 
-        const result = normalizeActions([a11, a12, a13, a13, a21, a22, a23])
+        const result = normalizeActions([a11, a12, a13, a13], [a21, a22, a23])
         expect(result[0]).toMatchObject(a11)
         expect(result[1]).toMatchObject(a21)
         expect(result[2]).toMatchObject(a22)
@@ -291,16 +297,10 @@ describe('normalizeActions', () => {
             comments: [],
         }
 
-        const result = normalizeActions([
-            a13,
-            a12,
-            a13,
-            a11,
-            a21,
-            a22,
-            a23,
-            a22,
-        ])
+        const result = normalizeActions(
+            [a13, a12, a13, a11],
+            [a21, a22, a23, a22],
+        )
         expect(result[0]).toMatchObject(a21)
         expect(result[1]).toMatchObject(a11)
         expect(result[2]).toMatchObject(a12)
@@ -359,7 +359,7 @@ describe('normalizeActions', () => {
             tags: [],
             comments: [],
         }
-        const result = normalizeActions([a14, a23, a13, a22, a12, a21, a11])
+        const result = normalizeActions([a13, a14, a12, a11], [a23, a22, a21])
         expect(result[0]).toMatchObject(a11)
         expect(result[1]).toMatchObject(a21)
         expect(result[2]).toMatchObject(a22)
@@ -419,7 +419,7 @@ describe('normalizeActions', () => {
             tags: [],
             comments: [],
         }
-        const result = normalizeActions([a24, a23, a13, a22, a12, a21, a11])
+        const result = normalizeActions([a13, a12, a11], [a24, a23, a22, a21])
         expect(result[0]).toMatchObject(a21)
         expect(result[1]).toMatchObject(a11)
         expect(result[2]).toMatchObject(a12)
@@ -459,7 +459,7 @@ describe('normalizeActions', () => {
             comments: [],
         }
 
-        const result = normalizeActions([a21, a11, a12, a13, a11])
+        const result = normalizeActions([a11, a12, a13, a11], [a21])
         expect(result[0]).toMatchObject(a11)
         expect(result[1]).toMatchObject(a21)
         expect(result[2]).toMatchObject(a12)
@@ -496,7 +496,7 @@ describe('normalizeActions', () => {
             comments: [],
         }
 
-        const result = normalizeActions([a21, a11, a22, a23, a11])
+        const result = normalizeActions([a11], [a21, a22, a23])
         expect(result[0]).toMatchObject(a21)
         expect(result[1]).toMatchObject(a11)
         expect(result[2]).toMatchObject(a22)

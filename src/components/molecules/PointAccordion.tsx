@@ -2,6 +2,7 @@ import ActionDisplayItem from '../atoms/ActionDisplayItem'
 import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
+import { ServerAction } from '../../types/action'
 import { useColors } from '../../hooks'
 import {
     ActivityIndicator,
@@ -11,13 +12,12 @@ import {
     Text,
     View,
 } from 'react-native'
-import { LiveServerAction, SavedServerAction } from '../../types/action'
 import React, { useEffect } from 'react'
 import { size, weight } from '../../theme/fonts'
 
 interface PointAccordionProps {
     point: Point
-    actions: (SavedServerAction | LiveServerAction)[]
+    actions: ServerAction[]
     expanded: boolean
     loading: boolean
     teamOne: GuestTeam
@@ -145,9 +145,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                 )}
                 {!loading && (
                     <FlatList
-                        data={actions.sort(
-                            (a, b) => b.actionNumber - a.actionNumber,
-                        )}
+                        data={actions.reverse()}
                         renderItem={({ item }) => {
                             return (
                                 <View
