@@ -12,12 +12,14 @@ interface ActionDisplayItemProps {
     action: ServerAction
     teamOne: GuestTeam
     teamTwo: GuestTeam
+    onPress?: (action: ServerAction) => void
 }
 
 const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
     action,
     teamOne,
     teamTwo,
+    onPress,
 }) => {
     const { colors } = useColors()
     const { actionType, playerOne, playerTwo, tags } = action
@@ -84,7 +86,11 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
         <Pressable
             style={styles.container}
             android_ripple={{ color: colors.textPrimary }}
-            onPress={() => {}}>
+            onPress={() => {
+                if (onPress) {
+                    onPress(action)
+                }
+            }}>
             <Text style={styles.action}>{getTeamName()}</Text>
             <View style={styles.dataContainer}>
                 <View style={styles.textContainer}>

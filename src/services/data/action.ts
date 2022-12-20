@@ -1,5 +1,7 @@
+import EncryptedStorage from 'react-native-encrypted-storage'
 import { ClientAction, SubscriptionObject } from '../../types/action'
 import {
+    addComment as networkAddComment,
     createAction as networkCreateAction,
     joinPoint as networkJoinPoint,
     nextPoint as networkNextPoint,
@@ -32,6 +34,24 @@ export const addAction = async (action: ClientAction, pointId: string) => {
  */
 export const undoAction = async (pointId: string) => {
     await networkUndoAction(pointId)
+}
+
+export const addComment = async (
+    gameId: string,
+    pointId: string,
+    actionNumber: number,
+    teamNumber: 'one' | 'two',
+    comment: string,
+) => {
+    const token = (await EncryptedStorage.getItem('access_token')) || ''
+    await networkAddComment(
+        token,
+        gameId,
+        pointId,
+        actionNumber,
+        teamNumber,
+        comment,
+    )
 }
 
 /**

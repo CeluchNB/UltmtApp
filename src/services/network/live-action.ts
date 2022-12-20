@@ -49,6 +49,28 @@ export const undoAction = async (pointId: string) => {
     actionSocket.emit('action:undo', JSON.stringify({ pointId }))
 }
 
+export const addComment = async (
+    jwt: string,
+    gameId: string,
+    pointId: string,
+    actionNumber: number,
+    teamNumber: 'one' | 'two',
+    comment: string,
+) => {
+    const actionSocket = await getSocket()
+    actionSocket.emit(
+        'action:comment',
+        JSON.stringify({
+            jwt,
+            gameId,
+            pointId,
+            actionNumber,
+            teamNumber,
+            comment,
+        }),
+    )
+}
+
 export const nextPoint = async (pointId: string) => {
     const actionSocket = await getSocket()
     actionSocket.emit('point:next', JSON.stringify({ pointId }))

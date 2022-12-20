@@ -1,9 +1,13 @@
 import ActionDisplayItem from '../atoms/ActionDisplayItem'
+import { GameStackParamList } from '../../types/navigation'
 import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import Point from '../../types/point'
 import { ServerAction } from '../../types/action'
 import { useColors } from '../../hooks'
+import { useDispatch } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
 import {
     ActivityIndicator,
     Animated,
@@ -13,6 +17,10 @@ import {
     View,
 } from 'react-native'
 import React, { useEffect } from 'react'
+import {
+    setLiveAction,
+    setSavedAction,
+} from '../../store/reducers/features/action/viewAction'
 import { size, weight } from '../../theme/fonts'
 
 interface PointAccordionProps {
@@ -34,6 +42,9 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
     teamTwo,
     isLive,
 }) => {
+    const navigation =
+        useNavigation<NativeStackNavigationProp<GameStackParamList>>()
+    const dispatch = useDispatch()
     const { colors } = useColors()
     const liveOpacity = React.useRef(new Animated.Value(0)).current
 
@@ -153,6 +164,18 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                                     style={styles.item}>
                                     <ActionDisplayItem
                                         action={item}
+                                        onPress={action => {
+                                            if (isLive) {
+                                                dispatch(setLiveAction(action))
+                                            } else {
+                                                dispatch(setSavedAction(action))
+                                            }
+                                            navigation.navigate('Comment', {
+                                                gameId: 'game1',
+                                                pointId: 'point1',
+                                                live: isLive,
+                                            })
+                                        }}
                                         teamOne={teamOne}
                                         teamTwo={teamTwo}
                                     />
