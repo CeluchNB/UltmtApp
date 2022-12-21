@@ -24,7 +24,7 @@ const CommentItem: React.FC<CommentInputProps> = ({ comment }) => {
             color: colors.gray,
         },
         comment: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontFifteen,
             color: colors.textPrimary,
         },
     })

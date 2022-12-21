@@ -1,7 +1,15 @@
+import * as Constants from '../../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { ClientAction, SubscriptionObject } from '../../types/action'
+import { addComment as networkAddComment } from '../network/action'
+import { throwApiError } from '../../utils/service-utils'
+import { withToken } from './auth'
 import {
-    addComment as networkAddComment,
+    ClientAction,
+    SavedServerAction,
+    SubscriptionObject,
+} from '../../types/action'
+import {
+    addComment as networkAddLiveComment,
     createAction as networkCreateAction,
     joinPoint as networkJoinPoint,
     nextPoint as networkNextPoint,
@@ -36,7 +44,15 @@ export const undoAction = async (pointId: string) => {
     await networkUndoAction(pointId)
 }
 
-export const addComment = async (
+/**
+ * Method to add a comment to a live action
+ * @param gameId id of game
+ * @param pointId id of point
+ * @param actionNumber action number
+ * @param teamNumber 'one' | 'two' - team reporting action
+ * @param comment comment text
+ */
+export const addLiveComment = async (
     gameId: string,
     pointId: string,
     actionNumber: number,
@@ -44,7 +60,7 @@ export const addComment = async (
     comment: string,
 ) => {
     const token = (await EncryptedStorage.getItem('access_token')) || ''
-    await networkAddComment(
+    await networkAddLiveComment(
         token,
         gameId,
         pointId,
@@ -75,4 +91,25 @@ export const subscribe = async (subscriptions: SubscriptionObject) => {
  */
 export const unsubscribe = () => {
     networkUnsubscribe()
+}
+
+/**
+ * Method to add a comment to a saved action.
+ * @param actionId id of action
+ * @param pointId id of point
+ * @param comment comment text
+ * @returns updated action
+ */
+export const addComment = async (
+    actionId: string,
+    pointId: string,
+    comment: string,
+): Promise<SavedServerAction> => {
+    try {
+        const response = await withToken(networkAddComment, actionId, comment)
+        const { action } = response.data
+        return action
+    } catch (error) {
+        return throwApiError(error, Constants.COMMENT_ERROR)
+    }
 }

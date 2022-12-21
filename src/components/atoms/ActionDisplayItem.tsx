@@ -59,6 +59,7 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'wrap',
+            alignItems: 'center',
         },
         player: {
             color: colors.textPrimary,
@@ -79,6 +80,10 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
             margin: 2,
             backgroundColor: colors.primary,
             borderWidth: 1,
+        },
+        commentCount: {
+            color: colors.textPrimary,
+            fontSize: size.fontFifteen,
         },
     })
 
@@ -131,6 +136,11 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
                             icon="comment-text-outline"
                             color={colors.textPrimary}
                         />
+                        {action.comments.length > 0 && (
+                            <Text style={styles.commentCount}>
+                                ({action.comments.length})
+                            </Text>
+                        )}
                     </View>
                 </View>
             </View>
