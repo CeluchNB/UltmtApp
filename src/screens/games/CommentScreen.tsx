@@ -1,3 +1,4 @@
+import * as Constants from '../../utils/constants'
 import ActionDisplayItem from '../../components/atoms/ActionDisplayItem'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import CommentInput from '../../components/atoms/CommentInput'
@@ -10,11 +11,14 @@ import {
     LiveServerAction,
     SavedServerAction,
     ServerAction,
+    SubscriptionObject,
 } from '../../types/action'
 import { addComment, addLiveComment } from '../../services/data/action'
+import { joinPoint, subscribe, unsubscribe } from '../../services/data/action'
 import {
     selectLiveAction,
     selectSavedAction,
+    setLiveAction,
     setSavedAction,
 } from '../../store/reducers/features/action/viewAction'
 import { useDispatch, useSelector } from 'react-redux'
@@ -25,28 +29,59 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
     const dispatch = useDispatch()
     const liveAction = useSelector(selectLiveAction)
     const savedAction = useSelector(selectSavedAction)
+    const [loading, setLoading] = React.useState(false)
+    const [error, setError] = React.useState('')
 
     const action = React.useMemo(() => {
         return (live ? liveAction : savedAction) as ServerAction
     }, [live, liveAction, savedAction])
 
+    const subscriptions: SubscriptionObject = {
+        client: (data: LiveServerAction) => {
+            if (
+                data.actionNumber === liveAction?.actionNumber &&
+                data.teamNumber === liveAction.teamNumber
+            ) {
+                dispatch(setLiveAction(data))
+            }
+        },
+        undo: () => {},
+        error: () => {},
+        point: () => {},
+    }
+
+    React.useEffect(() => {
+        joinPoint(gameId, pointId)
+        subscribe(subscriptions)
+        return () => {
+            unsubscribe()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     const submitComment = async (comment: string) => {
-        if (!live) {
-            const updatedAction = await addComment(
-                (action as SavedServerAction)._id,
-                pointId,
-                comment,
-            )
-            dispatch(setSavedAction(updatedAction))
-            console.log('updated', updatedAction.comments.length)
-        } else {
-            await addLiveComment(
-                gameId,
-                pointId,
-                action.actionNumber,
-                (action as LiveServerAction).teamNumber,
-                comment,
-            )
+        setLoading(true)
+        try {
+            if (!live) {
+                const updatedAction = await addComment(
+                    (action as SavedServerAction)._id,
+                    pointId,
+                    comment,
+                )
+                dispatch(setSavedAction(updatedAction))
+            } else {
+                await addLiveComment(
+                    gameId,
+                    pointId,
+                    action.actionNumber,
+                    (action as LiveServerAction).teamNumber,
+                    comment,
+                )
+            }
+        } catch (e: any) {
+            setError(e?.message ?? Constants.COMMENT_ERROR)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -70,7 +105,11 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                 teamTwo={{ name: 'team 2' }}
             />
             <View style={styles.container}>
-                <CommentInput loading={false} onSend={submitComment} />
+                <CommentInput
+                    loading={loading}
+                    error={error}
+                    onSend={submitComment}
+                />
                 <FlatList
                     data={action.comments}
                     ItemSeparatorComponent={() => (
