@@ -1,10 +1,14 @@
 import { GuestTeam } from '../../types/team'
 import { GuestUser } from '../../types/user'
 import React from 'react'
-import { ServerAction } from '../../types/action'
 import { mapActionToDescription } from '../../utils/action'
 import { useColors } from '../../hooks'
 import { Chip, IconButton } from 'react-native-paper'
+import {
+    LiveServerAction,
+    SavedServerAction,
+    ServerAction,
+} from '../../types/action'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
@@ -30,11 +34,11 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
 
     const getTeamName = (): string => {
         if ((action as any).teamNumber) {
-            return (action as any).teamNumber === 'one'
+            return (action as LiveServerAction).teamNumber === 'one'
                 ? teamOne.name
                 : teamTwo.name
         } else if ((action as any).team) {
-            return (action as any).team.name
+            return (action as SavedServerAction).team.name
         }
         return teamOne.name
     }
@@ -90,6 +94,7 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
     return (
         <Pressable
             style={styles.container}
+            disabled={!onPress}
             android_ripple={{ color: colors.textPrimary }}
             onPress={() => {
                 if (onPress) {

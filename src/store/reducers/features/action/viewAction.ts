@@ -1,15 +1,20 @@
+import { GuestTeam } from '../../../../types/team'
 import { RootState } from '../../../store'
 import { createSlice } from '@reduxjs/toolkit'
 import { LiveServerAction, SavedServerAction } from '../../../../types/action'
 
 export interface ViewActionSlice {
-    liveAction: LiveServerAction | undefined
-    savedAction: SavedServerAction | undefined
+    liveAction?: LiveServerAction
+    savedAction?: SavedServerAction
+    teamOne?: GuestTeam
+    teamTwo?: GuestTeam
 }
 
 const initialState: ViewActionSlice = {
     liveAction: undefined,
     savedAction: undefined,
+    teamOne: undefined,
+    teamTwo: undefined,
 }
 
 const viewActionSlice = createSlice({
@@ -22,6 +27,11 @@ const viewActionSlice = createSlice({
         setSavedAction(state, action) {
             state.savedAction = action.payload
         },
+        setTeams(state, action) {
+            const { teamOne, teamTwo } = action.payload
+            state.teamOne = teamOne
+            state.teamTwo = teamTwo
+        },
     },
 })
 
@@ -29,5 +39,12 @@ export const selectLiveAction = (state: RootState) =>
     state.viewAction.liveAction
 export const selectSavedAction = (state: RootState) =>
     state.viewAction.savedAction
-export const { setLiveAction, setSavedAction } = viewActionSlice.actions
+export const selectTeams = (state: RootState) => {
+    return {
+        teamOne: state.viewAction.teamOne,
+        teamTwo: state.viewAction.teamTwo,
+    }
+}
+export const { setLiveAction, setSavedAction, setTeams } =
+    viewActionSlice.actions
 export default viewActionSlice.reducer

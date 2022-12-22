@@ -24,6 +24,7 @@ import { normalizeActions, normalizeLiveActions } from '../../utils/point'
 import {
     setLiveAction,
     setSavedAction,
+    setTeams,
 } from '../../store/reducers/features/action/viewAction'
 
 export interface PointAccordionGroupProps {
@@ -156,6 +157,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
         return async (action: ServerAction) => {
             const live = isLivePoint(point)
             if (live) {
+                dispatch(setTeams({ teamOne, teamTwo }))
                 dispatch(setLiveAction(action))
             } else {
                 dispatch(setSavedAction(action))

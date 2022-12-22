@@ -18,6 +18,7 @@ import { joinPoint, subscribe, unsubscribe } from '../../services/data/action'
 import {
     selectLiveAction,
     selectSavedAction,
+    selectTeams,
     setLiveAction,
     setSavedAction,
 } from '../../store/reducers/features/action/viewAction'
@@ -29,6 +30,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
     const dispatch = useDispatch()
     const liveAction = useSelector(selectLiveAction)
     const savedAction = useSelector(selectSavedAction)
+    const { teamOne, teamTwo } = useSelector(selectTeams)
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
 
@@ -87,9 +89,13 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
 
     const styles = StyleSheet.create({
         container: {
+            display: 'flex',
+            height: '100%',
+        },
+        commentContainer: {
             marginTop: 20,
             backgroundColor: colors.darkPrimary,
-            height: '80%',
+            flex: 1,
         },
         divider: {
             backgroundColor: colors.gray,
@@ -99,28 +105,33 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
 
     return (
         <BaseScreen containerWidth="100%">
-            <ActionDisplayItem
-                action={action}
-                teamOne={{ name: 'team 1' }}
-                teamTwo={{ name: 'team 2' }}
-            />
             <View style={styles.container}>
-                <CommentInput
-                    loading={loading}
-                    error={error}
-                    onSend={submitComment}
+                <ActionDisplayItem
+                    action={action}
+                    teamOne={teamOne || { name: 'team one' }}
+                    teamTwo={teamTwo || { name: 'team two' }}
                 />
-                <FlatList
-                    data={action.comments}
-                    ItemSeparatorComponent={() => (
-                        <View style={styles.divider} />
-                    )}
-                    renderItem={({ item }) => {
-                        return (
-                            <CommentItem comment={item} onDelete={() => {}} />
-                        )
-                    }}
-                />
+                <View style={styles.commentContainer}>
+                    <CommentInput
+                        loading={loading}
+                        error={error}
+                        onSend={submitComment}
+                    />
+                    <FlatList
+                        data={action.comments}
+                        ItemSeparatorComponent={() => (
+                            <View style={styles.divider} />
+                        )}
+                        renderItem={({ item }) => {
+                            return (
+                                <CommentItem
+                                    comment={item}
+                                    onDelete={() => {}}
+                                />
+                            )
+                        }}
+                    />
+                </View>
             </View>
         </BaseScreen>
     )
