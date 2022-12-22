@@ -1,5 +1,6 @@
 import * as Constants from '../../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { saveActions as localSaveActions } from '../local/action'
 import { addComment as networkAddComment } from '../network/action'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
@@ -108,6 +109,7 @@ export const addComment = async (
     try {
         const response = await withToken(networkAddComment, actionId, comment)
         const { action } = response.data
+        await localSaveActions(pointId, [action])
         return action
     } catch (error) {
         return throwApiError(error, Constants.COMMENT_ERROR)
