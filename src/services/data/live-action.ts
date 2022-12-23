@@ -53,7 +53,11 @@ export const addLiveComment = async (
     teamNumber: 'one' | 'two',
     comment: string,
 ) => {
-    await refreshTokenIfNecessary()
+    try {
+        await refreshTokenIfNecessary()
+    } catch (e) {
+        // do nothing, just let the comment fail
+    }
     const token = (await EncryptedStorage.getItem('access_token')) || ''
     await networkAddLiveComment(
         token,
@@ -80,7 +84,11 @@ export const deleteLiveComment = async (
     teamNumber: 'one' | 'two',
     commentNumber: string,
 ) => {
-    await refreshTokenIfNecessary()
+    try {
+        await refreshTokenIfNecessary()
+    } catch (e) {
+        // do nothing, just let the action fail
+    }
     const token = (await EncryptedStorage.getItem('access_token')) || ''
     await networkDeleteLiveComment(
         token,
