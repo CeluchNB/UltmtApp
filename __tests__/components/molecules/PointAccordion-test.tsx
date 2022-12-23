@@ -41,6 +41,8 @@ const actions: LiveServerAction[] = [
     },
 ]
 
+const onActionPress = jest.fn()
+
 describe('PointAccordion', () => {
     it('should match snapshot closed', () => {
         const snapshot = render(
@@ -52,6 +54,7 @@ describe('PointAccordion', () => {
                 teamOne={{ name: 'Temper' }}
                 teamTwo={{ name: 'Truck' }}
                 isLive={false}
+                onActionPress={onActionPress}
             />,
         )
 
@@ -73,6 +76,7 @@ describe('PointAccordion', () => {
                 teamOne={{ name: 'Temper' }}
                 teamTwo={{ name: 'Truck' }}
                 isLive={true}
+                onActionPress={onActionPress}
             />,
         )
 

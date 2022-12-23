@@ -1,4 +1,4 @@
-import * as ActionData from '../../../src/services/data/action'
+import * as ActionData from '../../../src/services/data/live-action'
 import * as PointServices from '../../../src/services/network/point'
 import { LiveGameProps } from '../../../src/types/navigation'
 import LivePointEditScreen from '../../../src/screens/games/LivePointEditScreen'

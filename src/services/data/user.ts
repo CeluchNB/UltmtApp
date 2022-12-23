@@ -1,6 +1,7 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import jwt_decode from 'jwt-decode'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateUserData, DisplayUser, User } from '../../types/user'
@@ -254,20 +255,6 @@ export const changePassword = async (
 }
 
 /**
- * Method to remove all user token's from the whitelist
- * @param token user's auth token
- * @returns nothing
- */
-// export const logoutAllDevices = async (token: string): Promise<void> => {
-//     try {
-//         await EncryptedStorage.removeItem('access_token')
-//         await networkLogoutAllDevices(token)
-//     } catch (error) {
-//         return throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
-//     }
-// }
-
-/**
  * Method to delete a user's account
  * @returns nothing
  */
@@ -296,4 +283,17 @@ export const joinTeamByCode = async (code: string): Promise<User> => {
     } catch (error) {
         return throwApiError(error, Constants.EDIT_USER_ERROR)
     }
+}
+
+/**
+ * Method to get the current user's id based on the current token
+ * @returns user's id of empty string
+ */
+export const getUserId = async (): Promise<string> => {
+    const token = await EncryptedStorage.getItem('access_token')
+    if (!token) {
+        return ''
+    }
+    const decoded = jwt_decode(token) as any
+    return decoded.sub
 }

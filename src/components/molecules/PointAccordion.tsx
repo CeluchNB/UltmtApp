@@ -23,6 +23,7 @@ interface PointAccordionProps {
     teamOne: GuestTeam
     teamTwo: GuestTeam
     isLive: boolean
+    onActionPress: (action: ServerAction) => void
 }
 
 const PointAccordion: React.FC<PointAccordionProps> = ({
@@ -33,6 +34,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
     teamOne,
     teamTwo,
     isLive,
+    onActionPress,
 }) => {
     const { colors } = useColors()
     const liveOpacity = React.useRef(new Animated.Value(0)).current
@@ -153,6 +155,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                                     style={styles.item}>
                                     <ActionDisplayItem
                                         action={item}
+                                        onPress={onActionPress}
                                         teamOne={teamOne}
                                         teamTwo={teamTwo}
                                     />

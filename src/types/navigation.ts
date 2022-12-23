@@ -40,6 +40,11 @@ export type GameStackParamList = {
     GameHome: undefined
     GameSearch: { live: string }
     ViewGame: { gameId: string }
+    Comment: {
+        gameId: string
+        pointId: string
+        live: boolean
+    }
 }
 
 export type TabParamList = {
@@ -149,3 +154,5 @@ export type LiveGameProps = NativeStackScreenProps<
     LiveGameParamList,
     'FirstPoint'
 >
+
+export type CommentProps = NativeStackScreenProps<GameStackParamList, 'Comment'>

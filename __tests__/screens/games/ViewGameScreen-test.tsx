@@ -1,12 +1,14 @@
-import * as ActionData from '../../../src/services/data/action'
+import * as ActionData from '../../../src/services/data/live-action'
 import * as GameData from '../../../src/services/data/game'
 import * as PointData from '../../../src/services/data/point'
 import { NavigationContainer } from '@react-navigation/native'
 import Point from '../../../src/types/point'
+import { Provider } from 'react-redux'
 import React from 'react'
 import { ViewGameProps } from '../../../src/types/navigation'
 import ViewGameScreen from '../../../src/screens/games/ViewGameScreen'
 import { game } from '../../../fixtures/data'
+import store from '../../../src/store/store'
 import {
     ActionType,
     LiveServerAction,
@@ -167,7 +169,9 @@ describe('ViewGameScreen', () => {
     it('should match snapshot after data loaded', async () => {
         const snapshot = render(
             <NavigationContainer>
-                <ViewGameScreen {...props} />
+                <Provider store={store}>
+                    <ViewGameScreen {...props} />
+                </Provider>
             </NavigationContainer>,
         )
 
@@ -184,7 +188,9 @@ describe('ViewGameScreen', () => {
     it('should handle next point', async () => {
         const { getAllByText } = render(
             <NavigationContainer>
-                <ViewGameScreen {...props} />
+                <Provider store={store}>
+                    <ViewGameScreen {...props} />
+                </Provider>
             </NavigationContainer>,
         )
 

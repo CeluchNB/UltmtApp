@@ -104,9 +104,9 @@ export const withToken = async (
 }
 
 /**
- * Get current token from local storage
- * @returns token from local storage
- * @throws error if backend returns an error
+ * Determine if a user has a valid refresh token
+ * @returns true if user logged in
+ * @throws error if user is not currently logged in
  */
 export const isLoggedIn = async (): Promise<boolean> => {
     try {
@@ -120,6 +120,7 @@ export const isLoggedIn = async (): Promise<boolean> => {
             throw new ApiError(Constants.GENERIC_GET_TOKEN_ERROR)
         }
 
+        // TODO: can probably delete this
         const accessToken = await EncryptedStorage.getItem('access_token')
         if (!accessToken) {
             throw new ApiError(Constants.GENERIC_GET_TOKEN_ERROR)
@@ -127,5 +128,30 @@ export const isLoggedIn = async (): Promise<boolean> => {
         return true
     } catch (error) {
         throw throwApiError(error, Constants.GENERIC_GET_TOKEN_ERROR)
+    }
+}
+
+/**
+ * Method to determine if a user has a valid access token
+ * @returns boolean if user has valid access token
+ */
+export const hasValidAccessToken = async (): Promise<boolean> => {
+    const token = await EncryptedStorage.getItem('access_token')
+    if (!token) {
+        return false
+    }
+
+    const { exp } = jwt_decode(token) as any
+    return !isTokenExpired(exp)
+}
+
+/**
+ * Method to refresh the user's token if necessary. Used for live actions
+ * since sockets give no response to determine if a reauth is necessary.
+ */
+export const refreshTokenIfNecessary = async () => {
+    const hasToken = await hasValidAccessToken()
+    if (!hasToken) {
+        await refreshToken()
     }
 }
