@@ -1,8 +1,11 @@
 import * as ActionData from '../../../src/services/data/live-action'
 import * as PointData from '../../../src/services/data/point'
 import { GuestTeam } from '../../../src/types/team'
+import { NavigationContainer } from '@react-navigation/native'
 import Point from '../../../src/types/point'
+import { Provider } from 'react-redux'
 import React from 'react'
+import store from '../../../src/store/store'
 import {
     ActionType,
     LiveServerAction,
@@ -176,14 +179,24 @@ describe('PointAccordionGroup', () => {
     })
 
     it('should match snapshot', async () => {
-        const snapshot = render(<PointAccordionGroup {...props} />)
+        const snapshot = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <PointAccordionGroup {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
 
         expect(snapshot).toMatchSnapshot()
     })
 
     it('should display live point', async () => {
         const { getAllByText, getByText } = render(
-            <PointAccordionGroup {...props} />,
+            <NavigationContainer>
+                <Provider store={store}>
+                    <PointAccordionGroup {...props} />
+                </Provider>
+            </NavigationContainer>,
         )
         const point = getAllByText('Temper')[0]
         fireEvent.press(point)
@@ -196,7 +209,11 @@ describe('PointAccordionGroup', () => {
 
     it('should display saved point', async () => {
         const { getAllByText, getByText } = render(
-            <PointAccordionGroup {...props} />,
+            <NavigationContainer>
+                <Provider store={store}>
+                    <PointAccordionGroup {...props} />
+                </Provider>
+            </NavigationContainer>,
         )
         const point = getAllByText('Temper')[1]
         fireEvent.press(point)
@@ -209,7 +226,11 @@ describe('PointAccordionGroup', () => {
 
     it('should handle actions', async () => {
         const { getAllByText, getByText, queryByText } = render(
-            <PointAccordionGroup {...props} />,
+            <NavigationContainer>
+                <Provider store={store}>
+                    <PointAccordionGroup {...props} />
+                </Provider>
+            </NavigationContainer>,
         )
         const point = getAllByText('Temper')[0]
         fireEvent.press(point)

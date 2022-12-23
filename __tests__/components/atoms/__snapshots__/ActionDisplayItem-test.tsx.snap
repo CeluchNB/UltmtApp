@@ -1,7 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`match snapshot with live action 1`] = `
+exports[`ActionDisplayItem match snapshot with live action 1`] = `
 <View
+  accessibilityState={
+    Object {
+      "disabled": true,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
@@ -54,6 +59,7 @@ exports[`match snapshot with live action 1`] = `
       <View
         style={
           Object {
+            "alignItems": "center",
             "display": "flex",
             "flexDirection": "row",
             "flexWrap": "wrap",
@@ -103,6 +109,7 @@ exports[`match snapshot with live action 1`] = `
       <View
         style={
           Object {
+            "alignItems": "center",
             "display": "flex",
             "flexDirection": "row",
             "flexWrap": "wrap",
@@ -399,14 +406,31 @@ exports[`match snapshot with live action 1`] = `
             </Text>
           </View>
         </View>
+        <Text
+          style={
+            Object {
+              "color": "#ffd600",
+              "fontSize": 30.821917808219176,
+            }
+          }
+        >
+          (
+          1
+          )
+        </Text>
       </View>
     </View>
   </View>
 </View>
 `;
 
-exports[`should match snapshot with server action 1`] = `
+exports[`ActionDisplayItem should match snapshot with server action 1`] = `
 <View
+  accessibilityState={
+    Object {
+      "disabled": true,
+    }
+  }
   accessible={true}
   collapsable={false}
   focusable={true}
@@ -459,6 +483,7 @@ exports[`should match snapshot with server action 1`] = `
       <View
         style={
           Object {
+            "alignItems": "center",
             "display": "flex",
             "flexDirection": "row",
             "flexWrap": "wrap",
@@ -508,6 +533,7 @@ exports[`should match snapshot with server action 1`] = `
       <View
         style={
           Object {
+            "alignItems": "center",
             "display": "flex",
             "flexDirection": "row",
             "flexWrap": "wrap",
@@ -804,6 +830,18 @@ exports[`should match snapshot with server action 1`] = `
             </Text>
           </View>
         </View>
+        <Text
+          style={
+            Object {
+              "color": "#ffd600",
+              "fontSize": 30.821917808219176,
+            }
+          }
+        >
+          (
+          1
+          )
+        </Text>
       </View>
     </View>
   </View>
