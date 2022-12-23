@@ -1,13 +1,6 @@
-import * as Constants from '../../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { saveActions as localSaveActions } from '../local/action'
-import { addComment as networkAddComment } from '../network/action'
-import { throwApiError } from '../../utils/service-utils'
-import {
-    ClientAction,
-    SavedServerAction,
-    SubscriptionObject,
-} from '../../types/action'
+import { refreshTokenIfNecessary } from './auth'
+import { ClientAction, SubscriptionObject } from '../../types/action'
 import {
     addComment as networkAddLiveComment,
     createAction as networkCreateAction,
@@ -18,7 +11,6 @@ import {
     undoAction as networkUndoAction,
     unsubscribe as networkUnsubscribe,
 } from '../network/live-action'
-import { refreshTokenIfNecessary, withToken } from './auth'
 
 /**
  * Method to join a point
@@ -121,26 +113,4 @@ export const subscribe = async (subscriptions: SubscriptionObject) => {
  */
 export const unsubscribe = () => {
     networkUnsubscribe()
-}
-
-/**
- * Method to add a comment to a saved action.
- * @param actionId id of action
- * @param pointId id of point
- * @param comment comment text
- * @returns updated action
- */
-export const addComment = async (
-    actionId: string,
-    pointId: string,
-    comment: string,
-): Promise<SavedServerAction> => {
-    try {
-        const response = await withToken(networkAddComment, actionId, comment)
-        const { action } = response.data
-        await localSaveActions(pointId, [action])
-        return action
-    } catch (error) {
-        return throwApiError(error, Constants.COMMENT_ERROR)
-    }
 }

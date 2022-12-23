@@ -1,4 +1,4 @@
-import * as ActionData from '../../../src/services/data/action'
+import * as ActionData from '../../../src/services/data/live-action'
 import * as GameData from '../../../src/services/data/game'
 import * as PointData from '../../../src/services/data/point'
 import { NavigationContainer } from '@react-navigation/native'

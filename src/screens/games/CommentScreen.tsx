@@ -16,12 +16,16 @@ import {
     ServerAction,
     SubscriptionObject,
 } from '../../types/action'
+import { addComment, deleteComment } from '../../services/data/saved-action'
 import {
-    addComment,
     addLiveComment,
     deleteLiveComment,
-} from '../../services/data/action'
-import { joinPoint, subscribe, unsubscribe } from '../../services/data/action'
+} from '../../services/data/live-action'
+import {
+    joinPoint,
+    subscribe,
+    unsubscribe,
+} from '../../services/data/live-action'
 import {
     selectLiveAction,
     selectSavedAction,
@@ -50,6 +54,8 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
 
     const subscriptions: SubscriptionObject = {
         client: (data: LiveServerAction) => {
+            // could get any action of this point here,
+            // only update action if we received an update for this action
             if (
                 data.actionNumber === liveAction?.actionNumber &&
                 data.teamNumber === liveAction.teamNumber
@@ -100,10 +106,16 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
         }
     }
 
-    const deleteComment = async (commentNumber: number) => {
+    const handleDeleteComment = async (commentNumber: number) => {
         setError('')
         try {
             if (!live) {
+                const updatedAction = await deleteComment(
+                    (action as SavedServerAction)._id,
+                    commentNumber.toString(),
+                    pointId,
+                )
+                dispatch(setSavedAction(updatedAction))
             } else {
                 await deleteLiveComment(
                     gameId,
@@ -113,7 +125,9 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                     commentNumber.toString(),
                 )
             }
-        } catch (e) {}
+        } catch (e: any) {
+            setError(e?.message ?? Constants.COMMENT_ERROR)
+        }
     }
 
     const styles = StyleSheet.create({
@@ -157,7 +171,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                                 <CommentItem
                                     userId={userId || ''}
                                     comment={item}
-                                    onDelete={deleteComment}
+                                    onDelete={handleDeleteComment}
                                 />
                             )
                         }}

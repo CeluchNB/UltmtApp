@@ -1,4 +1,4 @@
-import * as ActionData from '../../../src/services/data/action'
+import * as ActionData from '../../../src/services/data/live-action'
 import * as PointData from '../../../src/services/data/point'
 import { GuestTeam } from '../../../src/types/team'
 import Point from '../../../src/types/point'

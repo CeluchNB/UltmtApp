@@ -24,7 +24,7 @@ import {
     subscribe,
     undoAction,
     unsubscribe,
-} from '../../services/data/action'
+} from '../../services/data/live-action'
 import { createPoint, finishPoint } from '../../services/data/point'
 import {
     getAction,

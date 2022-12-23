@@ -255,20 +255,6 @@ export const changePassword = async (
 }
 
 /**
- * Method to remove all user token's from the whitelist
- * @param token user's auth token
- * @returns nothing
- */
-// export const logoutAllDevices = async (token: string): Promise<void> => {
-//     try {
-//         await EncryptedStorage.removeItem('access_token')
-//         await networkLogoutAllDevices(token)
-//     } catch (error) {
-//         return throwApiError(error, Constants.GENERIC_LOGOUT_ERROR)
-//     }
-// }
-
-/**
  * Method to delete a user's account
  * @returns nothing
  */
@@ -309,6 +295,5 @@ export const getUserId = async (): Promise<string> => {
         return ''
     }
     const decoded = jwt_decode(token) as any
-    console.log('decoded', decoded)
     return decoded.sub
 }

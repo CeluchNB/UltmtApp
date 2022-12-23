@@ -17,3 +17,19 @@ export const addComment = async (
         },
     )
 }
+
+export const deleteComment = async (
+    token: string,
+    actionId: string,
+    commentNumber: string,
+): Promise<AxiosResponse> => {
+    return await axios.delete(
+        `${API_URL_V1}/action/${actionId}/comment/${commentNumber}`,
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    )
+}

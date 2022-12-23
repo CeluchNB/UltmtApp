@@ -19,7 +19,11 @@ import {
     getActionsByPoint,
     getLiveActionsByPoint,
 } from '../../services/data/point'
-import { joinPoint, subscribe, unsubscribe } from '../../services/data/action'
+import {
+    joinPoint,
+    subscribe,
+    unsubscribe,
+} from '../../services/data/live-action'
 import { normalizeActions, normalizeLiveActions } from '../../utils/point'
 import {
     setLiveAction,
