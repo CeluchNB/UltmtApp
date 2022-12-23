@@ -18,6 +18,18 @@ import PointAccordionGroup, {
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+const mockedNavigate = jest.fn()
+
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native')
+    return {
+        ...actualNav,
+        useNavigation: () => ({
+            addListener: jest.fn().mockReturnValue(() => {}),
+            navigate: mockedNavigate,
+        }),
+    }
+})
 
 const points: Point[] = [
     {
@@ -260,5 +272,63 @@ describe('PointAccordionGroup', () => {
         })
         expect(queryByText('huck')).toBeFalsy()
         expect(props.onNextPoint).toHaveBeenCalled()
+    })
+
+    it('should handle live action press', async () => {
+        const { getAllByText, getByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <PointAccordionGroup {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+        const point = getAllByText('Temper')[0]
+        fireEvent.press(point)
+
+        await waitFor(() => {
+            expect(liveSpy).toHaveBeenCalled()
+        })
+        expect(getByText('huck')).toBeTruthy()
+        fireEvent.press(getByText('huck'))
+
+        expect(mockedNavigate).toHaveBeenCalledWith('Comment', {
+            gameId: 'game1',
+            live: true,
+            pointId: 'point3',
+        })
+
+        expect(store.getState().viewAction.liveAction).toMatchObject(
+            liveActions[0],
+        )
+        expect(store.getState().viewAction.teamOne).toMatchObject(teamOne)
+        expect(store.getState().viewAction.teamTwo).toMatchObject(teamTwo)
+    })
+
+    it('should handle saved action press', async () => {
+        const { getAllByText, getByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <PointAccordionGroup {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+        const point = getAllByText('Temper')[1]
+        fireEvent.press(point)
+
+        await waitFor(() => {
+            expect(savedSpy).toHaveBeenCalled()
+        })
+        expect(getByText('pickup')).toBeTruthy()
+        fireEvent.press(getByText('pickup'))
+
+        expect(mockedNavigate).toHaveBeenCalledWith('Comment', {
+            gameId: 'game1',
+            live: false,
+            pointId: 'point2',
+        })
+
+        expect(store.getState().viewAction.savedAction).toMatchObject(
+            savedActions[0],
+        )
     })
 })
