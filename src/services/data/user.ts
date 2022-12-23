@@ -1,6 +1,7 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import jwt_decode from 'jwt-decode'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateUserData, DisplayUser, User } from '../../types/user'
@@ -296,4 +297,18 @@ export const joinTeamByCode = async (code: string): Promise<User> => {
     } catch (error) {
         return throwApiError(error, Constants.EDIT_USER_ERROR)
     }
+}
+
+/**
+ * Method to get the current user's id based on the current token
+ * @returns user's id of empty string
+ */
+export const getUserId = async (): Promise<string> => {
+    const token = await EncryptedStorage.getItem('access_token')
+    if (!token) {
+        return ''
+    }
+    const decoded = jwt_decode(token) as any
+    console.log('decoded', decoded)
+    return decoded.sub
 }

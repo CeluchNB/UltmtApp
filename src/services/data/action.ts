@@ -3,7 +3,6 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 import { saveActions as localSaveActions } from '../local/action'
 import { addComment as networkAddComment } from '../network/action'
 import { throwApiError } from '../../utils/service-utils'
-import { withToken } from './auth'
 import {
     ClientAction,
     SavedServerAction,
@@ -12,12 +11,14 @@ import {
 import {
     addComment as networkAddLiveComment,
     createAction as networkCreateAction,
+    deleteComment as networkDeleteLiveComment,
     joinPoint as networkJoinPoint,
     nextPoint as networkNextPoint,
     subscribe as networkSubscribe,
     undoAction as networkUndoAction,
     unsubscribe as networkUnsubscribe,
 } from '../network/live-action'
+import { refreshTokenIfNecessary, withToken } from './auth'
 
 /**
  * Method to join a point
@@ -60,6 +61,7 @@ export const addLiveComment = async (
     teamNumber: 'one' | 'two',
     comment: string,
 ) => {
+    await refreshTokenIfNecessary()
     const token = (await EncryptedStorage.getItem('access_token')) || ''
     await networkAddLiveComment(
         token,
@@ -68,6 +70,33 @@ export const addLiveComment = async (
         actionNumber,
         teamNumber,
         comment,
+    )
+}
+
+/**
+ * Method to delete a live comment
+ * @param gameId id of game
+ * @param pointId id of point
+ * @param actionNumber action number of point
+ * @param teamNumber team that submitted action - 'one' | 'two'
+ * @param commentNumber comment number
+ */
+export const deleteLiveComment = async (
+    gameId: string,
+    pointId: string,
+    actionNumber: number,
+    teamNumber: 'one' | 'two',
+    commentNumber: string,
+) => {
+    await refreshTokenIfNecessary()
+    const token = (await EncryptedStorage.getItem('access_token')) || ''
+    await networkDeleteLiveComment(
+        token,
+        gameId,
+        pointId,
+        actionNumber,
+        teamNumber,
+        commentNumber,
     )
 }
 

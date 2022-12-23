@@ -5,7 +5,10 @@ import CommentInput from '../../components/atoms/CommentInput'
 import CommentItem from '../../components/atoms/CommentItem'
 import { CommentProps } from '../../types/navigation'
 import React from 'react'
+import { getUserId } from '../../services/data/user'
+import { isLoggedIn } from '../../services/data/auth'
 import { useColors } from '../../hooks/useColors'
+import { useData } from '../../hooks'
 import { FlatList, StyleSheet, View } from 'react-native'
 import {
     LiveServerAction,
@@ -13,7 +16,11 @@ import {
     ServerAction,
     SubscriptionObject,
 } from '../../types/action'
-import { addComment, addLiveComment } from '../../services/data/action'
+import {
+    addComment,
+    addLiveComment,
+    deleteLiveComment,
+} from '../../services/data/action'
 import { joinPoint, subscribe, unsubscribe } from '../../services/data/action'
 import {
     selectLiveAction,
@@ -38,6 +45,9 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
         return (live ? liveAction : savedAction) as ServerAction
     }, [live, liveAction, savedAction])
 
+    const { data: isAuth } = useData(isLoggedIn)
+    const { data: userId } = useData(getUserId)
+
     const subscriptions: SubscriptionObject = {
         client: (data: LiveServerAction) => {
             if (
@@ -48,7 +58,9 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
             }
         },
         undo: () => {},
-        error: () => {},
+        error: (data: any) => {
+            setError(data.message)
+        },
         point: () => {},
     }
 
@@ -63,6 +75,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
 
     const submitComment = async (comment: string) => {
         setLoading(true)
+        setError('')
         try {
             if (!live) {
                 const updatedAction = await addComment(
@@ -85,6 +98,22 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
         } finally {
             setLoading(false)
         }
+    }
+
+    const deleteComment = async (commentNumber: number) => {
+        setError('')
+        try {
+            if (!live) {
+            } else {
+                await deleteLiveComment(
+                    gameId,
+                    pointId,
+                    action.actionNumber,
+                    (action as LiveServerAction).teamNumber,
+                    commentNumber.toString(),
+                )
+            }
+        } catch (e) {}
     }
 
     const styles = StyleSheet.create({
@@ -115,6 +144,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                     <CommentInput
                         loading={loading}
                         error={error}
+                        isLoggedIn={isAuth || false}
                         onSend={submitComment}
                     />
                     <FlatList
@@ -125,8 +155,9 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                         renderItem={({ item }) => {
                             return (
                                 <CommentItem
+                                    userId={userId || ''}
                                     comment={item}
-                                    onDelete={() => {}}
+                                    onDelete={deleteComment}
                                 />
                             )
                         }}

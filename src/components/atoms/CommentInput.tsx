@@ -9,12 +9,14 @@ const CHAR_LIMIT = 160
 interface CommentInputProps {
     loading: boolean
     error: string
+    isLoggedIn: boolean
     onSend: (comment: string) => void
 }
 
 const CommentInput: React.FC<CommentInputProps> = ({
     loading,
     error,
+    isLoggedIn,
     onSend,
 }) => {
     const { colors } = useColors()
@@ -47,7 +49,26 @@ const CommentInput: React.FC<CommentInputProps> = ({
             color: colors.error,
             fontSize: size.fontSmall,
         },
+        loginContainer: {
+            padding: 5,
+            alignItems: 'center',
+            backgroundColor: colors.darkPrimary,
+            borderBottomColor: colors.textPrimary,
+            borderBottomWidth: 1,
+        },
+        loginText: {
+            color: colors.textPrimary,
+            fontSize: size.fontMedium,
+        },
     })
+
+    if (!isLoggedIn) {
+        return (
+            <View style={styles.loginContainer}>
+                <Text style={styles.loginText}>Log in to leave a comment</Text>
+            </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
