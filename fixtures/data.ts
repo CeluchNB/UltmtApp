@@ -2,6 +2,7 @@ import { DetailedRequest } from '../src/types/request'
 import { Game } from '../src/types/game'
 import Point from '../src/types/point'
 import { User } from '../src/types/user'
+import { ActionType, SavedServerAction } from '../src/types/action'
 
 export const fetchProfileData: User = {
     _id: 'testid',
@@ -179,4 +180,13 @@ export const point: Point = {
     teamTwoActive: false,
     teamOneActions: [],
     teamTwoActions: [],
+}
+
+export const savedAction: SavedServerAction = {
+    _id: 'action1',
+    comments: [],
+    actionNumber: 1,
+    actionType: ActionType.PULL,
+    tags: ['ib'],
+    team: teamOne,
 }
