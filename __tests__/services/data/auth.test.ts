@@ -320,7 +320,6 @@ describe('refresh token if necessary', () => {
     })
 
     it('when necessary', async () => {
-        console.log('last test')
         RNEncryptedStorage.getItem
             .mockReturnValueOnce(Promise.resolve(''))
             .mockReturnValueOnce(Promise.resolve(validToken))
