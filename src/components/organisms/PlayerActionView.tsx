@@ -1,5 +1,5 @@
 import { ClientActionType } from '../../types/action'
-import { GuestUser } from '../../types/user'
+import { DisplayUser } from '../../types/user'
 import { IconButton } from 'react-native-paper'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
@@ -14,19 +14,23 @@ import {
 } from 'react-native'
 
 interface PlayerActionViewProps {
-    players: GuestUser[]
+    players: DisplayUser[]
     pulling: boolean
     prevAction?: ClientActionType
-    activePlayer?: number
+    activePlayer?: string
     undoDisabled: boolean
     loading: boolean
     error?: string
-    onAction: (index: number, action: ClientActionType, tags: string[]) => void
+    onAction: (
+        action: ClientActionType,
+        tags: string[],
+        playerOne: DisplayUser,
+    ) => void
     onUndo: () => void
 }
 
 type PlayerAction = {
-    player: GuestUser
+    player: DisplayUser
     actions: ClientActionType[]
 }
 
@@ -46,8 +50,8 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
         const actions = []
         for (let i = 0; i < players.length; i++) {
             let action = getValidPlayerActions(
-                i,
-                activePlayer || 0,
+                players[i]._id,
+                activePlayer || '',
                 prevAction,
                 pulling,
             )
@@ -60,11 +64,11 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     }, [players, activePlayer, prevAction, pulling])
 
     const onPress = (
-        index: number,
         action: ClientActionType,
         tags: string[],
+        player: DisplayUser,
     ) => {
-        onAction(index, action, tags)
+        onAction(action, tags, player)
     }
 
     const styles = StyleSheet.create({
@@ -106,7 +110,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
                             player={player}
                             actions={actions}
                             onAction={(action, tags) => {
-                                onPress(index, action, tags)
+                                onPress(action, tags, player)
                             }}
                         />
                     )

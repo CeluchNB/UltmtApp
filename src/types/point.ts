@@ -1,12 +1,12 @@
+import { DisplayUser } from './user'
 import { GuestTeam } from './team'
-import { GuestUser } from './user'
 import { SavedServerAction } from './action'
 
 interface Point {
     _id: string
     pointNumber: number
-    teamOnePlayers: GuestUser[]
-    teamTwoPlayers: GuestUser[]
+    teamOnePlayers: DisplayUser[]
+    teamTwoPlayers: DisplayUser[]
     teamOneScore: number
     teamTwoScore: number
     pullingTeam: GuestTeam

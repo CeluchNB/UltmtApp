@@ -10,7 +10,11 @@ import { StyleSheet, Text, View } from 'react-native'
 interface PlayerActionItemProps {
     player: GuestUser
     actions: ClientActionType[]
-    onAction: (action: ClientActionType, tags: string[]) => void
+    onAction: (
+        action: ClientActionType,
+        tags: string[],
+        player: GuestUser,
+    ) => void
 }
 
 const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
@@ -26,7 +30,7 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
 
     const onModalClose = (submit: boolean, tags: string[]) => {
         if (submit && selectedAction) {
-            onAction(selectedAction, tags)
+            onAction(selectedAction, tags, player)
         }
         setModalVisible(false)
         setSelectedAction(undefined)
@@ -85,7 +89,7 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                     collapsable={true}
                     mode="outlined"
                     onPress={() => {
-                        onAction(action, [])
+                        onAction(action, [], player)
                     }}
                     onLongPress={() => {
                         setSelectedAction(action)

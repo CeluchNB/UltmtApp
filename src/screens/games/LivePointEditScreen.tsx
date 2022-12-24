@@ -1,36 +1,20 @@
 import * as Constants from '../../utils/constants'
 import ActionDisplayItem from '../../components/atoms/ActionDisplayItem'
+import { ActionType } from '../../types/action'
 import { ApiError } from '../../types/services'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
-import { GuestUser } from '../../types/user'
 import { LiveGameProps } from '../../types/navigation'
 import PlayerActionView from '../../components/organisms/PlayerActionView'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
+import { getValidTeamActions } from '../../utils/action'
+import { nextPoint } from '../../services/data/live-action'
 import { useColors } from '../../hooks'
-import {
-    ActionType,
-    ClientActionType,
-    LiveServerAction,
-    SubscriptionObject,
-} from '../../types/action'
+import useLiveGameState from '../../hooks/useLiveGameState'
 import { StyleSheet, Text, View } from 'react-native'
-import {
-    addAction,
-    joinPoint,
-    nextPoint,
-    subscribe,
-    undoAction,
-    unsubscribe,
-} from '../../services/data/live-action'
 import { createPoint, finishPoint } from '../../services/data/point'
-import {
-    getAction,
-    getTeamAction,
-    getValidTeamActions,
-} from '../../utils/action'
 import { isPulling, isPullingNext } from '../../utils/point'
 import {
     selectGame,
@@ -51,114 +35,21 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
     const dispatch = useDispatch()
-    const [actionStack, setActionStack] = React.useState<
-        { playerIndex?: number; actionType: ClientActionType }[]
-    >([])
-    const [liveError, setLiveError] = React.useState<string | undefined>(
-        undefined,
-    )
     const [finishLoading, setFinishLoading] = React.useState(false)
     const [finishError, setFinishError] = React.useState<string | undefined>(
         undefined,
     )
-    const [resolvedActions, setResolvedActions] = React.useState<
-        LiveServerAction[]
-    >([])
 
-    const activePlayers = React.useMemo(() => {
-        if (team === 'one') {
-            return point.teamOnePlayers
-        } else {
-            return point.teamTwoPlayers
-        }
-    }, [point, team])
-
-    const subscriptions: SubscriptionObject = {
-        client: data => {
-            setLiveError(undefined)
-            setResolvedActions(curr => [...curr, data])
-        },
-        undo: () => {
-            setLiveError(undefined)
-            setResolvedActions(curr => curr.slice(0, curr.length - 2))
-        },
-        error: data => {
-            setLiveError(data?.message)
-        },
-        point: () => {},
-    }
-
-    React.useEffect(() => {
-        joinPoint(game._id, point._id).then(() => {
-            subscribe(subscriptions)
-        })
-        return () => {
-            unsubscribe()
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    // event functions
-    const onUndo = () => {
-        undoAction(point._id)
-        setActionStack(stack => {
-            return stack.filter((_item, i) => {
-                return i !== stack.length - 1
-            })
-        })
-        setFinishError(undefined)
-    }
-
-    const onAction = (
-        playerIndex: number,
-        actionType: ClientActionType,
-        tags: string[],
-    ) => {
-        const action = getAction(
-            actionType,
-            team,
-            tags,
-            getPlayerOne(playerIndex),
-            getPlayerTwo(),
-        )
-        addAction(action, point._id)
-        setActionStack(stack => {
-            return [
-                ...stack,
-                {
-                    playerIndex,
-                    actionType: action.actionType,
-                },
-            ]
-        })
-        setFinishError(undefined)
-    }
-
-    const onTeamAction = (
-        actionType: ClientActionType,
-        tags: string[],
-        playerOne?: GuestUser,
-        playerTwo?: GuestUser,
-    ) => {
-        const action = getTeamAction(
-            actionType,
-            team,
-            tags,
-            playerOne || activePlayers[getActiveAction().playerIndex || 0],
-            playerTwo,
-        )
-        addAction(action, point._id)
-        setActionStack(stack => {
-            return [
-                ...stack,
-                {
-                    playerIndex: undefined,
-                    actionType: action.actionType,
-                },
-            ]
-        })
-        setFinishError(undefined)
-    }
+    const {
+        actions,
+        lastAction,
+        activePlayers,
+        waiting,
+        error,
+        onPlayerAction,
+        onTeamAction,
+        onUndo,
+    } = useLiveGameState()
 
     const onFinishPoint = async () => {
         try {
@@ -169,7 +60,7 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
             dispatch(updateScore({ teamOneScore, teamTwoScore }))
 
             const newPoint = await createPoint(
-                isPullingNext(team, getActiveAction().actionType),
+                isPullingNext(team, lastAction?.actionType),
                 point.pointNumber + 1,
             )
             dispatch(setPoint(newPoint))
@@ -182,40 +73,6 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
             )
         } finally {
             setFinishLoading(false)
-        }
-    }
-
-    // util functions
-    const getPlayerOne = (playerIndex: number) => {
-        return activePlayers[playerIndex]
-    }
-
-    const getPlayerTwo = () => {
-        return actionStack.length > 0
-            ? activePlayers[
-                  actionStack[actionStack.length - 1].playerIndex || 0
-              ]
-            : undefined
-    }
-
-    const getActiveAction = (): {
-        playerIndex?: number
-        actionType?: ClientActionType
-    } => {
-        if (actionStack.length < 1) {
-            return { playerIndex: undefined, actionType: undefined }
-        } else if (
-            resolvedActions.length > actionStack.length ||
-            resolvedActions.length === 0
-        ) {
-            return {
-                playerIndex: actionStack[actionStack.length - 1].playerIndex,
-                actionType: actionStack[actionStack.length - 1].actionType,
-            }
-        }
-        return {
-            playerIndex: actionStack[resolvedActions.length - 1].playerIndex,
-            actionType: actionStack[resolvedActions.length - 1].actionType,
         }
     }
 
@@ -238,16 +95,16 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
             <PlayerActionView
                 players={activePlayers}
                 pulling={isPulling(point, game, team)}
-                prevAction={getActiveAction().actionType}
-                activePlayer={getActiveAction().playerIndex}
-                undoDisabled={actionStack.length === 0}
-                loading={resolvedActions.length < actionStack.length}
-                error={liveError}
-                onAction={onAction}
+                prevAction={lastAction?.actionType}
+                activePlayer={lastAction?.playerOne?._id}
+                undoDisabled={!lastAction}
+                loading={waiting}
+                error={error}
+                onAction={onPlayerAction}
                 onUndo={onUndo}
             />
             <TeamActionView
-                actions={getValidTeamActions(actionStack)}
+                actions={getValidTeamActions(actions)}
                 onAction={onTeamAction}
             />
             <PrimaryButton
@@ -256,20 +113,16 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                 loading={finishLoading}
                 disabled={
                     finishLoading ||
-                    actionStack.length === 0 ||
-                    (actionStack.length > 0 &&
-                        actionStack[actionStack.length - 1].actionType !==
-                            ActionType.TEAM_ONE_SCORE &&
-                        actionStack[actionStack.length - 1].actionType !==
-                            ActionType.TEAM_TWO_SCORE)
+                    (lastAction?.actionType !== ActionType.TEAM_ONE_SCORE &&
+                        lastAction?.actionType !== ActionType.TEAM_TWO_SCORE)
                 }
             />
             {finishError && <Text style={styles.error}>{finishError}</Text>}
-            {resolvedActions.length > 0 && (
+            {actions.length > 0 && (
                 <View>
                     <Text style={styles.header}>Last Action</Text>
                     <ActionDisplayItem
-                        action={resolvedActions[resolvedActions.length - 1]}
+                        action={actions[actions.length - 1]}
                         teamOne={game.teamOne}
                         teamTwo={game.teamTwo}
                     />
