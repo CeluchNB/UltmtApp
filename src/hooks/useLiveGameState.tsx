@@ -1,6 +1,7 @@
 import { GuestUser } from '../types/user'
 import React from 'react'
 import { selectPoint } from '../store/reducers/features/point/livePointReducer'
+import { useSelector } from 'react-redux'
 import {
     ClientAction,
     ClientActionType,
@@ -20,7 +21,6 @@ import {
     selectGame,
     selectTeam,
 } from '../store/reducers/features/game/liveGameReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
 function immutablePush<T>(newValue: T): (current: T[]) => T[] {
     return (current: T[]): T[] => {
@@ -132,9 +132,12 @@ const useLiveGameState = () => {
     return {
         activePlayers,
         actions,
-        waiting,
         error,
+        game,
         lastAction,
+        point,
+        team,
+        waiting,
         onPlayerAction,
         onTeamAction,
         onUndo,

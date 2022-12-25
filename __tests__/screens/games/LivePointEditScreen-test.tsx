@@ -36,13 +36,38 @@ const props: LiveGameProps = {
 }
 
 const playerList1 = [
-    { firstName: 'First 8', lastName: 'Last 8' },
-    { firstName: 'First 9', lastName: 'Last 9' },
-    { firstName: 'First 10', lastName: 'Last 10' },
-    { firstName: 'First 11', lastName: 'Last 11' },
-    { firstName: 'First 12', lastName: 'Last 12' },
-    { firstName: 'First 13', lastName: 'Last 13' },
-    { firstName: 'First 14', lastName: 'Last 14' },
+    { _id: 'p8', firstName: 'First 8', lastName: 'Last 8', username: 'fl8' },
+    { _id: 'p9', firstName: 'First 9', lastName: 'Last 9', username: 'fl9' },
+    {
+        _id: 'p10',
+        firstName: 'First 10',
+        lastName: 'Last 10',
+        username: 'fl10',
+    },
+    {
+        _id: 'p11',
+        firstName: 'First 11',
+        lastName: 'Last 11',
+        username: 'fl11',
+    },
+    {
+        _id: 'p12',
+        firstName: 'First 12',
+        lastName: 'Last 12',
+        username: 'fl12',
+    },
+    {
+        _id: 'p13',
+        firstName: 'First 13',
+        lastName: 'Last 13',
+        username: 'fl13',
+    },
+    {
+        _id: 'p14',
+        firstName: 'First 14',
+        lastName: 'Last 14',
+        username: 'fl14',
+    },
 ]
 
 const point: Point = {

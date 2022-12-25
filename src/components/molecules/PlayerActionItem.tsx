@@ -10,6 +10,7 @@ import { StyleSheet, Text, View } from 'react-native'
 interface PlayerActionItemProps {
     player: GuestUser
     actions: ClientActionType[]
+    loading: boolean
     onAction: (
         action: ClientActionType,
         tags: string[],
@@ -20,6 +21,7 @@ interface PlayerActionItemProps {
 const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
     player,
     actions,
+    loading,
     onAction,
 }) => {
     const { colors } = useColors()
@@ -87,6 +89,7 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                     labelStyle={styles.buttonText}
                     color={colors.textPrimary}
                     collapsable={true}
+                    disabled={loading}
                     mode="outlined"
                     onPress={() => {
                         onAction(action, [], player)
