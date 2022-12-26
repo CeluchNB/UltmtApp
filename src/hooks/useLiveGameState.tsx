@@ -79,11 +79,13 @@ const useLiveGameState = () => {
     }, [point, team])
 
     const lastAction = React.useMemo(() => {
-        if (actions.length > 0) {
-            return actions[actions.length - 1]
+        for (let i = actions.length - 1; i >= 0; i--) {
+            if (actions[i].teamNumber === team) {
+                return actions[i]
+            }
         }
         return undefined
-    }, [actions])
+    }, [actions, team])
 
     const onAction = (action: ClientAction) => {
         setWaiting(true)

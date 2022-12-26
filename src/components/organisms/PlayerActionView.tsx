@@ -33,9 +33,9 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
 }) => {
     const playerActions: PlayerAction[] = React.useMemo(() => {
         const actions = []
-        for (let i = 0; i < players.length; i++) {
+        for (const player of players) {
             let action = getValidPlayerActions(
-                players[i]._id,
+                player._id,
                 activePlayer || '',
                 prevAction,
                 pulling,
