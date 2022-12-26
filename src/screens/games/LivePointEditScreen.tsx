@@ -33,13 +33,14 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
 
     const {
         actions,
-        lastAction,
         activePlayers,
-        waiting,
         error,
         game,
-        team,
+        lastAction,
+        myTeamActions,
         point,
+        waiting,
+        team,
         onPlayerAction,
         onTeamAction,
         onUndo,
@@ -90,7 +91,7 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
             <LivePointStatus
                 error={error}
                 loading={waiting}
-                undoDisabled={actions.length === 0}
+                undoDisabled={myTeamActions.length === 0}
                 onUndo={onUndo}
             />
             <PlayerActionView
@@ -102,7 +103,7 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                 onAction={onPlayerAction}
             />
             <TeamActionView
-                actions={getValidTeamActions(actions)}
+                actions={getValidTeamActions(myTeamActions)}
                 onAction={onTeamAction}
             />
             <PrimaryButton

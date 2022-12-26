@@ -62,9 +62,14 @@ const useLiveGameState = () => {
     }, [])
 
     React.useEffect(() => {
-        joinPoint(game._id, point._id).then(() => {
-            subscribe(subscriptions)
-        })
+        setWaiting(true)
+        joinPoint(game._id, point._id)
+            .then(() => {
+                return subscribe(subscriptions)
+            })
+            .then(() => {
+                setWaiting(false)
+            })
         return () => {
             unsubscribe()
         }
@@ -85,6 +90,10 @@ const useLiveGameState = () => {
             }
         }
         return undefined
+    }, [actions, team])
+
+    const myTeamActions = React.useMemo(() => {
+        return actions.filter(a => a.teamNumber === team)
     }, [actions, team])
 
     const onAction = (action: ClientAction) => {
@@ -134,6 +143,7 @@ const useLiveGameState = () => {
     return {
         activePlayers,
         actions,
+        myTeamActions,
         error,
         game,
         lastAction,

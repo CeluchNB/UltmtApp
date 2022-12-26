@@ -162,6 +162,13 @@ export const getTeamAction = (
             tags,
         }
     }
+    if (action === ActionType.CALL_ON_FIELD) {
+        return {
+            actionType: action,
+            playerOne,
+            tags,
+        }
+    }
 
     return {
         actionType: action,
