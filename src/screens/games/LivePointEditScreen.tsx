@@ -16,7 +16,7 @@ import { setPoint } from '../../store/reducers/features/point/livePointReducer'
 import { updateScore } from '../../store/reducers/features/game/liveGameReducer'
 import { useColors } from '../../hooks'
 import { useDispatch } from 'react-redux'
-import useLiveGameState from '../../hooks/useLiveGameState'
+import { useGameEditor } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 import { createPoint, finishPoint } from '../../services/data/point'
 import { isPulling, isPullingNext } from '../../utils/point'
@@ -44,7 +44,7 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         onPlayerAction,
         onTeamAction,
         onUndo,
-    } = useLiveGameState()
+    } = useGameEditor()
 
     const onFinishPoint = async () => {
         try {

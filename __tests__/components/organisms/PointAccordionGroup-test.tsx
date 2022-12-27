@@ -156,7 +156,7 @@ const liveActions: LiveServerAction[] = [
 describe('PointAccordionGroup', () => {
     let props: PointAccordionGroupProps
     const deleteSpy = jest
-        .spyOn(PointData, 'deleteAllActionsByPoint')
+        .spyOn(PointData, 'deleteLocalActionsByPoint')
         .mockReturnValue(Promise.resolve())
     const savedSpy = jest
         .spyOn(PointData, 'getActionsByPoint')

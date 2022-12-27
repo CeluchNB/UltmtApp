@@ -9,7 +9,7 @@ import {
 } from '../../../src/types/action'
 import {
     createPoint,
-    deleteAllActionsByPoint,
+    deleteLocalActionsByPoint,
     finishPoint,
     getActionsByPoint,
     getLiveActionsByPoint,
@@ -215,14 +215,14 @@ describe('test delete actions', () => {
         jest.spyOn(ActionLocal, 'deleteAllActionsByPoint').mockReturnValueOnce(
             Promise.resolve(),
         )
-        expect(deleteAllActionsByPoint('pointId')).resolves.toBeUndefined()
+        expect(deleteLocalActionsByPoint('pointId')).resolves.toBeUndefined()
     })
 
     it('should handle local failure', async () => {
         jest.spyOn(ActionLocal, 'deleteAllActionsByPoint').mockReturnValueOnce(
             Promise.reject(),
         )
-        expect(deleteAllActionsByPoint('pointId')).resolves.toBeUndefined()
+        expect(deleteLocalActionsByPoint('pointId')).resolves.toBeUndefined()
     })
 })
 

@@ -15,7 +15,7 @@ import {
 } from '../../types/action'
 import React, { useEffect } from 'react'
 import {
-    deleteAllActionsByPoint,
+    deleteLocalActionsByPoint,
     getActionsByPoint,
     getLiveActionsByPoint,
 } from '../../services/data/point'
@@ -76,7 +76,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
             removeListener()
             unsubscribe()
             for (const point of points) {
-                deleteAllActionsByPoint(point._id)
+                deleteLocalActionsByPoint(point._id)
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

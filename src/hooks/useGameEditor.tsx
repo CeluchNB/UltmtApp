@@ -32,7 +32,7 @@ function immutablePop<T>(current: T[]): T[] {
     return current.slice(0, -1)
 }
 
-const useLiveGameState = () => {
+export const useGameEditor = () => {
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
@@ -156,5 +156,3 @@ const useLiveGameState = () => {
         onNextPoint,
     }
 }
-
-export default useLiveGameState
