@@ -5,26 +5,13 @@ import { List } from 'react-native-paper'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import Point from '../../types/point'
 import PointAccordion from '../molecules/PointAccordion'
+import { ServerAction } from '../../types/action'
+import { deleteLocalActionsByPoint } from '../../services/data/point'
+import { unsubscribe } from '../../services/data/live-action'
 import { useDispatch } from 'react-redux'
+import { useGameViewer } from '../../hooks'
 import { useNavigation } from '@react-navigation/native'
-import {
-    LiveServerAction,
-    SavedServerAction,
-    ServerAction,
-    SubscriptionObject,
-} from '../../types/action'
 import React, { useEffect } from 'react'
-import {
-    deleteLocalActionsByPoint,
-    getActionsByPoint,
-    getLiveActionsByPoint,
-} from '../../services/data/point'
-import {
-    joinPoint,
-    subscribe,
-    unsubscribe,
-} from '../../services/data/live-action'
-import { normalizeActions, normalizeLiveActions } from '../../utils/point'
 import {
     setLiveAction,
     setSavedAction,
@@ -44,33 +31,18 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     points,
     teamOne,
     teamTwo,
-    onNextPoint,
+    // onNextPoint,
 }) => {
     const navigation =
         useNavigation<NativeStackNavigationProp<GameStackParamList>>()
     const dispatch = useDispatch()
-    const [loading, setLoading] = React.useState(false)
-    const [teamOneActions, setTeamOneActions] = React.useState<
-        SavedServerAction[]
-    >([])
-    const [teamTwoActions, setTeamTwoActions] = React.useState<
-        SavedServerAction[]
-    >([])
     const [expandedId, setExpandedId] = React.useState('')
-    const [liveActions, setLiveActions] = React.useState<LiveServerAction[]>([])
 
-    const displayedActions = React.useCallback(
-        (point: Point) => {
-            return isLivePoint(point)
-                ? normalizeLiveActions(liveActions)
-                : normalizeActions(teamOneActions, teamTwoActions)
-        },
-        [liveActions, teamOneActions, teamTwoActions],
-    )
+    const { displayedActions, loading, onSelectPoint } = useGameViewer(gameId)
 
     useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
-            await loadPoints(expandedId)
+            await onSelectPoint(expandedId)
         })
         return () => {
             removeListener()
@@ -80,69 +52,10 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [points, expandedId, teamOneActions, teamTwoActions, liveActions])
+    }, [points, expandedId])
 
     const isLivePoint = (point: Point): boolean => {
         return point.teamOneActive || point.teamTwoActive
-    }
-
-    const subscriptions: SubscriptionObject = {
-        client: (data: LiveServerAction) => {
-            setLiveActions(curr => [data, ...curr])
-        },
-        undo: () => {
-            setLiveActions(curr => curr.slice(1))
-        },
-        error: () => {},
-        point: () => {
-            setLiveActions([])
-            setExpandedId('')
-            onNextPoint()
-        },
-    }
-
-    const getLiveActions = async (pointId: string) => {
-        setLiveActions([])
-        await joinPoint(gameId, pointId)
-        await subscribe(subscriptions)
-        const data = await getLiveActionsByPoint(gameId, pointId)
-        // TODO: if user closes and opens accordion a bunch, liveActions could grow A LOT
-        // think of way to remedy this
-        // normalizeActions prevents this from being a display issue
-        setLiveActions(curr => [...curr, ...data])
-    }
-
-    const getSavedActions = async (point: Point) => {
-        const oneActions = await getActionsByPoint(
-            'one',
-            point._id,
-            point.teamOneActions,
-        )
-        setTeamOneActions(oneActions)
-        const twoActions = await getActionsByPoint(
-            'two',
-            point._id,
-            point.teamTwoActions,
-        )
-        setTeamTwoActions(twoActions)
-    }
-
-    const loadPoints = async (id: string | number) => {
-        const point = points.find(p => p._id === id)
-        if (!point) {
-            return
-        }
-        setLoading(true)
-        try {
-            if (isLivePoint(point)) {
-                await getLiveActions(point._id)
-            } else {
-                await getSavedActions(point)
-            }
-        } catch (e) {
-        } finally {
-            setLoading(false)
-        }
     }
 
     const onAccordionPress = async (id: string | number) => {
@@ -150,9 +63,9 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
             setExpandedId('')
             return
         }
-        setExpandedId(id.toString())
 
-        await loadPoints(id)
+        setExpandedId(id.toString())
+        await onSelectPoint(id.toString())
     }
 
     const onActionPress = (
@@ -186,7 +99,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                             key={point._id}
                             point={point}
                             expanded={point._id === expandedId}
-                            actions={displayedActions(point)}
+                            actions={displayedActions}
                             loading={loading}
                             teamOne={teamOne}
                             teamTwo={teamTwo}

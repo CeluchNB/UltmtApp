@@ -1,3 +1,4 @@
+import { Game } from '../types/game'
 import Point from '../types/point'
 import React from 'react'
 import {
@@ -24,6 +25,8 @@ const isLivePoint = (point: Point): boolean => {
  */
 export const useGameViewer = (gameId: string) => {
     const [liveActions, setLiveActions] = React.useState<LiveServerAction[]>([])
+    const [game, setGame] = React.useState<Game>()
+    const [points, setPoints] = React.useState<Point[]>([])
     const [teamOneActions, setTeamOneActions] = React.useState<
         SavedServerAction[]
     >([])
@@ -33,7 +36,10 @@ export const useGameViewer = (gameId: string) => {
     const [activePoint, setActivePoint] = React.useState<Point | undefined>(
         undefined,
     )
-    const [loading, setLoading] = React.useState(false)
+    const [gameLoading, setGameLoading] = React.useState(false)
+    const [allPointsLoading, setAllPointsLoading] = React.useState(false)
+    const [pointLoading, setPointLoading] = React.useState(false)
+    // const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
 
     const displayedActions = React.useMemo(() => {
@@ -43,17 +49,34 @@ export const useGameViewer = (gameId: string) => {
             : normalizeActions(teamOneActions, teamTwoActions)
     }, [liveActions, teamOneActions, teamTwoActions, activePoint])
 
+    const loading = React.useMemo(() => {
+        return gameLoading || allPointsLoading || pointLoading
+    }, [gameLoading, pointLoading, allPointsLoading])
+
     React.useEffect(() => {
-        setLoading(true)
-        getGameById(gameId)
-            .then(() => {
-                return getPointsByGame(gameId)
+        setGameLoading(true)
+        setAllPointsLoading(true)
+
+        getPointsByGame(gameId)
+            .then(data => {
+                setPoints(data)
             })
             .catch((e: any) => {
                 setError(e.message)
             })
             .finally(() => {
-                setLoading(false)
+                setGameLoading(false)
+            })
+
+        getGameById(gameId)
+            .then(data => {
+                setGame(data)
+            })
+            .catch((e: any) => {
+                setError(e.message)
+            })
+            .finally(() => {
+                setAllPointsLoading(false)
             })
     }, [gameId])
 
@@ -72,9 +95,13 @@ export const useGameViewer = (gameId: string) => {
     }
 
     // public
-    const onOpenPoint = async (point: Point) => {
+    const onSelectPoint = async (id: string) => {
+        const point = getPointById(id)
+        if (!point) {
+            return
+        }
         setActivePoint(point)
-        setLoading(true)
+        setPointLoading(true)
         setError('')
         try {
             if (isLivePoint(point)) {
@@ -85,12 +112,12 @@ export const useGameViewer = (gameId: string) => {
         } catch (e: any) {
             setError(e.message)
         } finally {
-            setLoading(false)
+            setPointLoading(false)
         }
     }
 
     // public
-    const onClosePoint = async (point: Point) => {
+    const onDeselectPoint = async (point: Point) => {
         await deleteLocalActionsByPoint(point._id)
     }
 
@@ -122,5 +149,18 @@ export const useGameViewer = (gameId: string) => {
         setTeamTwoActions(twoActions)
     }
 
-    return { displayedActions, loading, error, onOpenPoint, onClosePoint }
+    // private
+    const getPointById = (id: string): Point | undefined => {
+        return points.find(p => p._id === id)
+    }
+
+    return {
+        displayedActions,
+        error,
+        game,
+        loading,
+        points,
+        onSelectPoint,
+        onDeselectPoint,
+    }
 }
