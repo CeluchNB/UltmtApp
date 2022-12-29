@@ -2,10 +2,10 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
 import PointAccordionGroup from '../../components/organisms/PointAccordionGroup'
 import React from 'react'
+import { ServerAction } from '../../types/action'
 import { ViewGameProps } from '../../types/navigation'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import { getGameById, getPointsByGame } from '../../services/data/game'
-import { useColors, useData } from '../../hooks'
+import { useColors, useGameViewer } from '../../hooks'
 
 const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
     const { colors } = useColors()
@@ -14,19 +14,16 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
     } = route
 
     const {
-        data: game,
-        loading: gameLoading,
-        refetch: updateGame,
-    } = useData(getGameById, gameId)
+        game,
+        points,
+        gameLoading,
+        loading,
+        displayedActions,
+        onSelectPoint,
+    } = useGameViewer(gameId)
 
-    const { data: points, refetch: updatePoints } = useData(
-        getPointsByGame,
-        gameId,
-    )
-
-    const onNextPoint = () => {
-        updateGame()
-        updatePoints()
+    const onSelectAction = (action: ServerAction) => {
+        console.log('action', action)
     }
 
     const styles = StyleSheet.create({
@@ -49,7 +46,11 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ route }) => {
                         )}
                         teamOne={game?.teamOne || { name: '' }}
                         teamTwo={game?.teamTwo || { name: '' }}
-                        onNextPoint={onNextPoint}
+                        loading={loading}
+                        displayedActions={displayedActions}
+                        onSelectPoint={onSelectPoint}
+                        onSelectAction={onSelectAction}
+                        onNextPoint={() => {}}
                     />
                 </View>
             )}

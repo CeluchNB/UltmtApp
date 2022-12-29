@@ -12,7 +12,7 @@ import {
     getLiveActionsByPoint,
 } from '../services/data/point'
 import { getGameById, getPointsByGame } from '../services/data/game'
-import { joinPoint, subscribe } from '../services/data/live-action'
+import { joinPoint, subscribe, unsubscribe } from '../services/data/live-action'
 import { normalizeActions, normalizeLiveActions } from '../utils/point'
 
 const isLivePoint = (point: Point): boolean => {
@@ -39,7 +39,6 @@ export const useGameViewer = (gameId: string) => {
     const [gameLoading, setGameLoading] = React.useState(false)
     const [allPointsLoading, setAllPointsLoading] = React.useState(false)
     const [pointLoading, setPointLoading] = React.useState(false)
-    // const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
 
     const displayedActions = React.useMemo(() => {
@@ -57,6 +56,17 @@ export const useGameViewer = (gameId: string) => {
         setGameLoading(true)
         setAllPointsLoading(true)
 
+        getGameById(gameId)
+            .then(data => {
+                setGame(data)
+            })
+            .catch((e: any) => {
+                setError(e.message)
+            })
+            .finally(() => {
+                setAllPointsLoading(false)
+            })
+
         getPointsByGame(gameId)
             .then(data => {
                 setPoints(data)
@@ -68,23 +78,22 @@ export const useGameViewer = (gameId: string) => {
                 setGameLoading(false)
             })
 
-        getGameById(gameId)
-            .then(data => {
-                setGame(data)
-            })
-            .catch((e: any) => {
-                setError(e.message)
-            })
-            .finally(() => {
-                setAllPointsLoading(false)
-            })
+        return () => {
+            unsubscribe()
+            for (const point of points) {
+                deleteLocalActionsByPoint(point._id)
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gameId])
 
     const subscriptions: SubscriptionObject = {
         client: (data: LiveServerAction) => {
+            console.log('got data', data)
             setLiveActions(curr => [data, ...curr])
         },
         undo: () => {
+            // TODO: potential error with both teams?
             setLiveActions(curr => curr.slice(1))
         },
         error: () => {},
@@ -114,11 +123,6 @@ export const useGameViewer = (gameId: string) => {
         } finally {
             setPointLoading(false)
         }
-    }
-
-    // public
-    const onDeselectPoint = async (point: Point) => {
-        await deleteLocalActionsByPoint(point._id)
     }
 
     // private
@@ -158,9 +162,10 @@ export const useGameViewer = (gameId: string) => {
         displayedActions,
         error,
         game,
+        gameLoading,
+        pointLoading,
         loading,
         points,
         onSelectPoint,
-        onDeselectPoint,
     }
 }

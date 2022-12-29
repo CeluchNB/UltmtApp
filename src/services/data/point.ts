@@ -93,6 +93,7 @@ export const getActionsByPoint = async (
     try {
         const localActions = await localGetActions(pointId, actionIds)
         if (localActions.length === 0) {
+            console.log('networking', team)
             const response = await networkGetActionsByPoint(team, pointId)
             const { actions: networkActions } = response.data
 

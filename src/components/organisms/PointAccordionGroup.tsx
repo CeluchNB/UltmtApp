@@ -6,10 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import Point from '../../types/point'
 import PointAccordion from '../molecules/PointAccordion'
 import { ServerAction } from '../../types/action'
-import { deleteLocalActionsByPoint } from '../../services/data/point'
-import { unsubscribe } from '../../services/data/live-action'
 import { useDispatch } from 'react-redux'
-import { useGameViewer } from '../../hooks'
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect } from 'react'
 import {
@@ -21,16 +18,24 @@ import {
 export interface PointAccordionGroupProps {
     gameId: string
     points: Point[]
+    displayedActions: ServerAction[]
     teamOne: GuestTeam
     teamTwo: GuestTeam
+    loading: boolean
+    onSelectPoint: (pointId: string) => void
+    onSelectAction: (action: ServerAction) => void
     onNextPoint: () => void
 }
 
 const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     gameId,
     points,
+    displayedActions,
     teamOne,
     teamTwo,
+    loading,
+    onSelectPoint,
+    onSelectAction,
     // onNextPoint,
 }) => {
     const navigation =
@@ -38,18 +43,12 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     const dispatch = useDispatch()
     const [expandedId, setExpandedId] = React.useState('')
 
-    const { displayedActions, loading, onSelectPoint } = useGameViewer(gameId)
-
     useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
             await onSelectPoint(expandedId)
         })
         return () => {
             removeListener()
-            unsubscribe()
-            for (const point of points) {
-                deleteLocalActionsByPoint(point._id)
-            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [points, expandedId])
@@ -68,6 +67,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
         await onSelectPoint(id.toString())
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const onActionPress = (
         point: Point,
     ): ((action: ServerAction) => Promise<void>) => {
@@ -104,7 +104,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                             teamOne={teamOne}
                             teamTwo={teamTwo}
                             isLive={isLivePoint(point)}
-                            onActionPress={onActionPress(point)}
+                            onActionPress={onSelectAction}
                         />
                     )
                 }}
