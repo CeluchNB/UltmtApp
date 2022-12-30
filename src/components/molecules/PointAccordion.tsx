@@ -3,6 +3,7 @@ import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import { ServerAction } from '../../types/action'
+import { isLivePoint } from '../../utils/point'
 import { useColors } from '../../hooks'
 import {
     ActivityIndicator,
@@ -22,7 +23,6 @@ interface PointAccordionProps {
     loading: boolean
     teamOne: GuestTeam
     teamTwo: GuestTeam
-    isLive: boolean
     onActionPress: (action: ServerAction) => void
 }
 
@@ -33,11 +33,13 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
     loading,
     teamOne,
     teamTwo,
-    isLive,
     onActionPress,
 }) => {
     const { colors } = useColors()
     const liveOpacity = React.useRef(new Animated.Value(0)).current
+    const isLive = React.useMemo(() => {
+        return isLivePoint(point)
+    }, [point])
 
     useEffect(() => {
         if (isLive) {

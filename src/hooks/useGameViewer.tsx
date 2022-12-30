@@ -1,6 +1,7 @@
 import { Game } from '../types/game'
 import Point from '../types/point'
 import React from 'react'
+import { isLivePoint } from '../utils/point'
 import {
     LiveServerAction,
     SavedServerAction,
@@ -14,10 +15,6 @@ import {
 import { getGameById, getPointsByGame } from '../services/data/game'
 import { joinPoint, subscribe, unsubscribe } from '../services/data/live-action'
 import { normalizeActions, normalizeLiveActions } from '../utils/point'
-
-const isLivePoint = (point: Point): boolean => {
-    return point.teamOneActive || point.teamTwoActive
-}
 
 /**
  * This hook enables easy use of common game viewing functions. Many methods perform mediation
@@ -89,7 +86,6 @@ export const useGameViewer = (gameId: string) => {
 
     const subscriptions: SubscriptionObject = {
         client: (data: LiveServerAction) => {
-            console.log('got data', data)
             setLiveActions(curr => [data, ...curr])
         },
         undo: () => {
@@ -99,7 +95,28 @@ export const useGameViewer = (gameId: string) => {
         error: () => {},
         point: () => {
             setLiveActions([])
-            // onNextPoint()
+            setAllPointsLoading(true)
+            getGameById(gameId)
+                .then(data => {
+                    setGame(data)
+                })
+                .catch((e: any) => {
+                    setError(e.message)
+                })
+
+            getPointsByGame(gameId)
+                .then(data => {
+                    setPoints(data)
+                    if (data.length > 0) {
+                        setActivePoint(data[data.length - 1])
+                    }
+                })
+                .catch((e: any) => {
+                    setError(e.message)
+                })
+                .finally(() => {
+                    setAllPointsLoading(false)
+                })
         },
     }
 
@@ -159,6 +176,8 @@ export const useGameViewer = (gameId: string) => {
     }
 
     return {
+        activePoint,
+        allPointsLoading,
         displayedActions,
         error,
         game,
