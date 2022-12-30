@@ -59,7 +59,9 @@ const SelectPlayersScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     }
 
     const onSetPlayers = async () => {
-        const players = playerList.filter((p, i) => selectedPlayers.includes(i))
+        const players = playerList.filter((_p, i) =>
+            selectedPlayers.includes(i),
+        )
         dispatch(setPlayers({ players }))
     }
 

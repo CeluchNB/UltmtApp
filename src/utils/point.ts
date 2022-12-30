@@ -118,7 +118,7 @@ export const normalizeActions = (
         }
     }
 
-    return result
+    return result.reverse()
 }
 
 export const normalizeLiveActions = (

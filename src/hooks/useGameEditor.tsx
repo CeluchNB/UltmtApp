@@ -1,7 +1,6 @@
 import { GuestUser } from '../types/user'
 import React from 'react'
-import { selectPoint } from '../store/reducers/features/point/livePointReducer'
-import { useSelector } from 'react-redux'
+import { isPullingNext } from '../utils/point'
 import {
     ClientAction,
     ClientActionType,
@@ -16,11 +15,18 @@ import {
     undoAction,
     unsubscribe,
 } from '../services/data/live-action'
+import { createPoint, finishPoint } from '../services/data/point'
 import { getAction, getTeamAction } from '../utils/action'
 import {
     selectGame,
     selectTeam,
+    updateScore,
 } from '../store/reducers/features/game/liveGameReducer'
+import {
+    selectPoint,
+    setPoint,
+} from '../store/reducers/features/point/livePointReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 function immutablePush<T>(newValue: T): (current: T[]) => T[] {
     return (current: T[]): T[] => {
@@ -33,6 +39,7 @@ function immutablePop<T>(current: T[]): T[] {
 }
 
 export const useGameEditor = () => {
+    const dispatch = useDispatch()
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
@@ -135,9 +142,22 @@ export const useGameEditor = () => {
         undoAction(point._id)
     }
 
-    const onNextPoint = () => {
-        setWaiting(true)
-        nextPoint(point._id)
+    const onFinishPoint = async () => {
+        const prevPoint = await finishPoint(point._id)
+        const { teamOneScore, teamTwoScore } = prevPoint
+
+        console.log('finished point')
+        const newPoint = await createPoint(
+            isPullingNext(team, lastAction?.actionType),
+            point.pointNumber + 1,
+        )
+        console.log('created point')
+
+        dispatch(updateScore({ teamOneScore, teamTwoScore }))
+        dispatch(setPoint(newPoint))
+        console.log('calling next')
+        await nextPoint(point._id)
+        console.log('called next')
     }
 
     return {
@@ -153,6 +173,6 @@ export const useGameEditor = () => {
         onPlayerAction,
         onTeamAction,
         onUndo,
-        onNextPoint,
+        onFinishPoint,
     }
 }

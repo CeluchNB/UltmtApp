@@ -7,6 +7,7 @@ import React from 'react'
 import { ServerAction } from '../../types/action'
 
 export interface PointAccordionGroupProps {
+    activePointId?: string
     points: Point[]
     displayedActions: ServerAction[]
     teamOne: GuestTeam
@@ -18,6 +19,7 @@ export interface PointAccordionGroupProps {
 }
 
 const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
+    activePointId,
     points,
     displayedActions,
     teamOne,
@@ -28,6 +30,14 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     // onNextPoint,
 }) => {
     const [expandedId, setExpandedId] = React.useState('')
+
+    React.useEffect(() => {
+        setExpandedId(curr => activePointId || curr)
+        if (activePointId) {
+            onSelectPoint(activePointId)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activePointId])
 
     const onAccordionPress = async (id: string | number) => {
         if (id === expandedId) {

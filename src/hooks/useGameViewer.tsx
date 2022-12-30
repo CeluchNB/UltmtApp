@@ -94,6 +94,7 @@ export const useGameViewer = (gameId: string) => {
         },
         error: () => {},
         point: () => {
+            console.log('got new point')
             setLiveActions([])
             setAllPointsLoading(true)
             getGameById(gameId)
@@ -108,7 +109,8 @@ export const useGameViewer = (gameId: string) => {
                 .then(data => {
                     setPoints(data)
                     if (data.length > 0) {
-                        setActivePoint(data[data.length - 1])
+                        console.log('setting active point', data[0]._id)
+                        setActivePoint(data[0])
                     }
                 })
                 .catch((e: any) => {

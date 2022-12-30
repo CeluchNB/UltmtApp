@@ -149,7 +149,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                 )}
                 {!loading && (
                     <FlatList
-                        data={actions.reverse()}
+                        data={actions}
                         renderItem={({ item }) => {
                             return (
                                 <View

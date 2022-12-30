@@ -11,21 +11,15 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
 import { getValidTeamActions } from '../../utils/action'
-import { nextPoint } from '../../services/data/live-action'
-import { setPoint } from '../../store/reducers/features/point/livePointReducer'
-import { updateScore } from '../../store/reducers/features/game/liveGameReducer'
+import { isPulling } from '../../utils/point'
 import { useColors } from '../../hooks'
-import { useDispatch } from 'react-redux'
 import { useGameEditor } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
-import { createPoint, finishPoint } from '../../services/data/point'
-import { isPulling, isPullingNext } from '../../utils/point'
 import { size, weight } from '../../theme/fonts'
 
 const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     // hooks
     const { colors } = useColors()
-    const dispatch = useDispatch()
     const [finishLoading, setFinishLoading] = React.useState(false)
     const [finishError, setFinishError] = React.useState<string | undefined>(
         undefined,
@@ -44,23 +38,14 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         onPlayerAction,
         onTeamAction,
         onUndo,
+        onFinishPoint: finishPoint,
     } = useGameEditor()
 
     const onFinishPoint = async () => {
         try {
             setFinishLoading(true)
             setFinishError(undefined)
-            const prevPoint = await finishPoint(point._id)
-            const { teamOneScore, teamTwoScore } = prevPoint
-
-            const newPoint = await createPoint(
-                isPullingNext(team, lastAction?.actionType),
-                point.pointNumber + 1,
-            )
-
-            dispatch(updateScore({ teamOneScore, teamTwoScore }))
-            dispatch(setPoint(newPoint))
-            nextPoint(prevPoint._id)
+            await finishPoint()
 
             navigation.reset({ index: 0, routes: [{ name: 'SelectPlayers' }] })
         } catch (e) {
