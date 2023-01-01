@@ -4,14 +4,7 @@ import PointAccordionGroup from '../../components/organisms/PointAccordionGroup'
 import React from 'react'
 import { ServerAction } from '../../types/action'
 import { ViewGameProps } from '../../types/navigation'
-import { isLivePoint } from '../../utils/point'
-import { useDispatch } from 'react-redux'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import {
-    setLiveAction,
-    setSavedAction,
-    setTeams,
-} from '../../store/reducers/features/action/viewAction'
 import { useColors, useGameViewer } from '../../hooks'
 
 const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
@@ -20,7 +13,6 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     } = route
 
     const { colors } = useColors()
-    const dispatch = useDispatch()
     const {
         activePoint,
         allPointsLoading,
@@ -29,6 +21,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         gameLoading,
         loading,
         displayedActions,
+        onSelectAction,
         onSelectPoint,
     } = useGameViewer(gameId)
 
@@ -43,20 +36,12 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         }
     }, [activePoint, navigation, onSelectPoint])
 
-    const onSelectAction = (action: ServerAction) => {
-        const live = isLivePoint(activePoint)
-        if (live) {
-            dispatch(
-                setTeams({ teamOne: game?.teamOne, teamTwo: game?.teamTwo }),
-            )
-            dispatch(setLiveAction(action))
-        } else {
-            dispatch(setSavedAction(action))
-        }
+    const handleSelectAction = (action: ServerAction) => {
+        const { pointId, live } = onSelectAction(action)
         navigation.navigate('Comment', {
             gameId,
             live,
-            pointId: activePoint?._id || '',
+            pointId,
         })
     }
 
@@ -85,7 +70,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                         loading={loading}
                         displayedActions={displayedActions}
                         onSelectPoint={onSelectPoint}
-                        onSelectAction={onSelectAction}
+                        onSelectAction={handleSelectAction}
                         onNextPoint={() => {}}
                     />
                 </View>

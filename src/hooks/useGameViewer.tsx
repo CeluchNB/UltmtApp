@@ -2,9 +2,11 @@ import { Game } from '../types/game'
 import Point from '../types/point'
 import React from 'react'
 import { isLivePoint } from '../utils/point'
+import { useDispatch } from 'react-redux'
 import {
     LiveServerAction,
     SavedServerAction,
+    ServerAction,
     SubscriptionObject,
 } from '../types/action'
 import {
@@ -15,12 +17,18 @@ import {
 import { getGameById, getPointsByGame } from '../services/data/game'
 import { joinPoint, subscribe, unsubscribe } from '../services/data/live-action'
 import { normalizeActions, normalizeLiveActions } from '../utils/point'
+import {
+    setLiveAction,
+    setSavedAction,
+    setTeams,
+} from '../store/reducers/features/action/viewAction'
 
 /**
  * This hook enables easy use of common game viewing functions. Many methods perform mediation
  * between live and saved points.
  */
 export const useGameViewer = (gameId: string) => {
+    const dispatch = useDispatch()
     const [liveActions, setLiveActions] = React.useState<LiveServerAction[]>([])
     const [game, setGame] = React.useState<Game>()
     const [points, setPoints] = React.useState<Point[]>([])
@@ -144,6 +152,21 @@ export const useGameViewer = (gameId: string) => {
         }
     }
 
+    const onSelectAction = (
+        action: ServerAction,
+    ): { gameId: string; pointId: string; live: boolean } => {
+        const live = isLivePoint(activePoint)
+        if (live) {
+            dispatch(
+                setTeams({ teamOne: game?.teamOne, teamTwo: game?.teamTwo }),
+            )
+            dispatch(setLiveAction(action))
+        } else {
+            dispatch(setSavedAction(action))
+        }
+        return { gameId, pointId: activePoint?._id || '', live }
+    }
+
     // private
     const getLiveActions = async (pointId: string) => {
         setLiveActions([])
@@ -187,6 +210,7 @@ export const useGameViewer = (gameId: string) => {
         pointLoading,
         loading,
         points,
+        onSelectAction,
         onSelectPoint,
     }
 }
