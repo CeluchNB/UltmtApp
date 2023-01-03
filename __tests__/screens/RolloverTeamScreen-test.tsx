@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import RolloverTeamScreen from '../../src/screens/RolloverTeamScreen'
 import { Team } from '../../src/types/team'
+import mockDate from 'mockdate'
 import store from '../../src/store/store'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
@@ -24,6 +25,11 @@ const props: Props = {
 
 beforeAll(() => {
     store.dispatch(ManagedTeamReducer.setTeam({ _id: 'team1' }))
+    mockDate.set('06/01/2022')
+})
+
+afterAll(() => {
+    mockDate.reset()
 })
 
 it('should match snapshot', async () => {

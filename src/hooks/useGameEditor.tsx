@@ -57,16 +57,18 @@ export const useGameEditor = () => {
                 successfulResponse()
                 setActions(immutablePush(data))
             },
-            undo: () => {
-                successfulResponse()
-                setActions(immutablePop)
+            undo: ({ team: undoTeamNumber }) => {
+                if (undoTeamNumber === team) {
+                    successfulResponse()
+                    setActions(immutablePop)
+                }
             },
             error: data => {
                 setError(data?.message)
             },
             point: () => {},
         }
-    }, [])
+    }, [team])
 
     React.useEffect(() => {
         setWaiting(true)
@@ -146,18 +148,14 @@ export const useGameEditor = () => {
         const prevPoint = await finishPoint(point._id)
         const { teamOneScore, teamTwoScore } = prevPoint
 
-        console.log('finished point')
         const newPoint = await createPoint(
             isPullingNext(team, lastAction?.actionType),
             point.pointNumber + 1,
         )
-        console.log('created point')
 
         dispatch(updateScore({ teamOneScore, teamTwoScore }))
         dispatch(setPoint(newPoint))
-        console.log('calling next')
         await nextPoint(point._id)
-        console.log('called next')
     }
 
     return {

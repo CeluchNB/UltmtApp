@@ -96,9 +96,14 @@ export const useGameViewer = (gameId: string) => {
         client: (data: LiveServerAction) => {
             setLiveActions(curr => [data, ...curr])
         },
-        undo: () => {
-            // TODO: potential error with both teams?
-            setLiveActions(curr => curr.slice(1))
+        undo: ({ team, actionNumber }) => {
+            setLiveActions(curr => {
+                return curr.filter(
+                    a =>
+                        a.actionNumber !== actionNumber ||
+                        a.teamNumber !== team,
+                )
+            })
         },
         error: () => {},
         point: () => {

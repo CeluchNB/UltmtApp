@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
+import mockDate from 'mockdate'
 import renderer from 'react-test-renderer'
 import store from '../../src/store/store'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
@@ -21,7 +22,13 @@ const props: Props = {
     route: {} as any,
 }
 
-beforeAll(() => {})
+beforeAll(() => {
+    mockDate.set('06/01/2022')
+})
+
+afterAll(() => {
+    mockDate.reset()
+})
 
 beforeEach(async () => {
     navigate.mockReset()
@@ -29,7 +36,6 @@ beforeEach(async () => {
 })
 
 it('should match snapshot', async () => {
-    jest.useFakeTimers()
     const snapshot = renderer.create(
         <Provider store={store}>
             <NavigationContainer>
