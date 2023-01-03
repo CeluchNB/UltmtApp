@@ -95,7 +95,6 @@ export const deleteComment = async (
 
 export const nextPoint = async (pointId: string) => {
     const actionSocket = await getSocket()
-    console.log('got socket')
     actionSocket.emit('point:next', JSON.stringify({ pointId }))
 }
 

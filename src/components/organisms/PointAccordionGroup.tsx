@@ -15,7 +15,6 @@ export interface PointAccordionGroupProps {
     loading: boolean
     onSelectPoint: (pointId: string) => void
     onSelectAction: (action: ServerAction) => void
-    onNextPoint: () => void
 }
 
 const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
@@ -27,7 +26,6 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     loading,
     onSelectPoint,
     onSelectAction,
-    // onNextPoint,
 }) => {
     const [expandedId, setExpandedId] = React.useState('')
 

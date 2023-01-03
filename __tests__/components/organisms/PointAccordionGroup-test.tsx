@@ -1,5 +1,3 @@
-import * as ActionData from '../../../src/services/data/live-action'
-import * as PointData from '../../../src/services/data/point'
 import { GuestTeam } from '../../../src/types/team'
 import { NavigationContainer } from '@react-navigation/native'
 import Point from '../../../src/types/point'
@@ -10,12 +8,11 @@ import {
     ActionType,
     LiveServerAction,
     SavedServerAction,
-    SubscriptionObject,
 } from '../../../src/types/action'
 import PointAccordionGroup, {
     PointAccordionGroupProps,
 } from '../../../src/components/organisms/PointAccordionGroup'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const mockedNavigate = jest.fn()
@@ -155,39 +152,17 @@ const liveActions: LiveServerAction[] = [
 
 describe('PointAccordionGroup', () => {
     let props: PointAccordionGroupProps
-    const deleteSpy = jest
-        .spyOn(PointData, 'deleteLocalActionsByPoint')
-        .mockReturnValue(Promise.resolve())
-    const savedSpy = jest
-        .spyOn(PointData, 'getActionsByPoint')
-        .mockImplementation((team, _) => {
-            if (team === 'one') {
-                return Promise.resolve(savedActions)
-            }
-            return Promise.resolve([])
-        })
-    const liveSpy = jest
-        .spyOn(PointData, 'getLiveActionsByPoint')
-        .mockReturnValue(Promise.resolve(liveActions))
-    let subs: SubscriptionObject
-    jest.spyOn(ActionData, 'subscribe').mockImplementation(
-        async subscriptions => {
-            subs = subscriptions
-        },
-    )
 
     beforeEach(() => {
         props = {
-            gameId: 'game1',
+            displayedActions: liveActions,
+            loading: false,
             points,
             teamOne,
             teamTwo,
-            onNextPoint: jest.fn(),
+            onSelectPoint: jest.fn(),
+            onSelectAction: jest.fn(),
         }
-
-        deleteSpy.mockClear()
-        savedSpy.mockClear()
-        liveSpy.mockClear()
     })
 
     it('should match snapshot', async () => {
@@ -203,41 +178,47 @@ describe('PointAccordionGroup', () => {
     })
 
     it('should display live point', async () => {
-        const { getAllByText, getByText } = render(
+        const { getAllByText, queryByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
                     <PointAccordionGroup {...props} />
                 </Provider>
             </NavigationContainer>,
         )
+
+        expect(queryByText('huck')).toBeFalsy()
+
         const point = getAllByText('Temper')[0]
         fireEvent.press(point)
 
         await waitFor(() => {
-            expect(liveSpy).toHaveBeenCalled()
+            expect(props.onSelectPoint).toHaveBeenCalled()
         })
-        expect(getByText('huck')).toBeTruthy()
+        expect(queryByText('huck')).toBeTruthy()
     })
 
     it('should display saved point', async () => {
-        const { getAllByText, getByText } = render(
+        props.displayedActions = savedActions
+        const { getAllByText, queryByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
                     <PointAccordionGroup {...props} />
                 </Provider>
             </NavigationContainer>,
         )
+        expect(queryByText('pickup')).toBeFalsy()
+
         const point = getAllByText('Temper')[1]
         fireEvent.press(point)
 
         await waitFor(() => {
-            expect(savedSpy).toHaveBeenCalled()
+            expect(props.onSelectPoint).toHaveBeenCalled()
         })
-        expect(getByText('pickup')).toBeTruthy()
+        expect(queryByText('pickup')).toBeTruthy()
     })
 
     it('should handle actions', async () => {
-        const { getAllByText, getByText, queryByText } = render(
+        const { getAllByText, getByText, queryByText, rerender } = render(
             <NavigationContainer>
                 <Provider store={store}>
                     <PointAccordionGroup {...props} />
@@ -248,33 +229,38 @@ describe('PointAccordionGroup', () => {
         fireEvent.press(point)
 
         await waitFor(() => {
-            expect(liveSpy).toHaveBeenCalled()
+            expect(props.onSelectPoint).toHaveBeenCalled()
         })
 
-        await act(async () => {
-            subs.client({
-                tags: ['newaction'],
-                comments: [],
-                actionType: ActionType.CATCH,
-                actionNumber: 4,
-                teamNumber: 'one',
-            })
-        })
+        props.displayedActions.push({
+            tags: ['newaction'],
+            comments: [],
+            actionType: ActionType.CATCH,
+            actionNumber: 4,
+            teamNumber: 'one',
+        } as LiveServerAction)
+
+        rerender(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <PointAccordionGroup {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
         expect(getByText('newaction')).toBeTruthy()
 
-        await act(async () => {
-            subs.undo({})
-        })
+        props.displayedActions.pop()
+        rerender(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <PointAccordionGroup {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
         expect(queryByText('newaction')).toBeFalsy()
-
-        await act(async () => {
-            subs.point({})
-        })
-        expect(queryByText('huck')).toBeFalsy()
-        expect(props.onNextPoint).toHaveBeenCalled()
     })
 
-    it('should handle live action press', async () => {
+    it('should handle action press', async () => {
         const { getAllByText, getByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
@@ -286,49 +272,11 @@ describe('PointAccordionGroup', () => {
         fireEvent.press(point)
 
         await waitFor(() => {
-            expect(liveSpy).toHaveBeenCalled()
+            expect(props.onSelectPoint).toHaveBeenCalled()
         })
         expect(getByText('huck')).toBeTruthy()
         fireEvent.press(getByText('huck'))
 
-        expect(mockedNavigate).toHaveBeenCalledWith('Comment', {
-            gameId: 'game1',
-            live: true,
-            pointId: 'point3',
-        })
-
-        expect(store.getState().viewAction.liveAction).toMatchObject(
-            liveActions[0],
-        )
-        expect(store.getState().viewAction.teamOne).toMatchObject(teamOne)
-        expect(store.getState().viewAction.teamTwo).toMatchObject(teamTwo)
-    })
-
-    it('should handle saved action press', async () => {
-        const { getAllByText, getByText } = render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <PointAccordionGroup {...props} />
-                </Provider>
-            </NavigationContainer>,
-        )
-        const point = getAllByText('Temper')[1]
-        fireEvent.press(point)
-
-        await waitFor(() => {
-            expect(savedSpy).toHaveBeenCalled()
-        })
-        expect(getByText('pickup')).toBeTruthy()
-        fireEvent.press(getByText('pickup'))
-
-        expect(mockedNavigate).toHaveBeenCalledWith('Comment', {
-            gameId: 'game1',
-            live: false,
-            pointId: 'point2',
-        })
-
-        expect(store.getState().viewAction.savedAction).toMatchObject(
-            savedActions[0],
-        )
+        expect(props.onSelectAction).toHaveBeenCalled()
     })
 })

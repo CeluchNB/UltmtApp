@@ -71,7 +71,6 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                         displayedActions={displayedActions}
                         onSelectPoint={onSelectPoint}
                         onSelectAction={handleSelectAction}
-                        onNextPoint={() => {}}
                     />
                 </View>
             )}
