@@ -8,7 +8,6 @@ import EditField from '../components/molecules/EditField'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import { logout } from '../services/data/auth'
 import { useColors } from '../hooks'
-import { AllScreenProps, SecureEditField } from '../types/navigation'
 import {
     Modal,
     SafeAreaView,
@@ -18,6 +17,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import { SettingsScreenProps, SecureEditField } from '../types/navigation'
 import {
     selectAccount,
     setPrivate,
@@ -26,7 +26,7 @@ import {
 import { size, weight } from '../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
-const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
+const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
     const { colors, isDarkMode } = useColors()
 
     const dispatch = useDispatch<AppDispatch>()
@@ -116,7 +116,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
 
     const onLogout = async () => {
         await logout()
-        navigation.navigate('Login')
+        navigation.navigate('Tabs', { screen: 'Account', params: { screen: 'Login' } })
     }
 
     const onChangeName = async (firstName: string, lastName: string) => {
@@ -269,7 +269,7 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                                             try {
                                                 await UserData.deleteAccount()
                                                 setModalVisible(false)
-                                                navigation.navigate('Login')
+                                                navigation.navigate('Tabs', { screen: 'Account', params: { screen: 'Login' } })
                                             } catch (e: any) {
                                                 setDeleteError(
                                                     e.message ??

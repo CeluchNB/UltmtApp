@@ -1441,3 +1441,5 @@ exports[`profile screen matches snapshot 1`] = `
   </RCTScrollView>
 </RCTSafeAreaView>
 `;
+
+exports[`should handle logout click 1`] = `null`;
