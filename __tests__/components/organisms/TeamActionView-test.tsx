@@ -33,17 +33,72 @@ const props = {
 }
 
 const playerList1 = [
-    { _id: 'realid1', firstName: 'First 1', lastName: 'Last 1' },
-    { firstName: 'First 2', lastName: 'Last 2' },
-    { firstName: 'First 3', lastName: 'Last 3' },
-    { firstName: 'First 4', lastName: 'Last 4' },
-    { firstName: 'First 5', lastName: 'Last 5' },
-    { firstName: 'First 6', lastName: 'Last 6' },
-    { firstName: 'First 7', lastName: 'Last 7' },
-    { firstName: 'First 8', lastName: 'Last 8' },
-    { firstName: 'First 9', lastName: 'Last 9' },
-    { _id: 'realid10', firstName: 'First 10', lastName: 'Last 10' },
-    { _id: 'realid11', firstName: 'First 11', lastName: 'Last 11' },
+    {
+        _id: 'realid1',
+        firstName: 'First 1',
+        lastName: 'Last 1',
+        username: 'firstlast1',
+    },
+    {
+        _id: 'realid2',
+        firstName: 'First 2',
+        lastName: 'Last 2',
+        username: 'firstlast2',
+    },
+    {
+        _id: 'realid3',
+        firstName: 'First 3',
+        lastName: 'Last 3',
+        username: 'firstlast3',
+    },
+    {
+        _id: 'realid4',
+        firstName: 'First 4',
+        lastName: 'Last 4',
+        username: 'firstlast4',
+    },
+    {
+        _id: 'realid5',
+        firstName: 'First 5',
+        lastName: 'Last 5',
+        username: 'firstlast5',
+    },
+    {
+        _id: 'realid6',
+        firstName: 'First 6',
+        lastName: 'Last 6',
+        username: 'firstlast6',
+    },
+    {
+        _id: 'realid7',
+        firstName: 'First 7',
+        lastName: 'Last 7',
+        username: 'firstlast7',
+    },
+    {
+        _id: 'realid8',
+        firstName: 'First 8',
+        lastName: 'Last 8',
+        username: 'firstlast8',
+    },
+    {
+        _id: 'realid9',
+        firstName: 'First 9',
+        lastName: 'Last 9',
+        username: 'firstlast9',
+    },
+    {
+        _id: 'realid10',
+        firstName: 'First 10',
+        lastName: 'Last 10',
+        username: 'firstlast10',
+    },
+    {
+        _id: 'realid11',
+        firstName: 'First 11',
+        lastName: 'Last 11',
+        username: 'firstlast11',
+    },
 ]
 
 const point: Point = {

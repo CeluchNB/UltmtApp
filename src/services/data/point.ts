@@ -115,7 +115,7 @@ export const getActionsByPoint = async (
  * Method to delete all actions for a specific point
  * @param pointId point id actions belong to
  */
-export const deleteAllActionsByPoint = async (pointId: string) => {
+export const deleteLocalActionsByPoint = async (pointId: string) => {
     try {
         await localDeleteAllActionsByPoint(pointId)
     } catch (e) {

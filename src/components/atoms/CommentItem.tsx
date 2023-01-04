@@ -47,7 +47,7 @@ const CommentItem: React.FC<CommentInputProps> = ({
                 </Text>
                 <Text style={styles.comment}>{commentText}</Text>
             </View>
-            {userId && userId === comment.user._id && (
+            {userId.length > 0 && userId === comment.user._id && (
                 <IconButton
                     icon="close"
                     color={colors.error}

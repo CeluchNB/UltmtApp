@@ -16,8 +16,8 @@ import {
  * @returns array of valid action
  */
 export const getValidPlayerActions = (
-    user: number,
-    actingUser: number,
+    user: string,
+    actingUser: string,
     action?: ClientActionType,
     pulling?: boolean,
 ): ClientActionType[] => {
@@ -58,7 +58,7 @@ export const getValidPlayerActions = (
  * @returns one of TEAM_ACTION_MAP's values
  */
 export const getValidTeamActions = (
-    actionStack: { playerIndex?: number; actionType: ClientActionType }[],
+    actionStack: { actionType: ClientActionType }[],
 ) => {
     for (const action of actionStack.slice().reverse()) {
         if (
@@ -159,6 +159,13 @@ export const getTeamAction = (
         }
         return {
             actionType,
+            tags,
+        }
+    }
+    if (action === ActionType.CALL_ON_FIELD) {
+        return {
+            actionType: action,
+            playerOne,
             tags,
         }
     }

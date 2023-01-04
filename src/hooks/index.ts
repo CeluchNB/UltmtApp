@@ -1,2 +1,5 @@
 export * from './useColors'
 export * from './useData'
+export * from './useGameEditor'
+export * from './useGameViewer'
+export * from './useCommenter'

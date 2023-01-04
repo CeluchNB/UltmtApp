@@ -1,3 +1,4 @@
+import '@testing-library/jest-native/extend-expect'
 import * as ActionData from '../../../src/services/data/live-action'
 import * as PointServices from '../../../src/services/network/point'
 import { LiveGameProps } from '../../../src/types/navigation'
@@ -9,7 +10,12 @@ import React from 'react'
 import { game } from '../../../fixtures/data'
 import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import {
+    ActionType,
+    LiveServerAction,
+    SubscriptionObject,
+} from '../../../src/types/action'
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 import {
     setGame,
     setTeam,
@@ -36,13 +42,38 @@ const props: LiveGameProps = {
 }
 
 const playerList1 = [
-    { firstName: 'First 8', lastName: 'Last 8' },
-    { firstName: 'First 9', lastName: 'Last 9' },
-    { firstName: 'First 10', lastName: 'Last 10' },
-    { firstName: 'First 11', lastName: 'Last 11' },
-    { firstName: 'First 12', lastName: 'Last 12' },
-    { firstName: 'First 13', lastName: 'Last 13' },
-    { firstName: 'First 14', lastName: 'Last 14' },
+    { _id: 'p8', firstName: 'First 8', lastName: 'Last 8', username: 'fl8' },
+    { _id: 'p9', firstName: 'First 9', lastName: 'Last 9', username: 'fl9' },
+    {
+        _id: 'p10',
+        firstName: 'First 10',
+        lastName: 'Last 10',
+        username: 'fl10',
+    },
+    {
+        _id: 'p11',
+        firstName: 'First 11',
+        lastName: 'Last 11',
+        username: 'fl11',
+    },
+    {
+        _id: 'p12',
+        firstName: 'First 12',
+        lastName: 'Last 12',
+        username: 'fl12',
+    },
+    {
+        _id: 'p13',
+        firstName: 'First 13',
+        lastName: 'Last 13',
+        username: 'fl13',
+    },
+    {
+        _id: 'p14',
+        firstName: 'First 14',
+        lastName: 'Last 14',
+        username: 'fl14',
+    },
 ]
 
 const point: Point = {
@@ -76,10 +107,10 @@ beforeEach(() => {
     jest.spyOn(ActionData, 'joinPoint').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'addAction').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'undoAction').mockReturnValue(Promise.resolve())
-    jest.spyOn(ActionData, 'subscribe').mockReturnValue(Promise.resolve())
+    // jest.spyOn(ActionData, 'subscribe').mockReturnValue(Promise.resolve())
 })
 
-it('should match snapshot', () => {
+it('should match snapshot', async () => {
     const snapshot = render(
         <NavigationContainer>
             <Provider store={store}>
@@ -87,6 +118,12 @@ it('should match snapshot', () => {
             </Provider>
         </NavigationContainer>,
     )
+
+    const pullBtn = snapshot.getAllByText('Pull')[2]
+
+    await waitFor(() => {
+        expect(pullBtn).not.toBeDisabled()
+    })
 
     expect(snapshot.toJSON()).toMatchSnapshot()
 })
@@ -122,6 +159,11 @@ it('should handle basic D point', async () => {
                 config: {},
             }),
         )
+    let subscriptions: SubscriptionObject
+    jest.spyOn(ActionData, 'subscribe').mockImplementationOnce(async subs => {
+        subscriptions = subs
+    })
+
     const { getAllByText, getByText } = render(
         <NavigationContainer>
             <Provider store={store}>
@@ -130,8 +172,34 @@ it('should handle basic D point', async () => {
         </NavigationContainer>,
     )
 
-    fireEvent.press(getAllByText('Pull')[2])
+    const pullBtn = getAllByText('Pull')[2]
+
+    await waitFor(() => {
+        expect(pullBtn).not.toBeDisabled()
+    })
+
+    fireEvent.press(pullBtn)
+    await act(async () => {
+        const pull: LiveServerAction = {
+            actionNumber: 1,
+            actionType: ActionType.PULL,
+            teamNumber: 'one',
+            comments: [],
+            tags: [],
+        }
+        subscriptions.client(pull)
+    })
     fireEvent.press(getByText('they score'))
+    await act(async () => {
+        const theyScore: LiveServerAction = {
+            actionNumber: 2,
+            actionType: ActionType.TEAM_TWO_SCORE,
+            teamNumber: 'one',
+            comments: [],
+            tags: [],
+        }
+        subscriptions.client(theyScore)
+    })
     fireEvent.press(getByText('finish point'))
 
     await waitFor(() => {
@@ -178,6 +246,12 @@ it('should handle basic O point', async () => {
                 config: {},
             }),
         )
+
+    let subscriptions: SubscriptionObject
+    jest.spyOn(ActionData, 'subscribe').mockImplementationOnce(async subs => {
+        subscriptions = subs
+    })
+
     const { getAllByText, getByText, getByTestId } = render(
         <NavigationContainer>
             <Provider store={store}>
@@ -186,12 +260,70 @@ it('should handle basic O point', async () => {
         </NavigationContainer>,
     )
 
-    fireEvent.press(getAllByText('Catch')[1])
+    const catchBtn = getAllByText('Catch')[1]
+    await waitFor(() => {
+        expect(catchBtn).not.toBeDisabled()
+    })
+
+    fireEvent.press(catchBtn)
+    await act(async () => {
+        const catchAction: LiveServerAction = {
+            actionNumber: 1,
+            actionType: ActionType.CATCH,
+            teamNumber: 'two',
+            comments: [],
+            tags: [],
+        }
+        subscriptions.client(catchAction)
+    })
     fireEvent.press(getAllByText('Catch')[2])
+    await act(async () => {
+        const catchAction: LiveServerAction = {
+            actionNumber: 2,
+            actionType: ActionType.CATCH,
+            teamNumber: 'two',
+            comments: [],
+            tags: [],
+        }
+        subscriptions.client(catchAction)
+    })
     fireEvent.press(getAllByText('Catch')[3])
+    await act(async () => {
+        const catchAction: LiveServerAction = {
+            actionNumber: 3,
+            actionType: ActionType.CATCH,
+            teamNumber: 'two',
+            comments: [],
+            tags: [],
+        }
+        subscriptions.client(catchAction)
+    })
     fireEvent.press(getAllByText('Catch')[4])
+    await act(async () => {
+        const catchAction: LiveServerAction = {
+            actionNumber: 4,
+            actionType: ActionType.CATCH,
+            teamNumber: 'two',
+            comments: [],
+            tags: [],
+        }
+        subscriptions.client(catchAction)
+    })
     fireEvent.press(getByTestId('undo-button'))
+    await act(async () => {
+        subscriptions.undo({})
+    })
     fireEvent.press(getAllByText('score')[4])
+    await act(async () => {
+        const scoreAction: LiveServerAction = {
+            actionNumber: 5,
+            actionType: ActionType.TEAM_ONE_SCORE,
+            teamNumber: 'two',
+            comments: [],
+            tags: [],
+        }
+        subscriptions.client(scoreAction)
+    })
     fireEvent.press(getByText('finish point'))
 
     await waitFor(() => {

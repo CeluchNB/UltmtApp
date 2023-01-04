@@ -19,7 +19,10 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const props: ViewGameProps = {
-    navigation: {} as any,
+    navigation: {
+        addListener: jest.fn().mockReturnValue(() => {}),
+        navigate: jest.fn(),
+    } as any,
     route: { params: { gameId: 'game1' } } as any,
 }
 
@@ -154,8 +157,9 @@ describe('ViewGameScreen', () => {
             subs = subscriptions
         },
     )
+    jest.spyOn(ActionData, 'joinPoint').mockReturnValue(Promise.resolve())
     beforeEach(() => {
-        jest.spyOn(PointData, 'deleteAllActionsByPoint').mockReturnValue(
+        jest.spyOn(PointData, 'deleteLocalActionsByPoint').mockReturnValue(
             Promise.resolve(),
         )
         jest.spyOn(PointData, 'getActionsByPoint').mockReturnValue(
@@ -166,6 +170,7 @@ describe('ViewGameScreen', () => {
         )
         jest.clearAllMocks()
     })
+
     it('should match snapshot after data loaded', async () => {
         const snapshot = render(
             <NavigationContainer>
@@ -210,5 +215,154 @@ describe('ViewGameScreen', () => {
 
         expect(gameSpy).toHaveBeenCalled()
         expect(pointsSpy).toHaveBeenCalled()
+    })
+
+    it('handles live point functionality', async () => {
+        const { getAllByText, queryByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <ViewGameScreen {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+
+        await waitFor(async () => {
+            expect(getAllByText('Temper').length).toBe(4)
+        })
+
+        const livePoint = getAllByText('Temper')[1]
+        fireEvent.press(livePoint)
+
+        await waitFor(async () => {
+            expect(queryByText('huck')).toBeTruthy()
+        })
+
+        act(() => {
+            subs.client({
+                actionNumber: 4,
+                actionType: ActionType.CATCH,
+                tags: ['newaction'],
+                comments: [],
+                playerOne: {
+                    _id: 'player1',
+                    firstName: 'First1',
+                    lastName: 'Last1',
+                    username: 'firstlast1',
+                },
+                teamNumber: 'one',
+            } as LiveServerAction)
+        })
+
+        await waitFor(async () => {
+            expect(queryByText('newaction')).toBeTruthy()
+        })
+
+        act(() => {
+            subs.undo({ actionNumber: 4, team: 'one' })
+        })
+
+        await waitFor(async () => {
+            expect(queryByText('newaction')).toBeFalsy()
+        })
+
+        act(() => {
+            subs.point({})
+        })
+
+        await waitFor(async () => {
+            expect(gameSpy).toHaveBeenCalledTimes(2)
+        })
+        expect(pointsSpy).toHaveBeenCalledTimes(2)
+    })
+
+    it('handles saved point functionality', async () => {
+        const { getAllByText, queryAllByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <ViewGameScreen {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+
+        await waitFor(async () => {
+            expect(getAllByText('Temper').length).toBe(4)
+        })
+
+        const savedPoint = getAllByText('Temper')[2]
+        fireEvent.press(savedPoint)
+
+        await waitFor(async () => {
+            expect(queryAllByText('pickup').length).toBe(2)
+        })
+    })
+
+    it('handles live action select', async () => {
+        const { getAllByText, getByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <ViewGameScreen {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+
+        await waitFor(async () => {
+            expect(getAllByText('Temper').length).toBe(4)
+        })
+
+        const livePoint = getAllByText('Temper')[1]
+        fireEvent.press(livePoint)
+
+        await waitFor(async () => {
+            expect(getByText('huck')).toBeTruthy()
+        })
+
+        fireEvent.press(getByText('huck'))
+
+        expect(props.navigation.navigate).toHaveBeenCalledWith('Comment', {
+            gameId: 'game1',
+            pointId: 'point3',
+            live: true,
+        })
+
+        expect(store.getState().viewAction.liveAction).toMatchObject(
+            liveActions[0],
+        )
+        expect(store.getState().viewAction.teamOne).toMatchObject(game.teamOne)
+        expect(store.getState().viewAction.teamTwo).toMatchObject(game.teamTwo)
+    })
+
+    it('handles saved action select', async () => {
+        const { getAllByText, queryAllByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <ViewGameScreen {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+
+        await waitFor(async () => {
+            expect(getAllByText('Temper').length).toBe(4)
+        })
+
+        const livePoint = getAllByText('Temper')[2]
+        fireEvent.press(livePoint)
+
+        await waitFor(async () => {
+            expect(queryAllByText('pickup')).toBeTruthy()
+        })
+
+        fireEvent.press(queryAllByText('pickup')[0])
+
+        expect(props.navigation.navigate).toHaveBeenCalledWith('Comment', {
+            gameId: 'game1',
+            pointId: 'point2',
+            live: false,
+        })
+
+        expect(store.getState().viewAction.savedAction).toMatchObject(
+            savedActions[0],
+        )
+        expect(store.getState().viewAction.teamOne).toMatchObject(game.teamOne)
+        expect(store.getState().viewAction.teamTwo).toMatchObject(game.teamTwo)
     })
 })

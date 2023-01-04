@@ -1,32 +1,25 @@
 import { ClientActionType } from '../../types/action'
-import { GuestUser } from '../../types/user'
-import { IconButton } from 'react-native-paper'
+import { DisplayUser } from '../../types/user'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
 import { getValidPlayerActions } from '../../utils/action'
-import { useColors } from '../../hooks'
-import {
-    ActivityIndicator,
-    FlatList,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { FlatList, View } from 'react-native'
 
 interface PlayerActionViewProps {
-    players: GuestUser[]
+    players: DisplayUser[]
     pulling: boolean
     prevAction?: ClientActionType
-    activePlayer?: number
-    undoDisabled: boolean
+    activePlayer?: string
     loading: boolean
-    error?: string
-    onAction: (index: number, action: ClientActionType, tags: string[]) => void
-    onUndo: () => void
+    onAction: (
+        action: ClientActionType,
+        tags: string[],
+        playerOne: DisplayUser,
+    ) => void
 }
 
 type PlayerAction = {
-    player: GuestUser
+    player: DisplayUser
     actions: ClientActionType[]
 }
 
@@ -35,19 +28,15 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     pulling,
     prevAction,
     activePlayer,
-    undoDisabled,
     loading,
-    error,
     onAction,
-    onUndo,
 }) => {
-    const { colors } = useColors()
     const playerActions: PlayerAction[] = React.useMemo(() => {
         const actions = []
-        for (let i = 0; i < players.length; i++) {
+        for (const player of players) {
             let action = getValidPlayerActions(
-                i,
-                activePlayer || 0,
+                player._id,
+                activePlayer || '',
                 prevAction,
                 pulling,
             )
@@ -60,42 +49,15 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     }, [players, activePlayer, prevAction, pulling])
 
     const onPress = (
-        index: number,
         action: ClientActionType,
         tags: string[],
+        player: DisplayUser,
     ) => {
-        onAction(index, action, tags)
+        onAction(action, tags, player)
     }
-
-    const styles = StyleSheet.create({
-        headerContainer: {
-            flexDirection: 'row',
-            alignSelf: 'flex-end',
-        },
-        error: {
-            color: colors.error,
-            width: '80%',
-        },
-    })
 
     return (
         <View>
-            <View style={styles.headerContainer}>
-                <Text style={styles.error}>{error}</Text>
-                {!error && loading && (
-                    <ActivityIndicator
-                        color={colors.textPrimary}
-                        size="small"
-                    />
-                )}
-                <IconButton
-                    icon="undo"
-                    color={colors.textPrimary}
-                    onPress={onUndo}
-                    disabled={undoDisabled}
-                    testID="undo-button"
-                />
-            </View>
             <FlatList
                 data={playerActions}
                 renderItem={({ item, index }) => {
@@ -105,8 +67,9 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
                             key={index}
                             player={player}
                             actions={actions}
+                            loading={loading}
                             onAction={(action, tags) => {
-                                onPress(index, action, tags)
+                                onPress(action, tags, player)
                             }}
                         />
                     )

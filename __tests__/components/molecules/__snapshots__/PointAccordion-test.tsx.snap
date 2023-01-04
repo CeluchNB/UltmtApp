@@ -180,6 +180,27 @@ exports[`PointAccordion should match snapshot closed 1`] = `
           >
             <View>
               <View
+                style={
+                  Object {
+                    "marginBottom": -10,
+                  }
+                }
+              >
+                <View
+                  collapsable={false}
+                  style={
+                    Object {
+                      "alignSelf": "flex-end",
+                      "backgroundColor": "red",
+                      "borderRadius": 5,
+                      "height": 10,
+                      "opacity": 0,
+                      "width": 10,
+                    }
+                  }
+                />
+              </View>
+              <View
                 pointerEvents="box-none"
                 style={
                   Array [

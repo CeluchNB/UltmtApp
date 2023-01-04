@@ -1,9 +1,14 @@
+import Point from '../types/point'
 import {
     ActionType,
     ClientActionType,
     LiveServerAction,
     ServerAction,
 } from '../types/action'
+
+export const isLivePoint = (point?: Point): boolean => {
+    return point?.teamOneActive || point?.teamTwoActive || false
+}
 
 export const isPulling = (
     point?: { pullingTeam: { _id?: string } },
@@ -113,7 +118,7 @@ export const normalizeActions = (
         }
     }
 
-    return result
+    return result.reverse()
 }
 
 export const normalizeLiveActions = (

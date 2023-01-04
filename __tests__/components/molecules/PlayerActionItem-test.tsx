@@ -1,4 +1,5 @@
 import { ActionType } from '../../../src/types/action'
+import { DisplayUser } from '../../../src/types/user'
 import PlayerActionItem from '../../../src/components/molecules/PlayerActionItem'
 import { Provider } from 'react-redux'
 import React from 'react'
@@ -15,17 +16,21 @@ afterAll(() => {
     console.warn = originalWarn
 })
 
+const player: DisplayUser = {
+    _id: 'user1',
+    firstName: 'First',
+    lastName: 'Last',
+    username: 'firstlast',
+}
+
 it('should match snapshot', () => {
     const snapshot = render(
         <Provider store={store}>
             <PlayerActionItem
-                player={{
-                    firstName: 'First',
-                    lastName: 'Last',
-                    username: 'firstlast',
-                }}
+                player={player}
                 actions={[ActionType.BLOCK, ActionType.CATCH, 'score']}
                 onAction={jest.fn()}
+                loading={false}
             />
         </Provider>,
     )
@@ -37,16 +42,17 @@ it('should call action appropriately', () => {
     const { getByText } = render(
         <Provider store={store}>
             <PlayerActionItem
-                player={{ firstName: 'First', lastName: 'Last' }}
+                player={player}
                 actions={[ActionType.BLOCK, ActionType.CATCH, 'score']}
                 onAction={spy}
+                loading={false}
             />
         </Provider>,
     )
 
     const scoreBtn = getByText('score')
     fireEvent.press(scoreBtn)
-    expect(spy).toHaveBeenCalledWith('score', [])
+    expect(spy).toHaveBeenCalledWith('score', [], player)
 })
 
 it('should handle tag call', async () => {
@@ -54,9 +60,10 @@ it('should handle tag call', async () => {
     const { getByText } = render(
         <Provider store={store}>
             <PlayerActionItem
-                player={{ firstName: 'First', lastName: 'Last' }}
+                player={player}
                 actions={[ActionType.BLOCK, ActionType.CATCH, 'score']}
                 onAction={spy}
+                loading={false}
             />
         </Provider>,
     )
@@ -71,6 +78,6 @@ it('should handle tag call', async () => {
     fireEvent.press(doneBtn)
 
     await waitFor(() => {
-        expect(spy).toHaveBeenCalledWith('score', ['huck'])
+        expect(spy).toHaveBeenCalledWith('score', ['huck'], player)
     })
 })

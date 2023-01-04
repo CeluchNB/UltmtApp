@@ -10,12 +10,18 @@ import { StyleSheet, Text, View } from 'react-native'
 interface PlayerActionItemProps {
     player: GuestUser
     actions: ClientActionType[]
-    onAction: (action: ClientActionType, tags: string[]) => void
+    loading: boolean
+    onAction: (
+        action: ClientActionType,
+        tags: string[],
+        player: GuestUser,
+    ) => void
 }
 
 const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
     player,
     actions,
+    loading,
     onAction,
 }) => {
     const { colors } = useColors()
@@ -26,7 +32,7 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
 
     const onModalClose = (submit: boolean, tags: string[]) => {
         if (submit && selectedAction) {
-            onAction(selectedAction, tags)
+            onAction(selectedAction, tags, player)
         }
         setModalVisible(false)
         setSelectedAction(undefined)
@@ -83,9 +89,10 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                     labelStyle={styles.buttonText}
                     color={colors.textPrimary}
                     collapsable={true}
+                    disabled={loading}
                     mode="outlined"
                     onPress={() => {
-                        onAction(action, [])
+                        onAction(action, [], player)
                     }}
                     onLongPress={() => {
                         setSelectedAction(action)

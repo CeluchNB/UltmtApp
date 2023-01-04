@@ -2,112 +2,6 @@
 
 exports[`should match snapshot 1`] = `
 <View>
-  <View
-    style={
-      Object {
-        "alignSelf": "flex-end",
-        "flexDirection": "row",
-      }
-    }
-  >
-    <Text
-      style={
-        Object {
-          "color": "#ff0000",
-          "width": "80%",
-        }
-      }
-    >
-      test error
-    </Text>
-    <View
-      accessibilityRole="button"
-      accessibilityState={
-        Object {
-          "disabled": false,
-        }
-      }
-      accessible={true}
-      focusable={true}
-      hitSlop={
-        Object {
-          "bottom": 6,
-          "left": 6,
-          "right": 6,
-          "top": 6,
-        }
-      }
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Array [
-          Object {
-            "overflow": "hidden",
-          },
-          Array [
-            Object {
-              "alignItems": "center",
-              "justifyContent": "center",
-              "margin": 6,
-              "overflow": "hidden",
-            },
-            Object {
-              "borderRadius": 18,
-              "height": 36,
-              "width": 36,
-            },
-            false,
-            undefined,
-          ],
-        ]
-      }
-      testID="undo-button"
-    >
-      <View>
-        <Text
-          accessibilityElementsHidden={true}
-          allowFontScaling={false}
-          importantForAccessibility="no-hide-descendants"
-          pointerEvents="none"
-          selectable={false}
-          style={
-            Array [
-              Object {
-                "color": "#ffd600",
-                "fontSize": 24,
-              },
-              Array [
-                Object {
-                  "lineHeight": 24,
-                  "transform": Array [
-                    Object {
-                      "scaleX": 1,
-                    },
-                  ],
-                },
-                Object {
-                  "backgroundColor": "transparent",
-                },
-              ],
-              Object {
-                "fontFamily": "Material Design Icons",
-                "fontStyle": "normal",
-                "fontWeight": "normal",
-              },
-              Object {},
-            ]
-          }
-        >
-          󰕌
-        </Text>
-      </View>
-    </View>
-  </View>
   <RCTScrollView
     data={
       Array [
@@ -118,8 +12,10 @@ exports[`should match snapshot 1`] = `
             "score",
           ],
           "player": Object {
+            "_id": "user1",
             "firstName": "First 1",
             "lastName": "Last 1",
+            "username": "firstlast1",
           },
         },
         Object {
@@ -129,8 +25,10 @@ exports[`should match snapshot 1`] = `
             "score",
           ],
           "player": Object {
+            "_id": "user2",
             "firstName": "First 2",
             "lastName": "Last 2",
+            "username": "firstlast2",
           },
         },
         Object {
@@ -138,8 +36,10 @@ exports[`should match snapshot 1`] = `
             "Throwaway",
           ],
           "player": Object {
+            "_id": "user3",
             "firstName": "First 3",
             "lastName": "Last 3",
+            "username": "firstlast3",
           },
         },
         Object {
@@ -149,8 +49,10 @@ exports[`should match snapshot 1`] = `
             "score",
           ],
           "player": Object {
+            "_id": "user4",
             "firstName": "First 4",
             "lastName": "Last 4",
+            "username": "firstlast4",
           },
         },
         Object {
@@ -160,8 +62,10 @@ exports[`should match snapshot 1`] = `
             "score",
           ],
           "player": Object {
+            "_id": "user5",
             "firstName": "First 5",
             "lastName": "Last 5",
+            "username": "firstlast5",
           },
         },
         Object {
@@ -171,8 +75,10 @@ exports[`should match snapshot 1`] = `
             "score",
           ],
           "player": Object {
+            "_id": "user6",
             "firstName": "First 6",
             "lastName": "Last 6",
+            "username": "firstlast6",
           },
         },
         Object {
@@ -182,8 +88,10 @@ exports[`should match snapshot 1`] = `
             "score",
           ],
           "player": Object {
+            "_id": "user7",
             "firstName": "First 7",
             "lastName": "Last 7",
+            "username": "firstlast7",
           },
         },
       ]
@@ -239,6 +147,17 @@ exports[`should match snapshot 1`] = `
                
               Last 1
             </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#ffd600",
+                  "fontSize": 20.54794520547945,
+                }
+              }
+            >
+              @
+              firstlast1
+            </Text>
           </View>
           <View
             collapsable={false}
@@ -261,7 +180,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -323,7 +242,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -364,7 +283,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -426,7 +345,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -467,7 +386,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -529,7 +448,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -593,6 +512,17 @@ exports[`should match snapshot 1`] = `
                
               Last 2
             </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#ffd600",
+                  "fontSize": 20.54794520547945,
+                }
+              }
+            >
+              @
+              firstlast2
+            </Text>
           </View>
           <View
             collapsable={false}
@@ -615,7 +545,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -677,7 +607,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -718,7 +648,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -780,7 +710,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -821,7 +751,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -883,7 +813,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -947,6 +877,17 @@ exports[`should match snapshot 1`] = `
                
               Last 3
             </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#ffd600",
+                  "fontSize": 20.54794520547945,
+                }
+              }
+            >
+              @
+              firstlast3
+            </Text>
           </View>
           <View
             collapsable={false}
@@ -969,7 +910,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -1031,7 +972,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -1095,6 +1036,17 @@ exports[`should match snapshot 1`] = `
                
               Last 4
             </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#ffd600",
+                  "fontSize": 20.54794520547945,
+                }
+              }
+            >
+              @
+              firstlast4
+            </Text>
           </View>
           <View
             collapsable={false}
@@ -1117,7 +1069,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -1179,7 +1131,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -1220,7 +1172,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -1282,7 +1234,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -1323,7 +1275,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -1385,7 +1337,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -1449,6 +1401,17 @@ exports[`should match snapshot 1`] = `
                
               Last 5
             </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#ffd600",
+                  "fontSize": 20.54794520547945,
+                }
+              }
+            >
+              @
+              firstlast5
+            </Text>
           </View>
           <View
             collapsable={false}
@@ -1471,7 +1434,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -1533,7 +1496,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -1574,7 +1537,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -1636,7 +1599,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -1677,7 +1640,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -1739,7 +1702,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -1803,6 +1766,17 @@ exports[`should match snapshot 1`] = `
                
               Last 6
             </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#ffd600",
+                  "fontSize": 20.54794520547945,
+                }
+              }
+            >
+              @
+              firstlast6
+            </Text>
           </View>
           <View
             collapsable={false}
@@ -1825,7 +1799,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -1887,7 +1861,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -1928,7 +1902,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -1990,7 +1964,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -2031,7 +2005,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -2093,7 +2067,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -2157,6 +2131,17 @@ exports[`should match snapshot 1`] = `
                
               Last 7
             </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#ffd600",
+                  "fontSize": 20.54794520547945,
+                }
+              }
+            >
+              @
+              firstlast7
+            </Text>
           </View>
           <View
             collapsable={false}
@@ -2179,7 +2164,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -2241,7 +2226,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -2282,7 +2267,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -2344,7 +2329,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
@@ -2385,7 +2370,7 @@ exports[`should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 Object {
-                  "disabled": false,
+                  "disabled": true,
                 }
               }
               accessible={true}
@@ -2447,7 +2432,7 @@ exports[`should match snapshot 1`] = `
                           "textTransform": "uppercase",
                         },
                         Object {
-                          "color": "#ffd600",
+                          "color": "rgba(0, 0, 0, 0.32)",
                           "fontFamily": "System",
                           "fontWeight": "500",
                         },
