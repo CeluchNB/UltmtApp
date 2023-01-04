@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
+import { AppDispatch } from '../store/store'
 import { DetailedRequest } from '../types/request'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
@@ -27,7 +28,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
     const { colors } = useColors()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const toggleLoading = useSelector(selectToggleLoading)
     const openToRequests = useSelector(selectOpenToRequests)
     const error = useSelector(selectError)

@@ -51,7 +51,7 @@ const UserInput: React.FC<UserInputProps> = ({
             right={
                 rightIcon && (
                     <TextInput.Icon
-                        name="eye"
+                        icon="eye"
                         color={colors.textPrimary}
                         onPressIn={onRightPress}
                         onPressOut={onRightPress}

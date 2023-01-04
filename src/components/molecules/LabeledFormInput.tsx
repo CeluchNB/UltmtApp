@@ -11,6 +11,7 @@ interface LabeledFormInputProps {
     unit?: string
     error?: string
     onChange: (...event: any[]) => void
+    children?: React.ReactNode
 }
 
 const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {

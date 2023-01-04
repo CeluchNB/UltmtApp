@@ -1,5 +1,6 @@
 import * as Constants from '../../utils/constants'
 import { AllScreenProps } from '../../types/navigation'
+import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import { DisplayTeam } from '../../types/team'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
@@ -25,7 +26,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     const { colors } = useColors()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const managerTeams = useSelector(selectManagerTeams)
     const fetchProfileLoading = useSelector(selectFetchProfileLoading)
 

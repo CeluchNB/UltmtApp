@@ -25,8 +25,8 @@ export interface LiveGameSlice {
         teamTwoScore: number
         teamOneActive: boolean
         teamTwoActive: boolean
-        teamOnePlayers: GuestUser[]
-        teamTwoPlayers: GuestUser[]
+        teamOnePlayers: DisplayUser[]
+        teamTwoPlayers: DisplayUser[]
         tournament: undefined
     }
     activeTags: string[]

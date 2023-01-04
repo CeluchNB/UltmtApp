@@ -4,6 +4,7 @@ import { Modal, StyleSheet, View } from 'react-native'
 
 interface BaseModalProps {
     visible: boolean
+    children?: React.ReactNode
     onClose: (...args: any) => void
 }
 

@@ -212,7 +212,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                                 }>{`${item.firstName} ${item.lastName}`}</Text>
                             <IconButton
                                 icon="check"
-                                color={colors.success}
+                                iconColor={colors.success}
                                 disabled
                             />
                         </View>

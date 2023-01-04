@@ -72,7 +72,7 @@ const Section: React.FC<SectionProps> = ({
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{title}</Text>
                 <IconButton
-                    color={colors.primary}
+                    iconColor={colors.primary}
                     style={styles.createButton}
                     onPress={onCreatePress}
                     icon="plus"

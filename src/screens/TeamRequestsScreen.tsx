@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
+import { AppDispatch } from '../store/store'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { Props } from '../types/navigation'
@@ -26,7 +27,7 @@ import { useData, useLazyData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const { colors } = useColors()
 
     const team = useSelector(selectTeam)

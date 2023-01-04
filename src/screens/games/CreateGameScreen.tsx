@@ -1,3 +1,4 @@
+import { AppDispatch } from '../../store/store'
 import { CreateGame } from '../../types/game'
 import { CreateGameProps } from '../../types/navigation'
 import LabeledFormInput from '../../components/molecules/LabeledFormInput'
@@ -17,13 +18,14 @@ import {
 } from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
+
 const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     // Team One and Team Two are populated through
     // SelectMyTeamScreen and SelectOpponentScreen
     // Flow SelectMyTeamScreen -> SelectOpponentScreen -> CreateGameScreen
     const { teamOne, teamTwo } = route.params
     const { colors } = useColors()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const account = useSelector(selectAccount)
     const createStatus = useSelector(selectCreateStatus)
 

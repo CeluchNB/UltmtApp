@@ -69,7 +69,7 @@ const EditField: React.FC<EditFieldProps> = (props: EditFieldProps) => {
                 <Text style={styles.label}>{label}</Text>
                 <IconButton
                     icon="pencil"
-                    color={colors.textPrimary}
+                    iconColor={colors.textPrimary}
                     onPress={() => {
                         onEdit ? onEdit() : setActive(!active)
                     }}
@@ -103,7 +103,7 @@ const EditField: React.FC<EditFieldProps> = (props: EditFieldProps) => {
                 {active && (
                     <IconButton
                         style={styles.button}
-                        color={colors.textPrimary}
+                        iconColor={colors.textPrimary}
                         icon="check"
                         onPress={() => {
                             handleSubmit(onSubmit)()

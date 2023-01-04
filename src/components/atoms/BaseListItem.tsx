@@ -12,6 +12,7 @@ export interface BaseListItemProps {
     onPress?: () => {}
     requestStatus?: string
     error?: string
+    children?: React.ReactNode
 }
 
 const BaseListItem: React.FC<BaseListItemProps> = ({
@@ -87,7 +88,7 @@ const BaseListItem: React.FC<BaseListItemProps> = ({
             {showAccept && (
                 <IconButton
                     style={styles.buttonStyle}
-                    color={colors.success}
+                    iconColor={colors.success}
                     icon="plus"
                     onPress={onAccept}
                     testID="accept-button"
@@ -96,7 +97,7 @@ const BaseListItem: React.FC<BaseListItemProps> = ({
             {showDelete && (
                 <IconButton
                     style={styles.buttonStyle}
-                    color={colors.error}
+                    iconColor={colors.error}
                     icon="close"
                     onPress={onDelete}
                     testID="delete-button"
@@ -105,7 +106,7 @@ const BaseListItem: React.FC<BaseListItemProps> = ({
             {onPress && (
                 <IconButton
                     style={styles.buttonStyle}
-                    color={colors.textPrimary}
+                    iconColor={colors.textPrimary}
                     icon="chevron-right"
                     onPress={onPress}
                     testID="go-button"

@@ -63,7 +63,7 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
                     <View style={styles.codeContainer}>
                         <Text style={styles.code}>{code}</Text>
                         <IconButton
-                            color={colors.textPrimary}
+                            iconColor={colors.textPrimary}
                             style={styles.copyButton}
                             onPress={copyCode}
                             icon="content-copy"

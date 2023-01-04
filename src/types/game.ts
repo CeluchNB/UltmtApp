@@ -42,8 +42,8 @@ export interface Game {
     teamTwoScore: number
     teamOneActive: boolean
     teamTwoActive: boolean
-    teamOnePlayers: GuestUser[]
-    teamTwoPlayers: GuestUser[]
+    teamOnePlayers: DisplayUser[]
+    teamTwoPlayers: DisplayUser[]
     resolveCode: string
     points: string[]
 }

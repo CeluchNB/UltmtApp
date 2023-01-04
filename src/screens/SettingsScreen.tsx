@@ -2,6 +2,7 @@ import * as Constants from '../utils/constants'
 import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import * as UserData from '../services/data/user'
+import { AppDispatch } from '../store/store'
 import { Button } from 'react-native-paper'
 import EditField from '../components/molecules/EditField'
 import ScreenTitle from '../components/atoms/ScreenTitle'
@@ -28,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux'
 const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
     const { colors, isDarkMode } = useColors()
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const account = useSelector(selectAccount)
 
     const [firstError, setFirstError] = React.useState('')

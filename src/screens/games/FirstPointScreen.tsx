@@ -1,3 +1,4 @@
+import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import { LiveGameProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
@@ -17,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const FirstPointScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     const { colors } = useColors()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const game = useSelector(selectGame)
     const createStatus = useSelector(selectCreateStatus)
     const createError = useSelector(selectCreateError)
