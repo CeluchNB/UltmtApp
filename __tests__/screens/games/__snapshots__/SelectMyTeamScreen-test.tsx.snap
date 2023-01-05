@@ -462,7 +462,9 @@ exports[`should match snapshot with unauthenticated user 1`] = `
                         {
                           "marginHorizontal": 8,
                         },
-                        false,
+                        {
+                          "textTransform": "uppercase",
+                        },
                         {
                           "color": "#000000",
                           "fontFamily": "System",
@@ -657,7 +659,9 @@ exports[`should match snapshot without manager teams 1`] = `
                         {
                           "marginHorizontal": 8,
                         },
-                        false,
+                        {
+                          "textTransform": "uppercase",
+                        },
                         {
                           "color": "#000000",
                           "fontFamily": "System",

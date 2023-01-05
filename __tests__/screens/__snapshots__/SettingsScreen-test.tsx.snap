@@ -76,7 +76,6 @@ exports[`should match snapshot 1`] = `
           >
             <View
               collapsable={false}
-              color="#ff0000"
               style={
                 {
                   "backgroundColor": "transparent",
@@ -162,9 +161,11 @@ exports[`should match snapshot 1`] = `
                             "marginHorizontal": 12,
                           },
                           undefined,
-                          false,
                           {
-                            "color": "rgba(103, 80, 164, 1)",
+                            "textTransform": "uppercase",
+                          },
+                          {
+                            "color": "#ff0000",
                             "fontFamily": "System",
                             "fontSize": 14,
                             "fontWeight": "500",
@@ -1085,10 +1086,9 @@ exports[`should match snapshot 1`] = `
           >
             <View
               collapsable={false}
-              color="#ff0000"
               style={
                 {
-                  "backgroundColor": "rgba(103, 80, 164, 1)",
+                  "backgroundColor": "#ff0000",
                   "borderColor": "transparent",
                   "borderRadius": 20,
                   "borderStyle": "solid",
@@ -1173,7 +1173,9 @@ exports[`should match snapshot 1`] = `
                             "marginVertical": 10,
                           },
                           undefined,
-                          false,
+                          {
+                            "textTransform": "uppercase",
+                          },
                           {
                             "color": "rgba(255, 255, 255, 1)",
                             "fontFamily": "System",

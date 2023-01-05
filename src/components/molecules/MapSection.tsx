@@ -94,7 +94,8 @@ const MapSection = <T,>({
                 <Button
                     mode="text"
                     style={styles.button}
-                    color={colors.textPrimary}
+                    uppercase={true}
+                    textColor={colors.textPrimary}
                     onPress={onButtonPress}
                     testID="more-button">
                     {buttonText}

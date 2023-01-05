@@ -31,7 +31,6 @@ exports[`should match snapshot 1`] = `
       {
         "alignSelf": "center",
         "marginTop": 20,
-        "placeholderTextColor": "#ffffff",
         "width": "75%",
       }
     }
@@ -82,7 +81,7 @@ exports[`should match snapshot 1`] = `
           onChangeText={[Function]}
           onFocus={[Function]}
           placeholder="Team Place"
-          placeholderTextColor="rgba(73, 69, 79, 1)"
+          placeholderTextColor="#ffffff"
           selectionColor="#ffd600"
           style={
             [
@@ -98,7 +97,7 @@ exports[`should match snapshot 1`] = `
                 "paddingTop": 0,
               },
               {
-                "color": "rgba(28, 27, 31, 1)",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 16,
                 "fontWeight": undefined,
@@ -127,7 +126,6 @@ exports[`should match snapshot 1`] = `
       {
         "alignSelf": "center",
         "marginTop": 20,
-        "placeholderTextColor": "#ffffff",
         "width": "75%",
       }
     }
@@ -178,7 +176,7 @@ exports[`should match snapshot 1`] = `
           onChangeText={[Function]}
           onFocus={[Function]}
           placeholder="Team Name"
-          placeholderTextColor="rgba(73, 69, 79, 1)"
+          placeholderTextColor="#ffffff"
           selectionColor="#ffd600"
           style={
             [
@@ -194,7 +192,7 @@ exports[`should match snapshot 1`] = `
                 "paddingTop": 0,
               },
               {
-                "color": "rgba(28, 27, 31, 1)",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 16,
                 "fontWeight": undefined,
@@ -223,7 +221,6 @@ exports[`should match snapshot 1`] = `
       {
         "alignSelf": "center",
         "marginTop": 20,
-        "placeholderTextColor": "#ffffff",
         "width": "75%",
       }
     }
@@ -274,7 +271,7 @@ exports[`should match snapshot 1`] = `
           onChangeText={[Function]}
           onFocus={[Function]}
           placeholder="Team Handle"
-          placeholderTextColor="rgba(73, 69, 79, 1)"
+          placeholderTextColor="#ffffff"
           selectionColor="#ffd600"
           style={
             [
@@ -290,7 +287,7 @@ exports[`should match snapshot 1`] = `
                 "paddingTop": 0,
               },
               {
-                "color": "rgba(28, 27, 31, 1)",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 16,
                 "fontWeight": undefined,
@@ -499,7 +496,9 @@ exports[`should match snapshot 1`] = `
                     {
                       "marginHorizontal": 8,
                     },
-                    false,
+                    {
+                      "textTransform": "uppercase",
+                    },
                     {
                       "color": "#000000",
                       "fontFamily": "System",

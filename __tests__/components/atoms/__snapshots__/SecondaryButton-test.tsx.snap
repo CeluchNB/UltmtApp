@@ -37,7 +37,6 @@ exports[`test match snapshot 1`] = `
   >
     <View
       collapsable={false}
-      color="#ffd600"
       style={
         {
           "backgroundColor": "transparent",
@@ -124,9 +123,11 @@ exports[`test match snapshot 1`] = `
                     "marginVertical": 10,
                   },
                   undefined,
-                  false,
                   {
-                    "color": "rgba(103, 80, 164, 1)",
+                    "textTransform": "uppercase",
+                  },
+                  {
+                    "color": "#ffd600",
                     "fontFamily": "System",
                     "fontSize": 14,
                     "fontWeight": "500",

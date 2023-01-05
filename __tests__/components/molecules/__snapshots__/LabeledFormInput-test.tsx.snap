@@ -32,11 +32,7 @@ exports[`should match basic snapshot 1`] = `
     }
   >
     <View
-      style={
-        {
-          "placeholderTextColor": "#ffffff",
-        }
-      }
+      style={{}}
     >
       <View
         pointerEvents="none"
@@ -84,7 +80,7 @@ exports[`should match basic snapshot 1`] = `
             onChangeText={[Function]}
             onFocus={[Function]}
             placeholder="Test field"
-            placeholderTextColor="rgba(73, 69, 79, 1)"
+            placeholderTextColor="#ffffff"
             selectionColor="#ffd600"
             style={
               [
@@ -100,7 +96,7 @@ exports[`should match basic snapshot 1`] = `
                   "paddingTop": 0,
                 },
                 {
-                  "color": "rgba(28, 27, 31, 1)",
+                  "color": "#ffd600",
                   "fontFamily": "System",
                   "fontSize": 16,
                   "fontWeight": undefined,
@@ -242,11 +238,7 @@ exports[`should match snapshot without unit 1`] = `
     }
   >
     <View
-      style={
-        {
-          "placeholderTextColor": "#ffffff",
-        }
-      }
+      style={{}}
     >
       <View
         pointerEvents="none"
@@ -294,7 +286,7 @@ exports[`should match snapshot without unit 1`] = `
             onChangeText={[Function]}
             onFocus={[Function]}
             placeholder="Test field"
-            placeholderTextColor="rgba(73, 69, 79, 1)"
+            placeholderTextColor="#ffffff"
             selectionColor="#ffd600"
             style={
               [
@@ -310,7 +302,7 @@ exports[`should match snapshot without unit 1`] = `
                   "paddingTop": 0,
                 },
                 {
-                  "color": "rgba(28, 27, 31, 1)",
+                  "color": "#ffd600",
                   "fontFamily": "System",
                   "fontSize": 16,
                   "fontWeight": undefined,

@@ -139,7 +139,6 @@ exports[`profile screen matches snapshot 1`] = `
           @testuser
         </Text>
         <withTheme(Button)
-          color="#ff0000"
           loading={false}
           mode="text"
           onPress={[Function]}
@@ -148,6 +147,8 @@ exports[`profile screen matches snapshot 1`] = `
               "marginTop": 5,
             }
           }
+          textColor="#ff0000"
+          uppercase={true}
         >
           Sign Out
         </withTheme(Button)>
@@ -385,7 +386,6 @@ exports[`profile screen matches snapshot 1`] = `
             >
               <View
                 collapsable={false}
-                color="#ff0000"
                 style={
                   {
                     "backgroundColor": "transparent",
@@ -472,9 +472,11 @@ exports[`profile screen matches snapshot 1`] = `
                               "marginHorizontal": 12,
                             },
                             undefined,
-                            false,
                             {
-                              "color": "rgba(103, 80, 164, 1)",
+                              "textTransform": "uppercase",
+                            },
+                            {
+                              "color": "#ff0000",
                               "fontFamily": "System",
                               "fontSize": 14,
                               "fontWeight": "500",
@@ -1728,7 +1730,6 @@ exports[`profile screen matches snapshot 1`] = `
               >
                 <View
                   collapsable={false}
-                  color="#ffd600"
                   style={
                     {
                       "backgroundColor": "transparent",
@@ -1815,9 +1816,11 @@ exports[`profile screen matches snapshot 1`] = `
                                 "marginHorizontal": 12,
                               },
                               undefined,
-                              false,
                               {
-                                "color": "rgba(103, 80, 164, 1)",
+                                "textTransform": "uppercase",
+                              },
+                              {
+                                "color": "#ffd600",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",

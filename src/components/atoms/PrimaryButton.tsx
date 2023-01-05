@@ -31,6 +31,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
             mode="contained"
             compact={true}
             dark={!isDarkMode}
+            uppercase={true}
             disabled={disabled}
             style={[selfStyle.button, style]}
             onPress={onPress}

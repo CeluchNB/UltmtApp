@@ -22,7 +22,8 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
         <Button
             style={[{ borderColor: colors.textPrimary }, style]}
             mode="outlined"
-            color={colors.textPrimary}
+            textColor={colors.textPrimary}
+            uppercase={true}
             onPress={onPress}
             loading={loading}>
             {text}

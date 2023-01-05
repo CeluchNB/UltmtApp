@@ -601,7 +601,9 @@ exports[`Live CommentScreen should match snapshot 1`] = `
                               {
                                 "marginHorizontal": 8,
                               },
-                              false,
+                              {
+                                "textTransform": "uppercase",
+                              },
                               {
                                 "color": "rgba(28, 27, 31, 0.38)",
                                 "fontFamily": "System",
@@ -1452,7 +1454,9 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
                               {
                                 "marginHorizontal": 8,
                               },
-                              false,
+                              {
+                                "textTransform": "uppercase",
+                              },
                               {
                                 "color": "rgba(28, 27, 31, 0.38)",
                                 "fontFamily": "System",

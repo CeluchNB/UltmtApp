@@ -29,7 +29,6 @@ const UserInput: React.FC<UserInputProps> = ({
     const styles = StyleSheet.create({
         inputStyle: {
             backgroundColor: colors.primary,
-            placeholderTextColor: colors.secondary,
         },
         rightButton: {
             color: colors.textPrimary,
@@ -40,6 +39,8 @@ const UserInput: React.FC<UserInputProps> = ({
         <TextInput
             style={[styles.inputStyle, style]}
             placeholder={placeholder}
+            placeholderTextColor={colors.secondary}
+            textColor={colors.textPrimary}
             mode="outlined"
             outlineColor={colors.textSecondary}
             activeOutlineColor={colors.textPrimary}

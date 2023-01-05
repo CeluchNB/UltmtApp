@@ -169,7 +169,9 @@ exports[`should match snapshot 1`] = `
                           {
                             "marginHorizontal": 8,
                           },
-                          false,
+                          {
+                            "textTransform": "uppercase",
+                          },
                           {
                             "color": "#000000",
                             "fontFamily": "System",

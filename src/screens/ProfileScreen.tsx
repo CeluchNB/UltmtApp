@@ -184,7 +184,8 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                         </Text>
                         <Button
                             mode="text"
-                            color={colors.error}
+                            textColor={colors.error}
+                            uppercase={true}
                             onPress={onLogout}
                             loading={loading}
                             style={styles.signOutButton}>

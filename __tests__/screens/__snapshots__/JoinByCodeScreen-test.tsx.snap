@@ -45,7 +45,6 @@ exports[`should match snapshot 1`] = `
       style={
         {
           "margin": 5,
-          "placeholderTextColor": "#ffffff",
           "width": "80%",
         }
       }
@@ -96,7 +95,7 @@ exports[`should match snapshot 1`] = `
             onChangeText={[Function]}
             onFocus={[Function]}
             placeholder="6 Digit Code"
-            placeholderTextColor="rgba(73, 69, 79, 1)"
+            placeholderTextColor="#ffffff"
             selectionColor="#ffd600"
             style={
               [
@@ -112,7 +111,7 @@ exports[`should match snapshot 1`] = `
                   "paddingTop": 0,
                 },
                 {
-                  "color": "rgba(28, 27, 31, 1)",
+                  "color": "#ffd600",
                   "fontFamily": "System",
                   "fontSize": 16,
                   "fontWeight": undefined,
@@ -262,7 +261,9 @@ exports[`should match snapshot 1`] = `
                     {
                       "marginHorizontal": 8,
                     },
-                    false,
+                    {
+                      "textTransform": "uppercase",
+                    },
                     {
                       "color": "#000000",
                       "fontFamily": "System",

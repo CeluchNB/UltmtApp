@@ -95,7 +95,8 @@ const Section: React.FC<SectionProps> = ({
                 <Button
                     mode="text"
                     style={styles.button}
-                    color={colors.textPrimary}
+                    uppercase={true}
+                    textColor={colors.textPrimary}
                     onPress={onButtonPress}>
                     {buttonText}
                 </Button>

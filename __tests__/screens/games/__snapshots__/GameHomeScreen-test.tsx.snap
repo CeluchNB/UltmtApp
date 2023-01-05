@@ -98,7 +98,7 @@ exports[`should match snapshot with live and recent data 1`] = `
                 "paddingTop": 0,
               },
               {
-                "color": "rgba(73, 69, 79, 1)",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 41.0958904109589,
                 "fontWeight": undefined,
@@ -216,7 +216,6 @@ exports[`should match snapshot with live and recent data 1`] = `
           >
             <View
               collapsable={false}
-              color="#ffd600"
               style={
                 {
                   "backgroundColor": "transparent",
@@ -303,9 +302,11 @@ exports[`should match snapshot with live and recent data 1`] = `
                             "marginHorizontal": 12,
                           },
                           undefined,
-                          false,
                           {
-                            "color": "rgba(103, 80, 164, 1)",
+                            "textTransform": "uppercase",
+                          },
+                          {
+                            "color": "#ffd600",
                             "fontFamily": "System",
                             "fontSize": 14,
                             "fontWeight": "500",
@@ -604,7 +605,7 @@ exports[`should match snapshot with no data 1`] = `
                 "paddingTop": 0,
               },
               {
-                "color": "rgba(73, 69, 79, 1)",
+                "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 41.0958904109589,
                 "fontWeight": undefined,

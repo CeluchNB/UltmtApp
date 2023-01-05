@@ -131,7 +131,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                 <View style={styles.container}>
                     <Button
                         mode="text"
-                        color={colors.error}
+                        textColor={colors.error}
+                        uppercase={true}
                         onPress={onLogout}
                         loading={false}>
                         Sign Out
@@ -230,7 +231,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                     />
                     <Button
                         mode="contained"
-                        color={colors.error}
+                        buttonColor={colors.error}
+                        uppercase={true}
                         style={styles.deleteButton}
                         onPress={async () => {
                             setModalVisible(true)
@@ -254,7 +256,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                 <View style={styles.modalButtonContainer}>
                                     <Button
                                         mode="contained"
-                                        color={colors.success}
+                                        buttonColor={colors.success}
+                                        uppercase={true}
                                         style={styles.modalButton}
                                         onPress={() => {
                                             setModalVisible(false)
@@ -263,7 +266,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                     </Button>
                                     <Button
                                         mode="contained"
-                                        color={colors.error}
+                                        buttonColor={colors.error}
+                                        uppercase={true}
                                         style={styles.modalButton}
                                         onPress={async () => {
                                             try {

@@ -1343,7 +1343,6 @@ exports[`should match snapshot 1`] = `
       >
         <View
           collapsable={false}
-          color="#ffd600"
           style={
             {
               "backgroundColor": "transparent",
@@ -1431,9 +1430,11 @@ exports[`should match snapshot 1`] = `
                         "marginVertical": 10,
                       },
                       undefined,
-                      false,
                       {
-                        "color": "rgba(103, 80, 164, 1)",
+                        "textTransform": "uppercase",
+                      },
+                      {
+                        "color": "#ffd600",
                         "fontFamily": "System",
                         "fontSize": 14,
                         "fontWeight": "500",
@@ -1577,7 +1578,9 @@ exports[`should match snapshot 1`] = `
                       {
                         "marginHorizontal": 8,
                       },
-                      false,
+                      {
+                        "textTransform": "uppercase",
+                      },
                       {
                         "color": "rgba(28, 27, 31, 0.38)",
                         "fontFamily": "System",
@@ -2953,7 +2956,6 @@ exports[`should match snapshot for team two 1`] = `
       >
         <View
           collapsable={false}
-          color="#ffd600"
           style={
             {
               "backgroundColor": "transparent",
@@ -3041,9 +3043,11 @@ exports[`should match snapshot for team two 1`] = `
                         "marginVertical": 10,
                       },
                       undefined,
-                      false,
                       {
-                        "color": "rgba(103, 80, 164, 1)",
+                        "textTransform": "uppercase",
+                      },
+                      {
+                        "color": "#ffd600",
                         "fontFamily": "System",
                         "fontSize": 14,
                         "fontWeight": "500",
@@ -3187,7 +3191,9 @@ exports[`should match snapshot for team two 1`] = `
                       {
                         "marginHorizontal": 8,
                       },
-                      false,
+                      {
+                        "textTransform": "uppercase",
+                      },
                       {
                         "color": "rgba(28, 27, 31, 0.38)",
                         "fontFamily": "System",

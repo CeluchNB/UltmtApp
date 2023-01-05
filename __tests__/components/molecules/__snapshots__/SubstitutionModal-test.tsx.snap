@@ -3057,7 +3057,9 @@ exports[`should match snapshot with team one 1`] = `
                         {
                           "marginHorizontal": 8,
                         },
-                        false,
+                        {
+                          "textTransform": "uppercase",
+                        },
                         {
                           "color": "rgba(28, 27, 31, 0.38)",
                           "fontFamily": "System",
@@ -6140,7 +6142,9 @@ exports[`should match snapshot with team two 1`] = `
                         {
                           "marginHorizontal": 8,
                         },
-                        false,
+                        {
+                          "textTransform": "uppercase",
+                        },
                         {
                           "color": "rgba(28, 27, 31, 0.38)",
                           "fontFamily": "System",

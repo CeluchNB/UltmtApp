@@ -46,11 +46,7 @@ exports[`should match snapshot 1`] = `
       Email
     </Text>
     <View
-      style={
-        {
-          "placeholderTextColor": "#ffffff",
-        }
-      }
+      style={{}}
     >
       <View
         pointerEvents="none"
@@ -98,7 +94,7 @@ exports[`should match snapshot 1`] = `
             onChangeText={[Function]}
             onFocus={[Function]}
             placeholder="test@email.com"
-            placeholderTextColor="rgba(73, 69, 79, 1)"
+            placeholderTextColor="#ffffff"
             secureTextEntry={false}
             selectionColor="#ffd600"
             style={
@@ -115,7 +111,7 @@ exports[`should match snapshot 1`] = `
                   "paddingTop": 0,
                 },
                 {
-                  "color": "rgba(28, 27, 31, 1)",
+                  "color": "#ffd600",
                   "fontFamily": "System",
                   "fontSize": 16,
                   "fontWeight": undefined,
@@ -153,11 +149,7 @@ exports[`should match snapshot 1`] = `
       Password
     </Text>
     <View
-      style={
-        {
-          "placeholderTextColor": "#ffffff",
-        }
-      }
+      style={{}}
     >
       <View
         pointerEvents="none"
@@ -205,7 +197,7 @@ exports[`should match snapshot 1`] = `
             onChangeText={[Function]}
             onFocus={[Function]}
             placeholder="Current Password"
-            placeholderTextColor="rgba(73, 69, 79, 1)"
+            placeholderTextColor="#ffffff"
             secureTextEntry={true}
             selectionColor="#ffd600"
             style={
@@ -222,7 +214,7 @@ exports[`should match snapshot 1`] = `
                   "paddingTop": 0,
                 },
                 {
-                  "color": "rgba(28, 27, 31, 1)",
+                  "color": "#ffd600",
                   "fontFamily": "System",
                   "fontSize": 16,
                   "fontWeight": undefined,
@@ -371,7 +363,9 @@ exports[`should match snapshot 1`] = `
                       {
                         "marginHorizontal": 8,
                       },
-                      false,
+                      {
+                        "textTransform": "uppercase",
+                      },
                       {
                         "color": "#000000",
                         "fontFamily": "System",
