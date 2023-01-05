@@ -4,7 +4,7 @@ exports[`should match snapshot with all data 1`] = `
 <View>
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 41.0958904109589,
         "fontWeight": "900",
@@ -16,7 +16,7 @@ exports[`should match snapshot with all data 1`] = `
   </Text>
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 30.821917808219176,
         "textAlign": "center",
@@ -27,7 +27,7 @@ exports[`should match snapshot with all data 1`] = `
   </Text>
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 41.0958904109589,
         "fontWeight": "900",
@@ -44,7 +44,7 @@ exports[`should match snapshot with no teamname 1`] = `
 <View>
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 41.0958904109589,
         "fontWeight": "900",
@@ -56,18 +56,16 @@ exports[`should match snapshot with no teamname 1`] = `
   </Text>
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 30.821917808219176,
         "textAlign": "center",
       }
     }
-  >
-    
-  </Text>
+  />
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 41.0958904109589,
         "fontWeight": "900",

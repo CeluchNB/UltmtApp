@@ -2,9 +2,8 @@
 
 exports[`should match snapshot 1`] = `
 <RCTSafeAreaView
-  emulateUnlessSupported={true}
   style={
-    Object {
+    {
       "backgroundColor": "#303030",
       "flex": 1,
       "height": "100%",
@@ -15,7 +14,7 @@ exports[`should match snapshot 1`] = `
     refreshControl={
       <RefreshControlMock
         colors={
-          Array [
+          [
             "#31adff",
           ]
         }
@@ -29,7 +28,7 @@ exports[`should match snapshot 1`] = `
     <View>
       <View
         style={
-          Object {
+          {
             "alignItems": "center",
           }
         }
@@ -37,13 +36,13 @@ exports[`should match snapshot 1`] = `
         <Text
           numberOfLines={1}
           style={
-            Array [
-              Object {
+            [
+              {
                 "color": "#ffd600",
                 "fontSize": 61.64383561643835,
                 "fontWeight": "bold",
               },
-              Object {
+              {
                 "textAlign": "center",
               },
             ]
@@ -53,7 +52,7 @@ exports[`should match snapshot 1`] = `
         </Text>
         <Text
           style={
-            Object {
+            {
               "color": "#ffd600",
               "fontSize": 30.821917808219176,
               "fontWeight": "600",
@@ -66,7 +65,7 @@ exports[`should match snapshot 1`] = `
         </Text>
         <Text
           style={
-            Object {
+            {
               "color": "#ffd600",
               "fontSize": 30.821917808219176,
               "marginBottom": 5,
@@ -79,7 +78,7 @@ exports[`should match snapshot 1`] = `
       </View>
       <View
         style={
-          Object {
+          {
             "alignSelf": "center",
             "width": "75%",
           }
@@ -87,14 +86,14 @@ exports[`should match snapshot 1`] = `
       >
         <View
           style={
-            Object {
+            {
               "width": "100%",
             }
           }
         >
           <View
             style={
-              Object {
+              {
                 "display": "flex",
                 "flex": 1,
                 "flexDirection": "row",
@@ -103,7 +102,7 @@ exports[`should match snapshot 1`] = `
           >
             <Text
               style={
-                Object {
+                {
                   "color": "#ffd600",
                   "flex": 1,
                   "fontSize": 61.64383561643835,

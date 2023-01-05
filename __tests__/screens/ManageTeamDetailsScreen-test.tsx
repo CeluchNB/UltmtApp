@@ -35,10 +35,6 @@ const props: ManagedTeamDetailsProps = {
     } as any,
 }
 
-beforeAll(() => {
-    jest.useFakeTimers()
-})
-
 beforeEach(() => {
     jest.clearAllMocks()
     getManagedTeamResponse = {
@@ -124,10 +120,6 @@ beforeEach(() => {
     jest.spyOn(TeamData, 'getManagedTeam').mockReturnValue(
         Promise.resolve(getManagedTeamResponse),
     )
-})
-
-afterAll(() => {
-    jest.useRealTimers()
 })
 
 it('should match snapshot', async () => {

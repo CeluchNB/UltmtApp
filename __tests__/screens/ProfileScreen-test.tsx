@@ -43,7 +43,6 @@ beforeEach(() => {
 })
 
 it('profile screen matches snapshot', async () => {
-    jest.useFakeTimers()
     const snapshot = render(
         <Provider store={store}>
             <NavigationContainer>

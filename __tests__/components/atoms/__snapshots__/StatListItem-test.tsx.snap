@@ -3,14 +3,14 @@
 exports[`test matches snapshot 1`] = `
 <View
   style={
-    Object {
+    {
       "minWidth": 150,
     }
   }
 >
   <Text
     style={
-      Object {
+      {
         "color": "#ababab",
         "fontSize": 41.0958904109589,
         "fontWeight": "bold",
@@ -21,7 +21,7 @@ exports[`test matches snapshot 1`] = `
   </Text>
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 61.64383561643835,
         "fontWeight": "bold",
@@ -32,7 +32,7 @@ exports[`test matches snapshot 1`] = `
   </Text>
   <View
     style={
-      Object {
+      {
         "backgroundColor": "#31adff",
         "borderRadius": 5,
         "height": 10,

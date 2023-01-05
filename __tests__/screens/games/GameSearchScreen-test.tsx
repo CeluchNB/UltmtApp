@@ -27,8 +27,13 @@ const props: GameSearchProps = {
 const client = new QueryClient()
 
 beforeAll(() => {
-    jest.useFakeTimers()
+    jest.useFakeTimers({ legacyFakeTimers: true })
 })
+
+afterAll(() => {
+    jest.useRealTimers()
+})
+
 
 beforeEach(() => {
     jest.clearAllMocks()
@@ -41,10 +46,6 @@ beforeEach(() => {
             config: {},
         }),
     )
-})
-
-afterAll(() => {
-    jest.useRealTimers()
 })
 
 it('should match snapshot', async () => {
@@ -115,7 +116,6 @@ it('should use filter modal', async () => {
 
     const doneButton = getByText('done')
     fireEvent.press(doneButton)
-    await act(async () => {})
 
     const result = await queryByText('Game')
     expect(result).toBeNull()
@@ -150,7 +150,6 @@ it('should load more on scroll', async () => {
             layoutMeasurement: { height: 100, width: 100 }, // Dimensions of the device
         },
     })
-    await act(async () => {})
 
     expect(spy).toHaveBeenCalledTimes(2)
 })

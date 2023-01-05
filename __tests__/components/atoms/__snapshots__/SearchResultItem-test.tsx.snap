@@ -14,7 +14,7 @@ exports[`test matches snapshot 1`] = `
     onResponderTerminationRequest={[Function]}
     onStartShouldSetResponder={[Function]}
     style={
-      Object {
+      {
         "display": "flex",
         "flexDirection": "row",
         "opacity": 1,
@@ -23,14 +23,14 @@ exports[`test matches snapshot 1`] = `
   >
     <View
       style={
-        Object {
+        {
           "flex": 1,
         }
       }
     >
       <Text
         style={
-          Object {
+          {
             "color": "#ababab",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
@@ -41,7 +41,7 @@ exports[`test matches snapshot 1`] = `
       </Text>
       <Text
         style={
-          Object {
+          {
             "color": "#ffd600",
             "fontSize": 30.821917808219176,
             "fontWeight": "900",
@@ -59,7 +59,7 @@ exports[`test matches snapshot 1`] = `
   </View>
   <View
     style={
-      Object {
+      {
         "backgroundColor": "#31adff",
         "height": 1,
         "marginBottom": 10,
@@ -84,7 +84,7 @@ exports[`test matches snapshot with loading 1`] = `
     onResponderTerminationRequest={[Function]}
     onStartShouldSetResponder={[Function]}
     style={
-      Object {
+      {
         "display": "flex",
         "flexDirection": "row",
         "opacity": 1,
@@ -93,14 +93,14 @@ exports[`test matches snapshot with loading 1`] = `
   >
     <View
       style={
-        Object {
+        {
           "flex": 1,
         }
       }
     >
       <Text
         style={
-          Object {
+          {
             "color": "#ababab",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
@@ -111,7 +111,7 @@ exports[`test matches snapshot with loading 1`] = `
       </Text>
       <Text
         style={
-          Object {
+          {
             "color": "#ffd600",
             "fontSize": 30.821917808219176,
             "fontWeight": "900",
@@ -129,7 +129,7 @@ exports[`test matches snapshot with loading 1`] = `
   </View>
   <View
     style={
-      Object {
+      {
         "backgroundColor": "#31adff",
         "height": 1,
         "marginBottom": 10,
@@ -154,7 +154,7 @@ exports[`test matches snapshot without subheader 1`] = `
     onResponderTerminationRequest={[Function]}
     onStartShouldSetResponder={[Function]}
     style={
-      Object {
+      {
         "display": "flex",
         "flexDirection": "row",
         "opacity": 1,
@@ -163,14 +163,14 @@ exports[`test matches snapshot without subheader 1`] = `
   >
     <View
       style={
-        Object {
+        {
           "flex": 1,
         }
       }
     >
       <Text
         style={
-          Object {
+          {
             "color": "#ababab",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
@@ -188,7 +188,7 @@ exports[`test matches snapshot without subheader 1`] = `
   </View>
   <View
     style={
-      Object {
+      {
         "backgroundColor": "#31adff",
         "height": 1,
         "marginBottom": 10,

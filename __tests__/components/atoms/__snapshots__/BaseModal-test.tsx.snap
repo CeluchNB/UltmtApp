@@ -11,7 +11,7 @@ exports[`should match snapshot with minimal children 1`] = `
 >
   <View
     style={
-      Object {
+      {
         "alignItems": "center",
         "backgroundColor": "#30303050",
         "display": "flex",
@@ -23,7 +23,7 @@ exports[`should match snapshot with minimal children 1`] = `
   >
     <View
       style={
-        Object {
+        {
           "alignItems": "center",
           "backgroundColor": "#303030",
           "borderColor": "#ffd600",

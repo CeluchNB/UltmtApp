@@ -2,9 +2,8 @@
 
 exports[`JoinGameScreen should match snapshot 1`] = `
 <RCTSafeAreaView
-  emulateUnlessSupported={true}
   style={
-    Object {
+    {
       "backgroundColor": "#303030",
       "height": "100%",
     }
@@ -12,7 +11,7 @@ exports[`JoinGameScreen should match snapshot 1`] = `
 >
   <View
     style={
-      Object {
+      {
         "alignSelf": "center",
         "width": "80%",
       }
@@ -21,8 +20,8 @@ exports[`JoinGameScreen should match snapshot 1`] = `
     <Text
       numberOfLines={1}
       style={
-        Array [
-          Object {
+        [
+          {
             "color": "#ffd600",
             "fontSize": 61.64383561643835,
             "fontWeight": "bold",
@@ -36,7 +35,7 @@ exports[`JoinGameScreen should match snapshot 1`] = `
     <View>
       <View
         style={
-          Object {
+          {
             "alignSelf": "center",
             "display": "flex",
             "flexDirection": "row",
@@ -46,13 +45,13 @@ exports[`JoinGameScreen should match snapshot 1`] = `
       >
         <View
           style={
-            Array [
-              Object {
-                "backgroundColor": "rgb(231, 231, 231)",
+            [
+              {
+                "backgroundColor": "rgba(231, 224, 236, 1)",
                 "borderTopLeftRadius": 4,
                 "borderTopRightRadius": 4,
               },
-              Object {
+              {
                 "backgroundColor": "#303030",
                 "color": "#ffd600",
                 "flex": 1,
@@ -64,31 +63,32 @@ exports[`JoinGameScreen should match snapshot 1`] = `
           <View
             collapsable={false}
             style={
-              Object {
+              {
                 "backgroundColor": "#ffd600",
                 "bottom": 0,
-                "height": 2,
+                "height": 1,
                 "left": 0,
                 "position": "absolute",
                 "right": 0,
-                "transform": Array [
-                  Object {
+                "transform": [
+                  {
                     "scaleY": 0.5,
                   },
                 ],
                 "zIndex": 1,
               }
             }
+            testID="text-input-underline"
           />
           <View
             style={
-              Array [
-                Object {
+              [
+                {
                   "paddingBottom": 0,
                   "paddingTop": 0,
                 },
-                Object {
-                  "minHeight": 64,
+                {
+                  "minHeight": 56,
                 },
               ]
             }
@@ -96,6 +96,7 @@ exports[`JoinGameScreen should match snapshot 1`] = `
             <TextInput
               editable={true}
               focusable={true}
+              maxFontSizeMultiplier={1.5}
               multiline={false}
               onBlur={[Function]}
               onChangeText={[Function]}
@@ -105,36 +106,39 @@ exports[`JoinGameScreen should match snapshot 1`] = `
               placeholderTextColor="#ababab"
               selectionColor="#ffd600"
               style={
-                Array [
-                  Object {
-                    "flexGrow": 1,
+                [
+                  {
                     "margin": 0,
                   },
-                  Object {
-                    "paddingLeft": 12,
-                    "paddingRight": 12,
+                  {
+                    "paddingLeft": 16,
+                    "paddingRight": 16,
                   },
-                  Object {
-                    "height": 64,
+                  {
+                    "height": 56,
                   },
-                  Object {
+                  {
                     "paddingBottom": 0,
                     "paddingTop": 0,
                   },
-                  Object {
-                    "color": "#ffd600",
+                  {
+                    "color": "rgba(73, 69, 79, 1)",
                     "fontFamily": "System",
                     "fontSize": 41.0958904109589,
                     "fontWeight": undefined,
+                    "letterSpacing": 0.15,
+                    "lineHeight": undefined,
                     "textAlign": "left",
                     "textAlignVertical": "center",
                   },
                   false,
-                  Array [
-                    Object {},
+                  [
+                    {},
                   ],
+                  undefined,
                 ]
               }
+              testID="text-input-flat"
               underlineColorAndroid="transparent"
               value=""
             />

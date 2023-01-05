@@ -3,7 +3,7 @@
 exports[`should match snapshot 1`] = `
 <View
   style={
-    Object {
+    {
       "flexDirection": "row",
     }
   }
@@ -11,7 +11,7 @@ exports[`should match snapshot 1`] = `
   <View>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "900",
@@ -23,7 +23,7 @@ exports[`should match snapshot 1`] = `
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 30.821917808219176,
           "textAlign": "center",
@@ -34,7 +34,7 @@ exports[`should match snapshot 1`] = `
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "900",
@@ -47,7 +47,7 @@ exports[`should match snapshot 1`] = `
   </View>
   <Text
     style={
-      Object {
+      {
         "color": "#ababab",
         "flex": 1,
         "fontSize": 30.821917808219176,
@@ -63,7 +63,7 @@ exports[`should match snapshot 1`] = `
   <View>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "900",
@@ -75,18 +75,16 @@ exports[`should match snapshot 1`] = `
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 30.821917808219176,
           "textAlign": "center",
         }
       }
-    >
-      
-    </Text>
+    />
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "900",
@@ -103,7 +101,7 @@ exports[`should match snapshot 1`] = `
 exports[`should match snapshot with no description 1`] = `
 <View
   style={
-    Object {
+    {
       "flexDirection": "row",
     }
   }
@@ -111,7 +109,7 @@ exports[`should match snapshot with no description 1`] = `
   <View>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "900",
@@ -123,7 +121,7 @@ exports[`should match snapshot with no description 1`] = `
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 30.821917808219176,
           "textAlign": "center",
@@ -134,7 +132,7 @@ exports[`should match snapshot with no description 1`] = `
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "900",
@@ -148,7 +146,7 @@ exports[`should match snapshot with no description 1`] = `
   <View>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "900",
@@ -160,18 +158,16 @@ exports[`should match snapshot with no description 1`] = `
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 30.821917808219176,
           "textAlign": "center",
         }
       }
-    >
-      
-    </Text>
+    />
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "900",

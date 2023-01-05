@@ -3,59 +3,59 @@
 exports[`PointAccordionGroup should match snapshot 1`] = `
 <RCTScrollView
   data={
-    Array [
-      Object {
+    [
+      {
         "_id": "point3",
         "pointNumber": 1,
-        "pullingTeam": Object {
+        "pullingTeam": {
           "name": "Temper",
         },
-        "receivingTeam": Object {
+        "receivingTeam": {
           "name": "Truck",
         },
-        "teamOneActions": Array [],
+        "teamOneActions": [],
         "teamOneActive": true,
-        "teamOnePlayers": Array [],
+        "teamOnePlayers": [],
         "teamOneScore": 2,
-        "teamTwoActions": Array [],
+        "teamTwoActions": [],
         "teamTwoActive": false,
-        "teamTwoPlayers": Array [],
+        "teamTwoPlayers": [],
         "teamTwoScore": 0,
       },
-      Object {
+      {
         "_id": "point2",
         "pointNumber": 1,
-        "pullingTeam": Object {
+        "pullingTeam": {
           "name": "Temper",
         },
-        "receivingTeam": Object {
+        "receivingTeam": {
           "name": "Truck",
         },
-        "teamOneActions": Array [],
+        "teamOneActions": [],
         "teamOneActive": false,
-        "teamOnePlayers": Array [],
+        "teamOnePlayers": [],
         "teamOneScore": 2,
-        "teamTwoActions": Array [],
+        "teamTwoActions": [],
         "teamTwoActive": false,
-        "teamTwoPlayers": Array [],
+        "teamTwoPlayers": [],
         "teamTwoScore": 0,
       },
-      Object {
+      {
         "_id": "point1",
         "pointNumber": 1,
-        "pullingTeam": Object {
+        "pullingTeam": {
           "name": "Temper",
         },
-        "receivingTeam": Object {
+        "receivingTeam": {
           "name": "Truck",
         },
-        "teamOneActions": Array [],
+        "teamOneActions": [],
         "teamOneActive": false,
-        "teamOnePlayers": Array [],
+        "teamOnePlayers": [],
         "teamOneScore": 1,
-        "teamTwoActions": Array [],
+        "teamTwoActions": [],
         "teamTwoActive": false,
-        "teamTwoPlayers": Array [],
+        "teamTwoPlayers": [],
         "teamTwoScore": 0,
       },
     ]
@@ -73,8 +73,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
   removeClippedSubviews={false}
   renderItem={[Function]}
   scrollEventThrottle={50}
-  stickyHeaderIndices={Array []}
-  viewabilityConfigCallbackPairs={Array []}
+  stickyHeaderIndices={[]}
+  viewabilityConfigCallbackPairs={[]}
 >
   <View>
     <View
@@ -83,7 +83,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
     >
       <View
         style={
-          Object {
+          {
             "backgroundColor": "#303030",
           }
         }
@@ -91,22 +91,25 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
         <View>
           <View
             style={
-              Object {
-                "backgroundColor": "#f6f6f6",
+              {
+                "backgroundColor": "rgba(255, 251, 254, 1)",
               }
             }
           >
             <View
               accessibilityRole="button"
               accessibilityState={
-                Object {
+                {
                   "disabled": false,
                   "expanded": false,
                 }
               }
               accessible={true}
+              collapsable={false}
               focusable={true}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
               onResponderGrant={[Function]}
               onResponderMove={[Function]}
               onResponderRelease={[Function]}
@@ -114,15 +117,16 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
               style={
-                Array [
-                  Object {
+                [
+                  {
                     "overflow": "hidden",
                   },
-                  Array [
-                    Object {
+                  false,
+                  [
+                    {
                       "padding": 8,
                     },
-                    Object {
+                    {
                       "backgroundColor": "#303030",
                       "borderColor": "#ffd600",
                       "borderStyle": "solid",
@@ -137,7 +141,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               <View
                 pointerEvents="none"
                 style={
-                  Object {
+                  {
                     "alignItems": "center",
                     "flexDirection": "row",
                   }
@@ -145,11 +149,11 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               >
                 <View
                   style={
-                    Array [
-                      Object {
+                    [
+                      {
                         "margin": 8,
                       },
-                      Object {
+                      {
                         "flex": 1,
                         "justifyContent": "center",
                       },
@@ -160,23 +164,27 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     numberOfLines={1}
                     selectable={false}
                     style={
-                      Array [
-                        Object {
-                          "color": "#000000",
-                          "fontFamily": "System",
-                          "fontWeight": "400",
-                        },
-                        Object {
+                      [
+                        {
                           "textAlign": "left",
                         },
-                        Array [
-                          Object {
+                        {
+                          "color": "rgba(28, 27, 31, 1)",
+                          "fontFamily": "System",
+                          "fontWeight": "400",
+                          "letterSpacing": 0,
+                        },
+                        {
+                          "writingDirection": "ltr",
+                        },
+                        [
+                          {
                             "fontSize": 16,
                           },
-                          Object {
-                            "color": "rgba(0, 0, 0, 0.87)",
+                          {
+                            "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "color": "#ffd600",
                           },
                         ],
@@ -185,7 +193,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   >
                     <View
                       style={
-                        Object {
+                        {
                           "display": "flex",
                           "flexDirection": "row",
                         }
@@ -193,14 +201,14 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     >
                       <View
                         style={
-                          Object {
+                          {
                             "marginRight": 10,
                           }
                         }
                       >
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -211,7 +219,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                         </Text>
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -224,7 +232,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                       <View>
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -235,7 +243,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                         </Text>
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -250,8 +258,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                 </View>
                 <View
                   style={
-                    Array [
-                      Object {
+                    [
+                      {
                         "margin": 8,
                       },
                       undefined,
@@ -261,7 +269,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   <View>
                     <View
                       style={
-                        Object {
+                        {
                           "marginBottom": -10,
                         }
                       }
@@ -269,7 +277,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                       <View
                         collapsable={false}
                         style={
-                          Object {
+                          {
                             "alignSelf": "flex-end",
                             "backgroundColor": "red",
                             "borderRadius": 5,
@@ -283,13 +291,10 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     <View
                       pointerEvents="box-none"
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "alignItems": "center",
-                            "height": 40,
                             "justifyContent": "center",
-                            "margin": 8,
-                            "width": 40,
                           },
                           undefined,
                         ]
@@ -302,30 +307,30 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                         pointerEvents="none"
                         selectable={false}
                         style={
-                          Array [
-                            Object {
+                          [
+                            {
                               "color": "#ffd600",
                               "fontSize": 24,
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "lineHeight": 24,
-                                "transform": Array [
-                                  Object {
+                                "transform": [
+                                  {
                                     "scaleX": 1,
                                   },
                                 ],
                               },
-                              Object {
+                              {
                                 "backgroundColor": "transparent",
                               },
                             ],
-                            Object {
+                            {
                               "fontFamily": "Material Design Icons",
                               "fontStyle": "normal",
                               "fontWeight": "normal",
                             },
-                            Object {},
+                            {},
                           ]
                         }
                       >
@@ -346,7 +351,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
     >
       <View
         style={
-          Object {
+          {
             "backgroundColor": "#303030",
           }
         }
@@ -354,22 +359,25 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
         <View>
           <View
             style={
-              Object {
-                "backgroundColor": "#f6f6f6",
+              {
+                "backgroundColor": "rgba(255, 251, 254, 1)",
               }
             }
           >
             <View
               accessibilityRole="button"
               accessibilityState={
-                Object {
+                {
                   "disabled": false,
                   "expanded": false,
                 }
               }
               accessible={true}
+              collapsable={false}
               focusable={true}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
               onResponderGrant={[Function]}
               onResponderMove={[Function]}
               onResponderRelease={[Function]}
@@ -377,15 +385,16 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
               style={
-                Array [
-                  Object {
+                [
+                  {
                     "overflow": "hidden",
                   },
-                  Array [
-                    Object {
+                  false,
+                  [
+                    {
                       "padding": 8,
                     },
-                    Object {
+                    {
                       "backgroundColor": "#303030",
                       "borderColor": "#ffd600",
                       "borderStyle": "solid",
@@ -400,7 +409,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               <View
                 pointerEvents="none"
                 style={
-                  Object {
+                  {
                     "alignItems": "center",
                     "flexDirection": "row",
                   }
@@ -408,11 +417,11 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               >
                 <View
                   style={
-                    Array [
-                      Object {
+                    [
+                      {
                         "margin": 8,
                       },
-                      Object {
+                      {
                         "flex": 1,
                         "justifyContent": "center",
                       },
@@ -423,23 +432,27 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     numberOfLines={1}
                     selectable={false}
                     style={
-                      Array [
-                        Object {
-                          "color": "#000000",
-                          "fontFamily": "System",
-                          "fontWeight": "400",
-                        },
-                        Object {
+                      [
+                        {
                           "textAlign": "left",
                         },
-                        Array [
-                          Object {
+                        {
+                          "color": "rgba(28, 27, 31, 1)",
+                          "fontFamily": "System",
+                          "fontWeight": "400",
+                          "letterSpacing": 0,
+                        },
+                        {
+                          "writingDirection": "ltr",
+                        },
+                        [
+                          {
                             "fontSize": 16,
                           },
-                          Object {
-                            "color": "rgba(0, 0, 0, 0.87)",
+                          {
+                            "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "color": "#ffd600",
                           },
                         ],
@@ -448,7 +461,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   >
                     <View
                       style={
-                        Object {
+                        {
                           "display": "flex",
                           "flexDirection": "row",
                         }
@@ -456,14 +469,14 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     >
                       <View
                         style={
-                          Object {
+                          {
                             "marginRight": 10,
                           }
                         }
                       >
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -474,7 +487,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                         </Text>
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -487,7 +500,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                       <View>
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -498,7 +511,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                         </Text>
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -513,8 +526,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                 </View>
                 <View
                   style={
-                    Array [
-                      Object {
+                    [
+                      {
                         "margin": 8,
                       },
                       undefined,
@@ -525,13 +538,10 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     <View
                       pointerEvents="box-none"
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "alignItems": "center",
-                            "height": 40,
                             "justifyContent": "center",
-                            "margin": 8,
-                            "width": 40,
                           },
                           undefined,
                         ]
@@ -544,30 +554,30 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                         pointerEvents="none"
                         selectable={false}
                         style={
-                          Array [
-                            Object {
+                          [
+                            {
                               "color": "#ffd600",
                               "fontSize": 24,
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "lineHeight": 24,
-                                "transform": Array [
-                                  Object {
+                                "transform": [
+                                  {
                                     "scaleX": 1,
                                   },
                                 ],
                               },
-                              Object {
+                              {
                                 "backgroundColor": "transparent",
                               },
                             ],
-                            Object {
+                            {
                               "fontFamily": "Material Design Icons",
                               "fontStyle": "normal",
                               "fontWeight": "normal",
                             },
-                            Object {},
+                            {},
                           ]
                         }
                       >
@@ -588,7 +598,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
     >
       <View
         style={
-          Object {
+          {
             "backgroundColor": "#303030",
           }
         }
@@ -596,22 +606,25 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
         <View>
           <View
             style={
-              Object {
-                "backgroundColor": "#f6f6f6",
+              {
+                "backgroundColor": "rgba(255, 251, 254, 1)",
               }
             }
           >
             <View
               accessibilityRole="button"
               accessibilityState={
-                Object {
+                {
                   "disabled": false,
                   "expanded": false,
                 }
               }
               accessible={true}
+              collapsable={false}
               focusable={true}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
               onResponderGrant={[Function]}
               onResponderMove={[Function]}
               onResponderRelease={[Function]}
@@ -619,15 +632,16 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
               style={
-                Array [
-                  Object {
+                [
+                  {
                     "overflow": "hidden",
                   },
-                  Array [
-                    Object {
+                  false,
+                  [
+                    {
                       "padding": 8,
                     },
-                    Object {
+                    {
                       "backgroundColor": "#303030",
                       "borderColor": "#ffd600",
                       "borderStyle": "solid",
@@ -642,7 +656,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               <View
                 pointerEvents="none"
                 style={
-                  Object {
+                  {
                     "alignItems": "center",
                     "flexDirection": "row",
                   }
@@ -650,11 +664,11 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               >
                 <View
                   style={
-                    Array [
-                      Object {
+                    [
+                      {
                         "margin": 8,
                       },
-                      Object {
+                      {
                         "flex": 1,
                         "justifyContent": "center",
                       },
@@ -665,23 +679,27 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     numberOfLines={1}
                     selectable={false}
                     style={
-                      Array [
-                        Object {
-                          "color": "#000000",
-                          "fontFamily": "System",
-                          "fontWeight": "400",
-                        },
-                        Object {
+                      [
+                        {
                           "textAlign": "left",
                         },
-                        Array [
-                          Object {
+                        {
+                          "color": "rgba(28, 27, 31, 1)",
+                          "fontFamily": "System",
+                          "fontWeight": "400",
+                          "letterSpacing": 0,
+                        },
+                        {
+                          "writingDirection": "ltr",
+                        },
+                        [
+                          {
                             "fontSize": 16,
                           },
-                          Object {
-                            "color": "rgba(0, 0, 0, 0.87)",
+                          {
+                            "color": "rgba(28, 27, 31, 1)",
                           },
-                          Object {
+                          {
                             "color": "#ffd600",
                           },
                         ],
@@ -690,7 +708,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   >
                     <View
                       style={
-                        Object {
+                        {
                           "display": "flex",
                           "flexDirection": "row",
                         }
@@ -698,14 +716,14 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     >
                       <View
                         style={
-                          Object {
+                          {
                             "marginRight": 10,
                           }
                         }
                       >
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -716,7 +734,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                         </Text>
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -729,7 +747,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                       <View>
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -740,7 +758,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                         </Text>
                         <Text
                           style={
-                            Object {
+                            {
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
@@ -755,8 +773,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                 </View>
                 <View
                   style={
-                    Array [
-                      Object {
+                    [
+                      {
                         "margin": 8,
                       },
                       undefined,
@@ -767,13 +785,10 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     <View
                       pointerEvents="box-none"
                       style={
-                        Array [
-                          Object {
+                        [
+                          {
                             "alignItems": "center",
-                            "height": 40,
                             "justifyContent": "center",
-                            "margin": 8,
-                            "width": 40,
                           },
                           undefined,
                         ]
@@ -786,30 +801,30 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                         pointerEvents="none"
                         selectable={false}
                         style={
-                          Array [
-                            Object {
+                          [
+                            {
                               "color": "#ffd600",
                               "fontSize": 24,
                             },
-                            Array [
-                              Object {
+                            [
+                              {
                                 "lineHeight": 24,
-                                "transform": Array [
-                                  Object {
+                                "transform": [
+                                  {
                                     "scaleX": 1,
                                   },
                                 ],
                               },
-                              Object {
+                              {
                                 "backgroundColor": "transparent",
                               },
                             ],
-                            Object {
+                            {
                               "fontFamily": "Material Design Icons",
                               "fontStyle": "normal",
                               "fontWeight": "normal",
                             },
-                            Object {},
+                            {},
                           ]
                         }
                       >

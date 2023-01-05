@@ -2,9 +2,8 @@
 
 exports[`should match snapshot with live and recent data 1`] = `
 <RCTSafeAreaView
-  emulateUnlessSupported={true}
   style={
-    Object {
+    {
       "backgroundColor": "#303030",
       "height": "100%",
     }
@@ -12,7 +11,7 @@ exports[`should match snapshot with live and recent data 1`] = `
 >
   <View
     style={
-      Object {
+      {
         "alignSelf": "center",
         "display": "flex",
         "flexDirection": "row",
@@ -22,13 +21,13 @@ exports[`should match snapshot with live and recent data 1`] = `
   >
     <View
       style={
-        Array [
-          Object {
-            "backgroundColor": "rgb(231, 231, 231)",
+        [
+          {
+            "backgroundColor": "rgba(231, 224, 236, 1)",
             "borderTopLeftRadius": 4,
             "borderTopRightRadius": 4,
           },
-          Object {
+          {
             "backgroundColor": "#303030",
             "color": "#ffd600",
             "flex": 1,
@@ -40,31 +39,32 @@ exports[`should match snapshot with live and recent data 1`] = `
       <View
         collapsable={false}
         style={
-          Object {
+          {
             "backgroundColor": "#ffd600",
             "bottom": 0,
-            "height": 2,
+            "height": 1,
             "left": 0,
             "position": "absolute",
             "right": 0,
-            "transform": Array [
-              Object {
+            "transform": [
+              {
                 "scaleY": 0.5,
               },
             ],
             "zIndex": 1,
           }
         }
+        testID="text-input-underline"
       />
       <View
         style={
-          Array [
-            Object {
+          [
+            {
               "paddingBottom": 0,
               "paddingTop": 0,
             },
-            Object {
-              "minHeight": 64,
+            {
+              "minHeight": 56,
             },
           ]
         }
@@ -72,6 +72,7 @@ exports[`should match snapshot with live and recent data 1`] = `
         <TextInput
           editable={true}
           focusable={true}
+          maxFontSizeMultiplier={1.5}
           multiline={false}
           onBlur={[Function]}
           onChangeText={[Function]}
@@ -81,36 +82,39 @@ exports[`should match snapshot with live and recent data 1`] = `
           placeholderTextColor="#ababab"
           selectionColor="#ffd600"
           style={
-            Array [
-              Object {
-                "flexGrow": 1,
+            [
+              {
                 "margin": 0,
               },
-              Object {
-                "paddingLeft": 12,
-                "paddingRight": 12,
+              {
+                "paddingLeft": 16,
+                "paddingRight": 16,
               },
-              Object {
-                "height": 64,
+              {
+                "height": 56,
               },
-              Object {
+              {
                 "paddingBottom": 0,
                 "paddingTop": 0,
               },
-              Object {
-                "color": "#ffd600",
+              {
+                "color": "rgba(73, 69, 79, 1)",
                 "fontFamily": "System",
                 "fontSize": 41.0958904109589,
                 "fontWeight": undefined,
+                "letterSpacing": 0.15,
+                "lineHeight": undefined,
                 "textAlign": "left",
                 "textAlignVertical": "center",
               },
               false,
-              Array [
-                Object {},
+              [
+                {},
               ],
+              undefined,
             ]
           }
+          testID="text-input-flat"
           underlineColorAndroid="transparent"
           value=""
         />
@@ -121,7 +125,7 @@ exports[`should match snapshot with live and recent data 1`] = `
     refreshControl={
       <RefreshControlMock
         colors={
-          Array [
+          [
             "#31adff",
           ]
         }
@@ -131,7 +135,7 @@ exports[`should match snapshot with live and recent data 1`] = `
     }
     showsVerticalScrollIndicator={false}
     style={
-      Object {
+      {
         "alignSelf": "center",
         "width": "90%",
       }
@@ -142,14 +146,14 @@ exports[`should match snapshot with live and recent data 1`] = `
     <View>
       <View
         style={
-          Object {
+          {
             "width": "100%",
           }
         }
       >
         <View
           style={
-            Object {
+            {
               "display": "flex",
               "flex": 1,
               "flexDirection": "row",
@@ -158,7 +162,7 @@ exports[`should match snapshot with live and recent data 1`] = `
         >
           <Text
             style={
-              Object {
+              {
                 "color": "#ffd600",
                 "flex": 1,
                 "fontSize": 61.64383561643835,
@@ -179,99 +183,144 @@ exports[`should match snapshot with live and recent data 1`] = `
         <View
           collapsable={false}
           style={
-            Object {
+            {
               "alignSelf": "center",
-              "backgroundColor": "transparent",
-              "borderColor": "transparent",
-              "borderRadius": 4,
-              "borderStyle": "solid",
-              "borderWidth": 0,
-              "elevation": 0,
-              "marginTop": 10,
-              "minWidth": 64,
+              "bottom": undefined,
+              "left": undefined,
+              "position": undefined,
+              "right": undefined,
+              "shadowColor": "#000",
+              "shadowOffset": {
+                "height": 0,
+                "width": 0,
+              },
+              "shadowOpacity": 0,
+              "shadowRadius": 0,
+              "top": undefined,
             }
           }
         >
           <View
-            accessibilityRole="button"
-            accessibilityState={
-              Object {
-                "disabled": false,
+            collapsable={false}
+            style={
+              {
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 0,
+                "shadowRadius": 0,
               }
             }
-            accessible={true}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              Array [
-                Object {
-                  "overflow": "hidden",
-                },
-                Object {
-                  "borderRadius": 4,
-                },
-              ]
-            }
-            testID="more-button"
           >
             <View
+              collapsable={false}
+              color="#ffd600"
               style={
-                Array [
-                  Object {
-                    "alignItems": "center",
-                    "flexDirection": "row",
-                    "justifyContent": "center",
-                  },
-                  undefined,
-                ]
+                {
+                  "backgroundColor": "transparent",
+                  "borderColor": "transparent",
+                  "borderRadius": 20,
+                  "borderStyle": "solid",
+                  "borderWidth": 0,
+                  "marginTop": 10,
+                  "minWidth": 64,
+                }
               }
             >
-              <Text
-                numberOfLines={1}
-                selectable={false}
+              <View
+                accessibilityRole="button"
+                accessibilityState={
+                  {
+                    "disabled": false,
+                  }
+                }
+                accessible={true}
+                collapsable={false}
+                focusable={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
                 style={
-                  Array [
-                    Object {
-                      "color": "#000000",
-                      "fontFamily": "System",
-                      "fontWeight": "400",
+                  [
+                    {
+                      "overflow": "hidden",
                     },
-                    Object {
-                      "textAlign": "left",
+                    false,
+                    {
+                      "borderRadius": 20,
                     },
-                    Array [
-                      Object {
-                        "letterSpacing": 1,
-                        "marginHorizontal": 16,
-                        "marginVertical": 9,
-                        "textAlign": "center",
-                      },
-                      undefined,
-                      Object {
-                        "textTransform": "uppercase",
-                      },
-                      Object {
-                        "color": "#ffd600",
-                        "fontFamily": "System",
-                        "fontWeight": "500",
-                      },
-                      Object {
-                        "fontFamily": "System",
-                        "fontWeight": "500",
-                      },
-                      undefined,
-                    ],
                   ]
                 }
+                testID="more-button"
               >
-                explore live games
-              </Text>
+                <View
+                  style={
+                    [
+                      {
+                        "alignItems": "center",
+                        "flexDirection": "row",
+                        "justifyContent": "center",
+                      },
+                      undefined,
+                    ]
+                  }
+                >
+                  <Text
+                    numberOfLines={1}
+                    selectable={false}
+                    style={
+                      [
+                        {
+                          "color": "rgba(28, 27, 31, 1)",
+                          "fontFamily": "System",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "letterSpacing": 0.1,
+                          "lineHeight": 20,
+                        },
+                        {
+                          "textAlign": "left",
+                        },
+                        {
+                          "writingDirection": "ltr",
+                        },
+                        [
+                          {
+                            "marginHorizontal": 16,
+                            "marginVertical": 9,
+                            "textAlign": "center",
+                          },
+                          false,
+                          {
+                            "marginHorizontal": 12,
+                          },
+                          undefined,
+                          false,
+                          {
+                            "color": "rgba(103, 80, 164, 1)",
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
+                          undefined,
+                        ],
+                      ]
+                    }
+                  >
+                    explore live games
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -280,143 +329,175 @@ exports[`should match snapshot with live and recent data 1`] = `
   </RCTScrollView>
   <View
     collapsable={false}
-    pointerEvents="auto"
     style={
-      Object {
-        "backgroundColor": "#ffd600",
-        "borderRadius": 8,
+      {
+        "alignSelf": undefined,
         "bottom": 0,
-        "elevation": 6,
-        "margin": 20,
-        "opacity": 1,
+        "left": undefined,
         "position": "absolute",
         "right": 0,
-        "shadowColor": "#000000",
-        "shadowOffset": Object {
-          "height": 5,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 4,
           "width": 0,
         },
-        "shadowOpacity": 0.24,
-        "shadowRadius": 6,
-        "transform": Array [
-          Object {
-            "scale": 1,
-          },
-        ],
+        "shadowOpacity": 0.15,
+        "shadowRadius": 8,
+        "top": undefined,
       }
     }
   >
     <View
-      accessibilityRole="button"
-      accessibilityState={
-        Object {
-          "disabled": false,
-        }
-      }
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
+      collapsable={false}
       style={
-        Array [
-          Object {
-            "overflow": "hidden",
+        {
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 1,
+            "width": 0,
           },
-          Object {
-            "borderRadius": 28,
-          },
-        ]
+          "shadowOpacity": 0.3,
+          "shadowRadius": 3,
+        }
       }
     >
       <View
-        pointerEvents="none"
+        collapsable={false}
+        pointerEvents="auto"
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flexDirection": "row",
-              "justifyContent": "center",
-            },
-            Object {
-              "height": 56,
-              "width": 56,
-            },
-          ]
+          {
+            "backgroundColor": "#ffd600",
+            "borderRadius": 8,
+            "margin": 20,
+            "opacity": 1,
+            "overflow": "hidden",
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          }
         }
+        testID="fab-container"
       >
         <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
-            Array [
-              Object {
-                "alignItems": "center",
-                "justifyContent": "center",
+            [
+              {
+                "overflow": "hidden",
               },
-              Object {
-                "height": 24,
-                "width": 24,
-              },
+              false,
+              undefined,
             ]
           }
+          testID="fab"
         >
           <View
-            collapsable={false}
+            pointerEvents="none"
             style={
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "opacity": 1,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-                "transform": Array [
-                  Object {
-                    "rotate": "0deg",
-                  },
-                ],
-              }
+              [
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "borderRadius": 16,
+                  "height": 56,
+                  "width": 56,
+                },
+              ]
             }
+            testID="fab-content"
           >
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
+            <View
               style={
-                Array [
-                  Object {
-                    "color": "rgba(0, 0, 0, .54)",
-                    "fontSize": 24,
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
                   },
-                  Array [
-                    Object {
-                      "lineHeight": 24,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "Material Design Icons",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
+                  {
+                    "height": 24,
+                    "width": 24,
                   },
-                  Object {},
                 ]
               }
             >
-              󰐕
-            </Text>
+              <View
+                collapsable={false}
+                style={
+                  {
+                    "bottom": 0,
+                    "left": 0,
+                    "opacity": 1,
+                    "position": "absolute",
+                    "right": 0,
+                    "top": 0,
+                    "transform": [
+                      {
+                        "rotate": "0deg",
+                      },
+                    ],
+                  }
+                }
+              >
+                <Text
+                  accessibilityElementsHidden={true}
+                  allowFontScaling={false}
+                  importantForAccessibility="no-hide-descendants"
+                  pointerEvents="none"
+                  selectable={false}
+                  style={
+                    [
+                      {
+                        "color": "rgba(33, 0, 93, 1)",
+                        "fontSize": 24,
+                      },
+                      [
+                        {
+                          "lineHeight": 24,
+                          "transform": [
+                            {
+                              "scaleX": 1,
+                            },
+                          ],
+                        },
+                        {
+                          "backgroundColor": "transparent",
+                        },
+                      ],
+                      {
+                        "fontFamily": "Material Design Icons",
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                      },
+                      {},
+                    ]
+                  }
+                >
+                  󰐕
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
       </View>
@@ -427,9 +508,8 @@ exports[`should match snapshot with live and recent data 1`] = `
 
 exports[`should match snapshot with no data 1`] = `
 <RCTSafeAreaView
-  emulateUnlessSupported={true}
   style={
-    Object {
+    {
       "backgroundColor": "#303030",
       "height": "100%",
     }
@@ -437,7 +517,7 @@ exports[`should match snapshot with no data 1`] = `
 >
   <View
     style={
-      Object {
+      {
         "alignSelf": "center",
         "display": "flex",
         "flexDirection": "row",
@@ -447,13 +527,13 @@ exports[`should match snapshot with no data 1`] = `
   >
     <View
       style={
-        Array [
-          Object {
-            "backgroundColor": "rgb(231, 231, 231)",
+        [
+          {
+            "backgroundColor": "rgba(231, 224, 236, 1)",
             "borderTopLeftRadius": 4,
             "borderTopRightRadius": 4,
           },
-          Object {
+          {
             "backgroundColor": "#303030",
             "color": "#ffd600",
             "flex": 1,
@@ -465,31 +545,32 @@ exports[`should match snapshot with no data 1`] = `
       <View
         collapsable={false}
         style={
-          Object {
+          {
             "backgroundColor": "#ffd600",
             "bottom": 0,
-            "height": 2,
+            "height": 1,
             "left": 0,
             "position": "absolute",
             "right": 0,
-            "transform": Array [
-              Object {
+            "transform": [
+              {
                 "scaleY": 0.5,
               },
             ],
             "zIndex": 1,
           }
         }
+        testID="text-input-underline"
       />
       <View
         style={
-          Array [
-            Object {
+          [
+            {
               "paddingBottom": 0,
               "paddingTop": 0,
             },
-            Object {
-              "minHeight": 64,
+            {
+              "minHeight": 56,
             },
           ]
         }
@@ -497,6 +578,7 @@ exports[`should match snapshot with no data 1`] = `
         <TextInput
           editable={true}
           focusable={true}
+          maxFontSizeMultiplier={1.5}
           multiline={false}
           onBlur={[Function]}
           onChangeText={[Function]}
@@ -506,36 +588,39 @@ exports[`should match snapshot with no data 1`] = `
           placeholderTextColor="#ababab"
           selectionColor="#ffd600"
           style={
-            Array [
-              Object {
-                "flexGrow": 1,
+            [
+              {
                 "margin": 0,
               },
-              Object {
-                "paddingLeft": 12,
-                "paddingRight": 12,
+              {
+                "paddingLeft": 16,
+                "paddingRight": 16,
               },
-              Object {
-                "height": 64,
+              {
+                "height": 56,
               },
-              Object {
+              {
                 "paddingBottom": 0,
                 "paddingTop": 0,
               },
-              Object {
-                "color": "#ffd600",
+              {
+                "color": "rgba(73, 69, 79, 1)",
                 "fontFamily": "System",
                 "fontSize": 41.0958904109589,
                 "fontWeight": undefined,
+                "letterSpacing": 0.15,
+                "lineHeight": undefined,
                 "textAlign": "left",
                 "textAlignVertical": "center",
               },
               false,
-              Array [
-                Object {},
+              [
+                {},
               ],
+              undefined,
             ]
           }
+          testID="text-input-flat"
           underlineColorAndroid="transparent"
           value=""
         />
@@ -546,7 +631,7 @@ exports[`should match snapshot with no data 1`] = `
     refreshControl={
       <RefreshControlMock
         colors={
-          Array [
+          [
             "#31adff",
           ]
         }
@@ -556,7 +641,7 @@ exports[`should match snapshot with no data 1`] = `
     }
     showsVerticalScrollIndicator={false}
     style={
-      Object {
+      {
         "alignSelf": "center",
         "width": "90%",
       }
@@ -567,7 +652,7 @@ exports[`should match snapshot with no data 1`] = `
     <View>
       <Text
         style={
-          Object {
+          {
             "alignSelf": "center",
             "color": "#ababab",
             "fontSize": 61.64383561643835,
@@ -580,143 +665,175 @@ exports[`should match snapshot with no data 1`] = `
   </RCTScrollView>
   <View
     collapsable={false}
-    pointerEvents="auto"
     style={
-      Object {
-        "backgroundColor": "#ffd600",
-        "borderRadius": 8,
+      {
+        "alignSelf": undefined,
         "bottom": 0,
-        "elevation": 6,
-        "margin": 20,
-        "opacity": 1,
+        "left": undefined,
         "position": "absolute",
         "right": 0,
-        "shadowColor": "#000000",
-        "shadowOffset": Object {
-          "height": 5,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 4,
           "width": 0,
         },
-        "shadowOpacity": 0.24,
-        "shadowRadius": 6,
-        "transform": Array [
-          Object {
-            "scale": 1,
-          },
-        ],
+        "shadowOpacity": 0.15,
+        "shadowRadius": 8,
+        "top": undefined,
       }
     }
   >
     <View
-      accessibilityRole="button"
-      accessibilityState={
-        Object {
-          "disabled": false,
-        }
-      }
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
+      collapsable={false}
       style={
-        Array [
-          Object {
-            "overflow": "hidden",
+        {
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 1,
+            "width": 0,
           },
-          Object {
-            "borderRadius": 28,
-          },
-        ]
+          "shadowOpacity": 0.3,
+          "shadowRadius": 3,
+        }
       }
     >
       <View
-        pointerEvents="none"
+        collapsable={false}
+        pointerEvents="auto"
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flexDirection": "row",
-              "justifyContent": "center",
-            },
-            Object {
-              "height": 56,
-              "width": 56,
-            },
-          ]
+          {
+            "backgroundColor": "#ffd600",
+            "borderRadius": 8,
+            "margin": 20,
+            "opacity": 1,
+            "overflow": "hidden",
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          }
         }
+        testID="fab-container"
       >
         <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
-            Array [
-              Object {
-                "alignItems": "center",
-                "justifyContent": "center",
+            [
+              {
+                "overflow": "hidden",
               },
-              Object {
-                "height": 24,
-                "width": 24,
-              },
+              false,
+              undefined,
             ]
           }
+          testID="fab"
         >
           <View
-            collapsable={false}
+            pointerEvents="none"
             style={
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "opacity": 1,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-                "transform": Array [
-                  Object {
-                    "rotate": "0deg",
-                  },
-                ],
-              }
+              [
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                {
+                  "borderRadius": 16,
+                  "height": 56,
+                  "width": 56,
+                },
+              ]
             }
+            testID="fab-content"
           >
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
+            <View
               style={
-                Array [
-                  Object {
-                    "color": "rgba(0, 0, 0, .54)",
-                    "fontSize": 24,
+                [
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
                   },
-                  Array [
-                    Object {
-                      "lineHeight": 24,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "Material Design Icons",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
+                  {
+                    "height": 24,
+                    "width": 24,
                   },
-                  Object {},
                 ]
               }
             >
-              󰐕
-            </Text>
+              <View
+                collapsable={false}
+                style={
+                  {
+                    "bottom": 0,
+                    "left": 0,
+                    "opacity": 1,
+                    "position": "absolute",
+                    "right": 0,
+                    "top": 0,
+                    "transform": [
+                      {
+                        "rotate": "0deg",
+                      },
+                    ],
+                  }
+                }
+              >
+                <Text
+                  accessibilityElementsHidden={true}
+                  allowFontScaling={false}
+                  importantForAccessibility="no-hide-descendants"
+                  pointerEvents="none"
+                  selectable={false}
+                  style={
+                    [
+                      {
+                        "color": "rgba(33, 0, 93, 1)",
+                        "fontSize": 24,
+                      },
+                      [
+                        {
+                          "lineHeight": 24,
+                          "transform": [
+                            {
+                              "scaleX": 1,
+                            },
+                          ],
+                        },
+                        {
+                          "backgroundColor": "transparent",
+                        },
+                      ],
+                      {
+                        "fontFamily": "Material Design Icons",
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                      },
+                      {},
+                    ]
+                  }
+                >
+                  󰐕
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
       </View>

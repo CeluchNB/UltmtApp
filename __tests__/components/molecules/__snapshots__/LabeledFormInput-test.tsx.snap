@@ -3,7 +3,7 @@
 exports[`should match basic snapshot 1`] = `
 <View
   style={
-    Object {
+    {
       "alignItems": "center",
       "display": "flex",
       "flexDirection": "row",
@@ -14,7 +14,7 @@ exports[`should match basic snapshot 1`] = `
 >
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 41.0958904109589,
         "fontWeight": "bold",
@@ -26,14 +26,14 @@ exports[`should match basic snapshot 1`] = `
   </Text>
   <View
     style={
-      Object {
+      {
         "width": "30%",
       }
     }
   >
     <View
       style={
-        Object {
+        {
           "placeholderTextColor": "#ffffff",
         }
       }
@@ -41,20 +41,21 @@ exports[`should match basic snapshot 1`] = `
       <View
         pointerEvents="none"
         style={
-          Array [
-            Object {
+          [
+            {
               "bottom": 0,
               "left": 0,
               "position": "absolute",
               "right": 0,
               "top": 6,
             },
-            Object {
+            {
               "backgroundColor": "#303030",
               "borderColor": "#31adff",
               "borderRadius": 4,
               "borderWidth": 1,
             },
+            undefined,
           ]
         }
         testID="text-input-outline"
@@ -62,12 +63,12 @@ exports[`should match basic snapshot 1`] = `
       <View>
         <View
           style={
-            Array [
-              Object {
+            [
+              {
                 "paddingBottom": 0,
               },
-              Object {
-                "minHeight": 64,
+              {
+                "minHeight": 56,
                 "paddingTop": 8,
               },
             ]
@@ -77,40 +78,43 @@ exports[`should match basic snapshot 1`] = `
             autoCapitalize="none"
             editable={true}
             keyboardType="default"
+            maxFontSizeMultiplier={1.5}
             multiline={false}
             onBlur={[Function]}
             onChangeText={[Function]}
             onFocus={[Function]}
             placeholder="Test field"
-            placeholderTextColor="#ffffff"
+            placeholderTextColor="rgba(73, 69, 79, 1)"
             selectionColor="#ffd600"
             style={
-              Array [
-                Object {
-                  "flexGrow": 1,
+              [
+                {
                   "margin": 0,
-                  "paddingHorizontal": 14,
                   "zIndex": 1,
                 },
-                Object {
-                  "height": 56,
+                {
+                  "height": 48,
                 },
-                Object {
+                {
                   "paddingBottom": 0,
                   "paddingTop": 0,
                 },
-                Object {
-                  "color": "#ffd600",
+                {
+                  "color": "rgba(28, 27, 31, 1)",
                   "fontFamily": "System",
                   "fontSize": 16,
                   "fontWeight": undefined,
+                  "letterSpacing": 0.15,
+                  "lineHeight": undefined,
+                  "paddingHorizontal": 16,
                   "textAlign": "left",
                   "textAlignVertical": "center",
                 },
                 false,
-                Array [
-                  Object {},
+                [
+                  {},
                 ],
+                undefined,
               ]
             }
             testID="text-input-outlined"
@@ -122,7 +126,7 @@ exports[`should match basic snapshot 1`] = `
     </View>
     <Text
       style={
-        Object {
+        {
           "color": "#ff0000",
           "fontSize": 20.54794520547945,
         }
@@ -133,7 +137,7 @@ exports[`should match basic snapshot 1`] = `
   </View>
   <Text
     style={
-      Object {
+      {
         "color": "#ababab",
         "fontSize": 30.821917808219176,
         "fontWeight": "bold",
@@ -149,7 +153,7 @@ exports[`should match basic snapshot 1`] = `
 exports[`should match snapshot with non-user input 1`] = `
 <View
   style={
-    Object {
+    {
       "alignItems": "center",
       "display": "flex",
       "flexDirection": "row",
@@ -160,7 +164,7 @@ exports[`should match snapshot with non-user input 1`] = `
 >
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 41.0958904109589,
         "fontWeight": "bold",
@@ -172,7 +176,7 @@ exports[`should match snapshot with non-user input 1`] = `
   </Text>
   <View
     style={
-      Object {
+      {
         "width": "30%",
       }
     }
@@ -182,7 +186,7 @@ exports[`should match snapshot with non-user input 1`] = `
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "#ff0000",
           "fontSize": 20.54794520547945,
         }
@@ -193,7 +197,7 @@ exports[`should match snapshot with non-user input 1`] = `
   </View>
   <Text
     style={
-      Object {
+      {
         "color": "#ababab",
         "fontSize": 30.821917808219176,
         "fontWeight": "bold",
@@ -209,7 +213,7 @@ exports[`should match snapshot with non-user input 1`] = `
 exports[`should match snapshot without unit 1`] = `
 <View
   style={
-    Object {
+    {
       "alignItems": "center",
       "display": "flex",
       "flexDirection": "row",
@@ -220,7 +224,7 @@ exports[`should match snapshot without unit 1`] = `
 >
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 41.0958904109589,
         "fontWeight": "bold",
@@ -232,14 +236,14 @@ exports[`should match snapshot without unit 1`] = `
   </Text>
   <View
     style={
-      Object {
+      {
         "width": "50%",
       }
     }
   >
     <View
       style={
-        Object {
+        {
           "placeholderTextColor": "#ffffff",
         }
       }
@@ -247,20 +251,21 @@ exports[`should match snapshot without unit 1`] = `
       <View
         pointerEvents="none"
         style={
-          Array [
-            Object {
+          [
+            {
               "bottom": 0,
               "left": 0,
               "position": "absolute",
               "right": 0,
               "top": 6,
             },
-            Object {
+            {
               "backgroundColor": "#303030",
               "borderColor": "#31adff",
               "borderRadius": 4,
               "borderWidth": 1,
             },
+            undefined,
           ]
         }
         testID="text-input-outline"
@@ -268,12 +273,12 @@ exports[`should match snapshot without unit 1`] = `
       <View>
         <View
           style={
-            Array [
-              Object {
+            [
+              {
                 "paddingBottom": 0,
               },
-              Object {
-                "minHeight": 64,
+              {
+                "minHeight": 56,
                 "paddingTop": 8,
               },
             ]
@@ -283,40 +288,43 @@ exports[`should match snapshot without unit 1`] = `
             autoCapitalize="none"
             editable={true}
             keyboardType="default"
+            maxFontSizeMultiplier={1.5}
             multiline={false}
             onBlur={[Function]}
             onChangeText={[Function]}
             onFocus={[Function]}
             placeholder="Test field"
-            placeholderTextColor="#ffffff"
+            placeholderTextColor="rgba(73, 69, 79, 1)"
             selectionColor="#ffd600"
             style={
-              Array [
-                Object {
-                  "flexGrow": 1,
+              [
+                {
                   "margin": 0,
-                  "paddingHorizontal": 14,
                   "zIndex": 1,
                 },
-                Object {
-                  "height": 56,
+                {
+                  "height": 48,
                 },
-                Object {
+                {
                   "paddingBottom": 0,
                   "paddingTop": 0,
                 },
-                Object {
-                  "color": "#ffd600",
+                {
+                  "color": "rgba(28, 27, 31, 1)",
                   "fontFamily": "System",
                   "fontSize": 16,
                   "fontWeight": undefined,
+                  "letterSpacing": 0.15,
+                  "lineHeight": undefined,
+                  "paddingHorizontal": 16,
                   "textAlign": "left",
                   "textAlignVertical": "center",
                 },
                 false,
-                Array [
-                  Object {},
+                [
+                  {},
                 ],
+                undefined,
               ]
             }
             testID="text-input-outlined"
@@ -328,7 +336,7 @@ exports[`should match snapshot without unit 1`] = `
     </View>
     <Text
       style={
-        Object {
+        {
           "color": "#ff0000",
           "fontSize": 20.54794520547945,
         }
