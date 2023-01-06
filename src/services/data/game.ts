@@ -9,6 +9,7 @@ import { CreateGame, Game } from '../../types/game'
 import {
     addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
+    finishGame as networkFinishGame,
     getGameById as networkGetGameById,
     getPointsByGame as networkGetPointsByGame,
     joinGame as networkJoinGame,
@@ -132,6 +133,16 @@ export const joinGame = async (
         return game
     } catch (e) {
         return throwApiError(e, Constants.JOIN_GAME_ERROR)
+    }
+}
+
+export const finishGame = async (): Promise<Game> => {
+    try {
+        const response = await withGameToken(networkFinishGame)
+        const { game } = response.data
+        return game
+    } catch (e) {
+        return throwApiError(e, Constants.FINISH_GAME_ERROR)
     }
 }
 

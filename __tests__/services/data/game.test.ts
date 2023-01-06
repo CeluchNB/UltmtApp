@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken'
 import {
     addGuestPlayer,
     createGame,
+    finishGame,
     getGameById,
     getPointsByGame,
     joinGame,
@@ -257,6 +258,39 @@ describe('test join game', () => {
             message: Constants.JOIN_GAME_ERROR,
         })
         expect(RNEncryptedStorage.setItem).not.toHaveBeenCalled()
+    })
+})
+
+describe('test finish game', () => {
+    it('handles network success', async () => {
+        jest.spyOn(GameServices, 'finishGame').mockReturnValueOnce(
+            Promise.resolve({
+                data: { game },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await finishGame()
+        expect(result).toMatchObject(game)
+    })
+
+    it('handles network failure', async () => {
+        jest.spyOn(GameServices, 'finishGame').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        await expect(finishGame()).rejects.toMatchObject({
+            message: Constants.FINISH_GAME_ERROR,
+        })
     })
 })
 
