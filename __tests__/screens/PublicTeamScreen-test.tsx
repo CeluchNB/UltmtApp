@@ -7,6 +7,8 @@ import { Team } from '../../src/types/team'
 import renderer from 'react-test-renderer'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+
 const navigate = jest.fn()
 const addListener = jest.fn()
 
@@ -50,7 +52,6 @@ beforeEach(() => {
 })
 
 it('should match snapshot', async () => {
-    jest.useFakeTimers()
     const snapshot = renderer.create(
         <NavigationContainer>
             <PublicTeamScreen {...props} />

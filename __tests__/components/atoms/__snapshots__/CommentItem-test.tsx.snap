@@ -3,7 +3,7 @@
 exports[`CommentItem should match snapshot 1`] = `
 <View
   style={
-    Object {
+    {
       "backgroundColor": "#1a1a1a",
       "display": "flex",
       "flexDirection": "row",
@@ -13,7 +13,7 @@ exports[`CommentItem should match snapshot 1`] = `
 >
   <View
     style={
-      Object {
+      {
         "alignItems": "flex-start",
         "flex": 1,
       }
@@ -21,7 +21,7 @@ exports[`CommentItem should match snapshot 1`] = `
   >
     <Text
       style={
-        Object {
+        {
           "color": "#ababab",
           "fontSize": 30.821917808219176,
         }
@@ -33,7 +33,7 @@ exports[`CommentItem should match snapshot 1`] = `
     </Text>
     <Text
       style={
-        Object {
+        {
           "color": "#ffd600",
           "fontSize": 30.821917808219176,
         }

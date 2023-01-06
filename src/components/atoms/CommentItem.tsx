@@ -50,7 +50,7 @@ const CommentItem: React.FC<CommentInputProps> = ({
             {userId.length > 0 && userId === comment.user._id && (
                 <IconButton
                     icon="close"
-                    color={colors.error}
+                    iconColor={colors.error}
                     onPress={() => {
                         onDelete(comment.commentNumber)
                     }}

@@ -61,11 +61,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
                 underlineColor={colors.textPrimary}
                 activeUnderlineColor={colors.textPrimary}
                 placeholderTextColor={colors.gray}
-                theme={{
-                    colors: {
-                        text: colors.textPrimary,
-                    },
-                }}
+                textColor={colors.textPrimary}
                 placeholder={placeholder}
                 onChangeText={text => {
                     setSearchText(text)
@@ -85,7 +81,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
                 <Button
                     mode="outlined"
                     style={styles.filter}
-                    color={colors.textPrimary}
+                    textColor={colors.textPrimary}
                     onPress={onFilterPress}>
                     Filter
                 </Button>

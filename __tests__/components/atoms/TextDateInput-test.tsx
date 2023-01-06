@@ -1,9 +1,18 @@
-import React from 'react'
+import * as React from 'react'
 import TextDateInput from '../../../src/components/atoms/TextDateInput'
 import { act, fireEvent, render } from '@testing-library/react-native'
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 import MockDate from 'mockdate'
 MockDate.set('01 October 2022 00:00 UTC')
+
+beforeAll(() => {
+    jest.useFakeTimers({ legacyFakeTimers: true })
+})
+
+afterAll(() => {
+    jest.useRealTimers()
+})
 
 it('should match snapshot while closed', () => {
     const snapshot = render(

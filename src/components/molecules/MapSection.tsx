@@ -70,7 +70,7 @@ const MapSection = <T,>({
                 <Text style={styles.title}>{title}</Text>
                 {showCreateButton && (
                     <IconButton
-                        color={colors.primary}
+                        iconColor={colors.primary}
                         style={styles.createButton}
                         onPress={onCreatePress}
                         icon="plus"
@@ -94,7 +94,8 @@ const MapSection = <T,>({
                 <Button
                     mode="text"
                     style={styles.button}
-                    color={colors.textPrimary}
+                    uppercase={true}
+                    textColor={colors.textPrimary}
                     onPress={onButtonPress}
                     testID="more-button">
                     {buttonText}

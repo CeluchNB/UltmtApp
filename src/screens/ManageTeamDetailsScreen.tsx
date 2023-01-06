@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as TeamData from '../services/data/team'
+import { AppDispatch } from '../store/store'
 import { ManagedTeamDetailsProps } from '../types/navigation'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
@@ -30,7 +31,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     route,
 }: ManagedTeamDetailsProps) => {
     const { id, place, name } = route.params
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const team = useSelector(selectTeam)
 
     const { colors } = useColors()

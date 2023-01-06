@@ -66,7 +66,7 @@ describe('test team services', () => {
     it('should handle network create team failure', async () => {
         jest.spyOn(TeamServices, 'createTeam').mockReturnValueOnce(teamError)
 
-        expect(createTeam(createData)).rejects.toThrow()
+        await expect(createTeam(createData)).rejects.toBeDefined()
     })
 
     it('should handle network get managed team success', async () => {
@@ -83,7 +83,7 @@ describe('test team services', () => {
             teamError,
         )
 
-        expect(getManagedTeam('')).rejects.toThrow()
+        await expect(getManagedTeam('')).rejects.toBeDefined()
     })
 
     it('should handle network get team success', async () => {
@@ -96,7 +96,7 @@ describe('test team services', () => {
     it('should handle network get team failure', async () => {
         jest.spyOn(TeamServices, 'getTeam').mockReturnValueOnce(teamError)
 
-        expect(getTeam('')).rejects.toThrow()
+        await expect(getTeam('')).rejects.toBeDefined()
     })
 
     it('should handle network remove player success', async () => {
@@ -111,7 +111,7 @@ describe('test team services', () => {
     it('should handle network remove player failure', async () => {
         jest.spyOn(TeamServices, 'removePlayer').mockReturnValueOnce(teamError)
 
-        expect(removePlayer('', '')).rejects.toThrow()
+        await expect(removePlayer('', '')).rejects.toBeDefined()
     })
 
     it('should handle network rollover success', async () => {
@@ -124,11 +124,11 @@ describe('test team services', () => {
     it('should handle network rollover failure', async () => {
         jest.spyOn(TeamServices, 'rollover').mockReturnValueOnce(teamError)
 
-        expect(rollover('', true, '', '')).rejects.toThrow()
+        await expect(rollover('', true, '', '')).rejects.toBeDefined()
     })
 
     it('should handle search not enough characters failure', async () => {
-        expect(searchTeam('12')).rejects.toThrow()
+        await expect(searchTeam('12')).rejects.toBeDefined()
     })
 
     it('should handle network search success', async () => {
@@ -149,7 +149,7 @@ describe('test team services', () => {
     it('should handle network search failure', async () => {
         jest.spyOn(TeamServices, 'searchTeam').mockReturnValueOnce(teamError)
 
-        expect(searchTeam('1234')).rejects.toThrow()
+        await expect(searchTeam('1234')).rejects.toBeDefined()
     })
 
     it('should handle network toggle roster status success', async () => {
@@ -166,7 +166,7 @@ describe('test team services', () => {
             teamError,
         )
 
-        expect(toggleRosterStatus('', true)).rejects.toThrow()
+        await expect(toggleRosterStatus('', true)).rejects.toBeDefined()
     })
 
     it('should handle network add manager success', async () => {
@@ -180,7 +180,7 @@ describe('test team services', () => {
             teamError,
         )
 
-        expect(addManager('', '')).rejects.toThrow()
+        await expect(addManager('', '')).rejects.toBeDefined()
     })
 
     it('should handle network get archived team success', async () => {
@@ -195,7 +195,7 @@ describe('test team services', () => {
         jest.spyOn(TeamServices, 'getArchivedTeam').mockReturnValueOnce(
             teamError,
         )
-        expect(getArchivedTeam('')).rejects.toThrow()
+        await expect(getArchivedTeam('')).rejects.toBeDefined()
     })
 
     it('should handle network create bulk join code success', async () => {
@@ -224,6 +224,6 @@ describe('test team services', () => {
             }),
         )
 
-        expect(createBulkJoinCode('')).rejects.toThrow()
+        await expect(createBulkJoinCode('')).rejects.toBeDefined()
     })
 })

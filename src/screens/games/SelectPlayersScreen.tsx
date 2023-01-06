@@ -1,3 +1,4 @@
+import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import { Chip } from 'react-native-paper'
 import GameHeader from '../../components/molecules/GameHeader'
@@ -33,7 +34,7 @@ const SelectPlayersScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     const point = useSelector(selectPoint)
     const status = useSelector(selectSetPlayersStatus)
     const error = useSelector(selectSetPlayersError)
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const [selectedPlayers, setSelectedPlayers] = useState<number[]>([])
     const [modalVisible, setModalVisible] = useState(false)
 

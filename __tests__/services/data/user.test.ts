@@ -91,7 +91,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(fetchProfile()).rejects.toThrow()
+        await expect(fetchProfile()).rejects.toBeDefined()
     })
 
     it('should handle network create account success', async () => {
@@ -124,12 +124,12 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(createAccount(createUser)).rejects.toThrow()
+        await expect(createAccount(createUser)).rejects.toBeDefined()
         expect(RNEncryptedStorage.setItem).not.toHaveBeenCalled()
     })
 
-    it('should handle too few search characters correctly', () => {
-        expect(searchUsers('')).rejects.toThrow()
+    it('should handle too few search characters correctly', async () => {
+        await expect(searchUsers('')).rejects.toBeDefined()
     })
 
     it('should handle network search users success', async () => {
@@ -147,7 +147,7 @@ describe('test user data calls', () => {
         expect(result).toEqual(displayUsers)
     })
 
-    it('should handle network search users failure', () => {
+    it('should handle network search users failure', async () => {
         jest.spyOn(UserServices, 'searchUsers').mockReturnValueOnce(
             Promise.reject({
                 data: { message: errorText },
@@ -158,7 +158,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(searchUsers('123')).rejects.toThrow()
+        await expect(searchUsers('123')).rejects.toBeDefined()
     })
 
     it('should handle network leave team success', async () => {
@@ -187,7 +187,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(leaveTeam('')).rejects.toThrow()
+        await expect(leaveTeam('')).rejects.toBeDefined()
     })
 
     it('should handle network get public user success', async () => {
@@ -216,7 +216,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(getPublicUser('')).rejects.toThrow()
+        await expect(getPublicUser('')).rejects.toBeDefined()
     })
 
     it('should handle network leave manager role success', async () => {
@@ -243,7 +243,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        expect(leaveManagerRole('')).rejects.toThrow()
+        await expect(leaveManagerRole('')).rejects.toBeDefined()
     })
 
     it('should handle request password recovery network success', async () => {
@@ -270,7 +270,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        expect(requestPasswordRecovery('')).rejects.toThrow()
+        await expect(requestPasswordRecovery('')).rejects.toBeDefined()
     })
 
     it('should handle reset password network success', async () => {
@@ -301,7 +301,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        expect(resetPassword('', '')).rejects.toThrow()
+        await expect(resetPassword('', '')).rejects.toBeDefined()
     })
 
     it('should handle set open to requests network success', async () => {
@@ -328,7 +328,7 @@ describe('test user data calls', () => {
                 config: {},
             }),
         )
-        expect(setOpenToRequests(true)).rejects.toThrow()
+        await expect(setOpenToRequests(true)).rejects.toBeDefined()
     })
 
     it('should handle change name network success', async () => {
@@ -356,7 +356,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(changeName('', '')).rejects.toThrow()
+        await expect(changeName('', '')).rejects.toBeDefined()
     })
 
     it('should handle set private network success', async () => {
@@ -384,7 +384,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(setPrivate(true)).rejects.toThrow()
+        await expect(setPrivate(true)).rejects.toBeDefined()
     })
 
     it('should handle change email network success', async () => {
@@ -413,7 +413,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(changeEmail('', '', '')).rejects.toThrow()
+        await expect(changeEmail('', '', '')).rejects.toBeDefined()
     })
 
     it('should handle change password network success', async () => {
@@ -442,7 +442,7 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(changePassword('', '', '')).rejects.toThrow()
+        await expect(changePassword('', '', '')).rejects.toBeDefined()
     })
 
     it('should handle delete account network success', async () => {
@@ -501,6 +501,6 @@ describe('test user data calls', () => {
             }),
         )
 
-        expect(joinTeamByCode('')).rejects.toThrow()
+        await expect(joinTeamByCode('')).rejects.toBeDefined()
     })
 })

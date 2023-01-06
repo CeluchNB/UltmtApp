@@ -43,9 +43,9 @@ describe('test add comment', () => {
             .mockReturnValueOnce(Promise.resolve())
         localSpy.mockReset()
 
-        expect(addComment('action1', 'point1', 'Test')).rejects.toThrowError(
-            Constants.COMMENT_ERROR,
-        )
+        await expect(
+            addComment('action1', 'point1', 'Test'),
+        ).rejects.toMatchObject({ message: Constants.COMMENT_ERROR })
         expect(localSpy).not.toHaveBeenCalled()
     })
 })
@@ -86,9 +86,9 @@ describe('delete comment', () => {
             .mockReturnValueOnce(Promise.resolve())
         localSpy.mockReset()
 
-        expect(deleteComment('action1', '1', 'point1')).rejects.toThrowError(
-            Constants.COMMENT_ERROR,
-        )
+        await expect(
+            deleteComment('action1', '1', 'point1'),
+        ).rejects.toMatchObject({ message: Constants.COMMENT_ERROR })
         expect(localSpy).not.toHaveBeenCalled()
     })
 })

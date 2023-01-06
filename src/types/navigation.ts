@@ -83,9 +83,9 @@ export type AllScreenProps = NativeStackScreenProps<
     'Tabs'
 >
 
-export type TopLevelProps = NativeStackScreenProps<
-    TopLevelParamList,
-    'SettingsScreen'
+export type SettingsScreenProps = CompositeScreenProps<
+    NativeStackScreenProps<TopLevelParamList, 'SettingsScreen'>,
+    NativeStackScreenProps<AllScreenProps>
 >
 
 export type SecureEditProps = NativeStackScreenProps<

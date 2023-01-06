@@ -4,7 +4,7 @@ exports[`should match snapshot while closed 1`] = `
 <View>
   <View
     style={
-      Object {
+      {
         "display": "flex",
         "flexDirection": "row",
       }
@@ -12,7 +12,7 @@ exports[`should match snapshot while closed 1`] = `
   >
     <View
       style={
-        Object {
+        {
           "color": "#ffd600",
         }
       }
@@ -20,20 +20,21 @@ exports[`should match snapshot while closed 1`] = `
       <View
         pointerEvents="none"
         style={
-          Array [
-            Object {
+          [
+            {
               "bottom": 0,
               "left": 0,
               "position": "absolute",
               "right": 0,
               "top": 6,
             },
-            Object {
+            {
               "backgroundColor": "#303030",
               "borderColor": "#ffd600",
               "borderRadius": 4,
               "borderWidth": 1,
             },
+            undefined,
           ]
         }
         testID="text-input-outline"
@@ -41,12 +42,12 @@ exports[`should match snapshot while closed 1`] = `
       <View>
         <View
           style={
-            Array [
-              Object {
+            [
+              {
                 "paddingBottom": 0,
               },
-              Object {
-                "minHeight": 64,
+              {
+                "minHeight": 56,
                 "paddingTop": 8,
               },
             ]
@@ -55,6 +56,7 @@ exports[`should match snapshot while closed 1`] = `
           <TextInput
             editable={true}
             focusable={false}
+            maxFontSizeMultiplier={1.5}
             multiline={false}
             onBlur={[Function]}
             onChangeText={[Function]}
@@ -64,32 +66,34 @@ exports[`should match snapshot while closed 1`] = `
             placeholderTextColor="#ffd600"
             selectionColor="#ffd600"
             style={
-              Array [
-                Object {
-                  "flexGrow": 1,
+              [
+                {
                   "margin": 0,
-                  "paddingHorizontal": 14,
                   "zIndex": 1,
                 },
-                Object {
-                  "height": 56,
+                {
+                  "height": 48,
                 },
-                Object {
+                {
                   "paddingBottom": 0,
                   "paddingTop": 0,
                 },
-                Object {
-                  "color": "#000000",
+                {
+                  "color": "rgba(28, 27, 31, 1)",
                   "fontFamily": "System",
                   "fontSize": 16,
                   "fontWeight": undefined,
+                  "letterSpacing": 0.15,
+                  "lineHeight": undefined,
+                  "paddingHorizontal": 16,
                   "textAlign": "left",
                   "textAlignVertical": "center",
                 },
                 false,
-                Array [
-                  Object {},
+                [
+                  {},
                 ],
+                undefined,
               ]
             }
             testID="date-text-input"

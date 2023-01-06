@@ -138,22 +138,6 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                     type === RequestType.PLAYER ? 'Players' : 'Managers'
                 }`}
             />
-            {/* <TextInput
-                mode="flat"
-                style={[styles.input]}
-                underlineColor={colors.textPrimary}
-                activeUnderlineColor={colors.textPrimary}
-                placeholderTextColor={colors.gray}
-                onChangeText={search}
-                theme={{
-                    colors: {
-                        text: colors.textPrimary,
-                    },
-                }}
-                placeholder={`Search ${
-                    type === RequestType.PLAYER ? 'players' : 'managers'
-                }...`}
-            /> */}
             <SearchBar
                 placeholder={`Search ${
                     type === RequestType.PLAYER ? 'players' : 'managers'
@@ -212,7 +196,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
                                 }>{`${item.firstName} ${item.lastName}`}</Text>
                             <IconButton
                                 icon="check"
-                                color={colors.success}
+                                iconColor={colors.success}
                                 disabled
                             />
                         </View>

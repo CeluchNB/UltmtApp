@@ -1,6 +1,6 @@
 import BaseModal from '../atoms/BaseModal'
 import { Chip } from 'react-native-paper'
-import { GuestUser } from '../../types/user'
+import { DisplayUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import { size } from '../../theme/fonts'
@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux'
 interface SubstitutionModalProps {
     visible: boolean
     onClose: () => void
-    onSubmit: (playerOne: GuestUser, playerTwo: GuestUser) => void
+    onSubmit: (playerOne: DisplayUser, playerTwo: DisplayUser) => void
 }
 
 /*
@@ -35,13 +35,13 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
-    const [playerOne, setPlayerOne] = React.useState<GuestUser | undefined>(
+    const [playerOne, setPlayerOne] = React.useState<DisplayUser | undefined>(
         undefined,
     )
     const [playerOneIndex, setPlayerOneIndex] = React.useState<
         number | undefined
     >(undefined)
-    const [playerTwo, setPlayerTwo] = React.useState<GuestUser | undefined>(
+    const [playerTwo, setPlayerTwo] = React.useState<DisplayUser | undefined>(
         undefined,
     )
     const [playerTwoIndex, setPlayerTwoIndex] = React.useState<

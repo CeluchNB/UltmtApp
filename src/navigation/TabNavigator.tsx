@@ -1,14 +1,15 @@
+/* eslint-disable react/no-unstable-nested-components */
 import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import AccountNavigator from './../navigation/AccountNavigator'
+import { AllScreenProps } from '../types/navigation'
 import GameNavigator from './../navigation/GameNavigator'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { TopLevelProps } from '../types/navigation'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { useColors } from './../hooks'
 
 const Tab = createMaterialBottomTabNavigator()
-const TabNavigator: React.FC<TopLevelProps> = ({ navigation }) => {
+const TabNavigator: React.FC<AllScreenProps> = ({ navigation }) => {
     const { colors, isDarkMode } = useColors()
 
     const [, updateState] = React.useState<any>()

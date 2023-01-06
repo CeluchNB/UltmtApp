@@ -82,7 +82,7 @@ describe('test create point', () => {
             }),
         )
 
-        expect(createPoint(true, 1)).rejects.toThrow()
+        await expect(createPoint(true, 1)).rejects.toBeDefined()
     })
 })
 
@@ -121,11 +121,11 @@ describe('test set players', () => {
             }),
         )
 
-        expect(
+        await expect(
             setPlayers('point1', [
                 { firstName: 'First 1', lastName: 'Last 1' },
             ]),
-        ).rejects.toThrow()
+        ).rejects.toBeDefined()
     })
 })
 
@@ -156,7 +156,7 @@ describe('test finish point', () => {
             }),
         )
 
-        expect(finishPoint('point1')).rejects.toThrow()
+        await expect(finishPoint('point1')).rejects.toBeDefined()
     })
 })
 
@@ -195,9 +195,11 @@ describe('test get actions by point', () => {
             Promise.resolve([]),
         )
 
-        expect(getActionsByPoint('one', 'point1', [])).rejects.toThrowError(
-            Constants.GET_POINT_ERROR,
-        )
+        await expect(
+            getActionsByPoint('one', 'point1', []),
+        ).rejects.toMatchObject({
+            message: Constants.GET_POINT_ERROR,
+        })
     })
 
     it('should handle local success', async () => {
@@ -215,14 +217,18 @@ describe('test delete actions', () => {
         jest.spyOn(ActionLocal, 'deleteAllActionsByPoint').mockReturnValueOnce(
             Promise.resolve(),
         )
-        expect(deleteLocalActionsByPoint('pointId')).resolves.toBeUndefined()
+        await expect(
+            deleteLocalActionsByPoint('pointId'),
+        ).resolves.toBeUndefined()
     })
 
     it('should handle local failure', async () => {
         jest.spyOn(ActionLocal, 'deleteAllActionsByPoint').mockReturnValueOnce(
             Promise.reject(),
         )
-        expect(deleteLocalActionsByPoint('pointId')).resolves.toBeUndefined()
+        await expect(
+            deleteLocalActionsByPoint('pointId'),
+        ).resolves.toBeUndefined()
     })
 })
 
@@ -252,8 +258,8 @@ describe('test get live actions by point', () => {
             }),
         )
 
-        expect(getLiveActionsByPoint('', '')).rejects.toThrowError(
-            Constants.GET_POINT_ERROR,
-        )
+        await expect(getLiveActionsByPoint('', '')).rejects.toMatchObject({
+            message: Constants.GET_POINT_ERROR,
+        })
     })
 })

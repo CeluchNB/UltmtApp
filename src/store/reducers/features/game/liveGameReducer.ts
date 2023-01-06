@@ -1,8 +1,8 @@
 import * as GameData from '../../../../services/data/game'
+import { DisplayUser } from '../../../../types/user'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
 import { DisplayTeam, GuestTeam } from '../../../../types/team'
-import { DisplayUser, GuestUser } from '../../../../types/user'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export interface LiveGameSlice {
@@ -25,8 +25,8 @@ export interface LiveGameSlice {
         teamTwoScore: number
         teamOneActive: boolean
         teamTwoActive: boolean
-        teamOnePlayers: GuestUser[]
-        teamTwoPlayers: GuestUser[]
+        teamOnePlayers: DisplayUser[]
+        teamTwoPlayers: DisplayUser[]
         tournament: undefined
     }
     activeTags: string[]

@@ -47,7 +47,7 @@ it('should handle network login failures', async () => {
         }),
     )
 
-    expect(login('', '')).rejects.toThrow()
+    await expect(login('', '')).rejects.toBeDefined()
 })
 
 it('should handle network logout success', async () => {
@@ -76,7 +76,7 @@ it('should handle network logout failure', async () => {
         }),
     )
 
-    expect(logout()).rejects.toThrow()
+    await expect(logout()).rejects.toBeDefined()
     expect(RNEncryptedStorage.removeItem).toHaveBeenCalled()
 })
 
@@ -91,7 +91,7 @@ describe('should handle is logged in', () => {
     it('with unfound refresh token', async () => {
         RNEncryptedStorage.getItem.mockReturnValueOnce(Promise.resolve(null))
 
-        expect(isLoggedIn()).rejects.toThrow()
+        await expect(isLoggedIn()).rejects.toBeDefined()
     })
 
     it('with expired refresh token', async () => {
@@ -99,7 +99,7 @@ describe('should handle is logged in', () => {
         RNEncryptedStorage.getItem.mockReturnValueOnce(
             Promise.resolve(expToken),
         )
-        expect(isLoggedIn()).rejects.toThrow()
+        await expect(isLoggedIn()).rejects.toBeDefined()
     })
 
     it('with unfound access token', async () => {
@@ -107,10 +107,11 @@ describe('should handle is logged in', () => {
             .mockReturnValueOnce(Promise.resolve(validToken))
             .mockReturnValueOnce(Promise.resolve(null))
 
-        expect(isLoggedIn()).rejects.toThrow()
+        await expect(isLoggedIn()).rejects.toBeDefined()
     })
 })
 
+// TODO: fix or delete this test
 // it('should handle refresh token with refresh token', async () => {
 //     jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
 //         Promise.resolve(validToken),
@@ -263,7 +264,7 @@ describe('should handle with token wrapper', () => {
             }),
         )
 
-        expect(withToken(networkCall)).rejects.toThrow()
+        await expect(withToken(networkCall)).rejects.toBeDefined()
     })
 
     it('with failed network call', async () => {
@@ -277,7 +278,7 @@ describe('should handle with token wrapper', () => {
             }),
         )
 
-        expect(withToken(networkCall)).rejects.toThrow()
+        await expect(withToken(networkCall)).rejects.toBeDefined()
     })
 })
 

@@ -1,3 +1,4 @@
+import { AppDispatch } from '../../store/store'
 import { CreateGame } from '../../types/game'
 import { CreateGameProps } from '../../types/navigation'
 import LabeledFormInput from '../../components/molecules/LabeledFormInput'
@@ -23,7 +24,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     // Flow SelectMyTeamScreen -> SelectOpponentScreen -> CreateGameScreen
     const { teamOne, teamTwo } = route.params
     const { colors } = useColors()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const account = useSelector(selectAccount)
     const createStatus = useSelector(selectCreateStatus)
 

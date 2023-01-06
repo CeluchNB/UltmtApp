@@ -7,6 +7,14 @@ MockDate.set('01 October 2022 00:00 UTC')
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
+beforeAll(() => {
+    jest.useFakeTimers({ legacyFakeTimers: true })
+})
+
+afterAll(() => {
+    jest.useRealTimers()
+})
+
 it('should match snapshot', () => {
     const snapshot = render(
         <FilterModal

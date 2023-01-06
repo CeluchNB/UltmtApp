@@ -139,7 +139,7 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
                         <IconButton
                             size={15}
                             icon="comment-text-outline"
-                            color={colors.textPrimary}
+                            iconColor={colors.textPrimary}
                         />
                         {action.comments.length > 0 && (
                             <Text style={styles.commentCount}>

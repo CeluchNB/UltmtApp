@@ -3,7 +3,7 @@
 exports[`should match snapshot 1`] = `
 <View
   style={
-    Object {
+    {
       "alignItems": "center",
       "backgroundColor": "#303030",
       "height": "100%",
@@ -13,8 +13,8 @@ exports[`should match snapshot 1`] = `
   <Text
     numberOfLines={1}
     style={
-      Array [
-        Object {
+      [
+        {
           "color": "#ffd600",
           "fontSize": 61.64383561643835,
           "fontWeight": "bold",
@@ -27,7 +27,7 @@ exports[`should match snapshot 1`] = `
   </Text>
   <View
     style={
-      Object {
+      {
         "alignItems": "center",
         "flexDirection": "row",
         "width": "75%",
@@ -36,7 +36,7 @@ exports[`should match snapshot 1`] = `
   >
     <Text
       style={
-        Object {
+        {
           "alignSelf": "center",
           "color": "#ffd600",
           "flex": 1,
@@ -52,9 +52,14 @@ exports[`should match snapshot 1`] = `
     <View
       accessibilityRole="checkbox"
       accessibilityState={
-        Object {
+        {
           "checked": false,
           "disabled": false,
+        }
+      }
+      accessibilityValue={
+        {
+          "text": "off",
         }
       }
       accessible={true}
@@ -66,20 +71,20 @@ exports[`should match snapshot 1`] = `
         onFillColor="#ffd600"
         onValueChange={[Function]}
         style={
-          Array [
-            Object {
+          [
+            {
               "backgroundColor": "transparent",
               "height": 32,
               "width": 32,
             },
-            Object {
+            {
               "alignSelf": "center",
               "marginTop": 25,
             },
           ]
         }
         tintColors={
-          Object {
+          {
             "false": "#ababab",
             "true": "#ffd600",
           }
@@ -90,7 +95,7 @@ exports[`should match snapshot 1`] = `
   </View>
   <Text
     style={
-      Object {
+      {
         "alignSelf": "center",
         "color": "#31adff",
         "marginBottom": 10,
@@ -102,7 +107,7 @@ exports[`should match snapshot 1`] = `
   </Text>
   <Text
     style={
-      Object {
+      {
         "alignSelf": "center",
         "color": "#ffd600",
         "fontSize": 41.0958904109589,
@@ -116,7 +121,7 @@ exports[`should match snapshot 1`] = `
   </Text>
   <View
     style={
-      Object {
+      {
         "alignSelf": "center",
         "backgroundColor": "#303030",
         "color": "#ffd600",
@@ -126,20 +131,20 @@ exports[`should match snapshot 1`] = `
   >
     <RNCPicker
       items={
-        Array [
-          Object {
+        [
+          {
             "label": "2022",
             "testID": undefined,
             "textColor": undefined,
             "value": "2022",
           },
-          Object {
+          {
             "label": "2022 - 2023",
             "testID": undefined,
             "textColor": undefined,
             "value": "2022 - 2023",
           },
-          Object {
+          {
             "label": "2023",
             "testID": undefined,
             "textColor": undefined,
@@ -151,8 +156,8 @@ exports[`should match snapshot 1`] = `
       onChange={[Function]}
       selectedIndex={0}
       style={
-        Array [
-          Object {
+        [
+          {
             "height": 216,
           },
           undefined,
@@ -162,7 +167,7 @@ exports[`should match snapshot 1`] = `
   </View>
   <Text
     style={
-      Object {
+      {
         "alignSelf": "center",
         "color": "#31adff",
         "marginBottom": 10,
@@ -174,7 +179,7 @@ exports[`should match snapshot 1`] = `
   </Text>
   <Text
     style={
-      Object {
+      {
         "alignSelf": "center",
         "color": "#31adff",
         "marginBottom": 10,
@@ -187,105 +192,147 @@ exports[`should match snapshot 1`] = `
   <View
     collapsable={false}
     style={
-      Object {
-        "backgroundColor": "#ffd600",
-        "borderColor": "transparent",
-        "borderRadius": 4,
-        "borderStyle": "solid",
-        "borderWidth": 0,
-        "elevation": 2,
-        "minWidth": "auto",
-        "shadowColor": "#000000",
-        "shadowOffset": Object {
-          "height": 0.75,
+      {
+        "alignSelf": undefined,
+        "bottom": undefined,
+        "left": undefined,
+        "position": undefined,
+        "right": undefined,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 0,
           "width": 0,
         },
-        "shadowOpacity": 0.24,
-        "shadowRadius": 1.5,
+        "shadowOpacity": 0,
+        "shadowRadius": 0,
+        "top": undefined,
       }
     }
   >
     <View
-      accessibilityRole="button"
-      accessibilityState={
-        Object {
-          "disabled": false,
-        }
-      }
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
+      collapsable={false}
       style={
-        Array [
-          Object {
-            "overflow": "hidden",
+        {
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 0,
+            "width": 0,
           },
-          Object {
-            "borderRadius": 4,
-          },
-        ]
+          "shadowOpacity": 0,
+          "shadowRadius": 0,
+        }
       }
     >
       <View
+        collapsable={false}
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flexDirection": "row",
-              "justifyContent": "center",
-            },
-            undefined,
-          ]
+          {
+            "backgroundColor": "#ffd600",
+            "borderColor": "transparent",
+            "borderRadius": 20,
+            "borderStyle": "solid",
+            "borderWidth": 0,
+            "minWidth": "auto",
+          }
         }
       >
-        <Text
-          numberOfLines={1}
-          selectable={false}
+        <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
-            Array [
-              Object {
-                "color": "#000000",
-                "fontFamily": "System",
-                "fontWeight": "400",
+            [
+              {
+                "overflow": "hidden",
               },
-              Object {
-                "textAlign": "left",
+              false,
+              {
+                "borderRadius": 20,
               },
-              Array [
-                Object {
-                  "letterSpacing": 1,
-                  "marginHorizontal": 16,
-                  "marginVertical": 9,
-                  "textAlign": "center",
-                },
-                Object {
-                  "marginHorizontal": 8,
-                },
-                Object {
-                  "textTransform": "uppercase",
-                },
-                Object {
-                  "color": "#000000",
-                  "fontFamily": "System",
-                  "fontWeight": "500",
-                },
-                Object {
-                  "fontFamily": "System",
-                  "fontWeight": "500",
-                },
-                undefined,
-              ],
             ]
           }
+          testID="button"
         >
-          Submit
-        </Text>
+          <View
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              numberOfLines={1}
+              selectable={false}
+              style={
+                [
+                  {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "fontFamily": "System",
+                    "fontSize": 14,
+                    "fontWeight": "500",
+                    "letterSpacing": 0.1,
+                    "lineHeight": 20,
+                  },
+                  {
+                    "textAlign": "left",
+                  },
+                  {
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "marginHorizontal": 16,
+                      "marginVertical": 9,
+                      "textAlign": "center",
+                    },
+                    false,
+                    {
+                      "marginHorizontal": 24,
+                      "marginVertical": 10,
+                    },
+                    {
+                      "marginHorizontal": 8,
+                    },
+                    {
+                      "textTransform": "uppercase",
+                    },
+                    {
+                      "color": "#000000",
+                      "fontFamily": "System",
+                      "fontSize": 14,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1,
+                      "lineHeight": 20,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+            >
+              Submit
+            </Text>
+          </View>
+        </View>
       </View>
     </View>
   </View>
@@ -295,7 +342,7 @@ exports[`should match snapshot 1`] = `
 exports[`should match snapshot with open requests 1`] = `
 <View
   style={
-    Object {
+    {
       "alignItems": "center",
       "backgroundColor": "#303030",
       "height": "100%",
@@ -305,8 +352,8 @@ exports[`should match snapshot with open requests 1`] = `
   <Text
     numberOfLines={1}
     style={
-      Array [
-        Object {
+      [
+        {
           "color": "#ffd600",
           "fontSize": 61.64383561643835,
           "fontWeight": "bold",
@@ -319,7 +366,7 @@ exports[`should match snapshot with open requests 1`] = `
   </Text>
   <View
     style={
-      Object {
+      {
         "alignItems": "center",
         "flexDirection": "row",
         "width": "75%",
@@ -328,7 +375,7 @@ exports[`should match snapshot with open requests 1`] = `
   >
     <Text
       style={
-        Object {
+        {
           "alignSelf": "center",
           "color": "#ffd600",
           "flex": 1,
@@ -344,9 +391,14 @@ exports[`should match snapshot with open requests 1`] = `
     <View
       accessibilityRole="checkbox"
       accessibilityState={
-        Object {
+        {
           "checked": false,
           "disabled": false,
+        }
+      }
+      accessibilityValue={
+        {
+          "text": "off",
         }
       }
       accessible={true}
@@ -358,20 +410,20 @@ exports[`should match snapshot with open requests 1`] = `
         onFillColor="#ffd600"
         onValueChange={[Function]}
         style={
-          Array [
-            Object {
+          [
+            {
               "backgroundColor": "transparent",
               "height": 32,
               "width": 32,
             },
-            Object {
+            {
               "alignSelf": "center",
               "marginTop": 25,
             },
           ]
         }
         tintColors={
-          Object {
+          {
             "false": "#ababab",
             "true": "#ffd600",
           }
@@ -382,7 +434,7 @@ exports[`should match snapshot with open requests 1`] = `
   </View>
   <Text
     style={
-      Object {
+      {
         "alignSelf": "center",
         "color": "#31adff",
         "marginBottom": 10,
@@ -394,7 +446,7 @@ exports[`should match snapshot with open requests 1`] = `
   </Text>
   <Text
     style={
-      Object {
+      {
         "alignSelf": "center",
         "color": "#ffd600",
         "fontSize": 41.0958904109589,
@@ -408,7 +460,7 @@ exports[`should match snapshot with open requests 1`] = `
   </Text>
   <View
     style={
-      Object {
+      {
         "alignSelf": "center",
         "backgroundColor": "#303030",
         "color": "#ffd600",
@@ -418,20 +470,20 @@ exports[`should match snapshot with open requests 1`] = `
   >
     <RNCPicker
       items={
-        Array [
-          Object {
+        [
+          {
             "label": "2022",
             "testID": undefined,
             "textColor": undefined,
             "value": "2022",
           },
-          Object {
+          {
             "label": "2022 - 2023",
             "testID": undefined,
             "textColor": undefined,
             "value": "2022 - 2023",
           },
-          Object {
+          {
             "label": "2023",
             "testID": undefined,
             "textColor": undefined,
@@ -443,8 +495,8 @@ exports[`should match snapshot with open requests 1`] = `
       onChange={[Function]}
       selectedIndex={0}
       style={
-        Array [
-          Object {
+        [
+          {
             "height": 216,
           },
           undefined,
@@ -454,7 +506,7 @@ exports[`should match snapshot with open requests 1`] = `
   </View>
   <Text
     style={
-      Object {
+      {
         "alignSelf": "center",
         "color": "#31adff",
         "marginBottom": 10,
@@ -466,7 +518,7 @@ exports[`should match snapshot with open requests 1`] = `
   </Text>
   <Text
     style={
-      Object {
+      {
         "alignSelf": "center",
         "color": "#31adff",
         "marginBottom": 10,
@@ -479,105 +531,147 @@ exports[`should match snapshot with open requests 1`] = `
   <View
     collapsable={false}
     style={
-      Object {
-        "backgroundColor": "#ffd600",
-        "borderColor": "transparent",
-        "borderRadius": 4,
-        "borderStyle": "solid",
-        "borderWidth": 0,
-        "elevation": 2,
-        "minWidth": "auto",
-        "shadowColor": "#000000",
-        "shadowOffset": Object {
-          "height": 0.75,
+      {
+        "alignSelf": undefined,
+        "bottom": undefined,
+        "left": undefined,
+        "position": undefined,
+        "right": undefined,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 0,
           "width": 0,
         },
-        "shadowOpacity": 0.24,
-        "shadowRadius": 1.5,
+        "shadowOpacity": 0,
+        "shadowRadius": 0,
+        "top": undefined,
       }
     }
   >
     <View
-      accessibilityRole="button"
-      accessibilityState={
-        Object {
-          "disabled": false,
-        }
-      }
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
+      collapsable={false}
       style={
-        Array [
-          Object {
-            "overflow": "hidden",
+        {
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 0,
+            "width": 0,
           },
-          Object {
-            "borderRadius": 4,
-          },
-        ]
+          "shadowOpacity": 0,
+          "shadowRadius": 0,
+        }
       }
     >
       <View
+        collapsable={false}
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flexDirection": "row",
-              "justifyContent": "center",
-            },
-            undefined,
-          ]
+          {
+            "backgroundColor": "#ffd600",
+            "borderColor": "transparent",
+            "borderRadius": 20,
+            "borderStyle": "solid",
+            "borderWidth": 0,
+            "minWidth": "auto",
+          }
         }
       >
-        <Text
-          numberOfLines={1}
-          selectable={false}
+        <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
-            Array [
-              Object {
-                "color": "#000000",
-                "fontFamily": "System",
-                "fontWeight": "400",
+            [
+              {
+                "overflow": "hidden",
               },
-              Object {
-                "textAlign": "left",
+              false,
+              {
+                "borderRadius": 20,
               },
-              Array [
-                Object {
-                  "letterSpacing": 1,
-                  "marginHorizontal": 16,
-                  "marginVertical": 9,
-                  "textAlign": "center",
-                },
-                Object {
-                  "marginHorizontal": 8,
-                },
-                Object {
-                  "textTransform": "uppercase",
-                },
-                Object {
-                  "color": "#000000",
-                  "fontFamily": "System",
-                  "fontWeight": "500",
-                },
-                Object {
-                  "fontFamily": "System",
-                  "fontWeight": "500",
-                },
-                undefined,
-              ],
             ]
           }
+          testID="button"
         >
-          Submit
-        </Text>
+          <View
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              numberOfLines={1}
+              selectable={false}
+              style={
+                [
+                  {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "fontFamily": "System",
+                    "fontSize": 14,
+                    "fontWeight": "500",
+                    "letterSpacing": 0.1,
+                    "lineHeight": 20,
+                  },
+                  {
+                    "textAlign": "left",
+                  },
+                  {
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "marginHorizontal": 16,
+                      "marginVertical": 9,
+                      "textAlign": "center",
+                    },
+                    false,
+                    {
+                      "marginHorizontal": 24,
+                      "marginVertical": 10,
+                    },
+                    {
+                      "marginHorizontal": 8,
+                    },
+                    {
+                      "textTransform": "uppercase",
+                    },
+                    {
+                      "color": "#000000",
+                      "fontFamily": "System",
+                      "fontSize": 14,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1,
+                      "lineHeight": 20,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+            >
+              Submit
+            </Text>
+          </View>
+        </View>
       </View>
     </View>
   </View>

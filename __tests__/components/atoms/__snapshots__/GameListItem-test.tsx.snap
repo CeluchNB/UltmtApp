@@ -4,7 +4,7 @@ exports[`test matches snapshot 1`] = `
 <View>
   <Text
     style={
-      Object {
+      {
         "color": "#ababab",
         "fontSize": 41.0958904109589,
         "fontWeight": "bold",
@@ -15,7 +15,7 @@ exports[`test matches snapshot 1`] = `
   </Text>
   <Text
     style={
-      Object {
+      {
         "color": "#ffd600",
         "fontSize": 20.54794520547945,
         "fontWeight": "bold",

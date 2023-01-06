@@ -138,7 +138,7 @@ const GameCard: React.FC<GameCardProps> = props => {
                         </Text>
                     )}
                     <IconButton
-                        color={colors.textPrimary}
+                        iconColor={colors.textPrimary}
                         icon="chevron-right"
                         testID="go-button"
                     />

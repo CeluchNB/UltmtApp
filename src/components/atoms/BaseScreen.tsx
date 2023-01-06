@@ -4,6 +4,7 @@ import { SafeAreaView, StyleSheet, View } from 'react-native'
 
 interface BaseScreenProps {
     containerWidth: string
+    children?: React.ReactNode
 }
 
 const BaseScreen: React.FC<BaseScreenProps> = props => {

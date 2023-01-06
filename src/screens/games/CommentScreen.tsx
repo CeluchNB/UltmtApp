@@ -38,6 +38,8 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
         },
     })
 
+    const divider = () => <View style={styles.divider} />
+
     return (
         <BaseScreen containerWidth="100%">
             <View style={styles.container}>
@@ -55,9 +57,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                     />
                     <FlatList
                         data={action.comments}
-                        ItemSeparatorComponent={() => (
-                            <View style={styles.divider} />
-                        )}
+                        ItemSeparatorComponent={divider}
                         renderItem={({ item }) => {
                             return (
                                 <CommentItem

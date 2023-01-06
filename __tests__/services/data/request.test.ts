@@ -65,7 +65,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(deleteTeamRequest('')).rejects.toThrow()
+        await expect(deleteTeamRequest('')).rejects.toBeDefined()
     })
 
     it('should handle network delete user request success', async () => {
@@ -82,7 +82,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(deleteUserRequest('')).rejects.toThrow()
+        await expect(deleteUserRequest('')).rejects.toBeDefined()
     })
 
     it('should handle network get request success', async () => {
@@ -99,7 +99,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(getRequest('')).rejects.toThrow()
+        await expect(getRequest('')).rejects.toBeDefined()
     })
 
     it('should handle network request team success', async () => {
@@ -116,7 +116,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(requestTeam('')).rejects.toThrow()
+        await expect(requestTeam('')).rejects.toBeDefined()
     })
 
     it('should handle network request user success', async () => {
@@ -132,7 +132,7 @@ describe('test request data calls', () => {
         jest.spyOn(RequestServices, 'requestUser').mockReturnValueOnce(
             requestError,
         )
-        expect(requestUser('', '')).rejects.toThrow()
+        await expect(requestUser('', '')).rejects.toBeDefined()
     })
 
     it('should handle network respond to player success', async () => {
@@ -151,7 +151,7 @@ describe('test request data calls', () => {
             'respondToPlayerRequest',
         ).mockReturnValueOnce(requestError)
 
-        expect(respondToPlayerRequest('', true)).rejects.toThrow()
+        await expect(respondToPlayerRequest('', true)).rejects.toBeDefined()
     })
 
     it('should handle network respond to team success', async () => {
@@ -168,7 +168,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(respondToTeamRequest('', true)).rejects.toThrow()
+        await expect(respondToTeamRequest('', true)).rejects.toBeDefined()
     })
 
     it('should handle network get requests by team success', async () => {
@@ -191,7 +191,7 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(getRequestsByTeam('')).rejects.toThrow()
+        await expect(getRequestsByTeam('')).rejects.toBeDefined()
     })
 
     it('should handle network get requests by user success', async () => {
@@ -214,6 +214,6 @@ describe('test request data calls', () => {
             requestError,
         )
 
-        expect(getRequestsByUser()).rejects.toThrow()
+        await expect(getRequestsByUser()).rejects.toBeDefined()
     })
 })

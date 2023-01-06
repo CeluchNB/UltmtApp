@@ -1,3 +1,4 @@
+import { AppDispatch } from '../../store/store'
 import BaseModal from '../atoms/BaseModal'
 import { GuestUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
@@ -28,7 +29,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
     const { colors } = useColors()
     const status = useSelector(selectGuestPlayerStatus)
     const error = useSelector(selectGuestPlayerError)
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
 
     const {
         control,

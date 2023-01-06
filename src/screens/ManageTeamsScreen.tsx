@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { AppDispatch } from '../store/store'
 import { DisplayTeam } from '../types/team'
 import IconButtonText from '../components/atoms/IconButtonText'
 import MapSection from '../components/molecules/MapSection'
@@ -27,7 +28,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
     const { colors } = useColors()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const playerTeams = useSelector(selectPlayerTeams)
     const managerTeams = useSelector(selectManagerTeams)
     const archiveTeams = useSelector(selectArchiveTeams)

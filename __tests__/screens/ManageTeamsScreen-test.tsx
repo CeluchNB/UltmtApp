@@ -23,17 +23,9 @@ const props: Props = {
     route: {} as any,
 }
 
-beforeAll(() => {
-    jest.useFakeTimers()
-})
-
 beforeEach(async () => {
     store.dispatch(AccountReducer.setProfile(fetchProfileData))
     jest.clearAllMocks()
-})
-
-afterAll(() => {
-    jest.useRealTimers()
 })
 
 it('should match snapshot', async () => {

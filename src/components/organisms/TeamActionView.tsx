@@ -94,7 +94,8 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
                             compact={true}
                             style={styles.button}
                             labelStyle={styles.buttonText}
-                            color={colors.textPrimary}
+                            textColor={colors.textPrimary}
+                            uppercase={true}
                             collapsable={true}
                             mode="outlined"
                             onPress={() => {

@@ -3,7 +3,7 @@
 exports[`should match snapshot 1`] = `
 <View
   style={
-    Object {
+    {
       "backgroundColor": "#303030",
       "height": "100%",
     }
@@ -12,13 +12,13 @@ exports[`should match snapshot 1`] = `
   <Text
     numberOfLines={1}
     style={
-      Array [
-        Object {
+      [
+        {
           "color": "#ffd600",
           "fontSize": 61.64383561643835,
           "fontWeight": "bold",
         },
-        Object {
+        {
           "alignSelf": "center",
         },
       ]
@@ -28,7 +28,7 @@ exports[`should match snapshot 1`] = `
   </Text>
   <View
     style={
-      Object {
+      {
         "alignSelf": "center",
         "display": "flex",
         "flexDirection": "row",
@@ -38,13 +38,13 @@ exports[`should match snapshot 1`] = `
   >
     <View
       style={
-        Array [
-          Object {
-            "backgroundColor": "rgb(231, 231, 231)",
+        [
+          {
+            "backgroundColor": "rgba(231, 224, 236, 1)",
             "borderTopLeftRadius": 4,
             "borderTopRightRadius": 4,
           },
-          Object {
+          {
             "backgroundColor": "#303030",
             "color": "#ffd600",
             "flex": 1,
@@ -57,31 +57,32 @@ exports[`should match snapshot 1`] = `
       <View
         collapsable={false}
         style={
-          Object {
+          {
             "backgroundColor": "#ffd600",
             "bottom": 0,
-            "height": 2,
+            "height": 1,
             "left": 0,
             "position": "absolute",
             "right": 0,
-            "transform": Array [
-              Object {
+            "transform": [
+              {
                 "scaleY": 0.5,
               },
             ],
             "zIndex": 1,
           }
         }
+        testID="text-input-underline"
       />
       <View
         style={
-          Array [
-            Object {
+          [
+            {
               "paddingBottom": 0,
               "paddingTop": 0,
             },
-            Object {
-              "minHeight": 64,
+            {
+              "minHeight": 56,
             },
           ]
         }
@@ -89,6 +90,7 @@ exports[`should match snapshot 1`] = `
         <TextInput
           editable={true}
           focusable={true}
+          maxFontSizeMultiplier={1.5}
           multiline={false}
           onBlur={[Function]}
           onChangeText={[Function]}
@@ -98,36 +100,39 @@ exports[`should match snapshot 1`] = `
           placeholderTextColor="#ababab"
           selectionColor="#ffd600"
           style={
-            Array [
-              Object {
-                "flexGrow": 1,
+            [
+              {
                 "margin": 0,
               },
-              Object {
-                "paddingLeft": 12,
-                "paddingRight": 12,
+              {
+                "paddingLeft": 16,
+                "paddingRight": 16,
               },
-              Object {
-                "height": 64,
+              {
+                "height": 56,
               },
-              Object {
+              {
                 "paddingBottom": 0,
                 "paddingTop": 0,
               },
-              Object {
+              {
                 "color": "#ffd600",
                 "fontFamily": "System",
                 "fontSize": 41.0958904109589,
                 "fontWeight": undefined,
+                "letterSpacing": 0.15,
+                "lineHeight": undefined,
                 "textAlign": "left",
                 "textAlignVertical": "center",
               },
               false,
-              Array [
-                Object {},
+              [
+                {},
               ],
+              undefined,
             ]
           }
+          testID="text-input-flat"
           underlineColorAndroid="transparent"
           value=""
         />
@@ -137,97 +142,145 @@ exports[`should match snapshot 1`] = `
   <View
     collapsable={false}
     style={
-      Object {
+      {
         "alignSelf": "center",
-        "backgroundColor": "transparent",
-        "borderColor": "#ffd600",
-        "borderRadius": 4,
-        "borderStyle": "solid",
-        "borderWidth": 0.5,
-        "elevation": 0,
-        "minWidth": 64,
+        "bottom": undefined,
+        "left": undefined,
+        "position": undefined,
+        "right": undefined,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 0,
+          "width": 0,
+        },
+        "shadowOpacity": 0,
+        "shadowRadius": 0,
+        "top": undefined,
       }
     }
   >
     <View
-      accessibilityRole="button"
-      accessibilityState={
-        Object {
-          "disabled": false,
-        }
-      }
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
+      collapsable={false}
       style={
-        Array [
-          Object {
-            "overflow": "hidden",
+        {
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 0,
+            "width": 0,
           },
-          Object {
-            "borderRadius": 4,
-          },
-        ]
+          "shadowOpacity": 0,
+          "shadowRadius": 0,
+        }
       }
     >
       <View
+        collapsable={false}
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flexDirection": "row",
-              "justifyContent": "center",
-            },
-            undefined,
-          ]
+          {
+            "backgroundColor": "transparent",
+            "borderColor": "#ffd600",
+            "borderRadius": 20,
+            "borderStyle": "solid",
+            "borderWidth": 1,
+            "minWidth": 64,
+          }
         }
       >
-        <Text
-          numberOfLines={1}
-          selectable={false}
+        <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "disabled": false,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
-            Array [
-              Object {
-                "color": "#000000",
-                "fontFamily": "System",
-                "fontWeight": "400",
+            [
+              {
+                "overflow": "hidden",
               },
-              Object {
-                "textAlign": "left",
+              false,
+              {
+                "borderRadius": 20,
               },
-              Array [
-                Object {
-                  "letterSpacing": 1,
-                  "marginHorizontal": 16,
-                  "marginVertical": 9,
-                  "textAlign": "center",
-                },
-                undefined,
-                Object {
-                  "textTransform": "uppercase",
-                },
-                Object {
-                  "color": "#ffd600",
-                  "fontFamily": "System",
-                  "fontWeight": "500",
-                },
-                Object {
-                  "fontFamily": "System",
-                  "fontWeight": "500",
-                },
-                undefined,
-              ],
             ]
           }
+          testID="button"
         >
-          create bulk join code
-        </Text>
+          <View
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              numberOfLines={1}
+              selectable={false}
+              style={
+                [
+                  {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "fontFamily": "System",
+                    "fontSize": 14,
+                    "fontWeight": "500",
+                    "letterSpacing": 0.1,
+                    "lineHeight": 20,
+                  },
+                  {
+                    "textAlign": "left",
+                  },
+                  {
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "marginHorizontal": 16,
+                      "marginVertical": 9,
+                      "textAlign": "center",
+                    },
+                    false,
+                    {
+                      "marginHorizontal": 24,
+                      "marginVertical": 10,
+                    },
+                    undefined,
+                    {
+                      "textTransform": "uppercase",
+                    },
+                    {
+                      "color": "#ffd600",
+                      "fontFamily": "System",
+                      "fontSize": 14,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1,
+                      "lineHeight": 20,
+                    },
+                    undefined,
+                  ],
+                ]
+              }
+            >
+              create bulk join code
+            </Text>
+          </View>
+        </View>
       </View>
     </View>
   </View>
@@ -240,7 +293,7 @@ exports[`should match snapshot 1`] = `
     visible={false}
   />
   <RCTScrollView
-    data={Array []}
+    data={[]}
     getItem={[Function]}
     getItemCount={[Function]}
     keyExtractor={[Function]}
@@ -254,20 +307,20 @@ exports[`should match snapshot 1`] = `
     removeClippedSubviews={false}
     renderItem={[Function]}
     scrollEventThrottle={50}
-    stickyHeaderIndices={Array []}
+    stickyHeaderIndices={[]}
     style={
-      Object {
+      {
         "alignSelf": "center",
         "flexGrow": 0,
         "width": "75%",
       }
     }
-    viewabilityConfigCallbackPairs={Array []}
+    viewabilityConfigCallbackPairs={[]}
   >
     <View />
   </RCTScrollView>
   <RCTScrollView
-    data={Array []}
+    data={[]}
     getItem={[Function]}
     getItemCount={[Function]}
     keyExtractor={[Function]}
@@ -281,15 +334,15 @@ exports[`should match snapshot 1`] = `
     removeClippedSubviews={false}
     renderItem={[Function]}
     scrollEventThrottle={50}
-    stickyHeaderIndices={Array []}
+    stickyHeaderIndices={[]}
     style={
-      Object {
+      {
         "alignSelf": "center",
         "flexGrow": 0,
         "width": "75%",
       }
     }
-    viewabilityConfigCallbackPairs={Array []}
+    viewabilityConfigCallbackPairs={[]}
   >
     <View />
   </RCTScrollView>

@@ -2,12 +2,12 @@ import * as Constants from '../utils/constants'
 import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import * as UserData from '../services/data/user'
+import { AppDispatch } from '../store/store'
 import { Button } from 'react-native-paper'
 import EditField from '../components/molecules/EditField'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import { logout } from '../services/data/auth'
 import { useColors } from '../hooks'
-import { AllScreenProps, SecureEditField } from '../types/navigation'
 import {
     Modal,
     SafeAreaView,
@@ -17,6 +17,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import { SecureEditField, SettingsScreenProps } from '../types/navigation'
 import {
     selectAccount,
     setPrivate,
@@ -25,10 +26,10 @@ import {
 import { size, weight } from '../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
-const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
+const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
     const { colors, isDarkMode } = useColors()
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const account = useSelector(selectAccount)
 
     const [firstError, setFirstError] = React.useState('')
@@ -115,7 +116,10 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
 
     const onLogout = async () => {
         await logout()
-        navigation.navigate('Login')
+        navigation.navigate('Tabs', {
+            screen: 'Account',
+            params: { screen: 'Login' },
+        })
     }
 
     const onChangeName = async (firstName: string, lastName: string) => {
@@ -130,7 +134,8 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                 <View style={styles.container}>
                     <Button
                         mode="text"
-                        color={colors.error}
+                        textColor={colors.error}
+                        uppercase={true}
                         onPress={onLogout}
                         loading={false}>
                         Sign Out
@@ -229,7 +234,8 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                     />
                     <Button
                         mode="contained"
-                        color={colors.error}
+                        buttonColor={colors.error}
+                        uppercase={true}
                         style={styles.deleteButton}
                         onPress={async () => {
                             setModalVisible(true)
@@ -253,7 +259,8 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                                 <View style={styles.modalButtonContainer}>
                                     <Button
                                         mode="contained"
-                                        color={colors.success}
+                                        buttonColor={colors.success}
+                                        uppercase={true}
                                         style={styles.modalButton}
                                         onPress={() => {
                                             setModalVisible(false)
@@ -262,13 +269,17 @@ const SettingsScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                                     </Button>
                                     <Button
                                         mode="contained"
-                                        color={colors.error}
+                                        buttonColor={colors.error}
+                                        uppercase={true}
                                         style={styles.modalButton}
                                         onPress={async () => {
                                             try {
                                                 await UserData.deleteAccount()
                                                 setModalVisible(false)
-                                                navigation.navigate('Login')
+                                                navigation.navigate('Tabs', {
+                                                    screen: 'Account',
+                                                    params: { screen: 'Login' },
+                                                })
                                             } catch (e: any) {
                                                 setDeleteError(
                                                     e.message ??

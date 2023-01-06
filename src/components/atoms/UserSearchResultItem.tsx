@@ -70,7 +70,7 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
                 {!loading && (
                     <IconButton
                         style={styles.buttonStyle}
-                        color={colors.success}
+                        iconColor={colors.success}
                         icon="plus"
                         onPress={onPress}
                     />

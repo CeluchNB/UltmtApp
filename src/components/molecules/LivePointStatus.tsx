@@ -37,7 +37,7 @@ const LivePointStatus: React.FC<LivePointStatusProps> = ({
             )}
             <IconButton
                 icon="undo"
-                color={colors.textPrimary}
+                iconColor={colors.textPrimary}
                 onPress={onUndo}
                 disabled={undoDisabled}
                 testID="undo-button"
