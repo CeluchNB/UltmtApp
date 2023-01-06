@@ -8,7 +8,10 @@ import SettingsScreen from '../../src/screens/SettingsScreen'
 import { fetchProfileData } from '../../fixtures/data'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
-import { SecureEditField, SettingsScreenProps } from '../../src/types/navigation'
+import {
+    SecureEditField,
+    SettingsScreenProps,
+} from '../../src/types/navigation'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -55,7 +58,10 @@ it('should handle logout press', async () => {
     expect(spy).toHaveBeenCalled()
     // should not need this
     await act(async () => {})
-    expect(navigate).toHaveBeenCalledWith('Tabs', { params: { screen: 'Login' }, screen: 'Account' })
+    expect(navigate).toHaveBeenCalledWith('Tabs', {
+        params: { screen: 'Login' },
+        screen: 'Account',
+    })
 })
 
 it('should handle private account switch press', async () => {
@@ -264,7 +270,10 @@ it('should delete account', async () => {
     await act(async () => {})
 
     expect(spy).toHaveBeenCalled()
-    expect(navigate).toHaveBeenCalledWith('Tabs', { params: { screen: 'Login' }, screen: 'Account' })
+    expect(navigate).toHaveBeenCalledWith('Tabs', {
+        params: { screen: 'Login' },
+        screen: 'Account',
+    })
 })
 
 it('should handle delete account error', async () => {

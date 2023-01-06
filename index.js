@@ -15,7 +15,14 @@ const Root = () => {
 
     return (
         <Provider store={store}>
-            <PaperProvider theme={{...theme, colors: { ...theme.colors, secondaryContainer: 'transparent' } }}>
+            <PaperProvider
+                theme={{
+                    ...theme,
+                    colors: {
+                        ...theme.colors,
+                        secondaryContainer: 'transparent',
+                    },
+                }}>
                 <App />
             </PaperProvider>
         </Provider>

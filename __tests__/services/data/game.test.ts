@@ -63,7 +63,9 @@ describe('test search games', () => {
             }),
         )
 
-        expect(searchGames()).rejects.toThrowError(Constants.SEARCH_ERROR)
+        await expect(searchGames()).rejects.toMatchObject({
+            message: Constants.SEARCH_ERROR,
+        })
     })
 })
 
@@ -94,9 +96,9 @@ describe('test create game', () => {
             }),
         )
 
-        expect(createGame({} as any)).rejects.toThrowError(
-            Constants.CREATE_GAME_ERROR,
-        )
+        await expect(createGame({} as any)).rejects.toMatchObject({
+            message: Constants.CREATE_GAME_ERROR,
+        })
     })
 })
 
@@ -146,9 +148,9 @@ describe('test add guest player', () => {
             }),
         )
 
-        expect(
+        await expect(
             addGuestPlayer({ firstName: 'First 1', lastName: 'Last 1' }),
-        ).rejects.toThrowError(Constants.ADD_GUEST_ERROR)
+        ).rejects.toMatchObject({ message: Constants.ADD_GUEST_ERROR })
     })
 })
 
@@ -179,9 +181,9 @@ describe('test get points by game', () => {
             }),
         )
 
-        expect(getPointsByGame('game1')).rejects.toThrow(
-            Constants.GET_GAME_ERROR,
-        )
+        await expect(getPointsByGame('game1')).rejects.toMatchObject({
+            message: Constants.GET_GAME_ERROR,
+        })
     })
 })
 
@@ -212,9 +214,9 @@ describe('test get game by id', () => {
             }),
         )
 
-        expect(getGameById('gameid')).rejects.toThrowError(
-            Constants.GET_GAME_ERROR,
-        )
+        await expect(getGameById('gameid')).rejects.toMatchObject({
+            message: Constants.GET_GAME_ERROR,
+        })
     })
 })
 
@@ -249,9 +251,11 @@ describe('test join game', () => {
             }),
         )
 
-        expect(joinGame('gameid', 'teamid', '123456')).rejects.toThrowError(
-            Constants.GET_GAME_ERROR,
-        )
+        await expect(
+            joinGame('gameid', 'teamid', '123456'),
+        ).rejects.toMatchObject({
+            message: Constants.JOIN_GAME_ERROR,
+        })
         expect(RNEncryptedStorage.setItem).not.toHaveBeenCalled()
     })
 })

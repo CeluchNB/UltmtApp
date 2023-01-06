@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import AccountNavigator from './../navigation/AccountNavigator'

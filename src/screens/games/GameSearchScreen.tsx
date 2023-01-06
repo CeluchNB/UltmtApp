@@ -116,6 +116,16 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ route }) => {
         },
     })
 
+    const footer = () => {
+        return isLoading || isFetchingNextPage ? (
+            <ActivityIndicator
+                color={colors.textPrimary}
+                size="large"
+                testID="infinite-scroll-indicator"
+            />
+        ) : null
+    }
+
     return (
         <SafeAreaView style={styles.screen}>
             <View>
@@ -194,15 +204,7 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ route }) => {
                 }}
                 onEndReached={loadMore}
                 onEndReachedThreshold={0.1}
-                ListFooterComponent={() => {
-                    return isLoading || isFetchingNextPage ? (
-                        <ActivityIndicator
-                            color={colors.textPrimary}
-                            size="large"
-                            testID="infinite-scroll-indicator"
-                        />
-                    ) : null
-                }}
+                ListFooterComponent={footer}
                 testID="game-search-list"
             />
         </SafeAreaView>

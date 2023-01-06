@@ -34,7 +34,6 @@ afterAll(() => {
     jest.useRealTimers()
 })
 
-
 beforeEach(() => {
     jest.clearAllMocks()
     jest.spyOn(GameServices, 'searchGames').mockReturnValueOnce(

@@ -18,7 +18,6 @@ import {
 } from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-
 const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     // Team One and Team Two are populated through
     // SelectMyTeamScreen and SelectOpponentScreen

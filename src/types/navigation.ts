@@ -84,7 +84,7 @@ export type AllScreenProps = NativeStackScreenProps<
 >
 
 export type SettingsScreenProps = CompositeScreenProps<
-    NativeStackScreenProps<TopLevelParamList,'SettingsScreen'>,
+    NativeStackScreenProps<TopLevelParamList, 'SettingsScreen'>,
     NativeStackScreenProps<AllScreenProps>
 >
 

@@ -1,6 +1,6 @@
+import { DisplayUser } from './user'
 import { Tournament } from './tournament'
 import { DisplayTeam, GuestTeam } from './team'
-import { DisplayUser, GuestUser } from './user'
 export interface DisplayGame {
     opponent: DisplayTeam
     teamScore: number

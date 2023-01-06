@@ -26,20 +26,12 @@ interface PointAccordionProps {
     onActionPress: (action: ServerAction) => void
 }
 
-const PointAccordion: React.FC<PointAccordionProps> = ({
-    point,
-    actions,
-    expanded,
-    loading,
-    teamOne,
-    teamTwo,
-    onActionPress,
-}) => {
+const AccordionRightView = (props: { point: Point; isExpanded: boolean }) => {
     const { colors } = useColors()
     const liveOpacity = React.useRef(new Animated.Value(0)).current
     const isLive = React.useMemo(() => {
-        return isLivePoint(point)
-    }, [point])
+        return isLivePoint(props.point)
+    }, [props.point])
 
     useEffect(() => {
         if (isLive) {
@@ -59,6 +51,55 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             ).start()
         }
     }, [isLive, liveOpacity])
+
+    const styles = StyleSheet.create({
+        circleContainer: {
+            marginBottom: -10,
+        },
+        circle: {
+            width: 10,
+            height: 10,
+            borderRadius: 5,
+            backgroundColor: 'red',
+            alignSelf: 'flex-end',
+        },
+    })
+    return (
+        <View>
+            {isLive && (
+                <View style={styles.circleContainer}>
+                    <Animated.View
+                        style={[styles.circle, { opacity: liveOpacity }]}
+                    />
+                </View>
+            )}
+            <List.Icon
+                {...props}
+                color={colors.textPrimary}
+                icon={props.isExpanded ? 'chevron-up' : 'chevron-down'}
+            />
+        </View>
+    )
+}
+
+const getAccordionRightView = (point: Point) => {
+    return (props: { isExpanded: boolean }) => {
+        return (
+            <AccordionRightView point={point} isExpanded={props.isExpanded} />
+        )
+    }
+}
+
+const PointAccordion: React.FC<PointAccordionProps> = ({
+    point,
+    actions,
+    expanded,
+    loading,
+    teamOne,
+    teamTwo,
+    onActionPress,
+}) => {
+    const { colors } = useColors()
 
     const styles = StyleSheet.create({
         accordion: {
@@ -103,27 +144,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             <List.Accordion
                 id={point._id}
                 style={styles.accordion}
-                right={props => (
-                    <View>
-                        {isLive && (
-                            <View style={styles.circleContainer}>
-                                <Animated.View
-                                    style={[
-                                        styles.circle,
-                                        { opacity: liveOpacity },
-                                    ]}
-                                />
-                            </View>
-                        )}
-                        <List.Icon
-                            {...props}
-                            color={colors.textPrimary}
-                            icon={
-                                props.isExpanded ? 'chevron-up' : 'chevron-down'
-                            }
-                        />
-                    </View>
-                )}
+                right={getAccordionRightView(point)}
                 titleStyle={{ color: colors.textPrimary }}
                 title={
                     <View style={styles.titleContainer}>

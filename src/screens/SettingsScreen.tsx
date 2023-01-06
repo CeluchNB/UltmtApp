@@ -17,7 +17,7 @@ import {
     Text,
     View,
 } from 'react-native'
-import { SettingsScreenProps, SecureEditField } from '../types/navigation'
+import { SecureEditField, SettingsScreenProps } from '../types/navigation'
 import {
     selectAccount,
     setPrivate,
@@ -116,7 +116,10 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
 
     const onLogout = async () => {
         await logout()
-        navigation.navigate('Tabs', { screen: 'Account', params: { screen: 'Login' } })
+        navigation.navigate('Tabs', {
+            screen: 'Account',
+            params: { screen: 'Login' },
+        })
     }
 
     const onChangeName = async (firstName: string, lastName: string) => {
@@ -273,7 +276,10 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                             try {
                                                 await UserData.deleteAccount()
                                                 setModalVisible(false)
-                                                navigation.navigate('Tabs', { screen: 'Account', params: { screen: 'Login' } })
+                                                navigation.navigate('Tabs', {
+                                                    screen: 'Account',
+                                                    params: { screen: 'Login' },
+                                                })
                                             } catch (e: any) {
                                                 setDeleteError(
                                                     e.message ??
