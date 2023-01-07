@@ -90,3 +90,11 @@ export const finishGame = async (token: string) => {
         },
     )
 }
+
+export const getGamesByTeam = async (teamId: string) => {
+    return await axios.get(`${API_URL_V1}/game/team/${teamId}`, {
+        headers: {
+            'X-API-Key': API_KEY,
+        },
+    })
+}

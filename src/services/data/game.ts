@@ -11,6 +11,7 @@ import {
     createGame as networkCreateGame,
     finishGame as networkFinishGame,
     getGameById as networkGetGameById,
+    getGamesByTeam as networkGetGameByTeams,
     getPointsByGame as networkGetPointsByGame,
     joinGame as networkJoinGame,
     searchGames as networkSearchGames,
@@ -136,6 +137,10 @@ export const joinGame = async (
     }
 }
 
+/**
+ * Method to finish a game as a game editor
+ * @returns the updated game
+ */
 export const finishGame = async (): Promise<Game> => {
     try {
         const response = await withGameToken(networkFinishGame)
@@ -143,6 +148,21 @@ export const finishGame = async (): Promise<Game> => {
         return game
     } catch (e) {
         return throwApiError(e, Constants.FINISH_GAME_ERROR)
+    }
+}
+
+/**
+ * Get all games associated with a specific team. (Team ID must be teamOne's or teamTwo's _id)
+ * @param teamId id of team
+ * @returns list of games associated with team
+ */
+export const getGamesByTeam = async (teamId: string): Promise<Game[]> => {
+    try {
+        const response = await networkGetGameByTeams(teamId)
+        const { games } = response.data
+        return games
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
     }
 }
 
