@@ -41,11 +41,11 @@ const GameHeader: React.FC<GameHeaderProps> = ({ game }) => {
                 teamname={game.teamOne.teamname}
                 score={game.teamOneScore}
             />
-            {(game.teamOneActive || game.teamTwoActive) && (
-                <Text style={styles.descriptionText}>
-                    Game to {game.scoreLimit}
-                </Text>
-            )}
+            <Text style={styles.descriptionText}>
+                {game.teamOneActive || game.teamTwoActive
+                    ? `Game to ${game.scoreLimit}`
+                    : ''}
+            </Text>
             <TeamScore
                 name={game.teamTwo.name}
                 teamname={game.teamTwo.teamname}

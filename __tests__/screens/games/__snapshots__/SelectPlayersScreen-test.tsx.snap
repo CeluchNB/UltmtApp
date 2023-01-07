@@ -73,8 +73,7 @@ exports[`should match snapshot 1`] = `
           }
         }
       >
-        Game to 
-        15
+        Game to 15
       </Text>
       <View>
         <Text
@@ -1686,8 +1685,7 @@ exports[`should match snapshot for team two 1`] = `
           }
         }
       >
-        Game to 
-        15
+        Game to 15
       </Text>
       <View>
         <Text

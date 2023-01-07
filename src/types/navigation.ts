@@ -150,9 +150,9 @@ export type JoinGameProps = CompositeScreenProps<
     >
 >
 
-export type LiveGameProps = NativeStackScreenProps<
-    LiveGameParamList,
-    'FirstPoint'
+export type LiveGameProps = CompositeScreenProps<
+    NativeStackScreenProps<LiveGameParamList, 'FirstPoint'>,
+    NativeStackScreenProps<TopLevelParamList>
 >
 
 export type CommentProps = NativeStackScreenProps<GameStackParamList, 'Comment'>

@@ -1,5 +1,6 @@
 import { GuestUser } from '../types/user'
 import React from 'react'
+import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import {
     ClientAction,
@@ -34,8 +35,12 @@ function immutablePush<T>(newValue: T): (current: T[]) => T[] {
     }
 }
 
-function immutablePop<T>(current: T[]): T[] {
-    return current.slice(0, -1)
+function immutableFilter<T extends { actionNumber: number }>(
+    actionNumber: number,
+): (current: T[]) => T[] {
+    return (current: T[]): T[] => {
+        return current.filter(item => item.actionNumber !== actionNumber)
+    }
 }
 
 export const useGameEditor = () => {
@@ -57,10 +62,10 @@ export const useGameEditor = () => {
                 successfulResponse()
                 setActions(immutablePush(data))
             },
-            undo: ({ team: undoTeamNumber }) => {
+            undo: ({ team: undoTeamNumber, actionNumber }) => {
                 if (undoTeamNumber === team) {
                     successfulResponse()
-                    setActions(immutablePop)
+                    setActions(immutableFilter(actionNumber))
                 }
             },
             error: data => {
@@ -158,6 +163,11 @@ export const useGameEditor = () => {
         await nextPoint(point._id)
     }
 
+    const onFinishGame = async () => {
+        await finishPoint(point._id)
+        await finishGame()
+    }
+
     return {
         activePlayers,
         actions,
@@ -172,5 +182,6 @@ export const useGameEditor = () => {
         onTeamAction,
         onUndo,
         onFinishPoint,
+        onFinishGame,
     }
 }
