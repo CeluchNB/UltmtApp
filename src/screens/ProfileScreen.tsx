@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { AllScreenProps } from '../types/navigation'
 import { Button } from 'react-native-paper'
+import { Game } from '../types/game'
 import GameListItem from '../components/atoms/GameListItem'
 import IconButtonText from '../components/atoms/IconButtonText'
 import MapSection from '../components/molecules/MapSection'
@@ -10,6 +11,7 @@ import StatListItem from '../components/atoms/StatListItem'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { User } from '../types/user'
 import { fetchProfile } from '../services/data/user'
+import { getGamesByTeam } from '../services/data/game'
 import { logout } from '../services/data/auth'
 import { size } from '../theme/fonts'
 import {
@@ -43,14 +45,37 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     const {
         data: profile,
         loading: profileLoading,
-        error,
-        refetch,
+        error: profileError,
+        refetch: profileRefetch,
     } = useData<User>(fetchProfile)
+
+    const teamToGet = React.useMemo(() => {
+        if (!profile) {
+            return undefined
+        }
+        if (profile.managerTeams.length > 0) {
+            return profile.managerTeams[0]._id
+        }
+        if (profile.playerTeams.length > 0) {
+            return profile.playerTeams[0]._id
+        }
+        return undefined
+    }, [profile])
+
+    const {
+        data: games,
+        loading: gameLoading,
+        refetch: gameRefetch,
+    } = useData<Game[]>(getGamesByTeam, teamToGet)
+
+    const sortedGames = React.useMemo(() => {
+        return games?.reverse()
+    }, [games])
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
             if (!profileLoading) {
-                refetch()
+                profileRefetch()
             }
         })
         return unsubscribe
@@ -139,7 +164,8 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                         colors={[colors.textSecondary]}
                         refreshing={profileLoading}
                         onRefresh={async () => {
-                            refetch()
+                            profileRefetch()
+                            gameRefetch()
                         }}
                     />
                 }
@@ -194,9 +220,11 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                     </View>
                 }
                 ListFooterComponent={
-                    error ? (
+                    profileError ? (
                         <View style={styles.footerContainer}>
-                            <Text style={styles.error}>{error.message}</Text>
+                            <Text style={styles.error}>
+                                {profileError.message}
+                            </Text>
                         </View>
                     ) : (
                         <View style={styles.footerContainer}>
@@ -212,21 +240,32 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                                     return <StatListItem stat={item} />
                                 }}
                             />
-                            <MapSection
-                                title="Games"
-                                showButton={false}
-                                showCreateButton={true}
-                                onCreatePress={onCreateGame}
-                                onButtonPress={() => ({})}
-                                buttonText="see all games"
-                                listData={[]}
-                                renderItem={item => {
-                                    return (
-                                        <GameListItem key={item} game={item} />
-                                    )
-                                }}
-                                error="No games available"
-                            />
+                            <View>
+                                <MapSection
+                                    title="Games"
+                                    showButton={true}
+                                    showCreateButton={true}
+                                    onCreatePress={onCreateGame}
+                                    onButtonPress={() => ({})}
+                                    buttonText="see all games"
+                                    listData={sortedGames}
+                                    loading={gameLoading}
+                                    renderItem={item => {
+                                        return (
+                                            <GameListItem
+                                                key={item._id}
+                                                game={item}
+                                                teamId={teamToGet}
+                                            />
+                                        )
+                                    }}
+                                    error={
+                                        games?.length === 0
+                                            ? 'No games available'
+                                            : undefined
+                                    }
+                                />
+                            </View>
                             <MapSection
                                 title="Teams"
                                 showButton={true}
