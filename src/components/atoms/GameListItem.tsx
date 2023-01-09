@@ -1,15 +1,21 @@
 import * as React from 'react'
+import BaseListItem from './BaseListItem'
 import { Game } from '../../types/game'
 import { useColors } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 interface GameListItemProps {
     game: Game
     teamId?: string
+    onPress?: () => void
 }
 
-const GameListItem: React.FC<GameListItemProps> = ({ game, teamId }) => {
+const GameListItem: React.FC<GameListItemProps> = ({
+    game,
+    teamId,
+    onPress,
+}) => {
     const { colors } = useColors()
 
     const opponent = React.useMemo(() => {
@@ -28,6 +34,15 @@ const GameListItem: React.FC<GameListItemProps> = ({ game, teamId }) => {
         }
     }, [game, teamId])
 
+    const handlePress = React.useMemo(() => {
+        if (onPress) {
+            return async () => {
+                onPress()
+            }
+        }
+        return undefined
+    }, [onPress])
+
     const styles = StyleSheet.create({
         teamName: {
             color: colors.gray,
@@ -41,8 +56,9 @@ const GameListItem: React.FC<GameListItemProps> = ({ game, teamId }) => {
         },
     })
 
+    console.log('handle press', handlePress)
     return (
-        <View>
+        <BaseListItem onPress={handlePress}>
             <Text style={styles.teamName}>{`vs.${
                 opponent.place ? ` ${opponent.place}` : ''
             } ${opponent.name}`}</Text>
@@ -50,7 +66,7 @@ const GameListItem: React.FC<GameListItemProps> = ({ game, teamId }) => {
                 style={
                     styles.score
                 }>{`${scores.mine} - ${scores.opponent}`}</Text>
-        </View>
+        </BaseListItem>
     )
 }
 

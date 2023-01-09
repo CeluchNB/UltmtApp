@@ -1,9 +1,9 @@
 import * as React from 'react'
 import * as UserData from '../services/data/user'
+import { CreateAccountProps } from '../types/navigation'
 import { CreateUserData } from '../types/user'
 import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
@@ -13,7 +13,9 @@ import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
-const CreateAccountScreen: React.FC<Props> = ({ navigation }: Props) => {
+const CreateAccountScreen: React.FC<CreateAccountProps> = ({
+    navigation,
+}: CreateAccountProps) => {
     const { colors } = useColors()
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState(undefined)

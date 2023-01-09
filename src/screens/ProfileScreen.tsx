@@ -246,7 +246,9 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                                     showButton={true}
                                     showCreateButton={true}
                                     onCreatePress={onCreateGame}
-                                    onButtonPress={() => ({})}
+                                    onButtonPress={async () => {
+                                        navigation.navigate('TeamGames')
+                                    }}
                                     buttonText="see all games"
                                     listData={sortedGames}
                                     loading={gameLoading}
