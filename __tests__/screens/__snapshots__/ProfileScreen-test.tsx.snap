@@ -29,17 +29,66 @@ exports[`profile screen matches snapshot 1`] = `
           showButton={false}
           title="Stats"
         />
-        <MapSection
-          buttonText="see all games"
-          error="No games available"
-          listData={[]}
-          onButtonPress={[Function]}
-          onCreatePress={[Function]}
-          renderItem={[Function]}
-          showButton={false}
-          showCreateButton={true}
-          title="Games"
-        />
+        <View>
+          <MapSection
+            buttonText="see all games"
+            listData={
+              [
+                {
+                  "_id": "game1",
+                  "creator": {
+                    "_id": "user1",
+                    "firstName": "First 1",
+                    "lastName": "Last 1",
+                    "username": "first1last1",
+                  },
+                  "floaterTimeout": true,
+                  "halfScore": 8,
+                  "hardcapMins": 90,
+                  "playersPerPoint": 7,
+                  "points": [],
+                  "resolveCode": "111111",
+                  "scoreLimit": 15,
+                  "softcapMins": 75,
+                  "startTime": 2022-10-12T00:00:00.000Z,
+                  "teamOne": {
+                    "_id": "team1",
+                    "name": "Temper",
+                    "place": "Pittsburgh",
+                    "seasonEnd": "2022",
+                    "seasonStart": "2022",
+                    "teamname": "pghtemper",
+                  },
+                  "teamOneActive": true,
+                  "teamOnePlayers": [],
+                  "teamOneScore": 3,
+                  "teamTwo": {
+                    "name": "Sockeye",
+                  },
+                  "teamTwoActive": false,
+                  "teamTwoDefined": false,
+                  "teamTwoPlayers": [],
+                  "teamTwoScore": 0,
+                  "timeoutPerHalf": 1,
+                  "tournament": {
+                    "_id": "tourney1",
+                    "endDate": 2022-10-23T00:00:00.000Z,
+                    "eventId": "nationals22",
+                    "name": "Club Nationals 2022",
+                    "startDate": 2022-10-20T00:00:00.000Z,
+                  },
+                },
+              ]
+            }
+            loading={false}
+            onButtonPress={[Function]}
+            onCreatePress={[Function]}
+            renderItem={[Function]}
+            showButton={true}
+            showCreateButton={true}
+            title="Games"
+          />
+        </View>
         <MapSection
           buttonText="manage teams"
           listData={
@@ -699,40 +748,243 @@ exports[`profile screen matches snapshot 1`] = `
               No stats available
             </Text>
           </View>
-          <View
-            style={
-              {
-                "width": "100%",
-              }
-            }
-          >
+          <View>
             <View
               style={
                 {
-                  "display": "flex",
-                  "flex": 1,
-                  "flexDirection": "row",
+                  "width": "100%",
                 }
               }
             >
-              <Text
+              <View
                 style={
                   {
-                    "color": "#ffd600",
+                    "display": "flex",
                     "flex": 1,
-                    "fontSize": 61.64383561643835,
-                    "fontWeight": "bold",
-                    "marginBottom": 10,
+                    "flexDirection": "row",
                   }
                 }
               >
-                Games
-              </Text>
+                <Text
+                  style={
+                    {
+                      "color": "#ffd600",
+                      "flex": 1,
+                      "fontSize": 61.64383561643835,
+                      "fontWeight": "bold",
+                      "marginBottom": 10,
+                    }
+                  }
+                >
+                  Games
+                </Text>
+                <View
+                  collapsable={false}
+                  style={
+                    {
+                      "alignSelf": undefined,
+                      "bottom": undefined,
+                      "left": undefined,
+                      "position": undefined,
+                      "right": undefined,
+                      "shadowColor": "#000",
+                      "shadowOffset": {
+                        "height": 0,
+                        "width": 0,
+                      },
+                      "shadowOpacity": 0,
+                      "shadowRadius": 0,
+                      "top": undefined,
+                    }
+                  }
+                >
+                  <View
+                    collapsable={false}
+                    style={
+                      {
+                        "shadowColor": "#000",
+                        "shadowOffset": {
+                          "height": 0,
+                          "width": 0,
+                        },
+                        "shadowOpacity": 0,
+                        "shadowRadius": 0,
+                      }
+                    }
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "backgroundColor": "#ffd600",
+                          "borderColor": "rgba(121, 116, 126, 1)",
+                          "borderRadius": 5,
+                          "borderWidth": 0,
+                          "display": "flex",
+                          "elevation": 0,
+                          "flexWrap": "nowrap",
+                          "height": 40,
+                          "margin": 6,
+                          "overflow": "hidden",
+                          "width": 40,
+                        }
+                      }
+                    >
+                      <View
+                        accessibilityComponentType="button"
+                        accessibilityRole="button"
+                        accessibilityState={
+                          {
+                            "disabled": false,
+                          }
+                        }
+                        accessibilityTraits="button"
+                        accessible={true}
+                        centered={true}
+                        collapsable={false}
+                        focusable={true}
+                        hitSlop={
+                          {
+                            "bottom": 6,
+                            "left": 6,
+                            "right": 6,
+                            "top": 6,
+                          }
+                        }
+                        onBlur={[Function]}
+                        onClick={[Function]}
+                        onFocus={[Function]}
+                        onResponderGrant={[Function]}
+                        onResponderMove={[Function]}
+                        onResponderRelease={[Function]}
+                        onResponderTerminate={[Function]}
+                        onResponderTerminationRequest={[Function]}
+                        onStartShouldSetResponder={[Function]}
+                        style={
+                          [
+                            {
+                              "overflow": "hidden",
+                            },
+                            false,
+                            [
+                              {
+                                "alignItems": "center",
+                                "flexGrow": 1,
+                                "justifyContent": "center",
+                              },
+                              {
+                                "borderRadius": 5,
+                              },
+                            ],
+                          ]
+                        }
+                        testID="create-button"
+                      >
+                        <Text
+                          accessibilityElementsHidden={true}
+                          allowFontScaling={false}
+                          importantForAccessibility="no-hide-descendants"
+                          pointerEvents="none"
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "color": "#303030",
+                                "fontSize": 24,
+                              },
+                              [
+                                {
+                                  "lineHeight": 24,
+                                  "transform": [
+                                    {
+                                      "scaleX": 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  "backgroundColor": "transparent",
+                                },
+                              ],
+                              {
+                                "fontFamily": "Material Design Icons",
+                                "fontStyle": "normal",
+                                "fontWeight": "normal",
+                              },
+                              {},
+                            ]
+                          }
+                        >
+                          󰐕
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={
+                  {
+                    "display": "flex",
+                    "flexDirection": "row",
+                    "marginBottom": 5,
+                  }
+                }
+              >
+                <View
+                  style={
+                    {
+                      "alignSelf": "center",
+                      "flex": 1,
+                    }
+                  }
+                >
+                  <View
+                    accessible={true}
+                    collapsable={false}
+                    focusable={false}
+                    onClick={[Function]}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      {
+                        "opacity": 1,
+                      }
+                    }
+                  >
+                    <Text
+                      style={
+                        {
+                          "color": "#ababab",
+                          "fontSize": 41.0958904109589,
+                          "fontWeight": "bold",
+                        }
+                      }
+                    >
+                      vs. Sockeye
+                    </Text>
+                    <Text
+                      style={
+                        {
+                          "color": "#ffd600",
+                          "fontSize": 20.54794520547945,
+                          "fontWeight": "bold",
+                        }
+                      }
+                    >
+                      0 - 3
+                    </Text>
+                  </View>
+                </View>
+              </View>
               <View
                 collapsable={false}
                 style={
                   {
-                    "alignSelf": undefined,
+                    "alignSelf": "center",
                     "bottom": undefined,
                     "left": undefined,
                     "position": undefined,
@@ -766,41 +1018,26 @@ exports[`profile screen matches snapshot 1`] = `
                     collapsable={false}
                     style={
                       {
-                        "backgroundColor": "#ffd600",
-                        "borderColor": "rgba(121, 116, 126, 1)",
-                        "borderRadius": 5,
+                        "backgroundColor": "transparent",
+                        "borderColor": "transparent",
+                        "borderRadius": 20,
+                        "borderStyle": "solid",
                         "borderWidth": 0,
-                        "display": "flex",
-                        "elevation": 0,
-                        "flexWrap": "nowrap",
-                        "height": 40,
-                        "margin": 6,
-                        "overflow": "hidden",
-                        "width": 40,
+                        "marginTop": 10,
+                        "minWidth": 64,
                       }
                     }
                   >
                     <View
-                      accessibilityComponentType="button"
                       accessibilityRole="button"
                       accessibilityState={
                         {
                           "disabled": false,
                         }
                       }
-                      accessibilityTraits="button"
                       accessible={true}
-                      centered={true}
                       collapsable={false}
                       focusable={true}
-                      hitSlop={
-                        {
-                          "bottom": 6,
-                          "left": 6,
-                          "right": 6,
-                          "top": 6,
-                        }
-                      }
                       onBlur={[Function]}
                       onClick={[Function]}
                       onFocus={[Function]}
@@ -816,72 +1053,79 @@ exports[`profile screen matches snapshot 1`] = `
                             "overflow": "hidden",
                           },
                           false,
-                          [
-                            {
-                              "alignItems": "center",
-                              "flexGrow": 1,
-                              "justifyContent": "center",
-                            },
-                            {
-                              "borderRadius": 5,
-                            },
-                          ],
+                          {
+                            "borderRadius": 20,
+                          },
                         ]
                       }
-                      testID="create-button"
+                      testID="more-button"
                     >
-                      <Text
-                        accessibilityElementsHidden={true}
-                        allowFontScaling={false}
-                        importantForAccessibility="no-hide-descendants"
-                        pointerEvents="none"
-                        selectable={false}
+                      <View
                         style={
                           [
                             {
-                              "color": "#303030",
-                              "fontSize": 24,
+                              "alignItems": "center",
+                              "flexDirection": "row",
+                              "justifyContent": "center",
                             },
-                            [
-                              {
-                                "lineHeight": 24,
-                                "transform": [
-                                  {
-                                    "scaleX": 1,
-                                  },
-                                ],
-                              },
-                              {
-                                "backgroundColor": "transparent",
-                              },
-                            ],
-                            {
-                              "fontFamily": "Material Design Icons",
-                              "fontStyle": "normal",
-                              "fontWeight": "normal",
-                            },
-                            {},
+                            undefined,
                           ]
                         }
                       >
-                        󰐕
-                      </Text>
+                        <Text
+                          numberOfLines={1}
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "fontFamily": "System",
+                                "fontSize": 14,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.1,
+                                "lineHeight": 20,
+                              },
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "writingDirection": "ltr",
+                              },
+                              [
+                                {
+                                  "marginHorizontal": 16,
+                                  "marginVertical": 9,
+                                  "textAlign": "center",
+                                },
+                                false,
+                                {
+                                  "marginHorizontal": 12,
+                                },
+                                undefined,
+                                {
+                                  "textTransform": "uppercase",
+                                },
+                                {
+                                  "color": "#ffd600",
+                                  "fontFamily": "System",
+                                  "fontSize": 14,
+                                  "fontWeight": "500",
+                                  "letterSpacing": 0.1,
+                                  "lineHeight": 20,
+                                },
+                                undefined,
+                              ],
+                            ]
+                          }
+                        >
+                          see all games
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
               </View>
             </View>
-            <Text
-              style={
-                {
-                  "color": "#ffd600",
-                  "fontSize": 41.0958904109589,
-                  "marginBottom": 50,
-                }
-              }
-            >
-              No games available
-            </Text>
           </View>
           <View
             style={

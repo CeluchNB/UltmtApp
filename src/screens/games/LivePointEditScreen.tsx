@@ -14,16 +14,17 @@ import { getValidTeamActions } from '../../utils/action'
 import { isPulling } from '../../utils/point'
 import { useColors } from '../../hooks'
 import { useGameEditor } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
 const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
     // hooks
     const { colors } = useColors()
-    const [finishLoading, setFinishLoading] = React.useState(false)
+    const [finishPointLoading, setFinishPointLoading] = React.useState(false)
     const [finishError, setFinishError] = React.useState<string | undefined>(
         undefined,
     )
+    const [finishGameLoading, setFinishGameLoading] = React.useState(false)
 
     const {
         actions,
@@ -39,11 +40,21 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         onTeamAction,
         onUndo,
         onFinishPoint: finishPoint,
+        onFinishGame: finishGame,
     } = useGameEditor()
+
+    const finishDisable = React.useMemo(() => {
+        return (
+            finishPointLoading ||
+            finishGameLoading ||
+            (lastAction?.actionType !== ActionType.TEAM_ONE_SCORE &&
+                lastAction?.actionType !== ActionType.TEAM_TWO_SCORE)
+        )
+    }, [finishGameLoading, finishPointLoading, lastAction?.actionType])
 
     const onFinishPoint = async () => {
         try {
-            setFinishLoading(true)
+            setFinishPointLoading(true)
             setFinishError(undefined)
             await finishPoint()
 
@@ -53,7 +64,25 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                 (e as ApiError).message ?? Constants.FINISH_POINT_ERROR,
             )
         } finally {
-            setFinishLoading(false)
+            setFinishPointLoading(false)
+        }
+    }
+
+    const onFinishGame = async () => {
+        try {
+            setFinishGameLoading(true)
+            await finishGame()
+            // navigation.reset({ index: 0, routes: [{ name:  }]})
+            navigation.navigate('Tabs', {
+                screen: 'Account',
+                params: { screen: 'Profile' },
+            })
+        } catch (e) {
+            setFinishError(
+                (e as ApiError).message ?? Constants.FINISH_GAME_ERROR,
+            )
+        } finally {
+            setFinishGameLoading(false)
         }
     }
 
@@ -68,50 +97,67 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
             fontWeight: weight.full,
             margin: 5,
         },
+        button: {
+            margin: 5,
+        },
     })
 
     return (
         <BaseScreen containerWidth="80%">
-            <GameHeader game={game} />
-            <LivePointStatus
-                error={error}
-                loading={waiting}
-                undoDisabled={myTeamActions.length === 0}
-                onUndo={onUndo}
-            />
-            <PlayerActionView
-                players={activePlayers}
-                pulling={isPulling(point, game, team)}
-                prevAction={lastAction?.actionType}
-                activePlayer={lastAction?.playerOne?._id}
-                loading={waiting}
-                onAction={onPlayerAction}
-            />
-            <TeamActionView
-                actions={getValidTeamActions(myTeamActions)}
-                onAction={onTeamAction}
-            />
-            <PrimaryButton
-                onPress={onFinishPoint}
-                text="finish point"
-                loading={finishLoading}
-                disabled={
-                    finishLoading ||
-                    (lastAction?.actionType !== ActionType.TEAM_ONE_SCORE &&
-                        lastAction?.actionType !== ActionType.TEAM_TWO_SCORE)
+            <FlatList
+                data={[]}
+                renderItem={() => <View />}
+                ListHeaderComponent={
+                    <View>
+                        <GameHeader game={game} />
+                        <LivePointStatus
+                            error={error}
+                            loading={waiting}
+                            undoDisabled={myTeamActions.length === 0}
+                            onUndo={onUndo}
+                        />
+                        <PlayerActionView
+                            players={activePlayers}
+                            pulling={isPulling(point, game, team)}
+                            prevAction={lastAction?.actionType}
+                            activePlayer={lastAction?.playerOne?._id}
+                            loading={waiting}
+                            onAction={onPlayerAction}
+                        />
+                        <TeamActionView
+                            actions={getValidTeamActions(myTeamActions)}
+                            onAction={onTeamAction}
+                        />
+                        <PrimaryButton
+                            style={styles.button}
+                            onPress={onFinishPoint}
+                            text="next point"
+                            loading={finishPointLoading}
+                            disabled={finishDisable}
+                        />
+                        <PrimaryButton
+                            style={styles.button}
+                            onPress={onFinishGame}
+                            text="finish game"
+                            loading={finishGameLoading}
+                            disabled={finishDisable}
+                        />
+                        {finishError && (
+                            <Text style={styles.error}>{finishError}</Text>
+                        )}
+                        {actions.length > 0 && (
+                            <View>
+                                <Text style={styles.header}>Last Action</Text>
+                                <ActionDisplayItem
+                                    action={actions[actions.length - 1]}
+                                    teamOne={game.teamOne}
+                                    teamTwo={game.teamTwo}
+                                />
+                            </View>
+                        )}
+                    </View>
                 }
             />
-            {finishError && <Text style={styles.error}>{finishError}</Text>}
-            {actions.length > 0 && (
-                <View>
-                    <Text style={styles.header}>Last Action</Text>
-                    <ActionDisplayItem
-                        action={actions[actions.length - 1]}
-                        teamOne={game.teamOne}
-                        teamTwo={game.teamTwo}
-                    />
-                </View>
-            )}
         </BaseScreen>
     )
 }

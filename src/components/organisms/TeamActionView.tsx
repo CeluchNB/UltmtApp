@@ -85,6 +85,7 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
     return (
         <View style={styles.container}>
             <FlatList
+                listKey="team-action-list"
                 data={actions}
                 numColumns={2}
                 renderItem={({ item }) => {

@@ -305,7 +305,7 @@ exports[`test with right icon 1`] = `
                 style={
                   [
                     {
-                      "color": "rgba(73, 69, 79, 1)",
+                      "color": "#ffd600",
                       "fontSize": 24,
                     },
                     [

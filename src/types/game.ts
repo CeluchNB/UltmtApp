@@ -1,11 +1,6 @@
 import { DisplayUser } from './user'
 import { Tournament } from './tournament'
 import { DisplayTeam, GuestTeam } from './team'
-export interface DisplayGame {
-    opponent: DisplayTeam
-    teamScore: number
-    opponentScore: number
-}
 
 export interface CreateGame {
     creator: DisplayUser

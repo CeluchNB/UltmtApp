@@ -20,6 +20,7 @@ exports[`should match snapshot 1`] = `
     getItem={[Function]}
     getItemCount={[Function]}
     keyExtractor={[Function]}
+    listKey="team-action-list"
     onContentSizeChange={[Function]}
     onLayout={[Function]}
     onMomentumScrollBegin={[Function]}

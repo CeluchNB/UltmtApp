@@ -120,7 +120,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                 </View>
                 <View style={styles.container}>
                     <MapSection
-                        title="Teams I Play For"
+                        title="Playing With"
                         showButton={false}
                         showCreateButton={true}
                         onCreatePress={() => {
@@ -156,7 +156,7 @@ const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
                         }}
                     />
                     <MapSection
-                        title="Teams I Manage"
+                        title="Managing"
                         showButton={false}
                         showCreateButton={true}
                         onCreatePress={() => {

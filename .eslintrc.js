@@ -19,7 +19,6 @@ module.exports = {
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': 'warn',
         'prefer-desctructuring': 'off',
-        'react-hooks/exhaustive-deps': 'warn',
     },
     ignorePatterns: ['**/coverage/**/*.js'],
     globals: {

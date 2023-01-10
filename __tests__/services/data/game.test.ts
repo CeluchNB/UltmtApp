@@ -7,7 +7,9 @@ import jwt from 'jsonwebtoken'
 import {
     addGuestPlayer,
     createGame,
+    finishGame,
     getGameById,
+    getGamesByTeam,
     getPointsByGame,
     joinGame,
     searchGames,
@@ -257,6 +259,72 @@ describe('test join game', () => {
             message: Constants.JOIN_GAME_ERROR,
         })
         expect(RNEncryptedStorage.setItem).not.toHaveBeenCalled()
+    })
+})
+
+describe('test finish game', () => {
+    it('handles network success', async () => {
+        jest.spyOn(GameServices, 'finishGame').mockReturnValueOnce(
+            Promise.resolve({
+                data: { game },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await finishGame()
+        expect(result).toMatchObject(game)
+    })
+
+    it('handles network failure', async () => {
+        jest.spyOn(GameServices, 'finishGame').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        await expect(finishGame()).rejects.toMatchObject({
+            message: Constants.FINISH_GAME_ERROR,
+        })
+    })
+})
+
+describe('get game by team', () => {
+    it('with network success', async () => {
+        jest.spyOn(GameServices, 'getGamesByTeam').mockReturnValueOnce(
+            Promise.resolve({
+                data: { games: [game] },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+        const result = await getGamesByTeam('team')
+        expect(result.length).toBe(1)
+        expect(result[0]).toMatchObject(game)
+    })
+
+    it('with network failure', async () => {
+        jest.spyOn(GameServices, 'getGamesByTeam').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 500,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        await expect(getGamesByTeam('team')).rejects.toMatchObject({
+            message: Constants.GET_GAME_ERROR,
+        })
     })
 })
 
