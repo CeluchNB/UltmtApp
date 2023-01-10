@@ -56,7 +56,6 @@ const GameListItem: React.FC<GameListItemProps> = ({
         },
     })
 
-    console.log('handle press', handlePress)
     return (
         <BaseListItem onPress={handlePress}>
             <Text style={styles.teamName}>{`vs.${

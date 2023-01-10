@@ -1,36 +1,44 @@
 import * as React from 'react'
-import { DisplayGame } from '../../../src/types/game'
-import { DisplayTeam } from '../../../src/types/team'
 import GameListItem from '../../../src/components/atoms/GameListItem'
-import { render } from '@testing-library/react-native'
+import { game } from '../../../fixtures/data'
 import renderer from 'react-test-renderer'
+import { fireEvent, render } from '@testing-library/react-native'
 
-const game: DisplayGame = {
-    opponent: {
-        _id: 'id1',
-        place: 'Place1',
-        name: 'Name1',
-        seasonStart: '2019',
-        seasonEnd: '2019',
-    } as DisplayTeam,
-    teamScore: 15,
-    opponentScore: 14,
-}
+describe('GameListItem', () => {
+    it('test matches snapshot', () => {
+        const snapshot = renderer.create(
+            <GameListItem game={game} teamId={game.teamOne._id} />,
+        )
 
-it('test matches snapshot', () => {
-    const snapshot = renderer.create(<GameListItem game={game} />)
+        expect(snapshot).toMatchSnapshot()
+    })
 
-    expect(snapshot).toMatchSnapshot()
-})
+    it('displays correct view', () => {
+        const { getByText } = render(
+            <GameListItem game={game} teamId={game.teamOne._id} />,
+        )
 
-it('displays correct view', () => {
-    const { getByText } = render(<GameListItem game={game} />)
+        const teamDisplay = getByText(`vs. ${game.teamTwo.name}`)
+        const scoreDisplay = getByText(
+            `${game.teamOneScore} - ${game.teamTwoScore}`,
+        )
 
-    const teamDisplay = getByText(
-        `vs. ${game.opponent.place} ${game.opponent.name}`,
-    )
-    const scoreDisplay = getByText(`${game.teamScore} - ${game.opponentScore}`)
+        expect(teamDisplay).toBeTruthy()
+        expect(scoreDisplay).toBeTruthy()
+    })
 
-    expect(teamDisplay).toBeTruthy()
-    expect(scoreDisplay).toBeTruthy()
+    it('handles press', () => {
+        const onPress = jest.fn()
+        const { getByText } = render(
+            <GameListItem
+                game={game}
+                teamId={game.teamOne._id}
+                onPress={onPress}
+            />,
+        )
+
+        const teamDisplay = getByText(`vs. ${game.teamTwo.name}`)
+        fireEvent.press(teamDisplay)
+        expect(onPress).toHaveBeenCalled()
+    })
 })

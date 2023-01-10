@@ -76,6 +76,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
         const unsubscribe = navigation.addListener('focus', async () => {
             if (!profileLoading) {
                 profileRefetch()
+                gameRefetch()
             }
         })
         return unsubscribe

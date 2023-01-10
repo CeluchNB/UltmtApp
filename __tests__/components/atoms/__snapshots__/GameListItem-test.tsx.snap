@@ -1,28 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test matches snapshot 1`] = `
-<View>
-  <Text
+exports[`GameListItem test matches snapshot 1`] = `
+<View
+  style={
+    {
+      "display": "flex",
+      "flexDirection": "row",
+      "marginBottom": 5,
+    }
+  }
+>
+  <View
     style={
       {
-        "color": "#ababab",
-        "fontSize": 41.0958904109589,
-        "fontWeight": "bold",
+        "alignSelf": "center",
+        "flex": 1,
       }
     }
   >
-    vs. Place1 Name1
-  </Text>
-  <Text
-    style={
-      {
-        "color": "#ffd600",
-        "fontSize": 20.54794520547945,
-        "fontWeight": "bold",
+    <View
+      accessible={true}
+      collapsable={false}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "opacity": 1,
+        }
       }
-    }
-  >
-    15 - 14
-  </Text>
+    >
+      <Text
+        style={
+          {
+            "color": "#ababab",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        vs. Sockeye
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 20.54794520547945,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        3 - 0
+      </Text>
+    </View>
+  </View>
 </View>
 `;

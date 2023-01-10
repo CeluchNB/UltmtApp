@@ -141,7 +141,7 @@ exports[`should match snapshot 1`] = `
                 }
               }
             >
-              Teams I Play For
+              Playing With
             </Text>
             <View
               collapsable={false}
@@ -1379,7 +1379,7 @@ exports[`should match snapshot 1`] = `
                 }
               }
             >
-              Teams I Manage
+              Managing
             </Text>
             <View
               collapsable={false}

@@ -1,15 +1,16 @@
 import * as AuthData from '../../src/services/data/auth'
+import * as GameData from '../../src/services/data/game'
 import * as UserData from '../../src/services/data/user'
 import { AllScreenProps } from '../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
 import ProfileScreen from '../../src/screens/ProfileScreen'
 import { Provider } from 'react-redux'
 import React from 'react'
-import { fetchProfileData } from '../../fixtures/data'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
 import { waitUntilRefreshComplete } from '../../fixtures/utils'
-import { act, fireEvent, render } from '@testing-library/react-native'
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { fetchProfileData, game } from '../../fixtures/data'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -34,6 +35,9 @@ beforeAll(async () => {
     jest.spyOn(UserData, 'fetchProfile').mockImplementation(async () => {
         return fetchProfileData
     })
+    jest.spyOn(GameData, 'getGamesByTeam').mockReturnValue(
+        Promise.resolve([game]),
+    )
     store.dispatch(setProfile(fetchProfileData))
 })
 
@@ -52,6 +56,11 @@ it('profile screen matches snapshot', async () => {
     )
 
     await waitUntilRefreshComplete(snapshot.getByTestId('profile-flat-list'))
+    await waitFor(async () => {
+        expect(
+            snapshot.getByText(`${game.teamTwoScore} - ${game.teamOneScore}`),
+        ).toBeTruthy()
+    })
 
     expect(snapshot.toJSON()).toMatchSnapshot()
 })
