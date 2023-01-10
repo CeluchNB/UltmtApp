@@ -1,0 +1,30 @@
+import { Realm } from '@realm/react'
+
+export const GameSchema: Realm.ObjectSchema = {
+    name: 'Game',
+    primaryKey: '_id',
+    properties: {
+        _id: 'string',
+        creator: 'DisplayUser',
+        teamOne: 'DisplayTeam',
+        teamTwo: 'GuestTeam',
+        teamTwoDefined: 'bool',
+        scoreLimit: 'int',
+        halfScore: 'int',
+        startTime: 'date',
+        softcapMins: 'int',
+        hardcapMins: 'int',
+        playersPerPoint: 'int',
+        timeoutPerHalf: 'int',
+        floaterTimeout: 'bool',
+        tournament: 'Tournament?',
+        teamOneScore: 'int',
+        teamTwoScore: 'int',
+        teamOneActive: 'bool',
+        teamTwoActive: 'bool',
+        teamOnePlayers: 'DisplayUser[]',
+        teamTwoPlayers: 'DisplayUser[]',
+        resolveCode: 'string',
+        points: 'string[]',
+    },
+}

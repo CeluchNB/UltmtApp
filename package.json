@@ -18,6 +18,7 @@
     "@react-navigation/material-bottom-tabs": "^6.2.10",
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.7",
+    "@realm/react": "^0.4.1",
     "@reduxjs/toolkit": "^1.9.1",
     "@types/react-native-dotenv": "^0.2.0",
     "@types/react-native-vector-icons": "^6.4.12",
@@ -37,6 +38,7 @@
     "react-native-vector-icons": "^9.2.0",
     "react-query": "^3.39.2",
     "react-redux": "^8.0.5",
+    "realm": "^11.3.1",
     "socket.io-client": "^4.5.4",
     "validator": "^13.7.0"
   },

@@ -361,6 +361,8 @@ PODS:
     - React-jsi (= 0.70.6)
     - React-logger (= 0.70.6)
     - React-perflogger (= 0.70.6)
+  - RealmJS (11.3.1):
+    - React
   - RNCAsyncStorage (1.17.11):
     - React-Core
   - RNCCheckbox (0.5.14):
@@ -438,6 +440,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RealmJS (from `../node_modules/realm`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
@@ -534,6 +537,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RealmJS:
+    :path: "../node_modules/realm"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCCheckbox:
@@ -598,6 +603,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: c75ceef7aa60a33b2d5731ebe5800ddde40cefc4
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
+  RealmJS: 43fc7bfb83229c8a2755cb34f71f769c97b7b581
   RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
   RNCCheckbox: 38989bbd3d7d536adf24ba26c6b3e6cefe0bea6f
   RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd

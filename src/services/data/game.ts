@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { GuestUser } from '../../types/user'
 import Point from '../../types/point'
+import { saveGame as localSaveGame } from '../local/game'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
@@ -63,9 +64,11 @@ export const createGame = async (data: CreateGame): Promise<Game> => {
         const response = await withToken(networkCreateGame, data)
 
         const { game, token } = response.data
+        await localSaveGame(game)
         await EncryptedStorage.setItem('game_token', token)
         return game
     } catch (e) {
+        console.log('got errro', e)
         return throwApiError(e, Constants.CREATE_GAME_ERROR)
     }
 }
