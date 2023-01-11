@@ -1,17 +1,37 @@
 import { Realm } from '@realm/react'
+import {
+    DisplayTeamSchema,
+    DisplayUserSchema,
+    GameSchema,
+    GuestTeamSchema,
+    TournamentSchema,
+} from './index'
 
-export const withRealm = async (
-    schemas: Realm.ObjectSchema[],
-    method: (realm: Realm) => void,
-) => {
+const SCHEMAS = [
+    DisplayTeamSchema,
+    DisplayUserSchema,
+    GameSchema.schema,
+    GuestTeamSchema,
+    TournamentSchema,
+]
+
+const config = {
+    schema: SCHEMAS,
+}
+
+let realm: Realm | undefined
+
+export const getRealm = async (): Promise<Realm> => {
     try {
-        const realm = await Realm.open({
-            schema: schemas,
-        })
-
-        method(realm)
-        realm.close()
+        if (!realm || realm.isClosed) {
+            realm = await Realm.open(config)
+        }
+        return realm
     } catch (error) {
         throw error
     }
+}
+
+export const closeRealm = () => {
+    realm?.close()
 }

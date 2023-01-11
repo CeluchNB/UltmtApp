@@ -3,10 +3,13 @@ import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { GuestUser } from '../../types/user'
 import Point from '../../types/point'
-import { saveGame as localSaveGame } from '../local/game'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
+import {
+    activeGames as localActiveGames,
+    saveGame as localSaveGame,
+} from '../local/game'
 import {
     addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
@@ -68,7 +71,6 @@ export const createGame = async (data: CreateGame): Promise<Game> => {
         await EncryptedStorage.setItem('game_token', token)
         return game
     } catch (e) {
-        console.log('got errro', e)
         return throwApiError(e, Constants.CREATE_GAME_ERROR)
     }
 }
@@ -82,6 +84,7 @@ export const addGuestPlayer = async (player: GuestUser): Promise<Game> => {
     try {
         const response = await withGameToken(networkAddGuestPlayer, player)
         const { game } = response.data
+        await localSaveGame(game)
         return game
     } catch (e) {
         return throwApiError(e, Constants.ADD_GUEST_ERROR)
@@ -133,6 +136,7 @@ export const joinGame = async (
     try {
         const response = await withToken(networkJoinGame, gameId, teamId, code)
         const { game, token } = response.data
+        await localSaveGame(game)
         await EncryptedStorage.setItem('game_token', token)
         return game
     } catch (e) {
@@ -163,6 +167,20 @@ export const getGamesByTeam = async (teamId: string): Promise<Game[]> => {
     try {
         const response = await networkGetGameByTeams(teamId)
         const { games } = response.data
+        return games
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to get active games saved locally. These games either
+ * need to be finished or pushed to the backend.
+ * @returns list of games
+ */
+export const getActiveGames = async (): Promise<Game[]> => {
+    try {
+        const games = await localActiveGames()
         return games
     } catch (e) {
         return throwApiError(e, Constants.GET_GAME_ERROR)

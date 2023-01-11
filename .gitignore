@@ -69,3 +69,6 @@ coverage/
 
 .env
 env.d.ts
+
+# Realm
+default.realm*
