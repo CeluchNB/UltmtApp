@@ -102,6 +102,8 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
         },
     })
 
+    console.log('active players', activePlayers)
+    console.log('prev', lastAction)
     return (
         <BaseScreen containerWidth="80%">
             <FlatList

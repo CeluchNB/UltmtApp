@@ -41,8 +41,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
 
-    const { data: activeGames } = useData<Game[]>(getActiveGames)
-
+    const { data: activeGames } = useData<Game[]>(getActiveGames, account._id)
     const {
         data: profile,
         loading: profileLoading,
@@ -70,7 +69,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     } = useData<Game[]>(getGamesByTeam, teamToGet)
 
     const sortedGames = React.useMemo(() => {
-        return games?.reverse()
+        return games?.reverse().slice(0, 3)
     }, [games])
 
     React.useEffect(() => {

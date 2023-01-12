@@ -8,6 +8,7 @@ import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
 import {
     activeGames as localActiveGames,
+    getGameById as localGetGameById,
     saveGame as localSaveGame,
 } from '../local/game'
 import {
@@ -69,7 +70,8 @@ export const createGame = async (data: CreateGame): Promise<Game> => {
         const { game, token } = response.data
         await localSaveGame(game)
         await EncryptedStorage.setItem('game_token', token)
-        return game
+        const result = await localGetGameById(game._id)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.CREATE_GAME_ERROR)
     }
@@ -85,7 +87,8 @@ export const addGuestPlayer = async (player: GuestUser): Promise<Game> => {
         const response = await withGameToken(networkAddGuestPlayer, player)
         const { game } = response.data
         await localSaveGame(game)
-        return game
+        const result = await localGetGameById(game._id)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.ADD_GUEST_ERROR)
     }
@@ -138,7 +141,8 @@ export const joinGame = async (
         const { game, token } = response.data
         await localSaveGame(game)
         await EncryptedStorage.setItem('game_token', token)
-        return game
+        const result = await localGetGameById(game._id)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.JOIN_GAME_ERROR)
     }
@@ -178,9 +182,9 @@ export const getGamesByTeam = async (teamId: string): Promise<Game[]> => {
  * need to be finished or pushed to the backend.
  * @returns list of games
  */
-export const getActiveGames = async (): Promise<Game[]> => {
+export const getActiveGames = async (userId: string): Promise<Game[]> => {
     try {
-        const games = await localActiveGames()
+        const games = await localActiveGames(userId)
         return games
     } catch (e) {
         return throwApiError(e, Constants.GET_GAME_ERROR)

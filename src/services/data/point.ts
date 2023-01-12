@@ -10,6 +10,10 @@ import {
     saveActions as localSaveActions,
 } from '../local/action'
 import {
+    getPointById as localGetPointById,
+    savePoint as localSavePoint,
+} from '../local/point'
+import {
     createPoint as networkCreatePoint,
     finishPoint as networkFinishPoint,
     getActionsByPoint as networkGetActionsByPoint,
@@ -35,7 +39,9 @@ export const createPoint = async (
         )
 
         const { point } = response.data
-        return point
+        await localSavePoint(point)
+        const result = await localGetPointById(point._id)
+        return result
     } catch (e: any) {
         return throwApiError(e, Constants.CREATE_POINT_ERROR)
     }
@@ -58,7 +64,9 @@ export const setPlayers = async (
             players,
         )
         const { point } = response.data
-        return point
+        await localSavePoint(point)
+        const result = await localGetPointById(point._id)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.SET_PLAYERS_ERROR)
     }
