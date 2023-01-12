@@ -1,5 +1,6 @@
 import * as Constants from '../../../src/utils/constants'
 import * as GameServices from '../../../src/services/network/game'
+import * as LocalGameServices from '../../../src/services/local/game'
 import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { game } from '../../../fixtures/data'
@@ -82,6 +83,12 @@ describe('test create game', () => {
                 config: {},
             }),
         )
+        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValueOnce(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
+            Promise.resolve(game),
+        )
 
         const result = await createGame({} as any)
         expect(result).toMatchObject(game)
@@ -113,7 +120,12 @@ describe('test add guest player', () => {
             ...game,
             teamOnePlayers: [
                 ...game.teamOnePlayers,
-                { firstName: 'First 1', lastName: 'Last 1' },
+                {
+                    _id: 'user1',
+                    firstName: 'First 1',
+                    lastName: 'Last 1',
+                    username: 'user1',
+                },
             ],
         }
 
@@ -129,9 +141,18 @@ describe('test add guest player', () => {
             }),
         )
 
+        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValueOnce(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
+            Promise.resolve(updatedGame),
+        )
+
         const result = await addGuestPlayer({
+            _id: 'user1',
             firstName: 'First 1',
             lastName: 'Last 1',
+            username: 'user1',
         })
         expect(result).toMatchObject(updatedGame)
     })
@@ -232,6 +253,13 @@ describe('test join game', () => {
                 headers: {},
                 config: {},
             }),
+        )
+
+        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValueOnce(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
+            Promise.resolve(game),
         )
 
         const result = await joinGame('gameid', 'teamid', '123456')

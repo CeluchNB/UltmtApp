@@ -1,4 +1,5 @@
 import * as GameServices from '../../../src/services/network/game'
+import * as LocalGameServices from '../../../src/services/local/game'
 import GuestPlayerModal from '../../../src/components/molecules/GuestPlayerModal'
 import { Provider } from 'react-redux'
 import React from 'react'
@@ -7,6 +8,10 @@ import store from '../../../src/store/store'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+
+jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(
+    Promise.resolve(undefined),
+)
 
 it('should match snapshot', () => {
     const snapshot = render(
@@ -28,6 +33,13 @@ it('should call add player correctly', async () => {
             statusText: 'Good',
             config: {},
             headers: {},
+        }),
+    )
+    jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
+        Promise.resolve({
+            ...game,
+            startTime: '2022' as unknown as Date,
+            tournament: undefined,
         }),
     )
     let visible = true

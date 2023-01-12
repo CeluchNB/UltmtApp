@@ -38,6 +38,9 @@ beforeAll(async () => {
     jest.spyOn(GameData, 'getGamesByTeam').mockReturnValue(
         Promise.resolve([game]),
     )
+    jest.spyOn(GameData, 'getActiveGames').mockReturnValue(
+        Promise.resolve([game]),
+    )
     store.dispatch(setProfile(fetchProfileData))
 })
 

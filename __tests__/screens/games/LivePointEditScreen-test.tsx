@@ -1,7 +1,7 @@
 import '@testing-library/jest-native/extend-expect'
 import * as ActionData from '../../../src/services/data/live-action'
 import * as GameServices from '../../../src/services/network/game'
-import * as PointServices from '../../../src/services/network/point'
+import * as PointServices from '../../../src/services/data/point'
 import { LiveGameProps } from '../../../src/types/navigation'
 import LivePointEditScreen from '../../../src/screens/games/LivePointEditScreen'
 import { NavigationContainer } from '@react-navigation/native'
@@ -134,32 +134,16 @@ describe('LivePointEditScreen', () => {
     it('should handle basic D point', async () => {
         const finishPointSpy = jest
             .spyOn(PointServices, 'finishPoint')
-            .mockReturnValueOnce(
-                Promise.resolve({
-                    data: { point: { ...point, teamTwoScore: 1 } },
-                    status: 200,
-                    statusText: 'Good',
-                    headers: {},
-                    config: {},
-                }),
-            )
+            .mockReturnValueOnce(Promise.resolve({ ...point, teamTwoScore: 1 }))
         const createPointSpy = jest
             .spyOn(PointServices, 'createPoint')
             .mockReturnValueOnce(
                 Promise.resolve({
-                    data: {
-                        point: {
-                            ...point,
-                            teamTwoScore: 1,
-                            pullingTeam: game.teamTwo,
-                            receivingTeam: game.teamOne,
-                            pointNumber: 2,
-                        },
-                    },
-                    status: 200,
-                    statusText: 'Good',
-                    headers: {},
-                    config: {},
+                    ...point,
+                    teamTwoScore: 1,
+                    pullingTeam: game.teamTwo,
+                    receivingTeam: game.teamOne,
+                    pointNumber: 2,
                 }),
             )
         let subscriptions: SubscriptionObject
@@ -213,42 +197,26 @@ describe('LivePointEditScreen', () => {
                 routes: [{ name: 'SelectPlayers' }],
             })
         })
-        expect(finishPointSpy).toHaveBeenCalledWith('', point._id)
+        expect(finishPointSpy).toHaveBeenCalledWith(point._id)
         expect(store.getState().liveGame.game.teamTwoScore).toBe(1)
         expect(store.getState().liveGame.game.teamOneScore).toBe(0)
-        expect(createPointSpy).toHaveBeenCalledWith('', false, 2)
+        expect(createPointSpy).toHaveBeenCalledWith(false, 2)
     })
 
     it('should handle basic O point', async () => {
         store.dispatch(setTeam('two'))
         const finishPointSpy = jest
             .spyOn(PointServices, 'finishPoint')
-            .mockReturnValueOnce(
-                Promise.resolve({
-                    data: { point: { ...point, teamOneScore: 1 } },
-                    status: 200,
-                    statusText: 'Good',
-                    headers: {},
-                    config: {},
-                }),
-            )
+            .mockReturnValueOnce(Promise.resolve({ ...point, teamOneScore: 1 }))
         const createPointSpy = jest
             .spyOn(PointServices, 'createPoint')
             .mockReturnValueOnce(
                 Promise.resolve({
-                    data: {
-                        point: {
-                            ...point,
-                            teamOneScore: 1,
-                            pullingTeam: game.teamTwo,
-                            receivingTeam: game.teamOne,
-                            pointNumber: 2,
-                        },
-                    },
-                    status: 200,
-                    statusText: 'Good',
-                    headers: {},
-                    config: {},
+                    ...point,
+                    teamOneScore: 1,
+                    pullingTeam: game.teamTwo,
+                    receivingTeam: game.teamOne,
+                    pointNumber: 2,
                 }),
             )
 
@@ -339,24 +307,16 @@ describe('LivePointEditScreen', () => {
                 routes: [{ name: 'SelectPlayers' }],
             })
         })
-        expect(finishPointSpy).toHaveBeenCalledWith('', point._id)
+        expect(finishPointSpy).toHaveBeenCalledWith(point._id)
         expect(store.getState().liveGame.game.teamTwoScore).toBe(0)
         expect(store.getState().liveGame.game.teamOneScore).toBe(1)
-        expect(createPointSpy).toHaveBeenCalledWith('', false, 2)
+        expect(createPointSpy).toHaveBeenCalledWith(false, 2)
     })
 
     it('handles finish game', async () => {
         const finishPointSpy = jest
             .spyOn(PointServices, 'finishPoint')
-            .mockReturnValueOnce(
-                Promise.resolve({
-                    data: { point: { ...point, teamTwoScore: 1 } },
-                    status: 200,
-                    statusText: 'Good',
-                    headers: {},
-                    config: {},
-                }),
-            )
+            .mockReturnValueOnce(Promise.resolve({ ...point, teamTwoScore: 1 }))
         const finishGameSpy = jest
             .spyOn(GameServices, 'finishGame')
             .mockReturnValueOnce(
@@ -421,7 +381,7 @@ describe('LivePointEditScreen', () => {
                 params: { screen: 'Profile' },
             })
         })
-        expect(finishPointSpy).toHaveBeenCalledWith('', point._id)
+        expect(finishPointSpy).toHaveBeenCalledWith(point._id)
         expect(finishGameSpy).toHaveBeenCalled()
     })
 })

@@ -1,5 +1,6 @@
 import * as ActionLocal from '../../../src/services/local/action'
 import * as Constants from '../../../src/utils/constants'
+import * as LocalPointServices from '../../../src/services/local/point'
 import * as PointServices from '../../../src/services/network/point'
 import Point from '../../../src/types/point'
 import {
@@ -66,6 +67,12 @@ describe('test create point', () => {
                 headers: {},
             }),
         )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(point),
+        )
 
         const result = await createPoint(true, 1)
         expect(result).toMatchObject(point)
@@ -90,7 +97,14 @@ describe('test set players', () => {
     it('should handle network success', async () => {
         const newPoint = {
             ...point,
-            teamOnePlayers: [{ firstName: 'First 1', lastName: 'Last 1' }],
+            teamOnePlayers: [
+                {
+                    _id: 'user1',
+                    firstName: 'First 1',
+                    lastName: 'Last 1',
+                    username: 'user1',
+                },
+            ],
         }
         jest.spyOn(PointServices, 'setPlayers').mockReturnValueOnce(
             Promise.resolve({
@@ -103,9 +117,20 @@ describe('test set players', () => {
                 headers: {},
             }),
         )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(newPoint),
+        )
 
         const result = await setPlayers('point1', [
-            { firstName: 'First 1', lastName: 'Last 1' },
+            {
+                _id: 'user1',
+                firstName: 'First 1',
+                lastName: 'Last 1',
+                username: 'user1',
+            },
         ])
         expect(result).toMatchObject(newPoint)
     })
