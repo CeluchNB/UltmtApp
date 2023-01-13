@@ -3,6 +3,7 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 import { refreshTokenIfNecessary } from './auth'
 import { throwApiError } from '../../utils/service-utils'
 import {
+    ActionType,
     ClientAction,
     LiveServerAction,
     SubscriptionObject,
@@ -11,6 +12,10 @@ import {
     deleteAction as localDeleteAction,
     upsertAction as localSaveAction,
 } from '../local/action'
+import {
+    getPointById as localGetPointById,
+    savePoint as localSavePoint,
+} from '../local/point'
 import {
     addComment as networkAddLiveComment,
     createAction as networkCreateAction,
@@ -144,8 +149,20 @@ export const saveLocalAction = async (
     pointId: string,
 ): Promise<LiveServerAction> => {
     try {
+        if (action.actionType === ActionType.SUBSTITUTION) {
+            const point = await localGetPointById(pointId)
+            if (action.playerTwo) {
+                if (action.teamNumber === 'one') {
+                    point.teamOnePlayers.push(action.playerTwo)
+                } else {
+                    point.teamTwoPlayers.push(action.playerTwo)
+                }
+                await localSavePoint(point)
+            }
+        }
         return await localSaveAction(action, pointId)
     } catch (e) {
+        console.log('got error', e)
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }
