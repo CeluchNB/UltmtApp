@@ -10,6 +10,7 @@ import {
 } from '../types/action'
 import {
     addAction,
+    deleteLocalAction,
     joinPoint,
     nextPoint,
     saveLocalAction,
@@ -64,8 +65,13 @@ export const useGameEditor = () => {
                 successfulResponse()
                 setActions(immutablePush(data))
             },
-            undo: ({ team: undoTeamNumber, actionNumber }) => {
+            undo: async ({ team: undoTeamNumber, actionNumber }) => {
                 if (undoTeamNumber === team) {
+                    await deleteLocalAction(
+                        undoTeamNumber,
+                        actionNumber,
+                        point._id,
+                    )
                     successfulResponse()
                     setActions(immutableFilter(actionNumber))
                 }

@@ -1,6 +1,5 @@
 import * as Constants from '../../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { upsertAction as localSaveAction } from '../local/action'
 import { refreshTokenIfNecessary } from './auth'
 import { throwApiError } from '../../utils/service-utils'
 import {
@@ -8,6 +7,10 @@ import {
     LiveServerAction,
     SubscriptionObject,
 } from '../../types/action'
+import {
+    deleteAction as localDeleteAction,
+    upsertAction as localSaveAction,
+} from '../local/action'
 import {
     addComment as networkAddLiveComment,
     createAction as networkCreateAction,
@@ -144,5 +147,23 @@ export const saveLocalAction = async (
         return await localSaveAction(action, pointId)
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
+    }
+}
+
+/**
+ * Deletes a single action
+ * @param teamNumber team reporting action
+ * @param actionNumber action number
+ * @param pointId point id of action
+ */
+export const deleteLocalAction = async (
+    teamNumber: 'one' | 'two',
+    actionNumber: number,
+    pointId: string,
+) => {
+    try {
+        await localDeleteAction(teamNumber, actionNumber, pointId)
+    } catch (e) {
+        throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }

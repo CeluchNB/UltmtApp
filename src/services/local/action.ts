@@ -94,6 +94,21 @@ export const upsertAction = async (
     return parseAction(result)
 }
 
+export const deleteAction = async (
+    teamNumber: 'one' | 'two',
+    actionNumber: number,
+    pointId: string,
+) => {
+    const realm = await getRealm()
+    const actions = await realm.objects<ActionSchema>('Action')
+    const action = actions.filtered(
+        `teamNumber == "${teamNumber}" && actionNumber == ${actionNumber} && pointId == "${pointId}"`,
+    )[0]
+    realm.write(() => {
+        realm.delete(action)
+    })
+}
+
 export const getActionById = async (
     actionId: string,
 ): Promise<LiveServerAction> => {
