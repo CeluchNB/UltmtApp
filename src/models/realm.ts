@@ -1,5 +1,7 @@
 import { Realm } from '@realm/react'
 import {
+    ActionSchema,
+    CommentSchema,
     DisplayTeamSchema,
     DisplayUserSchema,
     GameSchema,
@@ -15,6 +17,8 @@ const SCHEMAS = [
     GuestTeamSchema,
     TournamentSchema,
     PointSchema.schema,
+    ActionSchema.schema,
+    CommentSchema,
 ]
 
 const config = {

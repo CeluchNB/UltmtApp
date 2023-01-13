@@ -289,6 +289,8 @@ PODS:
     - React-Core
   - react-native-encrypted-storage (4.0.3):
     - React-Core
+  - react-native-get-random-values (1.8.0):
+    - React-Core
   - react-native-safe-area-context (4.4.1):
     - RCT-Folly
     - RCTRequired
@@ -427,6 +429,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-encrypted-storage (from `../node_modules/react-native-encrypted-storage`)
+  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -511,6 +514,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-date-picker"
   react-native-encrypted-storage:
     :path: "../node_modules/react-native-encrypted-storage"
+  react-native-get-random-values:
+    :path: "../node_modules/react-native-get-random-values"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-perflogger:
@@ -590,6 +595,7 @@ SPEC CHECKSUMS:
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-date-picker: 93e43b3084cea595b4d68b1405d6d99849663bd6
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
+  react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466

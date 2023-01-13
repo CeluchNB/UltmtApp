@@ -1,6 +1,13 @@
+import * as Constants from '../../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { upsertAction as localSaveAction } from '../local/action'
 import { refreshTokenIfNecessary } from './auth'
-import { ClientAction, SubscriptionObject } from '../../types/action'
+import { throwApiError } from '../../utils/service-utils'
+import {
+    ClientAction,
+    LiveServerAction,
+    SubscriptionObject,
+} from '../../types/action'
 import {
     addComment as networkAddLiveComment,
     createAction as networkCreateAction,
@@ -121,4 +128,21 @@ export const subscribe = async (subscriptions: SubscriptionObject) => {
  */
 export const unsubscribe = () => {
     networkUnsubscribe()
+}
+
+/**
+ * Save action locally
+ * @param action action data
+ * @param pointId point action belongs to
+ * @returns live server action
+ */
+export const saveLocalAction = async (
+    action: LiveServerAction,
+    pointId: string,
+): Promise<LiveServerAction> => {
+    try {
+        return await localSaveAction(action, pointId)
+    } catch (e) {
+        return throwApiError({}, Constants.GET_ACTION_ERROR)
+    }
 }

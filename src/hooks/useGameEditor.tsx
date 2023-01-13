@@ -12,6 +12,7 @@ import {
     addAction,
     joinPoint,
     nextPoint,
+    saveLocalAction,
     subscribe,
     undoAction,
     unsubscribe,
@@ -58,7 +59,8 @@ export const useGameEditor = () => {
             setError('')
         }
         return {
-            client: data => {
+            client: async data => {
+                await saveLocalAction(data, point._id)
                 successfulResponse()
                 setActions(immutablePush(data))
             },
@@ -73,7 +75,7 @@ export const useGameEditor = () => {
             },
             point: () => {},
         }
-    }, [team])
+    }, [point._id, team])
 
     React.useEffect(() => {
         setWaiting(true)

@@ -32,6 +32,7 @@
     "react-native-date-picker": "^4.2.6",
     "react-native-dotenv": "^3.4.6",
     "react-native-encrypted-storage": "^4.0.3",
+    "react-native-get-random-values": "^1.8.0",
     "react-native-paper": "^5.1.2",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "^3.18.2",
@@ -84,7 +85,7 @@
       "node"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(@react-native|react-native|react-native-iphone-x-helper|react-native-vector-icons|@realm\/react)/)"
+      "node_modules/(?!(@react-native|react-native|react-native-iphone-x-helper|react-native-vector-icons|@realm/react)/)"
     ]
   }
 }
