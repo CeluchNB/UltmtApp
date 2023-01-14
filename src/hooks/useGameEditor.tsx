@@ -61,9 +61,9 @@ export const useGameEditor = () => {
         }
         return {
             client: async data => {
-                await saveLocalAction(data, point._id)
+                const action = await saveLocalAction(data, point._id)
                 successfulResponse()
-                setActions(immutablePush(data))
+                setActions(immutablePush(action))
             },
             undo: async ({ team: undoTeamNumber, actionNumber }) => {
                 if (undoTeamNumber === team) {

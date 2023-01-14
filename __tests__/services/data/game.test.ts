@@ -9,6 +9,7 @@ import {
     addGuestPlayer,
     createGame,
     finishGame,
+    getActiveGames,
     getGameById,
     getGamesByTeam,
     getPointsByGame,
@@ -351,6 +352,25 @@ describe('get game by team', () => {
         )
 
         await expect(getGamesByTeam('team')).rejects.toMatchObject({
+            message: Constants.GET_GAME_ERROR,
+        })
+    })
+})
+
+describe('get active games', () => {
+    it('with local success', async () => {
+        jest.spyOn(LocalGameServices, 'activeGames').mockReturnValue(
+            Promise.resolve([game]),
+        )
+        const result = await getActiveGames('user1')
+        expect(result.length).toBe(1)
+        expect(result[0]).toMatchObject(game)
+    })
+    it('with local failure', async () => {
+        jest.spyOn(LocalGameServices, 'activeGames').mockReturnValue(
+            Promise.reject({ message: 'test error' }),
+        )
+        await expect(getActiveGames('user')).rejects.toMatchObject({
             message: Constants.GET_GAME_ERROR,
         })
     })

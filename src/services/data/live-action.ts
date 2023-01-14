@@ -150,8 +150,8 @@ export const saveLocalAction = async (
 ): Promise<LiveServerAction> => {
     try {
         if (action.actionType === ActionType.SUBSTITUTION) {
-            const point = await localGetPointById(pointId)
             if (action.playerTwo) {
+                const point = await localGetPointById(pointId)
                 if (action.teamNumber === 'one') {
                     point.teamOnePlayers.push(action.playerTwo)
                 } else {
@@ -162,7 +162,6 @@ export const saveLocalAction = async (
         }
         return await localSaveAction(action, pointId)
     } catch (e) {
-        console.log('got error', e)
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }

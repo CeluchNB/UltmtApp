@@ -109,6 +109,12 @@ beforeEach(() => {
     jest.spyOn(ActionData, 'joinPoint').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'addAction').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'undoAction').mockReturnValue(Promise.resolve())
+    jest.spyOn(ActionData, 'saveLocalAction').mockImplementation(data =>
+        Promise.resolve(data),
+    )
+    jest.spyOn(ActionData, 'deleteLocalAction').mockReturnValue(
+        Promise.resolve(),
+    )
     // jest.spyOn(ActionData, 'subscribe').mockReturnValue(Promise.resolve())
 })
 
