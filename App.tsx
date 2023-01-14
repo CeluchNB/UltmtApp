@@ -17,7 +17,7 @@ const App: React.FC<{}> = () => {
     React.useEffect(() => {
         return () => {
             console.log('closing realm')
-            closeRealm()
+            //  closeRealm()
         }
     }, [])
     return (

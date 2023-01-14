@@ -302,6 +302,9 @@ describe('test finish game', () => {
                 config: {},
             }),
         )
+        jest.spyOn(LocalGameServices, 'deleteFullGame').mockReturnValueOnce(
+            Promise.resolve(),
+        )
 
         const result = await finishGame()
         expect(result).toMatchObject(game)

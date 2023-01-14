@@ -136,13 +136,17 @@ const parseLiveAction = (schema: ActionSchema): LiveServerAction => {
 const parseAction = (
     schema: ActionSchema,
 ): LiveServerAction & { _id: string; pointId: string } => {
-    return {
-        _id: schema._id.toHexString(),
-        pointId: schema.pointId,
-        actionType: schema.actionType,
-        actionNumber: schema.actionNumber,
-        teamNumber: schema.teamNumber,
-        tags: schema.tags,
-        comments: schema.comments,
-    }
+    return JSON.parse(
+        JSON.stringify({
+            _id: schema._id.toHexString(),
+            pointId: schema.pointId,
+            actionType: schema.actionType,
+            actionNumber: schema.actionNumber,
+            teamNumber: schema.teamNumber,
+            tags: schema.tags,
+            comments: schema.comments,
+            playerOne: schema.playerOne,
+            playerTwo: schema.playerTwo,
+        }),
+    )
 }

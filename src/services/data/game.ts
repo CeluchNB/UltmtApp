@@ -8,6 +8,7 @@ import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
 import {
     activeGames as localActiveGames,
+    deleteFullGame as localDeleteFullGame,
     getGameById as localGetGameById,
     saveGame as localSaveGame,
 } from '../local/game'
@@ -156,6 +157,7 @@ export const finishGame = async (): Promise<Game> => {
     try {
         const response = await withGameToken(networkFinishGame)
         const { game } = response.data
+        await localDeleteFullGame(game._id)
         return game
     } catch (e) {
         return throwApiError(e, Constants.FINISH_GAME_ERROR)

@@ -1,6 +1,7 @@
 import '@testing-library/jest-native/extend-expect'
 import * as ActionData from '../../../src/services/data/live-action'
 import * as GameServices from '../../../src/services/network/game'
+import * as LocalGameServices from '../../../src/services/local/game'
 import * as PointServices from '../../../src/services/data/point'
 import { LiveGameProps } from '../../../src/types/navigation'
 import LivePointEditScreen from '../../../src/screens/games/LivePointEditScreen'
@@ -341,6 +342,9 @@ describe('LivePointEditScreen', () => {
             async subs => {
                 subscriptions = subs
             },
+        )
+        jest.spyOn(LocalGameServices, 'deleteFullGame').mockReturnValueOnce(
+            Promise.resolve(),
         )
 
         const { getAllByText, getByText } = render(

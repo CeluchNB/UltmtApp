@@ -21,6 +21,7 @@ import {
 import { createPoint, finishPoint } from '../services/data/point'
 import { getAction, getTeamAction } from '../utils/action'
 import {
+    resetGame,
     selectGame,
     selectTeam,
     updateScore,
@@ -174,6 +175,7 @@ export const useGameEditor = () => {
     const onFinishGame = async () => {
         await finishPoint(point._id)
         await finishGame()
+        dispatch(resetGame())
     }
 
     return {
