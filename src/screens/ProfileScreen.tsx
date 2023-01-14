@@ -221,7 +221,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                         <ActiveGameWarning
                             count={activeGames?.length}
                             onPress={() => {
-                                console.log('got press')
+                                navigation.navigate('ActiveGames')
                             }}
                         />
                     </View>

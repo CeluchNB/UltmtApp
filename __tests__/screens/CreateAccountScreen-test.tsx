@@ -1,7 +1,7 @@
 import * as UserData from '../../src/services/data/user'
+import { CreateAccountProps } from '../../src/types/navigation'
 import CreateAccountScreen from '../../src/screens/CreateAccountScreen'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { User } from '../../src/types/user'
@@ -15,7 +15,7 @@ const reset = jest.fn()
 const navigate = jest.fn()
 const goBack = jest.fn()
 
-const props: Props = {
+const props: CreateAccountProps = {
     navigation: {
         navigate,
         reset,
