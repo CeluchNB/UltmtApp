@@ -13,7 +13,7 @@ const parsePoint = (schema: PointSchema): Point => {
             pointNumber: schema.pointNumber,
             teamOnePlayers: schema.teamOnePlayers,
             teamTwoPlayers: schema.teamTwoPlayers,
-            teamOneScore: schema.teamTwoScore,
+            teamOneScore: schema.teamOneScore,
             teamTwoScore: schema.teamTwoScore,
             pullingTeam: schema.pullingTeam,
             receivingTeam: schema.receivingTeam,
@@ -38,6 +38,8 @@ export const savePoint = async (point: Point) => {
     realm.write(() => {
         const rPoint = realm.create('Point', point, Realm.UpdateMode.Modified)
         game.points = [...new Set([...game.points, rPoint._id])]
+        game.teamOneScore = point.teamOneScore
+        game.teamTwoScore = point.teamTwoScore
     })
 }
 
@@ -47,5 +49,6 @@ export const getPointById = async (pointId: string): Promise<Point> => {
     if (!point) {
         return throwApiError({}, Constants.GET_POINT_ERROR)
     }
-    return parsePoint(point)
+    const result = parsePoint(point)
+    return result
 }

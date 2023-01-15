@@ -31,6 +31,7 @@ export class GameSchema {
             teamTwoPlayers: 'DisplayUser[]',
             resolveCode: 'string',
             points: 'string[]',
+            offline: 'bool',
         },
     }
 
@@ -56,8 +57,9 @@ export class GameSchema {
     teamTwoPlayers: DisplayUser[]
     resolveCode: string
     points: string[]
+    offline: boolean
 
-    constructor(game: Game) {
+    constructor(game: Game, offline: boolean = false) {
         this._id = game._id
         this.creator = game.creator
         this.teamOne = game.teamOne
@@ -80,5 +82,6 @@ export class GameSchema {
         this.teamTwoPlayers = game.teamTwoPlayers
         this.resolveCode = game.resolveCode
         this.points = game.points
+        this.offline = offline
     }
 }

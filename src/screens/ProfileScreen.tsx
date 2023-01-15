@@ -41,7 +41,10 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
 
-    const { data: activeGames } = useData<Game[]>(getActiveGames, account._id)
+    const { data: activeGames, refetch: activeGameRefetch } = useData<Game[]>(
+        getActiveGames,
+        account._id,
+    )
     const {
         data: profile,
         loading: profileLoading,
@@ -77,6 +80,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
             if (!profileLoading) {
                 profileRefetch()
                 gameRefetch()
+                activeGameRefetch()
             }
         })
         return unsubscribe
@@ -167,6 +171,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                         onRefresh={async () => {
                             profileRefetch()
                             gameRefetch()
+                            activeGameRefetch()
                         }}
                     />
                 }

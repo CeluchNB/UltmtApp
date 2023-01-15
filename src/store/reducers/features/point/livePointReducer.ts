@@ -53,6 +53,13 @@ const livePointSlice = createSlice({
         setPoint(state, action) {
             state.point = action.payload
         },
+        resetPoint(state) {
+            state.point = initialState.point
+            state.createError = initialState.createError
+            state.createStatus = initialState.createStatus
+            state.setPlayersError = initialState.setPlayersError
+            state.setPlayersStatus = initialState.setPlayersStatus
+        },
     },
     extraReducers: builder => {
         builder.addCase(createPoint.pending, state => {
@@ -114,6 +121,6 @@ export const selectSetPlayersStatus = (state: RootState) =>
 export const selectSetPlayersError = (state: RootState) =>
     state.livePoint.setPlayersError
 export const selectPoint = (state: RootState) => state.livePoint.point
-export const { resetSetPlayersStatus, substitute, setPoint } =
+export const { resetSetPlayersStatus, substitute, setPoint, resetPoint } =
     livePointSlice.actions
 export default livePointSlice.reducer

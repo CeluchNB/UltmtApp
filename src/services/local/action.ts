@@ -123,14 +123,31 @@ export const getActionById = async (
     return parseLiveAction(action)
 }
 
+export const getActionsByPoint = async (
+    pointId: string,
+): Promise<LiveServerAction[]> => {
+    const realm = await getRealm()
+    const actions = await realm
+        .objects<ActionSchema>('Action')
+        .filtered(`pointId == "${pointId}"`)
+
+    return actions.map(action => {
+        return parseLiveAction(action)
+    })
+}
+
 const parseLiveAction = (schema: ActionSchema): LiveServerAction => {
-    return {
-        actionType: schema.actionType,
-        actionNumber: schema.actionNumber,
-        teamNumber: schema.teamNumber,
-        tags: schema.tags,
-        comments: schema.comments,
-    }
+    return JSON.parse(
+        JSON.stringify({
+            actionType: schema.actionType,
+            actionNumber: schema.actionNumber,
+            teamNumber: schema.teamNumber,
+            tags: schema.tags,
+            comments: schema.comments,
+            playerOne: schema.playerOne,
+            playerTwo: schema.playerTwo,
+        }),
+    )
 }
 
 const parseAction = (

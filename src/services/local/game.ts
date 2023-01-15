@@ -6,7 +6,7 @@ import jwt_decode from 'jwt-decode'
 import { throwApiError } from '../../utils/service-utils'
 import { ActionSchema, GameSchema, PointSchema } from '../../models'
 
-const parseGame = (schema: GameSchema): Game => {
+const parseGame = (schema: GameSchema): Game & { offline: boolean } => {
     return JSON.parse(
         JSON.stringify({
             _id: schema._id,
@@ -31,6 +31,7 @@ const parseGame = (schema: GameSchema): Game => {
             teamTwoPlayers: schema.teamTwoPlayers,
             resolveCode: schema.resolveCode,
             points: schema.points,
+            offline: schema.offline,
         }),
     )
 }
@@ -44,12 +45,15 @@ export const getLocalGameId = async (): Promise<string> => {
 
 export const saveGame = async (game: Game) => {
     const realm = await getRealm()
+    console.log('saving game', game.teamOneScore, game.teamTwoScore)
     realm.write(() => {
-        realm.create('Game', game, Realm.UpdateMode.Modified)
+        realm.create('Game', new GameSchema(game), Realm.UpdateMode.Modified)
     })
 }
 
-export const getGameById = async (gameId: string): Promise<Game> => {
+export const getGameById = async (
+    gameId: string,
+): Promise<Game & { offline: boolean }> => {
     const realm = await getRealm()
     const game = await realm.objectForPrimaryKey<GameSchema>('Game', gameId)
     if (!game) {

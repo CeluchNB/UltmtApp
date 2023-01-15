@@ -10,6 +10,7 @@ import {
 } from '../../types/action'
 import {
     deleteAction as localDeleteAction,
+    getActionsByPoint as localGetActionsByPoint,
     upsertAction as localSaveAction,
 } from '../local/action'
 import {
@@ -181,5 +182,21 @@ export const deleteLocalAction = async (
         await localDeleteAction(teamNumber, actionNumber, pointId)
     } catch (e) {
         throwApiError({}, Constants.GET_ACTION_ERROR)
+    }
+}
+
+/**
+ * Method to get currently saved actions for a point
+ * @param pointId point action belongs to
+ * @param teamNumber specific team to get
+ * @returns list of live actions
+ */
+export const getLocalActionsByPoint = async (
+    pointId: string,
+): Promise<LiveServerAction[]> => {
+    try {
+        return await localGetActionsByPoint(pointId)
+    } catch (e) {
+        return throwApiError(e, Constants.GET_ACTION_ERROR)
     }
 }

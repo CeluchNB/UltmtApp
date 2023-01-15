@@ -20,6 +20,7 @@ import {
     getGamesByTeam as networkGetGameByTeams,
     getPointsByGame as networkGetPointsByGame,
     joinGame as networkJoinGame,
+    reactivateGame as networkReactivateGame,
     searchGames as networkSearchGames,
 } from '../network/game'
 
@@ -188,6 +189,32 @@ export const getActiveGames = async (userId: string): Promise<Game[]> => {
     try {
         const games = await localActiveGames(userId)
         return games
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to do all necessary data to reactivate a game
+ * @param gameId id of game
+ * @returns game
+ */
+export const resurrectActiveGame = async (
+    gameId: string,
+    teamId: string,
+): Promise<Game> => {
+    try {
+        const localGame = await localGetGameById(gameId)
+        if (localGame.offline) {
+            // handle offline game
+        }
+
+        const response = await withToken(networkReactivateGame, gameId, teamId)
+        const { game, token } = response.data
+        await localSaveGame(game)
+        const result = await localGetGameById(game._id)
+        await EncryptedStorage.setItem('game_token', token)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.GET_GAME_ERROR)
     }

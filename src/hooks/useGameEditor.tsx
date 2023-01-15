@@ -11,6 +11,7 @@ import {
 import {
     addAction,
     deleteLocalAction,
+    getLocalActionsByPoint,
     joinPoint,
     nextPoint,
     saveLocalAction,
@@ -27,6 +28,7 @@ import {
     updateScore,
 } from '../store/reducers/features/game/liveGameReducer'
 import {
+    resetPoint,
     selectPoint,
     setPoint,
 } from '../store/reducers/features/point/livePointReducer'
@@ -83,6 +85,19 @@ export const useGameEditor = () => {
             point: () => {},
         }
     }, [point._id, team])
+
+    React.useEffect(() => {
+        setWaiting(true)
+        getLocalActionsByPoint(point._id)
+            .then(pointActions => {
+                setActions(curr => [...curr, ...pointActions])
+            })
+            .catch(_e => {})
+            .finally(() => {
+                setWaiting(false)
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     React.useEffect(() => {
         setWaiting(true)
@@ -176,6 +191,7 @@ export const useGameEditor = () => {
         await finishPoint(point._id)
         await finishGame()
         dispatch(resetGame())
+        dispatch(resetPoint())
     }
 
     return {
