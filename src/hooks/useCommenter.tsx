@@ -64,10 +64,12 @@ export const useCommenter = (
     }
 
     React.useEffect(() => {
-        joinPoint(gameId, pointId)
-        subscribe(subscriptions)
-        return () => {
-            unsubscribe()
+        if (live) {
+            joinPoint(gameId, pointId)
+            subscribe(subscriptions)
+            return () => {
+                unsubscribe()
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

@@ -86,7 +86,6 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
         const result = await localGetPointById(point._id)
         return result
     } catch (e: any) {
-        console.log('got eror', e)
         return throwApiError(e, Constants.FINISH_POINT_ERROR)
     }
 }

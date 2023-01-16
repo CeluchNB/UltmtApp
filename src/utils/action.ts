@@ -35,12 +35,6 @@ export const getValidPlayerActions = (
                 return ACTION_MAP.DEFENSE
             case ActionType.PICKUP:
             case ActionType.CATCH:
-                console.log(
-                    'should return',
-                    currentUser,
-                    action.playerOne?._id,
-                    action.playerOne?.username,
-                )
                 if (currentUser === action.playerOne?._id) {
                     return ACTION_MAP.OFFENSE_WITH_POSSESSION
                 } else {
@@ -64,7 +58,6 @@ export const getValidPlayerActions = (
         }
     }
 
-    console.log('after return')
     return ACTION_MAP.OFFENSE_NO_POSSESSION
 }
 

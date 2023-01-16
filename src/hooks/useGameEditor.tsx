@@ -60,18 +60,12 @@ export const useGameEditor = () => {
     const [error, setError] = React.useState('')
     const [actions, setActions] = React.useState<LiveServerAction[]>([])
 
-    const subscriptions: SubscriptionObject = React.useMemo(() => {
-        const successfulResponse = () => {
-            setWaiting(false)
-            setError('')
-        }
-        const actionSideEffects = (data: LiveServerAction) => {
-            console.log('in sideffects')
+    const actionSideEffects = React.useCallback(
+        (data: LiveServerAction) => {
             if (
                 data.actionType === ActionType.SUBSTITUTION &&
                 data.teamNumber === team
             ) {
-                console.log('dispatching')
                 dispatch(
                     substitute({
                         playerOne: data.playerOne,
@@ -80,9 +74,12 @@ export const useGameEditor = () => {
                     }),
                 )
             }
-        }
+        },
+        [team, dispatch],
+    )
 
-        const undoSideEffects = (data: LiveServerAction) => {
+    const undoSideEffects = React.useCallback(
+        (data: LiveServerAction) => {
             if (
                 data.actionType === ActionType.SUBSTITUTION &&
                 data.teamNumber === team
@@ -95,12 +92,19 @@ export const useGameEditor = () => {
                     }),
                 )
             }
+        },
+        [team, dispatch],
+    )
+
+    const subscriptions: SubscriptionObject = React.useMemo(() => {
+        const successfulResponse = () => {
+            setWaiting(false)
+            setError('')
         }
 
         return {
             client: async data => {
                 try {
-                    console.log('got action', data)
                     const action = await saveLocalAction(data, point._id)
                     actionSideEffects(data)
                     successfulResponse()
@@ -111,14 +115,12 @@ export const useGameEditor = () => {
             },
             undo: async ({ team: undoTeamNumber, actionNumber }) => {
                 try {
-                    console.log('got undo')
                     if (undoTeamNumber === team) {
                         const result = await deleteLocalAction(
                             undoTeamNumber,
                             actionNumber,
                             point._id,
                         )
-                        console.log('got result', result)
                         undoSideEffects(result)
                         successfulResponse()
                         setActions(immutableFilter(actionNumber))
@@ -128,17 +130,19 @@ export const useGameEditor = () => {
                 }
             },
             error: data => {
-                console.log('got error')
                 setError(data?.message)
             },
             point: () => {},
         }
-    }, [point._id, team, dispatch])
+    }, [point._id, team, actionSideEffects, undoSideEffects])
 
     React.useEffect(() => {
         setWaiting(true)
         getLocalActionsByPoint(point._id)
             .then(pointActions => {
+                for (const action of pointActions) {
+                    actionSideEffects(action)
+                }
                 setActions(curr => [...curr, ...pointActions])
             })
             .catch(_e => {})
@@ -164,11 +168,11 @@ export const useGameEditor = () => {
 
     const activePlayers = React.useMemo(() => {
         if (team === 'one') {
-            return point.teamOnePlayers
+            return point.teamOnePlayers.slice(0, game.playersPerPoint)
         } else {
-            return point.teamTwoPlayers
+            return point.teamTwoPlayers.slice(0, game.playersPerPoint)
         }
-    }, [point, team])
+    }, [point, team, game])
 
     const lastAction = React.useMemo(() => {
         for (let i = actions.length - 1; i >= 0; i--) {

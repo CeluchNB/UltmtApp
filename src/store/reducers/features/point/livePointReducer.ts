@@ -44,7 +44,6 @@ const livePointSlice = createSlice({
             state.setPlayersError = undefined
         },
         substitute(state, action) {
-            console.log('got payload', action.payload)
             if (action.payload.team === 'one') {
                 const index = state.point.teamOnePlayers
                     .map(p => p._id)
@@ -54,9 +53,6 @@ const livePointSlice = createSlice({
                     1,
                     action.payload.playerTwo,
                 )
-                console.log('players', state.point.teamOnePlayers)
-                console.log('')
-                console.log('')
             } else {
                 const index = state.point.teamTwoPlayers
                     .map(p => p._id)

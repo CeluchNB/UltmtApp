@@ -45,7 +45,6 @@ export const getLocalGameId = async (): Promise<string> => {
 
 export const saveGame = async (game: Game) => {
     const realm = await getRealm()
-    console.log('saving game', game.teamOneScore, game.teamTwoScore)
     realm.write(() => {
         realm.create('Game', new GameSchema(game), Realm.UpdateMode.Modified)
     })
