@@ -119,8 +119,7 @@ const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
                         <PlayerActionView
                             players={activePlayers}
                             pulling={isPulling(point, game, team)}
-                            prevAction={lastAction?.actionType}
-                            activePlayer={lastAction?.playerOne?._id}
+                            actionStack={myTeamActions}
                             loading={waiting}
                             onAction={onPlayerAction}
                         />

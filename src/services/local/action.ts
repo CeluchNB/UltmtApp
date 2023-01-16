@@ -98,15 +98,17 @@ export const deleteAction = async (
     teamNumber: 'one' | 'two',
     actionNumber: number,
     pointId: string,
-) => {
+): Promise<LiveServerAction> => {
     const realm = await getRealm()
     const actions = await realm.objects<ActionSchema>('Action')
     const action = actions.filtered(
         `teamNumber == "${teamNumber}" && actionNumber == ${actionNumber} && pointId == "${pointId}"`,
     )[0]
+    const result = parseLiveAction(action)
     realm.write(() => {
         realm.delete(action)
     })
+    return result
 }
 
 export const getActionById = async (

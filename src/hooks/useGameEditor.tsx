@@ -1,8 +1,10 @@
-import { GuestUser } from '../types/user'
+import * as Constants from '../utils/constants'
+import { DisplayUser } from '../types/user'
 import React from 'react'
 import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import {
+    ActionType,
     ClientAction,
     ClientActionType,
     LiveServerAction,
@@ -31,6 +33,7 @@ import {
     resetPoint,
     selectPoint,
     setPoint,
+    substitute,
 } from '../store/reducers/features/point/livePointReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -62,29 +65,75 @@ export const useGameEditor = () => {
             setWaiting(false)
             setError('')
         }
+        const actionSideEffects = (data: LiveServerAction) => {
+            console.log('in sideffects')
+            if (
+                data.actionType === ActionType.SUBSTITUTION &&
+                data.teamNumber === team
+            ) {
+                console.log('dispatching')
+                dispatch(
+                    substitute({
+                        playerOne: data.playerOne,
+                        playerTwo: data.playerTwo,
+                        team: data.teamNumber,
+                    }),
+                )
+            }
+        }
+
+        const undoSideEffects = (data: LiveServerAction) => {
+            if (
+                data.actionType === ActionType.SUBSTITUTION &&
+                data.teamNumber === team
+            ) {
+                dispatch(
+                    substitute({
+                        playerOne: data.playerTwo,
+                        playerTwo: data.playerOne,
+                        team: data.teamNumber,
+                    }),
+                )
+            }
+        }
+
         return {
             client: async data => {
-                const action = await saveLocalAction(data, point._id)
-                successfulResponse()
-                setActions(immutablePush(action))
+                try {
+                    console.log('got action', data)
+                    const action = await saveLocalAction(data, point._id)
+                    actionSideEffects(data)
+                    successfulResponse()
+                    setActions(immutablePush(action))
+                } catch (e: any) {
+                    setError(e?.message ?? Constants.GET_ACTION_ERROR)
+                }
             },
             undo: async ({ team: undoTeamNumber, actionNumber }) => {
-                if (undoTeamNumber === team) {
-                    await deleteLocalAction(
-                        undoTeamNumber,
-                        actionNumber,
-                        point._id,
-                    )
-                    successfulResponse()
-                    setActions(immutableFilter(actionNumber))
+                try {
+                    console.log('got undo')
+                    if (undoTeamNumber === team) {
+                        const result = await deleteLocalAction(
+                            undoTeamNumber,
+                            actionNumber,
+                            point._id,
+                        )
+                        console.log('got result', result)
+                        undoSideEffects(result)
+                        successfulResponse()
+                        setActions(immutableFilter(actionNumber))
+                    }
+                } catch (e: any) {
+                    setError(e?.message ?? Constants.GET_ACTION_ERROR)
                 }
             },
             error: data => {
+                console.log('got error')
                 setError(data?.message)
             },
             point: () => {},
         }
-    }, [point._id, team])
+    }, [point._id, team, dispatch])
 
     React.useEffect(() => {
         setWaiting(true)
@@ -123,6 +172,7 @@ export const useGameEditor = () => {
 
     const lastAction = React.useMemo(() => {
         for (let i = actions.length - 1; i >= 0; i--) {
+            // don't worry about other team's actions
             if (actions[i].teamNumber === team) {
                 return actions[i]
             }
@@ -142,7 +192,7 @@ export const useGameEditor = () => {
     const onPlayerAction = (
         actionType: ClientActionType,
         tags: string[],
-        playerOne: GuestUser,
+        playerOne: DisplayUser,
     ) => {
         let playerTwo
         if (actions.length > 0) {
@@ -155,8 +205,8 @@ export const useGameEditor = () => {
     const onTeamAction = (
         actionType: ClientActionType,
         tags: string[],
-        playerOne?: GuestUser,
-        playerTwo?: GuestUser,
+        playerOne?: DisplayUser,
+        playerTwo?: DisplayUser,
     ) => {
         const action = getTeamAction(
             actionType,

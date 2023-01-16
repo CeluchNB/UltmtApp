@@ -1,6 +1,6 @@
 import * as PointData from '../../../../services/data/point'
+import { DisplayUser } from '../../../../types/user'
 import { GuestTeam } from '../../../../types/team'
-import { GuestUser } from '../../../../types/user'
 import Point from '../../../../types/point'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
@@ -44,10 +44,28 @@ const livePointSlice = createSlice({
             state.setPlayersError = undefined
         },
         substitute(state, action) {
+            console.log('got payload', action.payload)
             if (action.payload.team === 'one') {
-                state.point.teamOnePlayers = [...action.payload.players]
+                const index = state.point.teamOnePlayers
+                    .map(p => p._id)
+                    .indexOf(action.payload.playerOne._id)
+                state.point.teamOnePlayers.splice(
+                    index,
+                    1,
+                    action.payload.playerTwo,
+                )
+                console.log('players', state.point.teamOnePlayers)
+                console.log('')
+                console.log('')
             } else {
-                state.point.teamTwoPlayers = [...action.payload.players]
+                const index = state.point.teamTwoPlayers
+                    .map(p => p._id)
+                    .indexOf(action.payload.playerOne._id)
+                state.point.teamTwoPlayers.splice(
+                    index,
+                    1,
+                    action.payload.playerTwo,
+                )
             }
         },
         setPoint(state, action) {
@@ -100,7 +118,7 @@ export const createPoint = createAsyncThunk(
 
 export const setPlayers = createAsyncThunk(
     'livePoint/players',
-    async (data: { players: GuestUser[] }, thunkAPI) => {
+    async (data: { players: DisplayUser[] }, thunkAPI) => {
         const { players } = data
         const {
             livePoint: {

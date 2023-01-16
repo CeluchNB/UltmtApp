@@ -177,11 +177,11 @@ export const deleteLocalAction = async (
     teamNumber: 'one' | 'two',
     actionNumber: number,
     pointId: string,
-) => {
+): Promise<LiveServerAction> => {
     try {
-        await localDeleteAction(teamNumber, actionNumber, pointId)
+        return await localDeleteAction(teamNumber, actionNumber, pointId)
     } catch (e) {
-        throwApiError({}, Constants.GET_ACTION_ERROR)
+        return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }
 

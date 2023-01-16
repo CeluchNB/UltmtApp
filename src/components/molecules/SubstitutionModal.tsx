@@ -3,18 +3,15 @@ import { Chip } from 'react-native-paper'
 import { DisplayUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
+import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
+import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import {
     selectGame,
     selectTeam,
 } from '../../store/reducers/features/game/liveGameReducer'
-import {
-    selectPoint,
-    substitute,
-} from '../../store/reducers/features/point/livePointReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
 interface SubstitutionModalProps {
     visible: boolean
@@ -31,7 +28,6 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     onSubmit,
 }) => {
     const { colors } = useColors()
-    const dispatch = useDispatch()
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
@@ -77,7 +73,6 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
             // create new array with new player
             const newPlayers = currentPlayers.slice()
             newPlayers.splice(playerOneIndex, 1, playerTwo)
-            dispatch(substitute({ team, players: newPlayers }))
             onSubmit(playerOne, playerTwo)
             reset()
         }

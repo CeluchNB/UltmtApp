@@ -1,5 +1,5 @@
 import { Button } from 'react-native-paper'
-import { GuestUser } from '../../types/user'
+import { DisplayUser } from '../../types/user'
 import PlayerActionTagModal from '../molecules/PlayerActionTagModal'
 import React from 'react'
 import SubstitutionModal from '../molecules/SubstitutionModal'
@@ -14,8 +14,8 @@ interface TeamActionViewProps {
     onAction: (
         action: ClientActionType,
         tags: string[],
-        playerOne?: GuestUser,
-        playerTwo?: GuestUser,
+        playerOne?: DisplayUser,
+        playerTwo?: DisplayUser,
     ) => void
 }
 
@@ -51,7 +51,10 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
         setSubModalVisible(false)
     }
 
-    const handleSubstitution = (playerOne: GuestUser, playerTwo: GuestUser) => {
+    const handleSubstitution = (
+        playerOne: DisplayUser,
+        playerTwo: DisplayUser,
+    ) => {
         onSubModalClose()
         onAction(ActionType.SUBSTITUTION, [], playerOne, playerTwo)
     }
