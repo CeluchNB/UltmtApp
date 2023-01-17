@@ -19,10 +19,10 @@ const GameListItem: React.FC<GameListItemProps> = ({
     const { colors } = useColors()
 
     const opponent = React.useMemo(() => {
-        if (game.teamTwo._id === teamId) {
-            return game.teamOne
-        } else {
+        if (game.teamOne._id === teamId) {
             return game.teamTwo
+        } else {
+            return game.teamOne
         }
     }, [game, teamId])
 

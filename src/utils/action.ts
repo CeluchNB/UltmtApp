@@ -21,13 +21,6 @@ export const getValidPlayerActions = (
     actionStack: LiveServerAction[],
     pulling?: boolean,
 ): ClientActionType[] => {
-    if (actionStack.length === 0) {
-        if (pulling) {
-            return ACTION_MAP.PULLING
-        }
-        return ACTION_MAP.RECEIVING
-    }
-
     let currentUser: string | undefined = user
     for (const action of actionStack.reverse()) {
         switch (action.actionType) {
@@ -48,6 +41,9 @@ export const getValidPlayerActions = (
             case ActionType.TEAM_ONE_SCORE:
             case ActionType.TEAM_TWO_SCORE:
                 return ACTION_MAP.AFTER_SCORE
+            case ActionType.TIMEOUT:
+            case ActionType.CALL_ON_FIELD:
+                continue
             case ActionType.SUBSTITUTION:
                 // if we are getting actions for newly substituted user
                 if (user === action.playerTwo?._id) {
@@ -58,7 +54,10 @@ export const getValidPlayerActions = (
         }
     }
 
-    return ACTION_MAP.OFFENSE_NO_POSSESSION
+    if (pulling) {
+        return ACTION_MAP.PULLING
+    }
+    return ACTION_MAP.RECEIVING
 }
 
 /**

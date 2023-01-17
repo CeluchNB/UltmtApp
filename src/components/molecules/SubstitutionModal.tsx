@@ -56,13 +56,11 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
         if (team === 'one') {
             return game.teamOnePlayers.filter(
                 player =>
-                    !player._id ||
                     !point.teamOnePlayers.map(p => p._id).includes(player._id),
             )
         } else {
             return game.teamTwoPlayers.filter(
                 player =>
-                    !player._id ||
                     !point.teamTwoPlayers.map(p => p._id).includes(player._id),
             )
         }

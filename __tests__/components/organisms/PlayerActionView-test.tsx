@@ -1,9 +1,9 @@
-import { ActionType } from '../../../src/types/action'
 import { DisplayUser } from '../../../src/types/user'
 import PlayerActionView from '../../../src/components/organisms/PlayerActionView'
 import { Provider } from 'react-redux'
 import React from 'react'
 import store from '../../../src/store/store'
+import { ActionType, LiveServerAction } from '../../../src/types/action'
 import { fireEvent, render } from '@testing-library/react-native'
 
 const playerList1: DisplayUser[] = [
@@ -51,6 +51,17 @@ const playerList1: DisplayUser[] = [
     },
 ]
 
+const actionStack: LiveServerAction[] = [
+    {
+        actionType: ActionType.CATCH,
+        actionNumber: 1,
+        playerOne: playerList1[2],
+        playerTwo: playerList1[3],
+        tags: [],
+        teamNumber: 'one',
+        comments: [],
+    },
+]
 it('should match snapshot', () => {
     const snapshot = render(
         <Provider store={store}>
@@ -59,8 +70,7 @@ it('should match snapshot', () => {
                 pulling={false}
                 loading={true}
                 onAction={jest.fn()}
-                prevAction={ActionType.CATCH}
-                activePlayer={playerList1[2]._id}
+                actionStack={actionStack}
             />
         </Provider>,
     )
@@ -77,8 +87,7 @@ it('should call action', () => {
                 pulling={false}
                 loading={false}
                 onAction={actionFn}
-                prevAction={ActionType.CATCH}
-                activePlayer={playerList1[2]._id}
+                actionStack={actionStack}
             />
         </Provider>,
     )

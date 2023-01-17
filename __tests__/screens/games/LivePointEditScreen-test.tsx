@@ -113,8 +113,14 @@ beforeEach(() => {
     jest.spyOn(ActionData, 'saveLocalAction').mockImplementation(data =>
         Promise.resolve(data),
     )
-    jest.spyOn(ActionData, 'deleteLocalAction').mockReturnValue(
-        Promise.resolve(),
+    jest.spyOn(ActionData, 'deleteLocalAction').mockResolvedValue(
+        Promise.resolve({
+            actionNumber: 1,
+            actionType: ActionType.PULL,
+            teamNumber: 'one',
+            comments: [],
+            tags: [],
+        }),
     )
     // jest.spyOn(ActionData, 'subscribe').mockReturnValue(Promise.resolve())
 })

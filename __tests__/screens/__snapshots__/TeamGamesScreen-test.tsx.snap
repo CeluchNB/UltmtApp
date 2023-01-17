@@ -750,7 +750,7 @@ exports[`TeamGamesScreen matches snapshot 1`] = `
                     }
                   }
                 >
-                  vs. Sockeye
+                  vs. Place1 Name1
                 </Text>
                 <Text
                   style={

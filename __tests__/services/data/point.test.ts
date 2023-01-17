@@ -165,6 +165,12 @@ describe('test finish point', () => {
                 headers: {},
             }),
         )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(point),
+        )
 
         const result = await finishPoint('point1')
         expect(result).toMatchObject(point)
