@@ -112,6 +112,7 @@ exports[`LivePointEditScreen should match snapshot 1`] = `
             undoDisabled={true}
           />
           <PlayerActionView
+            actionStack={[]}
             loading={false}
             onAction={[Function]}
             players={

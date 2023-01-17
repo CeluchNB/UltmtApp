@@ -1,5 +1,5 @@
 import { DisplayTeam } from './team'
-import { GuestUser } from './user'
+import { DisplayUser } from './user'
 
 export enum ActionType {
     PULL = 'Pull',
@@ -17,18 +17,18 @@ export enum ActionType {
 
 export type SubscriptionType = 'client' | 'undo' | 'error' | 'point'
 export type SubscriptionObject = {
-    [x in SubscriptionType]: (data: any) => void
+    [x in SubscriptionType]: (data: any) => Promise<void> | void
 }
 
 export interface ClientAction {
     actionType: ActionType
-    playerOne?: GuestUser
-    playerTwo?: GuestUser
+    playerOne?: DisplayUser
+    playerTwo?: DisplayUser
     tags: string[]
 }
 
 export interface Comment {
-    user: GuestUser
+    user: DisplayUser
     comment: string
     commentNumber: number
 }

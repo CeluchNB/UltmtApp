@@ -1,6 +1,6 @@
 import * as PointData from '../../../../services/data/point'
+import { DisplayUser } from '../../../../types/user'
 import { GuestTeam } from '../../../../types/team'
-import { GuestUser } from '../../../../types/user'
 import Point from '../../../../types/point'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
@@ -45,13 +45,34 @@ const livePointSlice = createSlice({
         },
         substitute(state, action) {
             if (action.payload.team === 'one') {
-                state.point.teamOnePlayers = [...action.payload.players]
+                const index = state.point.teamOnePlayers
+                    .map(p => p._id)
+                    .indexOf(action.payload.playerOne._id)
+                state.point.teamOnePlayers.splice(
+                    index,
+                    1,
+                    action.payload.playerTwo,
+                )
             } else {
-                state.point.teamTwoPlayers = [...action.payload.players]
+                const index = state.point.teamTwoPlayers
+                    .map(p => p._id)
+                    .indexOf(action.payload.playerOne._id)
+                state.point.teamTwoPlayers.splice(
+                    index,
+                    1,
+                    action.payload.playerTwo,
+                )
             }
         },
         setPoint(state, action) {
             state.point = action.payload
+        },
+        resetPoint(state) {
+            state.point = initialState.point
+            state.createError = initialState.createError
+            state.createStatus = initialState.createStatus
+            state.setPlayersError = initialState.setPlayersError
+            state.setPlayersStatus = initialState.setPlayersStatus
         },
     },
     extraReducers: builder => {
@@ -93,7 +114,7 @@ export const createPoint = createAsyncThunk(
 
 export const setPlayers = createAsyncThunk(
     'livePoint/players',
-    async (data: { players: GuestUser[] }, thunkAPI) => {
+    async (data: { players: DisplayUser[] }, thunkAPI) => {
         const { players } = data
         const {
             livePoint: {
@@ -114,6 +135,6 @@ export const selectSetPlayersStatus = (state: RootState) =>
 export const selectSetPlayersError = (state: RootState) =>
     state.livePoint.setPlayersError
 export const selectPoint = (state: RootState) => state.livePoint.point
-export const { resetSetPlayersStatus, substitute, setPoint } =
+export const { resetSetPlayersStatus, substitute, setPoint, resetPoint } =
     livePointSlice.actions
 export default livePointSlice.reducer

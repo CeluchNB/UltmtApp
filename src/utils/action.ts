@@ -1,9 +1,10 @@
-import { GuestUser } from '../types/user'
+import { DisplayUser } from '../types/user'
 import {
     ACTION_MAP,
     ActionType,
     ClientAction,
     ClientActionType,
+    LiveServerAction,
     TEAM_ACTION_MAP,
 } from '../types/action'
 
@@ -17,39 +18,46 @@ import {
  */
 export const getValidPlayerActions = (
     user: string,
-    actingUser: string,
-    action?: ClientActionType,
+    actionStack: LiveServerAction[],
     pulling?: boolean,
 ): ClientActionType[] => {
-    if (!action) {
-        if (pulling) {
-            return ACTION_MAP.PULLING
+    let currentUser: string | undefined = user
+    for (const action of actionStack.reverse()) {
+        switch (action.actionType) {
+            case ActionType.PULL:
+                return ACTION_MAP.DEFENSE
+            case ActionType.PICKUP:
+            case ActionType.CATCH:
+                if (currentUser === action.playerOne?._id) {
+                    return ACTION_MAP.OFFENSE_WITH_POSSESSION
+                } else {
+                    return ACTION_MAP.OFFENSE_NO_POSSESSION
+                }
+            case ActionType.DROP:
+            case ActionType.THROWAWAY:
+                return ACTION_MAP.DEFENSE
+            case ActionType.BLOCK:
+                return ACTION_MAP.DEFENSE_AFTER_BLOCK
+            case ActionType.TEAM_ONE_SCORE:
+            case ActionType.TEAM_TWO_SCORE:
+                return ACTION_MAP.AFTER_SCORE
+            case ActionType.TIMEOUT:
+            case ActionType.CALL_ON_FIELD:
+                continue
+            case ActionType.SUBSTITUTION:
+                // if we are getting actions for newly substituted user
+                if (user === action.playerTwo?._id) {
+                    // inherit the actions from the player that was substituted for
+                    currentUser = action.playerOne?._id
+                }
+                continue
         }
-        return ACTION_MAP.RECEIVING
     }
 
-    switch (action) {
-        case ActionType.PULL:
-            return ACTION_MAP.DEFENSE
-        case ActionType.PICKUP:
-        case ActionType.CATCH:
-            if (user === actingUser) {
-                return ACTION_MAP.OFFENSE_WITH_POSSESSION
-            } else {
-                return ACTION_MAP.OFFENSE_NO_POSSESSION
-            }
-        case ActionType.DROP:
-        case ActionType.THROWAWAY:
-            return ACTION_MAP.DEFENSE
-        case ActionType.BLOCK:
-            return ACTION_MAP.DEFENSE_AFTER_BLOCK
-        case ActionType.TEAM_ONE_SCORE:
-        case ActionType.TEAM_TWO_SCORE:
-        case 'score':
-            return ACTION_MAP.AFTER_SCORE
+    if (pulling) {
+        return ACTION_MAP.PULLING
     }
-
-    return ACTION_MAP.OFFENSE_NO_POSSESSION
+    return ACTION_MAP.RECEIVING
 }
 
 /**
@@ -97,8 +105,8 @@ export const getAction = (
     action: ClientActionType,
     team: 'one' | 'two',
     tags: string[],
-    playerOne?: GuestUser,
-    playerTwo?: GuestUser,
+    playerOne?: DisplayUser,
+    playerTwo?: DisplayUser,
 ): ClientAction => {
     let actionType: ActionType
     if (action === 'score' && team === 'one') {
@@ -147,8 +155,8 @@ export const getTeamAction = (
     action: ClientActionType,
     team: 'one' | 'two',
     tags: string[],
-    playerOne?: GuestUser,
-    playerTwo?: GuestUser,
+    playerOne?: DisplayUser,
+    playerTwo?: DisplayUser,
 ): ClientAction => {
     let actionType: ActionType
     if (action === 'score') {

@@ -1,7 +1,9 @@
 import * as ActionLocal from '../../../src/services/local/action'
 import * as Constants from '../../../src/utils/constants'
+import * as LocalPointServices from '../../../src/services/local/point'
 import * as PointServices from '../../../src/services/network/point'
 import Point from '../../../src/types/point'
+import { game } from '../../../fixtures/data'
 import {
     ActionType,
     LiveServerAction,
@@ -12,6 +14,7 @@ import {
     deleteLocalActionsByPoint,
     finishPoint,
     getActionsByPoint,
+    getActivePointForGame,
     getLiveActionsByPoint,
     setPlayers,
 } from '../../../src/services/data/point'
@@ -66,6 +69,12 @@ describe('test create point', () => {
                 headers: {},
             }),
         )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(point),
+        )
 
         const result = await createPoint(true, 1)
         expect(result).toMatchObject(point)
@@ -90,7 +99,14 @@ describe('test set players', () => {
     it('should handle network success', async () => {
         const newPoint = {
             ...point,
-            teamOnePlayers: [{ firstName: 'First 1', lastName: 'Last 1' }],
+            teamOnePlayers: [
+                {
+                    _id: 'user1',
+                    firstName: 'First 1',
+                    lastName: 'Last 1',
+                    username: 'user1',
+                },
+            ],
         }
         jest.spyOn(PointServices, 'setPlayers').mockReturnValueOnce(
             Promise.resolve({
@@ -103,9 +119,20 @@ describe('test set players', () => {
                 headers: {},
             }),
         )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(newPoint),
+        )
 
         const result = await setPlayers('point1', [
-            { firstName: 'First 1', lastName: 'Last 1' },
+            {
+                _id: 'user1',
+                firstName: 'First 1',
+                lastName: 'Last 1',
+                username: 'user1',
+            },
         ])
         expect(result).toMatchObject(newPoint)
     })
@@ -139,6 +166,12 @@ describe('test finish point', () => {
                 config: {},
                 headers: {},
             }),
+        )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(point),
         )
 
         const result = await finishPoint('point1')
@@ -261,5 +294,35 @@ describe('test get live actions by point', () => {
         await expect(getLiveActionsByPoint('', '')).rejects.toMatchObject({
             message: Constants.GET_POINT_ERROR,
         })
+    })
+})
+
+describe('test get active point for game', () => {
+    it('with no points', async () => {
+        const result = await getActivePointForGame({ ...game, points: [] })
+        expect(result).toBeUndefined()
+    })
+
+    it('with two points', async () => {
+        jest.spyOn(LocalPointServices, 'getPointById')
+            .mockReturnValueOnce(Promise.resolve({ ...point, pointNumber: 2 }))
+            .mockReturnValueOnce(Promise.resolve({ ...point, pointNumber: 1 }))
+        const result = await getActivePointForGame({
+            ...game,
+            points: ['point1', 'point2'],
+        })
+        expect(result).toMatchObject({ ...point, pointNumber: 2 })
+    })
+
+    it('with error', async () => {
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.reject({ message: 'test error' }),
+        )
+        await expect(
+            getActivePointForGame({
+                ...game,
+                points: ['point1', 'point2'],
+            }),
+        ).rejects.toMatchObject({ message: Constants.GET_POINT_ERROR })
     })
 })

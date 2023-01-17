@@ -7,6 +7,12 @@ import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
 import {
+    activeGames as localActiveGames,
+    deleteFullGame as localDeleteFullGame,
+    getGameById as localGetGameById,
+    saveGame as localSaveGame,
+} from '../local/game'
+import {
     addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
     finishGame as networkFinishGame,
@@ -14,6 +20,7 @@ import {
     getGamesByTeam as networkGetGameByTeams,
     getPointsByGame as networkGetPointsByGame,
     joinGame as networkJoinGame,
+    reactivateGame as networkReactivateGame,
     searchGames as networkSearchGames,
 } from '../network/game'
 
@@ -63,8 +70,10 @@ export const createGame = async (data: CreateGame): Promise<Game> => {
         const response = await withToken(networkCreateGame, data)
 
         const { game, token } = response.data
+        await localSaveGame(game)
         await EncryptedStorage.setItem('game_token', token)
-        return game
+        const result = await localGetGameById(game._id)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.CREATE_GAME_ERROR)
     }
@@ -79,7 +88,9 @@ export const addGuestPlayer = async (player: GuestUser): Promise<Game> => {
     try {
         const response = await withGameToken(networkAddGuestPlayer, player)
         const { game } = response.data
-        return game
+        await localSaveGame(game)
+        const result = await localGetGameById(game._id)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.ADD_GUEST_ERROR)
     }
@@ -130,8 +141,10 @@ export const joinGame = async (
     try {
         const response = await withToken(networkJoinGame, gameId, teamId, code)
         const { game, token } = response.data
+        await localSaveGame(game)
         await EncryptedStorage.setItem('game_token', token)
-        return game
+        const result = await localGetGameById(game._id)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.JOIN_GAME_ERROR)
     }
@@ -145,6 +158,7 @@ export const finishGame = async (): Promise<Game> => {
     try {
         const response = await withGameToken(networkFinishGame)
         const { game } = response.data
+        await localDeleteFullGame(game._id)
         return game
     } catch (e) {
         return throwApiError(e, Constants.FINISH_GAME_ERROR)
@@ -161,6 +175,46 @@ export const getGamesByTeam = async (teamId: string): Promise<Game[]> => {
         const response = await networkGetGameByTeams(teamId)
         const { games } = response.data
         return games
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to get active games saved locally. These games either
+ * need to be finished or pushed to the backend.
+ * @returns list of games
+ */
+export const getActiveGames = async (userId: string): Promise<Game[]> => {
+    try {
+        const games = await localActiveGames(userId)
+        return games
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to do all necessary data to reactivate a game
+ * @param gameId id of game
+ * @returns game
+ */
+export const resurrectActiveGame = async (
+    gameId: string,
+    teamId: string,
+): Promise<Game> => {
+    try {
+        const localGame = await localGetGameById(gameId)
+        if (localGame.offline) {
+            // handle offline game
+        }
+
+        const response = await withToken(networkReactivateGame, gameId, teamId)
+        const { game, token } = response.data
+        await localSaveGame(game)
+        const result = await localGetGameById(game._id)
+        await EncryptedStorage.setItem('game_token', token)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.GET_GAME_ERROR)
     }

@@ -35,6 +35,7 @@ export type AccountStackParamList = {
     TeamRequestsScreen: undefined
     JoinByCodeScreen: undefined
     TeamGames: undefined
+    ActiveGames: undefined
 }
 
 export type GameStackParamList = {
@@ -163,5 +164,10 @@ export type LiveGameProps = CompositeScreenProps<
 export type CommentProps = NativeStackScreenProps<GameStackParamList, 'Comment'>
 export type TeamGameProps = CompositeScreenProps<
     NativeStackScreenProps<AccountStackParamList, 'TeamGames'>,
+    NativeStackScreenProps<TopLevelParamList>
+>
+
+export type ActiveGamesProps = CompositeScreenProps<
+    NativeStackScreenProps<AccountStackParamList, 'ActiveGames'>,
     NativeStackScreenProps<TopLevelParamList>
 >

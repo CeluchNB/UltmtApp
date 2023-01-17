@@ -1,4 +1,11 @@
-import { ACTION_MAP, ActionType, TEAM_ACTION_MAP } from '../../src/types/action'
+import { DisplayUser } from '../../src/types/user'
+import {
+    ACTION_MAP,
+    ActionType,
+    LiveServerAction,
+    TEAM_ACTION_MAP,
+} from '../../src/types/action'
+
 import {
     getAction,
     getValidPlayerActions,
@@ -6,48 +13,109 @@ import {
     mapActionToDisplayName,
 } from '../../src/utils/action'
 
+const playerOne: DisplayUser = {
+    _id: 'user1',
+    firstName: 'First 1',
+    lastName: 'Last 1',
+    username: 'firstlast1',
+}
+
+const playerTwo: DisplayUser = {
+    _id: 'user2',
+    firstName: 'First 2',
+    lastName: 'Last 2',
+    username: 'firstlast2',
+}
+
+const getTestAction = (
+    overrides?: Partial<LiveServerAction>,
+): LiveServerAction => {
+    return {
+        actionType: ActionType.CATCH,
+        actionNumber: 1,
+        playerOne,
+        playerTwo,
+        teamNumber: 'one',
+        comments: [],
+        tags: [],
+        ...overrides,
+    }
+}
+
 describe('test get player valid actions', () => {
     it('with pulling team', () => {
-        const result = getValidPlayerActions(0, 0, undefined, true)
+        const result = getValidPlayerActions('', [], true)
         expect(result).toBe(ACTION_MAP.PULLING)
     })
     it('with receiving team', () => {
-        const result = getValidPlayerActions(0, 0, undefined, false)
+        const result = getValidPlayerActions('', [], false)
         expect(result).toBe(ACTION_MAP.RECEIVING)
     })
     it('after pull', () => {
-        const result = getValidPlayerActions(0, 0, ActionType.PULL, true)
+        const stack: LiveServerAction[] = [
+            getTestAction({
+                actionType: ActionType.PULL,
+                playerTwo: undefined,
+            }),
+        ]
+        const result = getValidPlayerActions('user1', stack, true)
         expect(result).toBe(ACTION_MAP.DEFENSE)
     })
     it('after player catch', () => {
-        const result = getValidPlayerActions(0, 0, ActionType.CATCH, true)
+        const stack = [getTestAction({ actionType: ActionType.CATCH })]
+        const result = getValidPlayerActions('user1', stack, true)
         expect(result).toBe(ACTION_MAP.OFFENSE_WITH_POSSESSION)
     })
     it('after teammate catch', () => {
-        const result = getValidPlayerActions(0, 1, ActionType.CATCH, true)
+        const stack = [getTestAction({ actionType: ActionType.CATCH })]
+        const result = getValidPlayerActions('user2', stack, true)
         expect(result).toBe(ACTION_MAP.OFFENSE_NO_POSSESSION)
     })
     it('after turnover', () => {
-        const result = getValidPlayerActions(0, 0, ActionType.DROP, true)
+        const stack = [getTestAction({ actionType: ActionType.DROP })]
+        const result = getValidPlayerActions('user1', stack, true)
         expect(result).toBe(ACTION_MAP.DEFENSE)
     })
     it('after block', () => {
-        const result = getValidPlayerActions(0, 0, ActionType.BLOCK, true)
+        const stack = [getTestAction({ actionType: ActionType.BLOCK })]
+        const result = getValidPlayerActions('user1', stack, true)
         expect(result).toBe(ACTION_MAP.DEFENSE_AFTER_BLOCK)
     })
     it('after score', () => {
-        const result = getValidPlayerActions(0, 0, 'score', true)
+        const stack = [getTestAction({ actionType: ActionType.TEAM_ONE_SCORE })]
+        const result = getValidPlayerActions('user1', stack, true)
         expect(result).toBe(ACTION_MAP.AFTER_SCORE)
     })
-    it('with bad action', () => {
-        const result = getValidPlayerActions(0, 0, ActionType.TIMEOUT, true)
-        expect(result).toBe(ACTION_MAP.OFFENSE_NO_POSSESSION)
+    it('after timeout', () => {
+        const stack = [
+            getTestAction(),
+            getTestAction({ actionType: ActionType.TIMEOUT }),
+        ]
+        const result = getValidPlayerActions('user1', stack, true)
+        expect(result).toBe(ACTION_MAP.OFFENSE_WITH_POSSESSION)
+    })
+
+    it('after substitution of active player', () => {
+        const stack = [
+            getTestAction({
+                actionType: ActionType.CATCH,
+            }),
+            getTestAction({
+                actionType: ActionType.SUBSTITUTION,
+                playerTwo: {
+                    _id: 'user3',
+                    firstName: 'First 3',
+                    lastName: 'Last 3',
+                    username: 'firstlast3',
+                },
+            }),
+        ]
+        const result = getValidPlayerActions('user3', stack, true)
+        expect(result).toBe(ACTION_MAP.OFFENSE_WITH_POSSESSION)
     })
 })
 
 describe('test get action', () => {
-    const playerOne = { firstName: 'First 1', lastName: 'Last 1' }
-    const playerTwo = { firstName: 'First 2', lastName: 'Last 2' }
     it('with team one score and two players', () => {
         const result = getAction('score', 'one', ['tag'], playerOne, playerTwo)
         expect(result).toMatchObject({

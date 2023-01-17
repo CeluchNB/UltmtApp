@@ -1,6 +1,6 @@
 import { Button } from 'react-native-paper'
 import { ClientActionType } from '../../types/action'
-import { GuestUser } from '../../types/user'
+import { DisplayUser } from '../../types/user'
 import PlayerActionTagModal from './PlayerActionTagModal'
 import React from 'react'
 import { size } from '../../theme/fonts'
@@ -8,13 +8,13 @@ import { useColors } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface PlayerActionItemProps {
-    player: GuestUser
+    player: DisplayUser
     actions: ClientActionType[]
     loading: boolean
     onAction: (
         action: ClientActionType,
         tags: string[],
-        player: GuestUser,
+        player: DisplayUser,
     ) => void
 }
 

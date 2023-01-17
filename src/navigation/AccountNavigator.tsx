@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { AccountStackParamList } from './../types/navigation'
+import ActiveGamesScreen from '../screens/ActiveGamesScreen'
 import CreateAccountScreen from './../screens/CreateAccountScreen'
 import CreateTeamScreen from './../screens/CreateTeamScreen'
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen'
@@ -85,6 +86,7 @@ const AccountNavigator: React.FC<{}> = () => {
                 component={JoinByCodeScreen}
             />
             <Stack.Screen name="TeamGames" component={TeamGameScreen} />
+            <Stack.Screen name="ActiveGames" component={ActiveGamesScreen} />
         </Stack.Navigator>
     )
 }

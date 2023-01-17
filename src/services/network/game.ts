@@ -98,3 +98,20 @@ export const getGamesByTeam = async (teamId: string) => {
         },
     })
 }
+
+export const reactivateGame = async (
+    userJwt: string,
+    gameId: string,
+    teamId: string,
+) => {
+    return await axios.put(
+        `${API_URL_V1}/game/${gameId}/reactivate?team=${teamId}`,
+        {},
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+                Authorization: `Bearer ${userJwt}`,
+            },
+        },
+    )
+}

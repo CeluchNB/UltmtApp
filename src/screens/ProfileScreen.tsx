@@ -1,17 +1,17 @@
-import * as React from 'react'
+import ActiveGameWarning from '../components/atoms/ActiveGameWarning'
 import { AllScreenProps } from '../types/navigation'
 import { Button } from 'react-native-paper'
 import { Game } from '../types/game'
 import GameListItem from '../components/atoms/GameListItem'
 import IconButtonText from '../components/atoms/IconButtonText'
 import MapSection from '../components/molecules/MapSection'
+import React from 'react'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { User } from '../types/user'
 import { fetchProfile } from '../services/data/user'
-import { getGamesByTeam } from '../services/data/game'
 import { logout } from '../services/data/auth'
 import { size } from '../theme/fonts'
 import {
@@ -22,6 +22,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import { getActiveGames, getGamesByTeam } from '../services/data/game'
 import {
     resetState,
     selectAccount,
@@ -37,11 +38,13 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     const { colors } = useColors()
     const account = useSelector(selectAccount)
     const playerTeams = useSelector(selectPlayerTeams)
-
+    const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
 
-    const dispatch = useDispatch()
-
+    const { data: activeGames, refetch: activeGameRefetch } = useData<Game[]>(
+        getActiveGames,
+        account._id,
+    )
     const {
         data: profile,
         loading: profileLoading,
@@ -69,7 +72,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
     } = useData<Game[]>(getGamesByTeam, teamToGet)
 
     const sortedGames = React.useMemo(() => {
-        return games?.reverse()
+        return games?.reverse().slice(0, 3)
     }, [games])
 
     React.useEffect(() => {
@@ -77,6 +80,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
             if (!profileLoading) {
                 profileRefetch()
                 gameRefetch()
+                activeGameRefetch()
             }
         })
         return unsubscribe
@@ -167,6 +171,7 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                         onRefresh={async () => {
                             profileRefetch()
                             gameRefetch()
+                            activeGameRefetch()
                         }}
                     />
                 }
@@ -218,6 +223,12 @@ const ProfileScreen: React.FC<AllScreenProps> = ({
                             style={styles.signOutButton}>
                             Sign Out
                         </Button>
+                        <ActiveGameWarning
+                            count={activeGames?.length}
+                            onPress={() => {
+                                navigation.navigate('ActiveGames')
+                            }}
+                        />
                     </View>
                 }
                 ListFooterComponent={

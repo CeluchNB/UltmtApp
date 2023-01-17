@@ -1,4 +1,5 @@
 import * as Constants from '../../utils/constants'
+import { Game } from '../../types/game'
 import { GuestUser } from '../../types/user'
 import Point from '../../types/point'
 import { throwApiError } from '../../utils/service-utils'
@@ -9,6 +10,10 @@ import {
     getActions as localGetActions,
     saveActions as localSaveActions,
 } from '../local/action'
+import {
+    getPointById as localGetPointById,
+    savePoint as localSavePoint,
+} from '../local/point'
 import {
     createPoint as networkCreatePoint,
     finishPoint as networkFinishPoint,
@@ -35,7 +40,9 @@ export const createPoint = async (
         )
 
         const { point } = response.data
-        return point
+        await localSavePoint(point)
+        const result = await localGetPointById(point._id)
+        return result
     } catch (e: any) {
         return throwApiError(e, Constants.CREATE_POINT_ERROR)
     }
@@ -58,7 +65,9 @@ export const setPlayers = async (
             players,
         )
         const { point } = response.data
-        return point
+        await localSavePoint(point)
+        const result = await localGetPointById(point._id)
+        return result
     } catch (e) {
         return throwApiError(e, Constants.SET_PLAYERS_ERROR)
     }
@@ -73,7 +82,9 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
     try {
         const response = await withGameToken(networkFinishPoint, pointId)
         const { point } = response.data
-        return point
+        await localSavePoint(point)
+        const result = await localGetPointById(point._id)
+        return result
     } catch (e: any) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)
     }
@@ -124,6 +135,12 @@ export const deleteLocalActionsByPoint = async (pointId: string) => {
     }
 }
 
+/**
+ * Method to get current live actions associated with a point
+ * @param gameId id of game
+ * @param pointId id of point
+ * @returns list of actions
+ */
 export const getLiveActionsByPoint = async (
     gameId: string,
     pointId: string,
@@ -132,6 +149,36 @@ export const getLiveActionsByPoint = async (
         const response = await networkGetLiveActionsByPoint(gameId, pointId)
         const { actions } = response.data
         return actions
+    } catch (e) {
+        return throwApiError(e, Constants.GET_POINT_ERROR)
+    }
+}
+
+/**
+ * Method to get the currently active point of a game that
+ * is being reactivated locally
+ * @param game resurrected game
+ * @returns active point
+ */
+export const getActivePointForGame = async (
+    game: Game,
+): Promise<Point | undefined> => {
+    try {
+        if (game.points.length === 0) {
+            return undefined
+        }
+
+        let activePoint: Point | undefined
+        for (const id of game.points) {
+            const localPoint = await localGetPointById(id)
+            if (
+                !activePoint ||
+                localPoint.pointNumber > activePoint.pointNumber
+            ) {
+                activePoint = localPoint
+            }
+        }
+        return activePoint
     } catch (e) {
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }

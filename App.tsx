@@ -1,19 +1,25 @@
-import * as React from 'react'
 import GameCreationNavigator from './src/navigation/GameCreationNavigator'
 import LiveGameNavigator from './src/navigation/LiveGameNavigator'
 import { NavigationContainer } from '@react-navigation/native'
+import React from 'react'
 import SecureEditScreen from './src/screens/SecureEditScreen'
 import SettingsScreen from './src/screens/SettingsScreen'
 import TabNavigator from './src/navigation/TabNavigator'
 import { TopLevelParamList } from './src/types/navigation'
+import { closeRealm } from './src/models/realm'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 const Stack = createNativeStackNavigator<TopLevelParamList>()
-
 const queryClient = new QueryClient()
 
 const App: React.FC<{}> = () => {
+    React.useEffect(() => {
+        return () => {
+            console.log('closing realm')
+            //  closeRealm()
+        }
+    }, [])
     return (
         <NavigationContainer>
             <QueryClientProvider client={queryClient}>

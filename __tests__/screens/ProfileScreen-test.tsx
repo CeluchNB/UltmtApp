@@ -33,12 +33,17 @@ beforeAll(async () => {
     )
 
     jest.spyOn(UserData, 'fetchProfile').mockImplementation(async () => {
-        return fetchProfileData
+        return { ...fetchProfileData, managerTeams: [game.teamOne] }
     })
     jest.spyOn(GameData, 'getGamesByTeam').mockReturnValue(
         Promise.resolve([game]),
     )
-    store.dispatch(setProfile(fetchProfileData))
+    jest.spyOn(GameData, 'getActiveGames').mockReturnValue(
+        Promise.resolve([game]),
+    )
+    store.dispatch(
+        setProfile({ ...fetchProfileData, managerTeams: [game.teamOne] }),
+    )
 })
 
 beforeEach(() => {
@@ -58,7 +63,7 @@ it('profile screen matches snapshot', async () => {
     await waitUntilRefreshComplete(snapshot.getByTestId('profile-flat-list'))
     await waitFor(async () => {
         expect(
-            snapshot.getByText(`${game.teamTwoScore} - ${game.teamOneScore}`),
+            snapshot.getByText(`${game.teamOneScore} - ${game.teamTwoScore}`),
         ).toBeTruthy()
     })
 

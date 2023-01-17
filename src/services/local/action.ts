@@ -1,5 +1,10 @@
+import * as Constants from '../../utils/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { SavedServerAction } from '../../types/action'
+import { Realm } from '@realm/react'
+import { getRealm } from '../../models/realm'
+import { throwApiError } from '../../utils/service-utils'
+import { ActionSchema, PointSchema } from '../../models'
+import { LiveServerAction, SavedServerAction } from '../../types/action'
 
 /**
  * Method to save actions locally
@@ -45,4 +50,122 @@ export const deleteAllActionsByPoint = async (pointId: string) => {
     const keys = await AsyncStorage.getAllKeys()
     const filteredKeys = keys.filter(key => key.includes(pointId))
     await AsyncStorage.multiRemove(filteredKeys)
+}
+
+export const upsertAction = async (
+    action: LiveServerAction,
+    pointId: string,
+): Promise<LiveServerAction> => {
+    const realm = await getRealm()
+    const point = await realm.objectForPrimaryKey<PointSchema>('Point', pointId)
+    if (!point) {
+        return throwApiError({}, Constants.GET_POINT_ERROR)
+    }
+    realm.write(() => {
+        const rAction = realm.create<ActionSchema>(
+            'Action',
+            new ActionSchema(action, pointId),
+            Realm.UpdateMode.Modified,
+        )
+        if (action.teamNumber === 'one') {
+            point.teamOneActions = [
+                ...new Set([
+                    ...point.teamOneActions,
+                    rAction._id.toHexString(),
+                ]),
+            ]
+        } else {
+            point.teamTwoActions = [
+                ...new Set([
+                    ...point.teamTwoActions,
+                    rAction._id.toHexString(),
+                ]),
+            ]
+        }
+    })
+    const actions = await realm.objects<ActionSchema>('Action')
+    const result = actions.filtered(
+        `teamNumber == "${action.teamNumber}" && actionNumber == ${action.actionNumber} && pointId == "${pointId}"`,
+    )[0]
+
+    if (!result) {
+        return throwApiError({}, Constants.GET_ACTION_ERROR)
+    }
+    return parseAction(result)
+}
+
+export const deleteAction = async (
+    teamNumber: 'one' | 'two',
+    actionNumber: number,
+    pointId: string,
+): Promise<LiveServerAction> => {
+    const realm = await getRealm()
+    const actions = await realm.objects<ActionSchema>('Action')
+    const action = actions.filtered(
+        `teamNumber == "${teamNumber}" && actionNumber == ${actionNumber} && pointId == "${pointId}"`,
+    )[0]
+    const result = parseLiveAction(action)
+    realm.write(() => {
+        realm.delete(action)
+    })
+    return result
+}
+
+export const getActionById = async (
+    actionId: string,
+): Promise<LiveServerAction> => {
+    const realm = await getRealm()
+    const action = await realm.objectForPrimaryKey<ActionSchema>(
+        'Action',
+        actionId,
+    )
+    if (!action) {
+        return throwApiError({}, Constants.GET_ACTION_ERROR)
+    }
+    return parseLiveAction(action)
+}
+
+export const getActionsByPoint = async (
+    pointId: string,
+): Promise<LiveServerAction[]> => {
+    const realm = await getRealm()
+    const actions = await realm
+        .objects<ActionSchema>('Action')
+        .filtered(`pointId == "${pointId}"`)
+
+    return actions.map(action => {
+        return parseLiveAction(action)
+    })
+}
+
+const parseLiveAction = (schema: ActionSchema): LiveServerAction => {
+    return JSON.parse(
+        JSON.stringify({
+            actionType: schema.actionType,
+            actionNumber: schema.actionNumber,
+            teamNumber: schema.teamNumber,
+            tags: schema.tags,
+            comments: schema.comments,
+            playerOne: schema.playerOne,
+            playerTwo: schema.playerTwo,
+        }),
+    )
+}
+
+const parseAction = (
+    schema: ActionSchema,
+): LiveServerAction & { _id: string; pointId: string } => {
+    return JSON.parse(
+        JSON.stringify({
+            _id: schema._id.toHexString(),
+            pointId: schema.pointId,
+            actionType: schema.actionType,
+            actionNumber: schema.actionNumber,
+            teamNumber: schema.teamNumber,
+            tags: schema.tags,
+            comments: schema.comments,
+            playerOne: schema.playerOne,
+            playerTwo: schema.playerTwo,
+        }),
+    )
 }

@@ -1,5 +1,6 @@
 import * as UserServices from '../../../src/services/network/user'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
+import jwt from 'jsonwebtoken'
 import { CreateUserData, DisplayUser, User } from '../../../src/types/user'
 import {
     changeEmail,
@@ -9,6 +10,7 @@ import {
     deleteAccount,
     fetchProfile,
     getPublicUser,
+    getUserId,
     joinTeamByCode,
     leaveManagerRole,
     leaveTeam,
@@ -62,6 +64,7 @@ const createUser: CreateUserData = {
 describe('test user data calls', () => {
     beforeEach(() => {
         RNEncryptedStorage.setItem.mockReset()
+        RNEncryptedStorage.getItem.mockReset()
         RNEncryptedStorage.removeItem.mockReset()
     })
 
@@ -502,5 +505,17 @@ describe('test user data calls', () => {
         )
 
         await expect(joinTeamByCode('')).rejects.toBeDefined()
+    })
+
+    it('get current user id success', async () => {
+        const token = jwt.sign({ sub: 'user1' }, 'secret')
+        RNEncryptedStorage.getItem.mockReturnValue(Promise.resolve(token))
+        const result = await getUserId()
+        expect(result).toBe('user1')
+    })
+
+    it('get current user id with no token', async () => {
+        const result = await getUserId()
+        expect(result).toBe('')
     })
 })
