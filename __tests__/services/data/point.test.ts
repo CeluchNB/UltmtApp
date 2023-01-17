@@ -3,6 +3,7 @@ import * as Constants from '../../../src/utils/constants'
 import * as LocalPointServices from '../../../src/services/local/point'
 import * as PointServices from '../../../src/services/network/point'
 import Point from '../../../src/types/point'
+import { game } from '../../../fixtures/data'
 import {
     ActionType,
     LiveServerAction,
@@ -13,6 +14,7 @@ import {
     deleteLocalActionsByPoint,
     finishPoint,
     getActionsByPoint,
+    getActivePointForGame,
     getLiveActionsByPoint,
     setPlayers,
 } from '../../../src/services/data/point'
@@ -292,5 +294,35 @@ describe('test get live actions by point', () => {
         await expect(getLiveActionsByPoint('', '')).rejects.toMatchObject({
             message: Constants.GET_POINT_ERROR,
         })
+    })
+})
+
+describe('test get active point for game', () => {
+    it('with no points', async () => {
+        const result = await getActivePointForGame({ ...game, points: [] })
+        expect(result).toBeUndefined()
+    })
+
+    it('with two points', async () => {
+        jest.spyOn(LocalPointServices, 'getPointById')
+            .mockReturnValueOnce(Promise.resolve({ ...point, pointNumber: 2 }))
+            .mockReturnValueOnce(Promise.resolve({ ...point, pointNumber: 1 }))
+        const result = await getActivePointForGame({
+            ...game,
+            points: ['point1', 'point2'],
+        })
+        expect(result).toMatchObject({ ...point, pointNumber: 2 })
+    })
+
+    it('with error', async () => {
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.reject({ message: 'test error' }),
+        )
+        await expect(
+            getActivePointForGame({
+                ...game,
+                points: ['point1', 'point2'],
+            }),
+        ).rejects.toMatchObject({ message: Constants.GET_POINT_ERROR })
     })
 })
