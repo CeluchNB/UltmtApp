@@ -1,7 +1,7 @@
 import { DisplayUser } from '../types/user'
-import { Game } from '../types/game'
 import { Realm } from '@realm/react'
 import { Tournament } from '../types/tournament'
+import { CreateGame, Game } from '../types/game'
 import { DisplayTeam, GuestTeam } from '../types/team'
 
 export class GameSchema {
@@ -83,5 +83,33 @@ export class GameSchema {
         this.resolveCode = game.resolveCode
         this.points = game.points
         this.offline = offline
+    }
+
+    static createOfflineGame(game: CreateGame, teamOnePlayers: DisplayUser[]) {
+        return {
+            _id: new Realm.BSON.ObjectID().toHexString(),
+            creator: game.creator,
+            teamOne: game.teamOne,
+            teamTwo: game.teamTwo,
+            teamTwoDefined: game.teamTwoDefined,
+            scoreLimit: game.scoreLimit,
+            halfScore: game.halfScore,
+            startTime: new Date(game.startTime),
+            softcapMins: game.softcapMins,
+            hardcapMins: game.hardcapMins,
+            playersPerPoint: game.playersPerPoint,
+            timeoutPerHalf: game.timeoutPerHalf,
+            floaterTimeout: game.floaterTimeout,
+            tournament: game.tournament,
+            teamOneScore: 0,
+            teamTwoScore: 0,
+            teamOneActive: true,
+            teamTwoActive: false,
+            teamOnePlayers: teamOnePlayers,
+            teamTwoPlayers: [],
+            resolveCode: '',
+            points: [],
+            offline: true,
+        }
     }
 }

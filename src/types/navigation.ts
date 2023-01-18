@@ -55,9 +55,9 @@ export type TabParamList = {
 }
 
 export type GameCreationParamList = {
-    CreateGame: { teamOne: DisplayTeam; teamTwo: GuestTeam }
+    CreateGame: { teamTwo: GuestTeam }
     SelectMyTeam: undefined
-    SelectOpponent: { initialValue?: string; teamOne: DisplayTeam }
+    SelectOpponent: { initialValue?: string }
     JoinGame: { teamTwo: DisplayTeam }
 }
 
@@ -150,6 +150,14 @@ export type SelectOpponentProps = NativeStackScreenProps<
 
 export type JoinGameProps = CompositeScreenProps<
     NativeStackScreenProps<GameCreationParamList, 'JoinGame'>,
+    CompositeScreenProps<
+        NativeStackScreenProps<TopLevelParamList>,
+        NativeStackScreenProps<LiveGameParamList>
+    >
+>
+
+export type SelectMyTeamProps = CompositeScreenProps<
+    NativeStackScreenProps<GameCreationParamList, 'SelectMyTeam'>,
     CompositeScreenProps<
         NativeStackScreenProps<TopLevelParamList>,
         NativeStackScreenProps<LiveGameParamList>

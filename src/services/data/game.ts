@@ -1,13 +1,14 @@
 import * as Constants from '../../utils/constants'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { GuestUser } from '../../types/user'
 import Point from '../../types/point'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
+import { DisplayUser, GuestUser } from '../../types/user'
 import {
     activeGames as localActiveGames,
+    createOfflineGame as localCreateOfflineGame,
     deleteFullGame as localDeleteFullGame,
     getGameById as localGetGameById,
     saveGame as localSaveGame,
@@ -65,10 +66,20 @@ export const searchGames = async (
  * @param data all necessary data to create a game
  * @returns the created game
  */
-export const createGame = async (data: CreateGame): Promise<Game> => {
+export const createGame = async (
+    data: CreateGame,
+    offline: boolean,
+    teamOnePlayers: DisplayUser[],
+): Promise<Game> => {
     try {
-        const response = await withToken(networkCreateGame, data)
+        if (offline) {
+            const id = await localCreateOfflineGame(data, teamOnePlayers)
+            const result = await localGetGameById(id)
+            console.log('game', result)
+            return result
+        }
 
+        const response = await withToken(networkCreateGame, data)
         const { game, token } = response.data
         await localSaveGame(game)
         await EncryptedStorage.setItem('game_token', token)

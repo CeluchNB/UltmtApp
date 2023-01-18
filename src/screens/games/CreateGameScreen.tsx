@@ -5,13 +5,16 @@ import LabeledFormInput from '../../components/molecules/LabeledFormInput'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { Tournament } from '../../types/tournament'
-import { createGame } from '../../store/reducers/features/game/liveGameReducer'
 import { getFormFieldRules } from '../../utils/form-utils'
 import { selectAccount } from '../../store/reducers/features/account/accountReducer'
 import { useColors } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import React, { useEffect } from 'react'
 import { SafeAreaView, StyleSheet, Switch, View } from 'react-native'
+import {
+    createGame,
+    selectTeamOne,
+} from '../../store/reducers/features/game/liveGameReducer'
 import {
     resetCreateStatus,
     selectCreateStatus,
@@ -22,11 +25,12 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     // Team One and Team Two are populated through
     // SelectMyTeamScreen and SelectOpponentScreen
     // Flow SelectMyTeamScreen -> SelectOpponentScreen -> CreateGameScreen
-    const { teamOne, teamTwo } = route.params
+    const { teamTwo } = route.params
     const { colors } = useColors()
     const dispatch = useDispatch<AppDispatch>()
     const account = useSelector(selectAccount)
     const createStatus = useSelector(selectCreateStatus)
+    const teamOne = useSelector(selectTeamOne)
 
     const {
         control,
@@ -34,6 +38,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
         formState: { errors },
     } = useForm({
         defaultValues: {
+            offline: false,
             scoreLimit: 15,
             halfScore: 8,
             softcapMins: 75,
@@ -41,7 +46,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
             playersPerPoint: 7,
             timeoutPerHalf: 1,
             floaterTimeout: true,
-            tournament: {} as Tournament,
+            tournament: undefined,
         },
     })
 
@@ -50,6 +55,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     }
 
     const onCreate = async (formData: {
+        offline: boolean
         scoreLimit: number
         halfScore: number
         softcapMins: number
@@ -57,15 +63,23 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
         playersPerPoint: number
         timeoutPerHalf: number
         floaterTimeout: boolean
-        tournament: Tournament
+        tournament?: Tournament
     }) => {
         dispatch(resetCreateStatus())
+        const { offline, ...data } = formData
         const createGameData: CreateGame = {
-            ...formData,
+            ...data,
             teamTwoDefined: teamTwo._id !== undefined,
             startTime: new Date(),
             teamTwo: teamTwo,
-            teamOne: teamOne,
+            teamOne: {
+                _id: teamOne._id,
+                place: teamOne.place,
+                name: teamOne.name,
+                teamname: teamOne.teamname,
+                seasonStart: teamOne.seasonStart,
+                seasonEnd: teamOne.seasonEnd,
+            },
             creator: {
                 _id: account._id,
                 firstName: account.firstName,
@@ -74,7 +88,13 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
             },
         }
 
-        dispatch(createGame(createGameData))
+        dispatch(
+            createGame({
+                ...createGameData,
+                offline,
+                teamOnePlayers: teamOne.players,
+            }),
+        )
     }
 
     useEffect(() => {
@@ -107,6 +127,30 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
                     <ScreenTitle title="vs." />
                     <ScreenTitle title={teamTwo.name} />
                 </View>
+                <Controller
+                    name="offline"
+                    control={control}
+                    rules={{}}
+                    render={({ field: { onChange, value } }) => {
+                        return (
+                            <LabeledFormInput
+                                label="Offline"
+                                onChange={onChange}
+                                value={value}
+                                error={errors.offline?.message}>
+                                <Switch
+                                    trackColor={{
+                                        false: colors.gray,
+                                        true: colors.textSecondary,
+                                    }}
+                                    thumbColor={colors.textPrimary}
+                                    onValueChange={onChange}
+                                    value={value}
+                                />
+                            </LabeledFormInput>
+                        )
+                    }}
+                />
                 <Controller
                     name="scoreLimit"
                     control={control}
@@ -290,9 +334,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
                 <Controller
                     name="floaterTimeout"
                     control={control}
-                    rules={{
-                        required: true,
-                    }}
+                    rules={{}}
                     render={({ field: { onChange, value } }) => {
                         return (
                             <LabeledFormInput
