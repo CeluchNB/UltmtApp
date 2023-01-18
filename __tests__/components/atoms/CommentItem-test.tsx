@@ -7,7 +7,12 @@ describe('CommentItem', () => {
         comment: {
             commentNumber: 1,
             comment: 'Test comment',
-            user: { _id: '', firstName: 'First1', lastName: 'Last1' },
+            user: {
+                _id: '',
+                firstName: 'First1',
+                lastName: 'Last1',
+                username: 'firstlast1',
+            },
         },
         userId: 'user1',
         onDelete: jest.fn(),
@@ -29,6 +34,7 @@ describe('CommentItem', () => {
                         _id: 'user1',
                         firstName: 'First1',
                         lastName: 'Last1',
+                        username: 'firstlast1',
                     },
                 }}
             />,

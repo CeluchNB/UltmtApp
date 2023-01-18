@@ -1,10 +1,10 @@
 import * as AuthData from '../../../src/services/data/auth'
 import * as Constants from '../../../src/utils/constants'
 import * as UserData from '../../../src/services/data/user'
-import { AllScreenProps } from '../../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { SelectMyTeamProps } from '../../../src/types/navigation'
 import SelectMyTeamScreen from '../../../src/screens/games/SelectMyTeamScreen'
 import { fetchProfileData } from '../../../fixtures/data'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
@@ -21,7 +21,7 @@ const navigate = jest.fn()
 const addListener = jest.fn()
 const push = jest.fn()
 
-const props: AllScreenProps = {
+const props: SelectMyTeamProps = {
     navigation: {
         navigate,
         addListener,

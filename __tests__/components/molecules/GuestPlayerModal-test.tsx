@@ -40,6 +40,7 @@ it('should call add player correctly', async () => {
             ...game,
             startTime: '2022' as unknown as Date,
             tournament: undefined,
+            offline: false,
         }),
     )
     let visible = true
