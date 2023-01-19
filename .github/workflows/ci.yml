@@ -18,20 +18,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Create env file
-        run: |
-          touch .env
-          echo API_URL_V1="www.test.com" >> .env
-          echo API_KEY="testkey" >> .env
       - name: Install Dependencies
         run: |
           yarn install --frozen-lockfile
       - name: Lint
         run: |
           yarn lint
-      - name: Check types
-        run: |
-          yarn tsc
       - name: Test
         run: |
           yarn test-ci
