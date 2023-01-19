@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
+import { setTeamOne } from '../../../src/store/reducers/features/game/liveGameReducer'
 import store from '../../../src/store/store'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
@@ -56,6 +57,18 @@ beforeAll(() => {
             fetchProfileLoading: false,
         }),
     )
+    store.dispatch(
+        setTeamOne({
+            ...teamOne,
+            managers: [],
+            players: [],
+            seasonNumber: 2,
+            continuationId: 'place1name1',
+            rosterOpen: true,
+            requests: [],
+            games: [],
+        }),
+    )
 })
 
 afterAll(() => {
@@ -93,24 +106,28 @@ it('should create game', async () => {
     // a loading indicator to be gone
     await act(async () => {})
 
-    expect(spy).toHaveBeenCalledWith({
-        teamOne,
-        teamTwo,
-        creator: {
-            _id: 'id1',
-            firstName: 'First',
-            lastName: 'Last',
-            username: 'username',
+    expect(spy).toHaveBeenCalledWith(
+        {
+            teamOne,
+            teamTwo,
+            creator: {
+                _id: 'id1',
+                firstName: 'First',
+                lastName: 'Last',
+                username: 'username',
+            },
+            scoreLimit: 15,
+            halfScore: 8,
+            softcapMins: 75,
+            hardcapMins: 90,
+            playersPerPoint: 7,
+            timeoutPerHalf: 1,
+            floaterTimeout: true,
+            teamTwoDefined: true,
+            startTime: new Date(),
+            tournament: undefined,
         },
-        scoreLimit: 15,
-        halfScore: 8,
-        softcapMins: 75,
-        hardcapMins: 90,
-        playersPerPoint: 7,
-        timeoutPerHalf: 1,
-        floaterTimeout: true,
-        teamTwoDefined: true,
-        startTime: new Date(),
-        tournament: {},
-    })
+        false,
+        [],
+    )
 })

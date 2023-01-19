@@ -85,6 +85,54 @@ exports[`should match snapshot 1`] = `
           }
         }
       >
+        Offline
+      </Text>
+      <View
+        style={
+          {
+            "width": "50%",
+          }
+        }
+      >
+        <RCTSwitch
+          accessibilityRole="switch"
+          onChange={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          onTintColor="#31adff"
+          style={
+            {
+              "height": 31,
+              "width": 51,
+            }
+          }
+          thumbTintColor="#ffd600"
+          tintColor="#ababab"
+          value={false}
+        />
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "row",
+          "marginBottom": 5,
+          "marginTop": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "bold",
+            "width": "50%",
+          }
+        }
+      >
         Game to
       </Text>
       <View

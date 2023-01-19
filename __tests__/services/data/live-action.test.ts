@@ -374,13 +374,32 @@ describe('save local action', () => {
 
 describe('delete local action', () => {
     it('with local success', async () => {
+        const action: LiveServerAction = {
+            actionNumber: 1,
+            actionType: ActionType.SUBSTITUTION,
+            teamNumber: 'two',
+            playerOne: {
+                _id: 'user1',
+                firstName: 'First 1',
+                lastName: 'Last 1',
+                username: 'user1',
+            },
+            playerTwo: {
+                _id: 'user2',
+                firstName: 'First 2',
+                lastName: 'Last 2',
+                username: 'user2',
+            },
+            tags: [],
+            comments: [],
+        }
         jest.spyOn(LocalActionServices, 'deleteAction').mockReturnValueOnce(
-            Promise.resolve(),
+            Promise.resolve(action),
         )
 
         await expect(
             deleteLocalAction('one', 1, 'point1'),
-        ).resolves.toBeUndefined()
+        ).resolves.toMatchObject(action)
     })
 
     it('with local failure', async () => {

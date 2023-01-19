@@ -85,7 +85,12 @@ const savedActions: SavedServerAction[] = [
             seasonEnd: '2022',
         },
         comments: [],
-        playerOne: { firstName: 'First 1', lastName: 'Last 1' },
+        playerOne: {
+            _id: 'user1',
+            firstName: 'First 1',
+            lastName: 'Last 1',
+            username: 'firstlast1',
+        },
     },
     {
         _id: 'action2',
@@ -101,8 +106,18 @@ const savedActions: SavedServerAction[] = [
             seasonEnd: '2022',
         },
         comments: [],
-        playerOne: { firstName: 'First 2', lastName: 'Last 2' },
-        playerTwo: { firstName: 'First 1', lastName: 'Last 1' },
+        playerOne: {
+            _id: 'user2',
+            firstName: 'First 2',
+            lastName: 'Last 2',
+            username: 'firstlast2',
+        },
+        playerTwo: {
+            _id: 'user1',
+            firstName: 'First 1',
+            lastName: 'Last 1',
+            username: 'firstlast1',
+        },
     },
     {
         _id: 'action3',
@@ -118,8 +133,18 @@ const savedActions: SavedServerAction[] = [
             seasonEnd: '2022',
         },
         comments: [],
-        playerOne: { firstName: 'First 1', lastName: 'Last 1' },
-        playerTwo: { firstName: 'First 2', lastName: 'Last 2' },
+        playerOne: {
+            _id: 'user1',
+            firstName: 'First 1',
+            lastName: 'Last 1',
+            username: 'firstlast1',
+        },
+        playerTwo: {
+            _id: 'user2',
+            firstName: 'First 2',
+            lastName: 'Last 2',
+            username: 'firstlast2',
+        },
     },
 ]
 const liveActions: LiveServerAction[] = [
@@ -129,8 +154,18 @@ const liveActions: LiveServerAction[] = [
         actionNumber: 1,
         actionType: ActionType.CATCH,
         teamNumber: 'one',
-        playerOne: { firstName: 'First 1', lastName: 'Last 1' },
-        playerTwo: { firstName: 'First 2', lastName: 'Last 2' },
+        playerOne: {
+            _id: 'user1',
+            firstName: 'First 1',
+            lastName: 'Last 1',
+            username: 'firstlast1',
+        },
+        playerTwo: {
+            _id: 'user2',
+            firstName: 'First 2',
+            lastName: 'Last 2',
+            username: 'firstlast2',
+        },
     },
     {
         comments: [],
@@ -139,8 +174,18 @@ const liveActions: LiveServerAction[] = [
         actionType: ActionType.CATCH,
         teamNumber: 'one',
 
-        playerTwo: { firstName: 'First 1', lastName: 'Last 1' },
-        playerOne: { firstName: 'First 2', lastName: 'Last 2' },
+        playerTwo: {
+            _id: 'user1',
+            firstName: 'First 1',
+            lastName: 'Last 1',
+            username: 'firstlast1',
+        },
+        playerOne: {
+            _id: 'user2',
+            firstName: 'First 2',
+            lastName: 'Last 2',
+            username: 'firstlast2',
+        },
     },
 ]
 
