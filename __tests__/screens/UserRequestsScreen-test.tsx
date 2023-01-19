@@ -2,9 +2,9 @@ import * as Constants from '../../src/utils/constants'
 import * as RequestData from '../../src/services/data/request'
 import * as UserData from '../../src/services/data/user'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { UserRequestProps } from '../../src/types/navigation'
 import UserRequestsScreen from '../../src/screens/UserRequestsScreen'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
@@ -17,7 +17,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const navigate = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
 
-const props: Props = {
+const props: UserRequestProps = {
     navigation: {
         navigate,
         addListener,

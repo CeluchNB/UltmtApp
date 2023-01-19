@@ -1,7 +1,7 @@
-import { AllScreenProps } from '../../types/navigation'
 import { FAB } from 'react-native-paper'
 import { Game } from '../../types/game'
 import GameCard from '../../components/atoms/GameCard'
+import { GameHomeProps } from '../../types/navigation'
 import MapSection from '../../components/molecules/MapSection'
 import SearchBar from '../../components/atoms/SearchBar'
 import { searchGames } from '../../services/data/game'
@@ -16,7 +16,7 @@ import {
 } from 'react-native'
 import { useColors, useData } from '../../hooks'
 
-const GameHomeScreen: React.FC<AllScreenProps> = ({ navigation }) => {
+const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     const { colors } = useColors()
 
     const { data, loading, refetch } = useData<Game[]>(searchGames)

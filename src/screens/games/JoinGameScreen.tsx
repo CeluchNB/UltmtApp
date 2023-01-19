@@ -7,20 +7,21 @@ import React from 'react'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import SearchDisplay from '../../components/molecules/SearchDisplay'
 import { setPoint } from '../../store/reducers/features/point/livePointReducer'
-import { useDispatch } from 'react-redux'
 import {
     getPointsByGame,
     joinGame,
     searchGames,
 } from '../../services/data/game'
 import {
+    selectTeamOne,
     setGame,
     setTeam,
 } from '../../store/reducers/features/game/liveGameReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation, route }) => {
-    const { teamTwo } = route.params
+const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
     const dispatch = useDispatch()
+    const teamTwo = useSelector(selectTeamOne)
     const [modalVisible, setModalVisible] = React.useState(false)
     const [gameId, setGameId] = React.useState('')
     const [joinLoading, setJoinLoading] = React.useState(false)

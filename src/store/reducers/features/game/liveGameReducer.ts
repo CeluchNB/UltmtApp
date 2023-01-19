@@ -1,8 +1,9 @@
 import * as GameData from '../../../../services/data/game'
+import { CreateGame } from '../../../../types/game'
 import { DisplayUser } from '../../../../types/user'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
-import { DisplayTeam, GuestTeam } from '../../../../types/team'
+import { DisplayTeam, GuestTeam, Team } from '../../../../types/team'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export interface LiveGameSlice {
@@ -28,7 +29,9 @@ export interface LiveGameSlice {
         teamOnePlayers: DisplayUser[]
         teamTwoPlayers: DisplayUser[]
         tournament: undefined
+        offline?: boolean
     }
+    teamOne: Team
     activeTags: string[]
     team: 'one' | 'two'
     createStatus: Status
@@ -60,7 +63,9 @@ const initialState: LiveGameSlice = {
         teamOnePlayers: [],
         teamTwoPlayers: [],
         tournament: undefined,
+        offline: false,
     },
+    teamOne: {} as Team,
     activeTags: ['huck', 'break', 'layout'],
     team: 'one',
     createStatus: 'idle',
@@ -79,6 +84,9 @@ const liveGameSlice = createSlice({
         },
         setGame(state, action) {
             state.game = action.payload
+        },
+        setTeamOne(state, action) {
+            state.teamOne = action.payload
         },
         setTeam(state, action) {
             state.team = action.payload
@@ -144,8 +152,11 @@ const liveGameSlice = createSlice({
 
 export const createGame = createAsyncThunk(
     'liveGame/create',
-    async (data: any) => {
-        return await GameData.createGame(data)
+    async (
+        data: CreateGame & { offline: boolean; teamOnePlayers: DisplayUser[] },
+    ) => {
+        const { offline, teamOnePlayers, ...gameData } = data
+        return await GameData.createGame(gameData, offline, teamOnePlayers)
     },
 )
 
@@ -165,10 +176,12 @@ export const selectGuestPlayerStatus = (state: RootState) =>
 export const selectGuestPlayerError = (state: RootState) =>
     state.liveGame.guestPlayerError
 export const selectTags = (state: RootState) => state.liveGame.activeTags
+export const selectTeamOne = (state: RootState) => state.liveGame.teamOne
 export const {
     resetCreateStatus,
     setGame,
     setTeam,
+    setTeamOne,
     resetGuestPlayerStatus,
     addTag,
     updateScore,

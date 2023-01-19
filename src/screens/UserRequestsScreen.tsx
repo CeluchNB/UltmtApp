@@ -4,9 +4,9 @@ import { AppDispatch } from '../store/store'
 import { DetailedRequest } from '../types/request'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
+import { UserRequestProps } from '../types/navigation'
 import { size } from '../theme/fonts'
 import {
     RefreshControl,
@@ -26,7 +26,7 @@ import {
 import { useColors, useData, useLazyData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
-const UserRequestsScreen: React.FC<Props> = ({ navigation }) => {
+const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
     const { colors } = useColors()
     const dispatch = useDispatch<AppDispatch>()
     const toggleLoading = useSelector(selectToggleLoading)

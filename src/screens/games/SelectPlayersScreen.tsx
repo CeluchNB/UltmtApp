@@ -3,9 +3,9 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import { Chip } from 'react-native-paper'
 import GameHeader from '../../components/molecules/GameHeader'
 import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
-import { LiveGameProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
+import { SelectPlayersProps } from '../../types/navigation'
 import { isPulling } from '../../utils/point'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
@@ -25,7 +25,7 @@ import {
 } from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const SelectPlayersScreen: React.FC<LiveGameProps> = ({ navigation }) => {
+const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     // ignore flatlist flex wrap warning
     LogBox.ignoreLogs(['`flexWrap: `wrap`` is'])
     const { colors } = useColors()

@@ -27,8 +27,18 @@ const actions: LiveServerAction[] = [
         actionNumber: 1,
         actionType: ActionType.CATCH,
         teamNumber: 'one',
-        playerOne: { firstName: 'First 1', lastName: 'Last 1' },
-        playerTwo: { firstName: 'First 2', lastName: 'Last 2' },
+        playerOne: {
+            _id: 'user1',
+            firstName: 'First 1',
+            lastName: 'Last 1',
+            username: 'firstlast1',
+        },
+        playerTwo: {
+            _id: 'user2',
+            firstName: 'First 2',
+            lastName: 'Last 2',
+            username: 'firstlast2',
+        },
     },
     {
         comments: [],
@@ -36,8 +46,18 @@ const actions: LiveServerAction[] = [
         actionNumber: 2,
         actionType: ActionType.CATCH,
         teamNumber: 'one',
-        playerTwo: { firstName: 'First 1', lastName: 'Last 1' },
-        playerOne: { firstName: 'First 2', lastName: 'Last 2' },
+        playerTwo: {
+            _id: 'user1',
+            firstName: 'First 1',
+            lastName: 'Last 1',
+            username: 'firstlast1',
+        },
+        playerOne: {
+            _id: 'user2',
+            firstName: 'First 2',
+            lastName: 'Last 2',
+            username: 'firstlast2',
+        },
     },
 ]
 
@@ -53,7 +73,6 @@ describe('PointAccordion', () => {
                 expanded={false}
                 teamOne={{ name: 'Temper' }}
                 teamTwo={{ name: 'Truck' }}
-                isLive={false}
                 onActionPress={onActionPress}
             />,
         )
@@ -75,7 +94,6 @@ describe('PointAccordion', () => {
                 expanded={true}
                 teamOne={{ name: 'Temper' }}
                 teamTwo={{ name: 'Truck' }}
-                isLive={true}
                 onActionPress={onActionPress}
             />,
         )

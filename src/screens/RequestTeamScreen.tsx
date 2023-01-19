@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
-import { Props } from '../types/navigation'
+import { RequestTeamProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SearchBar from '../components/atoms/SearchBar'
 import SearchResultItem from '../components/atoms/SearchResultItem'
@@ -13,7 +13,7 @@ import { useColors } from '../hooks'
 import { useDispatch } from 'react-redux'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 
-const RequestTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
+const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
     const { colors } = useColors()
     const [teams, setTeams] = React.useState<Team[]>([])
     const dispatch = useDispatch()

@@ -1,7 +1,7 @@
 import * as UserData from '../../src/services/data/user'
+import { JoinByCodeProps } from '../../src/types/navigation'
 import JoinByCodeScreen from '../../src/screens/JoinByCodeScreen'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { fetchProfileData } from '../../fixtures/data'
@@ -13,7 +13,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const navigate = jest.fn()
 
-const props: Props = {
+const props: JoinByCodeProps = {
     navigation: {
         navigate,
     } as any,

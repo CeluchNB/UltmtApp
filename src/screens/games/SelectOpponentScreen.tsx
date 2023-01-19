@@ -13,11 +13,11 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
     navigation,
     route,
 }) => {
-    const { initialValue, teamOne } = route.params
+    const { initialValue } = route.params
     const [searchText, setSearchText] = useState(initialValue)
 
     const onSelect = (team: GuestTeam) => {
-        navigation.navigate('CreateGame', { teamOne, teamTwo: team })
+        navigation.navigate('CreateGame', { teamTwo: team })
     }
 
     const styles = StyleSheet.create({
@@ -66,7 +66,7 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
                 style={styles.button}
                 text="join existing game"
                 onPress={async () => {
-                    navigation.navigate('JoinGame', { teamTwo: teamOne })
+                    navigation.navigate('JoinGame')
                 }}
             />
         </BaseScreen>

@@ -2,9 +2,9 @@ import * as RequestData from '../../src/services/data/request'
 import * as TeamData from '../../src/services/data/team'
 import { DetailedRequest } from '../../src/types/request'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { RequestTeamProps } from '../../src/types/navigation'
 import RequestTeamScreen from '../../src/screens/RequestTeamScreen'
 import store from '../../src/store/store'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
@@ -12,7 +12,7 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const goBack = jest.fn()
-const props: Props = {
+const props: RequestTeamProps = {
     navigation: {
         goBack,
     } as any,

@@ -1,10 +1,10 @@
 import ActiveGameWarning from '../components/atoms/ActiveGameWarning'
-import { AllScreenProps } from '../types/navigation'
 import { Button } from 'react-native-paper'
 import { Game } from '../types/game'
 import GameListItem from '../components/atoms/GameListItem'
 import IconButtonText from '../components/atoms/IconButtonText'
 import MapSection from '../components/molecules/MapSection'
+import { ProfileProps } from '../types/navigation'
 import React from 'react'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
@@ -32,9 +32,7 @@ import {
 import { useColors, useData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
-const ProfileScreen: React.FC<AllScreenProps> = ({
-    navigation,
-}: AllScreenProps) => {
+const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
     const playerTeams = useSelector(selectPlayerTeams)

@@ -4,7 +4,7 @@ import { ActionType } from '../../types/action'
 import { ApiError } from '../../types/services'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
-import { LiveGameProps } from '../../types/navigation'
+import { LivePointEditProps } from '../../types/navigation'
 import LivePointStatus from '../../components/molecules/LivePointStatus'
 import PlayerActionView from '../../components/organisms/PlayerActionView'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
@@ -17,7 +17,7 @@ import { useGameEditor } from '../../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../../theme/fonts'
 
-const LivePointEditScreen: React.FC<LiveGameProps> = ({ navigation }) => {
+const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
     // hooks
     const { colors } = useColors()
     const [finishPointLoading, setFinishPointLoading] = React.useState(false)

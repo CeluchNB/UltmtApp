@@ -92,7 +92,7 @@ describe('test create game', () => {
             Promise.resolve({ ...game, offline: false }),
         )
 
-        const result = await createGame({} as any)
+        const result = await createGame({} as any, false, [])
         expect(result).toMatchObject(game)
     })
 
@@ -107,7 +107,7 @@ describe('test create game', () => {
             }),
         )
 
-        await expect(createGame({} as any)).rejects.toMatchObject({
+        await expect(createGame({} as any, false, [])).rejects.toMatchObject({
             message: Constants.CREATE_GAME_ERROR,
         })
     })

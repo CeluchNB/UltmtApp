@@ -3,11 +3,11 @@ import * as RequestData from '../../src/services/data/request'
 import * as TeamData from '../../src/services/data/team'
 import { DetailedRequest } from '../../src/types/request'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { RequestType } from '../../src/types/request'
 import { Team } from '../../src/types/team'
+import { TeamRequestProps } from '../../src/types/navigation'
 import TeamRequestsScreen from '../../src/screens/TeamRequestsScreen'
 import { setTeam } from '../../src/store/reducers/features/team/managedTeamReducer'
 import store from '../../src/store/store'
@@ -19,7 +19,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const navigate = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
 
-const props: Props = {
+const props: TeamRequestProps = {
     navigation: {
         navigate,
         addListener,

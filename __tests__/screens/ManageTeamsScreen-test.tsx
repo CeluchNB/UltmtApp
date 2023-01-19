@@ -1,8 +1,8 @@
 import * as AccountReducer from '../../src/store/reducers/features/account/accountReducer'
 import * as UserData from '../../src/services/data/user'
+import { ManageTeamsProps } from '../../src/types/navigation'
 import ManageTeamsScreen from '../../src/screens/ManageTeamsScreen'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { User } from '../../src/types/user'
@@ -15,7 +15,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const navigate = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
 
-const props: Props = {
+const props: ManageTeamsProps = {
     navigation: {
         navigate,
         addListener,

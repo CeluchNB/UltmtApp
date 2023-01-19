@@ -1,8 +1,8 @@
 import * as AuthData from '../services/data/auth'
 import * as React from 'react'
 import { LoginData } from '../types/reducers'
+import { LoginProps } from '../types/navigation'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
-const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
+const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
     // const hasCheckedLocalToken = React.useRef(false)
     const dispatch = useDispatch()
     const { colors } = useColors()

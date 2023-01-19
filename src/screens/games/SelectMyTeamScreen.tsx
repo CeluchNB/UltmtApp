@@ -1,14 +1,16 @@
 import * as Constants from '../../utils/constants'
-import { AllScreenProps } from '../../types/navigation'
 import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import { DisplayTeam } from '../../types/team'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
+import { SelectMyTeamProps } from '../../types/navigation'
 import TeamListItem from '../../components/atoms/TeamListItem'
 import { fetchProfile } from '../../store/reducers/features/account/accountReducer'
+import { getTeam } from '../../services/data/team'
 import { isLoggedIn } from '../../services/data/auth'
+import { setTeamOne } from '../../store/reducers/features/game/liveGameReducer'
 import { size } from '../../theme/fonts'
 import {
     ActivityIndicator,
@@ -24,7 +26,7 @@ import {
 import { useColors, useData } from '../../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
-const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
+const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
     const { colors } = useColors()
     const dispatch = useDispatch<AppDispatch>()
     const managerTeams = useSelector(selectManagerTeams)
@@ -46,8 +48,12 @@ const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuth])
 
-    const onSelect = (teamOne: DisplayTeam) => {
-        navigation.navigate('SelectOpponent', { teamOne })
+    const onSelect = async (teamOne: DisplayTeam) => {
+        try {
+            const team = await getTeam(teamOne._id)
+            dispatch(setTeamOne(team))
+            navigation.navigate('SelectOpponent', {})
+        } catch (e) {}
     }
 
     const onCreateTeam = async () => {
@@ -117,7 +123,7 @@ const SelectMyTeamScreen: React.FC<AllScreenProps> = ({ navigation }) => {
                             <TeamListItem
                                 team={item}
                                 onPress={async () => {
-                                    onSelect(item)
+                                    await onSelect(item)
                                 }}
                             />
                         )

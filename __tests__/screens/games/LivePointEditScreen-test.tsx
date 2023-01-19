@@ -3,7 +3,7 @@ import * as ActionData from '../../../src/services/data/live-action'
 import * as GameServices from '../../../src/services/network/game'
 import * as LocalGameServices from '../../../src/services/local/game'
 import * as PointServices from '../../../src/services/data/point'
-import { LiveGameProps } from '../../../src/types/navigation'
+import { LivePointEditProps } from '../../../src/types/navigation'
 import LivePointEditScreen from '../../../src/screens/games/LivePointEditScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import Point from '../../../src/types/point'
@@ -36,7 +36,7 @@ afterAll(() => {
 
 const reset = jest.fn()
 const navigate = jest.fn()
-const props: LiveGameProps = {
+const props: LivePointEditProps = {
     navigation: {
         reset,
         navigate,

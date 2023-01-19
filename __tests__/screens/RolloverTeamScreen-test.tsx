@@ -1,9 +1,9 @@
 import * as ManagedTeamReducer from '../../src/store/reducers/features/team/managedTeamReducer'
 import * as TeamData from '../../src/services/data/team'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { RolloverTeamProps } from '../../src/types/navigation'
 import RolloverTeamScreen from '../../src/screens/RolloverTeamScreen'
 import { Team } from '../../src/types/team'
 import mockDate from 'mockdate'
@@ -15,7 +15,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const goBack = jest.fn()
 const navigate = jest.fn()
 
-const props: Props = {
+const props: RolloverTeamProps = {
     navigation: {
         goBack,
         navigate,
@@ -45,7 +45,7 @@ it('should match snapshot', async () => {
 })
 
 it('should match snapshot with open requests', async () => {
-    const pendingReqProps: Props = {
+    const pendingReqProps: RolloverTeamProps = {
         navigation: {
             goBack,
             navigate,

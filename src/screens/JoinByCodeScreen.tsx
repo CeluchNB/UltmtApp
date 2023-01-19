@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as UserData from '../services/data/user'
+import { JoinByCodeProps } from '../types/navigation'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import { User } from '../types/user'
 import UserInput from '../components/atoms/UserInput'
@@ -14,7 +14,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { Modal, StyleSheet, Text, View } from 'react-native'
 import { useColors, useLazyData } from '../hooks'
 
-const JoinByCodeScreen: React.FC<Props> = ({ navigation }: Props) => {
+const JoinByCodeScreen: React.FC<JoinByCodeProps> = ({ navigation }) => {
     const dispatch = useDispatch()
 
     const { colors } = useColors()

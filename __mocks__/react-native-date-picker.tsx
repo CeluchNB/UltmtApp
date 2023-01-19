@@ -17,12 +17,9 @@ const DatePicker: React.FC<{
                 title="confirm"
                 onPress={() => {
                     onConfirm(new Date('01-01-2021'))
-                }}>
-                confirm
-            </Button>
-            <Button title="cancel" onPress={onCancel}>
-                cancel
-            </Button>
+                }}
+            />
+            <Button title="cancel" onPress={onCancel} />
         </View>
     )
 }

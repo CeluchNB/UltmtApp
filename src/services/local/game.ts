@@ -1,10 +1,11 @@
 import * as Constants from '../../utils/constants'
+import { DisplayUser } from '../../types/user'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { Game } from '../../types/game'
 import { getRealm } from '../../models/realm'
 import jwt_decode from 'jwt-decode'
 import { throwApiError } from '../../utils/service-utils'
 import { ActionSchema, GameSchema, PointSchema } from '../../models'
+import { CreateGame, Game } from '../../types/game'
 
 const parseGame = (schema: GameSchema): Game & { offline: boolean } => {
     return JSON.parse(
@@ -41,6 +42,23 @@ export const getLocalGameId = async (): Promise<string> => {
     const data = jwt_decode(token) as { sub: string }
 
     return data.sub
+}
+
+export const createOfflineGame = async (
+    data: CreateGame,
+    teamOnePlayers: DisplayUser[],
+): Promise<string> => {
+    const realm = await getRealm()
+    let id: string = ''
+    realm.write(() => {
+        const game = realm.create<GameSchema>(
+            'Game',
+            GameSchema.createOfflineGame(data, teamOnePlayers),
+        )
+        id = game._id
+    })
+
+    return id
 }
 
 export const saveGame = async (game: Game) => {
