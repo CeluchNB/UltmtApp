@@ -1,8 +1,8 @@
 import * as AuthData from '../../src/services/data/auth'
 import * as GameData from '../../src/services/data/game'
 import * as UserData from '../../src/services/data/user'
-import { AllScreenProps } from '../../src/types/navigation'
 import { NavigationContainer } from '@react-navigation/native'
+import { ProfileProps } from '../../src/types/navigation'
 import ProfileScreen from '../../src/screens/ProfileScreen'
 import { Provider } from 'react-redux'
 import React from 'react'
@@ -17,7 +17,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const navigate = jest.fn()
 const addListener = jest.fn()
 
-const props: AllScreenProps = {
+const props: ProfileProps = {
     navigation: {
         navigate,
         addListener,

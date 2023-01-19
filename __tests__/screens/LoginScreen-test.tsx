@@ -1,8 +1,8 @@
 import * as AuthData from '../../src/services/data/auth'
 import { ApiError } from '../../src/types/services'
+import { LoginProps } from '../../src/types/navigation'
 import LoginScreen from '../../src/screens/LoginScreen'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import renderer from 'react-test-renderer'
@@ -17,7 +17,7 @@ const addListener = jest.fn().mockImplementation((event, callback) => {
     callback()
 })
 
-const props: Props = {
+const props: LoginProps = {
     navigation: {
         navigate,
         reset,

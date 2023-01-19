@@ -3,8 +3,8 @@ import * as RequestData from '../services/data/request'
 import { AppDispatch } from '../store/store'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
+import { TeamRequestProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks'
@@ -26,7 +26,7 @@ import {
 import { useData, useLazyData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
-const TeamRequestsScreen: React.FC<Props> = ({ navigation }) => {
+const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
     const dispatch = useDispatch<AppDispatch>()
     const { colors } = useColors()
 

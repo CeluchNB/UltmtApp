@@ -70,7 +70,6 @@ it('should navigate with search result', async () => {
     fireEvent.press(team)
 
     expect(navigate).toHaveBeenCalledWith('CreateGame', {
-        teamOne,
         teamTwo,
     })
 })
@@ -90,7 +89,6 @@ it('with guest team', async () => {
     fireEvent.press(team)
 
     expect(navigate).toHaveBeenCalledWith('CreateGame', {
-        teamOne,
         teamTwo: { name: 'team2' },
     })
 })

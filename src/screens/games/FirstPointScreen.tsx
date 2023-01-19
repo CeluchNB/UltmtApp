@@ -1,6 +1,6 @@
 import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
-import { LiveGameProps } from '../../types/navigation'
+import { FirstPointProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { createPoint } from '../../store/reducers/features/point/livePointReducer'
@@ -16,7 +16,7 @@ import {
 import { size, weight } from '../../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
-const FirstPointScreen: React.FC<LiveGameProps> = ({ navigation }) => {
+const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
     const { colors } = useColors()
     const dispatch = useDispatch<AppDispatch>()
     const game = useSelector(selectGame)

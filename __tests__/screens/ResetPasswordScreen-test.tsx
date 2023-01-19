@@ -2,8 +2,8 @@ import * as AccountReducer from '../../src/store/reducers/features/account/accou
 import * as React from 'react'
 import * as UserData from '../../src/services/data/user'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
+import { ResetPasswordProps } from '../../src/types/navigation'
 import ResetPasswordScreen from '../../src/screens/ResetPasswordScreen'
 import { fetchProfileData } from '../../fixtures/data'
 import store from '../../src/store/store'
@@ -14,7 +14,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const navigate = jest.fn()
 
 const token = '1234.asdf.6543'
-const props: Props = {
+const props: ResetPasswordProps = {
     navigation: {
         navigate,
     } as any,

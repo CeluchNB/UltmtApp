@@ -1,7 +1,7 @@
 import * as React from 'react'
 import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { Props } from '../types/navigation'
+import { ResetPasswordProps } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
@@ -13,7 +13,7 @@ import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
-const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
+const ResetPasswordScreen: React.FC<ResetPasswordProps> = ({ navigation }) => {
     const { colors } = useColors()
     const {
         control,

@@ -2,8 +2,8 @@ import * as React from 'react'
 import { AppDispatch } from '../store/store'
 import { DisplayTeam } from '../types/team'
 import IconButtonText from '../components/atoms/IconButtonText'
+import { ManageTeamsProps } from '../types/navigation'
 import MapSection from '../components/molecules/MapSection'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { size } from '../theme/fonts'
@@ -26,7 +26,7 @@ import {
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const ManageTeams: React.FC<Props> = ({ navigation }: Props) => {
+const ManageTeams: React.FC<ManageTeamsProps> = ({ navigation }) => {
     const { colors } = useColors()
     const dispatch = useDispatch<AppDispatch>()
     const playerTeams = useSelector(selectPlayerTeams)

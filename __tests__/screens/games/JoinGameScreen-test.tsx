@@ -5,6 +5,7 @@ import JoinGameScreen from '../../../src/screens/games/JoinGameScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { setTeamOne } from '../../../src/store/reducers/features/game/liveGameReducer'
 import store from '../../../src/store/store'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import { game, point } from '../../../fixtures/data'
@@ -13,20 +14,21 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const props: JoinGameProps = {
     navigation: { navigate: jest.fn() } as any,
-    route: {
-        params: {
-            teamTwo: {
+    route: {} as any,
+}
+
+describe('JoinGameScreen', () => {
+    beforeAll(() => {
+        store.dispatch(
+            setTeamOne({
                 place: 'Pittsburgh',
                 name: 'Temper',
                 teamname: 'temper',
                 seasonStart: '2022',
                 seasonEnd: '2022',
-            },
-        },
-    } as any,
-}
-
-describe('JoinGameScreen', () => {
+            }),
+        )
+    })
     beforeEach(() => {
         jest.spyOn(GameData, 'searchGames').mockReturnValueOnce(
             Promise.resolve([game]),

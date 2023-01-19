@@ -1,6 +1,6 @@
 import * as React from 'react'
+import { ForgotPasswordProps } from '../types/navigation'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
@@ -12,7 +12,9 @@ import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 import { useColors, useLazyData } from '../hooks'
 
-const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
+const ForgotPasswordScreen: React.FC<ForgotPasswordProps> = ({
+    navigation,
+}) => {
     const { colors } = useColors()
     const [success, setSuccess] = React.useState(false)
 

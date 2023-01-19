@@ -1,9 +1,9 @@
 import * as React from 'react'
 import * as TeamData from '../services/data/team'
 import { CreateTeam } from '../types/team'
+import { CreateTeamProps } from '../types/navigation'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { Props } from '../types/navigation'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
@@ -20,7 +20,7 @@ interface CreateTeamFormData {
     season: string
 }
 
-const CreateTeamScreen: React.FC<Props> = ({ navigation }: Props) => {
+const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
     const [loading, setLoading] = React.useState(false)
     const currentYear = new Date().getFullYear()
     const years = [

@@ -1,7 +1,7 @@
 import * as TeamData from '../../src/services/data/team'
+import { CreateTeamProps } from '../../src/types/navigation'
 import CreateTeamScreen from '../../src/screens/CreateTeamScreen'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import { Provider } from 'react-redux'
 import React from 'react'
 import mockDate from 'mockdate'
@@ -14,7 +14,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const navigate = jest.fn()
 const goBack = jest.fn()
 
-const props: Props = {
+const props: CreateTeamProps = {
     navigation: {
         navigate,
         goBack,

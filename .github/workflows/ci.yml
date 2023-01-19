@@ -21,7 +21,12 @@ jobs:
       - name: Install Dependencies
         run: |
           yarn install --frozen-lockfile
-      - name: Test
+      - name: Lint
         run: |
           yarn lint
+      - name: Check types
+        run: |
+          yarn tsc
+      - name: Test
+        run: |
           yarn test-ci

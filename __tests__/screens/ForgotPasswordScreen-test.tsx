@@ -1,7 +1,7 @@
 import * as UserData from '../../src/services/data/user'
+import { ForgotPasswordProps } from '../../src/types/navigation'
 import ForgotPasswordScreen from '../../src/screens/ForgotPasswordScreen'
 import { NavigationContainer } from '@react-navigation/native'
-import { Props } from '../../src/types/navigation'
 import React from 'react'
 import renderer from 'react-test-renderer'
 import { act, fireEvent, render } from '@testing-library/react-native'
@@ -11,7 +11,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const reset = jest.fn()
 const navigate = jest.fn()
 
-const props: Props = {
+const props: ForgotPasswordProps = {
     navigation: {
         navigate,
         reset,
