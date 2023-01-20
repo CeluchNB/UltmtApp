@@ -1,10 +1,10 @@
 import * as Constants from '../../utils/constants'
 import Point from '../../types/point'
 import { Realm } from '@realm/react'
-import { getLocalGameId } from './game'
 import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
 import { GameSchema, PointSchema } from '../../models'
+import { getGameById, getLocalGameId } from './game'
 
 const parsePoint = (schema: PointSchema): Point => {
     return JSON.parse(
@@ -24,6 +24,37 @@ const parsePoint = (schema: PointSchema): Point => {
             teamTwoActions: schema.teamTwoActions,
         }),
     )
+}
+
+export const createOfflinePoint = async (
+    pulling: boolean,
+    pointNumber: number,
+    gameId: string,
+): Promise<string> => {
+    const realm = await getRealm()
+
+    const game = await getGameById(gameId)
+    let pointId = new Realm.BSON.ObjectID().toHexString()
+    const point: Point = {
+        _id: pointId,
+        pointNumber,
+        teamOnePlayers: [],
+        teamTwoPlayers: [],
+        teamOneScore: 0,
+        teamTwoScore: 0,
+        teamOneActions: [],
+        teamTwoActions: [],
+        teamOneActive: true,
+        teamTwoActive: false,
+        pullingTeam: pulling ? game.teamOne : game.teamTwo,
+        receivingTeam: pulling ? game.teamTwo : game.teamOne,
+    }
+
+    realm.write(() => {
+        realm.create<PointSchema>('Point', point)
+    })
+
+    return pointId
 }
 
 export const savePoint = async (point: Point) => {

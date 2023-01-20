@@ -1,19 +1,20 @@
 import * as Constants from '../../utils/constants'
+import { DisplayUser } from '../../types/user'
 import { Game } from '../../types/game'
-import { GuestUser } from '../../types/user'
 import Point from '../../types/point'
 import { throwApiError } from '../../utils/service-utils'
-import { withGameToken } from './game'
 import { LiveServerAction, SavedServerAction } from '../../types/action'
+import { activeGameId, activeGameOffline, withGameToken } from './game'
+import {
+    createOfflinePoint as localCreateOfflinePoint,
+    getPointById as localGetPointById,
+    savePoint as localSavePoint,
+} from '../local/point'
 import {
     deleteAllActionsByPoint as localDeleteAllActionsByPoint,
     getActions as localGetActions,
     saveActions as localSaveActions,
 } from '../local/action'
-import {
-    getPointById as localGetPointById,
-    savePoint as localSavePoint,
-} from '../local/point'
 import {
     createPoint as networkCreatePoint,
     finishPoint as networkFinishPoint,
@@ -33,19 +34,37 @@ export const createPoint = async (
     pointNumber: number,
 ): Promise<Point> => {
     try {
-        const response = await withGameToken(
-            networkCreatePoint,
-            pulling,
-            pointNumber,
-        )
+        const offline = await activeGameOffline()
+        let pointId: string = ''
+        if (offline) {
+            pointId = await createOfflinePoint(pulling, pointNumber)
+        } else {
+            const response = await withGameToken(
+                networkCreatePoint,
+                pulling,
+                pointNumber,
+            )
 
-        const { point } = response.data
-        await localSavePoint(point)
-        const result = await localGetPointById(point._id)
+            const { point } = response.data
+            await localSavePoint(point)
+        }
+        const result = await localGetPointById(pointId)
         return result
     } catch (e: any) {
         return throwApiError(e, Constants.CREATE_POINT_ERROR)
     }
+}
+
+const createOfflinePoint = async (
+    pulling: boolean,
+    pointNumber: number,
+): Promise<string> => {
+    const gameId = await activeGameId()
+    if (!gameId) {
+        return throwApiError({}, Constants.GET_GAME_ERROR)
+    }
+    const id = await localCreateOfflinePoint(pulling, pointNumber, gameId)
+    return id
 }
 
 /**
@@ -56,21 +75,31 @@ export const createPoint = async (
  */
 export const setPlayers = async (
     pointId: string,
-    players: GuestUser[],
+    players: DisplayUser[],
 ): Promise<Point> => {
     try {
-        const response = await withGameToken(
-            networkSetPlayers,
-            pointId,
-            players,
-        )
-        const { point } = response.data
-        await localSavePoint(point)
-        const result = await localGetPointById(point._id)
+        const offline = await activeGameOffline()
+        if (offline) {
+            await updateOfflinePoint(pointId, { teamOnePlayers: players })
+        } else {
+            const response = await withGameToken(
+                networkSetPlayers,
+                pointId,
+                players,
+            )
+            const { point } = response.data
+            await localSavePoint(point)
+        }
+        const result = await localGetPointById(pointId)
         return result
     } catch (e) {
         return throwApiError(e, Constants.SET_PLAYERS_ERROR)
     }
+}
+
+const updateOfflinePoint = async (pointId: string, data: Partial<Point>) => {
+    const point = await localGetPointById(pointId)
+    await localSavePoint({ ...point, ...data })
 }
 
 /**
@@ -80,10 +109,16 @@ export const setPlayers = async (
  */
 export const finishPoint = async (pointId: string): Promise<Point> => {
     try {
-        const response = await withGameToken(networkFinishPoint, pointId)
-        const { point } = response.data
-        await localSavePoint(point)
-        const result = await localGetPointById(point._id)
+        const offline = await activeGameOffline()
+        if (offline) {
+            // finish the point
+        } else {
+            const response = await withGameToken(networkFinishPoint, pointId)
+            const { point } = response.data
+            await localSavePoint(point)
+        }
+
+        const result = await localGetPointById(pointId)
         return result
     } catch (e: any) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)

@@ -49,6 +49,7 @@ export const createOfflineGame = async (
     teamOnePlayers: DisplayUser[],
 ): Promise<string> => {
     const realm = await getRealm()
+
     let id: string = ''
     realm.write(() => {
         const game = realm.create<GameSchema>(

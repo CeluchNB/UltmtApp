@@ -150,7 +150,12 @@ describe('test set players', () => {
 
         await expect(
             setPlayers('point1', [
-                { firstName: 'First 1', lastName: 'Last 1' },
+                {
+                    _id: 'user1',
+                    firstName: 'First 1',
+                    lastName: 'Last 1',
+                    username: 'firstlast1',
+                },
             ]),
         ).rejects.toBeDefined()
     })
