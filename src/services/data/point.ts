@@ -4,19 +4,28 @@ import { Game } from '../../types/game'
 import Point from '../../types/point'
 import { throwApiError } from '../../utils/service-utils'
 import { withGameToken } from './game'
-import { LiveServerAction, SavedServerAction } from '../../types/action'
 import {
+    ActionType,
+    LiveServerAction,
+    SavedServerAction,
+} from '../../types/action'
+import {
+    activeGameId,
     activeGameId as localActiveGameId,
     activeGameOffline as localActiveGameOffline,
+    getGameById as localGetGameById,
+    updateScore as localUpdateScore,
 } from '../local/game'
 import {
     createOfflinePoint as localCreateOfflinePoint,
     getPointById as localGetPointById,
     savePoint as localSavePoint,
+    savePoint,
 } from '../local/point'
 import {
     deleteAllActionsByPoint as localDeleteAllActionsByPoint,
     getActions as localGetActions,
+    getActionsByPoint as localGetActionsByPoint,
     saveActions as localSaveActions,
 } from '../local/action'
 import {
@@ -117,6 +126,7 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
         const offline = await localActiveGameOffline()
         if (offline) {
             // finish the point
+            await finishOfflinePoint(pointId)
         } else {
             const response = await withGameToken(networkFinishPoint, pointId)
             const { point } = response.data
@@ -126,6 +136,34 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
         const result = await localGetPointById(pointId)
         return result
     } catch (e: any) {
+        return throwApiError(e, Constants.FINISH_POINT_ERROR)
+    }
+}
+
+const finishOfflinePoint = async (pointId: string) => {
+    try {
+        const gameId = await activeGameId()
+        const game = await localGetGameById(gameId)
+        const point = await localGetPointById(pointId)
+        const actions = await localGetActionsByPoint(pointId)
+        let teamOneScore = game.teamOneScore
+        let teamTwoScore = game.teamTwoScore
+
+        for (const a of actions) {
+            if (a.actionType === ActionType.TEAM_ONE_SCORE) {
+                teamOneScore += 1
+                teamOneScore += 1
+                break
+            } else if (a.actionType === ActionType.TEAM_TWO_SCORE) {
+                teamTwoScore += 1
+                teamTwoScore += 1
+                break
+            }
+        }
+
+        await localUpdateScore(gameId, teamOneScore, teamTwoScore)
+        await savePoint(point)
+    } catch (e) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)
     }
 }

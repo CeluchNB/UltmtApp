@@ -167,6 +167,7 @@ export const useGameEditor = () => {
             })
             .finally(() => {
                 setWaiting(false)
+                setError('')
             })
         return () => {
             unsubscribe()
@@ -259,7 +260,9 @@ export const useGameEditor = () => {
 
         dispatch(updateScore({ teamOneScore, teamTwoScore }))
         dispatch(setPoint(newPoint))
-        await nextPoint(point._id)
+        if (!offline) {
+            await nextPoint(point._id)
+        }
     }
 
     const onFinishGame = async () => {

@@ -206,7 +206,6 @@ export const deleteLocalAction = async (
     try {
         return await localDeleteAction(teamNumber, actionNumber, pointId)
     } catch (e) {
-        console.log('got error in delete', e)
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }
@@ -219,7 +218,6 @@ export const undoOfflineAction = async (
         const actionNumber = point.teamOneActions.length
         return await deleteLocalAction('one', actionNumber, pointId)
     } catch (e) {
-        console.log('got error in undo', e)
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }
