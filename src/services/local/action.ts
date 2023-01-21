@@ -5,6 +5,7 @@ import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
 import { ActionSchema, PointSchema } from '../../models'
 import { LiveServerAction, SavedServerAction } from '../../types/action'
+import { getPointById, savePoint } from './point'
 
 /**
  * Method to save actions locally
@@ -104,6 +105,16 @@ export const deleteAction = async (
     const action = actions.filtered(
         `teamNumber == "${teamNumber}" && actionNumber == ${actionNumber} && pointId == "${pointId}"`,
     )[0]
+
+    // remove action from point array
+    const point = await getPointById(pointId)
+    if (teamNumber === 'one') {
+        point.teamOneActions.splice(actionNumber - 1)
+    } else {
+        point.teamTwoActions.splice(actionNumber - 1)
+    }
+    await savePoint(point)
+
     const result = parseLiveAction(action)
     realm.write(() => {
         realm.delete(action)

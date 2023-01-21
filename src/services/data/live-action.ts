@@ -168,6 +168,31 @@ export const saveLocalAction = async (
 }
 
 /**
+ * Method to create an offline action
+ * @param action action data
+ * @param pointId point id
+ * @returns live server action
+ */
+export const createOfflineAction = async (
+    action: ClientAction,
+    pointId: string,
+): Promise<LiveServerAction> => {
+    try {
+        const point = await localGetPointById(pointId)
+        const liveAction: LiveServerAction = {
+            ...action,
+            teamNumber: 'one',
+            comments: [],
+            actionNumber: point.teamOneActions.length + 1,
+        }
+        const newAction = await saveLocalAction(liveAction, pointId)
+        return newAction
+    } catch (e) {
+        return throwApiError({}, Constants.GET_ACTION_ERROR)
+    }
+}
+
+/**
  * Deletes a single action
  * @param teamNumber team reporting action
  * @param actionNumber action number
@@ -181,6 +206,20 @@ export const deleteLocalAction = async (
     try {
         return await localDeleteAction(teamNumber, actionNumber, pointId)
     } catch (e) {
+        console.log('got error in delete', e)
+        return throwApiError({}, Constants.GET_ACTION_ERROR)
+    }
+}
+
+export const undoOfflineAction = async (
+    pointId: string,
+): Promise<LiveServerAction> => {
+    try {
+        const point = await localGetPointById(pointId)
+        const actionNumber = point.teamOneActions.length
+        return await deleteLocalAction('one', actionNumber, pointId)
+    } catch (e) {
+        console.log('got error in undo', e)
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }

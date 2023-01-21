@@ -3,8 +3,12 @@ import { DisplayUser } from '../../types/user'
 import { Game } from '../../types/game'
 import Point from '../../types/point'
 import { throwApiError } from '../../utils/service-utils'
+import { withGameToken } from './game'
 import { LiveServerAction, SavedServerAction } from '../../types/action'
-import { activeGameId, activeGameOffline, withGameToken } from './game'
+import {
+    activeGameId as localActiveGameId,
+    activeGameOffline as localActiveGameOffline,
+} from '../local/game'
 import {
     createOfflinePoint as localCreateOfflinePoint,
     getPointById as localGetPointById,
@@ -34,7 +38,7 @@ export const createPoint = async (
     pointNumber: number,
 ): Promise<Point> => {
     try {
-        const offline = await activeGameOffline()
+        const offline = await localActiveGameOffline()
         let pointId: string = ''
         if (offline) {
             pointId = await createOfflinePoint(pulling, pointNumber)
@@ -59,7 +63,7 @@ const createOfflinePoint = async (
     pulling: boolean,
     pointNumber: number,
 ): Promise<string> => {
-    const gameId = await activeGameId()
+    const gameId = await localActiveGameId()
     if (!gameId) {
         return throwApiError({}, Constants.GET_GAME_ERROR)
     }
@@ -78,7 +82,7 @@ export const setPlayers = async (
     players: DisplayUser[],
 ): Promise<Point> => {
     try {
-        const offline = await activeGameOffline()
+        const offline = await localActiveGameOffline()
         if (offline) {
             await updateOfflinePoint(pointId, { teamOnePlayers: players })
         } else {
@@ -99,7 +103,8 @@ export const setPlayers = async (
 
 const updateOfflinePoint = async (pointId: string, data: Partial<Point>) => {
     const point = await localGetPointById(pointId)
-    await localSavePoint({ ...point, ...data })
+    const submit = { ...point, ...data }
+    await localSavePoint(submit)
 }
 
 /**
@@ -109,7 +114,7 @@ const updateOfflinePoint = async (pointId: string, data: Partial<Point>) => {
  */
 export const finishPoint = async (pointId: string): Promise<Point> => {
     try {
-        const offline = await activeGameOffline()
+        const offline = await localActiveGameOffline()
         if (offline) {
             // finish the point
         } else {

@@ -4,7 +4,7 @@ import { Realm } from '@realm/react'
 import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
 import { GameSchema, PointSchema } from '../../models'
-import { getGameById, getLocalGameId } from './game'
+import { activeGameId, getGameById } from './game'
 
 const parsePoint = (schema: PointSchema): Point => {
     return JSON.parse(
@@ -59,7 +59,7 @@ export const createOfflinePoint = async (
 
 export const savePoint = async (point: Point) => {
     const realm = await getRealm()
-    const gameId = await getLocalGameId()
+    const gameId = await activeGameId()
     const game = await realm.objectForPrimaryKey<GameSchema>('Game', gameId)
 
     if (!game) {

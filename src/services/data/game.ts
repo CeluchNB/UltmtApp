@@ -1,5 +1,4 @@
 import * as Constants from '../../utils/constants'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import Point from '../../types/point'
@@ -9,11 +8,15 @@ import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
 import { DisplayUser, GuestUser } from '../../types/user'
 import {
+    activeGameId as localActiveGameId,
+    activeGameOffline as localActiveGameOffline,
     activeGames as localActiveGames,
     createOfflineGame as localCreateOfflineGame,
     deleteFullGame as localDeleteFullGame,
     getGameById as localGetGameById,
     saveGame as localSaveGame,
+    setActiveGameId as localSetActiveGameId,
+    setActiveGameOffline as localSetActiveGameOffline,
 } from '../local/game'
 import {
     addGuestPlayer as networkAddGuestPlayer,
@@ -84,8 +87,8 @@ export const createGame = async (
             await localSaveGame(game)
             await EncryptedStorage.setItem('game_token', token)
         }
-        await setActiveGameId(id)
-        await setActiveGameOffline(offline)
+        await localSetActiveGameId(id)
+        await localSetActiveGameOffline(offline)
         const result = await localGetGameById(id)
         return result
     } catch (e) {
@@ -100,8 +103,8 @@ export const createGame = async (
  */
 export const addGuestPlayer = async (player: GuestUser): Promise<Game> => {
     try {
-        const offline = await activeGameOffline()
-        const gameId = await activeGameId()
+        const offline = await localActiveGameOffline()
+        const gameId = await localActiveGameId()
         if (offline) {
             const game = await localGetGameById(gameId)
             const guest = createGuestPlayer(player)
@@ -168,8 +171,8 @@ export const joinGame = async (
         const { game, token } = response.data
         await localSaveGame(game)
         await EncryptedStorage.setItem('game_token', token)
-        await setActiveGameId(gameId)
-        await setActiveGameOffline(false)
+        await localSetActiveGameId(gameId)
+        await localSetActiveGameOffline(false)
         const result = await localGetGameById(game._id)
         return result
     } catch (e) {
@@ -183,7 +186,7 @@ export const joinGame = async (
  */
 export const finishGame = async (): Promise<Game> => {
     try {
-        const offline = await activeGameOffline()
+        const offline = await localActiveGameOffline()
         if (offline) {
             // TODO: handle offline
         }
@@ -227,6 +230,14 @@ export const getActiveGames = async (userId: string): Promise<Game[]> => {
 }
 
 /**
+ * Method to determine if currently active game is offline
+ * @returns boolean indicating current game is offline or not
+ */
+export const activeGameOffline = async (): Promise<boolean> => {
+    return await localActiveGameOffline()
+}
+
+/**
  * Method to do all necessary data to reactivate a game
  * @param gameId id of game
  * @returns game
@@ -250,45 +261,13 @@ export const resurrectActiveGame = async (
             await EncryptedStorage.setItem('game_token', token)
         }
         const result = await localGetGameById(localGame._id)
-        await setActiveGameId(localGame._id)
-        await setActiveGameOffline(localGame.offline)
+        await localSetActiveGameId(localGame._id)
+        await localSetActiveGameOffline(localGame.offline)
 
         return result
     } catch (e) {
         return throwApiError(e, Constants.GET_GAME_ERROR)
     }
-}
-
-/**
- * Method to determine if currently active game is offline
- * @returns boolean indicating current game is offline or not
- */
-export const activeGameOffline = async (): Promise<boolean> => {
-    return (await AsyncStorage.getItem('active_game_offline')) === 'true'
-}
-
-/**
- * Method to get the ObjectId of the current active game
- * @returns current active game id
- */
-export const activeGameId = async (): Promise<string> => {
-    return (await AsyncStorage.getItem('active_game_id')) || ''
-}
-
-/**
- * Method to set active game offline status
- * @param offline boolean
- */
-export const setActiveGameOffline = async (offline: boolean) => {
-    await AsyncStorage.setItem('active_game_offline', offline.toString())
-}
-
-/**
- * Method to set active game id
- * @param id string
- */
-export const setActiveGameId = async (id: string) => {
-    await AsyncStorage.setItem('active_game_id', id)
 }
 
 export const withGameToken = async (
