@@ -10,11 +10,8 @@ import {
     SavedServerAction,
 } from '../../types/action'
 import {
-    activeGameId,
     activeGameId as localActiveGameId,
     activeGameOffline as localActiveGameOffline,
-    getGameById as localGetGameById,
-    updateScore as localUpdateScore,
 } from '../local/game'
 import {
     createOfflinePoint as localCreateOfflinePoint,
@@ -142,26 +139,19 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
 
 const finishOfflinePoint = async (pointId: string) => {
     try {
-        const gameId = await activeGameId()
-        const game = await localGetGameById(gameId)
         const point = await localGetPointById(pointId)
         const actions = await localGetActionsByPoint(pointId)
-        let teamOneScore = game.teamOneScore
-        let teamTwoScore = game.teamTwoScore
 
         for (const a of actions) {
             if (a.actionType === ActionType.TEAM_ONE_SCORE) {
-                teamOneScore += 1
-                teamOneScore += 1
+                point.teamOneScore += 1
                 break
             } else if (a.actionType === ActionType.TEAM_TWO_SCORE) {
-                teamTwoScore += 1
-                teamTwoScore += 1
+                point.teamTwoScore += 1
                 break
             }
         }
 
-        await localUpdateScore(gameId, teamOneScore, teamTwoScore)
         await savePoint(point)
     } catch (e) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)

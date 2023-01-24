@@ -89,27 +89,26 @@ export const createOfflineGame = async (
 export const saveGame = async (game: Game) => {
     const realm = await getRealm()
     const schema = new GameSchema(game)
-    console.log('saving schema', schema)
     realm.write(() => {
         realm.create('Game', schema, Realm.UpdateMode.Modified)
     })
 }
 
-export const updateScore = async (
-    gameId: string,
-    teamOneScore: number,
-    teamTwoScore: number,
-) => {
-    const realm = await getRealm()
-    const game = await realm.objectForPrimaryKey<GameSchema>('Game', gameId)
-    if (!game) {
-        return
-    }
-    realm.write(() => {
-        game.teamOneScore = teamOneScore
-        game.teamTwoScore = teamTwoScore
-    })
-}
+// export const updateGameScore = async (
+//     gameId: string,
+//     teamOneScore: number,
+//     teamTwoScore: number,
+// ) => {
+//     const realm = await getRealm()
+//     const game = await realm.objectForPrimaryKey<GameSchema>('Game', gameId)
+//     if (!game) {
+//         return
+//     }
+//     realm.write(() => {
+//         game.teamOneScore = teamOneScore
+//         game.teamTwoScore = teamTwoScore
+//     })
+// }
 
 export const getGameById = async (
     gameId: string,

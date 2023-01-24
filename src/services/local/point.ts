@@ -40,8 +40,8 @@ export const createOfflinePoint = async (
         pointNumber,
         teamOnePlayers: [],
         teamTwoPlayers: [],
-        teamOneScore: 0,
-        teamTwoScore: 0,
+        teamOneScore: game.teamOneScore,
+        teamTwoScore: game.teamTwoScore,
         teamOneActions: [],
         teamTwoActions: [],
         teamOneActive: true,
@@ -69,8 +69,8 @@ export const savePoint = async (point: Point) => {
     realm.write(() => {
         const rPoint = realm.create('Point', point, Realm.UpdateMode.Modified)
         game.points = [...new Set([...game.points, rPoint._id])]
-        game.teamOneScore = point.teamOneScore
-        game.teamTwoScore = point.teamTwoScore
+        game.teamOneScore = rPoint.teamOneScore
+        game.teamTwoScore = rPoint.teamTwoScore
     })
 }
 
