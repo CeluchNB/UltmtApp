@@ -50,8 +50,13 @@ export const createOfflinePoint = async (
         receivingTeam: pulling ? game.teamTwo : game.teamOne,
     }
 
+    const gameRecord = await realm.objectForPrimaryKey<GameSchema>(
+        'Game',
+        gameId,
+    )
     realm.write(() => {
         realm.create<PointSchema>('Point', point)
+        gameRecord?.points.push(pointId)
     })
 
     return pointId

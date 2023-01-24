@@ -56,6 +56,7 @@ export const createPoint = async (
             )
 
             const { point } = response.data
+            pointId = point._id
             await localSavePoint(point)
         }
         const result = await localGetPointById(pointId)
@@ -140,6 +141,9 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
 const finishOfflinePoint = async (pointId: string) => {
     try {
         const point = await localGetPointById(pointId)
+        if (!point.teamOneActive) {
+            return
+        }
         const actions = await localGetActionsByPoint(pointId)
 
         for (const a of actions) {
@@ -152,6 +156,7 @@ const finishOfflinePoint = async (pointId: string) => {
             }
         }
 
+        point.teamOneActive = false
         await savePoint(point)
     } catch (e) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)

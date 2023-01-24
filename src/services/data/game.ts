@@ -188,13 +188,18 @@ export const finishGame = async (): Promise<Game> => {
     try {
         const offline = await localActiveGameOffline()
         if (offline) {
-            // TODO: handle offline
-        }
-        const response = await withGameToken(networkFinishGame)
-        const { game } = response.data
+            const gameId = await localActiveGameId()
+            const game = await localGetGameById(gameId)
+            game.teamOneActive = false
+            await localSaveGame(game)
+            return game
+        } else {
+            const response = await withGameToken(networkFinishGame)
+            const { game } = response.data
 
-        await localDeleteFullGame(game._id)
-        return game
+            await localDeleteFullGame(game._id)
+            return game
+        }
     } catch (e) {
         return throwApiError(e, Constants.FINISH_GAME_ERROR)
     }
@@ -249,7 +254,8 @@ export const resurrectActiveGame = async (
     try {
         const localGame = await localGetGameById(gameId)
         if (localGame.offline) {
-            // handle offline game
+            localGame.teamOneActive = true
+            await localSaveGame(localGame)
         } else {
             const response = await withToken(
                 networkReactivateGame,
