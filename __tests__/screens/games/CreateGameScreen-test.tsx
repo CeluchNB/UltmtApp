@@ -35,99 +35,121 @@ const props: CreateGameProps = {
     route: { params: { teamOne, teamTwo } } as any,
 }
 
-beforeAll(() => {
-    MockDate.set('2022')
-    store.dispatch(
-        setProfile({
-            _id: 'id1',
-            firstName: 'First',
-            lastName: 'Last',
-            email: 'email@email.com',
-            username: 'username',
-            error: undefined,
-            leaveManagerError: undefined,
-            privateProfile: false,
-            openToRequests: true,
-            playerTeams: [],
-            managerTeams: [],
-            archiveTeams: [],
-            requests: [],
-            toggleRosterStatusLoading: false,
-            editLoading: false,
-            fetchProfileLoading: false,
-        }),
-    )
-    store.dispatch(
-        setTeamOne({
-            ...teamOne,
-            managers: [],
-            players: [],
-            seasonNumber: 2,
-            continuationId: 'place1name1',
-            rosterOpen: true,
-            requests: [],
-            games: [],
-        }),
-    )
+jest.mock('@react-native-community/netinfo', () => {
+    return {
+        useNetInfo: () => {
+            return {
+                isInternetReachable: true,
+            }
+        },
+    }
 })
 
-afterAll(() => {
-    MockDate.reset()
+jest.mock('react-native-paper', () => {
+    const RNPaper = jest.requireActual('react-native-paper')
+    return {
+        ...RNPaper,
+        Tooltip: () => {
+            return <div>Network status indicator</div>
+        },
+    }
 })
 
-it('should match snapshot', () => {
-    const snapshot = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <CreateGameScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    expect(snapshot.toJSON()).toMatchSnapshot()
-})
-
-it('should create game', async () => {
-    const spy = jest
-        .spyOn(GameData, 'createGame')
-        .mockReturnValue(Promise.resolve({} as any))
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <CreateGameScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const button = getByText('start')
-    fireEvent.press(button)
-
-    // It would be better if I could wait for
-    // a loading indicator to be gone
-    await act(async () => {})
-
-    expect(spy).toHaveBeenCalledWith(
-        {
-            teamOne,
-            teamTwo,
-            creator: {
+describe('CreateGameScreen', () => {
+    beforeAll(() => {
+        MockDate.set('2022')
+        store.dispatch(
+            setProfile({
                 _id: 'id1',
                 firstName: 'First',
                 lastName: 'Last',
+                email: 'email@email.com',
                 username: 'username',
+                error: undefined,
+                leaveManagerError: undefined,
+                privateProfile: false,
+                openToRequests: true,
+                playerTeams: [],
+                managerTeams: [],
+                archiveTeams: [],
+                requests: [],
+                toggleRosterStatusLoading: false,
+                editLoading: false,
+                fetchProfileLoading: false,
+            }),
+        )
+        store.dispatch(
+            setTeamOne({
+                ...teamOne,
+                managers: [],
+                players: [],
+                seasonNumber: 2,
+                continuationId: 'place1name1',
+                rosterOpen: true,
+                requests: [],
+                games: [],
+            }),
+        )
+    })
+
+    afterAll(() => {
+        MockDate.reset()
+    })
+
+    it('should match snapshot', () => {
+        const snapshot = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <CreateGameScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        expect(snapshot.toJSON()).toMatchSnapshot()
+    })
+
+    it('should create game', async () => {
+        const spy = jest
+            .spyOn(GameData, 'createGame')
+            .mockReturnValue(Promise.resolve({} as any))
+        const { getByText } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <CreateGameScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        const button = getByText('start')
+        fireEvent.press(button)
+
+        // It would be better if I could wait for
+        // a loading indicator to be gone
+        await act(async () => {})
+
+        expect(spy).toHaveBeenCalledWith(
+            {
+                teamOne,
+                teamTwo,
+                creator: {
+                    _id: 'id1',
+                    firstName: 'First',
+                    lastName: 'Last',
+                    username: 'username',
+                },
+                scoreLimit: 15,
+                halfScore: 8,
+                softcapMins: 75,
+                hardcapMins: 90,
+                playersPerPoint: 7,
+                timeoutPerHalf: 1,
+                floaterTimeout: true,
+                teamTwoDefined: true,
+                startTime: new Date(),
+                tournament: undefined,
             },
-            scoreLimit: 15,
-            halfScore: 8,
-            softcapMins: 75,
-            hardcapMins: 90,
-            playersPerPoint: 7,
-            timeoutPerHalf: 1,
-            floaterTimeout: true,
-            teamTwoDefined: true,
-            startTime: new Date(),
-            tournament: undefined,
-        },
-        false,
-        [],
-    )
+            false,
+            [],
+        )
+    })
 })

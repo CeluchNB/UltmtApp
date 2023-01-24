@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match snapshot 1`] = `
+exports[`CreateGameScreen should match snapshot 1`] = `
 <RCTSafeAreaView
   style={
     {
@@ -17,7 +17,14 @@ exports[`should match snapshot 1`] = `
       }
     }
   >
-    <View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "alignSelf": "center",
+        }
+      }
+    >
       <Text
         numberOfLines={1}
         style={
@@ -63,6 +70,165 @@ exports[`should match snapshot 1`] = `
       >
         Name 2
       </Text>
+    </View>
+    <View
+      style={
+        {
+          "alignSelf": "flex-end",
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "display": "flex",
+            "flexDirection": "row",
+          }
+        }
+      >
+        <View
+          collapsable={false}
+          style={
+            {
+              "alignSelf": undefined,
+              "bottom": undefined,
+              "left": undefined,
+              "position": undefined,
+              "right": undefined,
+              "shadowColor": "#000",
+              "shadowOffset": {
+                "height": 0,
+                "width": 0,
+              },
+              "shadowOpacity": 0,
+              "shadowRadius": 0,
+              "top": undefined,
+            }
+          }
+        >
+          <View
+            collapsable={false}
+            style={
+              {
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 0,
+                "shadowRadius": 0,
+              }
+            }
+          >
+            <View
+              collapsable={false}
+              style={
+                {
+                  "backgroundColor": undefined,
+                  "borderColor": "rgba(121, 116, 126, 1)",
+                  "borderRadius": 18,
+                  "borderWidth": 0,
+                  "elevation": 0,
+                  "height": 36,
+                  "margin": 0,
+                  "overflow": "hidden",
+                  "width": 36,
+                }
+              }
+            >
+              <View
+                accessibilityComponentType="button"
+                accessibilityRole="button"
+                accessibilityState={
+                  {
+                    "disabled": true,
+                  }
+                }
+                accessibilityTraits="button"
+                accessible={true}
+                centered={true}
+                collapsable={false}
+                focusable={true}
+                hitSlop={
+                  {
+                    "bottom": 6,
+                    "left": 6,
+                    "right": 6,
+                    "top": 6,
+                  }
+                }
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  [
+                    {
+                      "overflow": "hidden",
+                    },
+                    false,
+                    [
+                      {
+                        "alignItems": "center",
+                        "flexGrow": 1,
+                        "justifyContent": "center",
+                      },
+                      {
+                        "borderRadius": 18,
+                      },
+                    ],
+                  ]
+                }
+              >
+                <Text
+                  accessibilityElementsHidden={true}
+                  allowFontScaling={false}
+                  importantForAccessibility="no-hide-descendants"
+                  pointerEvents="none"
+                  selectable={false}
+                  style={
+                    [
+                      {
+                        "color": "#40dd50",
+                        "fontSize": 20,
+                      },
+                      [
+                        {
+                          "lineHeight": 20,
+                          "transform": [
+                            {
+                              "scaleX": 1,
+                            },
+                          ],
+                        },
+                        {
+                          "backgroundColor": "transparent",
+                        },
+                      ],
+                      {
+                        "fontFamily": "Material Design Icons",
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                      },
+                      {},
+                    ]
+                  }
+                >
+                  󰣸
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+        <div>
+          Network status indicator
+        </div>
+      </View>
     </View>
     <View
       style={
