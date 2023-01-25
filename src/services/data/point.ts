@@ -123,7 +123,6 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
     try {
         const offline = await localActiveGameOffline()
         if (offline) {
-            // finish the point
             await finishOfflinePoint(pointId)
         } else {
             const response = await withGameToken(networkFinishPoint, pointId)
