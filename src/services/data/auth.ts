@@ -69,7 +69,7 @@ export const refreshToken = async (): Promise<string> => {
     } catch (error: any) {
         await EncryptedStorage.removeItem('access_token')
         await EncryptedStorage.removeItem('refresh_token')
-        throw throwApiError(error, Constants.GENERIC_GET_TOKEN_ERROR)
+        return throwApiError(error, Constants.GENERIC_GET_TOKEN_ERROR)
     }
 }
 

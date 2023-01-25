@@ -7,6 +7,7 @@ import {
     isLoggedIn,
     login,
     logout,
+    refreshToken,
     refreshTokenIfNecessary,
     withToken,
 } from '../../../src/services/data/auth'
@@ -112,58 +113,63 @@ describe('should handle is logged in', () => {
 })
 
 // TODO: fix or delete this test
-// it('should handle refresh token with refresh token', async () => {
-//     jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
-//         Promise.resolve(validToken),
-//     )
-//     jest.spyOn(AuthServices, 'refreshToken').mockReturnValueOnce(
-//         Promise.resolve({
-//             data: {
-//                 tokens: { access: validToken, refresh: 'refresh.token.adsf' },
-//             },
-//             status: 200,
-//             statusText: 'Good',
-//             headers: {},
-//             config: {},
-//         }),
-//     )
+describe('refresh token', () => {
+    it('should handle refresh token with refresh token', async () => {
+        jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
+            Promise.resolve(validToken),
+        )
+        jest.spyOn(AuthServices, 'refreshToken').mockReturnValueOnce(
+            Promise.resolve({
+                data: {
+                    tokens: {
+                        access: validToken,
+                        refresh: 'refresh.token.adsf',
+                    },
+                },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
 
-//     const token = await refreshToken()
-//     expect(token).toBe(validToken)
-//     expect(RNEncryptedStorage.setItem).toBeCalledWith(
-//         'access_token',
-//         validToken,
-//     )
-//     expect(RNEncryptedStorage.setItem).toBeCalledWith(
-//         'refresh_token',
-//         'refresh.token.adsf',
-//     )
-// })
+        const token = await refreshToken()
+        expect(token).toBe(validToken)
+        expect(RNEncryptedStorage.setItem).toBeCalledWith(
+            'access_token',
+            validToken,
+        )
+        expect(RNEncryptedStorage.setItem).toBeCalledWith(
+            'refresh_token',
+            'refresh.token.adsf',
+        )
+    })
 
-// it('should handle refresh token with unfound refresh token', async () => {
-//     jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
-//         Promise.resolve(''),
-//     )
+    it('should handle refresh token with unfound refresh token', async () => {
+        jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
+            Promise.resolve(''),
+        )
 
-//     expect(refreshToken()).rejects.toThrow()
-// })
+        await expect(refreshToken()).rejects.toBeDefined()
+    })
 
-// it('should handle refresh token with network error', async () => {
-//     jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
-//         Promise.resolve(validToken),
-//     )
-//     jest.spyOn(AuthServices, 'refreshToken').mockReturnValueOnce(
-//         Promise.reject({
-//             data: {},
-//             status: 400,
-//             statusText: 'Bad',
-//             headers: {},
-//             config: {},
-//         }),
-//     )
+    it('should handle refresh token with network error', async () => {
+        jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(
+            Promise.resolve(validToken),
+        )
+        jest.spyOn(AuthServices, 'refreshToken').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
 
-//     expect(refreshToken()).rejects.toThrow()
-// })
+        await expect(refreshToken()).rejects.toBeDefined()
+    })
+})
 
 describe('should handle with token wrapper', () => {
     const networkCall = jest.fn()
