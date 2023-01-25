@@ -6,6 +6,7 @@ import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storag
 import { game } from '../../../fixtures/data'
 import jwt from 'jsonwebtoken'
 import {
+    activeGameOffline,
     addGuestPlayer,
     createGame,
     finishGame,
@@ -35,9 +36,10 @@ const point: Point = {
     receivingTeam: { name: 'Team 2' },
 }
 
+jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(Promise.resolve())
+
 afterEach(() => {
-    RNEncryptedStorage.getItem.mockReset()
-    RNEncryptedStorage.setItem.mockReset()
+    jest.resetAllMocks()
 })
 
 describe('test search games', () => {
@@ -85,9 +87,6 @@ describe('test create game', () => {
                 config: {},
             }),
         )
-        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValueOnce(
-            Promise.resolve(undefined),
-        )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
             Promise.resolve({ ...game, offline: false }),
         )
@@ -111,13 +110,21 @@ describe('test create game', () => {
             message: Constants.CREATE_GAME_ERROR,
         })
     })
+
+    it('offline creation', async () => {
+        jest.spyOn(LocalGameServices, 'createOfflineGame').mockReturnValueOnce(
+            Promise.resolve('game1'),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
+            Promise.resolve({ ...game, offline: false }),
+        )
+        const result = await createGame({} as any, true, [])
+        expect(result).toMatchObject(game)
+    })
 })
 
 describe('test add guest player', () => {
     it('with network success', async () => {
-        RNEncryptedStorage.getItem.mockReturnValueOnce(
-            Promise.resolve(validToken),
-        )
         const updatedGame = {
             ...game,
             teamOnePlayers: [
@@ -143,8 +150,11 @@ describe('test add guest player', () => {
             }),
         )
 
-        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValueOnce(
-            Promise.resolve(undefined),
+        jest.spyOn(LocalGameServices, 'activeGameOffline').mockReturnValueOnce(
+            Promise.resolve(false),
+        )
+        jest.spyOn(LocalGameServices, 'activeGameId').mockReturnValue(
+            Promise.resolve('game1'),
         )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
             Promise.resolve({ ...updatedGame, offline: false }),
@@ -176,6 +186,39 @@ describe('test add guest player', () => {
         await expect(
             addGuestPlayer({ firstName: 'First 1', lastName: 'Last 1' }),
         ).rejects.toMatchObject({ message: Constants.ADD_GUEST_ERROR })
+    })
+
+    it('successful offline addition', async () => {
+        const updatedGame = {
+            ...game,
+            teamOnePlayers: [
+                ...game.teamOnePlayers,
+                {
+                    _id: 'user1',
+                    firstName: 'First 1',
+                    lastName: 'Last 1',
+                    username: 'user1',
+                },
+            ],
+        }
+        jest.spyOn(LocalGameServices, 'activeGameOffline').mockReturnValueOnce(
+            Promise.resolve(true),
+        )
+        jest.spyOn(LocalGameServices, 'activeGameId').mockReturnValue(
+            Promise.resolve('game1'),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById')
+            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
+            .mockReturnValueOnce(
+                Promise.resolve({ ...updatedGame, offline: true }),
+            )
+        const result = await addGuestPlayer({
+            _id: 'user1',
+            firstName: 'First 1',
+            lastName: 'Last 1',
+            username: 'user1',
+        })
+        expect(result).toMatchObject(updatedGame)
     })
 })
 
@@ -257,9 +300,6 @@ describe('test join game', () => {
             }),
         )
 
-        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValueOnce(
-            Promise.resolve(undefined),
-        )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
             Promise.resolve({ ...game, offline: false }),
         )
@@ -326,6 +366,21 @@ describe('test finish game', () => {
             message: Constants.FINISH_GAME_ERROR,
         })
     })
+
+    it('successful offline finish', async () => {
+        jest.spyOn(LocalGameServices, 'getGameById')
+            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
+            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
+        jest.spyOn(LocalGameServices, 'activeGameOffline').mockReturnValueOnce(
+            Promise.resolve(true),
+        )
+        jest.spyOn(LocalGameServices, 'activeGameId').mockReturnValueOnce(
+            Promise.resolve('game1'),
+        )
+
+        const result = await finishGame()
+        expect(result).toMatchObject({ ...game, teamOneActive: false })
+    })
 })
 
 describe('get game by team', () => {
@@ -380,13 +435,20 @@ describe('get active games', () => {
     })
 })
 
+describe('get active game offline', () => {
+    it('with return value', async () => {
+        jest.spyOn(LocalGameServices, 'activeGameOffline').mockReturnValueOnce(
+            Promise.resolve(true),
+        )
+        const result = await activeGameOffline()
+        expect(result).toBe(true)
+    })
+})
+
 describe('resurrect active game', () => {
     it('with valid data', async () => {
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
             Promise.resolve({ ...game, offline: false }),
-        )
-        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(
-            Promise.resolve(),
         )
         jest.spyOn(GameServices, 'reactivateGame').mockReturnValue(
             Promise.resolve({
@@ -397,7 +459,7 @@ describe('resurrect active game', () => {
                 headers: {},
             }),
         )
-        RNEncryptedStorage.setItem.mockReturnValue(Promise.resolve())
+        RNEncryptedStorage.setItem.mockReturnValueOnce(Promise.resolve())
         const result = await resurrectActiveGame('game1', 'team1')
         expect(result).toMatchObject(game)
     })
@@ -410,6 +472,15 @@ describe('resurrect active game', () => {
         await expect(
             resurrectActiveGame('game1', 'team1'),
         ).rejects.toMatchObject({ message: Constants.GET_GAME_ERROR })
+    })
+
+    it('successful offline resurrect', async () => {
+        jest.spyOn(LocalGameServices, 'getGameById')
+            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
+            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
+        RNEncryptedStorage.setItem.mockReturnValueOnce(Promise.resolve())
+        const result = await resurrectActiveGame('game1', 'team1')
+        expect(result).toMatchObject(game)
     })
 })
 
