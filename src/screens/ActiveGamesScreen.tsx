@@ -38,35 +38,37 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
 
     const navigateToGame = async (activeGame: Game) => {
         // get game data
-        const game = await resurrectActiveGame(
-            activeGame._id,
-            getMyTeamId(activeGame),
-        )
-        // get point data
-        // either an in progress point or a new point
-        // actions handled in useGameEditor
-        const point = await getActivePointForGame(game)
-        const myTeamNumber = getTeamNumber(game)
-        dispatch(setGame(game))
-        dispatch(setTeam(myTeamNumber))
-        if (!point) {
-            dispatch(resetPoint())
-            navigation.navigate('LiveGame', { screen: 'FirstPoint' })
-            return
-        }
-        dispatch(setPoint(point))
-        if (myTeamNumber === 'one' && point?.teamOneActions.length === 0) {
-            navigation.navigate('LiveGame', { screen: 'SelectPlayers' })
-            return
-        } else if (
-            myTeamNumber === 'two' &&
-            point?.teamTwoActions.length === 0
-        ) {
-            navigation.navigate('LiveGame', { screen: 'SelectPlayers' })
-            return
-        }
+        try {
+            const game = await resurrectActiveGame(
+                activeGame._id,
+                getMyTeamId(activeGame),
+            )
+            // get point data
+            // either an in progress point or a new point
+            // actions handled in useGameEditor
+            const point = await getActivePointForGame(game)
+            const myTeamNumber = getTeamNumber(game)
+            dispatch(setGame(game))
+            dispatch(setTeam(myTeamNumber))
+            if (!point) {
+                dispatch(resetPoint())
+                navigation.navigate('LiveGame', { screen: 'FirstPoint' })
+                return
+            }
+            dispatch(setPoint(point))
+            if (myTeamNumber === 'one' && point?.teamOneActions.length === 0) {
+                navigation.navigate('LiveGame', { screen: 'SelectPlayers' })
+                return
+            } else if (
+                myTeamNumber === 'two' &&
+                point?.teamTwoActions.length === 0
+            ) {
+                navigation.navigate('LiveGame', { screen: 'SelectPlayers' })
+                return
+            }
 
-        navigation.navigate('LiveGame', { screen: 'LivePointEdit' })
+            navigation.navigate('LiveGame', { screen: 'LivePointEdit' })
+        } catch (e) {}
     }
 
     const styles = StyleSheet.create({

@@ -2,6 +2,7 @@ import * as Constants from '../../utils/constants'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import Point from '../../types/point'
+import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
@@ -192,12 +193,14 @@ export const finishGame = async (): Promise<Game> => {
             const game = await localGetGameById(gameId)
             game.teamOneActive = false
             await localSaveGame(game)
+            closeRealm()
             return game
         } else {
             const response = await withGameToken(networkFinishGame)
             const { game } = response.data
 
             await localDeleteFullGame(game._id)
+            closeRealm()
             return game
         }
     } catch (e) {

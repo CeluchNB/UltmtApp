@@ -4,8 +4,8 @@ import { ClientAction, SubscriptionObject } from '../../types/action'
 import { Socket, io } from 'socket.io-client'
 
 let socket: Socket
-const getSocket = async (): Promise<Socket> => {
-    if (!socket) {
+const getSocket = async (forceNew = false): Promise<Socket> => {
+    if (!socket || forceNew) {
         const token = (await EncryptedStorage.getItem('game_token')) || ''
         socket = io(WEBSOCKET_URL, {
             extraHeaders: { Authorization: `Bearer ${token}` },
@@ -33,7 +33,7 @@ const performOnceConnected = (
 }
 
 export const joinPoint = async (gameId: string, pointId: string) => {
-    const pointSocket = await getSocket()
+    const pointSocket = await getSocket(true)
     performOnceConnected(pointSocket, () =>
         pointSocket.emit('join:point', gameId, pointId),
     )
