@@ -23,6 +23,10 @@ const SCHEMAS = [
 
 const config = {
     schema: SCHEMAS,
+    shouldCompactOnLaunch: function (_totalSize: number, _usedSpace: number) {
+        // TODO: should implement this, but never seems to be called?
+        return false
+    },
 }
 
 let realm: Realm | undefined

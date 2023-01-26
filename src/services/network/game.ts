@@ -1,7 +1,7 @@
-import { CreateGame } from '../../types/game'
 import { GuestUser } from '../../types/user'
 import { addQueryParam } from '../../utils/service-utils'
 import { API_KEY, API_URL_V1 } from 'react-native-dotenv'
+import { CreateFullGame, CreateGame } from '../../types/game'
 import axios, { AxiosResponse } from 'axios'
 
 export const searchGames = async (
@@ -111,6 +111,24 @@ export const reactivateGame = async (
             headers: {
                 'X-API-Key': API_KEY,
                 Authorization: `Bearer ${userJwt}`,
+            },
+        },
+    )
+}
+
+export const pushOfflineGame = async (
+    token: string,
+    gameData: CreateFullGame,
+): Promise<AxiosResponse> => {
+    return await axios.post(
+        `${API_URL_V1}/game/full`,
+        {
+            gameData,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
             },
         },
     )

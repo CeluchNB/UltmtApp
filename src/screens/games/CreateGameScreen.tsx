@@ -2,6 +2,7 @@ import { AppDispatch } from '../../store/store'
 import { CreateGame } from '../../types/game'
 import { CreateGameProps } from '../../types/navigation'
 import LabeledFormInput from '../../components/molecules/LabeledFormInput'
+import NetInfoIndicator from '../../components/atoms/NetInfoIndicator'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { Tournament } from '../../types/tournament'
@@ -113,6 +114,13 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
             width: '80%',
             alignSelf: 'center',
         },
+        titleContainer: {
+            alignSelf: 'center',
+            alignItems: 'center',
+        },
+        netInfoContainer: {
+            alignSelf: 'flex-end',
+        },
         teamItemContainer: {
             display: 'flex',
             flexDirection: 'row',
@@ -122,10 +130,13 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.screen}>
             <View style={styles.container}>
-                <View>
+                <View style={styles.titleContainer}>
                     <ScreenTitle title={teamOne.name} />
                     <ScreenTitle title="vs." />
                     <ScreenTitle title={teamTwo.name} />
+                </View>
+                <View style={styles.netInfoContainer}>
+                    <NetInfoIndicator />
                 </View>
                 <Controller
                     name="offline"

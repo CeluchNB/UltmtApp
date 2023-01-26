@@ -8,12 +8,14 @@ import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storag
 import { point } from '../../../fixtures/data'
 import {
     ActionType,
+    ClientAction,
     LiveServerAction,
     SubscriptionObject,
 } from '../../../src/types/action'
 import {
     addAction,
     addLiveComment,
+    createOfflineAction,
     deleteLiveComment,
     deleteLocalAction,
     joinPoint,
@@ -21,6 +23,7 @@ import {
     saveLocalAction,
     subscribe,
     undoAction,
+    undoOfflineAction,
     unsubscribe,
 } from '../../../src/services/data/live-action'
 
@@ -410,5 +413,101 @@ describe('delete local action', () => {
         await expect(
             deleteLocalAction('one', 1, 'point1'),
         ).rejects.toMatchObject({ message: Constants.GET_ACTION_ERROR })
+    })
+})
+
+describe('create offline action', () => {
+    it('successfully', async () => {
+        const action: LiveServerAction = {
+            actionNumber: 1,
+            actionType: ActionType.CATCH,
+            teamNumber: 'one',
+            playerOne: {
+                _id: 'user1',
+                firstName: 'First 1',
+                lastName: 'Last 1',
+                username: 'user1',
+            },
+            playerTwo: {
+                _id: 'user2',
+                firstName: 'First 2',
+                lastName: 'Last 2',
+                username: 'user2',
+            },
+            tags: [],
+            comments: [],
+        }
+
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(point),
+        )
+        jest.spyOn(LocalActionServices, 'upsertAction').mockReturnValueOnce(
+            Promise.resolve(action),
+        )
+
+        const result = await createOfflineAction(
+            {
+                tags: [],
+                actionType: action.actionType,
+                playerOne: action.playerOne,
+                playerTwo: action.playerTwo,
+            },
+            'point1',
+        )
+
+        expect(result).toMatchObject(action)
+    })
+
+    it('with failure', async () => {
+        jest.spyOn(LocalPointServices, 'getPointById').mockRejectedValueOnce(
+            Promise.resolve(),
+        )
+
+        await expect(
+            createOfflineAction({} as ClientAction, 'point1'),
+        ).rejects.toMatchObject({ message: Constants.GET_ACTION_ERROR })
+    })
+})
+
+describe('undo offline action', () => {
+    it('with success', async () => {
+        const action: LiveServerAction = {
+            actionNumber: 1,
+            actionType: ActionType.CATCH,
+            teamNumber: 'one',
+            playerOne: {
+                _id: 'user1',
+                firstName: 'First 1',
+                lastName: 'Last 1',
+                username: 'user1',
+            },
+            playerTwo: {
+                _id: 'user2',
+                firstName: 'First 2',
+                lastName: 'Last 2',
+                username: 'user2',
+            },
+            tags: [],
+            comments: [],
+        }
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(point),
+        )
+        jest.spyOn(LocalActionServices, 'deleteAction').mockReturnValueOnce(
+            Promise.resolve(action),
+        )
+
+        const result = await undoOfflineAction('point1')
+        expect(result).toMatchObject(action)
+    })
+
+    it('with failure', async () => {
+        jest.spyOn(LocalPointServices, 'getPointById').mockRejectedValueOnce(
+            Promise.resolve(),
+        )
+
+        await expect(undoOfflineAction('point1')).rejects.toMatchObject({
+            message: Constants.GET_ACTION_ERROR,
+        })
     })
 })

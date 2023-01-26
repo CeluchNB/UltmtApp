@@ -1,8 +1,7 @@
 import * as Constants from '../../utils/constants'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DisplayUser } from '../../types/user'
-import EncryptedStorage from 'react-native-encrypted-storage'
 import { getRealm } from '../../models/realm'
-import jwt_decode from 'jwt-decode'
 import { throwApiError } from '../../utils/service-utils'
 import { ActionSchema, GameSchema, PointSchema } from '../../models'
 import { CreateGame, Game } from '../../types/game'
@@ -37,11 +36,36 @@ const parseGame = (schema: GameSchema): Game & { offline: boolean } => {
     )
 }
 
-export const getLocalGameId = async (): Promise<string> => {
-    const token = (await EncryptedStorage.getItem('game_token')) || ''
-    const data = jwt_decode(token) as { sub: string }
+/**
+ * Method to determine if currently active game is offline
+ * @returns boolean indicating current game is offline or not
+ */
+export const activeGameOffline = async (): Promise<boolean> => {
+    return (await AsyncStorage.getItem('active_game_offline')) === 'true'
+}
 
-    return data.sub
+/**
+ * Method to get the ObjectId of the current active game
+ * @returns current active game id
+ */
+export const activeGameId = async (): Promise<string> => {
+    return (await AsyncStorage.getItem('active_game_id')) || ''
+}
+
+/**
+ * Method to set active game offline status
+ * @param offline boolean
+ */
+export const setActiveGameOffline = async (offline: boolean) => {
+    await AsyncStorage.setItem('active_game_offline', offline.toString())
+}
+
+/**
+ * Method to set active game id
+ * @param id string
+ */
+export const setActiveGameId = async (id: string) => {
+    await AsyncStorage.setItem('active_game_id', id)
 }
 
 export const createOfflineGame = async (
@@ -49,6 +73,7 @@ export const createOfflineGame = async (
     teamOnePlayers: DisplayUser[],
 ): Promise<string> => {
     const realm = await getRealm()
+
     let id: string = ''
     realm.write(() => {
         const game = realm.create<GameSchema>(
@@ -63,8 +88,17 @@ export const createOfflineGame = async (
 
 export const saveGame = async (game: Game) => {
     const realm = await getRealm()
+    const gameRecord = await realm.objectForPrimaryKey<GameSchema>(
+        'Game',
+        game._id,
+    )
+    let offline = false
+    if (gameRecord) {
+        offline = gameRecord.offline
+    }
+    const schema = new GameSchema(game, offline)
     realm.write(() => {
-        realm.create('Game', new GameSchema(game), Realm.UpdateMode.Modified)
+        realm.create('Game', schema, Realm.UpdateMode.Modified)
     })
 }
 
@@ -79,11 +113,15 @@ export const getGameById = async (
     return parseGame(game)
 }
 
-export const activeGames = async (userId: string): Promise<Game[]> => {
+export const activeGames = async (
+    userId: string,
+): Promise<(Game & { offline: boolean })[]> => {
     const realm = await getRealm()
     const games = await realm.objects<GameSchema>('Game')
 
-    return games.filter(g => g.creator._id === userId)
+    return games
+        .filter(g => g.creator._id === userId)
+        .map(game => parseGame(game))
 }
 
 export const deleteFullGame = async (gameId: string): Promise<void> => {

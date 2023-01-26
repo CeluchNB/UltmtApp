@@ -1,6 +1,7 @@
 import * as Constants from '../utils/constants'
 import { DisplayUser } from '../types/user'
 import React from 'react'
+import { activeGameOffline } from '../services/data/game'
 import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import {
@@ -12,6 +13,7 @@ import {
 } from '../types/action'
 import {
     addAction,
+    createOfflineAction,
     deleteLocalAction,
     getLocalActionsByPoint,
     joinPoint,
@@ -19,6 +21,7 @@ import {
     saveLocalAction,
     subscribe,
     undoAction,
+    undoOfflineAction,
     unsubscribe,
 } from '../services/data/live-action'
 import { createPoint, finishPoint } from '../services/data/point'
@@ -59,6 +62,7 @@ export const useGameEditor = () => {
     const [waiting, setWaiting] = React.useState(false)
     const [error, setError] = React.useState('')
     const [actions, setActions] = React.useState<LiveServerAction[]>([])
+    const [offline, setOffline] = React.useState(false)
 
     const actionSideEffects = React.useCallback(
         (data: LiveServerAction) => {
@@ -96,12 +100,12 @@ export const useGameEditor = () => {
         [team, dispatch],
     )
 
-    const subscriptions: SubscriptionObject = React.useMemo(() => {
-        const successfulResponse = () => {
-            setWaiting(false)
-            setError('')
-        }
+    const successfulResponse = () => {
+        setWaiting(false)
+        setError('')
+    }
 
+    const subscriptions: SubscriptionObject = React.useMemo(() => {
         return {
             client: async data => {
                 try {
@@ -138,6 +142,9 @@ export const useGameEditor = () => {
 
     React.useEffect(() => {
         setWaiting(true)
+        activeGameOffline().then(isOffline => {
+            setOffline(isOffline)
+        })
         getLocalActionsByPoint(point._id)
             .then(pointActions => {
                 for (const action of pointActions) {
@@ -158,8 +165,9 @@ export const useGameEditor = () => {
             .then(() => {
                 return subscribe(subscriptions)
             })
-            .then(() => {
+            .finally(() => {
                 setWaiting(false)
+                setError('')
             })
         return () => {
             unsubscribe()
@@ -188,12 +196,19 @@ export const useGameEditor = () => {
         return actions.filter(a => a.teamNumber === team)
     }, [actions, team])
 
-    const onAction = (action: ClientAction) => {
+    const onAction = async (action: ClientAction) => {
         setWaiting(true)
-        addAction(action, point._id)
+        if (offline) {
+            const newAction = await createOfflineAction(action, point._id)
+            actionSideEffects(newAction)
+            successfulResponse()
+            setActions(immutablePush(newAction))
+        } else {
+            addAction(action, point._id)
+        }
     }
 
-    const onPlayerAction = (
+    const onPlayerAction = async (
         actionType: ClientActionType,
         tags: string[],
         playerOne: DisplayUser,
@@ -203,10 +218,10 @@ export const useGameEditor = () => {
             playerTwo = actions[actions.length - 1].playerOne
         }
         const action = getAction(actionType, team, tags, playerOne, playerTwo)
-        onAction(action)
+        await onAction(action)
     }
 
-    const onTeamAction = (
+    const onTeamAction = async (
         actionType: ClientActionType,
         tags: string[],
         playerOne?: DisplayUser,
@@ -219,12 +234,19 @@ export const useGameEditor = () => {
             playerOne,
             playerTwo,
         )
-        addAction(action, point._id)
+        await onAction(action)
     }
 
-    const onUndo = () => {
+    const onUndo = async () => {
         setWaiting(true)
-        undoAction(point._id)
+        if (offline) {
+            const result = await undoOfflineAction(point._id)
+            undoSideEffects(result)
+            successfulResponse()
+            setActions(immutableFilter(result.actionNumber))
+        } else {
+            undoAction(point._id)
+        }
     }
 
     const onFinishPoint = async () => {
@@ -238,7 +260,9 @@ export const useGameEditor = () => {
 
         dispatch(updateScore({ teamOneScore, teamTwoScore }))
         dispatch(setPoint(newPoint))
-        await nextPoint(point._id)
+        if (!offline) {
+            await nextPoint(point._id)
+        }
     }
 
     const onFinishGame = async () => {

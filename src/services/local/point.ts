@@ -1,10 +1,10 @@
 import * as Constants from '../../utils/constants'
 import Point from '../../types/point'
 import { Realm } from '@realm/react'
-import { getLocalGameId } from './game'
 import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
 import { GameSchema, PointSchema } from '../../models'
+import { activeGameId, getGameById } from './game'
 
 const parsePoint = (schema: PointSchema): Point => {
     return JSON.parse(
@@ -26,9 +26,45 @@ const parsePoint = (schema: PointSchema): Point => {
     )
 }
 
+export const createOfflinePoint = async (
+    pulling: boolean,
+    pointNumber: number,
+    gameId: string,
+): Promise<string> => {
+    const realm = await getRealm()
+
+    const game = await getGameById(gameId)
+    let pointId = new Realm.BSON.ObjectID().toHexString()
+    const point: Point = {
+        _id: pointId,
+        pointNumber,
+        teamOnePlayers: [],
+        teamTwoPlayers: [],
+        teamOneScore: game.teamOneScore,
+        teamTwoScore: game.teamTwoScore,
+        teamOneActions: [],
+        teamTwoActions: [],
+        teamOneActive: true,
+        teamTwoActive: false,
+        pullingTeam: pulling ? game.teamOne : game.teamTwo,
+        receivingTeam: pulling ? game.teamTwo : game.teamOne,
+    }
+
+    const gameRecord = await realm.objectForPrimaryKey<GameSchema>(
+        'Game',
+        gameId,
+    )
+    realm.write(() => {
+        realm.create<PointSchema>('Point', point)
+        gameRecord?.points.push(pointId)
+    })
+
+    return pointId
+}
+
 export const savePoint = async (point: Point) => {
     const realm = await getRealm()
-    const gameId = await getLocalGameId()
+    const gameId = await activeGameId()
     const game = await realm.objectForPrimaryKey<GameSchema>('Game', gameId)
 
     if (!game) {
@@ -38,8 +74,8 @@ export const savePoint = async (point: Point) => {
     realm.write(() => {
         const rPoint = realm.create('Point', point, Realm.UpdateMode.Modified)
         game.points = [...new Set([...game.points, rPoint._id])]
-        game.teamOneScore = point.teamOneScore
-        game.teamTwoScore = point.teamTwoScore
+        game.teamOneScore = rPoint.teamOneScore
+        game.teamTwoScore = rPoint.teamTwoScore
     })
 }
 

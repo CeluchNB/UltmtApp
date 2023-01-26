@@ -4,25 +4,31 @@ import { Game } from '../types/game'
 import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
 import ScreenTitle from '../components/atoms/ScreenTitle'
-import { getActivePointForGame } from '../services/data/point'
+import { getActiveGames } from '../services/data/game'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
-import { useData } from '../hooks'
-import { FlatList, StyleSheet } from 'react-native'
-import { getActiveGames, resurrectActiveGame } from '../services/data/game'
-import {
-    resetPoint,
-    setPoint,
-} from '../store/reducers/features/point/livePointReducer'
-import {
-    setGame,
-    setTeam,
-} from '../store/reducers/features/game/liveGameReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { size } from '../theme/fonts'
+import { useGameReactivation } from '../hooks/useGameReactivation'
+import { useSelector } from 'react-redux'
+import { FlatList, StyleSheet, Text } from 'react-native'
+import { useColors, useData } from '../hooks'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
+    const { colors } = useColors()
     const account = useSelector(selectAccount)
-    const dispatch = useDispatch()
-    const { data: games } = useData<Game[]>(getActiveGames, account._id)
+    const { navigateToGame } = useGameReactivation()
+    const { data: games, refetch } = useData<(Game & { offline: boolean })[]>(
+        getActiveGames,
+        account._id,
+    )
+
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            refetch()
+        })
+        return () => {
+            unsubscribe()
+        }
+    }, [navigation, refetch])
 
     const getMyTeamId = (game: Game): string => {
         return (
@@ -32,50 +38,34 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
         )
     }
 
-    const getTeamNumber = (game: Game): string => {
-        return game.creator._id === account._id ? 'one' : 'two'
-    }
-
-    const navigateToGame = async (activeGame: Game) => {
+    const onGamePress = async (activeGame: Game & { offline: boolean }) => {
         // get game data
-        const game = await resurrectActiveGame(
-            activeGame._id,
-            getMyTeamId(activeGame),
-        )
-        // get point data
-        // either an in progress point or a new point
-        // actions handled in useGameEditor
-        const point = await getActivePointForGame(game)
-        const myTeamNumber = getTeamNumber(game)
-        dispatch(setGame(game))
-        dispatch(setTeam(myTeamNumber))
-        if (!point) {
-            dispatch(resetPoint())
-            navigation.navigate('LiveGame', { screen: 'FirstPoint' })
-            return
-        }
-        dispatch(setPoint(point))
-        if (myTeamNumber === 'one' && point?.teamOneActions.length === 0) {
-            navigation.navigate('LiveGame', { screen: 'SelectPlayers' })
-            return
-        } else if (
-            myTeamNumber === 'two' &&
-            point?.teamTwoActions.length === 0
-        ) {
-            navigation.navigate('LiveGame', { screen: 'SelectPlayers' })
-            return
-        }
-
-        navigation.navigate('LiveGame', { screen: 'LivePointEdit' })
+        try {
+            if (activeGame.offline && !activeGame.teamOneActive) {
+                navigation.navigate('OfflineGameOptions', {
+                    gameId: activeGame._id,
+                })
+                return
+            }
+            navigateToGame(activeGame)
+        } catch (e) {}
     }
 
     const styles = StyleSheet.create({
+        infoText: {
+            fontSize: size.fontLarge,
+            color: colors.gray,
+        },
         list: { marginTop: 10 },
     })
 
     return (
         <BaseScreen containerWidth="80%">
             <ScreenTitle title="Active Games" />
+            {!games ||
+                (games?.length === 0 && (
+                    <Text style={styles.infoText}>No active games</Text>
+                ))}
             <FlatList
                 style={styles.list}
                 data={games}
@@ -85,7 +75,7 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                             game={item}
                             teamId={getMyTeamId(item)}
                             onPress={() => {
-                                navigateToGame(item)
+                                onGamePress(item)
                             }}
                         />
                     )

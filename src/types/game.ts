@@ -1,3 +1,4 @@
+import { ClientPoint } from './point'
 import { DisplayUser } from './user'
 import { Tournament } from './tournament'
 import { DisplayTeam, GuestTeam } from './team'
@@ -43,6 +44,12 @@ export interface Game {
     points: string[]
 }
 
+export interface CreateFullGame extends CreateGame {
+    teamOneScore: number
+    teamTwoScore: number
+    teamOnePlayers: DisplayUser[]
+    points: ClientPoint[]
+}
 export interface SearchParams {
     q?: string
     live?: boolean
