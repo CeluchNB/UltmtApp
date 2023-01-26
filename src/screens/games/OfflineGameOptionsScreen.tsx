@@ -35,7 +35,9 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     }
 
     const reactivateGame = async () => {
-        navigateToGame(game)
+        if (game) {
+            navigateToGame(game)
+        }
     }
 
     const styles = StyleSheet.create({
@@ -54,7 +56,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
                     <GameHeader game={game} />
                     <PrimaryButton
                         style={styles.button}
-                        text="Push to Cloud"
+                        text="push to cloud"
                         loading={loading}
                         disabled={loading}
                         onPress={pushGame}
@@ -64,7 +66,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
                     )}
                     <SecondaryButton
                         style={styles.button}
-                        text="Reactivate"
+                        text="reactivate"
                         loading={false}
                         onPress={reactivateGame}
                     />

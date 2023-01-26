@@ -166,7 +166,9 @@ export const getGameById = async (gameId: string): Promise<Game> => {
  * @param gameId game id
  * @returns game
  */
-export const getOfflineGameById = async (gameId: string): Promise<Game> => {
+export const getOfflineGameById = async (
+    gameId: string,
+): Promise<Game & { offline: boolean }> => {
     try {
         return await localGetGameById(gameId)
     } catch (e) {

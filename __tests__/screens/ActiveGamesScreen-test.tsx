@@ -13,17 +13,29 @@ import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
-const createGame = (overrides: Partial<Game>): Game => {
+const mockedNavigate = jest.fn()
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native')
+    return {
+        ...actualNav,
+        useNavigation: () => ({
+            navigate: mockedNavigate,
+        }),
+    }
+})
+
+const createGame = (overrides: Partial<Game>): Game & { offline: boolean } => {
     return {
         ...game,
+        offline: false,
         ...overrides,
     }
 }
 
-const navigate = jest.fn()
 const props: ActiveGamesProps = {
     navigation: {
-        navigate,
+        mockedNavigate,
+        addListener: jest.fn(),
     } as any,
     route: {} as any,
 }
@@ -104,7 +116,7 @@ describe('ActiveGamesScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(navigate).toHaveBeenCalledWith('LiveGame', {
+            expect(mockedNavigate).toHaveBeenCalledWith('LiveGame', {
                 screen: 'FirstPoint',
             })
         })
@@ -145,7 +157,7 @@ describe('ActiveGamesScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(navigate).toHaveBeenCalledWith('LiveGame', {
+            expect(mockedNavigate).toHaveBeenCalledWith('LiveGame', {
                 screen: 'SelectPlayers',
             })
         })
@@ -186,7 +198,7 @@ describe('ActiveGamesScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(navigate).toHaveBeenCalledWith('LiveGame', {
+            expect(mockedNavigate).toHaveBeenCalledWith('LiveGame', {
                 screen: 'SelectPlayers',
             })
         })
@@ -227,7 +239,7 @@ describe('ActiveGamesScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(navigate).toHaveBeenCalledWith('LiveGame', {
+            expect(mockedNavigate).toHaveBeenCalledWith('LiveGame', {
                 screen: 'LivePointEdit',
             })
         })
