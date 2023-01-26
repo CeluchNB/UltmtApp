@@ -1,13 +1,18 @@
 import * as Constants from '../../utils/constants'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import Point from '../../types/point'
 import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
+import { getActionsByPoint as localGetActionsByPoint } from '../local/action'
+import { getPointById as localGetPointById } from '../local/point'
+import { parseClientAction } from '../../utils/action'
+import { parseClientPoint } from '../../utils/point'
+import { parseFullGame } from '../../utils/game'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateGame, Game } from '../../types/game'
 import { DisplayUser, GuestUser } from '../../types/user'
+import Point, { ClientPoint } from '../../types/point'
 import {
     activeGameId as localActiveGameId,
     activeGameOffline as localActiveGameOffline,
@@ -27,6 +32,7 @@ import {
     getGamesByTeam as networkGetGameByTeams,
     getPointsByGame as networkGetPointsByGame,
     joinGame as networkJoinGame,
+    pushOfflineGame as networkPushOfflineGame,
     reactivateGame as networkReactivateGame,
     searchGames as networkSearchGames,
 } from '../network/game'
@@ -156,6 +162,19 @@ export const getGameById = async (gameId: string): Promise<Game> => {
 }
 
 /**
+ * Method to get an offline game by it's id
+ * @param gameId game id
+ * @returns game
+ */
+export const getOfflineGameById = async (gameId: string): Promise<Game> => {
+    try {
+        return await localGetGameById(gameId)
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+/**
  * Method to join a game as the second team.
  * @param gameId id of game to join
  * @param teamId id of joining team
@@ -228,7 +247,9 @@ export const getGamesByTeam = async (teamId: string): Promise<Game[]> => {
  * need to be finished or pushed to the backend.
  * @returns list of games
  */
-export const getActiveGames = async (userId: string): Promise<Game[]> => {
+export const getActiveGames = async (
+    userId: string,
+): Promise<(Game & { offline: boolean })[]> => {
     try {
         const games = await localActiveGames(userId)
         return games
@@ -276,6 +297,44 @@ export const resurrectActiveGame = async (
         return result
     } catch (e) {
         return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to push a game created offline and stored locally to the backend.
+ * @param gameId id of locally stored game
+ */
+export const pushOfflineGame = async (gameId: string): Promise<void> => {
+    try {
+        // create game data
+        const game = await localGetGameById(gameId)
+        const localPoints = await Promise.all(
+            game.points.map(id => {
+                return localGetPointById(id)
+            }),
+        )
+
+        const points: ClientPoint[] = []
+        localPoints.forEach(async point => {
+            const actions = await localGetActionsByPoint(point._id)
+            const clientPoint = parseClientPoint(point)
+            clientPoint.actions = actions.map(action =>
+                parseClientAction(action),
+            )
+            points.push(clientPoint)
+        })
+
+        const fullGame = parseFullGame(game)
+        fullGame.points = points
+
+        await withToken(networkPushOfflineGame, fullGame)
+
+        // delete local game
+        await localDeleteFullGame(gameId)
+
+        return
+    } catch (e) {
+        return throwApiError(e, Constants.FINISH_GAME_ERROR)
     }
 }
 

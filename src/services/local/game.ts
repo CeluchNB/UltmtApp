@@ -113,11 +113,15 @@ export const getGameById = async (
     return parseGame(game)
 }
 
-export const activeGames = async (userId: string): Promise<Game[]> => {
+export const activeGames = async (
+    userId: string,
+): Promise<(Game & { offline: boolean })[]> => {
     const realm = await getRealm()
     const games = await realm.objects<GameSchema>('Game')
 
-    return games.filter(g => g.creator._id === userId)
+    return games
+        .filter(g => g.creator._id === userId)
+        .map(game => parseGame(game))
 }
 
 export const deleteFullGame = async (gameId: string): Promise<void> => {

@@ -233,3 +233,12 @@ export const mapActionToDescription = (type: ActionType): string => {
             return 'Timeout called'
     }
 }
+
+export const parseClientAction = (action: LiveServerAction): ClientAction => {
+    return {
+        tags: action.tags,
+        playerOne: action.playerOne,
+        playerTwo: action.playerTwo,
+        actionType: action.actionType,
+    }
+}

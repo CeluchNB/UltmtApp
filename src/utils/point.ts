@@ -1,10 +1,10 @@
-import Point from '../types/point'
 import {
     ActionType,
     ClientActionType,
     LiveServerAction,
     ServerAction,
 } from '../types/action'
+import Point, { ClientPoint } from '../types/point'
 
 export const isLivePoint = (point?: Point): boolean => {
     return point?.teamOneActive || point?.teamTwoActive || false
@@ -132,4 +132,17 @@ export const normalizeLiveActions = (
     )
 
     return normalizeActions(teamOneActions, teamTwoActions)
+}
+
+export const parseClientPoint = (point: Point): ClientPoint => {
+    return {
+        pointNumber: point.pointNumber,
+        teamOnePlayers: point.teamOnePlayers,
+        teamOneScore: point.teamOneScore,
+        teamTwoScore: point.teamTwoScore,
+        pullingTeam: point.pullingTeam,
+        receivingTeam: point.receivingTeam,
+        scoringTeam: point.scoringTeam,
+        actions: [],
+    }
 }

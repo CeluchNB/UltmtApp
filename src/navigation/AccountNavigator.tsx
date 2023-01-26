@@ -8,6 +8,7 @@ import JoinByCodeScreen from '../screens/JoinByCodeScreen'
 import LoginScreen from './../screens/LoginScreen'
 import ManageTeamDetailsScreen from './../screens/ManageTeamDetailsScreen'
 import ManageTeamsScreen from './../screens/ManageTeamsScreen'
+import OfflineGameOptionsScreen from '../screens/games/OfflineGameOptionsScreen'
 import ProfileScreen from './../screens/ProfileScreen'
 import PublicTeamScreen from './../screens/PublicTeamScreen'
 import PublicUserScreen from './../screens/PublicUserScreen'
@@ -87,6 +88,10 @@ const AccountNavigator: React.FC<{}> = () => {
             />
             <Stack.Screen name="TeamGames" component={TeamGameScreen} />
             <Stack.Screen name="ActiveGames" component={ActiveGamesScreen} />
+            <Stack.Screen
+                name="OfflineGameOptions"
+                component={OfflineGameOptionsScreen}
+            />
         </Stack.Navigator>
     )
 }

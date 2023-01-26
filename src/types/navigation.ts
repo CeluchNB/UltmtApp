@@ -36,6 +36,7 @@ export type AccountStackParamList = {
     JoinByCodeScreen: undefined
     TeamGames: undefined
     ActiveGames: undefined
+    OfflineGameOptions: { gameId: string }
 }
 
 export type GameStackParamList = {
@@ -223,3 +224,13 @@ export type ActiveGamesProps = CompositeScreenProps<
     NativeStackScreenProps<AccountStackParamList, 'ActiveGames'>,
     NativeStackScreenProps<TopLevelParamList>
 >
+export type OfflineGameOptionsProps = NativeStackScreenProps<
+    AccountStackParamList,
+    'OfflineGameOptions'
+>
+
+declare global {
+    namespace ReactNavigation {
+        interface RootParamList extends TopLevelParamList {}
+    }
+}
