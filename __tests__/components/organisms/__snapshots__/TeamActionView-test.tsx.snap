@@ -52,6 +52,7 @@ exports[`should match snapshot 1`] = `
               {
                 "alignSelf": undefined,
                 "bottom": undefined,
+                "end": undefined,
                 "left": undefined,
                 "position": undefined,
                 "right": undefined,
@@ -62,6 +63,7 @@ exports[`should match snapshot 1`] = `
                 },
                 "shadowOpacity": 0,
                 "shadowRadius": 0,
+                "start": undefined,
                 "top": undefined,
               }
             }
@@ -205,6 +207,7 @@ exports[`should match snapshot 1`] = `
               {
                 "alignSelf": undefined,
                 "bottom": undefined,
+                "end": undefined,
                 "left": undefined,
                 "position": undefined,
                 "right": undefined,
@@ -215,6 +218,7 @@ exports[`should match snapshot 1`] = `
                 },
                 "shadowOpacity": 0,
                 "shadowRadius": 0,
+                "start": undefined,
                 "top": undefined,
               }
             }
@@ -371,6 +375,7 @@ exports[`should match snapshot 1`] = `
               {
                 "alignSelf": undefined,
                 "bottom": undefined,
+                "end": undefined,
                 "left": undefined,
                 "position": undefined,
                 "right": undefined,
@@ -381,6 +386,7 @@ exports[`should match snapshot 1`] = `
                 },
                 "shadowOpacity": 0,
                 "shadowRadius": 0,
+                "start": undefined,
                 "top": undefined,
               }
             }

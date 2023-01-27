@@ -186,6 +186,7 @@ exports[`should match snapshot with live and recent data 1`] = `
             {
               "alignSelf": "center",
               "bottom": undefined,
+              "end": undefined,
               "left": undefined,
               "position": undefined,
               "right": undefined,
@@ -196,6 +197,7 @@ exports[`should match snapshot with live and recent data 1`] = `
               },
               "shadowOpacity": 0,
               "shadowRadius": 0,
+              "start": undefined,
               "top": undefined,
             }
           }
@@ -334,6 +336,7 @@ exports[`should match snapshot with live and recent data 1`] = `
       {
         "alignSelf": undefined,
         "bottom": 0,
+        "end": undefined,
         "left": undefined,
         "position": "absolute",
         "right": 0,
@@ -344,6 +347,7 @@ exports[`should match snapshot with live and recent data 1`] = `
         },
         "shadowOpacity": 0.15,
         "shadowRadius": 8,
+        "start": undefined,
         "top": undefined,
       }
     }
@@ -670,6 +674,7 @@ exports[`should match snapshot with no data 1`] = `
       {
         "alignSelf": undefined,
         "bottom": 0,
+        "end": undefined,
         "left": undefined,
         "position": "absolute",
         "right": 0,
@@ -680,6 +685,7 @@ exports[`should match snapshot with no data 1`] = `
         },
         "shadowOpacity": 0.15,
         "shadowRadius": 8,
+        "start": undefined,
         "top": undefined,
       }
     }

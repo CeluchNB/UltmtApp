@@ -202,6 +202,7 @@ exports[`test with right icon 1`] = `
           {
             "alignSelf": undefined,
             "bottom": undefined,
+            "end": undefined,
             "left": undefined,
             "position": undefined,
             "right": undefined,
@@ -212,6 +213,7 @@ exports[`test with right icon 1`] = `
             },
             "shadowOpacity": 0,
             "shadowRadius": 0,
+            "start": undefined,
             "top": undefined,
           }
         }

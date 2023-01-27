@@ -92,7 +92,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
           <View
             style={
               {
-                "backgroundColor": "rgba(255, 251, 254, 1)",
+                "backgroundColor": "#303030",
               }
             }
           >
@@ -129,9 +129,11 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     {
                       "backgroundColor": "#303030",
                       "borderColor": "#ffd600",
+                      "borderRadius": 4,
                       "borderStyle": "solid",
                       "borderWidth": 1,
                       "color": "#ffd600",
+                      "margin": 4,
                       "padding": 0,
                     },
                   ],
@@ -360,7 +362,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
           <View
             style={
               {
-                "backgroundColor": "rgba(255, 251, 254, 1)",
+                "backgroundColor": "#303030",
               }
             }
           >
@@ -397,9 +399,11 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     {
                       "backgroundColor": "#303030",
                       "borderColor": "#ffd600",
+                      "borderRadius": 4,
                       "borderStyle": "solid",
                       "borderWidth": 1,
                       "color": "#ffd600",
+                      "margin": 4,
                       "padding": 0,
                     },
                   ],
@@ -607,7 +611,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
           <View
             style={
               {
-                "backgroundColor": "rgba(255, 251, 254, 1)",
+                "backgroundColor": "#303030",
               }
             }
           >
@@ -644,9 +648,11 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     {
                       "backgroundColor": "#303030",
                       "borderColor": "#ffd600",
+                      "borderRadius": 4,
                       "borderStyle": "solid",
                       "borderWidth": 1,
                       "color": "#ffd600",
+                      "margin": 4,
                       "padding": 0,
                     },
                   ],
