@@ -110,6 +110,18 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         navigation.navigate('GameCreationFlow', { screen: 'SelectMyTeam' })
     }
 
+    const onViewGame = (gameId: string) => {
+        navigation.navigate('Tabs', {
+            screen: 'Games',
+            params: {
+                screen: 'ViewGame',
+                params: {
+                    gameId,
+                },
+            },
+        })
+    }
+
     const styles = StyleSheet.create({
         container: {
             minHeight: '100%',
@@ -268,6 +280,9 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                                 key={item._id}
                                                 game={item}
                                                 teamId={teamToGet}
+                                                onPress={() => {
+                                                    onViewGame(item._id)
+                                                }}
                                             />
                                         )
                                     }}

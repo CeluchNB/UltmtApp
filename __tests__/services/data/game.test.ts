@@ -41,7 +41,9 @@ const point: Point = {
     receivingTeam: { name: 'Team 2' },
 }
 
-jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(Promise.resolve())
+beforeEach(() => {
+    jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(Promise.resolve())
+})
 
 afterEach(() => {
     jest.resetAllMocks()
@@ -95,6 +97,7 @@ describe('test create game', () => {
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
             Promise.resolve({ ...game, offline: false }),
         )
+        RNEncryptedStorage.setItem.mockReturnValueOnce(Promise.resolve())
 
         const result = await createGame({} as any, false, [])
         expect(result).toMatchObject(game)

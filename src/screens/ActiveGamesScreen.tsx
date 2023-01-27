@@ -15,7 +15,7 @@ import { useColors, useData } from '../hooks'
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     const { colors } = useColors()
     const account = useSelector(selectAccount)
-    const { navigateToGame } = useGameReactivation()
+    const { navigateToGame, onResurrect } = useGameReactivation()
     const { data: games, refetch } = useData<(Game & { offline: boolean })[]>(
         getActiveGames,
         account._id,
@@ -47,7 +47,9 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 })
                 return
             }
-            navigateToGame(activeGame)
+
+            const game = await onResurrect(activeGame)
+            navigateToGame(game)
         } catch (e) {}
     }
 

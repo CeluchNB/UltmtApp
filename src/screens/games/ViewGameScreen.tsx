@@ -1,11 +1,12 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
+import GameUtilityBar from '../../components/molecules/GameUtilityBar'
 import PointAccordionGroup from '../../components/organisms/PointAccordionGroup'
 import React from 'react'
 import { ServerAction } from '../../types/action'
 import { ViewGameProps } from '../../types/navigation'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import { useColors, useGameViewer } from '../../hooks'
+import { useColors, useGameReactivation, useGameViewer } from '../../hooks'
 
 const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const {
@@ -21,9 +22,12 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         gameLoading,
         loading,
         displayedActions,
+        managingTeamId,
         onSelectAction,
         onSelectPoint,
+        onReactivateGame,
     } = useGameViewer(gameId)
+    const { navigateToGame } = useGameReactivation()
 
     React.useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
@@ -45,16 +49,34 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         })
     }
 
+    const handleReactivateGame = React.useCallback(async () => {
+        if (!onReactivateGame) {
+            return undefined
+        }
+        const reactivatedGame = await onReactivateGame()
+        if (reactivatedGame) {
+            navigateToGame(reactivatedGame)
+        }
+    }, [navigateToGame, onReactivateGame])
+
     const styles = StyleSheet.create({
         pointsContainer: {
             marginTop: 10,
             height: '85%',
+            backgroundColor: colors.primary,
         },
     })
 
     return (
-        <BaseScreen containerWidth="100%">
+        <BaseScreen containerWidth="90%">
             {game && <GameHeader game={game} />}
+            {game && (
+                <GameUtilityBar
+                    onReactivateGame={
+                        managingTeamId ? handleReactivateGame : undefined
+                    }
+                />
+            )}
             {(allPointsLoading || gameLoading) && (
                 <ActivityIndicator color={colors.textPrimary} />
             )}

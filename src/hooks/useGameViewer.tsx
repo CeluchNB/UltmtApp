@@ -2,7 +2,7 @@ import { Game } from '../types/game'
 import Point from '../types/point'
 import React from 'react'
 import { isLivePoint } from '../utils/point'
-import { useDispatch } from 'react-redux'
+import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
 import {
     LiveServerAction,
     SavedServerAction,
@@ -14,7 +14,11 @@ import {
     getActionsByPoint,
     getLiveActionsByPoint,
 } from '../services/data/point'
-import { getGameById, getPointsByGame } from '../services/data/game'
+import {
+    getGameById,
+    getPointsByGame,
+    reactivateInactiveGame,
+} from '../services/data/game'
 import { joinPoint, subscribe, unsubscribe } from '../services/data/live-action'
 import { normalizeActions, normalizeLiveActions } from '../utils/point'
 import {
@@ -22,6 +26,7 @@ import {
     setSavedAction,
     setTeams,
 } from '../store/reducers/features/action/viewAction'
+import { useDispatch, useSelector } from 'react-redux'
 
 /**
  * This hook enables easy use of common game viewing functions. Many methods perform mediation
@@ -29,6 +34,7 @@ import {
  */
 export const useGameViewer = (gameId: string) => {
     const dispatch = useDispatch()
+    const managerTeams = useSelector(selectManagerTeams)
     const [liveActions, setLiveActions] = React.useState<LiveServerAction[]>([])
     const [game, setGame] = React.useState<Game>()
     const [points, setPoints] = React.useState<Point[]>([])
@@ -46,16 +52,40 @@ export const useGameViewer = (gameId: string) => {
     const [pointLoading, setPointLoading] = React.useState(false)
     const [error, setError] = React.useState('')
 
+    const loading = React.useMemo(() => {
+        return gameLoading || allPointsLoading || pointLoading
+    }, [gameLoading, pointLoading, allPointsLoading])
+
+    const managingTeamId = React.useMemo(() => {
+        const teamOneId = managerTeams.find(
+            team => team._id === game?.teamOne._id,
+        )?._id
+        if (teamOneId) return teamOneId
+
+        if (game?.teamTwo?._id) {
+            return managerTeams.find(team => team._id === game.teamTwo._id)?._id
+        }
+        return undefined
+    }, [game, managerTeams])
+
+    const onReactivateGame = React.useCallback(async () => {
+        if (!managingTeamId) {
+            return
+        }
+
+        const reactivatedGame = await reactivateInactiveGame(
+            gameId,
+            managingTeamId,
+        )
+        return reactivatedGame
+    }, [gameId, managingTeamId])
+
     const displayedActions = React.useMemo(() => {
         if (!activePoint) return []
         return isLivePoint(activePoint)
             ? normalizeLiveActions(liveActions)
             : normalizeActions(teamOneActions, teamTwoActions)
     }, [liveActions, teamOneActions, teamTwoActions, activePoint])
-
-    const loading = React.useMemo(() => {
-        return gameLoading || allPointsLoading || pointLoading
-    }, [gameLoading, pointLoading, allPointsLoading])
 
     React.useEffect(() => {
         setGameLoading(true)
@@ -214,7 +244,9 @@ export const useGameViewer = (gameId: string) => {
         pointLoading,
         loading,
         points,
+        managingTeamId,
         onSelectAction,
         onSelectPoint,
+        onReactivateGame,
     }
 }

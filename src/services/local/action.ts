@@ -95,6 +95,23 @@ export const upsertAction = async (
     return parseAction(result)
 }
 
+export const saveMultipleServerActions = async (
+    actions: LiveServerAction[],
+    pointId: string,
+): Promise<void> => {
+    const realm = await getRealm()
+
+    realm.write(() => {
+        for (const action of actions) {
+            realm.create(
+                'Action',
+                { ...action, _id: new Realm.BSON.ObjectId(), pointId },
+                Realm.UpdateMode.All,
+            )
+        }
+    })
+}
+
 export const deleteAction = async (
     teamNumber: 'one' | 'two',
     actionNumber: number,

@@ -30,6 +30,12 @@ export const useGameReactivation = () => {
         return game.creator._id === account._id ? 'one' : 'two'
     }
 
+    const onResurrect = async (
+        game: Game,
+    ): Promise<Game & { offline: boolean }> => {
+        return await resurrectActiveGame(game._id, getMyTeamId(game))
+    }
+
     const navigateToGame = async (activeGame: Game & { offline: boolean }) => {
         // get game data
         try {
@@ -66,5 +72,5 @@ export const useGameReactivation = () => {
         } catch (e) {}
     }
 
-    return { navigateToGame }
+    return { navigateToGame, onResurrect }
 }
