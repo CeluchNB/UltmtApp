@@ -1,6 +1,5 @@
 import { ActiveGamesProps } from '../types/navigation'
 import BaseScreen from '../components/atoms/BaseScreen'
-import { Game } from '../types/game'
 import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
 import ScreenTitle from '../components/atoms/ScreenTitle'
@@ -10,6 +9,7 @@ import { size } from '../theme/fonts'
 import { useGameReactivation } from '../hooks/useGameReactivation'
 import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, Text } from 'react-native'
+import { Game, LocalGame } from '../types/game'
 import { useColors, useData } from '../hooks'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
@@ -38,7 +38,7 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
         )
     }
 
-    const onGamePress = async (activeGame: Game & { offline: boolean }) => {
+    const onGamePress = async (activeGame: LocalGame) => {
         // get game data
         try {
             if (activeGame.offline && !activeGame.teamOneActive) {

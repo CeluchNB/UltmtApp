@@ -29,6 +29,7 @@ const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
                     iconColor={colors.textPrimary}
                     icon="arrow-u-left-top"
                     onPress={onReactivateGame}
+                    testID="reactivate-button"
                 />
             )}
         </View>

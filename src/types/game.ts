@@ -56,3 +56,5 @@ export interface SearchParams {
     after?: Date
     before?: Date
 }
+
+export type LocalGame = Game & { offline: boolean }
