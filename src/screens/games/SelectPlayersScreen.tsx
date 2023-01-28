@@ -7,17 +7,18 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
 import { isPulling } from '../../utils/point'
+import { reactivatePoint } from '../../services/data/point'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text } from 'react-native'
 import React, { useState } from 'react'
-
 import {
     resetSetPlayersStatus,
     selectPoint,
     selectSetPlayersError,
     selectSetPlayersStatus,
     setPlayers,
+    setPoint,
 } from '../../store/reducers/features/point/livePointReducer'
 import {
     selectGame,
@@ -45,6 +46,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         return game.teamTwoPlayers
     }, [game, team])
 
+    React.useEffect(() => {
+        if (status === 'success') {
+            dispatch(resetSetPlayersStatus())
+            navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
+        }
+    }, [status, navigation, dispatch])
+
     // no guaranteed unique attribute of GuestPlayer
     // must select by index
     const toggleSelection = (i: number) => {
@@ -66,12 +74,11 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         dispatch(setPlayers({ players }))
     }
 
-    React.useEffect(() => {
-        if (status === 'success') {
-            dispatch(resetSetPlayersStatus())
-            navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
-        }
-    }, [status, navigation, dispatch])
+    const onLastPoint = async () => {
+        const reactivatedPoint = await reactivatePoint(point._id, team)
+        dispatch(setPoint(reactivatedPoint))
+        navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
+    }
 
     const styles = StyleSheet.create({
         description: {
@@ -103,6 +110,11 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     return (
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
+            <SecondaryButton
+                style={styles.button}
+                text="last point"
+                onPress={onLastPoint}
+            />
             <Text style={styles.description}>
                 {game.playersPerPoint} players on next{'\n'}
                 {isPulling(point, game, team) ? 'D ' : 'O '}
