@@ -75,7 +75,11 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     }
 
     const onLastPoint = async () => {
-        const reactivatedPoint = await reactivatePoint(point._id, team)
+        const reactivatedPoint = await reactivatePoint(
+            point._id,
+            point.pointNumber - 1,
+            team,
+        )
         dispatch(setPoint(reactivatedPoint))
         navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
     }
@@ -110,11 +114,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     return (
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
-            <SecondaryButton
-                style={styles.button}
-                text="last point"
-                onPress={onLastPoint}
-            />
+            {point.pointNumber > 1 && !game.teamTwoActive && (
+                <SecondaryButton
+                    style={styles.button}
+                    text="last point"
+                    onPress={onLastPoint}
+                />
+            )}
             <Text style={styles.description}>
                 {game.playersPerPoint} players on next{'\n'}
                 {isPulling(point, game, team) ? 'D ' : 'O '}

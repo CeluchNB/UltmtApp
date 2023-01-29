@@ -103,6 +103,11 @@ export const saveMultipleServerActions = async (
 
     realm.write(() => {
         for (const action of actions) {
+            console.log(
+                'creating action',
+                action.actionNumber,
+                action.actionType,
+            )
             realm.create(
                 'Action',
                 { ...action, _id: new Realm.BSON.ObjectId(), pointId },

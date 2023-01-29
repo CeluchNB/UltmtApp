@@ -95,3 +95,15 @@ export const reactivatePoint = async (
         },
     )
 }
+
+export const deletePoint = async (
+    token: string,
+    pointId: string,
+): Promise<AxiosResponse> => {
+    return await axios.delete(`${API_URL_V1}/point/${pointId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
+        },
+    })
+}

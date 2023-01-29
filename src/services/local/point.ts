@@ -88,3 +88,20 @@ export const getPointById = async (pointId: string): Promise<Point> => {
     const result = parsePoint(point)
     return result
 }
+
+export const getPointByPointNumber = async (
+    pointNumber: number,
+    gamePoints: string[],
+): Promise<Point | undefined> => {
+    const realm = await getRealm()
+    const gameString = gamePoints.map(id => {
+        return `"${id}"`
+    })
+    const point = await realm
+        .objects<PointSchema>('Point')
+        .filtered(`pointNumber == ${pointNumber} && _id IN { ${gameString} }`)
+
+    if (point.length === 1) {
+        return parsePoint(point[0])
+    }
+}
