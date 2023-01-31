@@ -3,6 +3,7 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import { Chip } from 'react-native-paper'
 import GameHeader from '../../components/molecules/GameHeader'
 import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
+import LivePointStatus from '../../components/molecules/LivePointStatus'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
@@ -23,6 +24,7 @@ import {
 import {
     selectGame,
     selectTeam,
+    updateScore,
 } from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -75,13 +77,23 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     }
 
     const onLastPoint = async () => {
-        const reactivatedPoint = await reactivatePoint(
-            point._id,
-            point.pointNumber - 1,
-            team,
-        )
-        dispatch(setPoint(reactivatedPoint))
-        navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
+        try {
+            const reactivatedPoint = await reactivatePoint(
+                point._id,
+                point.pointNumber - 1,
+                team,
+            )
+            dispatch(setPoint(reactivatedPoint))
+            dispatch(
+                updateScore({
+                    teamOneScore: reactivatedPoint.teamOneScore,
+                    teamTwoScore: reactivatedPoint.teamTwoScore,
+                }),
+            )
+            navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
+        } catch (e) {
+            console.log('got e', e)
+        }
     }
 
     const styles = StyleSheet.create({
@@ -114,18 +126,16 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     return (
         <BaseScreen containerWidth="80%">
             <GameHeader game={game} />
-            {point.pointNumber > 1 && !game.teamTwoActive && (
-                <SecondaryButton
-                    style={styles.button}
-                    text="last point"
-                    onPress={onLastPoint}
-                />
-            )}
             <Text style={styles.description}>
                 {game.playersPerPoint} players on next{'\n'}
                 {isPulling(point, game, team) ? 'D ' : 'O '}
                 point
             </Text>
+            <LivePointStatus
+                loading={false}
+                undoDisabled={point.pointNumber === 1 || game.teamTwoActive}
+                onUndo={onLastPoint}
+            />
             <FlatList
                 contentContainerStyle={styles.flatListContainer}
                 data={playerList}

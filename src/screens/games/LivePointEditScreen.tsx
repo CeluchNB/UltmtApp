@@ -25,7 +25,6 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         undefined,
     )
     const [finishGameLoading, setFinishGameLoading] = React.useState(false)
-
     const {
         actions,
         activePlayers,
@@ -86,6 +85,14 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         }
     }
 
+    const onUndoPress = async () => {
+        if (actions.length > 0) {
+            await onUndo()
+        } else {
+            navigation.navigate('SelectPlayers')
+        }
+    }
+
     const styles = StyleSheet.create({
         error: {
             color: colors.error,
@@ -113,8 +120,8 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                         <LivePointStatus
                             error={error}
                             loading={waiting}
-                            undoDisabled={myTeamActions.length === 0}
-                            onUndo={onUndo}
+                            undoDisabled={false}
+                            onUndo={onUndoPress}
                         />
                         <PlayerActionView
                             players={activePlayers}

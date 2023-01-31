@@ -22,6 +22,7 @@ import {
 } from '../local/point'
 import {
     deleteAllActionsByPoint as localDeleteAllActionsByPoint,
+    deleteEditableActionsByPoint as localDeleteEditableActionsByPoint,
     getActions as localGetActions,
     getActionsByPoint as localGetActionsByPoint,
     saveActions as localSaveActions,
@@ -295,13 +296,13 @@ export const reactivatePoint = async (
             await localSavePoint(responsePoint)
 
             // load actions from backend
-            console.log('getting actions')
-            const actionsResponse = await networkGetActionsByPoint(
-                team,
+            const actionsResponse = await networkGetLiveActionsByPoint(
+                game._id,
                 point._id,
             )
+
             const { actions: networkActions } = actionsResponse.data
-            console.log('got actions', networkActions)
+            await localDeleteEditableActionsByPoint(team, point._id)
             await localSaveMultipleActions(
                 networkActions.map((action: SavedServerAction) => {
                     return { ...action, teamNumber: team }
@@ -313,7 +314,6 @@ export const reactivatePoint = async (
         const response = await localGetPointById(point._id)
         return response
     } catch (e) {
-        console.log('got e', e)
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }
 }

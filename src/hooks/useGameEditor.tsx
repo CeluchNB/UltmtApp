@@ -172,7 +172,8 @@ export const useGameEditor = () => {
         return () => {
             unsubscribe()
         }
-    }, [game, point, subscriptions])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const activePlayers = React.useMemo(() => {
         if (team === 'one') {

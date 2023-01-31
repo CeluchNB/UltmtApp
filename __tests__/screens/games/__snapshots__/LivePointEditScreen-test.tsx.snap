@@ -109,7 +109,7 @@ exports[`LivePointEditScreen should match snapshot 1`] = `
             error=""
             loading={false}
             onUndo={[Function]}
-            undoDisabled={true}
+            undoDisabled={false}
           />
           <PlayerActionView
             actionStack={[]}
@@ -364,7 +364,7 @@ exports[`LivePointEditScreen should match snapshot 1`] = `
                     style={
                       {
                         "backgroundColor": undefined,
-                        "borderColor": "rgba(28, 27, 31, 0.12)",
+                        "borderColor": "rgba(121, 116, 126, 1)",
                         "borderRadius": 20,
                         "borderWidth": 0,
                         "elevation": 0,
@@ -380,15 +380,10 @@ exports[`LivePointEditScreen should match snapshot 1`] = `
                       accessibilityRole="button"
                       accessibilityState={
                         {
-                          "disabled": true,
+                          "disabled": false,
                         }
                       }
-                      accessibilityTraits={
-                        [
-                          "button",
-                          "disabled",
-                        ]
-                      }
+                      accessibilityTraits="button"
                       accessible={true}
                       centered={true}
                       collapsable={false}
@@ -439,7 +434,7 @@ exports[`LivePointEditScreen should match snapshot 1`] = `
                         style={
                           [
                             {
-                              "color": "rgba(28, 27, 31, 0.38)",
+                              "color": "#ffd600",
                               "fontSize": 24,
                             },
                             [

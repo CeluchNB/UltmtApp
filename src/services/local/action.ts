@@ -103,11 +103,6 @@ export const saveMultipleServerActions = async (
 
     realm.write(() => {
         for (const action of actions) {
-            console.log(
-                'creating action',
-                action.actionNumber,
-                action.actionType,
-            )
             realm.create(
                 'Action',
                 { ...action, _id: new Realm.BSON.ObjectId(), pointId },
@@ -142,6 +137,19 @@ export const deleteAction = async (
         realm.delete(action)
     })
     return result
+}
+
+export const deleteEditableActionsByPoint = async (
+    team: 'one' | 'two',
+    pointId: string,
+): Promise<void> => {
+    const realm = await getRealm()
+    const actions = await realm
+        .objects<ActionSchema>('Action')
+        .filtered(`teamNumber == "${team}" && pointId == "${pointId}"`)
+    realm.write(() => {
+        realm.delete(actions)
+    })
 }
 
 export const getActionById = async (
