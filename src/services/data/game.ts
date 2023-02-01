@@ -363,7 +363,6 @@ export const reactivateInactiveGame = async (
         }
         await withGameToken(networkReactivatePoint, activePoint?._id)
 
-        // return?
         const result = await localGetGameById(game._id)
         return result
     } catch (e) {

@@ -17,6 +17,7 @@ import {
     getActionsByPoint,
     getActivePointForGame,
     getLiveActionsByPoint,
+    reactivatePoint,
     setPlayers,
 } from '../../../src/services/data/point'
 
@@ -274,6 +275,8 @@ describe('test finish point', () => {
                 {
                     ...liveAction,
                     actionType: ActionType.TEAM_ONE_SCORE,
+                    _id: 'action1',
+                    pointId: 'point1',
                 },
             ]),
         )
@@ -298,6 +301,8 @@ describe('test finish point', () => {
                 {
                     ...liveAction,
                     actionType: ActionType.TEAM_TWO_SCORE,
+                    _id: 'action1',
+                    pointId: 'point1',
                 },
             ]),
         )
@@ -324,6 +329,8 @@ describe('test finish point', () => {
                 {
                     ...liveAction,
                     actionType: ActionType.TEAM_TWO_SCORE,
+                    _id: 'action1',
+                    pointId: 'point1',
                 },
             ]),
         )
@@ -488,5 +495,130 @@ describe('test get active point for game', () => {
                 points: ['point1', 'point2'],
             }),
         ).rejects.toMatchObject({ message: Constants.GET_POINT_ERROR })
+    })
+})
+
+describe('test reactivate point', () => {
+    beforeEach(() => {
+        jest.spyOn(LocalGameServices, 'activeGameId').mockReturnValue(
+            Promise.resolve('game1'),
+        )
+
+        jest.spyOn(LocalPointServices, 'getPointByPointNumber').mockReturnValue(
+            Promise.resolve(point),
+        )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValue(
+            Promise.resolve(undefined),
+        )
+        jest.spyOn(LocalPointServices, 'deletePoint').mockReturnValue(
+            Promise.resolve(),
+        )
+        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(
+            Promise.resolve(),
+        )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValue(
+            Promise.resolve(point),
+        )
+    })
+    it('with online game', async () => {
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: false }),
+        )
+        const deleteSpy = jest
+            .spyOn(PointServices, 'deletePoint')
+            .mockReturnValue(
+                Promise.resolve({
+                    data: {},
+                    status: 200,
+                    statusText: 'good',
+                    config: {},
+                    headers: {},
+                }),
+            )
+        const reactivateSpy = jest
+            .spyOn(PointServices, 'reactivatePoint')
+            .mockReturnValue(
+                Promise.resolve({
+                    data: { point },
+                    status: 200,
+                    statusText: 'Good',
+                    config: {},
+                    headers: {},
+                }),
+            )
+        const getActionsSpy = jest
+            .spyOn(PointServices, 'getLiveActionsByPoint')
+            .mockReturnValue(
+                Promise.resolve({
+                    data: { actions: [liveAction] },
+                    status: 200,
+                    statusText: 'Good',
+                    config: {},
+                    headers: {},
+                }),
+            )
+        jest.spyOn(ActionLocal, 'deleteEditableActionsByPoint').mockReturnValue(
+            Promise.resolve(),
+        )
+        jest.spyOn(ActionLocal, 'saveMultipleServerActions').mockReturnValue(
+            Promise.resolve(),
+        )
+        jest.spyOn(ActionLocal, 'getActionsByPoint').mockReturnValue(
+            Promise.resolve([
+                { ...liveAction, _id: 'action1', pointId: point._id },
+            ]),
+        )
+
+        const result = await reactivatePoint('point1', 1, 'one')
+        expect(deleteSpy).toHaveBeenCalled()
+        expect(reactivateSpy).toHaveBeenCalled()
+        expect(getActionsSpy).toHaveBeenCalled()
+        expect(result).toMatchObject(point)
+
+        jest.clearAllMocks()
+        const result2 = await reactivatePoint('point1', 1, 'two')
+        expect(deleteSpy).toHaveBeenCalled()
+        expect(reactivateSpy).toHaveBeenCalled()
+        expect(getActionsSpy).toHaveBeenCalled()
+        expect(result2).toMatchObject(point)
+    })
+
+    it('with offline point', async () => {
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: true }),
+        )
+
+        const result = await reactivatePoint('point1', 1, 'one')
+        expect(result).toMatchObject(point)
+
+        const result2 = await reactivatePoint('point1', 2, 'one')
+        expect(result2).toMatchObject(point)
+    })
+
+    it('with offline point error', async () => {
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: true }),
+        )
+        jest.spyOn(LocalPointServices, 'getPointByPointNumber')
+            .mockReset()
+            .mockReturnValueOnce(Promise.resolve(point))
+
+        await expect(reactivatePoint('point1', 2, 'one')).rejects.toMatchObject(
+            { message: Constants.GET_POINT_ERROR },
+        )
+    })
+
+    it('with error case', async () => {
+        jest.resetAllMocks()
+        jest.spyOn(LocalGameServices, 'activeGameId').mockReturnValue(
+            Promise.resolve('game1'),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: false }),
+        )
+
+        await expect(reactivatePoint('point1', 1, 'one')).rejects.toMatchObject(
+            { message: Constants.GET_POINT_ERROR },
+        )
     })
 })

@@ -272,7 +272,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                     <View
                       style={
                         {
-                          "marginBottom": -10,
+                          "marginTop": -10,
                         }
                       }
                     >
