@@ -105,3 +105,12 @@ export const getPointByPointNumber = async (
         return parsePoint(point[0])
     }
 }
+
+export const deletePoint = async (pointId: string) => {
+    const realm = await getRealm()
+    const point = await realm.objectForPrimaryKey('Point', pointId)
+
+    realm.write(() => {
+        realm.delete(point)
+    })
+}

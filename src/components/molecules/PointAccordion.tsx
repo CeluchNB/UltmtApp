@@ -54,7 +54,7 @@ const AccordionRightView = (props: { point: Point; isExpanded: boolean }) => {
 
     const styles = StyleSheet.create({
         circleContainer: {
-            marginBottom: -10,
+            marginTop: -10,
         },
         circle: {
             width: 10,
@@ -128,16 +128,6 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             color: colors.textPrimary,
             fontSize: size.fontFifteen,
             fontWeight: weight.bold,
-        },
-        circleContainer: {
-            marginBottom: -10,
-        },
-        circle: {
-            width: 10,
-            height: 10,
-            borderRadius: 5,
-            backgroundColor: 'red',
-            alignSelf: 'flex-end',
         },
     })
 

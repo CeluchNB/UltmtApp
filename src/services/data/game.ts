@@ -10,7 +10,7 @@ import { parseClientPoint } from '../../utils/point'
 import { parseFullGame } from '../../utils/game'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
-import { CreateGame, Game } from '../../types/game'
+import { CreateGame, Game, LocalGame } from '../../types/game'
 import { DisplayUser, GuestUser } from '../../types/user'
 import Point, { ClientPoint } from '../../types/point'
 import {
@@ -277,14 +277,15 @@ export const activeGameOffline = async (): Promise<boolean> => {
 }
 
 /**
- * Method to do all necessary data to reactivate a game
+ * Method to do all necessary data operations to reactivate a game that is
+ * still live and stored on a user's device.
  * @param gameId id of game
  * @returns game
  */
 export const resurrectActiveGame = async (
     gameId: string,
     teamId: string,
-): Promise<Game & { offline: boolean }> => {
+): Promise<LocalGame> => {
     try {
         const localGame = await localGetGameById(gameId)
         if (localGame.offline) {

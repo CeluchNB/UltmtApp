@@ -168,14 +168,14 @@ export const getActionById = async (
 
 export const getActionsByPoint = async (
     pointId: string,
-): Promise<LiveServerAction[]> => {
+): Promise<(LiveServerAction & { _id: string; pointId: string })[]> => {
     const realm = await getRealm()
     const actions = await realm
         .objects<ActionSchema>('Action')
         .filtered(`pointId == "${pointId}"`)
 
     return actions.map(action => {
-        return parseLiveAction(action)
+        return parseAction(action)
     })
 }
 
