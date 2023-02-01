@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import { ViewGameProps } from '../../../src/types/navigation'
 import ViewGameScreen from '../../../src/screens/games/ViewGameScreen'
-import { game } from '../../../fixtures/data'
+import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
 import {
     ActionType,
@@ -16,7 +16,19 @@ import {
     SubscriptionObject,
 } from '../../../src/types/action'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { fetchProfileData, game } from '../../../fixtures/data'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+
+const mockedNavigate = jest.fn()
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native')
+    return {
+        ...actualNav,
+        useNavigation: () => ({
+            navigate: mockedNavigate,
+        }),
+    }
+})
 
 const props: ViewGameProps = {
     navigation: {
@@ -204,6 +216,7 @@ describe('ViewGameScreen', () => {
     )
     jest.spyOn(ActionData, 'joinPoint').mockReturnValue(Promise.resolve())
     beforeEach(() => {
+        jest.clearAllMocks()
         jest.spyOn(PointData, 'deleteLocalActionsByPoint').mockReturnValue(
             Promise.resolve(),
         )
@@ -213,7 +226,6 @@ describe('ViewGameScreen', () => {
         jest.spyOn(PointData, 'getLiveActionsByPoint').mockReturnValue(
             Promise.resolve(liveActions),
         )
-        jest.clearAllMocks()
     })
 
     it('should match snapshot after data loaded', async () => {
@@ -409,5 +421,52 @@ describe('ViewGameScreen', () => {
         )
         expect(store.getState().viewAction.teamOne).toMatchObject(game.teamOne)
         expect(store.getState().viewAction.teamTwo).toMatchObject(game.teamTwo)
+    })
+
+    it('reactivates game', async () => {
+        store.dispatch(
+            setProfile({
+                ...fetchProfileData,
+                managerTeams: [
+                    {
+                        _id: game.teamOne._id,
+                        place: game.teamOne.place,
+                        name: game.teamOne.name,
+                        teamname: game.teamOne.teamname,
+                        seasonStart: game.teamOne.seasonStart,
+                        seasonEnd: game.teamOne.seasonEnd,
+                    },
+                ],
+            }),
+        )
+        const spy = jest
+            .spyOn(GameData, 'reactivateInactiveGame')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    ...game,
+                    startTime: '2022' as unknown as Date,
+                    tournament: undefined,
+                    offline: false,
+                }),
+            )
+
+        jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
+            Promise.resolve(points[0]),
+        )
+        const { getByTestId, getAllByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <ViewGameScreen {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+        await waitFor(async () => {
+            expect(getAllByText('Temper').length).toBe(4)
+        })
+
+        const button = getByTestId('reactivate-button')
+        fireEvent.press(button)
+
+        expect(spy).toHaveBeenCalled()
     })
 })

@@ -1,6 +1,5 @@
 import * as GameData from '../../../src/services/data/game'
 import * as PointData from '../../../src/services/data/point'
-import { Game } from '../../../src/types/game'
 import { NavigationContainer } from '@react-navigation/native'
 import { OfflineGameOptionsProps } from '../../../src/types/navigation'
 import OfflineGameOptionsScreen from '../../../src/screens/games/OfflineGameOptionsScreen'
@@ -8,6 +7,7 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
+import { Game, LocalGame } from '../../../src/types/game'
 import { fetchProfileData, game } from '../../../fixtures/data'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
@@ -107,7 +107,8 @@ describe('OfflineGameOptionsScreen', () => {
                 ...game,
                 tournament: undefined,
                 startTime: '2022',
-            } as unknown as Game),
+                offline: false,
+            } as unknown as LocalGame),
         )
         jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
             Promise.resolve(undefined),

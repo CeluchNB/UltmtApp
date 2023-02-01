@@ -29,14 +29,15 @@ const performOnceConnected = (
         actionSocket.on('connect', () => {
             method()
         })
+        actionSocket.connect()
     }
 }
 
 export const joinPoint = async (gameId: string, pointId: string) => {
     const pointSocket = await getSocket(true)
-    performOnceConnected(pointSocket, () =>
-        pointSocket.emit('join:point', gameId, pointId),
-    )
+    performOnceConnected(pointSocket, () => {
+        pointSocket.emit('join:point', gameId, pointId)
+    })
 }
 
 export const createAction = async (action: ClientAction, pointId: string) => {

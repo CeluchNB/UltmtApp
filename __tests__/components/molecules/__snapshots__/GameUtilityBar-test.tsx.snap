@@ -1,11 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NetInfoIndicator with reachable internet 1`] = `
+exports[`GameUtilityBar renders with all actions 1`] = `
 <View
   style={
     {
       "display": "flex",
       "flexDirection": "row",
+      "justifyContent": "flex-end",
+      "width": "100%",
     }
   }
 >
@@ -55,7 +57,7 @@ exports[`NetInfoIndicator with reachable internet 1`] = `
             "borderWidth": 0,
             "elevation": 0,
             "height": 36,
-            "margin": 0,
+            "margin": 6,
             "overflow": "hidden",
             "width": 36,
           }
@@ -66,7 +68,7 @@ exports[`NetInfoIndicator with reachable internet 1`] = `
           accessibilityRole="button"
           accessibilityState={
             {
-              "disabled": true,
+              "disabled": false,
             }
           }
           accessibilityTraits="button"
@@ -109,6 +111,7 @@ exports[`NetInfoIndicator with reachable internet 1`] = `
               ],
             ]
           }
+          testID="reactivate-button"
         >
           <Text
             accessibilityElementsHidden={true}
@@ -119,7 +122,7 @@ exports[`NetInfoIndicator with reachable internet 1`] = `
             style={
               [
                 {
-                  "color": "#40dd50",
+                  "color": "#ffd600",
                   "fontSize": 20,
                 },
                 [
@@ -144,14 +147,11 @@ exports[`NetInfoIndicator with reachable internet 1`] = `
               ]
             }
           >
-            󰣸
+            󱞳
           </Text>
         </View>
       </View>
     </View>
   </View>
-  <div>
-    Network status indicator
-  </div>
 </View>
 `;

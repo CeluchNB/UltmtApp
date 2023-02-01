@@ -1,4 +1,4 @@
-import * as GameServices from '../../../src/services/network/game'
+import * as GameServices from '../../../src/services/data/game'
 import { GameSearchProps } from '../../../src/types/navigation'
 import GameSearchScreen from '../../../src/screens/games/GameSearchScreen'
 import { NavigationContainer } from '@react-navigation/native'
@@ -37,13 +37,7 @@ afterAll(() => {
 beforeEach(() => {
     jest.clearAllMocks()
     jest.spyOn(GameServices, 'searchGames').mockReturnValueOnce(
-        Promise.resolve({
-            data: { games: [game] },
-            status: 200,
-            statusText: 'Good',
-            headers: {},
-            config: {},
-        }),
+        Promise.resolve([game]),
     )
 })
 
@@ -64,15 +58,9 @@ it('should match snapshot', async () => {
 })
 
 it('should search', async () => {
-    const spy = jest.spyOn(GameServices, 'searchGames').mockReturnValueOnce(
-        Promise.resolve({
-            data: { games: [] },
-            status: 200,
-            statusText: 'Good',
-            headers: {},
-            config: {},
-        }),
-    )
+    const spy = jest
+        .spyOn(GameServices, 'searchGames')
+        .mockReturnValueOnce(Promise.resolve([game]))
     const { getByPlaceholderText, queryByText } = render(
         <NavigationContainer>
             <QueryClientProvider client={client}>
@@ -92,15 +80,9 @@ it('should search', async () => {
 })
 
 it('should use filter modal', async () => {
-    const spy = jest.spyOn(GameServices, 'searchGames').mockReturnValueOnce(
-        Promise.resolve({
-            data: { games: [] },
-            status: 200,
-            statusText: 'Good',
-            headers: {},
-            config: {},
-        }),
-    )
+    const spy = jest
+        .spyOn(GameServices, 'searchGames')
+        .mockReturnValueOnce(Promise.resolve([game]))
 
     const { getByText, queryByText } = render(
         <NavigationContainer>
@@ -123,15 +105,9 @@ it('should use filter modal', async () => {
 })
 
 it('should load more on scroll', async () => {
-    const spy = jest.spyOn(GameServices, 'searchGames').mockReturnValueOnce(
-        Promise.resolve({
-            data: { games: [game] },
-            status: 200,
-            statusText: 'Good',
-            headers: {},
-            config: {},
-        }),
-    )
+    const spy = jest
+        .spyOn(GameServices, 'searchGames')
+        .mockReturnValueOnce(Promise.resolve([game]))
 
     const { getByTestId } = render(
         <NavigationContainer>

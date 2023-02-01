@@ -17,7 +17,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
 }) => {
     const gameId = route.params.gameId
     const { colors } = useColors()
-    const { navigateToGame } = useGameReactivation()
+    const { navigateToGame, onResurrect } = useGameReactivation()
     const { data: game } = useData(getOfflineGameById, gameId)
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
@@ -36,7 +36,8 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
 
     const reactivateGame = async () => {
         if (game) {
-            navigateToGame(game)
+            const resurrectedGame = await onResurrect(game)
+            navigateToGame(resurrectedGame)
         }
     }
 

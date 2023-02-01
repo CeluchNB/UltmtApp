@@ -23,6 +23,7 @@ exports[`LivePointStatus matches base snapshot 1`] = `
       {
         "alignSelf": undefined,
         "bottom": undefined,
+        "end": undefined,
         "left": undefined,
         "position": undefined,
         "right": undefined,
@@ -33,6 +34,7 @@ exports[`LivePointStatus matches base snapshot 1`] = `
         },
         "shadowOpacity": 0,
         "shadowRadius": 0,
+        "start": undefined,
         "top": undefined,
       }
     }
@@ -187,6 +189,7 @@ exports[`LivePointStatus matches snapshot while loading 1`] = `
       {
         "alignSelf": undefined,
         "bottom": undefined,
+        "end": undefined,
         "left": undefined,
         "position": undefined,
         "right": undefined,
@@ -197,6 +200,7 @@ exports[`LivePointStatus matches snapshot while loading 1`] = `
         },
         "shadowOpacity": 0,
         "shadowRadius": 0,
+        "start": undefined,
         "top": undefined,
       }
     }

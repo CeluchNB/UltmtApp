@@ -54,7 +54,7 @@ const AccordionRightView = (props: { point: Point; isExpanded: boolean }) => {
 
     const styles = StyleSheet.create({
         circleContainer: {
-            marginBottom: -10,
+            marginTop: -10,
         },
         circle: {
             width: 10,
@@ -108,6 +108,8 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             borderColor: expanded ? colors.textSecondary : colors.textPrimary,
             borderStyle: 'solid',
             borderWidth: 1,
+            borderRadius: 4,
+            margin: 4,
             padding: 0,
         },
         item: {
@@ -127,22 +129,13 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             fontSize: size.fontFifteen,
             fontWeight: weight.bold,
         },
-        circleContainer: {
-            marginBottom: -10,
-        },
-        circle: {
-            width: 10,
-            height: 10,
-            borderRadius: 5,
-            backgroundColor: 'red',
-            alignSelf: 'flex-end',
-        },
     })
 
     return (
         <View style={{ backgroundColor: colors.primary }}>
             <List.Accordion
                 id={point._id}
+                theme={{ colors: { background: colors.primary } }}
                 style={styles.accordion}
                 right={getAccordionRightView(point)}
                 titleStyle={{ color: colors.textPrimary }}

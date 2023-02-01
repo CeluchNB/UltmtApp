@@ -12,24 +12,31 @@ import {
 import {
     activeGameId as localActiveGameId,
     activeGameOffline as localActiveGameOffline,
+    getGameById as localGetGameById,
+    saveGame as localSaveGame,
 } from '../local/game'
 import {
     createOfflinePoint as localCreateOfflinePoint,
+    deletePoint as localDeletePoint,
     getPointById as localGetPointById,
+    getPointByPointNumber as localGetPointByPointNumber,
     savePoint as localSavePoint,
-    savePoint,
 } from '../local/point'
 import {
     deleteAllActionsByPoint as localDeleteAllActionsByPoint,
+    deleteEditableActionsByPoint as localDeleteEditableActionsByPoint,
     getActions as localGetActions,
     getActionsByPoint as localGetActionsByPoint,
     saveActions as localSaveActions,
+    saveMultipleServerActions as localSaveMultipleActions,
 } from '../local/action'
 import {
     createPoint as networkCreatePoint,
+    deletePoint as networkDeletePoint,
     finishPoint as networkFinishPoint,
     getActionsByPoint as networkGetActionsByPoint,
     getLiveActionsByPoint as networkGetLiveActionsByPoint,
+    reactivatePoint as networkReactivatePoint,
     setPlayers as networkSetPlayers,
 } from '../network/point'
 
@@ -156,7 +163,7 @@ const finishOfflinePoint = async (pointId: string) => {
         }
 
         point.teamOneActive = false
-        await savePoint(point)
+        await localSavePoint(point)
     } catch (e) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)
     }
@@ -251,6 +258,96 @@ export const getActivePointForGame = async (
             }
         }
         return activePoint
+    } catch (e) {
+        return throwApiError(e, Constants.GET_POINT_ERROR)
+    }
+}
+
+/**
+ * Method to reactivate a point
+ * @param pointId id of point
+ * @param team team one or two
+ * @returns updated point
+ */
+export const reactivatePoint = async (
+    previousId: string,
+    pointNumber: number,
+    team: 'one' | 'two',
+): Promise<Point> => {
+    try {
+        const gameId = await localActiveGameId()
+        const game = await localGetGameById(gameId)
+        // find point by point number
+        const point = await localGetPointByPointNumber(pointNumber, game.points)
+        if (!point) {
+            throw new Error()
+        }
+        if (game.offline) {
+            game.points = game.points.filter(id => id !== previousId)
+            if (pointNumber === 1) {
+                point.teamOneScore = 0
+                point.teamTwoScore = 0
+                game.teamOneScore = 0
+                game.teamTwoScore = 0
+            } else {
+                const prevPoint = await localGetPointByPointNumber(
+                    pointNumber - 1,
+                    game.points,
+                )
+                if (!prevPoint) {
+                    throw new Error()
+                }
+
+                point.teamOneScore = prevPoint.teamOneScore
+                point.teamTwoScore = prevPoint.teamTwoScore
+                game.teamOneScore = prevPoint.teamOneScore
+                game.teamTwoScore = prevPoint.teamTwoScore
+            }
+            // currently, games can only be offline on creation
+            // therefore only team one will be active
+            point.teamOneActive = true
+            await localDeletePoint(previousId)
+            await localSavePoint(point)
+            await localSaveGame(game)
+        } else {
+            // reactivate point on backend
+            await withGameToken(networkDeletePoint, previousId)
+            const pointResponse = await withGameToken(
+                networkReactivatePoint,
+                point._id,
+            )
+            const { point: responsePoint } = pointResponse.data
+
+            // load actions from backend
+            const actionsResponse = await networkGetLiveActionsByPoint(
+                game._id,
+                point._id,
+            )
+
+            const { actions: networkActions } = actionsResponse.data
+            await localDeleteEditableActionsByPoint(team, point._id)
+            await localSaveMultipleActions(
+                networkActions.map((action: SavedServerAction) => {
+                    return { ...action, teamNumber: team }
+                }),
+                point._id,
+            )
+            const newActions = await localGetActionsByPoint(responsePoint._id)
+            if (team === 'one') {
+                responsePoint.teamOneActions = newActions.map(
+                    action => action._id,
+                )
+            } else {
+                responsePoint.teamTwoActions = newActions.map(
+                    action => action._id,
+                )
+            }
+
+            await localSavePoint(responsePoint)
+        }
+
+        const response = await localGetPointById(point._id)
+        return response
     } catch (e) {
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }

@@ -1,8 +1,8 @@
-import { Game } from '../types/game'
 import { getActivePointForGame } from '../services/data/point'
 import { resurrectActiveGame } from '../services/data/game'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
 import { useNavigation } from '@react-navigation/native'
+import { Game, LocalGame } from '../types/game'
 import {
     resetPoint,
     setPoint,
@@ -30,14 +30,13 @@ export const useGameReactivation = () => {
         return game.creator._id === account._id ? 'one' : 'two'
     }
 
-    const navigateToGame = async (activeGame: Game & { offline: boolean }) => {
+    const onResurrect = async (game: Game): Promise<LocalGame> => {
+        return await resurrectActiveGame(game._id, getMyTeamId(game))
+    }
+
+    const navigateToGame = async (game: LocalGame) => {
         // get game data
         try {
-            const game = await resurrectActiveGame(
-                activeGame._id,
-                getMyTeamId(activeGame),
-            )
-
             // get point data
             // either an in progress point or a new point
             // actions handled in useGameEditor
@@ -66,5 +65,5 @@ export const useGameReactivation = () => {
         } catch (e) {}
     }
 
-    return { navigateToGame }
+    return { navigateToGame, onResurrect }
 }

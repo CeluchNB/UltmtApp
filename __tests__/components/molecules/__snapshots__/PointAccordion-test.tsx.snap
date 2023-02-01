@@ -12,7 +12,7 @@ exports[`PointAccordion should match snapshot closed 1`] = `
     <View
       style={
         {
-          "backgroundColor": "rgba(255, 251, 254, 1)",
+          "backgroundColor": "#303030",
         }
       }
     >
@@ -49,9 +49,11 @@ exports[`PointAccordion should match snapshot closed 1`] = `
               {
                 "backgroundColor": "#303030",
                 "borderColor": "#ffd600",
+                "borderRadius": 4,
                 "borderStyle": "solid",
                 "borderWidth": 1,
                 "color": "#ffd600",
+                "margin": 4,
                 "padding": 0,
               },
             ],
@@ -190,7 +192,7 @@ exports[`PointAccordion should match snapshot closed 1`] = `
               <View
                 style={
                   {
-                    "marginBottom": -10,
+                    "marginTop": -10,
                   }
                 }
               >
@@ -278,7 +280,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
     <View
       style={
         {
-          "backgroundColor": "rgba(255, 251, 254, 1)",
+          "backgroundColor": "#303030",
         }
       }
     >
@@ -315,9 +317,11 @@ exports[`PointAccordion should match snapshot open 1`] = `
               {
                 "backgroundColor": "#303030",
                 "borderColor": "#31adff",
+                "borderRadius": 4,
                 "borderStyle": "solid",
                 "borderWidth": 1,
                 "color": "#ffd600",
+                "margin": 4,
                 "padding": 0,
               },
             ],
@@ -456,7 +460,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
               <View
                 style={
                   {
-                    "marginBottom": -10,
+                    "marginTop": -10,
                   }
                 }
               >

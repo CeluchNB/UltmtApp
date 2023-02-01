@@ -95,6 +95,23 @@ export const upsertAction = async (
     return parseAction(result)
 }
 
+export const saveMultipleServerActions = async (
+    actions: LiveServerAction[],
+    pointId: string,
+): Promise<void> => {
+    const realm = await getRealm()
+
+    realm.write(() => {
+        for (const action of actions) {
+            realm.create(
+                'Action',
+                { ...action, _id: new Realm.BSON.ObjectId(), pointId },
+                Realm.UpdateMode.All,
+            )
+        }
+    })
+}
+
 export const deleteAction = async (
     teamNumber: 'one' | 'two',
     actionNumber: number,
@@ -122,6 +139,19 @@ export const deleteAction = async (
     return result
 }
 
+export const deleteEditableActionsByPoint = async (
+    team: 'one' | 'two',
+    pointId: string,
+): Promise<void> => {
+    const realm = await getRealm()
+    const actions = await realm
+        .objects<ActionSchema>('Action')
+        .filtered(`teamNumber == "${team}" && pointId == "${pointId}"`)
+    realm.write(() => {
+        realm.delete(actions)
+    })
+}
+
 export const getActionById = async (
     actionId: string,
 ): Promise<LiveServerAction> => {
@@ -138,14 +168,14 @@ export const getActionById = async (
 
 export const getActionsByPoint = async (
     pointId: string,
-): Promise<LiveServerAction[]> => {
+): Promise<(LiveServerAction & { _id: string; pointId: string })[]> => {
     const realm = await getRealm()
     const actions = await realm
         .objects<ActionSchema>('Action')
         .filtered(`pointId == "${pointId}"`)
 
     return actions.map(action => {
-        return parseLiveAction(action)
+        return parseAction(action)
     })
 }
 

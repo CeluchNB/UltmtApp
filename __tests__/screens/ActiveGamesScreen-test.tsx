@@ -2,12 +2,12 @@ import * as GameData from '../../src/services/data/game'
 import * as PointData from '../../src/services/data/point'
 import { ActiveGamesProps } from '../../src/types/navigation'
 import ActiveGamesScreen from '../../src/screens/ActiveGamesScreen'
-import { Game } from '../../src/types/game'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
+import { Game, LocalGame } from '../../src/types/game'
 import { fetchProfileData, game, point } from '../../fixtures/data'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
@@ -24,7 +24,7 @@ jest.mock('@react-navigation/native', () => {
     }
 })
 
-const createGame = (overrides: Partial<Game>): Game & { offline: boolean } => {
+const createGame = (overrides: Partial<Game>): LocalGame => {
     return {
         ...game,
         offline: false,
@@ -93,7 +93,8 @@ describe('ActiveGamesScreen', () => {
                 ...game,
                 tournament: undefined,
                 startTime: '2022',
-            } as unknown as Game),
+                offline: false,
+            } as unknown as Game & { offline: boolean }),
         )
         jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
             Promise.resolve(undefined),
@@ -134,7 +135,8 @@ describe('ActiveGamesScreen', () => {
                 },
                 tournament: undefined,
                 startTime: '2022',
-            } as unknown as Game),
+                offline: false,
+            } as unknown as LocalGame),
         )
         jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
             Promise.resolve(point),
@@ -175,7 +177,8 @@ describe('ActiveGamesScreen', () => {
                 },
                 tournament: undefined,
                 startTime: '2022',
-            } as unknown as Game),
+                offline: false,
+            } as unknown as LocalGame),
         )
         jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
             Promise.resolve(point),
@@ -216,7 +219,8 @@ describe('ActiveGamesScreen', () => {
                 },
                 tournament: undefined,
                 startTime: '2022',
-            } as unknown as Game),
+                offline: false,
+            } as unknown as LocalGame),
         )
         jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
             Promise.resolve({ ...point, teamOneActions: ['an action'] }),

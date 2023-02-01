@@ -3,25 +3,28 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import { Chip } from 'react-native-paper'
 import GameHeader from '../../components/molecules/GameHeader'
 import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
+import LivePointStatus from '../../components/molecules/LivePointStatus'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
 import { isPulling } from '../../utils/point'
+import { reactivatePoint } from '../../services/data/point'
 import { size } from '../../theme/fonts'
 import { useColors } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text } from 'react-native'
 import React, { useState } from 'react'
-
 import {
     resetSetPlayersStatus,
     selectPoint,
     selectSetPlayersError,
     selectSetPlayersStatus,
     setPlayers,
+    setPoint,
 } from '../../store/reducers/features/point/livePointReducer'
 import {
     selectGame,
     selectTeam,
+    updateScore,
 } from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -45,6 +48,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         return game.teamTwoPlayers
     }, [game, team])
 
+    React.useEffect(() => {
+        if (status === 'success') {
+            dispatch(resetSetPlayersStatus())
+            navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
+        }
+    }, [status, navigation, dispatch])
+
     // no guaranteed unique attribute of GuestPlayer
     // must select by index
     const toggleSelection = (i: number) => {
@@ -66,12 +76,25 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         dispatch(setPlayers({ players }))
     }
 
-    React.useEffect(() => {
-        if (status === 'success') {
-            dispatch(resetSetPlayersStatus())
+    const onLastPoint = async () => {
+        try {
+            const reactivatedPoint = await reactivatePoint(
+                point._id,
+                point.pointNumber - 1,
+                team,
+            )
+            dispatch(setPoint(reactivatedPoint))
+            dispatch(
+                updateScore({
+                    teamOneScore: reactivatedPoint.teamOneScore,
+                    teamTwoScore: reactivatedPoint.teamTwoScore,
+                }),
+            )
             navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
+        } catch (e) {
+            console.log('got e', e)
         }
-    }, [status, navigation, dispatch])
+    }
 
     const styles = StyleSheet.create({
         description: {
@@ -108,6 +131,11 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 {isPulling(point, game, team) ? 'D ' : 'O '}
                 point
             </Text>
+            <LivePointStatus
+                loading={false}
+                undoDisabled={point.pointNumber === 1 || game.teamTwoActive}
+                onUndo={onLastPoint}
+            />
             <FlatList
                 contentContainerStyle={styles.flatListContainer}
                 data={playerList}

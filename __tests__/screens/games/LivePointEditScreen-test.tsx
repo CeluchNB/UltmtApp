@@ -1,7 +1,6 @@
 import '@testing-library/jest-native/extend-expect'
 import * as ActionData from '../../../src/services/data/live-action'
-import * as GameServices from '../../../src/services/network/game'
-import * as LocalGameServices from '../../../src/services/local/game'
+import * as GameServices from '../../../src/services/data/game'
 import * as PointServices from '../../../src/services/data/point'
 import { LivePointEditProps } from '../../../src/types/navigation'
 import LivePointEditScreen from '../../../src/screens/games/LivePointEditScreen'
@@ -106,7 +105,7 @@ beforeEach(() => {
     )
     store.dispatch(setPoint(point))
     store.dispatch(setTeam('one'))
-    reset.mockClear()
+    jest.resetAllMocks()
     jest.spyOn(ActionData, 'joinPoint').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'addAction').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'undoAction').mockReturnValue(Promise.resolve())
@@ -122,11 +121,10 @@ beforeEach(() => {
             tags: [],
         }),
     )
-    // jest.spyOn(ActionData, 'subscribe').mockReturnValue(Promise.resolve())
 })
 
 describe('LivePointEditScreen', () => {
-    it('should match snapshot', async () => {
+    it('matches snapshot', async () => {
         const snapshot = render(
             <NavigationContainer>
                 <Provider store={store}>
@@ -144,7 +142,7 @@ describe('LivePointEditScreen', () => {
         expect(snapshot.toJSON()).toMatchSnapshot()
     })
 
-    it('should handle basic D point', async () => {
+    it('handles basic D point', async () => {
         const finishPointSpy = jest
             .spyOn(PointServices, 'finishPoint')
             .mockReturnValueOnce(Promise.resolve({ ...point, teamTwoScore: 1 }))
@@ -216,7 +214,7 @@ describe('LivePointEditScreen', () => {
         expect(createPointSpy).toHaveBeenCalledWith(false, 2)
     })
 
-    it('should handle basic O point', async () => {
+    it('handles basic O point', async () => {
         store.dispatch(setTeam('two'))
         const finishPointSpy = jest
             .spyOn(PointServices, 'finishPoint')
@@ -332,25 +330,12 @@ describe('LivePointEditScreen', () => {
             .mockReturnValueOnce(Promise.resolve({ ...point, teamTwoScore: 1 }))
         const finishGameSpy = jest
             .spyOn(GameServices, 'finishGame')
-            .mockReturnValueOnce(
-                Promise.resolve({
-                    data: {
-                        game,
-                    },
-                    status: 200,
-                    statusText: 'Good',
-                    headers: {},
-                    config: {},
-                }),
-            )
+            .mockReturnValueOnce(Promise.resolve(game))
         let subscriptions: SubscriptionObject
         jest.spyOn(ActionData, 'subscribe').mockImplementationOnce(
             async subs => {
                 subscriptions = subs
             },
-        )
-        jest.spyOn(LocalGameServices, 'deleteFullGame').mockReturnValueOnce(
-            Promise.resolve(),
         )
 
         const { getAllByText, getByText } = render(
@@ -399,5 +384,149 @@ describe('LivePointEditScreen', () => {
         })
         expect(finishPointSpy).toHaveBeenCalledWith(point._id)
         expect(finishGameSpy).toHaveBeenCalled()
+    })
+
+    it('handles offline game actions', async () => {
+        store.dispatch(
+            setGame({
+                ...game,
+                teamOnePlayers: playerList1,
+                teamTwoPlayers: [],
+                tournament: undefined,
+                startTime: '2022',
+                offline: true,
+            }),
+        )
+        store.dispatch(setTeam('two'))
+        const finishPointSpy = jest
+            .spyOn(PointServices, 'finishPoint')
+            .mockReturnValueOnce(Promise.resolve({ ...point, teamOneScore: 1 }))
+        const createPointSpy = jest
+            .spyOn(PointServices, 'createPoint')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    ...point,
+                    teamOneScore: 1,
+                    pullingTeam: game.teamTwo,
+                    receivingTeam: game.teamOne,
+                    pointNumber: 2,
+                }),
+            )
+        jest.spyOn(GameServices, 'activeGameOffline').mockReturnValueOnce(
+            Promise.resolve(true),
+        )
+        jest.spyOn(ActionData, 'createOfflineAction').mockImplementation(
+            async action => {
+                return {
+                    ...action,
+                    teamNumber: 'two',
+                    actionNumber: 1,
+                    comments: [],
+                }
+            },
+        )
+        jest.spyOn(ActionData, 'undoOfflineAction').mockImplementation(
+            async _pointId => {
+                return {
+                    teamNumber: 'two',
+                    comments: [],
+                    tags: [],
+                    actionNumber: 1,
+                    actionType: ActionType.PULL,
+                }
+            },
+        )
+
+        let subscriptions: SubscriptionObject
+        jest.spyOn(ActionData, 'subscribe').mockImplementationOnce(
+            async subs => {
+                subscriptions = subs
+            },
+        )
+
+        const { getAllByText, getByText, getByTestId } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <LivePointEditScreen {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+
+        const catchBtn = getAllByText('Catch')[1]
+        await waitFor(() => {
+            expect(catchBtn).not.toBeDisabled()
+        })
+
+        fireEvent.press(catchBtn)
+        await act(async () => {
+            const catchAction: LiveServerAction = {
+                actionNumber: 1,
+                actionType: ActionType.CATCH,
+                teamNumber: 'two',
+                comments: [],
+                tags: [],
+            }
+            subscriptions.client(catchAction)
+        })
+        fireEvent.press(getAllByText('Catch')[2])
+        await act(async () => {
+            const catchAction: LiveServerAction = {
+                actionNumber: 2,
+                actionType: ActionType.CATCH,
+                teamNumber: 'two',
+                comments: [],
+                tags: [],
+            }
+            subscriptions.client(catchAction)
+        })
+        fireEvent.press(getAllByText('Catch')[3])
+        await act(async () => {
+            const catchAction: LiveServerAction = {
+                actionNumber: 3,
+                actionType: ActionType.CATCH,
+                teamNumber: 'two',
+                comments: [],
+                tags: [],
+            }
+            subscriptions.client(catchAction)
+        })
+        fireEvent.press(getAllByText('Catch')[4])
+        await act(async () => {
+            const catchAction: LiveServerAction = {
+                actionNumber: 4,
+                actionType: ActionType.CATCH,
+                teamNumber: 'two',
+                comments: [],
+                tags: [],
+            }
+            subscriptions.client(catchAction)
+        })
+        fireEvent.press(getByTestId('undo-button'))
+        await act(async () => {
+            subscriptions.undo({})
+        })
+        fireEvent.press(getAllByText('score')[4])
+        await act(async () => {
+            const scoreAction: LiveServerAction = {
+                actionNumber: 5,
+                actionType: ActionType.TEAM_ONE_SCORE,
+                teamNumber: 'two',
+                comments: [],
+                tags: [],
+            }
+            subscriptions.client(scoreAction)
+        })
+        fireEvent.press(getByText('next point'))
+
+        await waitFor(() => {
+            expect(reset).toHaveBeenCalledWith({
+                index: 0,
+                routes: [{ name: 'SelectPlayers' }],
+            })
+        })
+        expect(finishPointSpy).toHaveBeenCalledWith(point._id)
+        expect(store.getState().liveGame.game.teamTwoScore).toBe(0)
+        expect(store.getState().liveGame.game.teamOneScore).toBe(1)
+        expect(createPointSpy).toHaveBeenCalledWith(false, 2)
     })
 })

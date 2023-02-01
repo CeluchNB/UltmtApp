@@ -79,3 +79,31 @@ export const getLiveActionsByPoint = async (
         },
     )
 }
+
+export const reactivatePoint = async (
+    token: string,
+    pointId: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/point/${pointId}/reactivate`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}
+
+export const deletePoint = async (
+    token: string,
+    pointId: string,
+): Promise<AxiosResponse> => {
+    return await axios.delete(`${API_URL_V1}/point/${pointId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
+        },
+    })
+}
