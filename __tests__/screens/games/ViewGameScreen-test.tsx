@@ -30,10 +30,12 @@ jest.mock('@react-navigation/native', () => {
     }
 })
 
+const goBack = jest.fn()
 const props: ViewGameProps = {
     navigation: {
         addListener: jest.fn().mockReturnValue(() => {}),
         navigate: jest.fn(),
+        goBack,
     } as any,
     route: { params: { gameId: 'game1' } } as any,
 }
@@ -467,6 +469,49 @@ describe('ViewGameScreen', () => {
         const button = getByTestId('reactivate-button')
         fireEvent.press(button)
 
+        expect(spy).toHaveBeenCalled()
+    })
+
+    it('deletes game', async () => {
+        store.dispatch(
+            setProfile({
+                ...fetchProfileData,
+                managerTeams: [
+                    {
+                        _id: game.teamOne._id,
+                        place: game.teamOne.place,
+                        name: game.teamOne.name,
+                        teamname: game.teamOne.teamname,
+                        seasonStart: game.teamOne.seasonStart,
+                        seasonEnd: game.teamOne.seasonEnd,
+                    },
+                ],
+            }),
+        )
+        const spy = jest
+            .spyOn(GameData, 'deleteGame')
+            .mockReturnValueOnce(Promise.resolve(undefined))
+
+        const { getByTestId, getAllByText, getByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <ViewGameScreen {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+        await waitFor(async () => {
+            expect(getAllByText('Temper').length).toBe(4)
+        })
+
+        const button = getByTestId('delete-button')
+        fireEvent.press(button)
+
+        const confirmBtn = getByText('confirm')
+        fireEvent.press(confirmBtn)
+
+        await waitFor(async () => {
+            expect(goBack).toHaveBeenCalled()
+        })
         expect(spy).toHaveBeenCalled()
     })
 })

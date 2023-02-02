@@ -17,6 +17,7 @@ import {
     activeGameOffline,
     addGuestPlayer,
     createGame,
+    deleteGame,
     finishGame,
     getActiveGames,
     getGameById,
@@ -803,6 +804,43 @@ describe('test reactivate inactive game', () => {
         await expect(
             reactivateInactiveGame('game1', 'team1'),
         ).rejects.toMatchObject({ message: Constants.GET_GAME_ERROR })
+    })
+})
+
+describe('test delete game', () => {
+    it('with success', async () => {
+        jest.spyOn(LocalGameServices, 'deleteFullGame').mockReturnValueOnce(
+            Promise.resolve(),
+        )
+        jest.spyOn(GameServices, 'deleteGame').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'good',
+                config: {},
+                headers: {},
+            }),
+        )
+
+        await expect(deleteGame('game1', 'team1')).resolves.toBeUndefined()
+    })
+
+    it('with error', async () => {
+        jest.spyOn(LocalGameServices, 'deleteFullGame').mockReturnValueOnce(
+            Promise.resolve(),
+        )
+        jest.spyOn(GameServices, 'deleteGame').mockRejectedValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 401,
+                statusText: 'bad',
+                config: {},
+                headers: {},
+            }),
+        )
+        await expect(deleteGame('game1', 'team1')).rejects.toMatchObject({
+            message: Constants.DELETE_GAME_ERROR,
+        })
     })
 })
 
