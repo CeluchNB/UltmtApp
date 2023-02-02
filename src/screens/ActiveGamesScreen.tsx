@@ -1,15 +1,16 @@
 import { ActiveGamesProps } from '../types/navigation'
 import BaseScreen from '../components/atoms/BaseScreen'
+import ConfirmModal from '../components/molecules/ConfirmModal'
 import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
 import ScreenTitle from '../components/atoms/ScreenTitle'
-import { getActiveGames } from '../services/data/game'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
 import { size } from '../theme/fonts'
 import { useGameReactivation } from '../hooks/useGameReactivation'
 import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, Text } from 'react-native'
 import { Game, LocalGame } from '../types/game'
+import { deleteGame, getActiveGames } from '../services/data/game'
 import { useColors, useData } from '../hooks'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
@@ -20,6 +21,9 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
         getActiveGames,
         account._id,
     )
+    const [modalVisible, setModalVisible] = React.useState(false)
+    const [deletingGame, setDeletingGame] = React.useState<Game>()
+    const [deleteLoading, setDeleteLoading] = React.useState(false)
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -53,6 +57,23 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
         } catch (e) {}
     }
 
+    const onDelete = async () => {
+        if (deletingGame) {
+            setDeleteLoading(true)
+            try {
+                await deleteGame(deletingGame._id, getMyTeamId(deletingGame))
+            } finally {
+                refetch()
+                setDeleteLoading(false)
+            }
+        }
+        setModalVisible(false)
+    }
+
+    const onClose = async () => {
+        setModalVisible(false)
+    }
+
     const styles = StyleSheet.create({
         infoText: {
             fontSize: size.fontLarge,
@@ -76,12 +97,25 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                         <GameListItem
                             game={item}
                             teamId={getMyTeamId(item)}
+                            showDelete={true}
                             onPress={() => {
                                 onGamePress(item)
+                            }}
+                            onDelete={() => {
+                                setDeletingGame(item)
+                                setModalVisible(true)
                             }}
                         />
                     )
                 }}
+            />
+            <ConfirmModal
+                displayText="Are you sure you want to delete the game? This cannot be undone."
+                visible={modalVisible}
+                loading={deleteLoading}
+                onClose={onClose}
+                onCancel={onClose}
+                onConfirm={onDelete}
             />
         </BaseScreen>
     )

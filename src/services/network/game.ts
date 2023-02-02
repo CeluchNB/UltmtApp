@@ -133,3 +133,16 @@ export const pushOfflineGame = async (
         },
     )
 }
+
+export const deleteGame = async (
+    userJwt: string,
+    gameId: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.delete(`${API_URL_V1}/game/${gameId}?team=${teamId}`, {
+        headers: {
+            'X-API-Key': API_KEY,
+            Authorization: `Bearer ${userJwt}`,
+        },
+    })
+}

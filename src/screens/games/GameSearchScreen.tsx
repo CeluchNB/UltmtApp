@@ -22,7 +22,7 @@ import React, { useState } from 'react'
 
 const PAGE_SIZE = 10
 
-const GameSearchScreen: React.FC<GameSearchProps> = ({ route }) => {
+const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
     const { colors } = useColors()
     const { live: defaultLive } = route.params
 
@@ -31,7 +31,7 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ route }) => {
     const [live, setLive] = useState(defaultLive)
     const [after, setAfter] = useState(new Date('2022-01-02'))
     const [before, setBefore] = useState(
-        new Date(new Date().setDate(new Date().getDate() + 1)),
+        new Date(new Date().setDate(new Date().getDate() + 7)),
     )
 
     const { data, isLoading, isFetchingNextPage, fetchNextPage } =
@@ -197,7 +197,15 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ route }) => {
             <FlatList
                 data={data?.pages.flat()}
                 renderItem={({ item: game }) => (
-                    <GameCard key={game._id} game={game} onPress={() => {}} />
+                    <GameCard
+                        key={game._id}
+                        game={game}
+                        onPress={() => {
+                            navigation.navigate('ViewGame', {
+                                gameId: game._id,
+                            })
+                        }}
+                    />
                 )}
                 keyExtractor={(item, i) => {
                     return `${item._id}${i}`

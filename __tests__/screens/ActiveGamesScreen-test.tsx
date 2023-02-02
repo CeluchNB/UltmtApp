@@ -35,7 +35,9 @@ const createGame = (overrides: Partial<Game>): LocalGame => {
 const props: ActiveGamesProps = {
     navigation: {
         mockedNavigate,
-        addListener: jest.fn(),
+        addListener: () => {
+            return () => {}
+        },
     } as any,
     route: {} as any,
 }
@@ -247,5 +249,40 @@ describe('ActiveGamesScreen', () => {
                 screen: 'LivePointEdit',
             })
         })
+    })
+
+    it('deletes a game', async () => {
+        const spy = jest
+            .spyOn(GameData, 'deleteGame')
+            .mockReturnValueOnce(Promise.resolve(undefined))
+        const { getByText, getAllByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ActiveGamesScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        await waitFor(async () => {
+            expect(
+                getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+            ).toBeTruthy()
+        })
+
+        const deleteBtn1 = getAllByTestId('delete-button')[0]
+        fireEvent.press(deleteBtn1)
+
+        const confirmBtn = getByText('confirm')
+        fireEvent.press(confirmBtn)
+
+        expect(spy).toHaveBeenCalledTimes(1)
+
+        const deleteBtn2 = getAllByTestId('delete-button')[0]
+        fireEvent.press(deleteBtn2)
+
+        const cancelBtn = getByText('cancel')
+        fireEvent.press(cancelBtn)
+
+        expect(spy).toHaveBeenCalledTimes(1)
     })
 })
