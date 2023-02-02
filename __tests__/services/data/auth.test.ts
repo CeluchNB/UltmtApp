@@ -112,7 +112,6 @@ describe('should handle is logged in', () => {
     })
 })
 
-// TODO: fix or delete this test
 describe('refresh token', () => {
     it('should handle refresh token with refresh token', async () => {
         jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValueOnce(

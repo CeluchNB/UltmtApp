@@ -35,6 +35,7 @@ import {
 import {
     addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
+    deleteGame as networkDeleteGame,
     finishGame as networkFinishGame,
     getGameById as networkGetGameById,
     getGamesByTeam as networkGetGameByTeams,
@@ -405,6 +406,23 @@ export const pushOfflineGame = async (gameId: string): Promise<void> => {
         return
     } catch (e) {
         return throwApiError(e, Constants.FINISH_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to delete a game.
+ * @param gameId id of game to delete
+ * @param teamId id of team deleting
+ */
+export const deleteGame = async (gameId: string, teamId: string) => {
+    try {
+        try {
+            await localDeleteFullGame(gameId)
+        } finally {
+            await withToken(networkDeleteGame, gameId, teamId)
+        }
+    } catch (e) {
+        return throwApiError(e, Constants.DELETE_GAME_ERROR)
     }
 }
 

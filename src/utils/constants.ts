@@ -33,3 +33,4 @@ export const JOIN_GAME_ERROR = 'Cannot join this game. Please check your join co
 export const COMMENT_ERROR = 'Unable to add comment. Please try again.'
 export const FINISH_GAME_ERROR = 'Error finishing game. Please try again.'
 export const GET_ACTION_ERROR = 'Unable to get this action. Please try again.'
+export const DELETE_GAME_ERROR = 'Unable to delete this game. Please try again.'

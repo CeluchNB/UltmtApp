@@ -5,10 +5,12 @@ import { StyleSheet, View } from 'react-native'
 
 interface GameUtilityBarProps {
     onReactivateGame?: () => void
+    onDeleteGame?: () => void
 }
 
 const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
     onReactivateGame,
+    onDeleteGame,
 }) => {
     const { colors } = useColors()
 
@@ -30,6 +32,15 @@ const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
                     icon="arrow-u-left-top"
                     onPress={onReactivateGame}
                     testID="reactivate-button"
+                />
+            )}
+            {onDeleteGame && (
+                <IconButton
+                    size={20}
+                    iconColor={colors.error}
+                    icon="trash-can-outline"
+                    onPress={onDeleteGame}
+                    testID="delete-button"
                 />
             )}
         </View>

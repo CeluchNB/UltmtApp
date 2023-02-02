@@ -8,13 +8,17 @@ import { size, weight } from '../../theme/fonts'
 interface GameListItemProps {
     game: Game
     teamId?: string
+    showDelete?: boolean
     onPress?: () => void
+    onDelete?: () => void
 }
 
 const GameListItem: React.FC<GameListItemProps> = ({
     game,
     teamId,
+    showDelete,
     onPress,
+    onDelete,
 }) => {
     const { colors } = useColors()
 
@@ -43,6 +47,10 @@ const GameListItem: React.FC<GameListItemProps> = ({
         return undefined
     }, [onPress])
 
+    const handleDelete = async () => {
+        if (onDelete) onDelete()
+    }
+
     const styles = StyleSheet.create({
         teamName: {
             color: colors.gray,
@@ -57,7 +65,10 @@ const GameListItem: React.FC<GameListItemProps> = ({
     })
 
     return (
-        <BaseListItem onPress={handlePress}>
+        <BaseListItem
+            onPress={handlePress}
+            onDelete={handleDelete}
+            showDelete={showDelete}>
             <Text style={styles.teamName}>{`vs.${
                 opponent.place ? ` ${opponent.place}` : ''
             } ${opponent.name}`}</Text>

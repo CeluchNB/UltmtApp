@@ -1,10 +1,12 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
+import ConfirmModal from '../../components/molecules/ConfirmModal'
 import GameHeader from '../../components/molecules/GameHeader'
 import GameUtilityBar from '../../components/molecules/GameUtilityBar'
 import PointAccordionGroup from '../../components/organisms/PointAccordionGroup'
 import React from 'react'
 import { ServerAction } from '../../types/action'
 import { ViewGameProps } from '../../types/navigation'
+import { deleteGame } from '../../services/data/game'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { useColors, useGameReactivation, useGameViewer } from '../../hooks'
 
@@ -28,6 +30,8 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         onReactivateGame,
     } = useGameViewer(gameId)
     const { navigateToGame } = useGameReactivation()
+    const [modalVisible, setModalVisible] = React.useState(false)
+    const [deleteLoading, setDeleteLoading] = React.useState(false)
 
     React.useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
@@ -59,6 +63,28 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         }
     }, [navigateToGame, onReactivateGame])
 
+    const onDelete = () => {
+        setModalVisible(true)
+    }
+
+    const handleDeleteGame = React.useCallback(async () => {
+        setDeleteLoading(true)
+        try {
+            if (!managingTeamId) {
+                throw new Error()
+            }
+            await deleteGame(gameId, managingTeamId)
+        } finally {
+            setDeleteLoading(false)
+            setModalVisible(false)
+            navigation.goBack()
+        }
+    }, [gameId, managingTeamId, navigation])
+
+    const onClose = async () => {
+        setModalVisible(false)
+    }
+
     const styles = StyleSheet.create({
         pointsContainer: {
             marginTop: 10,
@@ -75,6 +101,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                     onReactivateGame={
                         managingTeamId ? handleReactivateGame : undefined
                     }
+                    onDeleteGame={managingTeamId ? onDelete : undefined}
                 />
             )}
             {(allPointsLoading || gameLoading) && (
@@ -96,6 +123,14 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                     />
                 </View>
             )}
+            <ConfirmModal
+                displayText="Are you sure you want to delete the game? This cannot be undone."
+                visible={modalVisible}
+                onClose={onClose}
+                onCancel={onClose}
+                loading={deleteLoading}
+                onConfirm={handleDeleteGame}
+            />
         </BaseScreen>
     )
 }
