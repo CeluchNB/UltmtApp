@@ -3,18 +3,20 @@ import React from 'react'
 import { useColors } from '../../hooks'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
-interface LivePointStatusProps {
+interface LivePointUtilityBarProps {
     undoDisabled: boolean
     loading: boolean
     error?: string
     onUndo: () => void
+    onEdit: () => void
 }
 
-const LivePointStatus: React.FC<LivePointStatusProps> = ({
+const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
     undoDisabled,
     loading,
     error,
     onUndo,
+    onEdit,
 }) => {
     const { colors } = useColors()
 
@@ -42,8 +44,14 @@ const LivePointStatus: React.FC<LivePointStatusProps> = ({
                 disabled={undoDisabled}
                 testID="undo-button"
             />
+            <IconButton
+                icon="pencil"
+                iconColor={colors.textPrimary}
+                onPress={onEdit}
+                testID="edit-button"
+            />
         </View>
     )
 }
 
-export default LivePointStatus
+export default LivePointUtilityBar

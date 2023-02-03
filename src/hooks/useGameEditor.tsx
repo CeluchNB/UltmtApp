@@ -1,7 +1,7 @@
 import * as Constants from '../utils/constants'
 import { DisplayUser } from '../types/user'
 import React from 'react'
-import { activeGameOffline } from '../services/data/game'
+import { UpdateGame } from '../types/game'
 import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import {
@@ -11,6 +11,7 @@ import {
     LiveServerAction,
     SubscriptionObject,
 } from '../types/action'
+import { activeGameOffline, editGame } from '../services/data/game'
 import {
     addAction,
     createOfflineAction,
@@ -30,6 +31,7 @@ import {
     resetGame,
     selectGame,
     selectTeam,
+    setGame,
     updateScore,
 } from '../store/reducers/features/game/liveGameReducer'
 import {
@@ -267,10 +269,34 @@ export const useGameEditor = () => {
     }
 
     const onFinishGame = async () => {
-        await finishPoint(point._id)
-        await finishGame()
-        dispatch(resetGame())
-        dispatch(resetPoint())
+        try {
+            await finishPoint(point._id)
+            await finishGame()
+            dispatch(resetGame())
+            dispatch(resetPoint())
+        } catch (e) {}
+    }
+
+    const onEditGame = async (gameData: UpdateGame) => {
+        try {
+            const data = parseUpdateGame(gameData)
+            const result = await editGame(game._id, data)
+            dispatch(setGame(result))
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const parseUpdateGame = (data: UpdateGame): UpdateGame => {
+        return {
+            scoreLimit: Number(data.scoreLimit),
+            halfScore: Number(data.halfScore),
+            softcapMins: Number(data.softcapMins),
+            hardcapMins: Number(data.hardcapMins),
+            playersPerPoint: Number(data.playersPerPoint),
+            timeoutPerHalf: Number(data.timeoutPerHalf),
+            floaterTimeout: data.floaterTimeout,
+        }
     }
 
     return {
@@ -288,5 +314,6 @@ export const useGameEditor = () => {
         onUndo,
         onFinishPoint,
         onFinishGame,
+        onEditGame,
     }
 }

@@ -57,4 +57,18 @@ export interface SearchParams {
     before?: Date
 }
 
+export interface UpdateGame {
+    teamTwo?: DisplayTeam
+    teamTwoDefined?: boolean
+    scoreLimit?: number
+    halfScore?: number
+    startTime?: Date
+    softcapMins?: number
+    hardcapMins?: number
+    playersPerPoint?: number
+    timeoutPerHalf?: number
+    floaterTimeout?: boolean
+    tournament?: Tournament
+}
+
 export type LocalGame = Game & { offline: boolean }

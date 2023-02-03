@@ -1,3 +1,4 @@
+import EditGameScreen from '../screens/games/EditGameScreen'
 import FirstPointScreen from '../screens/games/FirstPointScreen'
 import { LiveGameParamList } from '../types/navigation'
 import LivePointEditScreen from '../screens/games/LivePointEditScreen'
@@ -19,6 +20,7 @@ const LiveGameNavigator: React.FC<{}> = () => {
                 name="LivePointEdit"
                 component={LivePointEditScreen}
             />
+            <Stack.Screen name="EditGame" component={EditGameScreen} />
         </Stack.Navigator>
     )
 }

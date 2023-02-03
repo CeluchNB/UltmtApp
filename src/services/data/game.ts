@@ -10,7 +10,7 @@ import { parseClientPoint } from '../../utils/point'
 import { parseFullGame } from '../../utils/game'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
-import { CreateGame, Game, LocalGame } from '../../types/game'
+import { CreateGame, Game, LocalGame, UpdateGame } from '../../types/game'
 import { DisplayUser, GuestUser } from '../../types/user'
 import Point, { ClientPoint } from '../../types/point'
 import {
@@ -36,6 +36,7 @@ import {
     addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
     deleteGame as networkDeleteGame,
+    editGame as networkEditGame,
     finishGame as networkFinishGame,
     getGameById as networkGetGameById,
     getGamesByTeam as networkGetGameByTeams,
@@ -423,6 +424,32 @@ export const deleteGame = async (gameId: string, teamId: string) => {
         }
     } catch (e) {
         return throwApiError(e, Constants.DELETE_GAME_ERROR)
+    }
+}
+
+/**
+ * Method to edit a game.
+ * @param gameId id of game
+ * @param data updated game data
+ * @returns updated game
+ */
+export const editGame = async (
+    gameId: string,
+    data: UpdateGame,
+): Promise<Game> => {
+    try {
+        const game = await localGetGameById(gameId)
+        if (!game.offline) {
+            const response = await withGameToken(networkEditGame, data)
+            const { game: responseGame } = response.data
+            await localSaveGame(responseGame)
+        } else {
+            await localSaveGame({ ...game, ...data })
+        }
+
+        return await localGetGameById(gameId)
+    } catch (e) {
+        return throwApiError(e, Constants.UPDATE_GAME_ERROR)
     }
 }
 

@@ -18,6 +18,7 @@ import {
     addGuestPlayer,
     createGame,
     deleteGame,
+    editGame,
     finishGame,
     getActiveGames,
     getGameById,
@@ -841,6 +842,47 @@ describe('test delete game', () => {
         await expect(deleteGame('game1', 'team1')).rejects.toMatchObject({
             message: Constants.DELETE_GAME_ERROR,
         })
+    })
+})
+
+describe('test edit game', () => {
+    it('with valid online game', async () => {
+        const updatedGame = { ...game, offline: false, scoreLimit: 11 }
+        jest.spyOn(LocalGameServices, 'getGameById')
+            .mockReturnValueOnce(Promise.resolve({ ...game, offline: false }))
+            .mockReturnValueOnce(Promise.resolve(updatedGame))
+        jest.spyOn(GameServices, 'editGame').mockReturnValueOnce(
+            Promise.resolve({
+                data: { game: updatedGame },
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            }),
+        )
+
+        const result = await editGame('game', { scoreLimit: 11 })
+        expect(result).toMatchObject(updatedGame)
+    })
+
+    it('with valid offline game', async () => {
+        const updatedGame = { ...game, offline: true, scoreLimit: 11 }
+        jest.spyOn(LocalGameServices, 'getGameById')
+            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
+            .mockReturnValueOnce(Promise.resolve(updatedGame))
+
+        const result = await editGame('game', { scoreLimit: 11 })
+        expect(result).toMatchObject(updatedGame)
+    })
+
+    it('with error', async () => {
+        jest.spyOn(LocalGameServices, 'getGameById').mockRejectedValueOnce(
+            Promise.resolve({ message: 'error' }),
+        )
+
+        await expect(
+            editGame('game', { scoreLimit: 11 }),
+        ).rejects.toMatchObject({ message: Constants.UPDATE_GAME_ERROR })
     })
 })
 

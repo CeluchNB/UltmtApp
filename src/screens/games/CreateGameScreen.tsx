@@ -1,12 +1,12 @@
 import { AppDispatch } from '../../store/store'
 import { CreateGame } from '../../types/game'
 import { CreateGameProps } from '../../types/navigation'
+import GameForm from '../../components/organisms/GameForm'
 import LabeledFormInput from '../../components/molecules/LabeledFormInput'
 import NetInfoIndicator from '../../components/atoms/NetInfoIndicator'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { Tournament } from '../../types/tournament'
-import { getFormFieldRules } from '../../utils/form-utils'
 import { selectAccount } from '../../store/reducers/features/account/accountReducer'
 import { useColors } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
@@ -50,10 +50,6 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
             tournament: undefined,
         },
     })
-
-    const onNumberChange = (text: any): string => {
-        return text.toString().replace(/\D/, '')
-    }
 
     const onCreate = async (formData: {
         offline: boolean
@@ -162,210 +158,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
                         )
                     }}
                 />
-                <Controller
-                    name="scoreLimit"
-                    control={control}
-                    rules={getFormFieldRules<number>(
-                        'Score limit',
-                        true,
-                        1,
-                        2,
-                        [
-                            {
-                                test: (value: number) =>
-                                    /\d+/.test(value.toString()),
-                                message: 'Score limit must be a number',
-                            },
-                        ],
-                    )}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Game to"
-                                onChange={event => {
-                                    onChange(onNumberChange(event))
-                                }}
-                                value={value}
-                                unit="points"
-                                keyboardType="number-pad"
-                                error={errors.scoreLimit?.message}
-                            />
-                        )
-                    }}
-                />
-                <Controller
-                    name="halfScore"
-                    control={control}
-                    rules={getFormFieldRules<number>('Half score', true, 1, 2, [
-                        {
-                            test: (value: number) =>
-                                /\d+/.test(value.toString()),
-                            message: 'Half score must be a number',
-                        },
-                    ])}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Half at"
-                                onChange={event => {
-                                    onChange(onNumberChange(event))
-                                }}
-                                value={value}
-                                unit="points"
-                                keyboardType="number-pad"
-                                error={errors.halfScore?.message}
-                            />
-                        )
-                    }}
-                />
-                <Controller
-                    name="softcapMins"
-                    control={control}
-                    rules={getFormFieldRules<number>(
-                        'Softcap time',
-                        true,
-                        2,
-                        3,
-                        [
-                            {
-                                test: (value: number) =>
-                                    /\d+/.test(value.toString()),
-                                message: 'Softcap time must be a number',
-                            },
-                        ],
-                    )}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Soft cap"
-                                onChange={event => {
-                                    onChange(onNumberChange(event))
-                                }}
-                                value={value}
-                                unit="minutes"
-                                keyboardType="number-pad"
-                                error={errors.softcapMins?.message}
-                            />
-                        )
-                    }}
-                />
-                <Controller
-                    name="hardcapMins"
-                    control={control}
-                    rules={getFormFieldRules<number>(
-                        'Hardcap time',
-                        true,
-                        2,
-                        3,
-                        [
-                            {
-                                test: (value: number) =>
-                                    /\d+/.test(value.toString()),
-                                message: 'Hardcap time must be a number',
-                            },
-                        ],
-                    )}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Hard cap"
-                                onChange={event => {
-                                    onChange(onNumberChange(event))
-                                }}
-                                value={value}
-                                unit="points"
-                                keyboardType="number-pad"
-                                error={errors.hardcapMins?.message}
-                            />
-                        )
-                    }}
-                />
-                <Controller
-                    name="playersPerPoint"
-                    control={control}
-                    rules={getFormFieldRules<number>(
-                        'Players per point',
-                        true,
-                        1,
-                        2,
-                        [
-                            {
-                                test: (value: number) =>
-                                    /\d+/.test(value.toString()),
-                                message: 'Players per point must be a number',
-                            },
-                        ],
-                    )}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Players"
-                                onChange={event => {
-                                    onChange(onNumberChange(event))
-                                }}
-                                value={value}
-                                unit="per point"
-                                keyboardType="number-pad"
-                                error={errors.playersPerPoint?.message}
-                            />
-                        )
-                    }}
-                />
-                <Controller
-                    name="timeoutPerHalf"
-                    control={control}
-                    rules={getFormFieldRules<number>(
-                        'Timeouts per half',
-                        true,
-                        1,
-                        2,
-                        [
-                            {
-                                test: (value: number) =>
-                                    /\d+/.test(value.toString()),
-                                message: 'Timeouts per half must be a number',
-                            },
-                        ],
-                    )}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Timeouts"
-                                onChange={event => {
-                                    onChange(onNumberChange(event))
-                                }}
-                                value={value}
-                                unit="per half"
-                                keyboardType="number-pad"
-                                error={errors.timeoutPerHalf?.message}
-                            />
-                        )
-                    }}
-                />
-                <Controller
-                    name="floaterTimeout"
-                    control={control}
-                    rules={{}}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Floater timeout"
-                                onChange={onChange}
-                                value={value}
-                                error={errors.floaterTimeout?.message}>
-                                <Switch
-                                    trackColor={{
-                                        false: colors.gray,
-                                        true: colors.textSecondary,
-                                    }}
-                                    thumbColor={colors.textPrimary}
-                                    onValueChange={onChange}
-                                    value={value}
-                                />
-                            </LabeledFormInput>
-                        )
-                    }}
-                />
+                <GameForm control={control} errors={errors} />
                 {/* <Controller
                     name="tournament"
                     control={control}
