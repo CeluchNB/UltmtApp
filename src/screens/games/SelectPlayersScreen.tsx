@@ -3,7 +3,7 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import { Chip } from 'react-native-paper'
 import GameHeader from '../../components/molecules/GameHeader'
 import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
-import LivePointStatus from '../../components/molecules/LivePointStatus'
+import LivePointUtilityBar from '../../components/molecules/LivePointUtilityBar'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
@@ -91,9 +91,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 }),
             )
             navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
-        } catch (e) {
-            console.log('got e', e)
-        }
+        } catch (e) {}
     }
 
     const styles = StyleSheet.create({
@@ -131,10 +129,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 {isPulling(point, game, team) ? 'D ' : 'O '}
                 point
             </Text>
-            <LivePointStatus
+            <LivePointUtilityBar
                 loading={false}
                 undoDisabled={point.pointNumber === 1 || game.teamTwoActive}
                 onUndo={onLastPoint}
+                onEdit={() => {
+                    navigation.navigate('EditGame')
+                }}
             />
             <FlatList
                 contentContainerStyle={styles.flatListContainer}

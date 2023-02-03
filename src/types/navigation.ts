@@ -66,6 +66,7 @@ export type LiveGameParamList = {
     FirstPoint: undefined
     SelectPlayers: undefined // consider passing point id and not relying on live point reducer
     LivePointEdit: undefined
+    EditGame: undefined
 }
 
 export type TopLevelParamList = {
@@ -214,6 +215,10 @@ export type SelectPlayersProps = NativeStackScreenProps<
 export type LivePointEditProps = CompositeScreenProps<
     NativeStackScreenProps<LiveGameParamList, 'LivePointEdit'>,
     NativeStackScreenProps<TopLevelParamList>
+>
+export type EditGameProps = NativeStackScreenProps<
+    LiveGameParamList,
+    'EditGame'
 >
 
 export type TeamGameProps = CompositeScreenProps<

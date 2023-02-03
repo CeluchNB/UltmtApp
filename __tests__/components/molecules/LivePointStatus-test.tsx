@@ -1,4 +1,4 @@
-import LivePointStatus from '../../../src/components/molecules/LivePointStatus'
+import LivePointStatus from '../../../src/components/molecules/LivePointUtilityBar'
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
 

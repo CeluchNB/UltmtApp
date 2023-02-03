@@ -5,7 +5,7 @@ import { ApiError } from '../../types/services'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
 import { LivePointEditProps } from '../../types/navigation'
-import LivePointStatus from '../../components/molecules/LivePointStatus'
+import LivePointUtilityBar from '../../components/molecules/LivePointUtilityBar'
 import PlayerActionView from '../../components/organisms/PlayerActionView'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
@@ -117,11 +117,14 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                 ListHeaderComponent={
                     <View>
                         <GameHeader game={game} />
-                        <LivePointStatus
+                        <LivePointUtilityBar
                             error={error}
                             loading={waiting}
                             undoDisabled={false}
                             onUndo={onUndoPress}
+                            onEdit={() => {
+                                navigation.navigate('EditGame')
+                            }}
                         />
                         <PlayerActionView
                             players={activePlayers}
