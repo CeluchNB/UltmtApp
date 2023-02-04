@@ -4,7 +4,6 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import { DisplayTeam } from '../../types/team'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
-import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { SelectMyTeamProps } from '../../types/navigation'
 import TeamListItem from '../../components/atoms/TeamListItem'
 import { fetchProfile } from '../../store/reducers/features/account/accountReducer'
@@ -85,7 +84,6 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
 
     return (
         <BaseScreen containerWidth="80%">
-            <ScreenTitle style={styles.title} title="Select My Team" />
             {(loading || fetchProfileLoading) && (
                 <ActivityIndicator
                     color={colors.textPrimary}

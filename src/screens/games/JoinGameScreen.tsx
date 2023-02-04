@@ -4,7 +4,6 @@ import GameCard from '../../components/atoms/GameCard'
 import JoinByCodeModal from '../../components/molecules/JoinByCodeModal'
 import { JoinGameProps } from '../../types/navigation'
 import React from 'react'
-import ScreenTitle from '../../components/atoms/ScreenTitle'
 import SearchDisplay from '../../components/molecules/SearchDisplay'
 import { setPoint } from '../../store/reducers/features/point/livePointReducer'
 import {
@@ -26,6 +25,11 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
     const [gameId, setGameId] = React.useState('')
     const [joinLoading, setJoinLoading] = React.useState(false)
     const [joinError, setJoinError] = React.useState('')
+
+    React.useEffect(() => {
+        navigation.setOptions({ title: `Join Game with ${teamTwo.name}` })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [teamTwo])
 
     const onSearch = async (q: string) => {
         if (q.length > 3) {
@@ -85,7 +89,6 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
 
     return (
         <BaseScreen containerWidth="80%">
-            <ScreenTitle title={`Join Game with ${teamTwo.name}`} />
             <SearchDisplay
                 placeholder="Search Games..."
                 search={onSearch}

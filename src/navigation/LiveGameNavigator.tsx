@@ -5,10 +5,13 @@ import LivePointEditScreen from '../screens/games/LivePointEditScreen'
 import React from 'react'
 import SelectPlayersScreen from '../screens/games/SelectPlayersScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { useColors } from '../hooks'
 
 const Stack = createNativeStackNavigator<LiveGameParamList>()
 
 const LiveGameNavigator: React.FC<{}> = () => {
+    const { colors } = useColors()
+
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="FirstPoint" component={FirstPointScreen} />
@@ -20,7 +23,18 @@ const LiveGameNavigator: React.FC<{}> = () => {
                 name="LivePointEdit"
                 component={LivePointEditScreen}
             />
-            <Stack.Screen name="EditGame" component={EditGameScreen} />
+            <Stack.Screen
+                name="EditGame"
+                component={EditGameScreen}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: colors.primary,
+                    },
+                    headerTintColor: colors.textPrimary,
+                    title: 'Edit Game',
+                }}
+            />
         </Stack.Navigator>
     )
 }

@@ -108,6 +108,7 @@ const AccountNavigator: React.FC<{}> = () => {
             <Stack.Screen
                 name="OfflineGameOptions"
                 component={OfflineGameOptionsScreen}
+                options={{ title: '' }}
             />
         </Stack.Navigator>
     )

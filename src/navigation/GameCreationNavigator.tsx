@@ -5,19 +5,39 @@ import React from 'react'
 import SelectMyTeamScreen from '../screens/games/SelectMyTeamScreen'
 import SelectOpponentScreen from '../screens/games/SelectOpponentScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { useColors } from '../hooks'
 
 const Stack = createNativeStackNavigator<GameCreationParamList>()
 
 const GameCreationNavigator: React.FC<{}> = () => {
+    const { colors } = useColors()
+
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="SelectMyTeam" component={SelectMyTeamScreen} />
+        <Stack.Navigator
+            screenOptions={({ route }) => {
+                return {
+                    headerStyle: {
+                        backgroundColor: colors.primary,
+                    },
+                    headerTintColor: colors.textPrimary,
+                    title: route.name.split(/(?=[A-Z])/).join(' '),
+                }
+            }}>
+            <Stack.Screen
+                name="SelectMyTeam"
+                component={SelectMyTeamScreen}
+                options={{}}
+            />
             <Stack.Screen
                 name="SelectOpponent"
                 component={SelectOpponentScreen}
             />
             <Stack.Screen name="JoinGame" component={JoinGameScreen} />
-            <Stack.Screen name="CreateGame" component={CreateGameScreen} />
+            <Stack.Screen
+                name="CreateGame"
+                component={CreateGameScreen}
+                options={{ title: '' }}
+            />
         </Stack.Navigator>
     )
 }
