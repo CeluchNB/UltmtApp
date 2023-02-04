@@ -18,21 +18,6 @@ exports[`should match snapshot 1`] = `
     }
   >
     <Text
-      numberOfLines={1}
-      style={
-        [
-          {
-            "color": "#ffd600",
-            "fontSize": 61.64383561643835,
-            "fontWeight": "bold",
-          },
-          undefined,
-        ]
-      }
-    >
-      Change Email
-    </Text>
-    <Text
       style={
         {
           "color": "#ffd600",

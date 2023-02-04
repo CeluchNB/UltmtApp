@@ -16,9 +16,11 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 const goBack = jest.fn()
+const setOptions = jest.fn()
 const props: RequestUserProps = {
     navigation: {
         goBack,
+        setOptions,
     } as any,
     route: {
         params: { type: RequestType.PLAYER },
@@ -194,6 +196,7 @@ it('should correctly add manager', async () => {
     const managerProps: RequestUserProps = {
         navigation: {
             goBack,
+            setOptions,
         } as any,
         route: {
             params: { type: RequestType.MANAGER },
@@ -230,6 +233,7 @@ it('should handle add manager failure', async () => {
     const managerProps: RequestUserProps = {
         navigation: {
             goBack,
+            setOptions,
         } as any,
         route: {
             params: { type: RequestType.MANAGER },

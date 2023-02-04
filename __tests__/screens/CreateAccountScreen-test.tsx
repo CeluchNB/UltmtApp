@@ -14,12 +14,14 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const reset = jest.fn()
 const navigate = jest.fn()
 const goBack = jest.fn()
+const setOptions = jest.fn()
 
 const props: CreateAccountProps = {
     navigation: {
         navigate,
         reset,
         goBack,
+        setOptions,
     } as any,
     route: {} as any,
 }

@@ -12,12 +12,13 @@ import { act, fireEvent, render } from '@testing-library/react-native'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const goBack = jest.fn()
+const setOptions = jest.fn()
 let props: SecureEditProps
 
 beforeEach(() => {
     store.dispatch(setProfile(fetchProfileData))
     props = {
-        navigation: { goBack } as any,
+        navigation: { goBack, setOptions } as any,
         route: {
             params: {
                 title: 'Email',
@@ -47,7 +48,7 @@ it('should submit email successfully', async () => {
         .mockReset()
         .mockReturnValueOnce(Promise.resolve(fetchProfileData))
 
-    const { getAllByText, getByPlaceholderText } = render(
+    const { getByText, getByPlaceholderText } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <SecureEditScreen {...props} />
@@ -63,8 +64,8 @@ it('should submit email successfully', async () => {
     fireEvent.changeText(passwordField, 'Pass1234!')
     await act(async () => {})
 
-    const submitButton = getAllByText('Change Email')
-    fireEvent.press(submitButton[1])
+    const submitButton = getByText('Change Email')
+    fireEvent.press(submitButton)
     await act(async () => {})
 
     expect(spy).toHaveBeenCalledWith(
@@ -81,7 +82,7 @@ it('should submit email and fail front end validation', async () => {
         .mockReset()
         .mockReturnValueOnce(Promise.resolve(fetchProfileData))
 
-    const { getAllByText, getByText, getByPlaceholderText } = render(
+    const { getByText, getByPlaceholderText } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <SecureEditScreen {...props} />
@@ -97,8 +98,8 @@ it('should submit email and fail front end validation', async () => {
     fireEvent.changeText(passwordField, '')
     await act(async () => {})
 
-    const submitButton = getAllByText('Change Email')
-    fireEvent.press(submitButton[1])
+    const submitButton = getByText('Change Email')
+    fireEvent.press(submitButton)
     await act(async () => {})
 
     expect(spy).not.toHaveBeenCalled()
@@ -113,7 +114,7 @@ it('should submit email and fail back end call', async () => {
         .mockReset()
         .mockReturnValueOnce(Promise.reject({ message: 'Network error.' }))
 
-    const { getAllByText, getByText, getByPlaceholderText } = render(
+    const { getByText, getByPlaceholderText } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <SecureEditScreen {...props} />
@@ -129,8 +130,8 @@ it('should submit email and fail back end call', async () => {
     fireEvent.changeText(passwordField, 'badpass')
     await act(async () => {})
 
-    const submitButton = getAllByText('Change Email')
-    fireEvent.press(submitButton[1])
+    const submitButton = getByText('Change Email')
+    fireEvent.press(submitButton)
     await act(async () => {})
 
     expect(spy).toHaveBeenCalled()
@@ -140,7 +141,7 @@ it('should submit email and fail back end call', async () => {
 
 it('should submit password successfully', async () => {
     props = {
-        navigation: { goBack } as any,
+        navigation: { goBack, setOptions } as any,
         route: {
             params: {
                 title: 'Password',
@@ -155,7 +156,7 @@ it('should submit password successfully', async () => {
         .mockReset()
         .mockReturnValueOnce(Promise.resolve(fetchProfileData))
 
-    const { getAllByText, getByPlaceholderText } = render(
+    const { getByText, getByPlaceholderText } = render(
         <Provider store={store}>
             <NavigationContainer>
                 <SecureEditScreen {...props} />
@@ -171,8 +172,8 @@ it('should submit password successfully', async () => {
     fireEvent.changeText(passwordField, 'Pass1234!')
     await act(async () => {})
 
-    const submitButton = getAllByText('Change Password')
-    fireEvent.press(submitButton[1])
+    const submitButton = getByText('Change Password')
+    fireEvent.press(submitButton)
     await act(async () => {})
 
     expect(spy).toHaveBeenCalledWith('test@email.com', 'Pass1234!', 'Test987!')

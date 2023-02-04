@@ -108,6 +108,6 @@ describe('test forgot password screen', () => {
         )
 
         fireEvent.press(getByText('I Have A Code'))
-        expect(navigate).toHaveBeenLastCalledWith('ResetPasswordScreen')
+        expect(navigate).toHaveBeenLastCalledWith('ResetPassword')
     })
 })

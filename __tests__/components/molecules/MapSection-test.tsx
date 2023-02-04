@@ -5,7 +5,7 @@ import { Text } from 'react-native'
 import renderer from 'react-test-renderer'
 import { fireEvent, render } from '@testing-library/react-native'
 
-it('test matches snapshot', () => {
+it('matches snapshot', () => {
     const snapshot = renderer.create(
         <MapSection
             title="title"
@@ -22,7 +22,7 @@ it('test matches snapshot', () => {
     expect(snapshot).toMatchSnapshot()
 })
 
-it('test displays items correctly', () => {
+it('displays items correctly', () => {
     const { getByText } = render(
         <MapSection
             title="title"
@@ -41,7 +41,7 @@ it('test displays items correctly', () => {
     expect(item2).toBeTruthy()
 })
 
-it('test button press fires', () => {
+it('button press fires', () => {
     const fn = jest.fn()
     const { queryByTestId } = render(
         <MapSection
@@ -64,7 +64,7 @@ it('test button press fires', () => {
     expect(fn).toHaveBeenCalled()
 })
 
-it('test create button fires', () => {
+it('create button fires', () => {
     const fn = jest.fn()
     const { queryByTestId } = render(
         <MapSection

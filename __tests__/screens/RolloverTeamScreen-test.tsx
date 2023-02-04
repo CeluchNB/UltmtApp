@@ -14,11 +14,13 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const goBack = jest.fn()
 const navigate = jest.fn()
+const setOptions = jest.fn()
 
 const props: RolloverTeamProps = {
     navigation: {
         goBack,
         navigate,
+        setOptions,
     } as any,
     route: {} as any,
 }
@@ -49,6 +51,7 @@ it('should match snapshot with open requests', async () => {
         navigation: {
             goBack,
             navigate,
+            setOptions,
         } as any,
         route: {} as any,
     }
