@@ -59,12 +59,12 @@ const AccountNavigator: React.FC<{}> = () => {
             <Stack.Screen
                 name="ManagedTeamDetails"
                 component={ManageTeamDetailsScreen}
-                initialParams={{ id: '', place: '', name: '' }}
+                initialParams={{ id: '' }}
             />
             <Stack.Screen
                 name="PublicTeamDetails"
                 component={PublicTeamScreen}
-                initialParams={{ id: '', place: '', name: '' }}
+                initialParams={{ id: '' }}
             />
             <Stack.Screen
                 name="RequestUser"
@@ -76,12 +76,7 @@ const AccountNavigator: React.FC<{}> = () => {
                 name="PublicUserDetails"
                 component={PublicUserScreen}
                 initialParams={{
-                    user: {
-                        _id: '',
-                        firstName: '',
-                        lastName: '',
-                        username: '',
-                    },
+                    userId: '',
                 }}
             />
             <Stack.Screen

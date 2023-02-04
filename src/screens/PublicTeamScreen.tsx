@@ -20,7 +20,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     navigation,
 }) => {
     const { colors } = useColors()
-    const { id, place, name, archive } = route.params
+    const { id, archive } = route.params
     const [team, setTeam] = React.useState({} as Team)
     const [refreshing, setRefreshing] = React.useState(false)
     const [error, setError] = React.useState<string>('')
@@ -50,10 +50,15 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         const unsubscribe = navigation.addListener('focus', async () => {
             await initializeScreen()
         })
-        navigation.setOptions({ title: `${place} ${name}` })
+
         return unsubscribe
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    React.useEffect(() => {
+        navigation.setOptions({ title: `${team.place} ${team.name}` })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [team])
 
     const styles = StyleSheet.create({
         screen: {
@@ -140,7 +145,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                                         onPress={async () => {
                                             navigation.navigate(
                                                 'PublicUserDetails',
-                                                { user },
+                                                { userId: user._id },
                                             )
                                         }}
                                     />

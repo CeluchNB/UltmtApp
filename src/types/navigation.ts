@@ -1,4 +1,3 @@
-import { DisplayUser } from './user'
 import { GuestTeam } from './team'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RequestType } from './request'
@@ -20,14 +19,12 @@ export type AccountStackParamList = {
     ForgotPassword: undefined
     ManageTeams: undefined
     RequestTeam: undefined
-    ManagedTeamDetails: { id: string; place: string; name: string }
+    ManagedTeamDetails: { id: string }
     PublicTeamDetails: {
         id: string
-        place: string
-        name: string
         archive?: boolean
     }
-    PublicUserDetails: { user: DisplayUser }
+    PublicUserDetails: { userId: string }
     RequestUser: { type: RequestType }
     ResetPassword: undefined
     RolloverTeam: undefined
