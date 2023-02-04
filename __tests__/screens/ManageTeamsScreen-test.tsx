@@ -103,8 +103,6 @@ it('should navigate to managed team screen on managing team click', async () => 
 
     expect(navigate).toHaveBeenCalledWith('ManagedTeamDetails', {
         id: team._id,
-        place: team.place,
-        name: team.name,
     })
 })
 
