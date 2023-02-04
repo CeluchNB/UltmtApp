@@ -1,14 +1,13 @@
 import * as React from 'react'
 import * as TeamData from '../services/data/team'
+import BaseScreen from '../components/atoms/BaseScreen'
 import MapSection from '../components/molecules/MapSection'
 import { PublicTeamDetailsProps } from '../types/navigation'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import { Team } from '../types/team'
 import UserListItem from '../components/atoms/UserListItem'
 import { useColors } from '../hooks'
 import {
     RefreshControl,
-    SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
@@ -26,7 +25,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     const [refreshing, setRefreshing] = React.useState(false)
     const [error, setError] = React.useState<string>('')
 
-    const initializeScreen = React.useCallback(async () => {
+    const initializeScreen = async () => {
         const getTeam = async (): Promise<Team> => {
             if (archive) {
                 return TeamData.getArchivedTeam(id)
@@ -45,14 +44,16 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                         'An error occurred looking for this team. Please try again',
                 )
             })
-    }, [archive, id])
+    }
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
             await initializeScreen()
         })
+        navigation.setOptions({ title: `${place} ${name}` })
         return unsubscribe
-    }, [navigation, initializeScreen])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const styles = StyleSheet.create({
         screen: {
@@ -61,26 +62,22 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
             flex: 1,
         },
         headerContainer: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignSelf: 'center',
             alignItems: 'center',
         },
-        title: {
-            textAlign: 'center',
-        },
         date: {
-            textAlign: 'center',
             fontSize: size.fontFifteen,
             fontWeight: weight.medium,
             color: colors.textPrimary,
-            marginBottom: 5,
         },
         teamname: {
-            textAlign: 'center',
-            fontSize: size.fontFifteen,
+            fontSize: size.fontMedium,
             color: colors.textPrimary,
-            marginBottom: 5,
         },
         bodyContainer: {
-            width: '75%',
+            width: '100%',
             alignSelf: 'center',
         },
         error: {
@@ -92,7 +89,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     })
 
     return (
-        <SafeAreaView style={styles.screen}>
+        <BaseScreen containerWidth="90%">
             <ScrollView
                 testID="public-team-scroll-view"
                 refreshControl={
@@ -107,10 +104,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                     />
                 }>
                 <View style={styles.headerContainer}>
-                    <ScreenTitle
-                        title={`${place} ${name}`}
-                        style={styles.title}
-                    />
+                    <Text style={styles.teamname}>@{team?.teamname}</Text>
                     {team?.seasonStart === team?.seasonEnd ? (
                         <Text style={styles.date}>
                             {new Date(team?.seasonStart || '').getUTCFullYear()}
@@ -126,7 +120,6 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                                 ).getUTCFullYear()}
                         </Text>
                     )}
-                    <Text style={styles.teamname}>@{team?.teamname}</Text>
                 </View>
                 <View style={styles.bodyContainer}>
                     {error.length > 0 ? (
@@ -157,7 +150,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                     )}
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </BaseScreen>
     )
 }
 

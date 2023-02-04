@@ -3,7 +3,6 @@ import * as React from 'react'
 import * as UserData from '../services/data/user'
 import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import { User } from '../types/user'
 import UserInput from '../components/atoms/UserInput'
 import { useColors } from '../hooks'
@@ -43,6 +42,13 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
     const [passwordHidden, setPasswordHidden] = React.useState(true)
     const [dataError, setDataError] = React.useState('')
     const [loading, setLoading] = React.useState(false)
+
+    React.useEffect(() => {
+        navigation.setOptions({
+            title: `Change ${capitalizeFirstLetter(title)}`,
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     // Potential to pass field rules determination to calling component
     // but that requires many extra dependencies in calling component.
@@ -146,7 +152,6 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.screen}>
             <View style={styles.container}>
-                <ScreenTitle title={`Change ${capitalizeFirstLetter(title)}`} />
                 <Text style={styles.label}>{capitalizeFirstLetter(title)}</Text>
                 <Controller
                     name="value"

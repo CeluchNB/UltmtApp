@@ -5,7 +5,6 @@ import { ManagedTeamDetailsProps } from '../types/navigation'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { RequestType } from '../types/request'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import { Team } from '../types/team'
 import UserListItem from '../components/atoms/UserListItem'
@@ -44,6 +43,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     } = useData<Team>(TeamData.getManagedTeam, id)
 
     React.useEffect(() => {
+        navigation.setOptions({ title: `${place} ${name}` })
         const unsubscribe = navigation.addListener('focus', async () => {
             if (!teamData && !teamLoading) {
                 refetch()
@@ -52,7 +52,8 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         return () => {
             unsubscribe()
         }
-    })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     React.useEffect(() => {
         if (teamData) {
@@ -78,9 +79,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         headerContainer: {
             alignItems: 'center',
         },
-        title: {
-            textAlign: 'center',
-        },
         date: {
             textAlign: 'center',
             fontSize: size.fontFifteen,
@@ -90,7 +88,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         },
         teamname: {
             textAlign: 'center',
-            fontSize: size.fontFifteen,
+            fontSize: size.fontMedium,
             color: colors.textPrimary,
             marginBottom: 5,
         },
@@ -123,10 +121,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     }
                     testID="mtd-flat-list">
                     <View style={styles.headerContainer}>
-                        <ScreenTitle
-                            title={`${place} ${name}`}
-                            style={styles.title}
-                        />
                         <Text style={styles.error}>{error.message}</Text>
                     </View>
                 </ScrollView>
@@ -148,10 +142,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                 }
                 testID="mtd-flat-list">
                 <View style={styles.headerContainer}>
-                    <ScreenTitle
-                        title={`${place} ${name}`}
-                        style={styles.title}
-                    />
+                    <Text style={styles.teamname}>@{team?.teamname}</Text>
                     {team?.seasonStart === team?.seasonEnd ? (
                         <Text style={styles.date}>
                             {new Date(team?.seasonStart || '').getUTCFullYear()}
@@ -167,12 +158,11 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                                 ).getUTCFullYear()}
                         </Text>
                     )}
-                    <Text style={styles.teamname}>@{team?.teamname}</Text>
                     <PrimaryButton
                         text="manage requests"
                         loading={false}
                         onPress={async () => {
-                            navigation.navigate('TeamRequestsScreen')
+                            navigation.navigate('TeamRequests')
                         }}
                     />
                     <SecondaryButton

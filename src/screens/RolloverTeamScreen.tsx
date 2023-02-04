@@ -4,7 +4,6 @@ import CheckBox from '@react-native-community/checkbox'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { RolloverTeamProps } from '../types/navigation'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import { Team } from '../types/team'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
@@ -112,7 +111,6 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle title="Start New Season" />
             <View style={styles.checkboxContainer}>
                 <Text
                     style={{ ...styles.sectionTitle, ...styles.checkboxTitle }}>

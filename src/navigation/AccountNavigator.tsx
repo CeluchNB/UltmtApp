@@ -21,16 +21,34 @@ import TeamGameScreen from '../screens/TeamGamesScreen'
 import TeamRequestsScreen from '../screens/TeamRequestsScreen'
 import UserRequestsScreen from '../screens/UserRequestsScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { useColors } from '../hooks'
 
 const Stack = createNativeStackNavigator<AccountStackParamList>()
 
 const AccountNavigator: React.FC<{}> = () => {
+    const { colors } = useColors()
     return (
         <Stack.Navigator
             initialRouteName={'Login'}
-            screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
+            screenOptions={({ route }) => {
+                return {
+                    headerStyle: {
+                        backgroundColor: colors.primary,
+                    },
+                    headerTintColor: colors.textPrimary,
+                    title: route.name.split(/(?=[A-Z])/).join(' '),
+                }
+            }}>
+            <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="Profile"
+                component={ProfileScreen}
+                options={{ headerShown: false }}
+            />
             <Stack.Screen
                 name="CreateAccount"
                 component={CreateAccountScreen}
@@ -67,26 +85,25 @@ const AccountNavigator: React.FC<{}> = () => {
                 }}
             />
             <Stack.Screen
-                name="ForgotPasswordScreen"
+                name="ForgotPassword"
                 component={ForgotPasswordScreen}
             />
             <Stack.Screen
-                name="ResetPasswordScreen"
+                name="ResetPassword"
                 component={ResetPasswordScreen}
             />
             <Stack.Screen
-                name="UserRequestsScreen"
+                name="UserRequests"
                 component={UserRequestsScreen}
+                options={{ title: 'My Requests' }}
             />
+            <Stack.Screen name="TeamRequests" component={TeamRequestsScreen} />
+            <Stack.Screen name="JoinByCode" component={JoinByCodeScreen} />
             <Stack.Screen
-                name="TeamRequestsScreen"
-                component={TeamRequestsScreen}
+                name="TeamGames"
+                component={TeamGameScreen}
+                options={{ title: 'Your Games' }}
             />
-            <Stack.Screen
-                name="JoinByCodeScreen"
-                component={JoinByCodeScreen}
-            />
-            <Stack.Screen name="TeamGames" component={TeamGameScreen} />
             <Stack.Screen name="ActiveGames" component={ActiveGamesScreen} />
             <Stack.Screen
                 name="OfflineGameOptions"

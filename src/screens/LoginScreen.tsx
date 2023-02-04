@@ -155,7 +155,7 @@ const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
             <SecondaryButton
                 text="Forgot Password?"
                 onPress={async () => {
-                    navigation.navigate('ForgotPasswordScreen')
+                    navigation.navigate('ForgotPassword')
                 }}
                 style={styles.createButton}
             />

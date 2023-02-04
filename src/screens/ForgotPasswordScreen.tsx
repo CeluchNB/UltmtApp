@@ -51,6 +51,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordProps> = ({
         },
         submitButton: {
             marginTop: 20,
+            marginBottom: 10,
         },
         button: {
             alignSelf: 'center',
@@ -72,7 +73,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordProps> = ({
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle title="Forgot Password?" style={styles.title} />
+            <ScreenTitle title="Enter your email" style={styles.title} />
             <Controller
                 control={control}
                 rules={getFormFieldRules('Email', true, undefined, undefined, [
@@ -113,7 +114,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordProps> = ({
             <SecondaryButton
                 text="I Have A Code"
                 onPress={async () => {
-                    navigation.navigate('ResetPasswordScreen')
+                    navigation.navigate('ResetPassword')
                 }}
                 style={styles.button}
             />

@@ -2,7 +2,6 @@ import BaseScreen from '../components/atoms/BaseScreen'
 import { Game } from '../types/game'
 import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import { TeamGameProps } from '../types/navigation'
 import { getGamesByTeam } from '../services/data/game'
 import { useColors } from '../hooks'
@@ -69,7 +68,6 @@ const TeamGameScreen: React.FC<TeamGameProps> = ({ navigation }) => {
 
     return (
         <BaseScreen containerWidth="80%">
-            <ScreenTitle title="Your Games" />
             <SectionList
                 sections={data}
                 keyExtractor={item => item._id}

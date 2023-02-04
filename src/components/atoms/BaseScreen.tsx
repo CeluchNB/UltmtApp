@@ -1,5 +1,5 @@
 import React from 'react'
-import { useColors } from '../../hooks/useColors'
+import { useColors } from '../../hooks'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 
 interface BaseScreenProps {

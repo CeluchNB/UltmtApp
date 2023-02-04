@@ -4,7 +4,6 @@ import { AppDispatch } from '../store/store'
 import { DetailedRequest } from '../types/request'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { UserRequestProps } from '../types/navigation'
 import { size } from '../theme/fonts'
@@ -119,7 +118,6 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
                         />
                     }
                     testID="mt-scroll-view">
-                    <ScreenTitle style={styles.title} title="My Requests" />
                     <Text style={styles.error}>{fetchError.message}</Text>
                 </ScrollView>
             </SafeAreaView>
@@ -138,7 +136,6 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
                     />
                 }
                 testID="mt-scroll-view">
-                <ScreenTitle style={styles.title} title="My Requests" />
                 <View style={styles.container}>
                     <PrimaryButton
                         text={`${

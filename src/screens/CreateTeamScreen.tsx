@@ -4,7 +4,6 @@ import { CreateTeam } from '../types/team'
 import { CreateTeamProps } from '../types/navigation'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
 import { useColors } from '../hooks'
@@ -104,7 +103,6 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle style={styles.title} title="Create Team" />
             <Controller
                 name="place"
                 control={control}
