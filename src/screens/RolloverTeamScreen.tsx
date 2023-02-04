@@ -57,8 +57,6 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
             dispatch(setTeam(teamData))
             navigation.navigate('ManagedTeamDetails', {
                 id: teamData._id,
-                name: teamData.name,
-                place: teamData.place,
             })
         }
     })

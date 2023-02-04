@@ -313,8 +313,6 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                                     'PublicTeamDetails',
                                                     {
                                                         id: team._id,
-                                                        place: team.place,
-                                                        name: team.name,
                                                     },
                                                 )
                                             }}

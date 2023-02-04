@@ -84,8 +84,6 @@ it('should navigate to public team screen on playing team click', async () => {
 
     expect(navigate).toHaveBeenCalledWith('PublicTeamDetails', {
         id: team._id,
-        place: team.place,
-        name: team.name,
     })
 })
 
@@ -105,8 +103,6 @@ it('should navigate to managed team screen on managing team click', async () => 
 
     expect(navigate).toHaveBeenCalledWith('ManagedTeamDetails', {
         id: team._id,
-        place: team.place,
-        name: team.name,
     })
 })
 
@@ -126,8 +122,6 @@ it('should navigate to public team screen', async () => {
 
     expect(navigate).toHaveBeenCalledWith('PublicTeamDetails', {
         id: team._id,
-        place: team.place,
-        name: team.name,
         archive: true,
     })
 })
@@ -159,20 +153,6 @@ it('should navigate to create team', async () => {
 
     expect(navigate).toHaveBeenCalledWith('CreateTeam')
 })
-
-// it('should navigate to user requests screen', async () => {
-//     const { getByText } = render(
-//         <Provider store={store}>
-//             <NavigationContainer>
-//                 <ManageTeamsScreen {...props} />
-//             </NavigationContainer>
-//         </Provider>,
-//     )
-
-//     fireEvent.press(getByText('Requests'))
-
-//     expect(navigate).toHaveBeenCalledWith('UserRequests')
-// })
 
 it('should handle leave team', async () => {
     const leaveTeamSpy = jest

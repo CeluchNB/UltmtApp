@@ -29,7 +29,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     navigation,
     route,
 }: ManagedTeamDetailsProps) => {
-    const { id, place, name } = route.params
+    const { id } = route.params
     const dispatch = useDispatch<AppDispatch>()
     const team = useSelector(selectTeam)
 
@@ -43,7 +43,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     } = useData<Team>(TeamData.getManagedTeam, id)
 
     React.useEffect(() => {
-        navigation.setOptions({ title: `${place} ${name}` })
         const unsubscribe = navigation.addListener('focus', async () => {
             if (!teamData && !teamLoading) {
                 refetch()
@@ -54,6 +53,13 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    React.useEffect(() => {
+        navigation.setOptions({
+            title: `${teamData?.place || ''} ${teamData?.name || ''}`,
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [teamData])
 
     React.useEffect(() => {
         if (teamData) {
@@ -181,7 +187,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                                 user={manager}
                                 onPress={async () => {
                                     navigation.navigate('PublicUserDetails', {
-                                        user: manager,
+                                        userId: manager._id,
                                     })
                                 }}
                             />
@@ -206,7 +212,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                                 showAccept={false}
                                 onPress={async () => {
                                     navigation.navigate('PublicUserDetails', {
-                                        user,
+                                        userId: user._id,
                                     })
                                 }}
                                 onDelete={() => onRemovePlayer(user._id)}

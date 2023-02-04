@@ -129,8 +129,6 @@ it('should navigate to a public team', async () => {
 
     expect(navigate).toHaveBeenCalledWith('PublicTeamDetails', {
         id: 'team1',
-        place: 'place1',
-        name: 'name1',
     })
 })
 

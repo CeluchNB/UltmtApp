@@ -19,7 +19,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     route,
     navigation,
 }) => {
-    const { user: initialUser } = route.params
+    const { userId } = route.params
     const { colors } = useColors()
 
     const {
@@ -27,7 +27,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         loading,
         error,
         refetch,
-    } = useData<User>(UserData.getPublicUser, initialUser._id)
+    } = useData<User>(UserData.getPublicUser, userId)
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -41,10 +41,10 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 
     React.useEffect(() => {
         navigation.setOptions({
-            title: `${initialUser.firstName} ${initialUser.lastName}`,
+            title: `${user?.firstName} ${user?.lastName}`,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [initialUser])
+    }, [user])
 
     const styles = StyleSheet.create({
         screen: {
@@ -79,7 +79,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     />
                 }
                 testID="public-user-scroll-view">
-                <Text style={styles.titleText}>@{initialUser.username}</Text>
+                <Text style={styles.titleText}>@{user?.username}</Text>
                 {error ? (
                     <Text style={styles.error}>{error.message}</Text>
                 ) : (
@@ -97,8 +97,6 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                                                 'PublicTeamDetails',
                                                 {
                                                     id: team._id,
-                                                    place: team.place,
-                                                    name: team.name,
                                                 },
                                             )
                                         }}

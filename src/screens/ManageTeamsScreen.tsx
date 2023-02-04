@@ -65,8 +65,6 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
     const openTeamDetails = async (item: DisplayTeam) => {
         navigation.navigate('ManagedTeamDetails', {
             id: item._id,
-            place: item.place,
-            name: item.name,
         })
     }
 
@@ -153,8 +151,6 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
                                             'PublicTeamDetails',
                                             {
                                                 id: team._id,
-                                                place: team.place,
-                                                name: team.name,
                                             },
                                         )
                                     }}
@@ -215,8 +211,6 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
                                             'PublicTeamDetails',
                                             {
                                                 id: team._id,
-                                                place: team.place,
-                                                name: team.name,
                                                 archive: true,
                                             },
                                         )
