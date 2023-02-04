@@ -6,7 +6,6 @@ import { DisplayUser } from '../types/user'
 import { IconButton } from 'react-native-paper'
 import { RequestType } from '../types/request'
 import { RequestUserProps } from '../types/navigation'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import SearchBar from '../components/atoms/SearchBar'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
@@ -17,7 +16,10 @@ import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { size, weight } from '../theme/fonts'
 import { useColors, useLazyData } from '../hooks'
 
-const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
+const RequestUserScreen: React.FC<RequestUserProps> = ({
+    navigation,
+    route,
+}) => {
     const { type } = route.params
     const { colors } = useColors()
     const team = useSelector(selectTeam)
@@ -37,6 +39,15 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
         error: bulkJoinError,
         fetch: fetchCode,
     } = useLazyData<string>(TeamData.createBulkJoinCode)
+
+    React.useEffect(() => {
+        navigation.setOptions({
+            title: `Add ${
+                type === RequestType.PLAYER ? 'Players' : 'Managers'
+            }`,
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const search = async (term: string) => {
         setError('')
@@ -132,12 +143,6 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({ route }) => {
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle
-                style={styles.title}
-                title={`Add ${
-                    type === RequestType.PLAYER ? 'Players' : 'Managers'
-                }`}
-            />
             <SearchBar
                 placeholder={`Search ${
                     type === RequestType.PLAYER ? 'players' : 'managers'

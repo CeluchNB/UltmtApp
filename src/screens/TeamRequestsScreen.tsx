@@ -3,7 +3,6 @@ import * as RequestData from '../services/data/request'
 import { AppDispatch } from '../store/store'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import { TeamRequestProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
 import { size } from '../theme/fonts'
@@ -50,6 +49,9 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
         useLazyData<DetailedRequest>(RequestData.respondToPlayerRequest)
 
     React.useEffect(() => {
+        navigation.setOptions({
+            title: `${team?.name} Requests`,
+        })
         const unsubscribe = navigation.addListener('focus', () => {
             if (!requestsLoading) {
                 refetch()
@@ -58,7 +60,8 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
         return () => {
             unsubscribe()
         }
-    })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
         setResponseRequestId(requestId)
@@ -109,10 +112,6 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
                     />
                 }
                 testID="mtd-flat-list">
-                <ScreenTitle
-                    title={`${team?.name} Requests`}
-                    style={styles.title}
-                />
                 {error && <Text style={styles.error}>{error.message}</Text>}
                 <PrimaryButton
                     style={styles.toggleRosterButton}

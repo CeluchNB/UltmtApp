@@ -16,6 +16,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const navigate = jest.fn()
 const goBack = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
+const setOptions = jest.fn()
 
 let getManagedTeamResponse: Team
 let requestObject: DetailedRequest
@@ -25,6 +26,7 @@ const props: ManagedTeamDetailsProps = {
         addListener,
         navigate,
         goBack,
+        setOptions,
     } as any,
     route: {
         params: {

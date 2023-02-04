@@ -14,6 +14,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react-native'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const mockedNavigate = jest.fn()
+const setOptions = jest.fn()
 jest.mock('@react-navigation/native', () => {
     const actualNav = jest.requireActual('@react-navigation/native')
     return {
@@ -35,6 +36,7 @@ const createGame = (overrides: Partial<Game>): LocalGame => {
 const props: ActiveGamesProps = {
     navigation: {
         mockedNavigate,
+        setOptions,
         addListener: () => {
             return () => {}
         },

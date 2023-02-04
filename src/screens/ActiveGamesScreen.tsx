@@ -3,7 +3,6 @@ import BaseScreen from '../components/atoms/BaseScreen'
 import ConfirmModal from '../components/molecules/ConfirmModal'
 import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
 import { size } from '../theme/fonts'
 import { useGameReactivation } from '../hooks/useGameReactivation'
@@ -84,7 +83,6 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
 
     return (
         <BaseScreen containerWidth="80%">
-            <ScreenTitle title="Active Games" />
             {!games ||
                 (games?.length === 0 && (
                     <Text style={styles.infoText}>No active games</Text>

@@ -135,5 +135,5 @@ it('should handle forgot password button press', async () => {
 
     fireEvent.press(getByText('Forgot Password?'))
 
-    expect(navigate).toHaveBeenCalledWith('ForgotPasswordScreen')
+    expect(navigate).toHaveBeenCalledWith('ForgotPassword')
 })

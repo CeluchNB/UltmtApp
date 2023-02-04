@@ -5,7 +5,6 @@ import * as UserData from '../services/data/user'
 import { AppDispatch } from '../store/store'
 import { Button } from 'react-native-paper'
 import EditField from '../components/molecules/EditField'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import { logout } from '../services/data/auth'
 import { useColors } from '../hooks'
 import {
@@ -130,16 +129,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.screen} testID="screen">
             <ScrollView>
-                <ScreenTitle style={styles.screenTitle} title="Settings" />
                 <View style={styles.container}>
-                    <Button
-                        mode="text"
-                        textColor={colors.error}
-                        uppercase={true}
-                        onPress={onLogout}
-                        loading={false}>
-                        Sign Out
-                    </Button>
                     <Text style={styles.title}>Device</Text>
                     <View style={styles.publicContainer}>
                         <Text style={styles.publicText}>Dark Mode</Text>
@@ -212,7 +202,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                         label="Email"
                         initialValue={account.email}
                         onEdit={() => {
-                            navigation.navigate('SecureEditScreen', {
+                            navigation.navigate('SecureEdit', {
                                 title: 'email',
                                 value: account.email,
                                 field: SecureEditField.EMAIL,
@@ -224,7 +214,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                         label="Password"
                         initialValue="*****"
                         onEdit={() => {
-                            navigation.navigate('SecureEditScreen', {
+                            navigation.navigate('SecureEdit', {
                                 title: 'password',
                                 value: 'New password',
                                 field: SecureEditField.PASSWORD,
@@ -232,6 +222,14 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                         }}
                         onSubmit={async () => {}}
                     />
+                    <Button
+                        mode="text"
+                        textColor={colors.error}
+                        uppercase={true}
+                        onPress={onLogout}
+                        loading={false}>
+                        Sign Out
+                    </Button>
                     <Button
                         mode="contained"
                         buttonColor={colors.error}

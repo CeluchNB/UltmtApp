@@ -12,8 +12,10 @@ import { game, point } from '../../../fixtures/data'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
+const setOptions = jest.fn()
+
 const props: JoinGameProps = {
-    navigation: { navigate: jest.fn() } as any,
+    navigation: { navigate: jest.fn(), setOptions } as any,
     route: {} as any,
 }
 

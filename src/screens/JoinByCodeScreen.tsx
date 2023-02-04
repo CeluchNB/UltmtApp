@@ -2,7 +2,6 @@ import * as React from 'react'
 import * as UserData from '../services/data/user'
 import { JoinByCodeProps } from '../types/navigation'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import { User } from '../types/user'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
@@ -100,7 +99,6 @@ const JoinByCodeScreen: React.FC<JoinByCodeProps> = ({ navigation }) => {
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle style={styles.title} title="Join By Code" />
             <Modal
                 animationType="slide"
                 transparent={true}

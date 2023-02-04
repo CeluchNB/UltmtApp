@@ -21,23 +21,6 @@ exports[`should match snapshot 1`] = `
   >
     <RCTRefreshControl />
     <View>
-      <Text
-        numberOfLines={1}
-        style={
-          [
-            {
-              "color": "#ffd600",
-              "fontSize": 61.64383561643835,
-              "fontWeight": "bold",
-            },
-            {
-              "textAlign": "center",
-            },
-          ]
-        }
-      >
-        name Requests
-      </Text>
       <View
         collapsable={false}
         style={

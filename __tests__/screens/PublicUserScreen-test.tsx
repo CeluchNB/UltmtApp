@@ -9,11 +9,13 @@ import { act, fireEvent, render } from '@testing-library/react-native'
 
 const navigate = jest.fn()
 const addListener = jest.fn()
+const setOptions = jest.fn()
 
 const props: PublicUserDetailsProps = {
     navigation: {
         addListener,
         navigate,
+        setOptions,
     } as any,
     route: {
         params: {

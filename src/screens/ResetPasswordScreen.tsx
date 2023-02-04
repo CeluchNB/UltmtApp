@@ -2,7 +2,6 @@ import * as React from 'react'
 import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { ResetPasswordProps } from '../types/navigation'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
 import { resetPassword } from '../services/data/user'
@@ -75,7 +74,6 @@ const ResetPasswordScreen: React.FC<ResetPasswordProps> = ({ navigation }) => {
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle title="Reset Password" />
             <Controller
                 control={control}
                 name="passcode"

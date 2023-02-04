@@ -17,23 +17,6 @@ exports[`SelectMyTeamScreen should match snapshot with manager teams 1`] = `
       }
     }
   >
-    <Text
-      numberOfLines={1}
-      style={
-        [
-          {
-            "color": "#ffd600",
-            "fontSize": 61.64383561643835,
-            "fontWeight": "bold",
-          },
-          {
-            "marginTop": 10,
-          },
-        ]
-      }
-    >
-      Select My Team
-    </Text>
     <RCTScrollView
       data={
         [
@@ -312,23 +295,6 @@ exports[`SelectMyTeamScreen should match snapshot with unauthenticated user 1`] 
       }
     }
   >
-    <Text
-      numberOfLines={1}
-      style={
-        [
-          {
-            "color": "#ffd600",
-            "fontSize": 61.64383561643835,
-            "fontWeight": "bold",
-          },
-          {
-            "marginTop": 10,
-          },
-        ]
-      }
-    >
-      Select My Team
-    </Text>
     <View>
       <Text
         style={
@@ -511,23 +477,6 @@ exports[`SelectMyTeamScreen should match snapshot without manager teams 1`] = `
       }
     }
   >
-    <Text
-      numberOfLines={1}
-      style={
-        [
-          {
-            "color": "#ffd600",
-            "fontSize": 61.64383561643835,
-            "fontWeight": "bold",
-          },
-          {
-            "marginTop": 10,
-          },
-        ]
-      }
-    >
-      Select My Team
-    </Text>
     <View>
       <Text
         style={

@@ -4,7 +4,6 @@ import { DisplayTeam } from '../types/team'
 import IconButtonText from '../components/atoms/IconButtonText'
 import { ManageTeamsProps } from '../types/navigation'
 import MapSection from '../components/molecules/MapSection'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { size } from '../theme/fonts'
 import { useColors } from '../hooks/index'
@@ -26,7 +25,20 @@ import {
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const ManageTeams: React.FC<ManageTeamsProps> = ({ navigation }) => {
+const getRequestsButton = ({ navigation }: ManageTeamsProps) => {
+    return (
+        <IconButtonText
+            text="Requests"
+            icon="email-outline"
+            onPress={() => {
+                navigation.navigate('UserRequests')
+            }}
+        />
+    )
+}
+
+const ManageTeams: React.FC<ManageTeamsProps> = props => {
+    const { navigation } = props
     const { colors } = useColors()
     const dispatch = useDispatch<AppDispatch>()
     const playerTeams = useSelector(selectPlayerTeams)
@@ -41,8 +53,14 @@ const ManageTeams: React.FC<ManageTeamsProps> = ({ navigation }) => {
         const unsubscribe = navigation.addListener('focus', () => {
             dispatch(fetchProfile())
         })
+        navigation.setOptions({
+            headerRight: () => {
+                return getRequestsButton(props)
+            },
+        })
         return unsubscribe
-    })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const openTeamDetails = async (item: DisplayTeam) => {
         navigation.navigate('ManagedTeamDetails', {
@@ -73,13 +91,13 @@ const ManageTeams: React.FC<ManageTeamsProps> = ({ navigation }) => {
             textAlignVertical: 'center',
         },
         error: {
-            width: '75%',
+            width: '80%',
             alignSelf: 'center',
             fontSize: size.fontLarge,
             color: colors.gray,
         },
         container: {
-            width: '75%',
+            width: '80%',
             alignSelf: 'center',
         },
         headerContainer: {
@@ -107,17 +125,6 @@ const ManageTeams: React.FC<ManageTeamsProps> = ({ navigation }) => {
                     />
                 }
                 testID="mt-scroll-view">
-                <View style={styles.headerContainer}>
-                    <ScreenTitle style={styles.title} title="Manage Teams" />
-                    <IconButtonText
-                        style={styles.requestsButton}
-                        text="Requests"
-                        icon="email-outline"
-                        onPress={() => {
-                            navigation.navigate('UserRequestsScreen')
-                        }}
-                    />
-                </View>
                 <View style={styles.container}>
                     <MapSection
                         title="Playing With"

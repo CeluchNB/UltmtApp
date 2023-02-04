@@ -4,7 +4,6 @@ import { CreateAccountProps } from '../types/navigation'
 import { CreateUserData } from '../types/user'
 import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
@@ -78,7 +77,6 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
 
     return (
         <View style={styles.container}>
-            <ScreenTitle title="Create Account" style={styles.title} />
             <Controller
                 control={control}
                 rules={getFormFieldRules('First name', true, undefined, 20)}

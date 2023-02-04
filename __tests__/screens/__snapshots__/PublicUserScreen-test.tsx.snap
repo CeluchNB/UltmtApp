@@ -21,28 +21,11 @@ exports[`should match snapshot 1`] = `
     <RCTRefreshControl />
     <View>
       <Text
-        numberOfLines={1}
-        style={
-          [
-            {
-              "color": "#ffd600",
-              "fontSize": 61.64383561643835,
-              "fontWeight": "bold",
-            },
-            {
-              "alignSelf": "center",
-              "color": "#ffd600",
-            },
-          ]
-        }
-      >
-        first last
-      </Text>
-      <Text
         style={
           {
             "alignSelf": "center",
             "color": "#ffd600",
+            "fontSize": 41.0958904109589,
           }
         }
       >

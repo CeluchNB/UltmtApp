@@ -2,7 +2,6 @@ import * as React from 'react'
 import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
 import { RequestTeamProps } from '../types/navigation'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import SearchBar from '../components/atoms/SearchBar'
 import SearchResultItem from '../components/atoms/SearchResultItem'
 import SecondaryButton from '../components/atoms/SecondaryButton'
@@ -80,7 +79,6 @@ const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
 
     return (
         <View style={styles.screen}>
-            <ScreenTitle style={styles.title} title="Request Team" />
             <SearchBar
                 style={styles.input}
                 onChangeText={search}
@@ -90,7 +88,7 @@ const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
                 style={styles.joinButton}
                 text="join by code"
                 onPress={async () => {
-                    navigation.navigate('JoinByCodeScreen')
+                    navigation.navigate('JoinByCode')
                 }}
             />
             {searchError.length > 0 ? (

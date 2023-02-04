@@ -11,11 +11,13 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const navigate = jest.fn()
 const addListener = jest.fn()
+const setOptions = jest.fn()
 
 const props: PublicTeamDetailsProps = {
     navigation: {
         navigate,
         addListener,
+        setOptions,
         isFocused: () => true,
     } as any,
     route: {
@@ -59,17 +61,6 @@ it('should match snapshot', async () => {
     )
 
     expect(snapshot).toMatchSnapshot()
-})
-
-it('should display team name', async () => {
-    const { findByText } = render(
-        <NavigationContainer>
-            <PublicTeamScreen {...props} />
-        </NavigationContainer>,
-    )
-
-    const title = findByText('Place Name')
-    expect(title).toBeTruthy()
 })
 
 it('should handle player click', async () => {
@@ -125,6 +116,7 @@ it('should get archive team and handle player click', async () => {
         navigation: {
             navigate,
             addListener,
+            setOptions,
             isFocused: () => true,
         } as any,
         route: {

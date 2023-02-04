@@ -5,88 +5,70 @@ exports[`should match snapshot 1`] = `
   style={
     {
       "backgroundColor": "#303030",
-      "flex": 1,
       "height": "100%",
     }
   }
 >
-  <RCTScrollView
-    refreshControl={
-      <RefreshControlMock
-        colors={
-          [
-            "#31adff",
-          ]
-        }
-        onRefresh={[Function]}
-        refreshing={false}
-      />
+  <View
+    style={
+      {
+        "alignSelf": "center",
+        "width": "90%",
+      }
     }
-    testID="public-team-scroll-view"
   >
-    <RCTRefreshControl />
-    <View>
-      <View
-        style={
-          {
-            "alignItems": "center",
-          }
-        }
-      >
-        <Text
-          numberOfLines={1}
-          style={
+    <RCTScrollView
+      refreshControl={
+        <RefreshControlMock
+          colors={
             [
-              {
-                "color": "#ffd600",
-                "fontSize": 61.64383561643835,
-                "fontWeight": "bold",
-              },
-              {
-                "textAlign": "center",
-              },
+              "#31adff",
             ]
           }
-        >
-          Place Name
-        </Text>
-        <Text
-          style={
-            {
-              "color": "#ffd600",
-              "fontSize": 30.821917808219176,
-              "fontWeight": "600",
-              "marginBottom": 5,
-              "textAlign": "center",
-            }
-          }
-        >
-          NaN
-        </Text>
-        <Text
-          style={
-            {
-              "color": "#ffd600",
-              "fontSize": 30.821917808219176,
-              "marginBottom": 5,
-              "textAlign": "center",
-            }
-          }
-        >
-          @
-        </Text>
-      </View>
-      <View
-        style={
-          {
-            "alignSelf": "center",
-            "width": "75%",
-          }
-        }
-      >
+          onRefresh={[Function]}
+          refreshing={false}
+        />
+      }
+      testID="public-team-scroll-view"
+    >
+      <RCTRefreshControl />
+      <View>
         <View
           style={
             {
+              "alignItems": "center",
+              "alignSelf": "center",
+              "display": "flex",
+              "flexDirection": "column",
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#ffd600",
+                "fontSize": 41.0958904109589,
+              }
+            }
+          >
+            @
+          </Text>
+          <Text
+            style={
+              {
+                "color": "#ffd600",
+                "fontSize": 30.821917808219176,
+                "fontWeight": "600",
+              }
+            }
+          >
+            NaN
+          </Text>
+        </View>
+        <View
+          style={
+            {
+              "alignSelf": "center",
               "width": "100%",
             }
           }
@@ -94,29 +76,37 @@ exports[`should match snapshot 1`] = `
           <View
             style={
               {
-                "display": "flex",
-                "flex": 1,
-                "flexDirection": "row",
+                "width": "100%",
               }
             }
           >
-            <Text
+            <View
               style={
                 {
-                  "color": "#ffd600",
+                  "display": "flex",
                   "flex": 1,
-                  "fontSize": 61.64383561643835,
-                  "fontWeight": "bold",
-                  "marginBottom": 10,
+                  "flexDirection": "row",
                 }
               }
             >
-              Players
-            </Text>
+              <Text
+                style={
+                  {
+                    "color": "#ffd600",
+                    "flex": 1,
+                    "fontSize": 61.64383561643835,
+                    "fontWeight": "bold",
+                    "marginBottom": 10,
+                  }
+                }
+              >
+                Players
+              </Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
-  </RCTScrollView>
+    </RCTScrollView>
+  </View>
 </RCTSafeAreaView>
 `;

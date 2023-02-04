@@ -17,21 +17,6 @@ exports[`TeamGamesScreen matches snapshot 1`] = `
       }
     }
   >
-    <Text
-      numberOfLines={1}
-      style={
-        [
-          {
-            "color": "#ffd600",
-            "fontSize": 61.64383561643835,
-            "fontWeight": "bold",
-          },
-          undefined,
-        ]
-      }
-    >
-      Your Games
-    </Text>
     <RCTScrollView
       data={
         [

@@ -75,11 +75,13 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
-            if (!profileLoading) {
-                profileRefetch()
-                gameRefetch()
-                activeGameRefetch()
-            }
+            // TODO: causing poor UI effect on back navigation
+            // investigate consequences of removing this
+            // if (!profileLoading) {
+            //     profileRefetch()
+            //     gameRefetch()
+            //     activeGameRefetch()
+            // }
         })
         return unsubscribe
     })
@@ -201,7 +203,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                 icon="email-outline"
                                 text="Requests"
                                 onPress={() => {
-                                    navigation.navigate('UserRequestsScreen')
+                                    navigation.navigate('UserRequests')
                                 }}
                             />
                             <IconButtonText
@@ -209,7 +211,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                 icon="cog-outline"
                                 text="Settings"
                                 onPress={() => {
-                                    navigation.navigate('SettingsScreen')
+                                    navigation.navigate('Settings')
                                 }}
                             />
                         </View>

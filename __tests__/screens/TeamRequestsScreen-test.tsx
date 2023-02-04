@@ -18,11 +18,13 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const navigate = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
+const setOptions = jest.fn()
 
 const props: TeamRequestProps = {
     navigation: {
         navigate,
         addListener,
+        setOptions,
     } as any,
     route: {} as any,
 }

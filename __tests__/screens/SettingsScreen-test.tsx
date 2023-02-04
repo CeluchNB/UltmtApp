@@ -221,7 +221,7 @@ it('should navigate to edit email', async () => {
     fireEvent.press(editButton)
     await act(async () => {})
 
-    expect(navigate).toHaveBeenCalledWith('SecureEditScreen', {
+    expect(navigate).toHaveBeenCalledWith('SecureEdit', {
         title: 'email',
         value: fetchProfileData.email,
         field: SecureEditField.EMAIL,
@@ -241,7 +241,7 @@ it('should navigate to edit password', async () => {
     fireEvent.press(editButton)
     await act(async () => {})
 
-    expect(navigate).toHaveBeenCalledWith('SecureEditScreen', {
+    expect(navigate).toHaveBeenCalledWith('SecureEdit', {
         title: 'password',
         value: 'New password',
         field: SecureEditField.PASSWORD,

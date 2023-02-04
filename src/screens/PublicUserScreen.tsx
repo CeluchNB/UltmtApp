@@ -2,7 +2,6 @@ import * as React from 'react'
 import * as UserData from './../services/data/user'
 import MapSection from '../components/molecules/MapSection'
 import { PublicUserDetailsProps } from '../types/navigation'
-import ScreenTitle from '../components/atoms/ScreenTitle'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { User } from '../types/user'
 import { size } from '../theme/fonts'
@@ -40,6 +39,13 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         return unsubscribe
     }, [navigation, loading, user, refetch])
 
+    React.useEffect(() => {
+        navigation.setOptions({
+            title: `${initialUser.firstName} ${initialUser.lastName}`,
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialUser])
+
     const styles = StyleSheet.create({
         screen: {
             height: '100%',
@@ -47,6 +53,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         },
         titleText: {
             color: colors.textPrimary,
+            fontSize: size.fontMedium,
             alignSelf: 'center',
         },
         sectionContainer: {
@@ -72,10 +79,6 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     />
                 }
                 testID="public-user-scroll-view">
-                <ScreenTitle
-                    style={styles.titleText}
-                    title={`${initialUser.firstName} ${initialUser.lastName}`}
-                />
                 <Text style={styles.titleText}>@{initialUser.username}</Text>
                 {error ? (
                     <Text style={styles.error}>{error.message}</Text>

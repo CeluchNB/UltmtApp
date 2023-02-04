@@ -17,7 +17,7 @@ export type AccountStackParamList = {
     Profile: undefined
     CreateAccount: undefined
     CreateTeam: undefined
-    ForgotPasswordScreen: undefined
+    ForgotPassword: undefined
     ManageTeams: undefined
     RequestTeam: undefined
     ManagedTeamDetails: { id: string; place: string; name: string }
@@ -29,11 +29,11 @@ export type AccountStackParamList = {
     }
     PublicUserDetails: { user: DisplayUser }
     RequestUser: { type: RequestType }
-    ResetPasswordScreen: undefined
+    ResetPassword: undefined
     RolloverTeam: undefined
-    UserRequestsScreen: undefined
-    TeamRequestsScreen: undefined
-    JoinByCodeScreen: undefined
+    UserRequests: undefined
+    TeamRequests: undefined
+    JoinByCode: undefined
     TeamGames: undefined
     ActiveGames: undefined
     OfflineGameOptions: { gameId: string }
@@ -73,8 +73,8 @@ export type TopLevelParamList = {
     Tabs: NavigatorScreenParams<TabParamList>
     GameCreationFlow: NavigatorScreenParams<GameCreationParamList>
     LiveGame: NavigatorScreenParams<LiveGameParamList>
-    SettingsScreen: undefined
-    SecureEditScreen: { title: string; value: string; field: SecureEditField }
+    Settings: undefined
+    SecureEdit: { title: string; value: string; field: SecureEditField }
 }
 
 export type AllScreenProps = NativeStackScreenProps<
@@ -88,13 +88,13 @@ export type AllScreenProps = NativeStackScreenProps<
 >
 
 export type SettingsScreenProps = CompositeScreenProps<
-    NativeStackScreenProps<TopLevelParamList, 'SettingsScreen'>,
+    NativeStackScreenProps<TopLevelParamList, 'Settings'>,
     NativeStackScreenProps<AllScreenProps>
 >
 
 export type SecureEditProps = NativeStackScreenProps<
     TopLevelParamList,
-    'SecureEditScreen'
+    'SecureEdit'
 >
 
 // Account
@@ -141,23 +141,23 @@ export type RolloverTeamProps = NativeStackScreenProps<
 >
 export type ForgotPasswordProps = NativeStackScreenProps<
     AccountStackParamList,
-    'ForgotPasswordScreen'
+    'ForgotPassword'
 >
 export type ResetPasswordProps = NativeStackScreenProps<
     AccountStackParamList,
-    'ResetPasswordScreen'
+    'ResetPassword'
 >
 export type UserRequestProps = NativeStackScreenProps<
     AccountStackParamList,
-    'UserRequestsScreen'
+    'UserRequests'
 >
 export type TeamRequestProps = NativeStackScreenProps<
     AccountStackParamList,
-    'TeamRequestsScreen'
+    'TeamRequests'
 >
 export type JoinByCodeProps = NativeStackScreenProps<
     AccountStackParamList,
-    'JoinByCodeScreen'
+    'JoinByCode'
 >
 
 // Game Stack

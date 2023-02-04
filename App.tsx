@@ -8,12 +8,15 @@ import TabNavigator from './src/navigation/TabNavigator'
 import { TopLevelParamList } from './src/types/navigation'
 import { closeRealm } from './src/models/realm'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { useColors } from './src/hooks'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 const Stack = createNativeStackNavigator<TopLevelParamList>()
 const queryClient = new QueryClient()
 
 const App: React.FC<{}> = () => {
+    const { colors } = useColors()
+
     React.useEffect(() => {
         return () => {
             closeRealm()
@@ -25,15 +28,34 @@ const App: React.FC<{}> = () => {
                 {/* Settings Screen exists here for dark mode purposes */}
                 <Stack.Navigator
                     initialRouteName={'Tabs'}
-                    screenOptions={{ headerShown: false }}>
+                    screenOptions={{
+                        headerShown: false,
+                    }}>
                     <Stack.Screen name="Tabs" component={TabNavigator} />
                     <Stack.Screen
-                        name="SettingsScreen"
+                        name="Settings"
                         component={SettingsScreen}
+                        options={{
+                            title: 'Settings',
+                            headerShown: true,
+                            headerStyle: {
+                                backgroundColor: colors.primary,
+                            },
+                            headerTintColor: colors.textPrimary,
+                            headerBackTitle: 'Back',
+                        }}
                     />
                     <Stack.Screen
-                        name="SecureEditScreen"
+                        name="SecureEdit"
                         component={SecureEditScreen}
+                        options={{
+                            headerShown: true,
+                            headerStyle: {
+                                backgroundColor: colors.primary,
+                            },
+                            headerTintColor: colors.textPrimary,
+                            headerBackTitle: 'Back',
+                        }}
                     />
                     <Stack.Screen
                         name="GameCreationFlow"
