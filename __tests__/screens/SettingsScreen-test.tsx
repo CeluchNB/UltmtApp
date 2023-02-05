@@ -1,10 +1,12 @@
 import * as AuthData from '../../src/services/data/auth'
 import * as Preferences from '../../src/services/data/preferences'
 import * as UserData from '../../src/services/data/user'
+import DarkTheme from '../../src/theme/dark'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import SettingsScreen from '../../src/screens/SettingsScreen'
+import { ThemeProvider } from '../../src/theme/context'
 import { fetchProfileData } from '../../fixtures/data'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
@@ -341,11 +343,13 @@ it('should handle dark mode switch press', async () => {
     )
 
     const { getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <SettingsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
+        <ThemeProvider>
+            <Provider store={store}>
+                <NavigationContainer>
+                    <SettingsScreen {...props} />
+                </NavigationContainer>
+            </Provider>
+        </ThemeProvider>,
     )
 
     const switchEl = getByTestId('dark-mode-switch')
@@ -357,5 +361,5 @@ it('should handle dark mode switch press', async () => {
     expect(spy).toHaveBeenCalledWith(false)
 
     const screen = getByTestId('screen')
-    expect(screen.props.style.backgroundColor).toBe('#ffffff')
+    expect(screen.props.style.backgroundColor).toBe(DarkTheme.colors.primary)
 })

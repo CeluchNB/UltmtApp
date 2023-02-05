@@ -4,7 +4,6 @@ import MapSection from '../components/molecules/MapSection'
 import { PublicUserDetailsProps } from '../types/navigation'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { User } from '../types/user'
-import { size } from '../theme/fonts'
 import {
     RefreshControl,
     SafeAreaView,
@@ -13,14 +12,16 @@ import {
     Text,
     View,
 } from 'react-native'
-import { useColors, useData } from './../hooks'
+import { useData, useTheme } from './../hooks'
 
 const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     route,
     navigation,
 }) => {
     const { userId } = route.params
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
 
     const {
         data: user,
@@ -53,7 +54,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         },
         titleText: {
             color: colors.textPrimary,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             alignSelf: 'center',
         },
         sectionContainer: {
@@ -63,7 +64,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         error: {
             width: '75%',
             alignSelf: 'center',
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
         },
     })
 

@@ -6,7 +6,6 @@ import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { UserRequestProps } from '../types/navigation'
-import { size } from '../theme/fonts'
 import {
     RefreshControl,
     SafeAreaView,
@@ -22,11 +21,13 @@ import {
     selectToggleLoading,
     setOpenToRequests,
 } from '../store/reducers/features/account/accountReducer'
-import { useColors, useData, useLazyData } from '../hooks'
+import { useData, useLazyData, useTheme } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const dispatch = useDispatch<AppDispatch>()
     const toggleLoading = useSelector(selectToggleLoading)
     const openToRequests = useSelector(selectOpenToRequests)
@@ -90,7 +91,7 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
         error: {
             width: '75%',
             alignSelf: 'center',
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.gray,
         },
         toggleError: {

@@ -6,14 +6,16 @@ import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
 import { resetPassword } from '../services/data/user'
 import { setProfile } from '../store/reducers/features/account/accountReducer'
-import { useColors } from '../hooks'
 import { useDispatch } from 'react-redux'
+import { useTheme } from '../hooks'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
 const ResetPasswordScreen: React.FC<ResetPasswordProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const {
         control,
         handleSubmit,

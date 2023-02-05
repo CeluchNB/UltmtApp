@@ -1,8 +1,7 @@
 import { Comment } from '../../types/action'
 import { IconButton } from 'react-native-paper'
 import React from 'react'
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface CommentInputProps {
@@ -17,7 +16,9 @@ const CommentItem: React.FC<CommentInputProps> = ({
     onDelete,
 }) => {
     const { user, comment: commentText } = comment
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         container: {

@@ -5,8 +5,7 @@ import IconButtonText from '../components/atoms/IconButtonText'
 import { ManageTeamsProps } from '../types/navigation'
 import MapSection from '../components/molecules/MapSection'
 import TeamListItem from '../components/atoms/TeamListItem'
-import { size } from '../theme/fonts'
-import { useColors } from '../hooks/index'
+import { useTheme } from '../hooks'
 import {
     RefreshControl,
     SafeAreaView,
@@ -39,7 +38,9 @@ const getRequestsButton = ({ navigation }: ManageTeamsProps) => {
 
 const ManageTeams: React.FC<ManageTeamsProps> = props => {
     const { navigation } = props
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const dispatch = useDispatch<AppDispatch>()
     const playerTeams = useSelector(selectPlayerTeams)
     const managerTeams = useSelector(selectManagerTeams)
@@ -91,7 +92,7 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
         error: {
             width: '80%',
             alignSelf: 'center',
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.gray,
         },
         container: {

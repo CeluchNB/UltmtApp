@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { IconButton } from 'react-native-paper'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 export interface BaseListItemProps {
     showDelete?: boolean
@@ -25,7 +24,9 @@ const BaseListItem: React.FC<BaseListItemProps> = ({
     error,
     children,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         container: {
@@ -39,7 +40,7 @@ const BaseListItem: React.FC<BaseListItemProps> = ({
         },
         text: {
             color: colors.gray,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.bold,
         },
         buttonStyle: {
@@ -47,17 +48,17 @@ const BaseListItem: React.FC<BaseListItemProps> = ({
             justifyContent: 'center',
         },
         acceptedText: {
-            fontSize: size.fontSmall,
+            fontSize: size.fontTen,
             fontWeight: weight.bold,
             color: colors.success,
         },
         deniedText: {
-            fontSize: size.fontSmall,
+            fontSize: size.fontTen,
             fontWeight: weight.bold,
             color: colors.error,
         },
         pendingText: {
-            fontSize: size.fontSmall,
+            fontSize: size.fontTen,
             fontWeight: weight.bold,
             color: colors.gray,
         },

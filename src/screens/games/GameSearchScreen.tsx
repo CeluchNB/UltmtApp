@@ -6,9 +6,8 @@ import { GameSearchProps } from '../../types/navigation'
 import SearchBar from '../../components/atoms/SearchBar'
 import { parseLiveValue } from '../../utils/form-utils'
 import { searchGames } from '../../services/data/game'
-import { useColors } from '../../hooks'
 import { useInfiniteQuery } from 'react-query'
-import { weight } from '../../theme/fonts'
+import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     FlatList,
@@ -23,7 +22,9 @@ import React, { useState } from 'react'
 const PAGE_SIZE = 10
 
 const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, weight },
+    } = useTheme()
     const { live: defaultLive } = route.params
 
     const [modalVisible, setModalVisible] = useState(false)

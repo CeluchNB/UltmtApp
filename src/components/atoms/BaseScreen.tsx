@@ -1,5 +1,5 @@
 import React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 
 interface BaseScreenProps {
@@ -9,7 +9,9 @@ interface BaseScreenProps {
 
 const BaseScreen: React.FC<BaseScreenProps> = props => {
     const { containerWidth, children } = props
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         screen: {

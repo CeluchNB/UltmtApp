@@ -10,7 +10,6 @@ import { fetchProfile } from '../../store/reducers/features/account/accountReduc
 import { getTeam } from '../../services/data/team'
 import { isLoggedIn } from '../../services/data/auth'
 import { setTeamOne } from '../../store/reducers/features/game/liveGameReducer'
-import { size } from '../../theme/fonts'
 import {
     ActivityIndicator,
     FlatList,
@@ -22,11 +21,13 @@ import {
     selectFetchProfileLoading,
     selectManagerTeams,
 } from '../../store/reducers/features/account/accountReducer'
-import { useColors, useData } from '../../hooks'
+import { useData, useTheme } from '../../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const dispatch = useDispatch<AppDispatch>()
     const managerTeams = useSelector(selectManagerTeams)
     const fetchProfileLoading = useSelector(selectFetchProfileLoading)
@@ -78,7 +79,7 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
         },
         error: {
             color: colors.gray,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
         },
     })
 

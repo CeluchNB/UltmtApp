@@ -4,14 +4,15 @@ import { EditGameProps } from '../../types/navigation'
 import GameForm from '../../components/organisms/GameForm'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
-import { size } from '../../theme/fonts'
 import { useForm } from 'react-hook-form'
 import { StyleSheet, Text } from 'react-native'
-import { useColors, useGameEditor } from '../../hooks'
+import { useGameEditor, useTheme } from '../../hooks'
 
 const EditGameScreen: React.FC<EditGameProps> = ({ navigation }) => {
     const { game, onEditGame } = useGameEditor()
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
 
@@ -46,7 +47,7 @@ const EditGameScreen: React.FC<EditGameProps> = ({ navigation }) => {
     const styles = StyleSheet.create({
         errorText: {
             color: colors.error,
-            fontSize: size.fontSmall,
+            fontSize: size.fontTen,
         },
     })
     return (

@@ -1,20 +1,20 @@
 import Metrics from './metrics'
+import { FontSize, FontWeight } from '../types/theme'
 
-const size = {
-    fontSmall: Metrics.screenWidth * (10 / 365),
+const size: FontSize = {
+    fontTen: Metrics.screenWidth * (10 / 365),
     fontFifteen: Metrics.screenWidth * (15 / 365),
-    fontMedium: Metrics.screenWidth * (20 / 365),
-    fontLarge: Metrics.screenWidth * (30 / 365),
-    fontExtraLarge: Metrics.screenWidth * (40 / 365),
+    fontTwenty: Metrics.screenWidth * (20 / 365),
+    fontThirty: Metrics.screenWidth * (30 / 365),
+    fontFourty: Metrics.screenWidth * (40 / 365),
 }
 
-type WeightStyle = '900' | '600' | '400' | 'bold' | 'normal'
-const weight = {
-    full: '900' as WeightStyle,
-    medium: '600' as WeightStyle,
-    low: '400' as WeightStyle,
-    bold: 'bold' as WeightStyle,
-    normal: 'normal' as WeightStyle,
+const weight: FontWeight = {
+    full: '900',
+    medium: '600',
+    low: '400',
+    bold: 'bold',
+    normal: 'normal',
 }
 
 export { size, weight }

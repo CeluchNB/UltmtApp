@@ -2,7 +2,7 @@ import { GuestTeam } from '../../types/team'
 import { GuestUser } from '../../types/user'
 import React from 'react'
 import { mapActionToDescription } from '../../utils/action'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Chip, IconButton } from 'react-native-paper'
 import {
     LiveServerAction,
@@ -10,7 +10,6 @@ import {
     ServerAction,
 } from '../../types/action'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface ActionDisplayItemProps {
     action: ServerAction
@@ -25,7 +24,9 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
     teamTwo,
     onPress,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const { actionType, playerOne, playerTwo, tags } = action
 
     const getName = (player?: GuestUser): string => {

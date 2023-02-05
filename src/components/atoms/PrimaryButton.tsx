@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button } from 'react-native-paper'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 
 interface PrimaryButtonProps {
@@ -18,7 +18,9 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     style,
     disabled = false,
 }) => {
-    const { colors, isDarkMode } = useColors()
+    const {
+        theme: { colors, id },
+    } = useTheme()
 
     const selfStyle = StyleSheet.create({
         button: {
@@ -30,7 +32,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
         <Button
             mode="contained"
             compact={true}
-            dark={!isDarkMode}
+            dark={id === 'light'}
             uppercase={true}
             disabled={disabled}
             style={[selfStyle.button, style]}

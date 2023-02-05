@@ -5,7 +5,7 @@ import MapSection from '../components/molecules/MapSection'
 import { PublicTeamDetailsProps } from '../types/navigation'
 import { Team } from '../types/team'
 import UserListItem from '../components/atoms/UserListItem'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 import {
     RefreshControl,
     ScrollView,
@@ -13,13 +13,14 @@ import {
     Text,
     View,
 } from 'react-native'
-import { size, weight } from '../theme/fonts'
 
 const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     route,
     navigation,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const { id, archive } = route.params
     const [team, setTeam] = React.useState({} as Team)
     const [refreshing, setRefreshing] = React.useState(false)
@@ -78,7 +79,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
             color: colors.textPrimary,
         },
         teamname: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             color: colors.textPrimary,
         },
         bodyContainer: {
@@ -87,7 +88,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         },
         error: {
             color: colors.gray,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             fontWeight: weight.bold,
             textAlign: 'center',
         },

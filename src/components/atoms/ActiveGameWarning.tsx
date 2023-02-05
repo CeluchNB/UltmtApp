@@ -1,7 +1,7 @@
 import { Chip } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface ActiveGameWarningProps {
@@ -13,7 +13,9 @@ const ActiveGameWarning: React.FC<ActiveGameWarningProps> = ({
     count,
     onPress,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     if (!count || count <= 0) {
         return null

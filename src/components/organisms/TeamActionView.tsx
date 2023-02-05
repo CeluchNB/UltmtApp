@@ -4,8 +4,7 @@ import PlayerActionTagModal from '../molecules/PlayerActionTagModal'
 import React from 'react'
 import SubstitutionModal from '../molecules/SubstitutionModal'
 import { mapActionToDisplayName } from '../../utils/action'
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { ActionType, ClientActionType } from '../../types/action'
 import { FlatList, StyleSheet, View } from 'react-native'
 
@@ -23,7 +22,9 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
     actions,
     onAction,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const [subModalVisible, setSubModalVisible] = React.useState(false)
     const [tagModalVisible, setTagModalVisible] = React.useState(false)
     const [selectedAction, setSelectedAction] = React.useState<

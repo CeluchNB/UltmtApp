@@ -1,5 +1,5 @@
 import React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Modal, StyleSheet, View } from 'react-native'
 
 interface BaseModalProps {
@@ -10,7 +10,9 @@ interface BaseModalProps {
 
 const BaseModal: React.FC<BaseModalProps> = props => {
     const { visible, children, onClose } = props
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         modalContainer: {

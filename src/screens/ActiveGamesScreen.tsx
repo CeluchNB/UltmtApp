@@ -4,16 +4,17 @@ import ConfirmModal from '../components/molecules/ConfirmModal'
 import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
-import { size } from '../theme/fonts'
 import { useGameReactivation } from '../hooks/useGameReactivation'
 import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, Text } from 'react-native'
 import { Game, LocalGame } from '../types/game'
 import { deleteGame, getActiveGames } from '../services/data/game'
-import { useColors, useData } from '../hooks'
+import { useData, useTheme } from '../hooks'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const account = useSelector(selectAccount)
     const { navigateToGame, onResurrect } = useGameReactivation()
     const { data: games, refetch } = useData<(Game & { offline: boolean })[]>(
@@ -75,7 +76,7 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
 
     const styles = StyleSheet.create({
         infoText: {
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.gray,
         },
         list: { marginTop: 10 },

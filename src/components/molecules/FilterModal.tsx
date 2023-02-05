@@ -4,10 +4,9 @@ import { RadioButton } from 'react-native-paper'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import TextDateInput from '../atoms/TextDateInput'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface FilterModalProps {
     visible: boolean
@@ -20,7 +19,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
     defaultValues,
     onClose,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const { control, handleSubmit, reset } = useForm({
         defaultValues,
     })
@@ -33,13 +34,13 @@ const FilterModal: React.FC<FilterModalProps> = ({
         },
         title: {
             color: colors.textPrimary,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             fontWeight: weight.bold,
             flex: 1,
         },
         text: {
             color: colors.textPrimary,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.bold,
         },
         toText: {

@@ -5,12 +5,14 @@ import LivePointEditScreen from '../screens/games/LivePointEditScreen'
 import React from 'react'
 import SelectPlayersScreen from '../screens/games/SelectPlayersScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 
 const Stack = createNativeStackNavigator<LiveGameParamList>()
 
 const LiveGameNavigator: React.FC<{}> = () => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>

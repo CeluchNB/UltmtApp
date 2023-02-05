@@ -1,11 +1,13 @@
-import { useColors } from '../../hooks'
 import { useNetInfo } from '@react-native-community/netinfo'
+import { useTheme } from '../../hooks'
 import { IconButton, Tooltip } from 'react-native-paper'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 const NetInfoIndicator: React.FC<{}> = () => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const netInfo = useNetInfo()
     const [iconName, setIconName] = useState('network-strength-3')
     const [iconColor, setIconColor] = useState(colors.success)

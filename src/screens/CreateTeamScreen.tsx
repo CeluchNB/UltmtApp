@@ -6,11 +6,10 @@ import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../theme/fonts'
 
 interface CreateTeamFormData {
     place: string
@@ -29,7 +28,9 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
     ]
     const [error, setError] = React.useState('')
 
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const {
         control,
         handleSubmit,
@@ -77,7 +78,7 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
         },
         pickerTitle: {
             color: colors.textPrimary,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.bold,
             width: '75%',
             alignSelf: 'center',

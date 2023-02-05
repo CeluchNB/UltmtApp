@@ -5,12 +5,14 @@ import React from 'react'
 import SelectMyTeamScreen from '../screens/games/SelectMyTeamScreen'
 import SelectOpponentScreen from '../screens/games/SelectOpponentScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 
 const Stack = createNativeStackNavigator<GameCreationParamList>()
 
 const GameCreationNavigator: React.FC<{}> = () => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     return (
         <Stack.Navigator

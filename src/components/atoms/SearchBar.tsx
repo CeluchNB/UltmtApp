@@ -1,5 +1,4 @@
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Button, TextInput } from 'react-native-paper'
 import React, { useState } from 'react'
 import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
@@ -17,7 +16,9 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = props => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const {
         placeholder,
         style,
@@ -43,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
             backgroundColor: colors.primary,
             color: colors.textPrimary,
             marginBottom: 5,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             flex: 1,
         },
         filter: {

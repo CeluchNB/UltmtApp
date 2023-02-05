@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     StyleSheet,
@@ -7,7 +7,6 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface SearchResultItemProps {
     header: string
@@ -24,11 +23,13 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
     loading,
     error,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const styles = StyleSheet.create({
         header: {
             color: colors.gray,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.full,
         },
         subheader: {
@@ -50,7 +51,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
             backgroundColor: colors.textSecondary,
         },
         error: {
-            fontSize: size.fontSmall,
+            fontSize: size.fontTen,
             marginBottom: 2,
             color: colors.error,
         },

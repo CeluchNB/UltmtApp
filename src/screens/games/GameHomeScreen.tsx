@@ -5,7 +5,6 @@ import { GameHomeProps } from '../../types/navigation'
 import MapSection from '../../components/molecules/MapSection'
 import SearchBar from '../../components/atoms/SearchBar'
 import { searchGames } from '../../services/data/game'
-import { size } from '../../theme/fonts'
 import React, { useMemo } from 'react'
 import {
     RefreshControl,
@@ -14,10 +13,12 @@ import {
     StyleSheet,
     Text,
 } from 'react-native'
-import { useColors, useData } from '../../hooks'
+import { useData, useTheme } from '../../hooks'
 
 const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
 
     const { data, loading, refetch } = useData<Game[]>(searchGames)
 
@@ -65,7 +66,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
         },
         errorText: {
             alignSelf: 'center',
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.gray,
         },
         fab: {

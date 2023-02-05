@@ -3,9 +3,8 @@ import BaseModal from '../atoms/BaseModal'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { IconButton } from 'react-native-paper'
 import PrimaryButton from '../atoms/PrimaryButton'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface BulkCodeModalProps {
     code: string
@@ -19,7 +18,9 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
     visible,
     onClose,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         codeIntro: {
@@ -29,7 +30,7 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
             alignSelf: 'center',
         },
         code: {
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             letterSpacing: 2,
             color: colors.textSecondary,
             fontWeight: weight.full,

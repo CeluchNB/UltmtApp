@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { IconButton } from 'react-native-paper'
 import UserInput from '../atoms/UserInput'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface EditFieldProps {
     label: string
@@ -16,7 +15,9 @@ interface EditFieldProps {
 const EditField: React.FC<EditFieldProps> = (props: EditFieldProps) => {
     const { label, initialValue, onSubmit, onEdit } = props
 
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const [active, setActive] = React.useState(false)
 
     const {
@@ -31,7 +32,7 @@ const EditField: React.FC<EditFieldProps> = (props: EditFieldProps) => {
 
     const styles = StyleSheet.create({
         label: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.bold,
             color: colors.textPrimary,
             textAlignVertical: 'center',
@@ -49,7 +50,7 @@ const EditField: React.FC<EditFieldProps> = (props: EditFieldProps) => {
             flex: 1,
         },
         valueDisplay: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             color: colors.gray,
         },
         button: {

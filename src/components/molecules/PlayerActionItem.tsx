@@ -3,8 +3,7 @@ import { ClientActionType } from '../../types/action'
 import { DisplayUser } from '../../types/user'
 import PlayerActionTagModal from './PlayerActionTagModal'
 import React from 'react'
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface PlayerActionItemProps {
@@ -24,7 +23,9 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
     loading,
     onAction,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const [modalVisible, setModalVisible] = React.useState(false)
     const [selectedAction, setSelectedAction] = React.useState<
         ClientActionType | undefined
@@ -53,7 +54,7 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
             color: colors.textPrimary,
         },
         username: {
-            fontSize: size.fontSmall,
+            fontSize: size.fontTen,
             color: colors.textPrimary,
         },
         buttonContainer: {
@@ -67,7 +68,7 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
             marginRight: 5,
         },
         buttonText: {
-            fontSize: size.fontSmall,
+            fontSize: size.fontTen,
         },
     })
 

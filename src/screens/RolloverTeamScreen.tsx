@@ -11,9 +11,8 @@ import {
     selectTeam,
     setTeam,
 } from '../store/reducers/features/team/managedTeamReducer'
-import { size, weight } from '../theme/fonts'
-import { useColors, useLazyData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLazyData, useTheme } from '../hooks'
 
 interface RolloverTeamFormData {
     copyPlayers: boolean
@@ -21,7 +20,9 @@ interface RolloverTeamFormData {
 }
 
 const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const dispatch = useDispatch()
     const team = useSelector(selectTeam)
     const currentYear = new Date().getFullYear()
@@ -81,7 +82,7 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
         },
         sectionTitle: {
             color: colors.textPrimary,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.bold,
             width: '75%',
             alignSelf: 'center',

@@ -7,13 +7,14 @@ import SearchResultItem from '../components/atoms/SearchResultItem'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import { Team } from '../types/team'
 import { addRequest } from '../store/reducers/features/account/accountReducer'
-import { size } from '../theme/fonts'
-import { useColors } from '../hooks'
 import { useDispatch } from 'react-redux'
+import { useTheme } from '../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const [teams, setTeams] = React.useState<Team[]>([])
     const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
@@ -68,7 +69,7 @@ const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
         error: {
             width: '75%',
             alignSelf: 'center',
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.gray,
         },
         list: {

@@ -6,15 +6,17 @@ import PrimaryButton from '../components/atoms/PrimaryButton'
 import ScreenTitle from '../components/atoms/ScreenTitle'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
-import { useColors } from '../hooks'
 import { useDispatch } from 'react-redux'
+import { useTheme } from '../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
 const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
     // const hasCheckedLocalToken = React.useRef(false)
     const dispatch = useDispatch()
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState(undefined)
 

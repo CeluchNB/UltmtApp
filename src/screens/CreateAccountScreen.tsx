@@ -7,7 +7,7 @@ import PrimaryButton from '../components/atoms/PrimaryButton'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
@@ -15,7 +15,9 @@ import { StyleSheet, Text, View } from 'react-native'
 const CreateAccountScreen: React.FC<CreateAccountProps> = ({
     navigation,
 }: CreateAccountProps) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState(undefined)
     const [passwordHidden, setPasswordHidden] = React.useState(true)

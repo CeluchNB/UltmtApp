@@ -1,6 +1,6 @@
 import DatePicker from 'react-native-date-picker'
 import { TextInput } from 'react-native-paper'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
@@ -10,7 +10,9 @@ interface TextDateInputProps {
 }
 
 const TextDateInput: React.FC<TextDateInputProps> = ({ value, onChange }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const [open, setOpen] = useState(false)
 
     const styles = StyleSheet.create({

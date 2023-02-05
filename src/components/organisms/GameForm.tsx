@@ -1,7 +1,7 @@
 import LabeledFormInput from '../molecules/LabeledFormInput'
 import React from 'react'
 import { getFormFieldRules } from '../../utils/form-utils'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Control, Controller, FieldErrorsImpl } from 'react-hook-form'
 import { Switch, View } from 'react-native'
 
@@ -22,7 +22,9 @@ interface GameFormProps {
 
 const GameForm: React.FC<GameFormProps> = props => {
     const { control, errors } = props
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     const onNumberChange = (text: any): string => {
         return text.toString().replace(/\D/, '')

@@ -1,12 +1,11 @@
 import * as Constants from '../utils/constants'
-import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import * as UserData from '../services/data/user'
 import { AppDispatch } from '../store/store'
 import { Button } from 'react-native-paper'
 import EditField from '../components/molecules/EditField'
 import { logout } from '../services/data/auth'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 import {
     Modal,
     SafeAreaView,
@@ -22,11 +21,13 @@ import {
     setPrivate,
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
-import { size, weight } from '../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
-    const { colors, isDarkMode } = useColors()
+    const {
+        theme: { colors, id: themeId, size, weight },
+        toggleTheme,
+    } = useTheme()
 
     const dispatch = useDispatch<AppDispatch>()
     const account = useSelector(selectAccount)
@@ -35,9 +36,6 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
     const [lastError, setLastError] = React.useState('')
     const [deleteError, setDeleteError] = React.useState('')
     const [modalVisible, setModalVisible] = React.useState(false)
-
-    const [, updateState] = React.useState<any>()
-    const forceUpdate = React.useCallback(() => updateState({}), [])
 
     const styles = StyleSheet.create({
         screen: {
@@ -59,7 +57,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             flexDirection: 'row',
         },
         publicText: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             color: colors.textPrimary,
             fontWeight: weight.bold,
         },
@@ -94,7 +92,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             elevation: 5,
         },
         modalText: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             color: colors.error,
         },
         modalButtonContainer: {
@@ -105,7 +103,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
         },
         title: {
             flex: 1,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.textPrimary,
             fontWeight: weight.bold,
             marginTop: 10,
@@ -139,11 +137,9 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                 false: colors.gray,
                                 true: colors.textSecondary,
                             }}
-                            value={isDarkMode}
+                            value={themeId === 'dark'}
                             onValueChange={async () => {
-                                await Preferences.setDarkMode(!isDarkMode)
-                                // force re-render in new color scheme
-                                forceUpdate()
+                                toggleTheme()
                             }}
                             testID="dark-mode-switch"
                         />

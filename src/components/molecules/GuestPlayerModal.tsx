@@ -6,8 +6,7 @@ import React from 'react'
 import UserInput from '../atoms/UserInput'
 import { addGuestPlayer } from '../../store/reducers/features/game/liveGameReducer'
 import { getFormFieldRules } from '../../utils/form-utils'
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 import {
@@ -26,7 +25,9 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
     visible,
     onClose,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const status = useSelector(selectGuestPlayerStatus)
     const error = useSelector(selectGuestPlayerError)
     const dispatch = useDispatch<AppDispatch>()
@@ -75,7 +76,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
             elevation: 5,
         },
         title: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             color: colors.textSecondary,
         },
         inputContainer: {

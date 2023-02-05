@@ -13,15 +13,16 @@ import { searchUsers } from '../services/data/user'
 import { selectTeam } from '../store/reducers/features/team/managedTeamReducer'
 import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../theme/fonts'
-import { useColors, useLazyData } from '../hooks'
+import { useLazyData, useTheme } from '../hooks'
 
 const RequestUserScreen: React.FC<RequestUserProps> = ({
     navigation,
     route,
 }) => {
     const { type } = route.params
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const team = useSelector(selectTeam)
     const [players, setPlayers] = React.useState<DisplayUser[]>([])
     const [selectedPlayers, setSelectedPlayers] = React.useState<DisplayUser[]>(
@@ -109,7 +110,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
         error: {
             color: colors.gray,
             width: '75%',
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             fontWeight: weight.normal,
             alignSelf: 'center',
         },
@@ -131,7 +132,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
         },
         playerItem: {
             color: colors.success,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.full,
             flex: 1,
             alignSelf: 'center',

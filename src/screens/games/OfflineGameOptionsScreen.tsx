@@ -5,18 +5,19 @@ import { OfflineGameOptionsProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
-import { size } from '../../theme/fonts'
 import { useGameReactivation } from '../../hooks/useGameReactivation'
 import { StyleSheet, Text, View } from 'react-native'
 import { getOfflineGameById, pushOfflineGame } from '../../services/data/game'
-import { useColors, useData } from '../../hooks'
+import { useData, useTheme } from '../../hooks'
 
 const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     navigation,
     route,
 }) => {
     const gameId = route.params.gameId
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const { navigateToGame, onResurrect } = useGameReactivation()
     const { data: game } = useData(getOfflineGameById, gameId)
     const [loading, setLoading] = React.useState(false)
@@ -47,7 +48,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
         },
         errorText: {
             color: colors.error,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
         },
     })
     return (

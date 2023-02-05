@@ -5,11 +5,13 @@ import CommentItem from '../../components/atoms/CommentItem'
 import { CommentProps } from '../../types/navigation'
 import React from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { useColors, useCommenter } from '../../hooks'
+import { useCommenter, useTheme } from '../../hooks'
 
 const CommentScreen: React.FC<CommentProps> = ({ route }) => {
     const { gameId, pointId, live } = route.params
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const {
         action,
         teamOne,

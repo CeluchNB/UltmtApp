@@ -21,8 +21,7 @@ import {
     selectTeam,
     setTeam,
 } from '../store/reducers/features/team/managedTeamReducer'
-import { size, weight } from '../theme/fonts'
-import { useColors, useData } from '../hooks'
+import { useData, useTheme } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
@@ -33,7 +32,9 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
     const dispatch = useDispatch<AppDispatch>()
     const team = useSelector(selectTeam)
 
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const {
         data: teamData,
@@ -94,7 +95,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         },
         teamname: {
             textAlign: 'center',
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             color: colors.textPrimary,
             marginBottom: 5,
         },
@@ -104,7 +105,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         },
         error: {
             color: colors.error,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             width: '75%',
         },
         newSeasonButton: {

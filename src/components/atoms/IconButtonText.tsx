@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import {
     StyleProp,
     StyleSheet,
@@ -22,7 +22,9 @@ const IconButtonText: React.FC<IconButtonTextProps> = ({
     onPress,
     style,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         container: {

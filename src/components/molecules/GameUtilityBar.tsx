@@ -1,6 +1,6 @@
 import { IconButton } from 'react-native-paper'
 import React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, View } from 'react-native'
 
 interface GameUtilityBarProps {
@@ -12,7 +12,9 @@ const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
     onReactivateGame,
     onDeleteGame,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         container: {

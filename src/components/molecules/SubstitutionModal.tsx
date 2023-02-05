@@ -4,9 +4,8 @@ import { DisplayUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from '../../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import {
     selectGame,
@@ -27,7 +26,9 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     onClose,
     onSubmit,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
@@ -90,7 +91,7 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
         },
         text: {
             color: colors.textPrimary,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
         },
         chip: {
             borderRadius: 8,

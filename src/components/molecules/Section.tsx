@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Button, IconButton } from 'react-native-paper'
 import { FlatList, ListRenderItem, StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface SectionProps {
     title: string
@@ -29,7 +28,9 @@ const Section: React.FC<SectionProps> = ({
     showCreateButton = false,
     onCreatePress = () => {},
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         container: {
@@ -43,7 +44,7 @@ const Section: React.FC<SectionProps> = ({
             flexDirection: 'row',
         },
         title: {
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.textPrimary,
             fontWeight: weight.bold,
             marginBottom: 10,
@@ -61,7 +62,7 @@ const Section: React.FC<SectionProps> = ({
             marginTop: 10,
         },
         error: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             marginBottom: 50,
             color: colors.textPrimary,
         },

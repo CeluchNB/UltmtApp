@@ -1,9 +1,8 @@
 import React from 'react'
 import TeamScore from '../atoms/TeamScore'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { DisplayTeam, GuestTeam } from '../../types/team'
 import { StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface GameHeaderProps {
     game: {
@@ -18,7 +17,9 @@ interface GameHeaderProps {
 }
 
 const GameHeader: React.FC<GameHeaderProps> = ({ game }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         container: {

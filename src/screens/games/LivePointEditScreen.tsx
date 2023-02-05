@@ -12,14 +12,14 @@ import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
 import { getValidTeamActions } from '../../utils/action'
 import { isPulling } from '../../utils/point'
-import { useColors } from '../../hooks'
-import { useGameEditor } from '../../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
+import { useGameEditor, useTheme } from '../../hooks'
 
 const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
     // hooks
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const [finishPointLoading, setFinishPointLoading] = React.useState(false)
     const [finishError, setFinishError] = React.useState<string | undefined>(
         undefined,
@@ -100,7 +100,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         },
         header: {
             color: colors.textPrimary,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.full,
             margin: 5,
         },

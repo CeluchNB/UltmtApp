@@ -1,16 +1,17 @@
 import * as React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleProp, StyleSheet, Text, TextStyle } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 const ScreenTitle: React.FC<{
     title: string
     style?: StyleProp<TextStyle>
 }> = ({ title, style }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const selfStyle = StyleSheet.create({
         title: {
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.textPrimary,
             fontWeight: weight.bold,
         },
