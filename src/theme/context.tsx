@@ -30,17 +30,14 @@ export const ThemeProvider = React.memo<Props>(props => {
     }, [])
 
     const ToggleThemeCallback = React.useCallback(async () => {
-        await setDarkMode(theme.id !== 'dark')
         setTheme(curr => {
+            setDarkMode(curr.id !== 'dark')
             if (curr.id === 'dark') {
-                console.log('setting light')
                 return LightTheme
             } else {
-                console.log('setting dark')
                 return DarkTheme
             }
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const MemoizedValue = React.useMemo(() => {
