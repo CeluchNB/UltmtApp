@@ -13,7 +13,6 @@ import TeamListItem from '../components/atoms/TeamListItem'
 import { User } from '../types/user'
 import { fetchProfile } from '../services/data/user'
 import { logout } from '../services/data/auth'
-import { size } from '../theme/fonts'
 import {
     FlatList,
     RefreshControl,
@@ -29,11 +28,13 @@ import {
     selectPlayerTeams,
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
-import { useColors, useData } from '../hooks'
+import { useData, useTheme } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const account = useSelector(selectAccount)
     const playerTeams = useSelector(selectPlayerTeams)
     const dispatch = useDispatch()
@@ -164,7 +165,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
             width: '75%',
             alignSelf: 'center',
             textAlign: 'center',
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.gray,
         },
     })
@@ -218,7 +219,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                         <Text
                             style={{
                                 color: colors.textPrimary,
-                                fontSize: size.fontMedium,
+                                fontSize: size.fontTwenty,
                             }}>
                             {`@${
                                 account.username

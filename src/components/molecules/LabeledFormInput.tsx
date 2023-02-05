@@ -1,8 +1,7 @@
 import React from 'react'
 import UserInput from '../atoms/UserInput'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface LabeledFormInputProps {
     label: string
@@ -15,7 +14,9 @@ interface LabeledFormInputProps {
 }
 
 const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const {
         children,
         label,
@@ -35,7 +36,7 @@ const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
             marginBottom: 5,
         },
         labelText: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.bold,
             color: colors.textPrimary,
             width: '50%',
@@ -51,7 +52,7 @@ const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
         },
         errorText: {
             color: colors.error,
-            fontSize: size.fontSmall,
+            fontSize: size.fontTen,
         },
     })
     return (

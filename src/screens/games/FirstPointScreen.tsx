@@ -5,7 +5,7 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { createPoint } from '../../store/reducers/features/point/livePointReducer'
 import { selectGame } from '../../store/reducers/features/game/liveGameReducer'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import {
@@ -13,11 +13,12 @@ import {
     selectCreateStatus,
     selectPoint,
 } from '../../store/reducers/features/point/livePointReducer'
-import { size, weight } from '../../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
 const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const dispatch = useDispatch<AppDispatch>()
     const game = useSelector(selectGame)
     const createStatus = useSelector(selectCreateStatus)
@@ -49,12 +50,12 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
         },
         description: {
             color: colors.gray,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             textAlign: 'center',
         },
         passcode: {
             color: colors.textPrimary,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             fontWeight: weight.full,
             textAlign: 'center',
         },

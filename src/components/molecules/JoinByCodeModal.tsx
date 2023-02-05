@@ -3,8 +3,7 @@ import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import UserInput from '../atoms/UserInput'
 import { getFormFieldRules } from '../../utils/form-utils'
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
@@ -22,7 +21,9 @@ const JoinByCodeModal: React.FC<JoinByCodeModalProps> = ({
     error,
     onClose,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const {
         control,
         handleSubmit,
@@ -32,7 +33,7 @@ const JoinByCodeModal: React.FC<JoinByCodeModalProps> = ({
 
     const styles = StyleSheet.create({
         header: {
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.textPrimary,
         },
         inputContainer: {

@@ -21,12 +21,14 @@ import TeamGameScreen from '../screens/TeamGamesScreen'
 import TeamRequestsScreen from '../screens/TeamRequestsScreen'
 import UserRequestsScreen from '../screens/UserRequestsScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 
 const Stack = createNativeStackNavigator<AccountStackParamList>()
 
 const AccountNavigator: React.FC<{}> = () => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     return (
         <Stack.Navigator
             initialRouteName={'Login'}

@@ -8,14 +8,16 @@ import TabNavigator from './src/navigation/TabNavigator'
 import { TopLevelParamList } from './src/types/navigation'
 import { closeRealm } from './src/models/realm'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { useColors } from './src/hooks'
+import { useTheme } from './src/hooks'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 const Stack = createNativeStackNavigator<TopLevelParamList>()
 const queryClient = new QueryClient()
 
 const App: React.FC<{}> = () => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     React.useEffect(() => {
         return () => {

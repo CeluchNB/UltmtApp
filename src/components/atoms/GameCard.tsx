@@ -1,6 +1,6 @@
 import { Game } from '../../types/game'
 import { IconButton } from 'react-native-paper'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 
@@ -10,7 +10,9 @@ export interface GameCardProps {
 }
 
 const GameCard: React.FC<GameCardProps> = props => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const liveOpacity = React.useRef(new Animated.Value(0)).current
 
     const { game, onPress } = props

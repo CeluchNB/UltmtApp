@@ -8,14 +8,16 @@ import { ServerAction } from '../../types/action'
 import { ViewGameProps } from '../../types/navigation'
 import { deleteGame } from '../../services/data/game'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import { useColors, useGameReactivation, useGameViewer } from '../../hooks'
+import { useGameReactivation, useGameViewer, useTheme } from '../../hooks'
 
 const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const {
         params: { gameId },
     } = route
 
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const {
         activePoint,
         allPointsLoading,

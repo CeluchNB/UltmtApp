@@ -5,8 +5,7 @@ import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { TeamRequestProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
-import { size } from '../theme/fonts'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 import { DetailedRequest, RequestType } from '../types/request'
 import {
     RefreshControl,
@@ -27,7 +26,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
     const dispatch = useDispatch<AppDispatch>()
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
 
     const team = useSelector(selectTeam)
     const openLoading = useSelector(selectOpenLoading)
@@ -89,7 +90,7 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
         },
         error: {
             color: colors.error,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
         },
         toggleRosterButton: {
             alignSelf: 'center',

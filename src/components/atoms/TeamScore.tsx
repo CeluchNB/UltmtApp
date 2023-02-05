@@ -1,7 +1,6 @@
 import React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface TeamScoreProps {
     name: string
@@ -10,12 +9,14 @@ interface TeamScoreProps {
 }
 
 const TeamScore: React.FC<TeamScoreProps> = ({ name, teamname, score }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         primaryText: {
             color: colors.textPrimary,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             textAlign: 'center',
             fontWeight: weight.full,
         },

@@ -1,14 +1,4 @@
-export interface ColorPalette {
-    primary: string
-    secondary: string
-    textPrimary: string
-    textSecondary: string
-    success: string
-    error: string
-    gray: string
-    darkGray: string
-    darkPrimary: string
-}
+import { ColorPalette } from '../types/theme'
 
 export const lightColors: ColorPalette = {
     primary: '#ffffff',

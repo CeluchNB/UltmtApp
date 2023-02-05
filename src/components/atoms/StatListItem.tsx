@@ -1,15 +1,16 @@
 import * as React from 'react'
 import { DisplayStat } from '../../types/stats'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 interface StatListItemProps {
     stat: DisplayStat
 }
 
 const StatListItem: React.FC<StatListItemProps> = ({ stat }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         container: {
@@ -17,12 +18,12 @@ const StatListItem: React.FC<StatListItemProps> = ({ stat }) => {
         },
         statName: {
             color: colors.gray,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.bold,
         },
         value: {
             color: colors.textPrimary,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             fontWeight: weight.bold,
         },
         ratioView: {

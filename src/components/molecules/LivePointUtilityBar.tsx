@@ -1,6 +1,6 @@
 import { IconButton } from 'react-native-paper'
 import React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
 interface LivePointUtilityBarProps {
@@ -18,7 +18,9 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
     onUndo,
     onEdit,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         headerContainer: {

@@ -6,16 +6,17 @@ import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
 import { requestPasswordRecovery } from '../services/data/user'
-import { size } from '../theme/fonts'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
-import { useColors, useLazyData } from '../hooks'
+import { useLazyData, useTheme } from '../hooks'
 
 const ForgotPasswordScreen: React.FC<ForgotPasswordProps> = ({
     navigation,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const [success, setSuccess] = React.useState(false)
 
     const {
@@ -67,7 +68,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordProps> = ({
             width: '75%',
             alignSelf: 'center',
             marginTop: 2,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
         },
     })
 

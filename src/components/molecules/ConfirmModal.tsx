@@ -2,8 +2,7 @@ import BaseModal from '../atoms/BaseModal'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface ConfirmModalProps {
@@ -18,11 +17,13 @@ interface ConfirmModalProps {
 const ConfirmModal: React.FC<ConfirmModalProps> = props => {
     const { visible, displayText, loading, onConfirm, onCancel, onClose } =
         props
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         text: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             color: colors.textPrimary,
         },
         buttonContainer: {

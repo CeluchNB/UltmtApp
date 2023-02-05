@@ -6,17 +6,18 @@ import { User } from '../types/user'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
 import { setProfile } from '../store/reducers/features/account/accountReducer'
-import { size } from '../theme/fonts'
 import { useDispatch } from 'react-redux'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { Modal, StyleSheet, Text, View } from 'react-native'
-import { useColors, useLazyData } from '../hooks'
+import { useLazyData, useTheme } from '../hooks'
 
 const JoinByCodeScreen: React.FC<JoinByCodeProps> = ({ navigation }) => {
     const dispatch = useDispatch()
 
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const {
         control,
         handleSubmit,
@@ -92,7 +93,7 @@ const JoinByCodeScreen: React.FC<JoinByCodeProps> = ({ navigation }) => {
         },
         successText: {
             color: colors.success,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             marginBottom: 10,
         },
     })

@@ -5,7 +5,7 @@ import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { User } from '../types/user'
 import UserInput from '../components/atoms/UserInput'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import {
@@ -19,13 +19,14 @@ import {
     selectAccount,
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
-import { size, weight } from '../theme/fonts'
 import { useDispatch, useSelector } from 'react-redux'
 
 const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
     const { title, value: currentValue, field } = route.params
 
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const account = useSelector(selectAccount)
     const dispatch = useDispatch()
     const {
@@ -133,7 +134,7 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
             alignSelf: 'center',
         },
         label: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.bold,
             color: colors.textPrimary,
             textAlignVertical: 'center',

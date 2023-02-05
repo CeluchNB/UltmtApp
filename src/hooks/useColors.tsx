@@ -1,5 +1,6 @@
 import * as Preferences from '../services/data/preferences'
-import { ColorPalette, darkColors, lightColors } from '../theme/colors'
+import { ColorPalette } from '../types/theme'
+import { darkColors, lightColors } from '../theme/colors'
 import { useEffect, useRef, useState } from 'react'
 
 export const useColors = (): { colors: ColorPalette; isDarkMode: boolean } => {

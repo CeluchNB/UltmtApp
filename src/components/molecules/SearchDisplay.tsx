@@ -1,8 +1,7 @@
 import React from 'react'
 import SearchBar from '../atoms/SearchBar'
-import { useColors } from '../../hooks/useColors'
-import { useLazyData } from '../../hooks'
 import { ActivityIndicator, FlatList, ListRenderItem, View } from 'react-native'
+import { useLazyData, useTheme } from '../../hooks'
 
 interface SearchDisplayProps<T> {
     placeholder: string
@@ -14,7 +13,9 @@ interface SearchDisplayProps<T> {
 
 const SearchDisplay = <R,>(props: SearchDisplayProps<R>) => {
     const { placeholder, value, search, renderItem, onChangeText } = props
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const { data, loading, fetch } = useLazyData(search)
 
     const onSearch = (q: string) => {

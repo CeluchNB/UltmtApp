@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { IconButton } from 'react-native-paper'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     StyleSheet,
@@ -8,7 +8,6 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
-import { size, weight } from '../../theme/fonts'
 
 export interface UserSearchResultItemProps {
     name: string
@@ -25,7 +24,9 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
     onPress,
     error,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         container: {
@@ -38,7 +39,7 @@ const UserSearchResultItem: React.FC<UserSearchResultItemProps> = ({
         },
         name: {
             color: colors.gray,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             fontWeight: weight.full,
         },
         username: {

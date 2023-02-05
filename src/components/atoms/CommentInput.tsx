@@ -1,7 +1,6 @@
 import PrimaryButton from './PrimaryButton'
 import React from 'react'
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 
 const CHAR_LIMIT = 160
@@ -19,7 +18,9 @@ const CommentInput: React.FC<CommentInputProps> = ({
     isLoggedIn,
     onSend,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const [value, setValue] = React.useState('')
     const isUnderCharLimit = React.useMemo(() => {
         return value.length <= CHAR_LIMIT
@@ -47,7 +48,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
         },
         error: {
             color: colors.error,
-            fontSize: size.fontSmall,
+            fontSize: size.fontTen,
         },
         loginContainer: {
             padding: 5,
@@ -58,7 +59,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
         },
         loginText: {
             color: colors.textPrimary,
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
         },
     })
 

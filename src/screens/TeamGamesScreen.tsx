@@ -4,17 +4,18 @@ import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
 import { TeamGameProps } from '../types/navigation'
 import { getGamesByTeam } from '../services/data/game'
-import { useColors } from '../hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from '../hooks'
 import { SectionList, StyleSheet, Text } from 'react-native'
 import {
     selectManagerTeams,
     selectPlayerTeams,
 } from '../store/reducers/features/account/accountReducer'
-import { size, weight } from '../theme/fonts'
 
 const TeamGameScreen: React.FC<TeamGameProps> = ({ navigation }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
     const managerTeams = useSelector(selectManagerTeams)
     const playerTeams = useSelector(selectPlayerTeams)
     const [games, setGames] = React.useState<Game[][]>([])
@@ -61,7 +62,7 @@ const TeamGameScreen: React.FC<TeamGameProps> = ({ navigation }) => {
     const styles = StyleSheet.create({
         teamTitle: {
             color: colors.textPrimary,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             fontWeight: weight.bold,
         },
     })

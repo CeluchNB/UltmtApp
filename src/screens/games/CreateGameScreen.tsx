@@ -8,7 +8,7 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { Tournament } from '../../types/tournament'
 import { selectAccount } from '../../store/reducers/features/account/accountReducer'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import React, { useEffect } from 'react'
 import { SafeAreaView, StyleSheet, Switch, View } from 'react-native'
@@ -27,7 +27,9 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     // SelectMyTeamScreen and SelectOpponentScreen
     // Flow SelectMyTeamScreen -> SelectOpponentScreen -> CreateGameScreen
     const { teamTwo } = route.params
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const dispatch = useDispatch<AppDispatch>()
     const account = useSelector(selectAccount)
     const createStatus = useSelector(selectCreateStatus)

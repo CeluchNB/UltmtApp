@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { Button, IconButton } from 'react-native-paper'
-import { size, weight } from '../../theme/fonts'
 
 interface MapSectionProps<T> {
     title: string
@@ -29,7 +28,9 @@ const MapSection = <T,>({
     onCreatePress,
     error,
 }: MapSectionProps<T>) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         container: {
@@ -48,7 +49,7 @@ const MapSection = <T,>({
         },
         title: {
             flex: 1,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             color: colors.textPrimary,
             fontWeight: weight.bold,
             marginBottom: 10,
@@ -58,7 +59,7 @@ const MapSection = <T,>({
             marginTop: 10,
         },
         error: {
-            fontSize: size.fontMedium,
+            fontSize: size.fontTwenty,
             marginBottom: 50,
             color: colors.textPrimary,
         },

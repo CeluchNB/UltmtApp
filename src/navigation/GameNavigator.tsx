@@ -5,12 +5,14 @@ import GameSearchScreen from '../screens/games/GameSearchScreen'
 import { GameStackParamList } from '../types/navigation'
 import ViewGameScreen from '../screens/games/ViewGameScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { useColors } from '../hooks'
+import { useTheme } from '../hooks'
 
 const Stack = createNativeStackNavigator<GameStackParamList>()
 
 const GameNavigator: React.FC<{}> = () => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     return (
         <Stack.Navigator

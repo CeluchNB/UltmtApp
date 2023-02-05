@@ -9,8 +9,7 @@ import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
 import { isPulling } from '../../utils/point'
 import { reactivatePoint } from '../../services/data/point'
-import { size } from '../../theme/fonts'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text } from 'react-native'
 import React, { useState } from 'react'
 import {
@@ -31,7 +30,9 @@ import { useDispatch, useSelector } from 'react-redux'
 const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     // ignore flatlist flex wrap warning
     LogBox.ignoreLogs(['`flexWrap: `wrap`` is'])
-    const { colors } = useColors()
+    const {
+        theme: { colors, size },
+    } = useTheme()
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
@@ -97,7 +98,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     const styles = StyleSheet.create({
         description: {
             color: colors.gray,
-            fontSize: size.fontLarge,
+            fontSize: size.fontThirty,
             marginBottom: 10,
             textAlign: 'center',
         },

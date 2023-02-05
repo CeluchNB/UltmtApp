@@ -1,6 +1,6 @@
 import React from 'react'
 import { TextInput } from 'react-native-paper'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 
 interface UserInputProps {
@@ -24,7 +24,9 @@ const UserInput: React.FC<UserInputProps> = ({
     onRightPress,
     keyboardType = 'default',
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         inputStyle: {

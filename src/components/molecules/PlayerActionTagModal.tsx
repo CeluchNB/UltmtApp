@@ -5,7 +5,7 @@ import React from 'react'
 import ScreenTitle from '../atoms/ScreenTitle'
 import SecondaryButton from '../atoms/SecondaryButton'
 import UserInput from '../atoms/UserInput'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, View } from 'react-native'
 import {
     addTag,
@@ -23,7 +23,9 @@ const PlayerActionTagModal: React.FC<PlayerActionTagModalProps> = ({
     onClose,
 }) => {
     LogBox.ignoreLogs(['`flexWrap: `wrap`` is'])
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const dispatch = useDispatch()
     const tags = useSelector(selectTags)
     const [newTag, setNewTag] = React.useState('')

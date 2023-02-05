@@ -1,30 +1,17 @@
 /* eslint-disable react/no-unstable-nested-components */
-import * as Preferences from '../services/data/preferences'
 import * as React from 'react'
 import AccountNavigator from './../navigation/AccountNavigator'
 import { AllScreenProps } from '../types/navigation'
 import GameNavigator from './../navigation/GameNavigator'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { useColors } from './../hooks'
+import { useTheme } from './../hooks'
 
 const Tab = createMaterialBottomTabNavigator()
-const TabNavigator: React.FC<AllScreenProps> = ({ navigation }) => {
-    const { colors, isDarkMode } = useColors()
-
-    const [, updateState] = React.useState<any>()
-    const forceUpdate = React.useCallback(() => updateState({}), [])
-
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', async () => {
-            // force update screen when dark mode setting has changed
-            const newDarkMode = await Preferences.isDarkMode()
-            if (isDarkMode !== newDarkMode) {
-                forceUpdate()
-            }
-        })
-        return unsubscribe
-    }, [forceUpdate, navigation, isDarkMode])
+const TabNavigator: React.FC<AllScreenProps> = () => {
+    const {
+        theme: { colors },
+    } = useTheme()
 
     return (
         <Tab.Navigator

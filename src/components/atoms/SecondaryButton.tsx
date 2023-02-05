@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button } from 'react-native-paper'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import { StyleProp, ViewStyle } from 'react-native'
 
 interface SecondaryButtonProps {
@@ -16,7 +16,9 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
     style,
     loading = false,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     return (
         <Button

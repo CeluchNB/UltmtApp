@@ -4,7 +4,7 @@ import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import { ServerAction } from '../../types/action'
 import { isLivePoint } from '../../utils/point'
-import { useColors } from '../../hooks'
+import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     Animated,
@@ -14,7 +14,6 @@ import {
     View,
 } from 'react-native'
 import React, { useEffect } from 'react'
-import { size, weight } from '../../theme/fonts'
 
 interface PointAccordionProps {
     point: Point
@@ -27,7 +26,9 @@ interface PointAccordionProps {
 }
 
 const AccordionRightView = (props: { point: Point; isExpanded: boolean }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors },
+    } = useTheme()
     const liveOpacity = React.useRef(new Animated.Value(0)).current
     const isLive = React.useMemo(() => {
         return isLivePoint(props.point)
@@ -99,7 +100,9 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
     teamTwo,
     onActionPress,
 }) => {
-    const { colors } = useColors()
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         accordion: {
