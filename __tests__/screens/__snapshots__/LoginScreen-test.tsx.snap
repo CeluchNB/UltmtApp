@@ -73,6 +73,7 @@ exports[`test matches snapshot 1`] = `
         }
       >
         <TextInput
+          accessibilityLabel="Username or Email"
           autoCapitalize="none"
           editable={true}
           keyboardType="default"
@@ -168,6 +169,7 @@ exports[`test matches snapshot 1`] = `
         }
       >
         <TextInput
+          accessibilityLabel="Password"
           autoCapitalize="none"
           editable={true}
           keyboardType="default"

@@ -96,6 +96,7 @@ exports[`JoinByCodeModal should match snapshot 1`] = `
               }
             >
               <TextInput
+                accessibilityLabel="6 Digit Code"
                 autoCapitalize="none"
                 editable={true}
                 keyboardType="default"

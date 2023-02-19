@@ -71,6 +71,7 @@ exports[`should match basic snapshot 1`] = `
           }
         >
           <TextInput
+            accessibilityLabel="Test field"
             autoCapitalize="none"
             editable={true}
             keyboardType="default"
@@ -277,6 +278,7 @@ exports[`should match snapshot without unit 1`] = `
           }
         >
           <TextInput
+            accessibilityLabel="Test field"
             autoCapitalize="none"
             editable={true}
             keyboardType="default"
