@@ -5,8 +5,9 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "react-native start --no-interactive",
     "start:e2e": "NODE_ENV=e2e react-native start",
+    "test:e2e": "./e2e/run-e2e-tests.sh",
     "test": "TZ=UTC jest --collectCoverage",
     "test-ci": "TZ=UTC jest --forceExit",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
