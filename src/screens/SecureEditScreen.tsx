@@ -137,7 +137,6 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
             fontSize: size.fontTwenty,
             fontWeight: weight.bold,
             color: colors.textPrimary,
-            textAlignVertical: 'center',
             marginTop: 10,
         },
         error: {

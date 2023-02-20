@@ -132,13 +132,12 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         },
         titleContainer: {
             flexDirection: 'row',
-            textAlign: 'right',
             marginLeft: 10,
             marginBottom: 0,
         },
         title: {
             flex: 1,
-            textAlignVertical: 'center',
+            alignSelf: 'center',
         },
         headerContainer: {
             alignItems: 'center',

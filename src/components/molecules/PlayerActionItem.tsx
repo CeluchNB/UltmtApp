@@ -44,7 +44,6 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
             display: 'flex',
             flexDirection: 'row',
             marginTop: 10,
-            textAlignVertical: true,
         },
         nameContainer: {
             width: '35%',
@@ -58,13 +57,14 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
             color: colors.textPrimary,
         },
         buttonContainer: {
-            width: '65%',
+            flex: 1,
         },
         button: {
             borderColor: colors.textPrimary,
             color: colors.textPrimary,
             backgroundColor: colors.primary,
             flex: 1,
+            width: '100%',
             marginRight: 5,
         },
         buttonText: {
@@ -83,25 +83,27 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                 )}
             </View>
             {actions.map(action => (
-                <Button
-                    key={action}
-                    compact={true}
-                    style={styles.button}
-                    labelStyle={styles.buttonText}
-                    textColor={colors.textPrimary}
-                    uppercase={true}
-                    collapsable={true}
-                    disabled={loading}
-                    mode="outlined"
-                    onPress={() => {
-                        onAction(action, [], player)
-                    }}
-                    onLongPress={() => {
-                        setSelectedAction(action)
-                        setModalVisible(true)
-                    }}>
-                    {action}
-                </Button>
+                <View style={styles.buttonContainer} key={action}>
+                    <Button
+                        key={action}
+                        compact={true}
+                        style={styles.button}
+                        labelStyle={styles.buttonText}
+                        textColor={colors.textPrimary}
+                        uppercase={true}
+                        collapsable={true}
+                        disabled={loading}
+                        mode="outlined"
+                        onPress={() => {
+                            onAction(action, [], player)
+                        }}
+                        onLongPress={() => {
+                            setSelectedAction(action)
+                            setModalVisible(true)
+                        }}>
+                        {action}
+                    </Button>
+                </View>
             ))}
             <PlayerActionTagModal
                 visible={modalVisible}

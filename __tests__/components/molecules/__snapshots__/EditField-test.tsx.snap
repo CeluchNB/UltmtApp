@@ -5,6 +5,7 @@ exports[`should match snapshot 1`] = `
   <View
     style={
       {
+        "alignItems": "center",
         "display": "flex",
         "flexDirection": "row",
       }
@@ -16,7 +17,6 @@ exports[`should match snapshot 1`] = `
           "color": "#ffd600",
           "fontSize": 41.0958904109589,
           "fontWeight": "bold",
-          "textAlignVertical": "center",
         }
       }
     >
