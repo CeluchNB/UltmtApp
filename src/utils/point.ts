@@ -1,9 +1,5 @@
-import {
-    ActionType,
-    ClientActionType,
-    LiveServerAction,
-    ServerAction,
-} from '../types/action'
+import { TeamNumber } from '../types/team'
+import { ActionType, LiveServerAction, ServerAction } from '../types/action'
 import Point, { ClientPoint } from '../types/point'
 
 export const isLivePoint = (point?: Point): boolean => {
@@ -13,7 +9,7 @@ export const isLivePoint = (point?: Point): boolean => {
 export const isPulling = (
     point?: { pullingTeam: { _id?: string } },
     game?: { teamOne: { _id: string } },
-    team?: 'one' | 'two',
+    team?: TeamNumber,
 ): boolean => {
     if (!point || !game || !team) {
         return false
@@ -25,8 +21,8 @@ export const isPulling = (
 }
 
 export const isPullingNext = (
-    team: 'one' | 'two',
-    action?: ClientActionType,
+    team: TeamNumber,
+    action?: ActionType,
 ): boolean => {
     return (
         (team === 'one' && action === ActionType.TEAM_ONE_SCORE) ||

@@ -1,3 +1,4 @@
+import { ActionType } from '../../../src/types/action'
 import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
@@ -5,7 +6,6 @@ import TeamActionView from '../../../src/components/organisms/TeamActionView'
 import { game } from '../../../fixtures/data'
 import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
-import { ActionType, ClientActionType } from '../../../src/types/action'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import {
     setGame,
@@ -28,7 +28,7 @@ const props = {
         ActionType.TIMEOUT,
         'score',
         ActionType.SUBSTITUTION,
-    ] as ClientActionType[],
+    ] as ActionType[],
     onAction: jest.fn(),
 }
 

@@ -2,7 +2,7 @@ import { DisplayUser } from '../../types/user'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
 import { getValidPlayerActions } from '../../utils/action'
-import { ClientActionType, LiveServerAction } from '../../types/action'
+import { Action, LiveServerAction } from '../../types/action'
 import { FlatList, View } from 'react-native'
 
 interface PlayerActionViewProps {
@@ -10,16 +10,12 @@ interface PlayerActionViewProps {
     pulling: boolean
     actionStack: LiveServerAction[]
     loading: boolean
-    onAction: (
-        action: ClientActionType,
-        tags: string[],
-        playerOne: DisplayUser,
-    ) => void
+    onAction: (action: Action) => Promise<void>
 }
 
 type PlayerAction = {
     player: DisplayUser
-    actions: ClientActionType[]
+    actions: Action[]
 }
 
 const PlayerActionView: React.FC<PlayerActionViewProps> = ({
@@ -45,14 +41,6 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
         })
     }, [players, actionStack, pulling])
 
-    const onPress = (
-        action: ClientActionType,
-        tags: string[],
-        player: DisplayUser,
-    ) => {
-        onAction(action, tags, player)
-    }
-
     return (
         <View>
             <FlatList
@@ -66,9 +54,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
                             player={player}
                             actions={actions}
                             loading={loading}
-                            onAction={(action, tags) => {
-                                onPress(action, tags, player)
-                            }}
+                            onAction={onAction}
                         />
                     )
                 }}

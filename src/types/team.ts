@@ -47,3 +47,5 @@ export interface GuestTeam {
     seasonStart?: string
     seasonEnd?: string
 }
+
+export type TeamNumber = 'one' | 'two'

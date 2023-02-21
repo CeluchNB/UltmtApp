@@ -1,5 +1,6 @@
 import * as Constants from '../../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { TeamNumber } from '../../types/team'
 import { refreshTokenIfNecessary } from './auth'
 import { throwApiError } from '../../utils/service-utils'
 import {
@@ -66,7 +67,7 @@ export const addLiveComment = async (
     gameId: string,
     pointId: string,
     actionNumber: number,
-    teamNumber: 'one' | 'two',
+    teamNumber: TeamNumber,
     comment: string,
 ) => {
     try {
@@ -97,7 +98,7 @@ export const deleteLiveComment = async (
     gameId: string,
     pointId: string,
     actionNumber: number,
-    teamNumber: 'one' | 'two',
+    teamNumber: TeamNumber,
     commentNumber: string,
 ) => {
     try {
@@ -199,7 +200,7 @@ export const createOfflineAction = async (
  * @param pointId point id of action
  */
 export const deleteLocalAction = async (
-    teamNumber: 'one' | 'two',
+    teamNumber: TeamNumber,
     actionNumber: number,
     pointId: string,
 ): Promise<LiveServerAction> => {

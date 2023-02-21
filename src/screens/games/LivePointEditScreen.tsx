@@ -35,8 +35,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         point,
         waiting,
         team,
-        onPlayerAction,
-        onTeamAction,
+        onAction,
         onUndo,
         onFinishPoint: finishPoint,
         onFinishGame: finishGame,
@@ -135,11 +134,11 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                             pulling={isPulling(point, game, team)}
                             actionStack={myTeamActions}
                             loading={waiting}
-                            onAction={onPlayerAction}
+                            onAction={onAction}
                         />
                         <TeamActionView
                             actions={getValidTeamActions(myTeamActions)}
-                            onAction={onTeamAction}
+                            onAction={onAction}
                         />
                         <PrimaryButton
                             style={styles.button}

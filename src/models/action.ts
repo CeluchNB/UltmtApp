@@ -1,5 +1,6 @@
 import { DisplayUser } from '../types/user'
 import { Realm } from '@realm/react'
+import { TeamNumber } from '../types/team'
 import { ActionType, Comment, LiveServerAction } from '../types/action'
 
 export const CommentSchema: Realm.ObjectSchema = {
@@ -36,7 +37,7 @@ export class ActionSchema {
     playerTwo?: DisplayUser
     tags: string[]
     actionNumber: number
-    teamNumber: 'one' | 'two'
+    teamNumber: TeamNumber
     comments: Comment[]
 
     constructor(action: LiveServerAction, pointId: string) {

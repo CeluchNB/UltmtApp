@@ -1,9 +1,10 @@
 import { DisplayUser } from '../types/user'
+import { TeamNumber } from '../types/team'
 import {
     ACTION_MAP,
+    Action,
     ActionType,
     ClientAction,
-    ClientActionType,
     LiveServerAction,
     TEAM_ACTION_MAP,
 } from '../types/action'
@@ -20,7 +21,7 @@ export const getValidPlayerActions = (
     user: string,
     actionStack: LiveServerAction[],
     pulling?: boolean,
-): ClientActionType[] => {
+): Action[] => {
     let currentUser: string | undefined = user
     for (const action of actionStack.reverse()) {
         switch (action.actionType) {
@@ -66,13 +67,12 @@ export const getValidPlayerActions = (
  * @returns one of TEAM_ACTION_MAP's values
  */
 export const getValidTeamActions = (
-    actionStack: { actionType: ClientActionType }[],
-) => {
+    actionStack: { actionType: ActionType }[],
+): Action[] => {
     for (const action of actionStack.slice().reverse()) {
         if (
             action.actionType === ActionType.TEAM_ONE_SCORE ||
-            action.actionType === ActionType.TEAM_TWO_SCORE ||
-            action.actionType === 'score'
+            action.actionType === ActionType.TEAM_TWO_SCORE
         ) {
             return TEAM_ACTION_MAP.PREPOINT
         } else if (
@@ -102,8 +102,8 @@ export const getValidTeamActions = (
  * @returns action object
  */
 export const getAction = (
-    action: ClientActionType,
-    team: 'one' | 'two',
+    action: ActionType,
+    team: TeamNumber,
     tags: string[],
     playerOne?: DisplayUser,
     playerTwo?: DisplayUser,
@@ -152,8 +152,8 @@ export const getAction = (
  * @returns action data for team
  */
 export const getTeamAction = (
-    action: ClientActionType,
-    team: 'one' | 'two',
+    action: ActionType,
+    team: TeamNumber,
     tags: string[],
     playerOne?: DisplayUser,
     playerTwo?: DisplayUser,
@@ -191,7 +191,7 @@ export const getTeamAction = (
  * @param action action name
  * @returns display friendly name
  */
-export const mapActionToDisplayName = (action: ClientActionType) => {
+export const mapActionToDisplayName = (action: ActionType) => {
     switch (action) {
         case 'score':
             return 'they score'

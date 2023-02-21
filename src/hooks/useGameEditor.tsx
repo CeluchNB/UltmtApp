@@ -1,13 +1,11 @@
 import * as Constants from '../utils/constants'
-import { DisplayUser } from '../types/user'
 import React from 'react'
 import { UpdateGame } from '../types/game'
 import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import {
+    Action,
     ActionType,
-    ClientAction,
-    ClientActionType,
     LiveServerAction,
     SubscriptionObject,
 } from '../types/action'
@@ -26,7 +24,6 @@ import {
     unsubscribe,
 } from '../services/data/live-action'
 import { createPoint, finishPoint } from '../services/data/point'
-import { getAction, getTeamAction } from '../utils/action'
 import {
     resetGame,
     selectGame,
@@ -199,45 +196,19 @@ export const useGameEditor = () => {
         return actions.filter(a => a.teamNumber === team)
     }, [actions, team])
 
-    const onAction = async (action: ClientAction) => {
+    const onAction = async (action: Action) => {
         setWaiting(true)
         if (offline) {
-            const newAction = await createOfflineAction(action, point._id)
+            const newAction = await createOfflineAction(
+                action.action,
+                point._id,
+            )
             actionSideEffects(newAction)
             successfulResponse()
             setActions(immutablePush(newAction))
         } else {
-            addAction(action, point._id)
+            addAction(action.action, point._id)
         }
-    }
-
-    const onPlayerAction = async (
-        actionType: ClientActionType,
-        tags: string[],
-        playerOne: DisplayUser,
-    ) => {
-        let playerTwo
-        if (actions.length > 0) {
-            playerTwo = actions[actions.length - 1].playerOne
-        }
-        const action = getAction(actionType, team, tags, playerOne, playerTwo)
-        await onAction(action)
-    }
-
-    const onTeamAction = async (
-        actionType: ClientActionType,
-        tags: string[],
-        playerOne?: DisplayUser,
-        playerTwo?: DisplayUser,
-    ) => {
-        const action = getTeamAction(
-            actionType,
-            team,
-            tags,
-            playerOne,
-            playerTwo,
-        )
-        await onAction(action)
     }
 
     const onUndo = async () => {
@@ -309,8 +280,7 @@ export const useGameEditor = () => {
         point,
         team,
         waiting,
-        onPlayerAction,
-        onTeamAction,
+        onAction,
         onUndo,
         onFinishPoint,
         onFinishGame,

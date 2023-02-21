@@ -2,6 +2,7 @@ import * as Constants from '../../utils/constants'
 import { DisplayUser } from '../../types/user'
 import { Game } from '../../types/game'
 import Point from '../../types/point'
+import { TeamNumber } from '../../types/team'
 import { throwApiError } from '../../utils/service-utils'
 import { withGameToken } from './game'
 import {
@@ -176,7 +177,7 @@ const finishOfflinePoint = async (pointId: string) => {
  * @returns List of server actions
  */
 export const getActionsByPoint = async (
-    team: 'one' | 'two',
+    team: TeamNumber,
     pointId: string,
     actionIds: string[],
 ): Promise<SavedServerAction[]> => {
@@ -272,7 +273,7 @@ export const getActivePointForGame = async (
 export const reactivatePoint = async (
     previousId: string,
     pointNumber: number,
-    team: 'one' | 'two',
+    team: TeamNumber,
 ): Promise<Point> => {
     try {
         const gameId = await localActiveGameId()

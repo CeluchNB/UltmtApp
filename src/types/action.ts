@@ -1,5 +1,14 @@
-import { DisplayTeam } from './team'
 import { DisplayUser } from './user'
+import { getUserDisplayName } from '../utils/player'
+import { DisplayTeam, TeamNumber } from './team'
+
+export interface Action {
+    action: ServerAction
+    reporterDisplay: string
+    viewerDisplay: string
+    setTags(tags: string[]): void
+    setPlayers(playerOne?: DisplayUser, playerTwo?: DisplayUser): void
+}
 
 export enum ActionType {
     PULL = 'Pull',
@@ -39,7 +48,7 @@ export interface ServerAction extends ClientAction {
 }
 
 export interface LiveServerAction extends ServerAction {
-    teamNumber: 'one' | 'two'
+    teamNumber: TeamNumber
 }
 
 export interface SavedServerAction extends ServerAction {
@@ -47,9 +56,7 @@ export interface SavedServerAction extends ServerAction {
     team: DisplayTeam
 }
 
-export type ClientActionType = ActionType | 'score'
-
-export const ACTION_MAP: { [x: string]: ClientActionType[] } = {
+export const ACTION_MAP: { [x: string]: ActionType[] } = {
     PULLING: [ActionType.PULL],
     RECEIVING: [ActionType.CATCH, ActionType.PICKUP, ActionType.DROP],
     OFFENSE_WITH_POSSESSION: [ActionType.THROWAWAY],
@@ -59,7 +66,7 @@ export const ACTION_MAP: { [x: string]: ClientActionType[] } = {
     AFTER_SCORE: [],
 }
 
-export const TEAM_ACTION_MAP: { [x: string]: ClientActionType[] } = {
+export const TEAM_ACTION_MAP: { [x: string]: ActionType[] } = {
     PREPOINT: [],
     OFFENSE: [
         ActionType.TIMEOUT,
@@ -67,4 +74,69 @@ export const TEAM_ACTION_MAP: { [x: string]: ClientActionType[] } = {
         ActionType.SUBSTITUTION,
     ],
     DEFENSE: ['score', ActionType.CALL_ON_FIELD, ActionType.SUBSTITUTION],
+}
+
+class BaseAction implements Action {
+    action: ServerAction
+    reporterDisplay: string
+    viewerDisplay: string
+
+    constructor(action: ServerAction, viewerDisplay: string) {
+        this.action = action
+        this.reporterDisplay = action.actionType
+        this.viewerDisplay = viewerDisplay
+    }
+
+    setTags(tags: string[]): void {
+        this.action.tags = tags
+    }
+
+    setPlayers(playerOne?: DisplayUser, playerTwo?: DisplayUser): void {
+        this.action.playerOne = playerOne
+        this.action.playerTwo = playerTwo
+    }
+}
+
+const createAction = (action: ClientAction): Action => {
+    let viewerDisplay = ''
+    const playerOneDisplay = getUserDisplayName(action.playerOne)
+    const playerTwoDisplay = getUserDisplayName(action.playerTwo)
+    switch (action.actionType) {
+        case ActionType.BLOCK:
+            viewerDisplay = `${getUserDisplayName(
+                action.playerOne,
+            )} gets a block`
+            break
+        case ActionType.CALL_ON_FIELD:
+            viewerDisplay = 'There is a call on the field'
+            break
+        case ActionType.CATCH:
+            viewerDisplay = `${playerOneDisplay} catches a pass from ${playerTwoDisplay}`
+            break
+        case ActionType.DROP:
+            viewerDisplay = `${playerOneDisplay} drops the disc`
+            break
+        case ActionType.PICKUP:
+            viewerDisplay = `${playerOneDisplay} picks up the disc`
+            break
+        case ActionType.PULL:
+            viewerDisplay = `${playerOneDisplay} pulls the disc`
+            break
+        case ActionType.SUBSTITUTION:
+            viewerDisplay = `${playerTwoDisplay} replaces ${playerOneDisplay}`
+            break
+        case ActionType.TEAM_ONE_SCORE:
+        case ActionType.TEAM_TWO_SCORE:
+            break
+        case ActionType.THROWAWAY:
+            viewerDisplay = `${playerOneDisplay} throws away the disc`
+            break
+        case ActionType.TIMEOUT:
+            viewerDisplay = 'Timeout called'
+            break
+    }
+    return new BaseAction(
+        { ...action, comments: [], actionNumber: Infinity },
+        viewerDisplay,
+    )
 }

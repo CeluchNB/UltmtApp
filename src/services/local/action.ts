@@ -1,6 +1,7 @@
 import * as Constants from '../../utils/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Realm } from '@realm/react'
+import { TeamNumber } from '../../types/team'
 import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
 import { ActionSchema, PointSchema } from '../../models'
@@ -113,7 +114,7 @@ export const saveMultipleServerActions = async (
 }
 
 export const deleteAction = async (
-    teamNumber: 'one' | 'two',
+    teamNumber: TeamNumber,
     actionNumber: number,
     pointId: string,
 ): Promise<LiveServerAction> => {
@@ -140,7 +141,7 @@ export const deleteAction = async (
 }
 
 export const deleteEditableActionsByPoint = async (
-    team: 'one' | 'two',
+    team: TeamNumber,
     pointId: string,
 ): Promise<void> => {
     const realm = await getRealm()

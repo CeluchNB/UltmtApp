@@ -1,4 +1,5 @@
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { TeamNumber } from '../../types/team'
 import { WEBSOCKET_URL } from '@env'
 import { ClientAction, SubscriptionObject } from '../../types/action'
 import { Socket, io } from 'socket.io-client'
@@ -55,7 +56,7 @@ export const addComment = async (
     gameId: string,
     pointId: string,
     actionNumber: number,
-    teamNumber: 'one' | 'two',
+    teamNumber: TeamNumber,
     comment: string,
 ) => {
     const actionSocket = await getSocket()
@@ -77,7 +78,7 @@ export const deleteComment = async (
     gameId: string,
     pointId: string,
     actionNumber: number,
-    teamNumber: 'one' | 'two',
+    teamNumber: TeamNumber,
     commentNumber: string,
 ) => {
     const actionSocket = await getSocket()
