@@ -628,6 +628,7 @@ exports[`should match snapshot 1`] = `
               }
             >
               <TextInput
+                accessibilityLabel="New tag..."
                 autoCapitalize="none"
                 editable={true}
                 keyboardType="default"

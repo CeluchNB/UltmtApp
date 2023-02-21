@@ -1,7 +1,7 @@
 import * as AuthData from '../../src/services/data/auth'
 import * as Preferences from '../../src/services/data/preferences'
 import * as UserData from '../../src/services/data/user'
-import DarkTheme from '../../src/theme/dark'
+import LightTheme from '../../src/theme/light'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
@@ -361,5 +361,5 @@ it('should handle dark mode switch press', async () => {
     expect(spy).toHaveBeenCalledWith(false)
 
     const screen = getByTestId('screen')
-    expect(screen.props.style.backgroundColor).toBe(DarkTheme.colors.primary)
+    expect(screen.props.style.backgroundColor).toBe(LightTheme.colors.primary)
 })

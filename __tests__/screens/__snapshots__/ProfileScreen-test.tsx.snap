@@ -142,15 +142,14 @@ exports[`profile screen matches snapshot 1`] = `
               "flexDirection": "row",
               "marginBottom": 0,
               "marginLeft": 10,
-              "textAlign": "right",
             }
           }
         >
           <ScreenTitle
             style={
               {
+                "alignSelf": "center",
                 "flex": 1,
-                "textAlignVertical": "center",
               }
             }
             title="first last"
@@ -255,7 +254,6 @@ exports[`profile screen matches snapshot 1`] = `
                 "flexDirection": "row",
                 "marginBottom": 0,
                 "marginLeft": 10,
-                "textAlign": "right",
               }
             }
           >
@@ -269,8 +267,8 @@ exports[`profile screen matches snapshot 1`] = `
                     "fontWeight": "bold",
                   },
                   {
+                    "alignSelf": "center",
                     "flex": 1,
-                    "textAlignVertical": "center",
                   },
                 ]
               }

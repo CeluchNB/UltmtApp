@@ -85,10 +85,6 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
             height: '100%',
             backgroundColor: colors.primary,
         },
-        title: {
-            flex: 1,
-            textAlignVertical: 'center',
-        },
         error: {
             width: '80%',
             alignSelf: 'center',

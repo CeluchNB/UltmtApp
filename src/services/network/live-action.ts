@@ -1,5 +1,5 @@
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { WEBSOCKET_URL } from 'react-native-dotenv'
+import { WEBSOCKET_URL } from '@env'
 import { ClientAction, SubscriptionObject } from '../../types/action'
 import { Socket, io } from 'socket.io-client'
 

@@ -41,6 +41,7 @@ exports[`test snapshot 1`] = `
       }
     >
       <TextInput
+        accessibilityLabel="Placeholder"
         autoCapitalize="none"
         editable={true}
         keyboardType="default"
@@ -132,6 +133,7 @@ exports[`test with right icon 1`] = `
       }
     >
       <TextInput
+        accessibilityLabel="Placeholder"
         autoCapitalize="none"
         editable={true}
         keyboardType="default"

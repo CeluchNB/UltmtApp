@@ -73,6 +73,9 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
             marginTop: 10,
             marginBottom: 10,
         },
+        buttonContainer: {
+            flex: 1,
+        },
         button: {
             borderColor: colors.textPrimary,
             color: colors.textPrimary,
@@ -94,23 +97,25 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
                 numColumns={2}
                 renderItem={({ item }) => {
                     return (
-                        <Button
-                            key={item}
-                            compact={true}
-                            style={styles.button}
-                            labelStyle={styles.buttonText}
-                            textColor={colors.textPrimary}
-                            uppercase={true}
-                            collapsable={true}
-                            mode="outlined"
-                            onPress={() => {
-                                handleAction(item)
-                            }}
-                            onLongPress={() => {
-                                handleLongPress(item)
-                            }}>
-                            {mapActionToDisplayName(item)}
-                        </Button>
+                        <View key={item} style={styles.buttonContainer}>
+                            <Button
+                                key={item}
+                                compact={true}
+                                style={styles.button}
+                                labelStyle={styles.buttonText}
+                                textColor={colors.textPrimary}
+                                uppercase={true}
+                                collapsable={true}
+                                mode="outlined"
+                                onPress={() => {
+                                    handleAction(item)
+                                }}
+                                onLongPress={() => {
+                                    handleLongPress(item)
+                                }}>
+                                {mapActionToDisplayName(item)}
+                            </Button>
+                        </View>
                     )
                 }}
             />

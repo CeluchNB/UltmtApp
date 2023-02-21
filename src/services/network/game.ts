@@ -1,6 +1,6 @@
 import { GuestUser } from '../../types/user'
 import { addQueryParam } from '../../utils/service-utils'
-import { API_KEY, API_URL_V1 } from 'react-native-dotenv'
+import { API_KEY, API_URL_V1 } from '@env'
 import { CreateFullGame, CreateGame, UpdateGame } from '../../types/game'
 import axios, { AxiosResponse } from 'axios'
 
