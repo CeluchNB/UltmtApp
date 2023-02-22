@@ -207,6 +207,7 @@ export const useGameEditor = () => {
             successfulResponse()
             setActions(immutablePush(newAction))
         } else {
+            console.log('loggin action', action)
             addAction(action.action, point._id)
         }
     }

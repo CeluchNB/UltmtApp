@@ -27,6 +27,7 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
 
     const handleAction = (action: Action) => {
         if (action.action.actionType === ActionType.SUBSTITUTION) {
+            setSelectedAction(action)
             setSubModalVisible(true)
         } else {
             onAction(action)

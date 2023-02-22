@@ -1,6 +1,5 @@
 import * as Constants from '../../utils/constants'
 import ActionDisplayItem from '../../components/atoms/ActionDisplayItem'
-import { ActionType } from '../../types/action'
 import { ApiError } from '../../types/services'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
@@ -10,8 +9,8 @@ import PlayerActionView from '../../components/organisms/PlayerActionView'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
-import { getValidTeamActions } from '../../utils/action'
 import { isPulling } from '../../utils/point'
+import { ActionType, TeamActionListData } from '../../types/action'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { useGameEditor, useTheme } from '../../hooks'
 
@@ -49,6 +48,11 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                 lastAction?.actionType !== ActionType.TEAM_TWO_SCORE)
         )
     }, [finishGameLoading, finishPointLoading, lastAction?.actionType])
+
+    const teamActions = React.useMemo(() => {
+        const actionListData = new TeamActionListData(myTeamActions, team)
+        return actionListData.actionList
+    }, [myTeamActions, team])
 
     const onFinishPoint = async () => {
         try {
@@ -134,10 +138,11 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                             pulling={isPulling(point, game, team)}
                             actionStack={myTeamActions}
                             loading={waiting}
+                            team={team}
                             onAction={onAction}
                         />
                         <TeamActionView
-                            actions={getValidTeamActions(myTeamActions)}
+                            actions={teamActions}
                             onAction={onAction}
                         />
                         <PrimaryButton

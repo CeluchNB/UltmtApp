@@ -1,8 +1,13 @@
 import { DisplayUser } from '../../types/user'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
-import { getValidPlayerActions } from '../../utils/action'
-import { Action, LiveServerAction } from '../../types/action'
+import { TeamNumber } from '../../types/team'
+import {
+    Action,
+    ActionListData,
+    LiveServerAction,
+    PlayerActionListData,
+} from '../../types/action'
 import { FlatList, View } from 'react-native'
 
 interface PlayerActionViewProps {
@@ -10,12 +15,13 @@ interface PlayerActionViewProps {
     pulling: boolean
     actionStack: LiveServerAction[]
     loading: boolean
+    team: TeamNumber
     onAction: (action: Action) => Promise<void>
 }
 
 type PlayerAction = {
     player: DisplayUser
-    actions: Action[]
+    actions: ActionListData
 }
 
 const PlayerActionView: React.FC<PlayerActionViewProps> = ({
@@ -23,14 +29,16 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     pulling,
     actionStack,
     loading,
+    team,
     onAction,
 }) => {
     const playerActions: PlayerAction[] = React.useMemo(() => {
-        const actions = []
+        const actions: ActionListData[] = []
         for (const player of players) {
-            let action = getValidPlayerActions(
-                player._id,
-                actionStack.slice(),
+            let action = new PlayerActionListData(
+                player,
+                actionStack,
+                team,
                 pulling,
             )
             actions.push(action)
@@ -39,7 +47,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
         return actions.map((action, index) => {
             return { player: players[index], actions: action }
         })
-    }, [players, actionStack, pulling])
+    }, [players, actionStack, pulling, team])
 
     return (
         <View>
@@ -52,7 +60,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
                         <PlayerActionItem
                             key={index}
                             player={player}
-                            actions={actions}
+                            actions={actions.actionList}
                             loading={loading}
                             onAction={onAction}
                         />
