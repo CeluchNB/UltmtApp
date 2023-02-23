@@ -62,38 +62,56 @@ const actionStack: LiveServerAction[] = [
         comments: [],
     },
 ]
-it('should match snapshot', () => {
-    const snapshot = render(
-        <Provider store={store}>
-            <PlayerActionView
-                players={playerList1}
-                pulling={false}
-                loading={true}
-                onAction={jest.fn()}
-                actionStack={actionStack}
-            />
-        </Provider>,
-    )
 
-    expect(snapshot.toJSON()).toMatchSnapshot()
-})
+describe('PlayerActionView', () => {
+    it('should match snapshot', () => {
+        const snapshot = render(
+            <Provider store={store}>
+                <PlayerActionView
+                    players={playerList1}
+                    pulling={false}
+                    loading={true}
+                    onAction={jest.fn()}
+                    actionStack={actionStack}
+                    team={'one'}
+                />
+            </Provider>,
+        )
 
-it('should call action', () => {
-    const actionFn = jest.fn()
-    const { getAllByText } = render(
-        <Provider store={store}>
-            <PlayerActionView
-                players={playerList1}
-                pulling={false}
-                loading={false}
-                onAction={actionFn}
-                actionStack={actionStack}
-            />
-        </Provider>,
-    )
+        expect(snapshot.toJSON()).toMatchSnapshot()
+    })
 
-    const catchBtn = getAllByText(ActionType.CATCH)[0]
-    fireEvent.press(catchBtn)
+    it('should call action', () => {
+        const actionFn = jest.fn()
+        const { getAllByText } = render(
+            <Provider store={store}>
+                <PlayerActionView
+                    players={playerList1}
+                    pulling={false}
+                    loading={false}
+                    onAction={actionFn}
+                    actionStack={actionStack}
+                    team={'one'}
+                />
+            </Provider>,
+        )
 
-    expect(actionFn).toHaveBeenCalledWith(ActionType.CATCH, [], playerList1[0])
+        const catchBtn = getAllByText(ActionType.CATCH)[0]
+        fireEvent.press(catchBtn)
+
+        const action = {
+            action: {
+                playerOne: playerList1[0],
+                playerTwo: playerList1[2],
+                actionType: ActionType.CATCH,
+                tags: [],
+                comments: [],
+                actionNumber: Infinity,
+            },
+            reporterDisplay: ActionType.CATCH,
+            viewerDisplay:
+                'First 1 Last 1 catches the disc from First 3 Last 3',
+        }
+        expect(actionFn).toHaveBeenCalledWith(action)
+    })
 })

@@ -418,7 +418,7 @@ describe('LivePointEditScreen', () => {
         jest.spyOn(ActionData, 'createOfflineAction').mockImplementation(
             async action => {
                 return {
-                    ...action,
+                    ...action.action,
                     teamNumber: 'two',
                     actionNumber: 1,
                     comments: [],

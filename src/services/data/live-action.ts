@@ -1,11 +1,12 @@
 import * as Constants from '../../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { TeamNumber } from '../../types/team'
+import { parseClientAction } from '../../utils/action'
 import { refreshTokenIfNecessary } from './auth'
 import { throwApiError } from '../../utils/service-utils'
 import {
+    Action,
     ActionType,
-    ClientAction,
     LiveServerAction,
     SubscriptionObject,
 } from '../../types/action'
@@ -43,8 +44,9 @@ export const joinPoint = async (gameId: string, pointId: string) => {
  * @param action action data
  * @param pointId point action belongs to
  */
-export const addAction = async (action: ClientAction, pointId: string) => {
-    await networkCreateAction(action, pointId)
+export const addAction = async (action: Action, pointId: string) => {
+    const clientAction = parseClientAction({ ...action.action })
+    await networkCreateAction(clientAction, pointId)
 }
 
 /**
@@ -175,17 +177,18 @@ export const saveLocalAction = async (
  * @returns live server action
  */
 export const createOfflineAction = async (
-    action: ClientAction,
+    action: Action,
     pointId: string,
 ): Promise<LiveServerAction> => {
     try {
         const point = await localGetPointById(pointId)
         const liveAction: LiveServerAction = {
-            ...action,
+            ...action.action,
             teamNumber: 'one',
             comments: [],
             actionNumber: point.teamOneActions.length + 1,
         }
+
         const newAction = await saveLocalAction(liveAction, pointId)
         return newAction
     } catch (e) {

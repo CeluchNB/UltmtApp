@@ -7,8 +7,8 @@ import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { point } from '../../../fixtures/data'
 import {
+    Action,
     ActionType,
-    ClientAction,
     LiveServerAction,
     SubscriptionObject,
 } from '../../../src/types/action'
@@ -40,7 +40,7 @@ describe('basic actions', () => {
             .mockReturnValue(Promise.resolve())
 
         const action = { actionType: ActionType.PULL, tags: [] }
-        await addAction(action, 'point1')
+        await addAction({ action } as unknown as Action, 'point1')
         expect(spy).toHaveBeenCalledWith(action, 'point1')
     })
 
@@ -447,10 +447,18 @@ describe('create offline action', () => {
 
         const result = await createOfflineAction(
             {
-                tags: [],
-                actionType: action.actionType,
-                playerOne: action.playerOne,
-                playerTwo: action.playerTwo,
+                action: {
+                    tags: [],
+                    actionType: action.actionType,
+                    playerOne: action.playerOne,
+                    playerTwo: action.playerTwo,
+                    comments: [],
+                    actionNumber: 1,
+                },
+                reporterDisplay: action.actionType,
+                viewerDisplay: action.actionType,
+                setPlayersAndUpdateViewerDisplay: jest.fn(),
+                setTags: jest.fn(),
             },
             'point1',
         )
@@ -464,7 +472,7 @@ describe('create offline action', () => {
         )
 
         await expect(
-            createOfflineAction({} as ClientAction, 'point1'),
+            createOfflineAction({} as Action, 'point1'),
         ).rejects.toMatchObject({ message: Constants.GET_ACTION_ERROR })
     })
 })

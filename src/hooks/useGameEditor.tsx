@@ -199,16 +199,12 @@ export const useGameEditor = () => {
     const onAction = async (action: Action) => {
         setWaiting(true)
         if (offline) {
-            const newAction = await createOfflineAction(
-                action.action,
-                point._id,
-            )
+            const newAction = await createOfflineAction(action, point._id)
             actionSideEffects(newAction)
             successfulResponse()
             setActions(immutablePush(newAction))
         } else {
-            console.log('loggin action', action)
-            addAction(action.action, point._id)
+            addAction(action, point._id)
         }
     }
 

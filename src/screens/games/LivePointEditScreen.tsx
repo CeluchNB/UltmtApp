@@ -74,7 +74,6 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         try {
             setFinishGameLoading(true)
             await finishGame()
-            // navigation.reset({ index: 0, routes: [{ name:  }]})
             navigation.navigate('Tabs', {
                 screen: 'Account',
                 params: { screen: 'Profile' },

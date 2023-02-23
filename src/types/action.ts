@@ -1,13 +1,17 @@
 import { DisplayUser } from './user'
 import { getUserDisplayName } from '../utils/player'
 import { DisplayTeam, TeamNumber } from './team'
+import { isRetainingPossession, isScore, isTurnover } from '../utils/action'
 
 export interface Action {
     action: ServerAction
     reporterDisplay: string
     viewerDisplay: string
     setTags(tags: string[]): void
-    setPlayers(playerOne?: DisplayUser, playerTwo?: DisplayUser): void
+    setPlayersAndUpdateViewerDisplay(
+        playerOne?: DisplayUser,
+        playerTwo?: DisplayUser,
+    ): void
 }
 
 export enum ActionType {
@@ -56,31 +60,11 @@ export interface SavedServerAction extends ServerAction {
     team: DisplayTeam
 }
 
-// export const ACTION_MAP: { [x: string]: ActionType[] } = {
-//     PULLING: [ActionType.PULL],
-//     RECEIVING: [ActionType.CATCH, ActionType.PICKUP, ActionType.DROP],
-//     OFFENSE_WITH_POSSESSION: [ActionType.THROWAWAY],
-//     OFFENSE_NO_POSSESSION: [ActionType.CATCH, ActionType.DROP, 'score'],
-//     DEFENSE: [ActionType.BLOCK, ActionType.PICKUP, 'score'],
-//     DEFENSE_AFTER_BLOCK: [ActionType.PICKUP],
-//     AFTER_SCORE: [],
-// }
-
-// export const TEAM_ACTION_MAP: { [x: string]: ActionType[] } = {
-//     PREPOINT: [],
-//     OFFENSE: [
-//         ActionType.TIMEOUT,
-//         ActionType.CALL_ON_FIELD,
-//         ActionType.SUBSTITUTION,
-//     ],
-//     DEFENSE: ['score', ActionType.CALL_ON_FIELD, ActionType.SUBSTITUTION],
-// }
-
 export interface ActionListData {
     actionList: Action[]
 }
 
-export class PlayerActionListData {
+export class PlayerActionListData implements ActionListData {
     actionList: Action[]
     constructor(
         playerOne: DisplayUser,
@@ -97,7 +81,7 @@ export class PlayerActionListData {
     }
 }
 
-export class TeamActionListData {
+export class TeamActionListData implements ActionListData {
     actionList: Action[]
     constructor(actionStack: LiveServerAction[], team: TeamNumber) {
         this.actionList = getTeamActionList(actionStack, team)
@@ -111,46 +95,22 @@ const getPlayerActionList = (
     pulling: boolean,
 ): Action[] => {
     let currentUser: string | undefined = playerOne._id
-    const initialAction: ClientAction = {
-        playerOne,
-        actionType: ActionType.PULL,
-        tags: [],
-    }
-    const score =
-        playerTeam === 'one'
-            ? ActionType.TEAM_ONE_SCORE
-            : ActionType.TEAM_TWO_SCORE
     for (const action of actionStack.slice().reverse()) {
         const playerTwo = action.playerOne
         switch (action.actionType) {
             case ActionType.PICKUP:
             case ActionType.CATCH:
                 if (currentUser === action.playerOne?._id) {
-                    return [
-                        createAction({
-                            ...initialAction,
-                            actionType: ActionType.THROWAWAY,
-                        }),
-                    ]
+                    return [new ThrowawayAction(playerOne)]
                 } else {
                     return [
-                        createAction({
-                            ...initialAction,
-                            playerTwo,
-                            actionType: ActionType.CATCH,
-                        }),
-                        createAction({
-                            ...initialAction,
-                            playerTwo,
-                            actionType: ActionType.DROP,
-                        }),
-                        createAction(
-                            {
-                                ...initialAction,
-                                playerTwo,
-                                actionType: score,
-                            },
+                        new CatchAction(playerOne, playerTwo),
+                        new DropAction(playerOne, playerTwo),
+                        new ScoreAction(
+                            playerTeam,
                             'score',
+                            playerOne,
+                            playerTwo,
                         ),
                     ]
                 }
@@ -158,29 +118,12 @@ const getPlayerActionList = (
             case ActionType.THROWAWAY:
             case ActionType.PULL:
                 return [
-                    createAction({
-                        ...initialAction,
-                        actionType: ActionType.BLOCK,
-                    }),
-                    createAction({
-                        ...initialAction,
-                        actionType: ActionType.PICKUP,
-                    }),
-                    createAction(
-                        {
-                            ...initialAction,
-                            actionType: score,
-                        },
-                        'clhn',
-                    ),
+                    new BlockAction(playerOne),
+                    new PickupAction(playerOne),
+                    new ScoreAction(playerTeam, 'clhn', playerOne, undefined),
                 ]
             case ActionType.BLOCK:
-                return [
-                    createAction({
-                        ...initialAction,
-                        actionType: ActionType.PICKUP,
-                    }),
-                ]
+                return [new PickupAction(playerOne)]
             case ActionType.TEAM_ONE_SCORE:
             case ActionType.TEAM_TWO_SCORE:
                 return []
@@ -198,14 +141,13 @@ const getPlayerActionList = (
     }
 
     if (pulling) {
-        return [
-            createAction({ playerOne, actionType: ActionType.PULL, tags: [] }),
-        ]
+        return [new PullAction(playerOne)]
     }
+    // first action on receiving team
     return [
-        createAction({ playerOne, actionType: ActionType.CATCH, tags: [] }),
-        createAction({ playerOne, actionType: ActionType.PICKUP, tags: [] }),
-        createAction({ playerOne, actionType: ActionType.DROP, tags: [] }),
+        new CatchAction(playerOne),
+        new PickupAction(playerOne),
+        new DropAction(playerOne),
     ]
 }
 
@@ -214,62 +156,19 @@ const getTeamActionList = (
     team: TeamNumber,
 ): Action[] => {
     for (const action of actionStack.slice().reverse()) {
-        if (
-            [ActionType.BLOCK, ActionType.PICKUP, ActionType.CATCH].includes(
-                action.actionType,
-            )
-        ) {
+        if (isRetainingPossession(action.actionType)) {
             return [
-                createAction({
-                    actionType: ActionType.TIMEOUT,
-                    tags: [],
-                }),
-                createAction(
-                    {
-                        actionType: ActionType.CALL_ON_FIELD,
-                        tags: [],
-                    },
-                    'call on field',
-                ),
-                createAction({
-                    actionType: ActionType.SUBSTITUTION,
-                    tags: [],
-                }),
+                new TimeoutAction(),
+                new CallOnFieldAction(),
+                new SubstitutionAction(),
             ]
-        } else if (
-            [ActionType.PULL, ActionType.DROP, ActionType.THROWAWAY].includes(
-                action.actionType,
-            )
-        ) {
-            const scoreAction =
-                team === 'one'
-                    ? ActionType.TEAM_TWO_SCORE
-                    : ActionType.TEAM_ONE_SCORE
+        } else if (isTurnover(action.actionType)) {
             return [
-                createAction(
-                    {
-                        actionType: scoreAction,
-                        tags: [],
-                    },
-                    'they score',
-                ),
-                createAction(
-                    {
-                        actionType: ActionType.CALL_ON_FIELD,
-                        tags: [],
-                    },
-                    'call on field',
-                ),
-                createAction({
-                    actionType: ActionType.SUBSTITUTION,
-                    tags: [],
-                }),
+                new ScoreAction(team === 'one' ? 'two' : 'one', 'they score'),
+                new CallOnFieldAction(),
+                new SubstitutionAction(),
             ]
-        } else if (
-            [ActionType.TEAM_ONE_SCORE, ActionType.TEAM_TWO_SCORE].includes(
-                action.actionType,
-            )
-        ) {
+        } else if (isScore(action.actionType)) {
             return []
         }
     }
@@ -282,12 +181,18 @@ class BaseAction implements Action {
     viewerDisplay: string
 
     constructor(
-        action: ServerAction,
+        action: Partial<ServerAction>,
         viewerDisplay: string,
         reporterDisplay?: string,
     ) {
-        this.action = action
-        this.reporterDisplay = reporterDisplay ?? action.actionType
+        this.action = {
+            actionNumber: Infinity,
+            actionType: ActionType.PULL,
+            tags: [],
+            comments: [],
+            ...action,
+        }
+        this.reporterDisplay = reporterDisplay ?? this.action.actionType
         this.viewerDisplay = viewerDisplay
     }
 
@@ -295,56 +200,176 @@ class BaseAction implements Action {
         this.action.tags = tags
     }
 
-    setPlayers(playerOne?: DisplayUser, playerTwo?: DisplayUser): void {
+    setPlayersAndUpdateViewerDisplay(
+        playerOne?: DisplayUser,
+        playerTwo?: DisplayUser,
+    ): void {
+        this.action.playerOne = playerOne
+        this.action.playerTwo = playerTwo
+    }
+
+    setPlayers(playerOne?: DisplayUser, playerTwo?: DisplayUser) {
         this.action.playerOne = playerOne
         this.action.playerTwo = playerTwo
     }
 }
 
-const createAction = (
-    action: ClientAction,
-    reporterDisplay?: string,
-): Action => {
-    let viewerDisplay = ''
-    const playerOneDisplay = getUserDisplayName(action.playerOne)
-    const playerTwoDisplay = getUserDisplayName(action.playerTwo)
-    switch (action.actionType) {
-        case ActionType.BLOCK:
-            viewerDisplay = `${getUserDisplayName(
-                action.playerOne,
-            )} gets a block`
-            break
-        case ActionType.CALL_ON_FIELD:
-            viewerDisplay = 'There is a call on the field'
-            break
-        case ActionType.CATCH:
-            viewerDisplay = `${playerOneDisplay} catches the disc`
-            break
-        case ActionType.DROP:
-            viewerDisplay = `${playerOneDisplay} drops the disc`
-            break
-        case ActionType.PICKUP:
-            viewerDisplay = `${playerOneDisplay} picks up the disc`
-            break
-        case ActionType.PULL:
-            viewerDisplay = `${playerOneDisplay} pulls the disc`
-            break
-        case ActionType.SUBSTITUTION:
-            viewerDisplay = `${playerTwoDisplay} replaces ${playerOneDisplay}`
-            break
-        case ActionType.TEAM_ONE_SCORE:
-        case ActionType.TEAM_TWO_SCORE:
-            break
-        case ActionType.THROWAWAY:
-            viewerDisplay = `${playerOneDisplay} throws away the disc`
-            break
-        case ActionType.TIMEOUT:
-            viewerDisplay = 'Timeout called'
-            break
+class BlockAction extends BaseAction {
+    constructor(playerOne: DisplayUser) {
+        const playerOneDisplay = getUserDisplayName(playerOne)
+        const viewerDisplay = `${playerOneDisplay} blocks the throw`
+        super(
+            {
+                playerOne,
+                actionType: ActionType.BLOCK,
+            },
+            viewerDisplay,
+        )
     }
-    return new BaseAction(
-        { ...action, comments: [], actionNumber: Infinity },
-        viewerDisplay,
-        reporterDisplay,
-    )
+}
+
+class CallOnFieldAction extends BaseAction {
+    constructor() {
+        super(
+            { actionType: ActionType.CALL_ON_FIELD },
+            'There is a call on the field',
+            'call on field',
+        )
+    }
+}
+
+class CatchAction extends BaseAction {
+    constructor(playerOne: DisplayUser, playerTwo?: DisplayUser) {
+        super({ actionType: ActionType.CATCH }, 'Catch')
+        this.setPlayersAndUpdateViewerDisplay(playerOne, playerTwo)
+    }
+
+    setPlayersAndUpdateViewerDisplay(
+        playerOne?: DisplayUser,
+        playerTwo?: DisplayUser,
+    ) {
+        this.setPlayers(playerOne, playerTwo)
+        this.viewerDisplay = this.getViewerDisplay()
+    }
+
+    getViewerDisplay(): string {
+        const playerOneDisplay = getUserDisplayName(this.action.playerOne)
+        let viewerDisplay = `${playerOneDisplay} catches the disc`
+        if (this.action.playerTwo) {
+            const playerTwoDisplay = getUserDisplayName(this.action.playerTwo)
+            viewerDisplay = viewerDisplay.concat(` from ${playerTwoDisplay}`)
+        }
+        return viewerDisplay
+    }
+}
+
+class DropAction extends BaseAction {
+    constructor(playerOne: DisplayUser, playerTwo?: DisplayUser) {
+        super({ actionType: ActionType.DROP }, 'Drop')
+        this.setPlayersAndUpdateViewerDisplay(playerOne, playerTwo)
+    }
+
+    setPlayersAndUpdateViewerDisplay(
+        playerOne?: DisplayUser,
+        playerTwo?: DisplayUser,
+    ) {
+        this.setPlayers(playerOne, playerTwo)
+        this.viewerDisplay = this.getViewerDisplay()
+    }
+
+    getViewerDisplay(): string {
+        const playerOneDisplay = getUserDisplayName(this.action.playerOne)
+        let viewerDisplay = `${playerOneDisplay} drops the pass`
+        if (this.action.playerTwo) {
+            const playerTwoDisplay = getUserDisplayName(this.action.playerTwo)
+            viewerDisplay = viewerDisplay.concat(` from ${playerTwoDisplay}`)
+        }
+        return viewerDisplay
+    }
+}
+
+class PickupAction extends BaseAction {
+    constructor(playerOne: DisplayUser) {
+        const playerOneDisplay = getUserDisplayName(playerOne)
+        const viewerDisplay = `${playerOneDisplay} picks up the disc`
+        super({ playerOne, actionType: ActionType.PICKUP }, viewerDisplay)
+    }
+}
+
+class PullAction extends BaseAction {
+    constructor(playerOne: DisplayUser) {
+        const playerOneDisplay = getUserDisplayName(playerOne)
+        const viewerDisplay = `${playerOneDisplay} picks up the disc`
+        super({ playerOne, actionType: ActionType.PULL }, viewerDisplay)
+    }
+}
+
+class SubstitutionAction extends BaseAction {
+    constructor(playerOne?: DisplayUser, playerTwo?: DisplayUser) {
+        super({ actionType: ActionType.SUBSTITUTION }, 'substitution')
+        this.setPlayersAndUpdateViewerDisplay(playerOne, playerTwo)
+    }
+
+    setPlayersAndUpdateViewerDisplay(
+        playerOne?: DisplayUser,
+        playerTwo?: DisplayUser,
+    ) {
+        this.action.playerOne = playerOne
+        this.action.playerTwo = playerTwo
+        if (playerOne && playerTwo) {
+            const playerOneDisplay = getUserDisplayName(playerOne)
+            const playerTwoDisplay = getUserDisplayName(playerTwo)
+            this.viewerDisplay = `${playerTwoDisplay} replaces ${playerOneDisplay}`
+        }
+    }
+}
+
+class ScoreAction extends BaseAction {
+    constructor(
+        team: TeamNumber,
+        reporterDisplay?: string,
+        playerOne?: DisplayUser,
+        playerTwo?: DisplayUser,
+    ) {
+        const actionType =
+            team === 'one'
+                ? ActionType.TEAM_ONE_SCORE
+                : ActionType.TEAM_TWO_SCORE
+        super({ actionType }, 'score', reporterDisplay)
+        this.setPlayersAndUpdateViewerDisplay(playerOne, playerTwo)
+    }
+
+    setPlayersAndUpdateViewerDisplay(
+        playerOne?: DisplayUser,
+        playerTwo?: DisplayUser,
+    ) {
+        this.setPlayers(playerOne, playerTwo)
+        this.viewerDisplay = this.getViewerDisplay()
+    }
+
+    getViewerDisplay() {
+        let viewerDisplay = ''
+        const playerOneDisplay = getUserDisplayName(this.action.playerOne)
+        const playerTwoDisplay = getUserDisplayName(this.action.playerTwo)
+        if (playerOneDisplay && playerTwoDisplay) {
+            viewerDisplay = `${playerOneDisplay} scores from ${playerTwoDisplay}`
+        } else {
+            viewerDisplay = `The opposing team scores`
+        }
+        return viewerDisplay
+    }
+}
+
+class ThrowawayAction extends BaseAction {
+    constructor(playerOne: DisplayUser) {
+        const playerOneDisplay = getUserDisplayName(playerOne)
+        const viewerDisplay = `${playerOneDisplay} throws the disc away`
+        super({ playerOne, actionType: ActionType.THROWAWAY }, viewerDisplay)
+    }
+}
+
+class TimeoutAction extends BaseAction {
+    constructor() {
+        super({ actionType: ActionType.TIMEOUT }, 'Timeout called')
+    }
 }

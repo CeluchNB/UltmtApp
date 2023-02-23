@@ -12,9 +12,48 @@ exports[`should match snapshot 1`] = `
   <RCTScrollView
     data={
       [
-        "Timeout",
-        "score",
-        "Substitution",
+        {
+          "action": {
+            "actionNumber": Infinity,
+            "actionType": "Timeout",
+            "comments": [],
+            "playerOne": {
+              "_id": "realid1",
+              "firstName": "First 1",
+              "lastName": "Last 1",
+              "username": "firstlast1",
+            },
+            "tags": [],
+          },
+          "reporterDisplay": "Timeout",
+          "setPlayersAndUpdateViewerDisplay": [MockFunction],
+          "setTags": [MockFunction],
+          "viewerDisplay": "Timeout called",
+        },
+        {
+          "action": {
+            "actionNumber": Infinity,
+            "actionType": "TeamOneScore",
+            "comments": [],
+            "tags": [],
+          },
+          "reporterDisplay": "they score",
+          "setPlayersAndUpdateViewerDisplay": [MockFunction],
+          "setTags": [MockFunction],
+          "viewerDisplay": "They score",
+        },
+        {
+          "action": {
+            "actionNumber": Infinity,
+            "actionType": "Substitution",
+            "comments": [],
+            "tags": [],
+          },
+          "reporterDisplay": "Substitution",
+          "setPlayersAndUpdateViewerDisplay": [MockFunction],
+          "setTags": [MockFunction],
+          "viewerDisplay": "Substitution",
+        },
       ]
     }
     getItem={[Function]}

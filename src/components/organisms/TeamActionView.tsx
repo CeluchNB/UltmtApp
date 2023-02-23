@@ -53,7 +53,10 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
     ) => {
         onSubModalClose()
         if (selectedAction) {
-            selectedAction.setPlayers(playerOne, playerTwo)
+            selectedAction.setPlayersAndUpdateViewerDisplay(
+                playerOne,
+                playerTwo,
+            )
             onAction(selectedAction)
         }
     }
