@@ -6,6 +6,7 @@ import { refreshTokenIfNecessary } from './auth'
 import { throwApiError } from '../../utils/service-utils'
 import {
     Action,
+    ActionFactory,
     ActionType,
     LiveServerAction,
     SubscriptionObject,
@@ -151,7 +152,7 @@ export const unsubscribe = () => {
 export const saveLocalAction = async (
     action: LiveServerAction,
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<Action> => {
     try {
         if (action.actionType === ActionType.SUBSTITUTION) {
             if (action.playerTwo) {
@@ -164,7 +165,8 @@ export const saveLocalAction = async (
                 await localSavePoint(point)
             }
         }
-        return await localSaveAction(action, pointId)
+        const actionData = await localSaveAction(action, pointId)
+        return ActionFactory.createFromAction(actionData)
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
@@ -179,7 +181,7 @@ export const saveLocalAction = async (
 export const createOfflineAction = async (
     action: Action,
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<Action> => {
     try {
         const point = await localGetPointById(pointId)
         const liveAction: LiveServerAction = {
@@ -234,9 +236,10 @@ export const undoOfflineAction = async (
  */
 export const getLocalActionsByPoint = async (
     pointId: string,
-): Promise<LiveServerAction[]> => {
+): Promise<Action[]> => {
     try {
-        return await localGetActionsByPoint(pointId)
+        const actions = await localGetActionsByPoint(pointId)
+        return actions.map(action => ActionFactory.createFromAction(action))
     } catch (e) {
         return throwApiError(e, Constants.GET_ACTION_ERROR)
     }

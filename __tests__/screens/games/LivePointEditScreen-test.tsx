@@ -12,6 +12,7 @@ import { game } from '../../../fixtures/data'
 import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
 import {
+    ActionFactory,
     ActionType,
     LiveServerAction,
     SubscriptionObject,
@@ -110,7 +111,7 @@ beforeEach(() => {
     jest.spyOn(ActionData, 'addAction').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'undoAction').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'saveLocalAction').mockImplementation(data =>
-        Promise.resolve(data),
+        Promise.resolve(ActionFactory.createFromAction(data)),
     )
     jest.spyOn(ActionData, 'deleteLocalAction').mockResolvedValue(
         Promise.resolve({
@@ -417,12 +418,12 @@ describe('LivePointEditScreen', () => {
         )
         jest.spyOn(ActionData, 'createOfflineAction').mockImplementation(
             async action => {
-                return {
+                return ActionFactory.createFromAction({
                     ...action.action,
                     teamNumber: 'two',
                     actionNumber: 1,
                     comments: [],
-                }
+                } as LiveServerAction)
             },
         )
         jest.spyOn(ActionData, 'undoOfflineAction').mockImplementation(

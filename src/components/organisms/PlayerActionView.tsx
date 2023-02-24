@@ -5,7 +5,6 @@ import { TeamNumber } from '../../types/team'
 import {
     Action,
     ActionListData,
-    LiveServerAction,
     PlayerActionListData,
 } from '../../types/action'
 import { FlatList, View } from 'react-native'
@@ -13,7 +12,7 @@ import { FlatList, View } from 'react-native'
 interface PlayerActionViewProps {
     players: DisplayUser[]
     pulling: boolean
-    actionStack: LiveServerAction[]
+    actionStack: Action[]
     loading: boolean
     team: TeamNumber
     onAction: (action: Action) => Promise<void>

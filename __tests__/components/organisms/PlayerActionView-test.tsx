@@ -3,7 +3,12 @@ import PlayerActionView from '../../../src/components/organisms/PlayerActionView
 import { Provider } from 'react-redux'
 import React from 'react'
 import store from '../../../src/store/store'
-import { ActionType, LiveServerAction } from '../../../src/types/action'
+import {
+    Action,
+    ActionFactory,
+    ActionType,
+    LiveServerAction,
+} from '../../../src/types/action'
 import { fireEvent, render } from '@testing-library/react-native'
 
 const playerList1: DisplayUser[] = [
@@ -51,8 +56,8 @@ const playerList1: DisplayUser[] = [
     },
 ]
 
-const actionStack: LiveServerAction[] = [
-    {
+const actionStack: Action[] = [
+    ActionFactory.createFromAction({
         actionType: ActionType.CATCH,
         actionNumber: 1,
         playerOne: playerList1[2],
@@ -60,7 +65,7 @@ const actionStack: LiveServerAction[] = [
         tags: [],
         teamNumber: 'one',
         comments: [],
-    },
+    } as LiveServerAction),
 ]
 
 describe('PlayerActionView', () => {

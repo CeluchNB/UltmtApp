@@ -68,29 +68,26 @@ export class PlayerActionListData implements ActionListData {
     actionList: Action[]
     constructor(
         playerOne: DisplayUser,
-        actionStack: LiveServerAction[],
+        actionStack: Action[],
         team: TeamNumber,
         pulling: boolean,
     ) {
-        this.actionList = getPlayerActionList(
-            playerOne,
-            actionStack,
-            team,
-            pulling,
-        )
+        const actions = actionStack.map(action => action.action)
+        this.actionList = getPlayerActionList(playerOne, actions, team, pulling)
     }
 }
 
 export class TeamActionListData implements ActionListData {
     actionList: Action[]
-    constructor(actionStack: LiveServerAction[], team: TeamNumber) {
-        this.actionList = getTeamActionList(actionStack, team)
+    constructor(actionStack: Action[], team: TeamNumber) {
+        const actions = actionStack.map(action => action.action)
+        this.actionList = getTeamActionList(actions, team)
     }
 }
 
 const getPlayerActionList = (
     playerOne: DisplayUser,
-    actionStack: LiveServerAction[],
+    actionStack: ServerAction[],
     playerTeam: TeamNumber,
     pulling: boolean,
 ): Action[] => {
@@ -152,7 +149,7 @@ const getPlayerActionList = (
 }
 
 const getTeamActionList = (
-    actionStack: LiveServerAction[],
+    actionStack: ServerAction[],
     team: TeamNumber,
 ): Action[] => {
     for (const action of actionStack.slice().reverse()) {
@@ -356,11 +353,6 @@ class ScoreAction extends BaseAction {
         let viewerDisplay = ''
         const playerOneDisplay = getUserDisplayName(this.action.playerOne)
         const playerTwoDisplay = getUserDisplayName(this.action.playerTwo)
-        console.log(
-            'score action got displays',
-            this.action.playerOne,
-            this.action.playerTwo,
-        )
         if (playerOneDisplay && playerTwoDisplay) {
             viewerDisplay = `${playerOneDisplay} scores from ${playerTwoDisplay}`
         } else if (playerOneDisplay) {

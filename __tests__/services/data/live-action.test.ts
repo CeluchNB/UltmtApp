@@ -8,6 +8,7 @@ import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storag
 import { point } from '../../../fixtures/data'
 import {
     Action,
+    ActionFactory,
     ActionType,
     LiveServerAction,
     SubscriptionObject,
@@ -223,7 +224,7 @@ describe('save local action', () => {
         )
 
         const result = await saveLocalAction(action, 'point1')
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
         expect(savedPoint?.teamOnePlayers.length).toBe(1)
         expect(savedPoint?.teamOnePlayers[0]).toMatchObject(
             action.playerTwo || {},
@@ -266,7 +267,7 @@ describe('save local action', () => {
         )
 
         const result = await saveLocalAction(action, 'point1')
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
         expect(savedPoint?.teamTwoPlayers.length).toBe(1)
         expect(savedPoint?.teamTwoPlayers[0]).toMatchObject(
             action.playerTwo || {},
@@ -307,7 +308,7 @@ describe('save local action', () => {
             })
 
         const result = await saveLocalAction(action, 'point1')
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
         expect(mockGetPoint).not.toHaveBeenCalled()
         expect(mockSavePoint).not.toHaveBeenCalled()
     })
@@ -341,7 +342,7 @@ describe('save local action', () => {
             })
 
         const result = await saveLocalAction(action, 'point1')
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
         expect(mockGetPoint).not.toHaveBeenCalled()
         expect(mockSavePoint).not.toHaveBeenCalled()
     })
@@ -463,7 +464,7 @@ describe('create offline action', () => {
             'point1',
         )
 
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
     })
 
     it('with failure', async () => {

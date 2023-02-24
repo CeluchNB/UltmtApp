@@ -10,11 +10,7 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
 import { isPulling } from '../../utils/point'
-import {
-    ActionFactory,
-    ActionType,
-    TeamActionListData,
-} from '../../types/action'
+import { ActionType, TeamActionListData } from '../../types/action'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { useGameEditor, useTheme } from '../../hooks'
 
@@ -48,10 +44,10 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         return (
             finishPointLoading ||
             finishGameLoading ||
-            (lastAction?.actionType !== ActionType.TEAM_ONE_SCORE &&
-                lastAction?.actionType !== ActionType.TEAM_TWO_SCORE)
+            (lastAction?.action.actionType !== ActionType.TEAM_ONE_SCORE &&
+                lastAction?.action.actionType !== ActionType.TEAM_TWO_SCORE)
         )
-    }, [finishGameLoading, finishPointLoading, lastAction?.actionType])
+    }, [finishGameLoading, finishPointLoading, lastAction?.action])
 
     const teamActions = React.useMemo(() => {
         const actionListData = new TeamActionListData(myTeamActions, team)
@@ -169,10 +165,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                             <View>
                                 <Text style={styles.header}>Last Action</Text>
                                 <ActionDisplayItem
-                                    // TODO: Change this
-                                    action={ActionFactory.createFromAction(
-                                        actions[actions.length - 1],
-                                    )}
+                                    action={actions[actions.length - 1]}
                                     teamOne={game.teamOne}
                                     teamTwo={game.teamTwo}
                                 />

@@ -45,11 +45,11 @@ function immutablePush<T>(newValue: T): (current: T[]) => T[] {
     }
 }
 
-function immutableFilter<T extends { actionNumber: number }>(
+function immutableFilter<T extends { action: { actionNumber: number } }>(
     actionNumber: number,
 ): (current: T[]) => T[] {
     return (current: T[]): T[] => {
-        return current.filter(item => item.actionNumber !== actionNumber)
+        return current.filter(item => item.action.actionNumber !== actionNumber)
     }
 }
 
@@ -60,20 +60,21 @@ export const useGameEditor = () => {
     const point = useSelector(selectPoint)
     const [waiting, setWaiting] = React.useState(false)
     const [error, setError] = React.useState('')
-    const [actions, setActions] = React.useState<LiveServerAction[]>([])
+    const [actions, setActions] = React.useState<Action[]>([])
     const [offline, setOffline] = React.useState(false)
 
     const actionSideEffects = React.useCallback(
-        (data: LiveServerAction) => {
+        (data: Action) => {
+            const action = data.action as LiveServerAction
             if (
-                data.actionType === ActionType.SUBSTITUTION &&
-                data.teamNumber === team
+                action.actionType === ActionType.SUBSTITUTION &&
+                action.teamNumber === team
             ) {
                 dispatch(
                     substitute({
-                        playerOne: data.playerOne,
-                        playerTwo: data.playerTwo,
-                        team: data.teamNumber,
+                        playerOne: data.action.playerOne,
+                        playerTwo: data.action.playerTwo,
+                        team: action.teamNumber,
                     }),
                 )
             }
@@ -106,10 +107,10 @@ export const useGameEditor = () => {
 
     const subscriptions: SubscriptionObject = React.useMemo(() => {
         return {
-            client: async data => {
+            client: async (data: LiveServerAction) => {
                 try {
                     const action = await saveLocalAction(data, point._id)
-                    actionSideEffects(data)
+                    actionSideEffects(action)
                     successfulResponse()
                     setActions(immutablePush(action))
                 } catch (e: any) {
@@ -185,7 +186,7 @@ export const useGameEditor = () => {
     const lastAction = React.useMemo(() => {
         for (let i = actions.length - 1; i >= 0; i--) {
             // don't worry about other team's actions
-            if (actions[i].teamNumber === team) {
+            if ((actions[i].action as LiveServerAction).teamNumber === team) {
                 return actions[i]
             }
         }
@@ -193,7 +194,9 @@ export const useGameEditor = () => {
     }, [actions, team])
 
     const myTeamActions = React.useMemo(() => {
-        return actions.filter(a => a.teamNumber === team)
+        return actions.filter(
+            a => (a.action as LiveServerAction).teamNumber === team,
+        )
     }, [actions, team])
 
     const onAction = async (action: Action) => {
@@ -225,7 +228,7 @@ export const useGameEditor = () => {
         const { teamOneScore, teamTwoScore } = prevPoint
 
         const newPoint = await createPoint(
-            isPullingNext(team, lastAction?.actionType),
+            isPullingNext(team, lastAction?.action.actionType),
             point.pointNumber + 1,
         )
 

@@ -1,5 +1,7 @@
 import { DisplayUser } from '../../src/types/user'
 import {
+    Action,
+    ActionFactory,
     ActionType,
     LiveServerAction,
     PlayerActionListData,
@@ -20,10 +22,8 @@ const playerTwo: DisplayUser = {
     username: 'firstlast2',
 }
 
-const getTestLiveAction = (
-    overrides?: Partial<LiveServerAction>,
-): LiveServerAction => {
-    return {
+const getTestLiveAction = (overrides?: Partial<LiveServerAction>): Action => {
+    return ActionFactory.createFromAction({
         actionType: ActionType.CATCH,
         actionNumber: 1,
         playerOne,
@@ -32,7 +32,7 @@ const getTestLiveAction = (
         comments: [],
         tags: [],
         ...overrides,
-    }
+    })
 }
 
 // const testResultEqualsAction = (result: Action, action: Action) => {
@@ -54,7 +54,7 @@ describe('test get player valid actions', () => {
         expect(result.actionList[2].action.actionType).toBe(ActionType.DROP)
     })
     it('after pull', () => {
-        const stack: LiveServerAction[] = [
+        const stack: Action[] = [
             getTestLiveAction({
                 actionType: ActionType.PULL,
                 playerTwo: undefined,
