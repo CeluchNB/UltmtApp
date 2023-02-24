@@ -212,6 +212,11 @@ class BaseAction implements Action {
         this.action.playerOne = playerOne
         this.action.playerTwo = playerTwo
     }
+
+    createFromAction(action: Partial<ServerAction>): Action {
+        this.action = { ...this.action, ...action }
+        return this
+    }
 }
 
 class BlockAction extends BaseAction {
@@ -299,7 +304,7 @@ class PickupAction extends BaseAction {
 class PullAction extends BaseAction {
     constructor(playerOne: DisplayUser) {
         const playerOneDisplay = getUserDisplayName(playerOne)
-        const viewerDisplay = `${playerOneDisplay} picks up the disc`
+        const viewerDisplay = `${playerOneDisplay} pulls the disc`
         super({ playerOne, actionType: ActionType.PULL }, viewerDisplay)
     }
 }
@@ -351,8 +356,16 @@ class ScoreAction extends BaseAction {
         let viewerDisplay = ''
         const playerOneDisplay = getUserDisplayName(this.action.playerOne)
         const playerTwoDisplay = getUserDisplayName(this.action.playerTwo)
+        console.log(
+            'score action got displays',
+            this.action.playerOne,
+            this.action.playerTwo,
+        )
         if (playerOneDisplay && playerTwoDisplay) {
             viewerDisplay = `${playerOneDisplay} scores from ${playerTwoDisplay}`
+        } else if (playerOneDisplay) {
+            // TODO: is callahan the only way to get here?
+            viewerDisplay = `${playerOneDisplay} scores a callahan`
         } else {
             viewerDisplay = `The opposing team scores`
         }
@@ -371,5 +384,57 @@ class ThrowawayAction extends BaseAction {
 class TimeoutAction extends BaseAction {
     constructor() {
         super({ actionType: ActionType.TIMEOUT }, 'Timeout called')
+    }
+}
+
+export class ActionFactory {
+    static createFromAction = (action: ServerAction): Action => {
+        switch (action.actionType) {
+            case ActionType.BLOCK:
+                return new BlockAction(action.playerOne!).createFromAction(
+                    action,
+                )
+            case ActionType.CALL_ON_FIELD:
+                return new CallOnFieldAction().createFromAction(action)
+            case ActionType.CATCH:
+                return new CatchAction(
+                    action.playerOne!,
+                    action.playerTwo,
+                ).createFromAction(action)
+            case ActionType.DROP:
+                return new DropAction(
+                    action.playerOne!,
+                    action.playerTwo,
+                ).createFromAction(action)
+            case ActionType.PICKUP:
+                return new PickupAction(action.playerOne!).createFromAction(
+                    action,
+                )
+            case ActionType.PULL:
+                return new PullAction(action.playerOne!).createFromAction(
+                    action,
+                )
+            case ActionType.SUBSTITUTION:
+                return new SubstitutionAction(
+                    action.playerOne,
+                    action.playerTwo,
+                ).createFromAction(action)
+            case ActionType.TEAM_ONE_SCORE:
+            case ActionType.TEAM_TWO_SCORE:
+                const scoreAction = new ScoreAction('one').createFromAction(
+                    action,
+                )
+                scoreAction.setPlayersAndUpdateViewerDisplay(
+                    action.playerOne,
+                    action.playerTwo,
+                )
+                return scoreAction
+            case ActionType.THROWAWAY:
+                return new ThrowawayAction(action.playerOne!).createFromAction(
+                    action,
+                )
+            case ActionType.TIMEOUT:
+                return new TimeoutAction().createFromAction(action)
+        }
     }
 }

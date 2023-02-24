@@ -2,9 +2,9 @@ import ActionDisplayItem from '../atoms/ActionDisplayItem'
 import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
-import { ServerAction } from '../../types/action'
 import { isLivePoint } from '../../utils/point'
 import { useTheme } from '../../hooks'
+import { Action, ServerAction } from '../../types/action'
 import {
     ActivityIndicator,
     Animated,
@@ -17,7 +17,7 @@ import React, { useEffect } from 'react'
 
 interface PointAccordionProps {
     point: Point
-    actions: ServerAction[]
+    actions: Action[]
     expanded: boolean
     loading: boolean
     teamOne: GuestTeam
@@ -170,7 +170,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                         renderItem={({ item }) => {
                             return (
                                 <View
-                                    key={item.actionNumber}
+                                    key={item.action.actionNumber}
                                     style={styles.item}>
                                     <ActionDisplayItem
                                         action={item}

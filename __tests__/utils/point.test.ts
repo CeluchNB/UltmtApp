@@ -1,4 +1,8 @@
-import { ActionType, LiveServerAction } from '../../src/types/action'
+import {
+    ActionFactory,
+    ActionType,
+    LiveServerAction,
+} from '../../src/types/action'
 import {
     isPulling,
     isPullingNext,
@@ -127,13 +131,15 @@ describe('normalizeActions', () => {
 
     it('team one pull -> block -> pickup', () => {
         const result = normalizeActions(
-            [action1, action1, action3, action2],
+            [action1, action1, action3, action2].map(a =>
+                ActionFactory.createFromAction(a),
+            ),
             [],
         )
         expect(result.length).toBe(3)
-        expect(result[0]).toMatchObject(action3)
-        expect(result[1]).toMatchObject(action2)
-        expect(result[2]).toMatchObject(action1)
+        expect(result[0].action).toMatchObject(action3)
+        expect(result[1].action).toMatchObject(action2)
+        expect(result[2].action).toMatchObject(action1)
     })
 
     it('team two pull -> block -> pickup', () => {
@@ -142,12 +148,14 @@ describe('normalizeActions', () => {
         action3.teamNumber = 'two'
         const result = normalizeActions(
             [],
-            [action1, action1, action3, action2],
+            [action1, action1, action3, action2].map(a =>
+                ActionFactory.createFromAction(a),
+            ),
         )
         expect(result.length).toBe(3)
-        expect(result[0]).toMatchObject(action3)
-        expect(result[1]).toMatchObject(action2)
-        expect(result[2]).toMatchObject(action1)
+        expect(result[0].action).toMatchObject(action3)
+        expect(result[1].action).toMatchObject(action2)
+        expect(result[2].action).toMatchObject(action1)
     })
 
     it('team one pickup -> catch -> catch', () => {
@@ -155,10 +163,15 @@ describe('normalizeActions', () => {
         action2.actionType = ActionType.CATCH
         action3.actionType = ActionType.CATCH
 
-        const result = normalizeActions([action3, action2, action1], [])
-        expect(result[0]).toMatchObject(action3)
-        expect(result[1]).toMatchObject(action2)
-        expect(result[2]).toMatchObject(action1)
+        const result = normalizeActions(
+            [action3, action2, action1].map(a =>
+                ActionFactory.createFromAction(a),
+            ),
+            [],
+        )
+        expect(result[0].action).toMatchObject(action3)
+        expect(result[1].action).toMatchObject(action2)
+        expect(result[2].action).toMatchObject(action1)
     })
 
     it('team two pickup -> catch -> catch', () => {
@@ -169,10 +182,15 @@ describe('normalizeActions', () => {
         action3.actionType = ActionType.CATCH
         action3.teamNumber = 'two'
 
-        const result = normalizeActions([], [action3, action2, action1])
-        expect(result[0]).toMatchObject(action3)
-        expect(result[1]).toMatchObject(action2)
-        expect(result[2]).toMatchObject(action1)
+        const result = normalizeActions(
+            [],
+            [action3, action2, action1].map(a =>
+                ActionFactory.createFromAction(a),
+            ),
+        )
+        expect(result[0].action).toMatchObject(action3)
+        expect(result[1].action).toMatchObject(action2)
+        expect(result[2].action).toMatchObject(action1)
     })
 
     it('team one drop -> pickup -> catch', () => {
@@ -180,10 +198,15 @@ describe('normalizeActions', () => {
         action2.actionType = ActionType.PICKUP
         action3.actionType = ActionType.CATCH
 
-        const result = normalizeActions([action3, action2, action1], [])
-        expect(result[0]).toMatchObject(action3)
-        expect(result[1]).toMatchObject(action2)
-        expect(result[2]).toMatchObject(action1)
+        const result = normalizeActions(
+            [action3, action2, action1].map(a =>
+                ActionFactory.createFromAction(a),
+            ),
+            [],
+        )
+        expect(result[0].action).toMatchObject(action3)
+        expect(result[1].action).toMatchObject(action2)
+        expect(result[2].action).toMatchObject(action1)
     })
 
     it('team two drop -> pickup -> catch', () => {
@@ -194,10 +217,15 @@ describe('normalizeActions', () => {
         action3.actionType = ActionType.CATCH
         action3.teamNumber = 'two'
 
-        const result = normalizeActions([action3, action2, action1], [])
-        expect(result[0]).toMatchObject(action3)
-        expect(result[1]).toMatchObject(action2)
-        expect(result[2]).toMatchObject(action1)
+        const result = normalizeActions(
+            [action3, action2, action1].map(a =>
+                ActionFactory.createFromAction(a),
+            ),
+            [],
+        )
+        expect(result[0].action).toMatchObject(action3)
+        expect(result[1].action).toMatchObject(action2)
+        expect(result[2].action).toMatchObject(action1)
     })
 
     it('team one pull, team two catch -> catch -> throwaway, team one pickup -> catch', () => {
@@ -244,13 +272,16 @@ describe('normalizeActions', () => {
             comments: [],
         }
 
-        const result = normalizeActions([a11, a12, a13, a13], [a21, a22, a23])
-        expect(result[5]).toMatchObject(a11)
-        expect(result[4]).toMatchObject(a21)
-        expect(result[3]).toMatchObject(a22)
-        expect(result[2]).toMatchObject(a23)
-        expect(result[1]).toMatchObject(a12)
-        expect(result[0]).toMatchObject(a13)
+        const result = normalizeActions(
+            [a11, a12, a13, a13].map(a => ActionFactory.createFromAction(a)),
+            [a21, a22, a23].map(a => ActionFactory.createFromAction(a)),
+        )
+        expect(result[5].action).toMatchObject(a11)
+        expect(result[4].action).toMatchObject(a21)
+        expect(result[3].action).toMatchObject(a22)
+        expect(result[2].action).toMatchObject(a23)
+        expect(result[1].action).toMatchObject(a12)
+        expect(result[0].action).toMatchObject(a13)
     })
 
     it('team two pull, team one catch -> catch -> drop, team two pickup -> catch', () => {
@@ -298,15 +329,15 @@ describe('normalizeActions', () => {
         }
 
         const result = normalizeActions(
-            [a13, a12, a13, a11],
-            [a21, a22, a23, a22],
+            [a13, a12, a13, a11].map(a => ActionFactory.createFromAction(a)),
+            [a21, a22, a23, a22].map(a => ActionFactory.createFromAction(a)),
         )
-        expect(result[5]).toMatchObject(a21)
-        expect(result[4]).toMatchObject(a11)
-        expect(result[3]).toMatchObject(a12)
-        expect(result[2]).toMatchObject(a13)
-        expect(result[1]).toMatchObject(a22)
-        expect(result[0]).toMatchObject(a23)
+        expect(result[5].action).toMatchObject(a21)
+        expect(result[4].action).toMatchObject(a11)
+        expect(result[3].action).toMatchObject(a12)
+        expect(result[2].action).toMatchObject(a13)
+        expect(result[1].action).toMatchObject(a22)
+        expect(result[0].action).toMatchObject(a23)
     })
 
     it('team one drop, team two pickup -> catch -> drop, team one pickup -> catch -> catch', () => {
@@ -359,14 +390,17 @@ describe('normalizeActions', () => {
             tags: [],
             comments: [],
         }
-        const result = normalizeActions([a13, a14, a12, a11], [a23, a22, a21])
-        expect(result[6]).toMatchObject(a11)
-        expect(result[5]).toMatchObject(a21)
-        expect(result[4]).toMatchObject(a22)
-        expect(result[3]).toMatchObject(a23)
-        expect(result[2]).toMatchObject(a12)
-        expect(result[1]).toMatchObject(a13)
-        expect(result[0]).toMatchObject(a14)
+        const result = normalizeActions(
+            [a13, a14, a12, a11].map(a => ActionFactory.createFromAction(a)),
+            [a23, a22, a21].map(a => ActionFactory.createFromAction(a)),
+        )
+        expect(result[6].action).toMatchObject(a11)
+        expect(result[5].action).toMatchObject(a21)
+        expect(result[4].action).toMatchObject(a22)
+        expect(result[3].action).toMatchObject(a23)
+        expect(result[2].action).toMatchObject(a12)
+        expect(result[1].action).toMatchObject(a13)
+        expect(result[0].action).toMatchObject(a14)
     })
 
     it('team two drop, team one pickup -> catch -> drop, team two pickup -> catch -> catch', () => {
@@ -419,14 +453,17 @@ describe('normalizeActions', () => {
             tags: [],
             comments: [],
         }
-        const result = normalizeActions([a13, a12, a11], [a24, a23, a22, a21])
-        expect(result[6]).toMatchObject(a21)
-        expect(result[5]).toMatchObject(a11)
-        expect(result[4]).toMatchObject(a12)
-        expect(result[3]).toMatchObject(a13)
-        expect(result[2]).toMatchObject(a22)
-        expect(result[1]).toMatchObject(a23)
-        expect(result[0]).toMatchObject(a24)
+        const result = normalizeActions(
+            [a13, a12, a11].map(a => ActionFactory.createFromAction(a)),
+            [a24, a23, a22, a21].map(a => ActionFactory.createFromAction(a)),
+        )
+        expect(result[6].action).toMatchObject(a21)
+        expect(result[5].action).toMatchObject(a11)
+        expect(result[4].action).toMatchObject(a12)
+        expect(result[3].action).toMatchObject(a13)
+        expect(result[2].action).toMatchObject(a22)
+        expect(result[1].action).toMatchObject(a23)
+        expect(result[0].action).toMatchObject(a24)
     })
 
     it('team one pull, team two drop, team one pickup -> score', () => {
@@ -459,11 +496,14 @@ describe('normalizeActions', () => {
             comments: [],
         }
 
-        const result = normalizeActions([a11, a12, a13, a11], [a21])
-        expect(result[3]).toMatchObject(a11)
-        expect(result[2]).toMatchObject(a21)
-        expect(result[1]).toMatchObject(a12)
-        expect(result[0]).toMatchObject(a13)
+        const result = normalizeActions(
+            [a11, a12, a13, a11].map(a => ActionFactory.createFromAction(a)),
+            [a21].map(a => ActionFactory.createFromAction(a)),
+        )
+        expect(result[3].action).toMatchObject(a11)
+        expect(result[2].action).toMatchObject(a21)
+        expect(result[1].action).toMatchObject(a12)
+        expect(result[0].action).toMatchObject(a13)
     })
 
     it('team two pull, team one drop, team two pickup -> score', () => {
@@ -496,10 +536,13 @@ describe('normalizeActions', () => {
             comments: [],
         }
 
-        const result = normalizeActions([a11], [a21, a22, a23])
-        expect(result[3]).toMatchObject(a21)
-        expect(result[2]).toMatchObject(a11)
-        expect(result[1]).toMatchObject(a22)
-        expect(result[0]).toMatchObject(a23)
+        const result = normalizeActions(
+            [a11].map(a => ActionFactory.createFromAction(a)),
+            [a21, a22, a23].map(a => ActionFactory.createFromAction(a)),
+        )
+        expect(result[3].action).toMatchObject(a21)
+        expect(result[2].action).toMatchObject(a11)
+        expect(result[1].action).toMatchObject(a22)
+        expect(result[0].action).toMatchObject(a23)
     })
 })

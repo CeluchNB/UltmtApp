@@ -10,7 +10,11 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
 import { isPulling } from '../../utils/point'
-import { ActionType, TeamActionListData } from '../../types/action'
+import {
+    ActionFactory,
+    ActionType,
+    TeamActionListData,
+} from '../../types/action'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { useGameEditor, useTheme } from '../../hooks'
 
@@ -165,7 +169,10 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                             <View>
                                 <Text style={styles.header}>Last Action</Text>
                                 <ActionDisplayItem
-                                    action={actions[actions.length - 1]}
+                                    // TODO: Change this
+                                    action={ActionFactory.createFromAction(
+                                        actions[actions.length - 1],
+                                    )}
                                     teamOne={game.teamOne}
                                     teamTwo={game.teamTwo}
                                 />

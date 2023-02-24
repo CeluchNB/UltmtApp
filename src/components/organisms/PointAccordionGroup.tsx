@@ -4,12 +4,12 @@ import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import PointAccordion from '../molecules/PointAccordion'
 import React from 'react'
-import { ServerAction } from '../../types/action'
+import { Action, ServerAction } from '../../types/action'
 
 export interface PointAccordionGroupProps {
     activePointId?: string
     points: Point[]
-    displayedActions: ServerAction[]
+    displayedActions: Action[]
     teamOne: GuestTeam
     teamTwo: GuestTeam
     loading: boolean

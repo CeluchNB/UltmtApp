@@ -89,7 +89,7 @@ exports[`ActionDisplayItem match snapshot with live action 1`] = `
               }
             }
           >
-             catch from 
+            Noah Celuch catches the disc from Connor Tipping
           </Text>
         </View>
         <View>
@@ -674,7 +674,7 @@ exports[`ActionDisplayItem should match snapshot with server action 1`] = `
               }
             }
           >
-             catch from 
+            Noah Celuch catches the disc from Connor Tipping
           </Text>
         </View>
         <View>
