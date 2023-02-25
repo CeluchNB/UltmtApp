@@ -1,16 +1,81 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match snapshot 1`] = `
+exports[`PlayerActionView should match snapshot 1`] = `
 <View>
   <RCTScrollView
     data={
       [
         {
-          "actions": [
-            "Catch",
-            "Drop",
-            "score",
-          ],
+          "actions": PlayerActionList {
+            "actionList": [
+              CatchAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Catch",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user1",
+                    "firstName": "First 1",
+                    "lastName": "Last 1",
+                    "username": "firstlast1",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Catch",
+                "viewerDisplay": "First 1 Last 1 catches the disc from First 3 Last 3",
+              },
+              DropAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Drop",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user1",
+                    "firstName": "First 1",
+                    "lastName": "Last 1",
+                    "username": "firstlast1",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Drop",
+                "viewerDisplay": "First 1 Last 1 drops the pass from First 3 Last 3",
+              },
+              ScoreAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "TeamOneScore",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user1",
+                    "firstName": "First 1",
+                    "lastName": "Last 1",
+                    "username": "firstlast1",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "score",
+                "viewerDisplay": "First 1 Last 1 scores from First 3 Last 3",
+              },
+            ],
+          },
           "player": {
             "_id": "user1",
             "firstName": "First 1",
@@ -19,11 +84,76 @@ exports[`should match snapshot 1`] = `
           },
         },
         {
-          "actions": [
-            "Catch",
-            "Drop",
-            "score",
-          ],
+          "actions": PlayerActionList {
+            "actionList": [
+              CatchAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Catch",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user2",
+                    "firstName": "First 2",
+                    "lastName": "Last 2",
+                    "username": "firstlast2",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Catch",
+                "viewerDisplay": "First 2 Last 2 catches the disc from First 3 Last 3",
+              },
+              DropAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Drop",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user2",
+                    "firstName": "First 2",
+                    "lastName": "Last 2",
+                    "username": "firstlast2",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Drop",
+                "viewerDisplay": "First 2 Last 2 drops the pass from First 3 Last 3",
+              },
+              ScoreAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "TeamOneScore",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user2",
+                    "firstName": "First 2",
+                    "lastName": "Last 2",
+                    "username": "firstlast2",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "score",
+                "viewerDisplay": "First 2 Last 2 scores from First 3 Last 3",
+              },
+            ],
+          },
           "player": {
             "_id": "user2",
             "firstName": "First 2",
@@ -32,9 +162,26 @@ exports[`should match snapshot 1`] = `
           },
         },
         {
-          "actions": [
-            "Throwaway",
-          ],
+          "actions": PlayerActionList {
+            "actionList": [
+              ThrowawayAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Throwaway",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Throwaway",
+                "viewerDisplay": "First 3 Last 3 throws the disc away",
+              },
+            ],
+          },
           "player": {
             "_id": "user3",
             "firstName": "First 3",
@@ -43,11 +190,76 @@ exports[`should match snapshot 1`] = `
           },
         },
         {
-          "actions": [
-            "Catch",
-            "Drop",
-            "score",
-          ],
+          "actions": PlayerActionList {
+            "actionList": [
+              CatchAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Catch",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user4",
+                    "firstName": "First 4",
+                    "lastName": "Last 4",
+                    "username": "firstlast4",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Catch",
+                "viewerDisplay": "First 4 Last 4 catches the disc from First 3 Last 3",
+              },
+              DropAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Drop",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user4",
+                    "firstName": "First 4",
+                    "lastName": "Last 4",
+                    "username": "firstlast4",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Drop",
+                "viewerDisplay": "First 4 Last 4 drops the pass from First 3 Last 3",
+              },
+              ScoreAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "TeamOneScore",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user4",
+                    "firstName": "First 4",
+                    "lastName": "Last 4",
+                    "username": "firstlast4",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "score",
+                "viewerDisplay": "First 4 Last 4 scores from First 3 Last 3",
+              },
+            ],
+          },
           "player": {
             "_id": "user4",
             "firstName": "First 4",
@@ -56,11 +268,76 @@ exports[`should match snapshot 1`] = `
           },
         },
         {
-          "actions": [
-            "Catch",
-            "Drop",
-            "score",
-          ],
+          "actions": PlayerActionList {
+            "actionList": [
+              CatchAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Catch",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user5",
+                    "firstName": "First 5",
+                    "lastName": "Last 5",
+                    "username": "firstlast5",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Catch",
+                "viewerDisplay": "First 5 Last 5 catches the disc from First 3 Last 3",
+              },
+              DropAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Drop",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user5",
+                    "firstName": "First 5",
+                    "lastName": "Last 5",
+                    "username": "firstlast5",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Drop",
+                "viewerDisplay": "First 5 Last 5 drops the pass from First 3 Last 3",
+              },
+              ScoreAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "TeamOneScore",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user5",
+                    "firstName": "First 5",
+                    "lastName": "Last 5",
+                    "username": "firstlast5",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "score",
+                "viewerDisplay": "First 5 Last 5 scores from First 3 Last 3",
+              },
+            ],
+          },
           "player": {
             "_id": "user5",
             "firstName": "First 5",
@@ -69,11 +346,76 @@ exports[`should match snapshot 1`] = `
           },
         },
         {
-          "actions": [
-            "Catch",
-            "Drop",
-            "score",
-          ],
+          "actions": PlayerActionList {
+            "actionList": [
+              CatchAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Catch",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user6",
+                    "firstName": "First 6",
+                    "lastName": "Last 6",
+                    "username": "firstlast6",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Catch",
+                "viewerDisplay": "First 6 Last 6 catches the disc from First 3 Last 3",
+              },
+              DropAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Drop",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user6",
+                    "firstName": "First 6",
+                    "lastName": "Last 6",
+                    "username": "firstlast6",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Drop",
+                "viewerDisplay": "First 6 Last 6 drops the pass from First 3 Last 3",
+              },
+              ScoreAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "TeamOneScore",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user6",
+                    "firstName": "First 6",
+                    "lastName": "Last 6",
+                    "username": "firstlast6",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "score",
+                "viewerDisplay": "First 6 Last 6 scores from First 3 Last 3",
+              },
+            ],
+          },
           "player": {
             "_id": "user6",
             "firstName": "First 6",
@@ -82,11 +424,76 @@ exports[`should match snapshot 1`] = `
           },
         },
         {
-          "actions": [
-            "Catch",
-            "Drop",
-            "score",
-          ],
+          "actions": PlayerActionList {
+            "actionList": [
+              CatchAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Catch",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user7",
+                    "firstName": "First 7",
+                    "lastName": "Last 7",
+                    "username": "firstlast7",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Catch",
+                "viewerDisplay": "First 7 Last 7 catches the disc from First 3 Last 3",
+              },
+              DropAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "Drop",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user7",
+                    "firstName": "First 7",
+                    "lastName": "Last 7",
+                    "username": "firstlast7",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "Drop",
+                "viewerDisplay": "First 7 Last 7 drops the pass from First 3 Last 3",
+              },
+              ScoreAction {
+                "action": {
+                  "actionNumber": Infinity,
+                  "actionType": "TeamOneScore",
+                  "comments": [],
+                  "playerOne": {
+                    "_id": "user7",
+                    "firstName": "First 7",
+                    "lastName": "Last 7",
+                    "username": "firstlast7",
+                  },
+                  "playerTwo": {
+                    "_id": "user3",
+                    "firstName": "First 3",
+                    "lastName": "Last 3",
+                    "username": "firstlast3",
+                  },
+                  "tags": [],
+                },
+                "reporterDisplay": "score",
+                "viewerDisplay": "First 7 Last 7 scores from First 3 Last 3",
+              },
+            ],
+          },
           "player": {
             "_id": "user7",
             "firstName": "First 7",

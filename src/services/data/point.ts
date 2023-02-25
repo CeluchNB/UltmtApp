@@ -2,12 +2,15 @@ import * as Constants from '../../utils/constants'
 import { DisplayUser } from '../../types/user'
 import { Game } from '../../types/game'
 import Point from '../../types/point'
+import { TeamNumber } from '../../types/team'
 import { throwApiError } from '../../utils/service-utils'
 import { withGameToken } from './game'
 import {
+    Action,
+    ActionFactory,
     ActionType,
-    LiveServerAction,
-    SavedServerAction,
+    SavedServerActionData,
+    ServerActionData,
 } from '../../types/action'
 import {
     activeGameId as localActiveGameId,
@@ -176,10 +179,10 @@ const finishOfflinePoint = async (pointId: string) => {
  * @returns List of server actions
  */
 export const getActionsByPoint = async (
-    team: 'one' | 'two',
+    team: TeamNumber,
     pointId: string,
     actionIds: string[],
-): Promise<SavedServerAction[]> => {
+): Promise<Action[]> => {
     try {
         const localActions = await localGetActions(pointId, actionIds)
         if (localActions.length === 0) {
@@ -187,15 +190,21 @@ export const getActionsByPoint = async (
             const { actions: networkActions } = response.data
 
             const ids = networkActions.map(
-                (action: SavedServerAction) => action._id,
+                (action: SavedServerActionData) => action._id,
             )
 
             await localSaveActions(pointId, networkActions)
 
-            const actions = await localGetActions(pointId, ids)
+            const savedActions = await localGetActions(pointId, ids)
+            const actions = savedActions.map(action => {
+                return ActionFactory.createFromAction(action)
+            })
             return actions
         }
-        return localActions
+        const actions = localActions.map(action => {
+            return ActionFactory.createFromAction(action)
+        })
+        return actions
     } catch (e) {
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }
@@ -223,11 +232,14 @@ export const deleteLocalActionsByPoint = async (pointId: string) => {
 export const getLiveActionsByPoint = async (
     gameId: string,
     pointId: string,
-): Promise<LiveServerAction[]> => {
+): Promise<Action[]> => {
     try {
         const response = await networkGetLiveActionsByPoint(gameId, pointId)
         const { actions } = response.data
-        return actions
+
+        return actions.map((action: ServerActionData) =>
+            ActionFactory.createFromAction(action),
+        )
     } catch (e) {
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }
@@ -272,7 +284,7 @@ export const getActivePointForGame = async (
 export const reactivatePoint = async (
     previousId: string,
     pointNumber: number,
-    team: 'one' | 'two',
+    team: TeamNumber,
 ): Promise<Point> => {
     try {
         const gameId = await localActiveGameId()
@@ -327,7 +339,7 @@ export const reactivatePoint = async (
             const { actions: networkActions } = actionsResponse.data
             await localDeleteEditableActionsByPoint(team, point._id)
             await localSaveMultipleActions(
-                networkActions.map((action: SavedServerAction) => {
+                networkActions.map((action: SavedServerActionData) => {
                     return { ...action, teamNumber: team }
                 }),
                 point._id,

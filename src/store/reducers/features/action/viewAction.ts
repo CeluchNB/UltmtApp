@@ -1,11 +1,14 @@
 import { GuestTeam } from '../../../../types/team'
 import { RootState } from '../../../store'
 import { createSlice } from '@reduxjs/toolkit'
-import { LiveServerAction, SavedServerAction } from '../../../../types/action'
+import {
+    LiveServerActionData,
+    SavedServerActionData,
+} from '../../../../types/action'
 
 export interface ViewActionSlice {
-    liveAction?: LiveServerAction
-    savedAction?: SavedServerAction
+    liveAction?: LiveServerActionData
+    savedAction?: SavedServerActionData
     teamOne?: GuestTeam
     teamTwo?: GuestTeam
 }

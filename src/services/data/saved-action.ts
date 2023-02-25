@@ -1,5 +1,5 @@
 import * as Constants from '../../utils/constants'
-import { SavedServerAction } from '../../types/action'
+import { SavedServerActionData } from '../../types/action'
 import { saveActions as localSaveActions } from '../local/action'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
@@ -19,7 +19,7 @@ export const addComment = async (
     actionId: string,
     pointId: string,
     comment: string,
-): Promise<SavedServerAction> => {
+): Promise<SavedServerActionData> => {
     try {
         const response = await withToken(networkAddComment, actionId, comment)
         const { action } = response.data
@@ -41,7 +41,7 @@ export const deleteComment = async (
     actionId: string,
     commentNumber: string,
     pointId: string,
-): Promise<SavedServerAction> => {
+): Promise<SavedServerActionData> => {
     try {
         const response = await withToken(
             networkDeleteComment,

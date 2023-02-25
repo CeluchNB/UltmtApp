@@ -358,7 +358,7 @@ export const reactivateInactiveGame = async (
             // save actions locally
             await localSaveMultipleServerActions(
                 actions.map(action => {
-                    return { ...action, teamNumber: team }
+                    return { ...action.action, teamNumber: team }
                 }),
                 point._id,
             )

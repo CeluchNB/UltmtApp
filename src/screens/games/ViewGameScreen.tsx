@@ -4,7 +4,7 @@ import GameHeader from '../../components/molecules/GameHeader'
 import GameUtilityBar from '../../components/molecules/GameUtilityBar'
 import PointAccordionGroup from '../../components/organisms/PointAccordionGroup'
 import React from 'react'
-import { ServerAction } from '../../types/action'
+import { ServerActionData } from '../../types/action'
 import { ViewGameProps } from '../../types/navigation'
 import { deleteGame } from '../../services/data/game'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
@@ -46,7 +46,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         }
     }, [activePoint, navigation, onSelectPoint])
 
-    const handleSelectAction = (action: ServerAction) => {
+    const handleSelectAction = (action: ServerActionData) => {
         const { pointId, live } = onSelectAction(action)
         navigation.navigate('Comment', {
             gameId,

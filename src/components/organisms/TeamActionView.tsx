@@ -3,19 +3,13 @@ import { DisplayUser } from '../../types/user'
 import PlayerActionTagModal from '../molecules/PlayerActionTagModal'
 import React from 'react'
 import SubstitutionModal from '../molecules/SubstitutionModal'
-import { mapActionToDisplayName } from '../../utils/action'
 import { useTheme } from '../../hooks'
-import { ActionType, ClientActionType } from '../../types/action'
+import { Action, ActionType } from '../../types/action'
 import { FlatList, StyleSheet, View } from 'react-native'
 
 interface TeamActionViewProps {
-    actions: ClientActionType[]
-    onAction: (
-        action: ClientActionType,
-        tags: string[],
-        playerOne?: DisplayUser,
-        playerTwo?: DisplayUser,
-    ) => void
+    actions: Action[]
+    onAction: (action: Action) => Promise<void>
 }
 
 const TeamActionView: React.FC<TeamActionViewProps> = ({
@@ -28,24 +22,25 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
     const [subModalVisible, setSubModalVisible] = React.useState(false)
     const [tagModalVisible, setTagModalVisible] = React.useState(false)
     const [selectedAction, setSelectedAction] = React.useState<
-        ClientActionType | undefined
+        Action | undefined
     >(undefined)
 
-    const handleAction = (action: ClientActionType) => {
-        if (action === ActionType.SUBSTITUTION) {
+    const handleAction = (action: Action) => {
+        if (action.action.actionType === ActionType.SUBSTITUTION) {
+            setSelectedAction(action)
             setSubModalVisible(true)
         } else {
-            onAction(action, [])
+            onAction(action)
         }
     }
 
-    const handleLongPress = (action: ClientActionType) => {
-        if (action === ActionType.SUBSTITUTION) {
+    const handleLongPress = (action: Action) => {
+        if (action.action.actionType === ActionType.SUBSTITUTION) {
             setSubModalVisible(true)
         } else {
-            setSelectedAction(action)
             setTagModalVisible(true)
         }
+        setSelectedAction(action)
     }
 
     const onSubModalClose = () => {
@@ -57,12 +52,19 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
         playerTwo: DisplayUser,
     ) => {
         onSubModalClose()
-        onAction(ActionType.SUBSTITUTION, [], playerOne, playerTwo)
+        if (selectedAction) {
+            selectedAction.setPlayersAndUpdateViewerDisplay(
+                playerOne,
+                playerTwo,
+            )
+            onAction(selectedAction)
+        }
     }
 
     const onTagModalClose = (submit: boolean, tags: string[]) => {
         if (submit && selectedAction) {
-            onAction(selectedAction, tags)
+            selectedAction.setTags(tags)
+            onAction(selectedAction)
         }
         setTagModalVisible(false)
         setSelectedAction(undefined)
@@ -95,11 +97,12 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
                 listKey="team-action-list"
                 data={actions}
                 numColumns={2}
-                renderItem={({ item }) => {
+                renderItem={({ item: action }) => {
                     return (
-                        <View key={item} style={styles.buttonContainer}>
+                        <View
+                            key={action.action.actionType}
+                            style={styles.buttonContainer}>
                             <Button
-                                key={item}
                                 compact={true}
                                 style={styles.button}
                                 labelStyle={styles.buttonText}
@@ -108,12 +111,12 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
                                 collapsable={true}
                                 mode="outlined"
                                 onPress={() => {
-                                    handleAction(item)
+                                    handleAction(action)
                                 }}
                                 onLongPress={() => {
-                                    handleLongPress(item)
+                                    handleLongPress(action)
                                 }}>
-                                {mapActionToDisplayName(item)}
+                                {action.reporterDisplay}
                             </Button>
                         </View>
                     )

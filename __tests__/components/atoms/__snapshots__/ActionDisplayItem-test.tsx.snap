@@ -72,37 +72,11 @@ exports[`ActionDisplayItem match snapshot with live action 1`] = `
               {
                 "color": "#ffd600",
                 "fontSize": 30.821917808219176,
-                "fontWeight": "bold",
-              }
-            }
-          >
-            Noah Celuch
-          </Text>
-        </View>
-        <View>
-          <Text
-            style={
-              {
-                "color": "#ffd600",
-                "fontSize": 30.821917808219176,
                 "fontWeight": "900",
               }
             }
           >
-             catch from 
-          </Text>
-        </View>
-        <View>
-          <Text
-            style={
-              {
-                "color": "#ffd600",
-                "fontSize": 30.821917808219176,
-                "fontWeight": "bold",
-              }
-            }
-          >
-            Connor Tipping
+            Noah Celuch catches the disc from Connor Tipping
           </Text>
         </View>
       </View>
@@ -657,37 +631,11 @@ exports[`ActionDisplayItem should match snapshot with server action 1`] = `
               {
                 "color": "#ffd600",
                 "fontSize": 30.821917808219176,
-                "fontWeight": "bold",
-              }
-            }
-          >
-            Noah Celuch
-          </Text>
-        </View>
-        <View>
-          <Text
-            style={
-              {
-                "color": "#ffd600",
-                "fontSize": 30.821917808219176,
                 "fontWeight": "900",
               }
             }
           >
-             catch from 
-          </Text>
-        </View>
-        <View>
-          <Text
-            style={
-              {
-                "color": "#ffd600",
-                "fontSize": 30.821917808219176,
-                "fontWeight": "bold",
-              }
-            }
-          >
-            Connor Tipping
+            Noah Celuch catches the disc from Connor Tipping
           </Text>
         </View>
       </View>

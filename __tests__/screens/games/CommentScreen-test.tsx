@@ -9,7 +9,7 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import store from '../../../src/store/store'
 import {
-    SavedServerAction,
+    SavedServerActionData,
     SubscriptionObject,
 } from '../../../src/types/action'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
@@ -20,7 +20,7 @@ import {
 } from '../../../src/store/reducers/features/action/viewAction'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
-const updatedSavedAction: SavedServerAction = {
+const updatedSavedAction: SavedServerActionData = {
     ...savedAction,
     comments: [
         {

@@ -2,7 +2,7 @@ import Point from '../../../src/types/point'
 import PointAccordion from '../../../src/components/molecules/PointAccordion'
 import React from 'react'
 import { render } from '@testing-library/react-native'
-import { ActionType, LiveServerAction } from '../../../src/types/action'
+import { Action, ActionFactory, ActionType } from '../../../src/types/action'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const point: Point = {
@@ -20,7 +20,7 @@ const point: Point = {
     teamTwoActions: [],
 }
 
-const actions: LiveServerAction[] = [
+const actions: Action[] = [
     {
         comments: [],
         tags: ['huck'],
@@ -59,7 +59,7 @@ const actions: LiveServerAction[] = [
             username: 'firstlast2',
         },
     },
-]
+].map(a => ActionFactory.createFromAction(a))
 
 const onActionPress = jest.fn()
 

@@ -100,7 +100,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
                     }
                   }
                 >
-                   pulls
+                   pulls the disc
                 </Text>
               </View>
             </View>
@@ -961,7 +961,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
                     }
                   }
                 >
-                   pulls
+                   pulls the disc
                 </Text>
               </View>
             </View>

@@ -6,9 +6,10 @@ import * as PointServices from '../../../src/services/network/point'
 import Point from '../../../src/types/point'
 import { game } from '../../../fixtures/data'
 import {
+    ActionFactory,
     ActionType,
-    LiveServerAction,
-    SavedServerAction,
+    LiveServerActionData,
+    SavedServerActionData,
 } from '../../../src/types/action'
 import {
     createPoint,
@@ -36,7 +37,7 @@ const point: Point = {
     receivingTeam: { name: 'Team 2' },
 }
 
-const action: SavedServerAction = {
+const action: SavedServerActionData = {
     _id: 'action1',
     actionNumber: 1,
     comments: [],
@@ -52,7 +53,7 @@ const action: SavedServerAction = {
     tags: [],
 }
 
-const liveAction: LiveServerAction = {
+const liveAction: LiveServerActionData = {
     actionNumber: 1,
     comments: [],
     teamNumber: 'one',
@@ -382,7 +383,7 @@ describe('test get actions by point', () => {
             Promise.resolve(),
         )
         const result = await getActionsByPoint('one', 'point1', [])
-        expect(result).toEqual([action])
+        expect(result).toEqual([ActionFactory.createFromAction(action)])
     })
 
     it('should handle network failure', async () => {
@@ -412,7 +413,7 @@ describe('test get actions by point', () => {
         )
 
         const result = await getActionsByPoint('one', 'point1', [action._id])
-        expect(result).toEqual([action])
+        expect(result).toEqual([ActionFactory.createFromAction(action)])
     })
 })
 
@@ -448,7 +449,7 @@ describe('test get live actions by point', () => {
             }),
         )
         const result = await getLiveActionsByPoint('one', 'point1')
-        expect(result).toEqual([liveAction])
+        expect(result).toEqual([ActionFactory.createFromAction(liveAction)])
     })
 
     it('should handle network failure', async () => {

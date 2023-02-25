@@ -7,9 +7,10 @@ import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { point } from '../../../fixtures/data'
 import {
+    Action,
+    ActionFactory,
     ActionType,
-    ClientAction,
-    LiveServerAction,
+    LiveServerActionData,
     SubscriptionObject,
 } from '../../../src/types/action'
 import {
@@ -40,7 +41,7 @@ describe('basic actions', () => {
             .mockReturnValue(Promise.resolve())
 
         const action = { actionType: ActionType.PULL, tags: [] }
-        await addAction(action, 'point1')
+        await addAction({ action } as unknown as Action, 'point1')
         expect(spy).toHaveBeenCalledWith(action, 'point1')
     })
 
@@ -188,7 +189,7 @@ describe('comment actions', () => {
 
 describe('save local action', () => {
     it('successful substitution on team one', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'one',
@@ -223,7 +224,7 @@ describe('save local action', () => {
         )
 
         const result = await saveLocalAction(action, 'point1')
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
         expect(savedPoint?.teamOnePlayers.length).toBe(1)
         expect(savedPoint?.teamOnePlayers[0]).toMatchObject(
             action.playerTwo || {},
@@ -231,7 +232,7 @@ describe('save local action', () => {
     })
 
     it('successful substitution on team two', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'two',
@@ -266,7 +267,7 @@ describe('save local action', () => {
         )
 
         const result = await saveLocalAction(action, 'point1')
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
         expect(savedPoint?.teamTwoPlayers.length).toBe(1)
         expect(savedPoint?.teamTwoPlayers[0]).toMatchObject(
             action.playerTwo || {},
@@ -274,7 +275,7 @@ describe('save local action', () => {
     })
 
     it('with non-substitution action', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.CATCH,
             teamNumber: 'two',
@@ -307,13 +308,13 @@ describe('save local action', () => {
             })
 
         const result = await saveLocalAction(action, 'point1')
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
         expect(mockGetPoint).not.toHaveBeenCalled()
         expect(mockSavePoint).not.toHaveBeenCalled()
     })
 
     it('with malformed substitution', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'two',
@@ -341,13 +342,13 @@ describe('save local action', () => {
             })
 
         const result = await saveLocalAction(action, 'point1')
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
         expect(mockGetPoint).not.toHaveBeenCalled()
         expect(mockSavePoint).not.toHaveBeenCalled()
     })
 
     it('handles local error', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'two',
@@ -377,7 +378,7 @@ describe('save local action', () => {
 
 describe('delete local action', () => {
     it('with local success', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'two',
@@ -418,7 +419,7 @@ describe('delete local action', () => {
 
 describe('create offline action', () => {
     it('successfully', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.CATCH,
             teamNumber: 'one',
@@ -447,15 +448,23 @@ describe('create offline action', () => {
 
         const result = await createOfflineAction(
             {
-                tags: [],
-                actionType: action.actionType,
-                playerOne: action.playerOne,
-                playerTwo: action.playerTwo,
+                action: {
+                    tags: [],
+                    actionType: action.actionType,
+                    playerOne: action.playerOne,
+                    playerTwo: action.playerTwo,
+                    comments: [],
+                    actionNumber: 1,
+                },
+                reporterDisplay: action.actionType,
+                viewerDisplay: action.actionType,
+                setPlayersAndUpdateViewerDisplay: jest.fn(),
+                setTags: jest.fn(),
             },
             'point1',
         )
 
-        expect(result).toMatchObject(action)
+        expect(result).toMatchObject(ActionFactory.createFromAction(action))
     })
 
     it('with failure', async () => {
@@ -464,14 +473,14 @@ describe('create offline action', () => {
         )
 
         await expect(
-            createOfflineAction({} as ClientAction, 'point1'),
+            createOfflineAction({} as Action, 'point1'),
         ).rejects.toMatchObject({ message: Constants.GET_ACTION_ERROR })
     })
 })
 
 describe('undo offline action', () => {
     it('with success', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.CATCH,
             teamNumber: 'one',

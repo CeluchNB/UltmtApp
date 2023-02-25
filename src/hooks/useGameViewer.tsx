@@ -4,9 +4,10 @@ import React from 'react'
 import { isLivePoint } from '../utils/point'
 import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
 import {
-    LiveServerAction,
-    SavedServerAction,
-    ServerAction,
+    Action,
+    ActionFactory,
+    LiveServerActionData,
+    ServerActionData,
     SubscriptionObject,
 } from '../types/action'
 import {
@@ -35,15 +36,11 @@ import { useDispatch, useSelector } from 'react-redux'
 export const useGameViewer = (gameId: string) => {
     const dispatch = useDispatch()
     const managerTeams = useSelector(selectManagerTeams)
-    const [liveActions, setLiveActions] = React.useState<LiveServerAction[]>([])
+    const [liveActions, setLiveActions] = React.useState<Action[]>([])
     const [game, setGame] = React.useState<Game>()
     const [points, setPoints] = React.useState<Point[]>([])
-    const [teamOneActions, setTeamOneActions] = React.useState<
-        SavedServerAction[]
-    >([])
-    const [teamTwoActions, setTeamTwoActions] = React.useState<
-        SavedServerAction[]
-    >([])
+    const [teamOneActions, setTeamOneActions] = React.useState<Action[]>([])
+    const [teamTwoActions, setTeamTwoActions] = React.useState<Action[]>([])
     const [activePoint, setActivePoint] = React.useState<Point | undefined>(
         undefined,
     )
@@ -123,15 +120,16 @@ export const useGameViewer = (gameId: string) => {
     }, [gameId])
 
     const subscriptions: SubscriptionObject = {
-        client: (data: LiveServerAction) => {
-            setLiveActions(curr => [data, ...curr])
+        client: (data: LiveServerActionData) => {
+            const action = ActionFactory.createFromAction(data)
+            setLiveActions(curr => [action, ...curr])
         },
         undo: ({ team, actionNumber }) => {
             setLiveActions(curr => {
                 return curr.filter(
                     a =>
-                        a.actionNumber !== actionNumber ||
-                        a.teamNumber !== team,
+                        a.action.actionNumber !== actionNumber ||
+                        (a.action as LiveServerActionData).teamNumber !== team,
                 )
             })
         },
@@ -188,7 +186,7 @@ export const useGameViewer = (gameId: string) => {
 
     // public
     const onSelectAction = (
-        action: ServerAction,
+        action: ServerActionData,
     ): { gameId: string; pointId: string; live: boolean } => {
         const live = isLivePoint(activePoint)
         if (live) {
