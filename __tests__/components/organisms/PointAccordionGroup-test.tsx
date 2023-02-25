@@ -8,7 +8,7 @@ import {
     Action,
     ActionFactory,
     ActionType,
-    LiveServerAction,
+    LiveServerActionData,
 } from '../../../src/types/action'
 import PointAccordionGroup, {
     PointAccordionGroupProps,
@@ -286,7 +286,7 @@ describe('PointAccordionGroup', () => {
                 actionType: ActionType.CATCH,
                 actionNumber: 4,
                 teamNumber: 'one',
-            } as LiveServerAction),
+            } as LiveServerActionData),
         )
 
         rerender(

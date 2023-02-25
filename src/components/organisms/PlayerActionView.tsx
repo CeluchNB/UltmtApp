@@ -4,8 +4,8 @@ import React from 'react'
 import { TeamNumber } from '../../types/team'
 import {
     Action,
-    ActionListData,
-    PlayerActionListData,
+    ActionList,
+    PlayerActionList,
 } from '../../types/action'
 import { FlatList, View } from 'react-native'
 
@@ -20,7 +20,7 @@ interface PlayerActionViewProps {
 
 type PlayerAction = {
     player: DisplayUser
-    actions: ActionListData
+    actions: ActionList
 }
 
 const PlayerActionView: React.FC<PlayerActionViewProps> = ({
@@ -32,9 +32,9 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     onAction,
 }) => {
     const playerActions: PlayerAction[] = React.useMemo(() => {
-        const actions: ActionListData[] = []
+        const actions: ActionList[] = []
         for (const player of players) {
-            let action = new PlayerActionListData(
+            let action = new PlayerActionList(
                 player,
                 actionStack,
                 team,

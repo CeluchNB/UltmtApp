@@ -1,6 +1,6 @@
 import { DisplayUser } from './user'
 import { GuestTeam } from './team'
-import { ClientAction, SavedServerAction } from './action'
+import { ClientActionData, SavedServerActionData } from './action'
 
 interface Point {
     _id: string
@@ -26,11 +26,11 @@ export interface ClientPoint {
     pullingTeam: GuestTeam
     receivingTeam: GuestTeam
     scoringTeam?: GuestTeam
-    actions: ClientAction[]
+    actions: ClientActionData[]
 }
 
 export interface PopulatedPoint extends Point {
-    actions: SavedServerAction[]
+    actions: SavedServerActionData[]
 }
 
 export default Point

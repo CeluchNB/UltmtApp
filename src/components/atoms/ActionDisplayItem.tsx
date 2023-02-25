@@ -3,9 +3,9 @@ import React from 'react'
 import { useTheme } from '../../hooks'
 import {
     Action,
-    LiveServerAction,
-    SavedServerAction,
-    ServerAction,
+    LiveServerActionData,
+    SavedServerActionData,
+    ServerActionData,
 } from '../../types/action'
 import { Chip, IconButton } from 'react-native-paper'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
@@ -14,7 +14,7 @@ interface ActionDisplayItemProps {
     action: Action
     teamOne: GuestTeam
     teamTwo: GuestTeam
-    onPress?: (action: ServerAction) => void
+    onPress?: (action: ServerActionData) => void
 }
 
 const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
@@ -31,11 +31,11 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
 
     const getTeamName = (): string => {
         if ((actionData as any).teamNumber) {
-            return (actionData as LiveServerAction).teamNumber === 'one'
+            return (actionData as LiveServerActionData).teamNumber === 'one'
                 ? teamOne.name
                 : teamTwo.name
         } else if ((actionData as any).team) {
-            return (actionData as SavedServerAction).team.name
+            return (actionData as SavedServerActionData).team.name
         }
         return teamOne.name
     }

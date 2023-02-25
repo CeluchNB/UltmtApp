@@ -13,7 +13,7 @@ import {
     Action,
     ActionFactory,
     ActionType,
-    LiveServerAction,
+    LiveServerActionData,
     SubscriptionObject,
 } from '../../../src/types/action'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
@@ -311,7 +311,7 @@ describe('ViewGameScreen', () => {
                     username: 'firstlast1',
                 },
                 teamNumber: 'one',
-            } as LiveServerAction)
+            } as LiveServerActionData)
         })
 
         await waitFor(async () => {

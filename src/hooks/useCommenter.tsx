@@ -5,9 +5,9 @@ import { isLoggedIn } from '../services/data/auth'
 import { useData } from './'
 import {
     ActionFactory,
-    LiveServerAction,
-    SavedServerAction,
-    ServerAction,
+    LiveServerActionData,
+    SavedServerActionData,
+    ServerActionData,
     SubscriptionObject,
 } from '../types/action'
 import { addComment, deleteComment } from '../services/data/saved-action'
@@ -41,7 +41,7 @@ export const useCommenter = (
 
     const action = React.useMemo(() => {
         return ActionFactory.createFromAction(
-            (live ? liveAction : savedAction) as ServerAction,
+            (live ? liveAction : savedAction) as ServerActionData,
         )
     }, [live, liveAction, savedAction])
 
@@ -49,7 +49,7 @@ export const useCommenter = (
     const { data: userId } = useData(getUserId)
 
     const subscriptions: SubscriptionObject = {
-        client: (data: LiveServerAction) => {
+        client: (data: LiveServerActionData) => {
             // could get any action of this point here,
             // only update action if we received an update for this action
             if (
@@ -84,7 +84,7 @@ export const useCommenter = (
         try {
             if (!live) {
                 const updatedAction = await addComment(
-                    (action.action as SavedServerAction)._id,
+                    (action.action as SavedServerActionData)._id,
                     pointId,
                     comment,
                 )
@@ -94,7 +94,7 @@ export const useCommenter = (
                     gameId,
                     pointId,
                     action.action.actionNumber,
-                    (action.action as LiveServerAction).teamNumber,
+                    (action.action as LiveServerActionData).teamNumber,
                     comment,
                 )
             }
@@ -111,7 +111,7 @@ export const useCommenter = (
         try {
             if (!live) {
                 const updatedAction = await deleteComment(
-                    (action.action as SavedServerAction)._id,
+                    (action.action as SavedServerActionData)._id,
                     commentNumber.toString(),
                     pointId,
                 )
@@ -121,7 +121,7 @@ export const useCommenter = (
                     gameId,
                     pointId,
                     action.action.actionNumber,
-                    (action.action as LiveServerAction).teamNumber,
+                    (action.action as LiveServerActionData).teamNumber,
                     commentNumber.toString(),
                 )
             }

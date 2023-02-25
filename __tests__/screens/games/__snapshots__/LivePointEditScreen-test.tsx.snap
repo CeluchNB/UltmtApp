@@ -629,7 +629,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                 data={
                   [
                     {
-                      "actions": PlayerActionListData {
+                      "actions": PlayerActionList {
                         "actionList": [
                           PullAction {
                             "action": {
@@ -657,7 +657,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": PlayerActionListData {
+                      "actions": PlayerActionList {
                         "actionList": [
                           PullAction {
                             "action": {
@@ -685,7 +685,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": PlayerActionListData {
+                      "actions": PlayerActionList {
                         "actionList": [
                           PullAction {
                             "action": {
@@ -713,7 +713,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": PlayerActionListData {
+                      "actions": PlayerActionList {
                         "actionList": [
                           PullAction {
                             "action": {
@@ -741,7 +741,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": PlayerActionListData {
+                      "actions": PlayerActionList {
                         "actionList": [
                           PullAction {
                             "action": {
@@ -769,7 +769,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": PlayerActionListData {
+                      "actions": PlayerActionList {
                         "actionList": [
                           PullAction {
                             "action": {
@@ -797,7 +797,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": PlayerActionListData {
+                      "actions": PlayerActionList {
                         "actionList": [
                           PullAction {
                             "action": {

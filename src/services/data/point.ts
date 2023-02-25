@@ -9,8 +9,8 @@ import {
     Action,
     ActionFactory,
     ActionType,
-    SavedServerAction,
-    ServerAction,
+    SavedServerActionData,
+    ServerActionData,
 } from '../../types/action'
 import {
     activeGameId as localActiveGameId,
@@ -190,7 +190,7 @@ export const getActionsByPoint = async (
             const { actions: networkActions } = response.data
 
             const ids = networkActions.map(
-                (action: SavedServerAction) => action._id,
+                (action: SavedServerActionData) => action._id,
             )
 
             await localSaveActions(pointId, networkActions)
@@ -237,7 +237,7 @@ export const getLiveActionsByPoint = async (
         const response = await networkGetLiveActionsByPoint(gameId, pointId)
         const { actions } = response.data
 
-        return actions.map((action: ServerAction) =>
+        return actions.map((action: ServerActionData) =>
             ActionFactory.createFromAction(action),
         )
     } catch (e) {
@@ -339,7 +339,7 @@ export const reactivatePoint = async (
             const { actions: networkActions } = actionsResponse.data
             await localDeleteEditableActionsByPoint(team, point._id)
             await localSaveMultipleActions(
-                networkActions.map((action: SavedServerAction) => {
+                networkActions.map((action: SavedServerActionData) => {
                     return { ...action, teamNumber: team }
                 }),
                 point._id,

@@ -6,8 +6,8 @@ import { selectManagerTeams } from '../store/reducers/features/account/accountRe
 import {
     Action,
     ActionFactory,
-    LiveServerAction,
-    ServerAction,
+    LiveServerActionData,
+    ServerActionData,
     SubscriptionObject,
 } from '../types/action'
 import {
@@ -120,7 +120,7 @@ export const useGameViewer = (gameId: string) => {
     }, [gameId])
 
     const subscriptions: SubscriptionObject = {
-        client: (data: LiveServerAction) => {
+        client: (data: LiveServerActionData) => {
             const action = ActionFactory.createFromAction(data)
             setLiveActions(curr => [action, ...curr])
         },
@@ -129,7 +129,7 @@ export const useGameViewer = (gameId: string) => {
                 return curr.filter(
                     a =>
                         a.action.actionNumber !== actionNumber ||
-                        (a.action as LiveServerAction).teamNumber !== team,
+                        (a.action as LiveServerActionData).teamNumber !== team,
                 )
             })
         },
@@ -186,7 +186,7 @@ export const useGameViewer = (gameId: string) => {
 
     // public
     const onSelectAction = (
-        action: ServerAction,
+        action: ServerActionData,
     ): { gameId: string; pointId: string; live: boolean } => {
         const live = isLivePoint(activePoint)
         if (live) {

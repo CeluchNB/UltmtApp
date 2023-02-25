@@ -7,7 +7,7 @@ import {
     Action,
     ActionFactory,
     ActionType,
-    LiveServerAction,
+    LiveServerActionData,
 } from '../../../src/types/action'
 import { fireEvent, render } from '@testing-library/react-native'
 
@@ -65,7 +65,7 @@ const actionStack: Action[] = [
         tags: [],
         teamNumber: 'one',
         comments: [],
-    } as LiveServerAction),
+    } as LiveServerActionData),
 ]
 
 describe('PlayerActionView', () => {

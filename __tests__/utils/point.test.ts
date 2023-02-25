@@ -1,7 +1,7 @@
 import {
     ActionFactory,
     ActionType,
-    LiveServerAction,
+    LiveServerActionData,
 } from '../../src/types/action'
 import {
     isPulling,
@@ -102,9 +102,9 @@ describe('isPullingNext', () => {
 })
 
 describe('normalizeActions', () => {
-    let action1: LiveServerAction
-    let action2: LiveServerAction
-    let action3: LiveServerAction
+    let action1: LiveServerActionData
+    let action2: LiveServerActionData
+    let action3: LiveServerActionData
     beforeEach(() => {
         action1 = {
             actionNumber: 1,
@@ -229,42 +229,42 @@ describe('normalizeActions', () => {
     })
 
     it('team one pull, team two catch -> catch -> throwaway, team one pickup -> catch', () => {
-        const a11: LiveServerAction = {
+        const a11: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.PULL,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a21: LiveServerAction = {
+        const a21: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.CATCH,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a22: LiveServerAction = {
+        const a22: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.CATCH,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a23: LiveServerAction = {
+        const a23: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.THROWAWAY,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a12: LiveServerAction = {
+        const a12: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.PICKUP,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a13: LiveServerAction = {
+        const a13: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.CATCH,
             teamNumber: 'one',
@@ -285,42 +285,42 @@ describe('normalizeActions', () => {
     })
 
     it('team two pull, team one catch -> catch -> drop, team two pickup -> catch', () => {
-        const a21: LiveServerAction = {
+        const a21: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.PULL,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a11: LiveServerAction = {
+        const a11: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.CATCH,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a12: LiveServerAction = {
+        const a12: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.CATCH,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a13: LiveServerAction = {
+        const a13: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.DROP,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a22: LiveServerAction = {
+        const a22: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.PICKUP,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a23: LiveServerAction = {
+        const a23: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.CATCH,
             teamNumber: 'two',
@@ -341,49 +341,49 @@ describe('normalizeActions', () => {
     })
 
     it('team one drop, team two pickup -> catch -> drop, team one pickup -> catch -> catch', () => {
-        const a11: LiveServerAction = {
+        const a11: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.DROP,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a21: LiveServerAction = {
+        const a21: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.PICKUP,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a22: LiveServerAction = {
+        const a22: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.CATCH,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a23: LiveServerAction = {
+        const a23: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.DROP,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a12: LiveServerAction = {
+        const a12: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.PICKUP,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a13: LiveServerAction = {
+        const a13: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.CATCH,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a14: LiveServerAction = {
+        const a14: LiveServerActionData = {
             actionNumber: 4,
             actionType: ActionType.CATCH,
             teamNumber: 'one',
@@ -404,49 +404,49 @@ describe('normalizeActions', () => {
     })
 
     it('team two drop, team one pickup -> catch -> drop, team two pickup -> catch -> catch', () => {
-        const a21: LiveServerAction = {
+        const a21: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.DROP,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a11: LiveServerAction = {
+        const a11: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.PICKUP,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a12: LiveServerAction = {
+        const a12: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.CATCH,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a13: LiveServerAction = {
+        const a13: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.DROP,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a22: LiveServerAction = {
+        const a22: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.PICKUP,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a23: LiveServerAction = {
+        const a23: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.CATCH,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a24: LiveServerAction = {
+        const a24: LiveServerActionData = {
             actionNumber: 4,
             actionType: ActionType.CATCH,
             teamNumber: 'two',
@@ -467,28 +467,28 @@ describe('normalizeActions', () => {
     })
 
     it('team one pull, team two drop, team one pickup -> score', () => {
-        const a11: LiveServerAction = {
+        const a11: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.PULL,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a21: LiveServerAction = {
+        const a21: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.DROP,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a12: LiveServerAction = {
+        const a12: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.PICKUP,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a13: LiveServerAction = {
+        const a13: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.TEAM_ONE_SCORE,
             teamNumber: 'one',
@@ -507,28 +507,28 @@ describe('normalizeActions', () => {
     })
 
     it('team two pull, team one drop, team two pickup -> score', () => {
-        const a21: LiveServerAction = {
+        const a21: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.PULL,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a11: LiveServerAction = {
+        const a11: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.DROP,
             teamNumber: 'one',
             tags: [],
             comments: [],
         }
-        const a22: LiveServerAction = {
+        const a22: LiveServerActionData = {
             actionNumber: 2,
             actionType: ActionType.PICKUP,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
-        const a23: LiveServerAction = {
+        const a23: LiveServerActionData = {
             actionNumber: 3,
             actionType: ActionType.TEAM_ONE_SCORE,
             teamNumber: 'two',

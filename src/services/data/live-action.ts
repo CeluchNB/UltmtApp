@@ -8,7 +8,7 @@ import {
     Action,
     ActionFactory,
     ActionType,
-    LiveServerAction,
+    LiveServerActionData,
     SubscriptionObject,
 } from '../../types/action'
 import {
@@ -150,7 +150,7 @@ export const unsubscribe = () => {
  * @returns live server action
  */
 export const saveLocalAction = async (
-    action: LiveServerAction,
+    action: LiveServerActionData,
     pointId: string,
 ): Promise<Action> => {
     try {
@@ -184,7 +184,7 @@ export const createOfflineAction = async (
 ): Promise<Action> => {
     try {
         const point = await localGetPointById(pointId)
-        const liveAction: LiveServerAction = {
+        const liveAction: LiveServerActionData = {
             ...action.action,
             teamNumber: 'one',
             comments: [],
@@ -208,7 +208,7 @@ export const deleteLocalAction = async (
     teamNumber: TeamNumber,
     actionNumber: number,
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<LiveServerActionData> => {
     try {
         return await localDeleteAction(teamNumber, actionNumber, pointId)
     } catch (e) {
@@ -218,7 +218,7 @@ export const deleteLocalAction = async (
 
 export const undoOfflineAction = async (
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<LiveServerActionData> => {
     try {
         const point = await localGetPointById(pointId)
         const actionNumber = point.teamOneActions.length

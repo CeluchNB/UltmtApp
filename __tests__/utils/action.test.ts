@@ -3,9 +3,9 @@ import {
     Action,
     ActionFactory,
     ActionType,
-    LiveServerAction,
-    PlayerActionListData,
-    TeamActionListData,
+    LiveServerActionData,
+    PlayerActionList,
+    TeamActionList,
 } from '../../src/types/action'
 
 const playerOne: DisplayUser = {
@@ -22,7 +22,9 @@ const playerTwo: DisplayUser = {
     username: 'firstlast2',
 }
 
-const getTestLiveAction = (overrides?: Partial<LiveServerAction>): Action => {
+const getTestLiveAction = (
+    overrides?: Partial<LiveServerActionData>,
+): Action => {
     return ActionFactory.createFromAction({
         actionType: ActionType.CATCH,
         actionNumber: 1,
@@ -35,19 +37,14 @@ const getTestLiveAction = (overrides?: Partial<LiveServerAction>): Action => {
     })
 }
 
-// const testResultEqualsAction = (result: Action, action: Action) => {
-//     expect(result.reporterDisplay).toBe(action.reporterDisplay)
-//     expect(result.action).toMatchObject(action.action)
-// }
-
 describe('test get player valid actions', () => {
     it('with pulling team', () => {
-        const result = new PlayerActionListData(playerOne, [], 'one', true)
+        const result = new PlayerActionList(playerOne, [], 'one', true)
         expect(result.actionList.length).toBe(1)
         expect(result.actionList[0].action.actionType).toBe(ActionType.PULL)
     })
     it('with receiving team', () => {
-        const result = new PlayerActionListData(playerOne, [], 'one', false)
+        const result = new PlayerActionList(playerOne, [], 'one', false)
         expect(result.actionList.length).toBe(3)
         expect(result.actionList[0].action.actionType).toBe(ActionType.CATCH)
         expect(result.actionList[1].action.actionType).toBe(ActionType.PICKUP)
@@ -60,7 +57,7 @@ describe('test get player valid actions', () => {
                 playerTwo: undefined,
             }),
         ]
-        const result = new PlayerActionListData(playerOne, stack, 'one', true)
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
         expect(result.actionList.length).toBe(3)
         expect(result.actionList[0].action.actionType).toBe(ActionType.BLOCK)
         expect(result.actionList[1].action.actionType).toBe(ActionType.PICKUP)
@@ -71,7 +68,7 @@ describe('test get player valid actions', () => {
 
     it('after player catch', () => {
         const stack = [getTestLiveAction({ actionType: ActionType.CATCH })]
-        const result = new PlayerActionListData(playerOne, stack, 'one', true)
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
         expect(result.actionList.length).toBe(1)
         expect(result.actionList[0].action.actionType).toBe(
             ActionType.THROWAWAY,
@@ -80,8 +77,8 @@ describe('test get player valid actions', () => {
 
     it('after teammate catch', () => {
         const stack = [getTestLiveAction({ actionType: ActionType.CATCH })]
-        const result = new PlayerActionListData(playerTwo, stack, 'one', true)
-        // expect(result).toBe(ACTION_MAP.OFFENSE_NO_POSSESSION)
+        const result = new PlayerActionList(playerTwo, stack, 'one', true)
+
         expect(result.actionList.length).toBe(3)
         expect(result.actionList[0].action.actionType).toBe(ActionType.CATCH)
         expect(result.actionList[1].action.actionType).toBe(ActionType.DROP)
@@ -91,7 +88,7 @@ describe('test get player valid actions', () => {
     })
     it('after turnover', () => {
         const stack = [getTestLiveAction({ actionType: ActionType.DROP })]
-        const result = new PlayerActionListData(playerOne, stack, 'one', true)
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
         expect(result.actionList.length).toBe(3)
         expect(result.actionList[0].action.actionType).toBe(ActionType.BLOCK)
         expect(result.actionList[1].action.actionType).toBe(ActionType.PICKUP)
@@ -102,8 +99,8 @@ describe('test get player valid actions', () => {
 
     it('after block', () => {
         const stack = [getTestLiveAction({ actionType: ActionType.BLOCK })]
-        const result = new PlayerActionListData(playerOne, stack, 'one', true)
-        // expect(result).toBe(ACTION_MAP.DEFENSE_AFTER_BLOCK)
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
+
         expect(result.actionList.length).toBe(1)
         expect(result.actionList[0].action.actionType).toBe(ActionType.PICKUP)
     })
@@ -112,7 +109,7 @@ describe('test get player valid actions', () => {
         const stack = [
             getTestLiveAction({ actionType: ActionType.TEAM_ONE_SCORE }),
         ]
-        const result = new PlayerActionListData(playerOne, stack, 'one', true)
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
         expect(result.actionList.length).toBe(0)
     })
 
@@ -121,8 +118,8 @@ describe('test get player valid actions', () => {
             getTestLiveAction(),
             getTestLiveAction({ actionType: ActionType.TIMEOUT }),
         ]
-        const result = new PlayerActionListData(playerOne, stack, 'one', true)
-        // expect(result).toBe(ACTION_MAP.OFFENSE_WITH_POSSESSION)
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
+
         expect(result.actionList.length).toBe(1)
         expect(result.actionList[0].action.actionType).toBe(
             ActionType.THROWAWAY,
@@ -144,7 +141,7 @@ describe('test get player valid actions', () => {
                 },
             }),
         ]
-        const result = new PlayerActionListData(
+        const result = new PlayerActionList(
             {
                 _id: 'user3',
                 firstName: 'First 3',
@@ -155,7 +152,7 @@ describe('test get player valid actions', () => {
             'one',
             true,
         )
-        // expect(result).toBe(ACTION_MAP.OFFENSE_WITH_POSSESSION)
+
         expect(result.actionList.length).toBe(1)
         expect(result.actionList[0].action.actionType).toBe(
             ActionType.THROWAWAY,
@@ -165,7 +162,7 @@ describe('test get player valid actions', () => {
 
 describe('getValidTeamActions', () => {
     it('prepoint', () => {
-        const result = new TeamActionListData([], 'one')
+        const result = new TeamActionList([], 'one')
         expect(result.actionList.length).toBe(0)
     })
 
@@ -174,7 +171,7 @@ describe('getValidTeamActions', () => {
             getTestLiveAction({ actionType: ActionType.CATCH }),
             getTestLiveAction({ actionType: ActionType.TEAM_ONE_SCORE }),
         ]
-        const result = new TeamActionListData(stack, 'one')
+        const result = new TeamActionList(stack, 'one')
         expect(result.actionList.length).toBe(0)
     })
 
@@ -183,8 +180,8 @@ describe('getValidTeamActions', () => {
             getTestLiveAction({ actionType: ActionType.CATCH }),
             getTestLiveAction({ actionType: ActionType.CATCH }),
         ]
-        const result = new TeamActionListData(stack, 'one')
-        // expect(result).toBe(TEAM_ACTION_MAP.OFFENSE)
+        const result = new TeamActionList(stack, 'one')
+
         expect(result.actionList.length).toBe(3)
         expect(result.actionList[0].action.actionType).toBe(ActionType.TIMEOUT)
         expect(result.actionList[1].action.actionType).toBe(
@@ -199,11 +196,9 @@ describe('getValidTeamActions', () => {
         const stack = [
             getTestLiveAction({ actionType: ActionType.CATCH }),
             getTestLiveAction({ actionType: ActionType.DROP }),
-            // { playerIndex: 0, actionType: ActionType.CATCH },
-            // { playerIndex: 1, actionType: ActionType.DROP },
         ]
-        const result = new TeamActionListData(stack, 'one')
-        // expect(result).toBe(TEAM_ACTION_MAP.DEFENSE)
+        const result = new TeamActionList(stack, 'one')
+
         expect(result.actionList.length).toBe(3)
         expect(result.actionList[0].action.actionType).toBe(
             ActionType.TEAM_TWO_SCORE,

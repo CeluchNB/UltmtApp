@@ -6,7 +6,7 @@ import { isPullingNext } from '../utils/point'
 import {
     Action,
     ActionType,
-    LiveServerAction,
+    LiveServerActionData,
     SubscriptionObject,
 } from '../types/action'
 import { activeGameOffline, editGame } from '../services/data/game'
@@ -65,7 +65,7 @@ export const useGameEditor = () => {
 
     const actionSideEffects = React.useCallback(
         (data: Action) => {
-            const action = data.action as LiveServerAction
+            const action = data.action as LiveServerActionData
             if (
                 action.actionType === ActionType.SUBSTITUTION &&
                 action.teamNumber === team
@@ -83,7 +83,7 @@ export const useGameEditor = () => {
     )
 
     const undoSideEffects = React.useCallback(
-        (data: LiveServerAction) => {
+        (data: LiveServerActionData) => {
             if (
                 data.actionType === ActionType.SUBSTITUTION &&
                 data.teamNumber === team
@@ -107,7 +107,7 @@ export const useGameEditor = () => {
 
     const subscriptions: SubscriptionObject = React.useMemo(() => {
         return {
-            client: async (data: LiveServerAction) => {
+            client: async (data: LiveServerActionData) => {
                 try {
                     const action = await saveLocalAction(data, point._id)
                     actionSideEffects(action)
@@ -186,7 +186,9 @@ export const useGameEditor = () => {
     const lastAction = React.useMemo(() => {
         for (let i = actions.length - 1; i >= 0; i--) {
             // don't worry about other team's actions
-            if ((actions[i].action as LiveServerAction).teamNumber === team) {
+            if (
+                (actions[i].action as LiveServerActionData).teamNumber === team
+            ) {
                 return actions[i]
             }
         }
@@ -195,7 +197,7 @@ export const useGameEditor = () => {
 
     const myTeamActions = React.useMemo(() => {
         return actions.filter(
-            a => (a.action as LiveServerAction).teamNumber === team,
+            a => (a.action as LiveServerActionData).teamNumber === team,
         )
     }, [actions, team])
 

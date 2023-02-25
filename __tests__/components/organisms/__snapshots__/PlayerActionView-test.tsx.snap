@@ -6,7 +6,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
     data={
       [
         {
-          "actions": PlayerActionListData {
+          "actions": PlayerActionList {
             "actionList": [
               CatchAction {
                 "action": {
@@ -84,7 +84,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
           },
         },
         {
-          "actions": PlayerActionListData {
+          "actions": PlayerActionList {
             "actionList": [
               CatchAction {
                 "action": {
@@ -162,7 +162,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
           },
         },
         {
-          "actions": PlayerActionListData {
+          "actions": PlayerActionList {
             "actionList": [
               ThrowawayAction {
                 "action": {
@@ -190,7 +190,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
           },
         },
         {
-          "actions": PlayerActionListData {
+          "actions": PlayerActionList {
             "actionList": [
               CatchAction {
                 "action": {
@@ -268,7 +268,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
           },
         },
         {
-          "actions": PlayerActionListData {
+          "actions": PlayerActionList {
             "actionList": [
               CatchAction {
                 "action": {
@@ -346,7 +346,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
           },
         },
         {
-          "actions": PlayerActionListData {
+          "actions": PlayerActionList {
             "actionList": [
               CatchAction {
                 "action": {
@@ -424,7 +424,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
           },
         },
         {
-          "actions": PlayerActionListData {
+          "actions": PlayerActionList {
             "actionList": [
               CatchAction {
                 "action": {

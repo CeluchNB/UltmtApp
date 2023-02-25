@@ -4,7 +4,7 @@ import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import PointAccordion from '../molecules/PointAccordion'
 import React from 'react'
-import { Action, ServerAction } from '../../types/action'
+import { Action, ServerActionData } from '../../types/action'
 
 export interface PointAccordionGroupProps {
     activePointId?: string
@@ -14,7 +14,7 @@ export interface PointAccordionGroupProps {
     teamTwo: GuestTeam
     loading: boolean
     onSelectPoint: (pointId: string) => void
-    onSelectAction: (action: ServerAction) => void
+    onSelectAction: (action: ServerActionData) => void
 }
 
 const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({

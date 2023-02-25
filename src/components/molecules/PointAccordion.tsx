@@ -4,7 +4,7 @@ import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import { isLivePoint } from '../../utils/point'
 import { useTheme } from '../../hooks'
-import { Action, ServerAction } from '../../types/action'
+import { Action, ServerActionData } from '../../types/action'
 import {
     ActivityIndicator,
     Animated,
@@ -22,7 +22,7 @@ interface PointAccordionProps {
     loading: boolean
     teamOne: GuestTeam
     teamTwo: GuestTeam
-    onActionPress: (action: ServerAction) => void
+    onActionPress: (action: ServerActionData) => void
 }
 
 const AccordionRightView = (props: { point: Point; isExpanded: boolean }) => {

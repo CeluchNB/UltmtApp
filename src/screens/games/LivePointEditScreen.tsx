@@ -10,7 +10,7 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
 import { isPulling } from '../../utils/point'
-import { ActionType, TeamActionListData } from '../../types/action'
+import { ActionType, TeamActionList } from '../../types/action'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { useGameEditor, useTheme } from '../../hooks'
 
@@ -50,7 +50,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
     }, [finishGameLoading, finishPointLoading, lastAction?.action])
 
     const teamActions = React.useMemo(() => {
-        const actionListData = new TeamActionListData(myTeamActions, team)
+        const actionListData = new TeamActionList(myTeamActions, team)
         return actionListData.actionList
     }, [myTeamActions, team])
 

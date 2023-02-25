@@ -10,7 +10,7 @@ import {
     Action,
     ActionFactory,
     ActionType,
-    LiveServerAction,
+    LiveServerActionData,
     SubscriptionObject,
 } from '../../../src/types/action'
 import {
@@ -189,7 +189,7 @@ describe('comment actions', () => {
 
 describe('save local action', () => {
     it('successful substitution on team one', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'one',
@@ -232,7 +232,7 @@ describe('save local action', () => {
     })
 
     it('successful substitution on team two', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'two',
@@ -275,7 +275,7 @@ describe('save local action', () => {
     })
 
     it('with non-substitution action', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.CATCH,
             teamNumber: 'two',
@@ -314,7 +314,7 @@ describe('save local action', () => {
     })
 
     it('with malformed substitution', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'two',
@@ -348,7 +348,7 @@ describe('save local action', () => {
     })
 
     it('handles local error', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'two',
@@ -378,7 +378,7 @@ describe('save local action', () => {
 
 describe('delete local action', () => {
     it('with local success', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.SUBSTITUTION,
             teamNumber: 'two',
@@ -419,7 +419,7 @@ describe('delete local action', () => {
 
 describe('create offline action', () => {
     it('successfully', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.CATCH,
             teamNumber: 'one',
@@ -480,7 +480,7 @@ describe('create offline action', () => {
 
 describe('undo offline action', () => {
     it('with success', async () => {
-        const action: LiveServerAction = {
+        const action: LiveServerActionData = {
             actionNumber: 1,
             actionType: ActionType.CATCH,
             teamNumber: 'one',

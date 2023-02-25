@@ -10,8 +10,8 @@ import { game } from '../../../fixtures/data'
 import jwt from 'jsonwebtoken'
 import {
     ActionType,
-    LiveServerAction,
-    SavedServerAction,
+    LiveServerActionData,
+    SavedServerActionData,
 } from '../../../src/types/action'
 import {
     activeGameOffline,
@@ -524,7 +524,7 @@ describe('test push offline game', () => {
         jest.resetAllMocks()
     })
 
-    const action: LiveServerAction = {
+    const action: LiveServerActionData = {
         comments: [],
         tags: ['huck'],
         actionNumber: 1,
@@ -602,7 +602,7 @@ describe('test push offline game', () => {
 })
 
 describe('test reactivate inactive game', () => {
-    const savedActions: SavedServerAction[] = [
+    const savedActions: SavedServerActionData[] = [
         {
             _id: 'action1',
             actionNumber: 1,

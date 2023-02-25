@@ -1,7 +1,7 @@
 import { DisplayUser } from '../types/user'
 import { Realm } from '@realm/react'
 import { TeamNumber } from '../types/team'
-import { ActionType, Comment, LiveServerAction } from '../types/action'
+import { ActionType, Comment, LiveServerActionData } from '../types/action'
 
 export const CommentSchema: Realm.ObjectSchema = {
     name: 'Comment',
@@ -40,7 +40,7 @@ export class ActionSchema {
     teamNumber: TeamNumber
     comments: Comment[]
 
-    constructor(action: LiveServerAction, pointId: string) {
+    constructor(action: LiveServerActionData, pointId: string) {
         this._id = new Realm.BSON.ObjectID()
         this.pointId = pointId
         this.actionType = action.actionType

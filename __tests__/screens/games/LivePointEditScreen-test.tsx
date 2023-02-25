@@ -14,7 +14,7 @@ import store from '../../../src/store/store'
 import {
     ActionFactory,
     ActionType,
-    LiveServerAction,
+    LiveServerActionData,
     SubscriptionObject,
 } from '../../../src/types/action'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
@@ -181,7 +181,7 @@ describe('LivePointEditScreen', () => {
 
         fireEvent.press(pullBtn)
         await act(async () => {
-            const pull: LiveServerAction = {
+            const pull: LiveServerActionData = {
                 actionNumber: 1,
                 actionType: ActionType.PULL,
                 teamNumber: 'one',
@@ -192,7 +192,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getByText('they score'))
         await act(async () => {
-            const theyScore: LiveServerAction = {
+            const theyScore: LiveServerActionData = {
                 actionNumber: 2,
                 actionType: ActionType.TEAM_TWO_SCORE,
                 teamNumber: 'one',
@@ -254,7 +254,7 @@ describe('LivePointEditScreen', () => {
 
         fireEvent.press(catchBtn)
         await act(async () => {
-            const catchAction: LiveServerAction = {
+            const catchAction: LiveServerActionData = {
                 actionNumber: 1,
                 actionType: ActionType.CATCH,
                 teamNumber: 'two',
@@ -265,7 +265,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getAllByText('Catch')[2])
         await act(async () => {
-            const catchAction: LiveServerAction = {
+            const catchAction: LiveServerActionData = {
                 actionNumber: 2,
                 actionType: ActionType.CATCH,
                 teamNumber: 'two',
@@ -276,7 +276,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getAllByText('Catch')[3])
         await act(async () => {
-            const catchAction: LiveServerAction = {
+            const catchAction: LiveServerActionData = {
                 actionNumber: 3,
                 actionType: ActionType.CATCH,
                 teamNumber: 'two',
@@ -287,7 +287,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getAllByText('Catch')[4])
         await act(async () => {
-            const catchAction: LiveServerAction = {
+            const catchAction: LiveServerActionData = {
                 actionNumber: 4,
                 actionType: ActionType.CATCH,
                 teamNumber: 'two',
@@ -302,7 +302,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getAllByText('score')[4])
         await act(async () => {
-            const scoreAction: LiveServerAction = {
+            const scoreAction: LiveServerActionData = {
                 actionNumber: 5,
                 actionType: ActionType.TEAM_ONE_SCORE,
                 teamNumber: 'two',
@@ -355,7 +355,7 @@ describe('LivePointEditScreen', () => {
 
         fireEvent.press(pullBtn)
         await act(async () => {
-            const pull: LiveServerAction = {
+            const pull: LiveServerActionData = {
                 actionNumber: 1,
                 actionType: ActionType.PULL,
                 teamNumber: 'one',
@@ -366,7 +366,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getByText('they score'))
         await act(async () => {
-            const theyScore: LiveServerAction = {
+            const theyScore: LiveServerActionData = {
                 actionNumber: 2,
                 actionType: ActionType.TEAM_TWO_SCORE,
                 teamNumber: 'one',
@@ -423,7 +423,7 @@ describe('LivePointEditScreen', () => {
                     teamNumber: 'two',
                     actionNumber: 1,
                     comments: [],
-                } as LiveServerAction)
+                } as LiveServerActionData)
             },
         )
         jest.spyOn(ActionData, 'undoOfflineAction').mockImplementation(
@@ -460,7 +460,7 @@ describe('LivePointEditScreen', () => {
 
         fireEvent.press(catchBtn)
         await act(async () => {
-            const catchAction: LiveServerAction = {
+            const catchAction: LiveServerActionData = {
                 actionNumber: 1,
                 actionType: ActionType.CATCH,
                 teamNumber: 'two',
@@ -471,7 +471,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getAllByText('Catch')[2])
         await act(async () => {
-            const catchAction: LiveServerAction = {
+            const catchAction: LiveServerActionData = {
                 actionNumber: 2,
                 actionType: ActionType.CATCH,
                 teamNumber: 'two',
@@ -482,7 +482,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getAllByText('Catch')[3])
         await act(async () => {
-            const catchAction: LiveServerAction = {
+            const catchAction: LiveServerActionData = {
                 actionNumber: 3,
                 actionType: ActionType.CATCH,
                 teamNumber: 'two',
@@ -493,7 +493,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getAllByText('Catch')[4])
         await act(async () => {
-            const catchAction: LiveServerAction = {
+            const catchAction: LiveServerActionData = {
                 actionNumber: 4,
                 actionType: ActionType.CATCH,
                 teamNumber: 'two',
@@ -508,7 +508,7 @@ describe('LivePointEditScreen', () => {
         })
         fireEvent.press(getAllByText('score')[4])
         await act(async () => {
-            const scoreAction: LiveServerAction = {
+            const scoreAction: LiveServerActionData = {
                 actionNumber: 5,
                 actionType: ActionType.TEAM_ONE_SCORE,
                 teamNumber: 'two',

@@ -1,5 +1,5 @@
 import { TeamNumber } from '../types/team'
-import { Action, ActionType, LiveServerAction } from '../types/action'
+import { Action, ActionType, LiveServerActionData } from '../types/action'
 import Point, { ClientPoint } from '../types/point'
 
 export const isLivePoint = (point?: Point): boolean => {
@@ -47,7 +47,6 @@ export const normalizeActions = (
         ).values(),
     ].sort((a, b) => a.action.actionNumber - b.action.actionNumber)
 
-    // helper values
     const result: Action[] = []
     const turnovers = [ActionType.DROP, ActionType.THROWAWAY]
     const initiating = [ActionType.CATCH, ActionType.PICKUP]
@@ -126,10 +125,10 @@ export const normalizeActions = (
 
 export const normalizeLiveActions = (liveActions: Action[]): Action[] => {
     const teamOneActions = liveActions.filter(
-        action => (action.action as LiveServerAction).teamNumber === 'one',
+        action => (action.action as LiveServerActionData).teamNumber === 'one',
     )
     const teamTwoActions = liveActions.filter(
-        action => (action.action as LiveServerAction).teamNumber === 'two',
+        action => (action.action as LiveServerActionData).teamNumber === 'two',
     )
 
     return normalizeActions(teamOneActions, teamTwoActions)

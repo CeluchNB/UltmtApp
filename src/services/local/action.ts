@@ -5,7 +5,7 @@ import { TeamNumber } from '../../types/team'
 import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
 import { ActionSchema, PointSchema } from '../../models'
-import { LiveServerAction, SavedServerAction } from '../../types/action'
+import { LiveServerActionData, SavedServerActionData } from '../../types/action'
 import { getPointById, savePoint } from './point'
 
 /**
@@ -15,7 +15,7 @@ import { getPointById, savePoint } from './point'
  */
 export const saveActions = async (
     pointId: string,
-    actions: SavedServerAction[],
+    actions: SavedServerActionData[],
 ) => {
     const pairs: [string, string][] = actions.map(action => [
         `${pointId}:${action._id}`,
@@ -33,7 +33,7 @@ export const saveActions = async (
 export const getActions = async (
     pointId: string,
     actionIds: string[],
-): Promise<SavedServerAction[]> => {
+): Promise<SavedServerActionData[]> => {
     const keys = actionIds.map(id => `${pointId}:${id}`)
     const actions = await AsyncStorage.multiGet(keys)
     for (const kvp of actions) {
@@ -55,9 +55,9 @@ export const deleteAllActionsByPoint = async (pointId: string) => {
 }
 
 export const upsertAction = async (
-    action: LiveServerAction,
+    action: LiveServerActionData,
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<LiveServerActionData> => {
     const realm = await getRealm()
     const point = await realm.objectForPrimaryKey<PointSchema>('Point', pointId)
     if (!point) {
@@ -97,7 +97,7 @@ export const upsertAction = async (
 }
 
 export const saveMultipleServerActions = async (
-    actions: LiveServerAction[],
+    actions: LiveServerActionData[],
     pointId: string,
 ): Promise<void> => {
     const realm = await getRealm()
@@ -117,7 +117,7 @@ export const deleteAction = async (
     teamNumber: TeamNumber,
     actionNumber: number,
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<LiveServerActionData> => {
     const realm = await getRealm()
     const actions = await realm.objects<ActionSchema>('Action')
     const action = actions.filtered(
@@ -155,7 +155,7 @@ export const deleteEditableActionsByPoint = async (
 
 export const getActionById = async (
     actionId: string,
-): Promise<LiveServerAction> => {
+): Promise<LiveServerActionData> => {
     const realm = await getRealm()
     const action = await realm.objectForPrimaryKey<ActionSchema>(
         'Action',
@@ -169,7 +169,7 @@ export const getActionById = async (
 
 export const getActionsByPoint = async (
     pointId: string,
-): Promise<(LiveServerAction & { _id: string; pointId: string })[]> => {
+): Promise<(LiveServerActionData & { _id: string; pointId: string })[]> => {
     const realm = await getRealm()
     const actions = await realm
         .objects<ActionSchema>('Action')
@@ -180,7 +180,7 @@ export const getActionsByPoint = async (
     })
 }
 
-const parseLiveAction = (schema: ActionSchema): LiveServerAction => {
+const parseLiveAction = (schema: ActionSchema): LiveServerActionData => {
     return JSON.parse(
         JSON.stringify({
             actionType: schema.actionType,
@@ -196,7 +196,7 @@ const parseLiveAction = (schema: ActionSchema): LiveServerAction => {
 
 const parseAction = (
     schema: ActionSchema,
-): LiveServerAction & { _id: string; pointId: string } => {
+): LiveServerActionData & { _id: string; pointId: string } => {
     return JSON.parse(
         JSON.stringify({
             _id: schema._id.toHexString(),

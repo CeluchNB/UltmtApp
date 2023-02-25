@@ -3,8 +3,8 @@ import React from 'react'
 import {
     ActionFactory,
     ActionType,
-    LiveServerAction,
-    SavedServerAction,
+    LiveServerActionData,
+    SavedServerActionData,
 } from '../../../src/types/action'
 import { fireEvent, render } from '@testing-library/react-native'
 
@@ -40,7 +40,7 @@ describe('ActionDisplayItem', () => {
                         seasonStart: '2022',
                         seasonEnd: '2022',
                     },
-                } as SavedServerAction)}
+                } as SavedServerActionData)}
                 teamOne={{ name: 'Team 1' }}
                 teamTwo={{ name: 'Team 2' }}
             />,
@@ -71,7 +71,7 @@ describe('ActionDisplayItem', () => {
                         },
                     ],
                     teamNumber: 'two',
-                } as LiveServerAction)}
+                } as LiveServerActionData)}
                 teamOne={{ name: 'Team 1' }}
                 teamTwo={{ name: 'Team 2' }}
             />,
@@ -112,7 +112,7 @@ describe('ActionDisplayItem', () => {
                         seasonStart: '2022',
                         seasonEnd: '2022',
                     },
-                } as SavedServerAction)}
+                } as SavedServerActionData)}
                 teamOne={{ name: 'Team 1' }}
                 teamTwo={{ name: 'Team 2' }}
                 onPress={onPress}

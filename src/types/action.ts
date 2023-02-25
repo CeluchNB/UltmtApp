@@ -1,10 +1,10 @@
 import { DisplayUser } from './user'
 import { getUserDisplayName } from '../utils/player'
 import { DisplayTeam, TeamNumber } from './team'
-import { isRetainingPossession, isScore, isTurnover } from '../utils/action'
+import { getPlayerActionList, getTeamActionList } from '../utils/action'
 
 export interface Action {
-    action: ServerAction
+    action: ServerActionData
     reporterDisplay: string
     viewerDisplay: string
     setTags(tags: string[]): void
@@ -33,7 +33,7 @@ export type SubscriptionObject = {
     [x in SubscriptionType]: (data: any) => Promise<void> | void
 }
 
-export interface ClientAction {
+export interface ClientActionData {
     actionType: ActionType
     playerOne?: DisplayUser
     playerTwo?: DisplayUser
@@ -46,25 +46,25 @@ export interface Comment {
     commentNumber: number
 }
 
-export interface ServerAction extends ClientAction {
+export interface ServerActionData extends ClientActionData {
     comments: Comment[]
     actionNumber: number
 }
 
-export interface LiveServerAction extends ServerAction {
+export interface LiveServerActionData extends ServerActionData {
     teamNumber: TeamNumber
 }
 
-export interface SavedServerAction extends ServerAction {
+export interface SavedServerActionData extends ServerActionData {
     _id: string
     team: DisplayTeam
 }
 
-export interface ActionListData {
+export interface ActionList {
     actionList: Action[]
 }
 
-export class PlayerActionListData implements ActionListData {
+export class PlayerActionList implements ActionList {
     actionList: Action[]
     constructor(
         playerOne: DisplayUser,
@@ -77,7 +77,7 @@ export class PlayerActionListData implements ActionListData {
     }
 }
 
-export class TeamActionListData implements ActionListData {
+export class TeamActionList implements ActionList {
     actionList: Action[]
     constructor(actionStack: Action[], team: TeamNumber) {
         const actions = actionStack.map(action => action.action)
@@ -85,100 +85,13 @@ export class TeamActionListData implements ActionListData {
     }
 }
 
-const getPlayerActionList = (
-    playerOne: DisplayUser,
-    actionStack: ServerAction[],
-    playerTeam: TeamNumber,
-    pulling: boolean,
-): Action[] => {
-    let currentUser: string | undefined = playerOne._id
-    for (const action of actionStack.slice().reverse()) {
-        const playerTwo = action.playerOne
-        switch (action.actionType) {
-            case ActionType.PICKUP:
-            case ActionType.CATCH:
-                if (currentUser === action.playerOne?._id) {
-                    return [new ThrowawayAction(playerOne)]
-                } else {
-                    return [
-                        new CatchAction(playerOne, playerTwo),
-                        new DropAction(playerOne, playerTwo),
-                        new ScoreAction(
-                            playerTeam,
-                            'score',
-                            playerOne,
-                            playerTwo,
-                        ),
-                    ]
-                }
-            case ActionType.DROP:
-            case ActionType.THROWAWAY:
-            case ActionType.PULL:
-                return [
-                    new BlockAction(playerOne),
-                    new PickupAction(playerOne),
-                    new ScoreAction(playerTeam, 'clhn', playerOne, undefined),
-                ]
-            case ActionType.BLOCK:
-                return [new PickupAction(playerOne)]
-            case ActionType.TEAM_ONE_SCORE:
-            case ActionType.TEAM_TWO_SCORE:
-                return []
-            case ActionType.TIMEOUT:
-            case ActionType.CALL_ON_FIELD:
-                continue
-            case ActionType.SUBSTITUTION:
-                // if we are getting actions for newly substituted user
-                if (playerOne._id === action.playerTwo?._id) {
-                    // inherit the actions from the player that was substituted for
-                    currentUser = action.playerOne?._id
-                }
-                continue
-        }
-    }
-
-    if (pulling) {
-        return [new PullAction(playerOne)]
-    }
-    // first action on receiving team
-    return [
-        new CatchAction(playerOne),
-        new PickupAction(playerOne),
-        new DropAction(playerOne),
-    ]
-}
-
-const getTeamActionList = (
-    actionStack: ServerAction[],
-    team: TeamNumber,
-): Action[] => {
-    for (const action of actionStack.slice().reverse()) {
-        if (isRetainingPossession(action.actionType)) {
-            return [
-                new TimeoutAction(),
-                new CallOnFieldAction(),
-                new SubstitutionAction(),
-            ]
-        } else if (isTurnover(action.actionType)) {
-            return [
-                new ScoreAction(team === 'one' ? 'two' : 'one', 'they score'),
-                new CallOnFieldAction(),
-                new SubstitutionAction(),
-            ]
-        } else if (isScore(action.actionType)) {
-            return []
-        }
-    }
-    return []
-}
-
 class BaseAction implements Action {
-    action: ServerAction
+    action: ServerActionData
     reporterDisplay: string
     viewerDisplay: string
 
     constructor(
-        action: Partial<ServerAction>,
+        action: Partial<ServerActionData>,
         viewerDisplay: string,
         reporterDisplay?: string,
     ) {
@@ -210,13 +123,13 @@ class BaseAction implements Action {
         this.action.playerTwo = playerTwo
     }
 
-    createFromAction(action: Partial<ServerAction>): Action {
+    createFromAction(action: Partial<ServerActionData>): Action {
         this.action = { ...this.action, ...action }
         return this
     }
 }
 
-class BlockAction extends BaseAction {
+export class BlockAction extends BaseAction {
     constructor(playerOne: DisplayUser) {
         const playerOneDisplay = getUserDisplayName(playerOne)
         const viewerDisplay = `${playerOneDisplay} blocks the throw`
@@ -230,7 +143,7 @@ class BlockAction extends BaseAction {
     }
 }
 
-class CallOnFieldAction extends BaseAction {
+export class CallOnFieldAction extends BaseAction {
     constructor() {
         super(
             { actionType: ActionType.CALL_ON_FIELD },
@@ -240,7 +153,7 @@ class CallOnFieldAction extends BaseAction {
     }
 }
 
-class CatchAction extends BaseAction {
+export class CatchAction extends BaseAction {
     constructor(playerOne: DisplayUser, playerTwo?: DisplayUser) {
         super({ actionType: ActionType.CATCH }, 'Catch')
         this.setPlayersAndUpdateViewerDisplay(playerOne, playerTwo)
@@ -265,7 +178,7 @@ class CatchAction extends BaseAction {
     }
 }
 
-class DropAction extends BaseAction {
+export class DropAction extends BaseAction {
     constructor(playerOne: DisplayUser, playerTwo?: DisplayUser) {
         super({ actionType: ActionType.DROP }, 'Drop')
         this.setPlayersAndUpdateViewerDisplay(playerOne, playerTwo)
@@ -290,7 +203,7 @@ class DropAction extends BaseAction {
     }
 }
 
-class PickupAction extends BaseAction {
+export class PickupAction extends BaseAction {
     constructor(playerOne: DisplayUser) {
         const playerOneDisplay = getUserDisplayName(playerOne)
         const viewerDisplay = `${playerOneDisplay} picks up the disc`
@@ -298,7 +211,7 @@ class PickupAction extends BaseAction {
     }
 }
 
-class PullAction extends BaseAction {
+export class PullAction extends BaseAction {
     constructor(playerOne: DisplayUser) {
         const playerOneDisplay = getUserDisplayName(playerOne)
         const viewerDisplay = `${playerOneDisplay} pulls the disc`
@@ -306,7 +219,7 @@ class PullAction extends BaseAction {
     }
 }
 
-class SubstitutionAction extends BaseAction {
+export class SubstitutionAction extends BaseAction {
     constructor(playerOne?: DisplayUser, playerTwo?: DisplayUser) {
         super({ actionType: ActionType.SUBSTITUTION }, 'substitution')
         this.setPlayersAndUpdateViewerDisplay(playerOne, playerTwo)
@@ -326,7 +239,7 @@ class SubstitutionAction extends BaseAction {
     }
 }
 
-class ScoreAction extends BaseAction {
+export class ScoreAction extends BaseAction {
     constructor(
         team: TeamNumber,
         reporterDisplay?: string,
@@ -356,7 +269,7 @@ class ScoreAction extends BaseAction {
         if (playerOneDisplay && playerTwoDisplay) {
             viewerDisplay = `${playerOneDisplay} scores from ${playerTwoDisplay}`
         } else if (playerOneDisplay) {
-            // TODO: is callahan the only way to get here?
+            // TODO: is a callahan the only way to get here?
             viewerDisplay = `${playerOneDisplay} scores a callahan`
         } else {
             viewerDisplay = `The opposing team scores`
@@ -365,7 +278,7 @@ class ScoreAction extends BaseAction {
     }
 }
 
-class ThrowawayAction extends BaseAction {
+export class ThrowawayAction extends BaseAction {
     constructor(playerOne: DisplayUser) {
         const playerOneDisplay = getUserDisplayName(playerOne)
         const viewerDisplay = `${playerOneDisplay} throws the disc away`
@@ -373,14 +286,14 @@ class ThrowawayAction extends BaseAction {
     }
 }
 
-class TimeoutAction extends BaseAction {
+export class TimeoutAction extends BaseAction {
     constructor() {
         super({ actionType: ActionType.TIMEOUT }, 'Timeout called')
     }
 }
 
 export class ActionFactory {
-    static createFromAction = (action: ServerAction): Action => {
+    static createFromAction = (action: ServerActionData): Action => {
         switch (action.actionType) {
             case ActionType.BLOCK:
                 return new BlockAction(action.playerOne!).createFromAction(

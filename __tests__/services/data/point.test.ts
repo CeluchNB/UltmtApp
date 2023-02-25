@@ -8,8 +8,8 @@ import { game } from '../../../fixtures/data'
 import {
     ActionFactory,
     ActionType,
-    LiveServerAction,
-    SavedServerAction,
+    LiveServerActionData,
+    SavedServerActionData,
 } from '../../../src/types/action'
 import {
     createPoint,
@@ -37,7 +37,7 @@ const point: Point = {
     receivingTeam: { name: 'Team 2' },
 }
 
-const action: SavedServerAction = {
+const action: SavedServerActionData = {
     _id: 'action1',
     actionNumber: 1,
     comments: [],
@@ -53,7 +53,7 @@ const action: SavedServerAction = {
     tags: [],
 }
 
-const liveAction: LiveServerAction = {
+const liveAction: LiveServerActionData = {
     actionNumber: 1,
     comments: [],
     teamNumber: 'one',
