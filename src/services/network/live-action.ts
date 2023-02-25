@@ -41,7 +41,10 @@ export const joinPoint = async (gameId: string, pointId: string) => {
     })
 }
 
-export const createAction = async (action: ClientActionData, pointId: string) => {
+export const createAction = async (
+    action: ClientActionData,
+    pointId: string,
+) => {
     const actionSocket = await getSocket()
     actionSocket.emit('action', JSON.stringify({ action, pointId }))
 }
