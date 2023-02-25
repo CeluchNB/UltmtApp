@@ -1,6 +1,6 @@
 import * as Constants from '../../utils/constants'
 import { SavedServerActionData } from '../../types/action'
-import { saveActions as localSaveActions } from '../local/action'
+import { saveDisplayActions as localSaveActions } from '../local/action'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import {

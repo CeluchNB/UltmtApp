@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
+// TODO: LDR - get away from other data layer calls?
 import { getActionsByPoint } from './point'
 import { reactivatePoint as networkReactivatePoint } from '../network/point'
 import { parseClientAction } from '../../utils/action'
@@ -14,9 +15,9 @@ import { CreateGame, Game, LocalGame, UpdateGame } from '../../types/game'
 import { DisplayUser, GuestUser } from '../../types/user'
 import Point, { ClientPoint } from '../../types/point'
 import {
-    activeGameId as localActiveGameId,
-    activeGameOffline as localActiveGameOffline,
-    activeGames as localActiveGames,
+    getActiveGameId as localActiveGameId,
+    getActiveGameOffline as localActiveGameOffline,
+    getActiveGames as localActiveGames,
     createOfflineGame as localCreateOfflineGame,
     deleteFullGame as localDeleteFullGame,
     getGameById as localGetGameById,
@@ -342,6 +343,7 @@ export const reactivateInactiveGame = async (
         const { points } = pointResponse.data
         // save points locally
         await Promise.all(points.map((point: Point) => localSavePoint(point)))
+        // TOTEST: LDR - game as accurate score and points array
 
         const team = game.teamOne._id === teamId ? 'one' : 'two'
         // get actions
