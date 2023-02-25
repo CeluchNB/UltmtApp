@@ -35,11 +35,11 @@ const EditField: React.FC<EditFieldProps> = (props: EditFieldProps) => {
             fontSize: size.fontTwenty,
             fontWeight: weight.bold,
             color: colors.textPrimary,
-            textAlignVertical: 'center',
         },
         labelContainer: {
             flexDirection: 'row',
             display: 'flex',
+            alignItems: 'center',
         },
         editContainer: {
             flexDirection: 'row',

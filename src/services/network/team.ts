@@ -1,5 +1,5 @@
 import { CreateTeam } from '../../types/team'
-import { API_KEY, API_URL_V1 } from 'react-native-dotenv'
+import { API_KEY, API_URL_V1 } from '@env'
 import axios, { AxiosResponse } from 'axios'
 
 export const createTeam = async (

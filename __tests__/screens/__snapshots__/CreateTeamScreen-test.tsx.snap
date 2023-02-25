@@ -55,6 +55,7 @@ exports[`should match snapshot 1`] = `
         }
       >
         <TextInput
+          accessibilityLabel="Team Place"
           autoCapitalize="none"
           editable={true}
           keyboardType="default"
@@ -150,6 +151,7 @@ exports[`should match snapshot 1`] = `
         }
       >
         <TextInput
+          accessibilityLabel="Team Name"
           autoCapitalize="none"
           editable={true}
           keyboardType="default"
@@ -245,6 +247,7 @@ exports[`should match snapshot 1`] = `
         }
       >
         <TextInput
+          accessibilityLabel="Team Handle"
           autoCapitalize="none"
           editable={true}
           keyboardType="default"

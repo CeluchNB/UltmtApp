@@ -106,6 +106,9 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
             flexDirection: 'row',
             flexWrap: 'wrap',
         },
+        list: {
+            height: '55%',
+        },
         chip: {
             borderRadius: 8,
             margin: 5,
@@ -139,6 +142,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 }}
             />
             <FlatList
+                style={styles.list}
                 contentContainerStyle={styles.flatListContainer}
                 data={playerList}
                 renderItem={({ item, index }) => {

@@ -351,6 +351,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                 }
               >
                 <TextInput
+                  accessibilityLabel="Game to"
                   autoCapitalize="none"
                   editable={true}
                   keyboardType="number-pad"
@@ -484,6 +485,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                 }
               >
                 <TextInput
+                  accessibilityLabel="Half at"
                   autoCapitalize="none"
                   editable={true}
                   keyboardType="number-pad"
@@ -617,6 +619,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                 }
               >
                 <TextInput
+                  accessibilityLabel="Soft cap"
                   autoCapitalize="none"
                   editable={true}
                   keyboardType="number-pad"
@@ -750,6 +753,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                 }
               >
                 <TextInput
+                  accessibilityLabel="Hard cap"
                   autoCapitalize="none"
                   editable={true}
                   keyboardType="number-pad"
@@ -883,6 +887,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                 }
               >
                 <TextInput
+                  accessibilityLabel="Players"
                   autoCapitalize="none"
                   editable={true}
                   keyboardType="number-pad"
@@ -1016,6 +1021,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                 }
               >
                 <TextInput
+                  accessibilityLabel="Timeouts"
                   autoCapitalize="none"
                   editable={true}
                   keyboardType="number-pad"

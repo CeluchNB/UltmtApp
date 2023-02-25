@@ -40,6 +40,7 @@ const UserInput: React.FC<UserInputProps> = ({
     return (
         <TextInput
             style={[styles.inputStyle, style]}
+            accessibilityLabel={placeholder}
             placeholder={placeholder}
             placeholderTextColor={colors.secondary}
             textColor={colors.textPrimary}

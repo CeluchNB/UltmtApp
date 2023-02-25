@@ -247,7 +247,12 @@ export const changePassword = async (
             password,
             newPassword,
         )
-        const { user } = response.data
+        const {
+            user,
+            tokens: { access, refresh },
+        } = response.data
+        await EncryptedStorage.setItem('access_token', access)
+        await EncryptedStorage.setItem('refresh_token', refresh)
         return user
     } catch (error) {
         return throwApiError(error, Constants.EDIT_USER_ERROR)

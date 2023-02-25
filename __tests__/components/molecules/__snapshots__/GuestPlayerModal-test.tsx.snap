@@ -99,6 +99,7 @@ exports[`GuestPlayerModal should match snapshot 1`] = `
               }
             >
               <TextInput
+                accessibilityLabel="First Name"
                 autoCapitalize="none"
                 editable={true}
                 keyboardType="default"
@@ -201,6 +202,7 @@ exports[`GuestPlayerModal should match snapshot 1`] = `
               }
             >
               <TextInput
+                accessibilityLabel="Last Name"
                 autoCapitalize="none"
                 editable={true}
                 keyboardType="default"

@@ -422,7 +422,7 @@ describe('test user data calls', () => {
     it('should handle change password network success', async () => {
         jest.spyOn(UserServices, 'changePassword').mockReturnValueOnce(
             Promise.resolve({
-                data: { user },
+                data: { user, tokens: { access: '', refresh: '' } },
                 status: 200,
                 statusText: 'Good',
                 headers: {},

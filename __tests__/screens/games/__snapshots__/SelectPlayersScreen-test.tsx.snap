@@ -501,6 +501,11 @@ exports[`should match snapshot 1`] = `
       renderItem={[Function]}
       scrollEventThrottle={50}
       stickyHeaderIndices={[]}
+      style={
+        {
+          "height": "55%",
+        }
+      }
       viewabilityConfigCallbackPairs={[]}
     >
       <View>
@@ -2451,6 +2456,11 @@ exports[`should match snapshot for team two 1`] = `
       renderItem={[Function]}
       scrollEventThrottle={50}
       stickyHeaderIndices={[]}
+      style={
+        {
+          "height": "55%",
+        }
+      }
       viewabilityConfigCallbackPairs={[]}
     >
       <View>

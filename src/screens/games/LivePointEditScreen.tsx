@@ -94,6 +94,10 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
     }
 
     const styles = StyleSheet.create({
+        container: {
+            width: '80%',
+            alignSelf: 'center',
+        },
         error: {
             color: colors.error,
             fontSize: size.fontFifteen,
@@ -110,12 +114,12 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
     })
 
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth="100%">
             <FlatList
                 data={[]}
                 renderItem={() => <View />}
                 ListHeaderComponent={
-                    <View>
+                    <View style={styles.container}>
                         <GameHeader game={game} />
                         <LivePointUtilityBar
                             error={error}
