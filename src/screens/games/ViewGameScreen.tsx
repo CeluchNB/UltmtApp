@@ -56,12 +56,16 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     }
 
     const handleReactivateGame = React.useCallback(async () => {
-        if (!onReactivateGame) {
-            return undefined
-        }
-        const reactivatedGame = await onReactivateGame()
-        if (reactivatedGame) {
-            navigateToGame(reactivatedGame)
+        try {
+            if (!onReactivateGame) {
+                return undefined
+            }
+            const reactivatedGame = await onReactivateGame()
+            if (reactivatedGame) {
+                navigateToGame(reactivatedGame)
+            }
+        } catch (e) {
+            // TODO: error display?
         }
     }, [navigateToGame, onReactivateGame])
 

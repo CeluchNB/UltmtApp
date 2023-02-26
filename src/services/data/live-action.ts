@@ -165,7 +165,6 @@ export const saveLocalAction = async (
             }
         }
         const actionData = await localSaveAction(action, pointId)
-        // TOTEST: LDR - point is correctly updated - especially with substitution
         if (actionData.teamNumber === 'one') {
             point.teamOneActions = [
                 ...new Set([...point.teamOneActions, actionData._id]),
@@ -227,7 +226,6 @@ export const deleteLocalAction = async (
             pointId,
         )
 
-        // TOTEST: LDR - remove action from point
         await removeActionFromPoint(teamNumber, actionNumber, pointId)
 
         return action
@@ -247,6 +245,7 @@ const removeActionFromPoint = async (
     } else {
         point.teamTwoActions.splice(actionNumber - 1)
     }
+    await localSavePoint(point)
 }
 
 export const undoOfflineAction = async (

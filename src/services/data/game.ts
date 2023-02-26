@@ -1,11 +1,9 @@
 import * as Constants from '../../utils/constants'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { SavedServerActionData } from '../../types/action'
 import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
-// TODO: LDR - get away from other data layer calls?
-import { getActionsByPoint } from './point'
-import { reactivatePoint as networkReactivatePoint } from '../network/point'
 import { parseClientAction } from '../../utils/action'
 import { parseClientPoint } from '../../utils/point'
 import { parseFullGame } from '../../utils/game'
@@ -16,7 +14,7 @@ import { DisplayUser, GuestUser } from '../../types/user'
 import Point, { ClientPoint } from '../../types/point'
 import {
     getActiveGameId as localActiveGameId,
-    getActiveGameOffline as localActiveGameOffline,
+    isActiveGameOffline as localActiveGameOffline,
     getActiveGames as localActiveGames,
     createOfflineGame as localCreateOfflineGame,
     deleteFullGame as localDeleteFullGame,
@@ -47,6 +45,10 @@ import {
     reactivateGame as networkReactivateGame,
     searchGames as networkSearchGames,
 } from '../network/game'
+import {
+    getActionsByPoint as networkGetActionsByPoint,
+    reactivatePoint as networkReactivatePoint,
+} from '../network/point'
 
 /**
  * Method to search games with available search and query parameters.
@@ -337,13 +339,13 @@ export const reactivateInactiveGame = async (
         await EncryptedStorage.setItem('game_token', token)
         await localSetActiveGameId(game._id)
         await localSetActiveGameOffline(false)
+        console.log('after initial stuff')
 
         // get points
         const pointResponse = await networkGetPointsByGame(gameId)
         const { points } = pointResponse.data
         // save points locally
         await Promise.all(points.map((point: Point) => localSavePoint(point)))
-        // TOTEST: LDR - game as accurate score and points array
 
         const team = game.teamOne._id === teamId ? 'one' : 'two'
         // get actions
@@ -352,24 +354,31 @@ export const reactivateInactiveGame = async (
             if (!activePoint || activePoint.pointNumber < point.pointNumber) {
                 activePoint = point
             }
-            const actions = await getActionsByPoint(
+
+            const actionResponse = await networkGetActionsByPoint(
                 team,
                 point._id,
-                team === 'one' ? point.teamOneActions : point.teamTwoActions,
             )
+            console.log('got actions')
+            const { actions: networkActions } = actionResponse.data
+
             // save actions locally
+            console.log('saving actions')
             await localSaveMultipleServerActions(
-                actions.map(action => {
-                    return { ...action.action, teamNumber: team }
+                networkActions.map((action: SavedServerActionData) => {
+                    return { ...action, teamNumber: team }
                 }),
                 point._id,
             )
         }
+        console.log('network reactivation')
         await withGameToken(networkReactivatePoint, activePoint?._id)
 
+        console.log('local get')
         const result = await localGetGameById(game._id)
         return result
     } catch (e) {
+        console.log('getting errors', e)
         return throwApiError(e, Constants.GET_GAME_ERROR)
     }
 }

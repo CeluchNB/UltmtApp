@@ -166,10 +166,11 @@ describe('test add guest player', () => {
             }),
         )
 
-        jest.spyOn(LocalGameServices, 'activeGameOffline').mockReturnValueOnce(
-            Promise.resolve(false),
-        )
-        jest.spyOn(LocalGameServices, 'activeGameId').mockReturnValue(
+        jest.spyOn(
+            LocalGameServices,
+            'isActiveGameOffline',
+        ).mockReturnValueOnce(Promise.resolve(false))
+        jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
             Promise.resolve('game1'),
         )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
@@ -217,10 +218,11 @@ describe('test add guest player', () => {
                 },
             ],
         }
-        jest.spyOn(LocalGameServices, 'activeGameOffline').mockReturnValueOnce(
-            Promise.resolve(true),
-        )
-        jest.spyOn(LocalGameServices, 'activeGameId').mockReturnValue(
+        jest.spyOn(
+            LocalGameServices,
+            'isActiveGameOffline',
+        ).mockReturnValueOnce(Promise.resolve(true))
+        jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
             Promise.resolve('game1'),
         )
         jest.spyOn(LocalGameServices, 'getGameById')
@@ -387,10 +389,11 @@ describe('test finish game', () => {
         jest.spyOn(LocalGameServices, 'getGameById')
             .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
             .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
-        jest.spyOn(LocalGameServices, 'activeGameOffline').mockReturnValueOnce(
-            Promise.resolve(true),
-        )
-        jest.spyOn(LocalGameServices, 'activeGameId').mockReturnValueOnce(
+        jest.spyOn(
+            LocalGameServices,
+            'isActiveGameOffline',
+        ).mockReturnValueOnce(Promise.resolve(true))
+        jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValueOnce(
             Promise.resolve('game1'),
         )
 
@@ -434,7 +437,7 @@ describe('get game by team', () => {
 
 describe('get active games', () => {
     it('with local success', async () => {
-        jest.spyOn(LocalGameServices, 'activeGames').mockReturnValue(
+        jest.spyOn(LocalGameServices, 'getActiveGames').mockReturnValue(
             Promise.resolve([{ ...game, offline: false }]),
         )
         const result = await getActiveGames('user1')
@@ -442,7 +445,7 @@ describe('get active games', () => {
         expect(result[0]).toMatchObject(game)
     })
     it('with local failure', async () => {
-        jest.spyOn(LocalGameServices, 'activeGames').mockReturnValue(
+        jest.spyOn(LocalGameServices, 'getActiveGames').mockReturnValue(
             Promise.reject({ message: 'test error' }),
         )
         await expect(getActiveGames('user')).rejects.toMatchObject({
@@ -453,9 +456,10 @@ describe('get active games', () => {
 
 describe('get active game offline', () => {
     it('with return value', async () => {
-        jest.spyOn(LocalGameServices, 'activeGameOffline').mockReturnValueOnce(
-            Promise.resolve(true),
-        )
+        jest.spyOn(
+            LocalGameServices,
+            'isActiveGameOffline',
+        ).mockReturnValueOnce(Promise.resolve(true))
         const result = await activeGameOffline()
         expect(result).toBe(true)
     })
@@ -711,8 +715,14 @@ describe('test reactivate inactive game', () => {
         jest.spyOn(LocalPointServices, 'savePoint').mockReturnValue(
             Promise.resolve(undefined),
         )
-        jest.spyOn(LocalActionServices, 'getActions').mockReturnValueOnce(
-            Promise.resolve(savedActions),
+        jest.spyOn(PointServices, 'getActionsByPoint').mockReturnValueOnce(
+            Promise.resolve({
+                data: { actions: savedActions },
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            }),
         )
         jest.spyOn(
             LocalActionServices,
@@ -755,7 +765,7 @@ describe('test reactivate inactive game', () => {
             LocalGameServices,
             'setActiveGameOffline',
         ).mockReturnValueOnce(Promise.resolve())
-        jest.spyOn(GameServices, 'getPointsByGame').mockReturnValueOnce(
+        jest.spyOn(GameServices, 'getPointsByGame').mockReturnValue(
             Promise.resolve({
                 data: { points: [{ ...point, pointNumber: 2 }, point] },
                 status: 200,
@@ -767,8 +777,14 @@ describe('test reactivate inactive game', () => {
         jest.spyOn(LocalPointServices, 'savePoint').mockReturnValue(
             Promise.resolve(undefined),
         )
-        jest.spyOn(LocalActionServices, 'getActions').mockReturnValue(
-            Promise.resolve(savedActions),
+        jest.spyOn(PointServices, 'getActionsByPoint').mockReturnValue(
+            Promise.resolve({
+                data: { actions: savedActions },
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            }),
         )
         jest.spyOn(
             LocalActionServices,

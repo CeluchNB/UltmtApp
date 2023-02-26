@@ -210,7 +210,7 @@ describe('save local action', () => {
         }
 
         jest.spyOn(LocalActionServices, 'upsertAction').mockReturnValueOnce(
-            Promise.resolve(action),
+            Promise.resolve({ ...action, _id: 'actoion1', pointId: 'point1' }),
         )
         jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
             Promise.resolve(point),
@@ -253,7 +253,7 @@ describe('save local action', () => {
         }
 
         jest.spyOn(LocalActionServices, 'upsertAction').mockReturnValueOnce(
-            Promise.resolve(action),
+            Promise.resolve({ ...action, _id: 'actoion1', pointId: 'point1' }),
         )
         jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
             Promise.resolve(point),
@@ -296,7 +296,7 @@ describe('save local action', () => {
         }
 
         jest.spyOn(LocalActionServices, 'upsertAction').mockReturnValueOnce(
-            Promise.resolve(action),
+            Promise.resolve({ ...action, _id: 'actoion1', pointId: 'point1' }),
         )
         const mockGetPoint = jest
             .spyOn(LocalPointServices, 'getPointById')
@@ -309,8 +309,8 @@ describe('save local action', () => {
 
         const result = await saveLocalAction(action, 'point1')
         expect(result).toMatchObject(ActionFactory.createFromAction(action))
-        expect(mockGetPoint).not.toHaveBeenCalled()
-        expect(mockSavePoint).not.toHaveBeenCalled()
+        expect(mockGetPoint).toHaveBeenCalled()
+        expect(mockSavePoint).toHaveBeenCalled()
     })
 
     it('with malformed substitution', async () => {
@@ -329,7 +329,7 @@ describe('save local action', () => {
         }
 
         jest.spyOn(LocalActionServices, 'upsertAction').mockReturnValueOnce(
-            Promise.resolve(action),
+            Promise.resolve({ ...action, _id: 'actoion1', pointId: 'point1' }),
         )
         const mockGetPoint = jest
             .spyOn(LocalPointServices, 'getPointById')
@@ -343,8 +343,8 @@ describe('save local action', () => {
 
         const result = await saveLocalAction(action, 'point1')
         expect(result).toMatchObject(ActionFactory.createFromAction(action))
-        expect(mockGetPoint).not.toHaveBeenCalled()
-        expect(mockSavePoint).not.toHaveBeenCalled()
+        expect(mockGetPoint).toHaveBeenCalled()
+        expect(mockSavePoint).toHaveBeenCalled()
     })
 
     it('handles local error', async () => {
@@ -400,6 +400,12 @@ describe('delete local action', () => {
         jest.spyOn(LocalActionServices, 'deleteAction').mockReturnValueOnce(
             Promise.resolve(action),
         )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(point),
+        )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
+            Promise.resolve(),
+        )
 
         await expect(
             deleteLocalAction('one', 1, 'point1'),
@@ -443,7 +449,13 @@ describe('create offline action', () => {
             Promise.resolve(point),
         )
         jest.spyOn(LocalActionServices, 'upsertAction').mockReturnValueOnce(
-            Promise.resolve(action),
+            Promise.resolve({ ...action, _id: 'action1', pointId: 'point1' }),
+        )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(point),
+        )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
+            Promise.resolve(),
         )
 
         const result = await createOfflineAction(
@@ -504,6 +516,12 @@ describe('undo offline action', () => {
         )
         jest.spyOn(LocalActionServices, 'deleteAction').mockReturnValueOnce(
             Promise.resolve(action),
+        )
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
+            Promise.resolve(point),
+        )
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
+            Promise.resolve(),
         )
 
         const result = await undoOfflineAction('point1')

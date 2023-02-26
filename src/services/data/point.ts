@@ -22,14 +22,14 @@ import {
 import {
     deleteAllDisplayActionsByPoint as localDeleteAllActionsByPoint,
     deleteEditableActionsByPoint as localDeleteEditableActionsByPoint,
-    getDisplayActions as localGetActions,
     getActionsByPoint as localGetActionsByPoint,
-    saveDisplayActions as localSaveActions,
+    getDisplayActions as localGetDisplayActions,
+    saveDisplayActions as localSaveDisplayActions,
     saveMultipleServerActions as localSaveMultipleActions,
 } from '../local/action'
 import {
     getActiveGameId as localGetActiveGameId,
-    getActiveGameOffline as localGetActiveGameOffline,
+    isActiveGameOffline as localGetActiveGameOffline,
     getGameById as localGetGameById,
     saveGame as localSaveGame,
 } from '../local/game'
@@ -57,10 +57,12 @@ export const createPoint = async (
         const offline = await localGetActiveGameOffline()
         const gameId = await localGetActiveGameId()
         const game = await localGetGameById(gameId)
+        console.log('after first calls')
         let pointId: string = ''
         if (offline) {
             pointId = await createOfflinePoint(pulling, pointNumber, game)
         } else {
+            console.log('calling network')
             const response = await withGameToken(
                 networkCreatePoint,
                 pulling,
@@ -69,11 +71,14 @@ export const createPoint = async (
 
             const { point } = response.data
             pointId = point._id
+            console.log('saving point')
             await localSavePoint(point)
         }
-        // TOTEST: LDR
+
+        console.log('adding point to game')
         await addPointToGame(gameId, pointId)
         const result = await localGetPointById(pointId)
+        console.log('got point')
         return result
     } catch (e: any) {
         return throwApiError(e, Constants.CREATE_POINT_ERROR)
@@ -147,7 +152,6 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
         }
 
         const result = await localGetPointById(pointId)
-        // TOTEST: LDR - update game score
         await updateGameScore(result.teamOneScore, result.teamTwoScore)
         return result
     } catch (e: any) {
@@ -192,13 +196,13 @@ const finishOfflinePoint = async (pointId: string) => {
  * @param pointId id of point
  * @returns List of server actions
  */
-export const getActionsByPoint = async (
+export const getViewableActionsByPoint = async (
     team: TeamNumber,
     pointId: string,
     actionIds: string[],
 ): Promise<Action[]> => {
     try {
-        const localActions = await localGetActions(pointId, actionIds)
+        const localActions = await localGetDisplayActions(pointId, actionIds)
         if (localActions.length === 0) {
             const response = await networkGetActionsByPoint(team, pointId)
             const { actions: networkActions } = response.data
@@ -207,9 +211,9 @@ export const getActionsByPoint = async (
                 (action: SavedServerActionData) => action._id,
             )
 
-            await localSaveActions(pointId, networkActions)
+            await localSaveDisplayActions(pointId, networkActions)
 
-            const savedActions = await localGetActions(pointId, ids)
+            const savedActions = await localGetDisplayActions(pointId, ids)
             const actions = savedActions.map(action => {
                 return ActionFactory.createFromAction(action)
             })
@@ -371,7 +375,6 @@ export const reactivatePoint = async (
             }
 
             await localSavePoint(responsePoint)
-            // TOTEST: LDR - set game score by point
             await updateGameScore(
                 responsePoint.teamOneScore,
                 responsePoint.teamTwoScore,

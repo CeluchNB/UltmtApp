@@ -40,7 +40,7 @@ const parseGame = (schema: GameSchema): Game & { offline: boolean } => {
  * Method to determine if currently active game is offline
  * @returns boolean indicating current game is offline or not
  */
-export const getActiveGameOffline = async (): Promise<boolean> => {
+export const isActiveGameOffline = async (): Promise<boolean> => {
     return (await AsyncStorage.getItem('active_game_offline')) === 'true'
 }
 

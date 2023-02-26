@@ -12,8 +12,8 @@ import {
 } from '../types/action'
 import {
     deleteLocalActionsByPoint,
-    getActionsByPoint,
     getLiveActionsByPoint,
+    getViewableActionsByPoint,
 } from '../services/data/point'
 import {
     getGameById,
@@ -214,13 +214,13 @@ export const useGameViewer = (gameId: string) => {
 
     // private
     const getSavedActions = async (point: Point) => {
-        const oneActions = await getActionsByPoint(
+        const oneActions = await getViewableActionsByPoint(
             'one',
             point._id,
             point.teamOneActions,
         )
         setTeamOneActions(oneActions)
-        const twoActions = await getActionsByPoint(
+        const twoActions = await getViewableActionsByPoint(
             'two',
             point._id,
             point.teamTwoActions,

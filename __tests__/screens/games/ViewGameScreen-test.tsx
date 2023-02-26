@@ -224,7 +224,7 @@ describe('ViewGameScreen', () => {
         jest.spyOn(PointData, 'deleteLocalActionsByPoint').mockReturnValue(
             Promise.resolve(),
         )
-        jest.spyOn(PointData, 'getActionsByPoint').mockReturnValue(
+        jest.spyOn(PointData, 'getViewableActionsByPoint').mockReturnValue(
             Promise.resolve(savedActions),
         )
         jest.spyOn(PointData, 'getLiveActionsByPoint').mockReturnValue(
