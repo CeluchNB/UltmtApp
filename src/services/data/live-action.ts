@@ -154,18 +154,28 @@ export const saveLocalAction = async (
     pointId: string,
 ): Promise<Action> => {
     try {
+        const point = await localGetPointById(pointId)
         if (action.actionType === ActionType.SUBSTITUTION) {
             if (action.playerTwo) {
-                const point = await localGetPointById(pointId)
                 if (action.teamNumber === 'one') {
                     point.teamOnePlayers.push(action.playerTwo)
                 } else {
                     point.teamTwoPlayers.push(action.playerTwo)
                 }
-                await localSavePoint(point)
             }
         }
         const actionData = await localSaveAction(action, pointId)
+        if (actionData.teamNumber === 'one') {
+            point.teamOneActions = [
+                ...new Set([...point.teamOneActions, actionData._id]),
+            ]
+        } else {
+            point.teamTwoActions = [
+                ...new Set([...point.teamTwoActions, actionData._id]),
+            ]
+        }
+
+        await localSavePoint(point)
         return ActionFactory.createFromAction(actionData)
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
@@ -210,10 +220,32 @@ export const deleteLocalAction = async (
     pointId: string,
 ): Promise<LiveServerActionData> => {
     try {
-        return await localDeleteAction(teamNumber, actionNumber, pointId)
+        const action = await localDeleteAction(
+            teamNumber,
+            actionNumber,
+            pointId,
+        )
+
+        await removeActionFromPoint(teamNumber, actionNumber, pointId)
+
+        return action
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
+}
+
+const removeActionFromPoint = async (
+    teamNumber: TeamNumber,
+    actionNumber: number,
+    pointId: string,
+) => {
+    const point = await localGetPointById(pointId)
+    if (teamNumber === 'one') {
+        point.teamOneActions.splice(actionNumber - 1)
+    } else {
+        point.teamTwoActions.splice(actionNumber - 1)
+    }
+    await localSavePoint(point)
 }
 
 export const undoOfflineAction = async (

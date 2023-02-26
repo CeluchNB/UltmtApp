@@ -80,7 +80,7 @@ export class GameSchema {
         this.teamTwoActive = game.teamTwoActive
         this.teamOnePlayers = game.teamOnePlayers
         this.teamTwoPlayers = game.teamTwoPlayers
-        this.resolveCode = game.resolveCode
+        this.resolveCode = game.resolveCode || ''
         this.points = game.points
         this.offline = offline
     }

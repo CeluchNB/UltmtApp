@@ -13,12 +13,6 @@ import {
     ServerActionData,
 } from '../../types/action'
 import {
-    activeGameId as localActiveGameId,
-    activeGameOffline as localActiveGameOffline,
-    getGameById as localGetGameById,
-    saveGame as localSaveGame,
-} from '../local/game'
-import {
     createOfflinePoint as localCreateOfflinePoint,
     deletePoint as localDeletePoint,
     getPointById as localGetPointById,
@@ -26,13 +20,19 @@ import {
     savePoint as localSavePoint,
 } from '../local/point'
 import {
-    deleteAllActionsByPoint as localDeleteAllActionsByPoint,
+    deleteAllDisplayActionsByPoint as localDeleteAllActionsByPoint,
     deleteEditableActionsByPoint as localDeleteEditableActionsByPoint,
-    getActions as localGetActions,
     getActionsByPoint as localGetActionsByPoint,
-    saveActions as localSaveActions,
+    getDisplayActions as localGetDisplayActions,
+    saveDisplayActions as localSaveDisplayActions,
     saveMultipleServerActions as localSaveMultipleActions,
 } from '../local/action'
+import {
+    getActiveGameId as localGetActiveGameId,
+    isActiveGameOffline as localGetActiveGameOffline,
+    getGameById as localGetGameById,
+    saveGame as localSaveGame,
+} from '../local/game'
 import {
     createPoint as networkCreatePoint,
     deletePoint as networkDeletePoint,
@@ -54,11 +54,15 @@ export const createPoint = async (
     pointNumber: number,
 ): Promise<Point> => {
     try {
-        const offline = await localActiveGameOffline()
+        const offline = await localGetActiveGameOffline()
+        const gameId = await localGetActiveGameId()
+        const game = await localGetGameById(gameId)
+        console.log('after first calls')
         let pointId: string = ''
         if (offline) {
-            pointId = await createOfflinePoint(pulling, pointNumber)
+            pointId = await createOfflinePoint(pulling, pointNumber, game)
         } else {
+            console.log('calling network')
             const response = await withGameToken(
                 networkCreatePoint,
                 pulling,
@@ -67,9 +71,14 @@ export const createPoint = async (
 
             const { point } = response.data
             pointId = point._id
+            console.log('saving point')
             await localSavePoint(point)
         }
+
+        console.log('adding point to game')
+        await addPointToGame(gameId, pointId)
         const result = await localGetPointById(pointId)
+        console.log('got point')
         return result
     } catch (e: any) {
         return throwApiError(e, Constants.CREATE_POINT_ERROR)
@@ -79,13 +88,15 @@ export const createPoint = async (
 const createOfflinePoint = async (
     pulling: boolean,
     pointNumber: number,
+    game: Game,
 ): Promise<string> => {
-    const gameId = await localActiveGameId()
-    if (!gameId) {
-        return throwApiError({}, Constants.GET_GAME_ERROR)
-    }
-    const id = await localCreateOfflinePoint(pulling, pointNumber, gameId)
-    return id
+    const pointId = await localCreateOfflinePoint(pulling, pointNumber, game)
+    return pointId
+}
+
+const addPointToGame = async (gameId: string, pointId: string) => {
+    const game = await localGetGameById(gameId)
+    await localSaveGame({ ...game, points: [...game.points, pointId] })
 }
 
 /**
@@ -99,7 +110,7 @@ export const setPlayers = async (
     players: DisplayUser[],
 ): Promise<Point> => {
     try {
-        const offline = await localActiveGameOffline()
+        const offline = await localGetActiveGameOffline()
         if (offline) {
             await updateOfflinePoint(pointId, { teamOnePlayers: players })
         } else {
@@ -131,7 +142,7 @@ const updateOfflinePoint = async (pointId: string, data: Partial<Point>) => {
  */
 export const finishPoint = async (pointId: string): Promise<Point> => {
     try {
-        const offline = await localActiveGameOffline()
+        const offline = await localGetActiveGameOffline()
         if (offline) {
             await finishOfflinePoint(pointId)
         } else {
@@ -141,10 +152,17 @@ export const finishPoint = async (pointId: string): Promise<Point> => {
         }
 
         const result = await localGetPointById(pointId)
+        await updateGameScore(result.teamOneScore, result.teamTwoScore)
         return result
     } catch (e: any) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)
     }
+}
+
+const updateGameScore = async (teamOneScore: number, teamTwoScore: number) => {
+    const gameId = await localGetActiveGameId()
+    const game = await localGetGameById(gameId)
+    await localSaveGame({ ...game, teamOneScore, teamTwoScore })
 }
 
 const finishOfflinePoint = async (pointId: string) => {
@@ -178,13 +196,13 @@ const finishOfflinePoint = async (pointId: string) => {
  * @param pointId id of point
  * @returns List of server actions
  */
-export const getActionsByPoint = async (
+export const getViewableActionsByPoint = async (
     team: TeamNumber,
     pointId: string,
     actionIds: string[],
 ): Promise<Action[]> => {
     try {
-        const localActions = await localGetActions(pointId, actionIds)
+        const localActions = await localGetDisplayActions(pointId, actionIds)
         if (localActions.length === 0) {
             const response = await networkGetActionsByPoint(team, pointId)
             const { actions: networkActions } = response.data
@@ -193,9 +211,9 @@ export const getActionsByPoint = async (
                 (action: SavedServerActionData) => action._id,
             )
 
-            await localSaveActions(pointId, networkActions)
+            await localSaveDisplayActions(pointId, networkActions)
 
-            const savedActions = await localGetActions(pointId, ids)
+            const savedActions = await localGetDisplayActions(pointId, ids)
             const actions = savedActions.map(action => {
                 return ActionFactory.createFromAction(action)
             })
@@ -276,7 +294,8 @@ export const getActivePointForGame = async (
 }
 
 /**
- * Method to reactivate a point
+ * Method to reactivate a point. Reactivation of a point can only occur if it is the last
+ * existing point in a game.
  * @param pointId id of point
  * @param team team one or two
  * @returns updated point
@@ -287,7 +306,7 @@ export const reactivatePoint = async (
     team: TeamNumber,
 ): Promise<Point> => {
     try {
-        const gameId = await localActiveGameId()
+        const gameId = await localGetActiveGameId()
         const game = await localGetGameById(gameId)
         // find point by point number
         const point = await localGetPointByPointNumber(pointNumber, game.points)
@@ -356,6 +375,10 @@ export const reactivatePoint = async (
             }
 
             await localSavePoint(responsePoint)
+            await updateGameScore(
+                responsePoint.teamOneScore,
+                responsePoint.teamTwoScore,
+            )
         }
 
         const response = await localGetPointById(point._id)

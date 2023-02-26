@@ -19,7 +19,7 @@ describe('test add comment', () => {
             }),
         )
         const localSpy = jest
-            .spyOn(LocalServices, 'saveActions')
+            .spyOn(LocalServices, 'saveDisplayActions')
             .mockReturnValueOnce(Promise.resolve())
 
         const result = await addComment('action1', 'point1', 'Test')
@@ -39,7 +39,7 @@ describe('test add comment', () => {
             }),
         )
         const localSpy = jest
-            .spyOn(LocalServices, 'saveActions')
+            .spyOn(LocalServices, 'saveDisplayActions')
             .mockReturnValueOnce(Promise.resolve())
         localSpy.mockReset()
 
@@ -62,7 +62,7 @@ describe('delete comment', () => {
             }),
         )
         const localSpy = jest
-            .spyOn(LocalServices, 'saveActions')
+            .spyOn(LocalServices, 'saveDisplayActions')
             .mockReturnValueOnce(Promise.resolve())
 
         const result = await deleteComment('action1', '1', 'point1')
@@ -82,7 +82,7 @@ describe('delete comment', () => {
             }),
         )
         const localSpy = jest
-            .spyOn(LocalServices, 'saveActions')
+            .spyOn(LocalServices, 'saveDisplayActions')
             .mockReturnValueOnce(Promise.resolve())
         localSpy.mockReset()
 
