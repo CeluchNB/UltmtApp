@@ -13,6 +13,11 @@ exports[`should match snapshot 1`] = `
   <RCTScrollView
     refreshControl={
       <RefreshControlMock
+        colors={
+          [
+            "#31adff",
+          ]
+        }
         onRefresh={[Function]}
         refreshing={false}
       />

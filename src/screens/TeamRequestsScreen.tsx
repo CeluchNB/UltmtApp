@@ -106,6 +106,7 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
             <ScrollView
                 refreshControl={
                     <RefreshControl
+                        colors={[colors.textSecondary]}
                         refreshing={requestsLoading}
                         onRefresh={() => {
                             refetch()

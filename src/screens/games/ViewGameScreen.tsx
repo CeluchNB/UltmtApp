@@ -30,6 +30,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         onSelectAction,
         onSelectPoint,
         onReactivateGame,
+        onRefresh,
     } = useGameViewer(gameId)
     const { navigateToGame } = useGameReactivation()
     const [modalVisible, setModalVisible] = React.useState(false)
@@ -132,6 +133,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                         displayedActions={displayedActions}
                         onSelectPoint={onSelectPoint}
                         onSelectAction={handleSelectAction}
+                        onRefresh={onRefresh}
                     />
                 </View>
             )}

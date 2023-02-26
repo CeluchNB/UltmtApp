@@ -85,30 +85,7 @@ export const useGameViewer = (gameId: string) => {
     }, [liveActions, teamOneActions, teamTwoActions, activePoint])
 
     React.useEffect(() => {
-        setGameLoading(true)
-        setAllPointsLoading(true)
-
-        getGameById(gameId)
-            .then(data => {
-                setGame(data)
-            })
-            .catch((e: any) => {
-                setError(e.message)
-            })
-            .finally(() => {
-                setAllPointsLoading(false)
-            })
-
-        getPointsByGame(gameId)
-            .then(data => {
-                setPoints(data)
-            })
-            .catch((e: any) => {
-                setError(e.message)
-            })
-            .finally(() => {
-                setGameLoading(false)
-            })
+        initializeGame()
 
         return () => {
             unsubscribe()
@@ -118,6 +95,24 @@ export const useGameViewer = (gameId: string) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gameId])
+
+    const initializeGame = async () => {
+        try {
+            setGameLoading(true)
+            setAllPointsLoading(true)
+
+            const gameData = await getGameById(gameId)
+            setGame(gameData)
+
+            const pointsData = await getPointsByGame(gameId)
+            setPoints(pointsData)
+        } catch (e: any) {
+            setError(e?.message)
+        } finally {
+            setAllPointsLoading(false)
+            setGameLoading(false)
+        }
+    }
 
     const subscriptions: SubscriptionObject = {
         client: (data: LiveServerActionData) => {
@@ -147,7 +142,7 @@ export const useGameViewer = (gameId: string) => {
 
             getPointsByGame(gameId)
                 .then(data => {
-                    // TODO: games gauranteed to come in order?
+                    // TODO: points gauranteed to come in order?
                     setPoints(data)
                     if (data.length > 0) {
                         setActivePoint(data[0])
@@ -247,5 +242,6 @@ export const useGameViewer = (gameId: string) => {
         onSelectAction,
         onSelectPoint,
         onReactivateGame,
+        onRefresh: initializeGame,
     }
 }

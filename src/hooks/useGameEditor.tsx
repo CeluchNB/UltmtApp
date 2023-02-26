@@ -244,6 +244,9 @@ export const useGameEditor = () => {
     const onFinishGame = async () => {
         try {
             await finishPoint(point._id)
+            if (!offline) {
+                await nextPoint(point._id)
+            }
             await finishGame()
             dispatch(resetGame())
             dispatch(resetPoint())
