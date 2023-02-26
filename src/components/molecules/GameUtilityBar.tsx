@@ -1,14 +1,16 @@
 import { IconButton } from 'react-native-paper'
 import React from 'react'
 import { useTheme } from '../../hooks'
-import { StyleSheet, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 
 interface GameUtilityBarProps {
+    loading: boolean
     onReactivateGame?: () => void
     onDeleteGame?: () => void
 }
 
 const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
+    loading,
     onReactivateGame,
     onDeleteGame,
 }) => {
@@ -27,6 +29,9 @@ const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
 
     return (
         <View style={styles.container}>
+            {loading && (
+                <ActivityIndicator size="small" color={colors.textPrimary} />
+            )}
             {onReactivateGame && (
                 <IconButton
                     size={20}

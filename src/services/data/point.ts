@@ -57,12 +57,10 @@ export const createPoint = async (
         const offline = await localGetActiveGameOffline()
         const gameId = await localGetActiveGameId()
         const game = await localGetGameById(gameId)
-        console.log('after first calls')
         let pointId: string = ''
         if (offline) {
             pointId = await createOfflinePoint(pulling, pointNumber, game)
         } else {
-            console.log('calling network')
             const response = await withGameToken(
                 networkCreatePoint,
                 pulling,
@@ -71,14 +69,11 @@ export const createPoint = async (
 
             const { point } = response.data
             pointId = point._id
-            console.log('saving point')
             await localSavePoint(point)
         }
 
-        console.log('adding point to game')
         await addPointToGame(gameId, pointId)
         const result = await localGetPointById(pointId)
-        console.log('got point')
         return result
     } catch (e: any) {
         return throwApiError(e, Constants.CREATE_POINT_ERROR)

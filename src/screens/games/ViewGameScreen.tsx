@@ -34,6 +34,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const { navigateToGame } = useGameReactivation()
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deleteLoading, setDeleteLoading] = React.useState(false)
+    const [reactivateLoading, setReactivateLoading] = React.useState(false)
 
     React.useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
@@ -60,12 +61,16 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
             if (!onReactivateGame) {
                 return undefined
             }
+            setReactivateLoading(true)
             const reactivatedGame = await onReactivateGame()
+            setReactivateLoading(false)
             if (reactivatedGame) {
                 navigateToGame(reactivatedGame)
             }
         } catch (e) {
             // TODO: error display?
+        } finally {
+            setReactivateLoading(false)
         }
     }, [navigateToGame, onReactivateGame])
 
@@ -104,6 +109,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
             {game && <GameHeader game={game} />}
             {game && (
                 <GameUtilityBar
+                    loading={reactivateLoading}
                     onReactivateGame={
                         managingTeamId ? handleReactivateGame : undefined
                     }

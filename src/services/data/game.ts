@@ -339,7 +339,6 @@ export const reactivateInactiveGame = async (
         await EncryptedStorage.setItem('game_token', token)
         await localSetActiveGameId(game._id)
         await localSetActiveGameOffline(false)
-        console.log('after initial stuff')
 
         // get points
         const pointResponse = await networkGetPointsByGame(gameId)
@@ -359,11 +358,9 @@ export const reactivateInactiveGame = async (
                 team,
                 point._id,
             )
-            console.log('got actions')
             const { actions: networkActions } = actionResponse.data
 
             // save actions locally
-            console.log('saving actions')
             await localSaveMultipleServerActions(
                 networkActions.map((action: SavedServerActionData) => {
                     return { ...action, teamNumber: team }
@@ -371,14 +368,11 @@ export const reactivateInactiveGame = async (
                 point._id,
             )
         }
-        console.log('network reactivation')
         await withGameToken(networkReactivatePoint, activePoint?._id)
 
-        console.log('local get')
         const result = await localGetGameById(game._id)
         return result
     } catch (e) {
-        console.log('getting errors', e)
         return throwApiError(e, Constants.GET_GAME_ERROR)
     }
 }
