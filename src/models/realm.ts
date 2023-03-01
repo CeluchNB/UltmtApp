@@ -7,6 +7,7 @@ import {
     GameSchema,
     GuestTeamSchema,
     PointSchema,
+    TeamSchema,
     TournamentSchema,
 } from './index'
 
@@ -19,6 +20,7 @@ const SCHEMAS = [
     PointSchema.schema,
     ActionSchema.schema,
     CommentSchema,
+    TeamSchema.schema,
 ]
 
 const config = {

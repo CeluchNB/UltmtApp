@@ -209,6 +209,7 @@ describe('PointAccordionGroup', () => {
             teamTwo,
             onSelectPoint: jest.fn(),
             onSelectAction: jest.fn(),
+            onRefresh: jest.fn(),
         }
     })
 

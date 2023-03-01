@@ -4,6 +4,7 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 import { SavedServerActionData } from '../../types/action'
 import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
+import { getUserId } from './user'
 import { parseClientAction } from '../../utils/action'
 import { parseClientPoint } from '../../utils/point'
 import { parseFullGame } from '../../utils/game'
@@ -99,6 +100,8 @@ export const createGame = async (
     try {
         let id: string
         if (offline) {
+            const userId = await getUserId()
+            data.creator._id = userId
             id = await localCreateOfflineGame(data, teamOnePlayers)
         } else {
             const response = await withToken(networkCreateGame, data)

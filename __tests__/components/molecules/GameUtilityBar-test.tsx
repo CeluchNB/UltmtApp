@@ -8,6 +8,7 @@ describe('GameUtilityBar', () => {
             <GameUtilityBar
                 onReactivateGame={() => {}}
                 onDeleteGame={() => {}}
+                loading={false}
             />,
         )
 
@@ -17,7 +18,10 @@ describe('GameUtilityBar', () => {
     it('calls reactivate function', () => {
         const onReactivateGame = jest.fn()
         const { getByTestId } = render(
-            <GameUtilityBar onReactivateGame={onReactivateGame} />,
+            <GameUtilityBar
+                onReactivateGame={onReactivateGame}
+                loading={false}
+            />,
         )
 
         fireEvent.press(getByTestId('reactivate-button'))
@@ -27,7 +31,7 @@ describe('GameUtilityBar', () => {
     it('calls delete function', () => {
         const onDeleteGame = jest.fn()
         const { getByTestId } = render(
-            <GameUtilityBar onDeleteGame={onDeleteGame} />,
+            <GameUtilityBar onDeleteGame={onDeleteGame} loading={false} />,
         )
 
         fireEvent.press(getByTestId('delete-button'))

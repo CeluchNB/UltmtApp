@@ -2,6 +2,7 @@ import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import jwt_decode from 'jwt-decode'
+import { saveTeams as localSaveTeams } from '../local/team'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateUserData, DisplayUser, User } from '../../types/user'
@@ -31,7 +32,8 @@ import {
 export const fetchProfile = async (): Promise<User> => {
     try {
         const response = await withToken(networkFetchProfile)
-        const { user } = response.data
+        const { user, fullManagerTeams } = response.data
+        await localSaveTeams(fullManagerTeams)
         return user
     } catch (error: any) {
         return throwApiError(error, Constants.GENERIC_FETCH_PROFILE_ERROR)

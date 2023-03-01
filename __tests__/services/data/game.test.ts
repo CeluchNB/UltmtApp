@@ -4,6 +4,7 @@ import * as LocalActionServices from '../../../src/services/local/action'
 import * as LocalGameServices from '../../../src/services/local/game'
 import * as LocalPointServices from '../../../src/services/local/point'
 import * as PointServices from '../../../src/services/network/point'
+import * as UserServices from '../../../src/services/data/user'
 import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { game } from '../../../fixtures/data'
@@ -131,10 +132,13 @@ describe('test create game', () => {
         jest.spyOn(LocalGameServices, 'createOfflineGame').mockReturnValueOnce(
             Promise.resolve('game1'),
         )
+        jest.spyOn(UserServices, 'getUserId').mockReturnValueOnce(
+            Promise.resolve('id1'),
+        )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
             Promise.resolve({ ...game, offline: false }),
         )
-        const result = await createGame({} as any, true, [])
+        const result = await createGame(game, true, [])
         expect(result).toMatchObject(game)
     })
 })
