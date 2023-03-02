@@ -1,6 +1,9 @@
+import React from 'react'
 import { getActivePointForGame } from '../services/data/point'
+import { getUserId } from '../services/data/user'
 import { resurrectActiveGame } from '../services/data/game'
-import { selectAccount } from '../store/reducers/features/account/accountReducer'
+import { useData } from './useData'
+import { useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { Game, LocalGame } from '../types/game'
 import {
@@ -11,24 +14,29 @@ import {
     setGame,
     setTeam,
 } from '../store/reducers/features/game/liveGameReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
 export const useGameReactivation = () => {
     const navigation = useNavigation()
-    const account = useSelector(selectAccount)
     const dispatch = useDispatch()
+    const { data: userId } = useData(getUserId)
 
-    const getMyTeamId = (game: Game): string => {
-        return (
-            (game.creator._id === account._id
-                ? game.teamOne._id
-                : game.teamTwo._id) || ''
-        )
-    }
+    const getMyTeamId = React.useCallback(
+        (game: Game): string => {
+            return (
+                (game.creator._id === userId
+                    ? game.teamOne._id
+                    : game.teamTwo._id) || ''
+            )
+        },
+        [userId],
+    )
 
-    const getTeamNumber = (game: Game): string => {
-        return game.creator._id === account._id ? 'one' : 'two'
-    }
+    const getTeamNumber = React.useCallback(
+        (game: Game): string => {
+            return game.creator._id === userId ? 'one' : 'two'
+        },
+        [userId],
+    )
 
     const onResurrect = async (game: Game): Promise<LocalGame> => {
         return await resurrectActiveGame(game._id, getMyTeamId(game))

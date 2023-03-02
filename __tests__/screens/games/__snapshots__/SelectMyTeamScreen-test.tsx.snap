@@ -22,9 +22,16 @@ exports[`SelectMyTeamScreen should match snapshot with manager teams 1`] = `
         [
           {
             "_id": "team1",
+            "continuationId": "team1",
+            "games": [],
+            "managers": [],
             "name": "Name",
             "place": "Place",
+            "players": [],
+            "requests": [],
+            "rosterOpen": true,
             "seasonEnd": "2022",
+            "seasonNumber": 1,
             "seasonStart": "2022",
             "teamname": "place1name1",
           },

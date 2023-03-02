@@ -265,10 +265,11 @@ export const getGamesByTeam = async (teamId: string): Promise<Game[]> => {
  * need to be finished or pushed to the backend.
  * @returns list of games
  */
-export const getActiveGames = async (
-    userId: string,
-): Promise<(Game & { offline: boolean })[]> => {
+export const getActiveGames = async (): Promise<
+    (Game & { offline: boolean })[]
+> => {
     try {
+        const userId = await getUserId()
         const games = await localActiveGames(userId)
         return games
     } catch (e) {
