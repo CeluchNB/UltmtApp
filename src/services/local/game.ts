@@ -40,7 +40,7 @@ const parseGame = (schema: GameSchema): Game & { offline: boolean } => {
  * Method to determine if currently active game is offline
  * @returns boolean indicating current game is offline or not
  */
-export const activeGameOffline = async (): Promise<boolean> => {
+export const isActiveGameOffline = async (): Promise<boolean> => {
     return (await AsyncStorage.getItem('active_game_offline')) === 'true'
 }
 
@@ -48,7 +48,7 @@ export const activeGameOffline = async (): Promise<boolean> => {
  * Method to get the ObjectId of the current active game
  * @returns current active game id
  */
-export const activeGameId = async (): Promise<string> => {
+export const getActiveGameId = async (): Promise<string> => {
     return (await AsyncStorage.getItem('active_game_id')) || ''
 }
 
@@ -113,7 +113,7 @@ export const getGameById = async (
     return parseGame(game)
 }
 
-export const activeGames = async (
+export const getActiveGames = async (
     userId: string,
 ): Promise<(Game & { offline: boolean })[]> => {
     const realm = await getRealm()

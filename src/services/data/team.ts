@@ -1,8 +1,13 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
+import { getUserId } from './user'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
+import {
+    getManagingTeams as localGetManagingTeams,
+    saveTeams as localSaveTeams,
+} from '../local/team'
 import {
     addManager as networkAddManager,
     createBulkJoinCode as networkCreateBulkJoinCode,
@@ -17,7 +22,7 @@ import {
 } from '../network/team'
 
 /**
- * Method to create team
+ * Method to create a managed team by a user
  * @param data create team data
  * @returns created team
  * @throws error if team is not created successfully
@@ -26,6 +31,7 @@ export const createTeam = async (data: CreateTeam): Promise<Team> => {
     try {
         const response = await withToken(networkCreateTeam, data)
         const { team } = response.data
+        await localSaveTeams([team])
         return team
     } catch (error) {
         return throwApiError(error, Constants.CREATE_TEAM_ERROR)
@@ -204,5 +210,19 @@ export const createBulkJoinCode = async (teamId: string): Promise<string> => {
         return code
     } catch (error) {
         return throwApiError(error, Constants.EDIT_TEAM_ERROR)
+    }
+}
+
+/**
+ * Get the locally saved teams that the user is a manager of.
+ * @param userId
+ * @returns list of teams
+ */
+export const getManagingTeams = async (): Promise<Team[]> => {
+    try {
+        const userId = await getUserId()
+        return await localGetManagingTeams(userId)
+    } catch (error) {
+        return throwApiError(error, Constants.GET_TEAM_ERROR)
     }
 }

@@ -1,6 +1,5 @@
 import * as Constants from '../../utils/constants'
 import ActionDisplayItem from '../../components/atoms/ActionDisplayItem'
-import { ActionType } from '../../types/action'
 import { ApiError } from '../../types/services'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
@@ -10,8 +9,8 @@ import PlayerActionView from '../../components/organisms/PlayerActionView'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
-import { getValidTeamActions } from '../../utils/action'
 import { isPulling } from '../../utils/point'
+import { ActionType, TeamActionList } from '../../types/action'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { useGameEditor, useTheme } from '../../hooks'
 
@@ -35,8 +34,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         point,
         waiting,
         team,
-        onPlayerAction,
-        onTeamAction,
+        onAction,
         onUndo,
         onFinishPoint: finishPoint,
         onFinishGame: finishGame,
@@ -46,10 +44,15 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         return (
             finishPointLoading ||
             finishGameLoading ||
-            (lastAction?.actionType !== ActionType.TEAM_ONE_SCORE &&
-                lastAction?.actionType !== ActionType.TEAM_TWO_SCORE)
+            (lastAction?.action.actionType !== ActionType.TEAM_ONE_SCORE &&
+                lastAction?.action.actionType !== ActionType.TEAM_TWO_SCORE)
         )
-    }, [finishGameLoading, finishPointLoading, lastAction?.actionType])
+    }, [finishGameLoading, finishPointLoading, lastAction?.action])
+
+    const teamActions = React.useMemo(() => {
+        const actionListData = new TeamActionList(myTeamActions, team)
+        return actionListData.actionList
+    }, [myTeamActions, team])
 
     const onFinishPoint = async () => {
         try {
@@ -71,7 +74,6 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         try {
             setFinishGameLoading(true)
             await finishGame()
-            // navigation.reset({ index: 0, routes: [{ name:  }]})
             navigation.navigate('Tabs', {
                 screen: 'Account',
                 params: { screen: 'Profile' },
@@ -135,11 +137,12 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                             pulling={isPulling(point, game, team)}
                             actionStack={myTeamActions}
                             loading={waiting}
-                            onAction={onPlayerAction}
+                            team={team}
+                            onAction={onAction}
                         />
                         <TeamActionView
-                            actions={getValidTeamActions(myTeamActions)}
-                            onAction={onTeamAction}
+                            actions={teamActions}
+                            onAction={onAction}
                         />
                         <PrimaryButton
                             style={styles.button}

@@ -1,15 +1,11 @@
 import * as AuthData from '../../../src/services/data/auth'
 import * as Constants from '../../../src/utils/constants'
 import * as TeamData from '../../../src/services/data/team'
-import * as UserData from '../../../src/services/data/user'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { SelectMyTeamProps } from '../../../src/types/navigation'
 import SelectMyTeamScreen from '../../../src/screens/games/SelectMyTeamScreen'
-import { Team } from '../../../src/types/team'
-import { fetchProfileData } from '../../../fixtures/data'
-import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
 import {
     fireEvent,
@@ -67,8 +63,8 @@ describe('SelectMyTeamScreen', () => {
         jest.spyOn(AuthData, 'isLoggedIn').mockReturnValue(
             Promise.resolve(true),
         )
-        jest.spyOn(UserData, 'fetchProfile').mockReturnValueOnce(
-            Promise.resolve({ ...fetchProfileData, managerTeams: [] }),
+        jest.spyOn(TeamData, 'getManagingTeams').mockReturnValueOnce(
+            Promise.resolve([]),
         )
         const snapshot = render(
             <Provider store={store}>
@@ -95,26 +91,26 @@ describe('SelectMyTeamScreen', () => {
         jest.spyOn(AuthData, 'isLoggedIn').mockReturnValue(
             Promise.resolve(true),
         )
-        jest.spyOn(UserData, 'fetchProfile').mockReturnValueOnce(
-            Promise.resolve({ ...fetchProfileData, managerTeams: [] }),
+        jest.spyOn(TeamData, 'getManagingTeams').mockReturnValueOnce(
+            Promise.resolve([
+                {
+                    _id: 'team1',
+                    place: 'Place',
+                    name: 'Name',
+                    teamname: 'place1name1',
+                    seasonStart: '2022',
+                    seasonEnd: '2022',
+                    managers: [],
+                    players: [],
+                    seasonNumber: 1,
+                    continuationId: 'team1',
+                    rosterOpen: true,
+                    requests: [],
+                    games: [],
+                },
+            ]),
         )
-        jest.spyOn(TeamData, 'getTeam').mockReturnValueOnce(
-            Promise.resolve({} as Team),
-        )
-        store.dispatch(
-            setProfile({
-                managerTeams: [
-                    {
-                        _id: 'team1',
-                        place: 'Place',
-                        name: 'Name',
-                        teamname: 'place1name1',
-                        seasonStart: '2022',
-                        seasonEnd: '2022',
-                    },
-                ],
-            }),
-        )
+
         const snapshot = render(
             <Provider store={store}>
                 <NavigationContainer>

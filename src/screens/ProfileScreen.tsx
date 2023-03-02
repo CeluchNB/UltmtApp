@@ -78,11 +78,11 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         const unsubscribe = navigation.addListener('focus', async () => {
             // TODO: causing poor UI effect on back navigation
             // investigate consequences of removing this
-            // if (!profileLoading) {
-            //     profileRefetch()
-            //     gameRefetch()
-            //     activeGameRefetch()
-            // }
+            if (!profileLoading) {
+                // profileRefetch()
+                gameRefetch()
+                activeGameRefetch()
+            }
         })
         return unsubscribe
     })
@@ -114,7 +114,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     }
 
     const onViewGame = (gameId: string) => {
-        navigation.navigate('Tabs', {
+        navigation.push('Tabs', {
             screen: 'Games',
             params: {
                 screen: 'ViewGame',
@@ -289,7 +289,8 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                         )
                                     }}
                                     error={
-                                        games?.length === 0
+                                        !sortedGames ||
+                                        sortedGames?.length === 0
                                             ? 'No games available'
                                             : undefined
                                     }

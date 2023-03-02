@@ -4,8 +4,8 @@ import Point from '../src/types/point'
 import { User } from '../src/types/user'
 import {
     ActionType,
-    LiveServerAction,
-    SavedServerAction,
+    LiveServerActionData,
+    SavedServerActionData,
 } from '../src/types/action'
 
 export const fetchProfileData: User = {
@@ -186,7 +186,7 @@ export const point: Point = {
     teamTwoActions: [],
 }
 
-export const liveAction: LiveServerAction = {
+export const liveAction: LiveServerActionData = {
     comments: [
         {
             comment: 'Test comment',
@@ -204,7 +204,7 @@ export const liveAction: LiveServerAction = {
     tags: ['ib'],
     teamNumber: 'one',
 }
-export const savedAction: SavedServerAction = {
+export const savedAction: SavedServerActionData = {
     _id: 'action1',
     comments: [],
     actionNumber: 1,

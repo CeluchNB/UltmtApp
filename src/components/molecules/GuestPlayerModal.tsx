@@ -3,6 +3,7 @@ import BaseModal from '../atoms/BaseModal'
 import { GuestUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
+import SecondaryButton from '../atoms/SecondaryButton'
 import UserInput from '../atoms/UserInput'
 import { addGuestPlayer } from '../../store/reducers/features/game/liveGameReducer'
 import { getFormFieldRules } from '../../utils/form-utils'
@@ -92,6 +93,11 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
         },
         button: {
             marginTop: 10,
+            marginLeft: 5,
+            marginRight: 5,
+        },
+        buttonContainer: {
+            flexDirection: 'row',
         },
     })
 
@@ -139,14 +145,24 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
                 <Text style={styles.errorText}>{errors.lastName.message}</Text>
             )}
             {error && <Text style={styles.errorText}>{error}</Text>}
-            <PrimaryButton
-                style={styles.button}
-                text="add"
-                onPress={async () => {
-                    handleSubmit(onSubmitPlayer)()
-                }}
-                loading={status === 'loading'}
-            />
+            <View style={styles.buttonContainer}>
+                <SecondaryButton
+                    style={styles.button}
+                    text="cancel"
+                    onPress={async () => {
+                        reset()
+                        onClose()
+                    }}
+                />
+                <PrimaryButton
+                    style={styles.button}
+                    text="add"
+                    onPress={async () => {
+                        handleSubmit(onSubmitPlayer)()
+                    }}
+                    loading={status === 'loading'}
+                />
+            </View>
         </BaseModal>
     )
 }

@@ -3,7 +3,12 @@ import { CreateGame } from '../../../../types/game'
 import { DisplayUser } from '../../../../types/user'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
-import { DisplayTeam, GuestTeam, Team } from '../../../../types/team'
+import {
+    DisplayTeam,
+    GuestTeam,
+    Team,
+    TeamNumber,
+} from '../../../../types/team'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export interface LiveGameSlice {
@@ -33,7 +38,7 @@ export interface LiveGameSlice {
     }
     teamOne: Team
     activeTags: string[]
-    team: 'one' | 'two'
+    team: TeamNumber
     createStatus: Status
     createError: string | undefined
     guestPlayerStatus: Status

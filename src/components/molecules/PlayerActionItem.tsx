@@ -1,5 +1,5 @@
+import { Action } from '../../types/action'
 import { Button } from 'react-native-paper'
-import { ClientActionType } from '../../types/action'
 import { DisplayUser } from '../../types/user'
 import PlayerActionTagModal from './PlayerActionTagModal'
 import React from 'react'
@@ -8,13 +8,9 @@ import { StyleSheet, Text, View } from 'react-native'
 
 interface PlayerActionItemProps {
     player: DisplayUser
-    actions: ClientActionType[]
+    actions: Action[]
     loading: boolean
-    onAction: (
-        action: ClientActionType,
-        tags: string[],
-        player: DisplayUser,
-    ) => void
+    onAction: (action: Action) => Promise<void>
 }
 
 const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
@@ -28,12 +24,13 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
     } = useTheme()
     const [modalVisible, setModalVisible] = React.useState(false)
     const [selectedAction, setSelectedAction] = React.useState<
-        ClientActionType | undefined
+        Action | undefined
     >()
 
     const onModalClose = (submit: boolean, tags: string[]) => {
         if (submit && selectedAction) {
-            onAction(selectedAction, tags, player)
+            selectedAction.setTags(tags)
+            onAction(selectedAction)
         }
         setModalVisible(false)
         setSelectedAction(undefined)
@@ -83,9 +80,10 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                 )}
             </View>
             {actions.map(action => (
-                <View style={styles.buttonContainer} key={action}>
+                <View
+                    style={styles.buttonContainer}
+                    key={action.action.actionType}>
                     <Button
-                        key={action}
                         compact={true}
                         style={styles.button}
                         labelStyle={styles.buttonText}
@@ -94,14 +92,14 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                         collapsable={true}
                         disabled={loading}
                         mode="outlined"
-                        onPress={() => {
-                            onAction(action, [], player)
+                        onPress={async () => {
+                            await onAction(action)
                         }}
                         onLongPress={() => {
                             setSelectedAction(action)
                             setModalVisible(true)
                         }}>
-                        {action}
+                        {action.reporterDisplay}
                     </Button>
                 </View>
             ))}

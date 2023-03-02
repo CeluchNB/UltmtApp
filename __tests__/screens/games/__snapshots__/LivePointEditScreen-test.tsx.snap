@@ -170,6 +170,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
               ]
             }
             pulling={true}
+            team="one"
           />
           <TeamActionView
             actions={[]}
@@ -628,9 +629,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                 data={
                   [
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p8",
+                                "firstName": "First 8",
+                                "lastName": "Last 8",
+                                "username": "fl8",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 8 Last 8 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p8",
                         "firstName": "First 8",
@@ -639,9 +657,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p9",
+                                "firstName": "First 9",
+                                "lastName": "Last 9",
+                                "username": "fl9",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 9 Last 9 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p9",
                         "firstName": "First 9",
@@ -650,9 +685,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p10",
+                                "firstName": "First 10",
+                                "lastName": "Last 10",
+                                "username": "fl10",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 10 Last 10 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p10",
                         "firstName": "First 10",
@@ -661,9 +713,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p11",
+                                "firstName": "First 11",
+                                "lastName": "Last 11",
+                                "username": "fl11",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 11 Last 11 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p11",
                         "firstName": "First 11",
@@ -672,9 +741,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p12",
+                                "firstName": "First 12",
+                                "lastName": "Last 12",
+                                "username": "fl12",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 12 Last 12 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p12",
                         "firstName": "First 12",
@@ -683,9 +769,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p13",
+                                "firstName": "First 13",
+                                "lastName": "Last 13",
+                                "username": "fl13",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 13 Last 13 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p13",
                         "firstName": "First 13",
@@ -694,9 +797,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p14",
+                                "firstName": "First 14",
+                                "lastName": "Last 14",
+                                "username": "fl14",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 14 Last 14 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p14",
                         "firstName": "First 14",

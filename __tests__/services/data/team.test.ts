@@ -1,3 +1,4 @@
+import * as LocalTeamServices from '../../../src/services/local/team'
 import * as TeamServices from '../../../src/services/network/team'
 import { CreateTeam, Team } from '../../../src/types/team'
 import {
@@ -57,6 +58,9 @@ const teamError = Promise.reject({
 
 describe('test team services', () => {
     it('should handle network create team success', async () => {
+        jest.spyOn(LocalTeamServices, 'saveTeams').mockReturnValueOnce(
+            Promise.resolve(),
+        )
         jest.spyOn(TeamServices, 'createTeam').mockReturnValueOnce(teamSuccess)
 
         const result = await createTeam(createData)

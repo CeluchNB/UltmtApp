@@ -1,14 +1,12 @@
 import * as Constants from '../utils/constants'
-import { DisplayUser } from '../types/user'
 import React from 'react'
 import { UpdateGame } from '../types/game'
 import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import {
+    Action,
     ActionType,
-    ClientAction,
-    ClientActionType,
-    LiveServerAction,
+    LiveServerActionData,
     SubscriptionObject,
 } from '../types/action'
 import { activeGameOffline, editGame } from '../services/data/game'
@@ -26,7 +24,6 @@ import {
     unsubscribe,
 } from '../services/data/live-action'
 import { createPoint, finishPoint } from '../services/data/point'
-import { getAction, getTeamAction } from '../utils/action'
 import {
     resetGame,
     selectGame,
@@ -48,11 +45,11 @@ function immutablePush<T>(newValue: T): (current: T[]) => T[] {
     }
 }
 
-function immutableFilter<T extends { actionNumber: number }>(
+function immutableFilter<T extends { action: { actionNumber: number } }>(
     actionNumber: number,
 ): (current: T[]) => T[] {
     return (current: T[]): T[] => {
-        return current.filter(item => item.actionNumber !== actionNumber)
+        return current.filter(item => item.action.actionNumber !== actionNumber)
     }
 }
 
@@ -63,20 +60,21 @@ export const useGameEditor = () => {
     const point = useSelector(selectPoint)
     const [waiting, setWaiting] = React.useState(false)
     const [error, setError] = React.useState('')
-    const [actions, setActions] = React.useState<LiveServerAction[]>([])
+    const [actions, setActions] = React.useState<Action[]>([])
     const [offline, setOffline] = React.useState(false)
 
     const actionSideEffects = React.useCallback(
-        (data: LiveServerAction) => {
+        (data: Action) => {
+            const action = data.action as LiveServerActionData
             if (
-                data.actionType === ActionType.SUBSTITUTION &&
-                data.teamNumber === team
+                action.actionType === ActionType.SUBSTITUTION &&
+                action.teamNumber === team
             ) {
                 dispatch(
                     substitute({
-                        playerOne: data.playerOne,
-                        playerTwo: data.playerTwo,
-                        team: data.teamNumber,
+                        playerOne: data.action.playerOne,
+                        playerTwo: data.action.playerTwo,
+                        team: action.teamNumber,
                     }),
                 )
             }
@@ -85,7 +83,7 @@ export const useGameEditor = () => {
     )
 
     const undoSideEffects = React.useCallback(
-        (data: LiveServerAction) => {
+        (data: LiveServerActionData) => {
             if (
                 data.actionType === ActionType.SUBSTITUTION &&
                 data.teamNumber === team
@@ -109,10 +107,10 @@ export const useGameEditor = () => {
 
     const subscriptions: SubscriptionObject = React.useMemo(() => {
         return {
-            client: async data => {
+            client: async (data: LiveServerActionData) => {
                 try {
                     const action = await saveLocalAction(data, point._id)
-                    actionSideEffects(data)
+                    actionSideEffects(action)
                     successfulResponse()
                     setActions(immutablePush(action))
                 } catch (e: any) {
@@ -188,7 +186,9 @@ export const useGameEditor = () => {
     const lastAction = React.useMemo(() => {
         for (let i = actions.length - 1; i >= 0; i--) {
             // don't worry about other team's actions
-            if (actions[i].teamNumber === team) {
+            if (
+                (actions[i].action as LiveServerActionData).teamNumber === team
+            ) {
                 return actions[i]
             }
         }
@@ -196,10 +196,12 @@ export const useGameEditor = () => {
     }, [actions, team])
 
     const myTeamActions = React.useMemo(() => {
-        return actions.filter(a => a.teamNumber === team)
+        return actions.filter(
+            a => (a.action as LiveServerActionData).teamNumber === team,
+        )
     }, [actions, team])
 
-    const onAction = async (action: ClientAction) => {
+    const onAction = async (action: Action) => {
         setWaiting(true)
         if (offline) {
             const newAction = await createOfflineAction(action, point._id)
@@ -209,35 +211,6 @@ export const useGameEditor = () => {
         } else {
             addAction(action, point._id)
         }
-    }
-
-    const onPlayerAction = async (
-        actionType: ClientActionType,
-        tags: string[],
-        playerOne: DisplayUser,
-    ) => {
-        let playerTwo
-        if (actions.length > 0) {
-            playerTwo = actions[actions.length - 1].playerOne
-        }
-        const action = getAction(actionType, team, tags, playerOne, playerTwo)
-        await onAction(action)
-    }
-
-    const onTeamAction = async (
-        actionType: ClientActionType,
-        tags: string[],
-        playerOne?: DisplayUser,
-        playerTwo?: DisplayUser,
-    ) => {
-        const action = getTeamAction(
-            actionType,
-            team,
-            tags,
-            playerOne,
-            playerTwo,
-        )
-        await onAction(action)
     }
 
     const onUndo = async () => {
@@ -257,7 +230,7 @@ export const useGameEditor = () => {
         const { teamOneScore, teamTwoScore } = prevPoint
 
         const newPoint = await createPoint(
-            isPullingNext(team, lastAction?.actionType),
+            isPullingNext(team, lastAction?.action.actionType),
             point.pointNumber + 1,
         )
 
@@ -271,6 +244,9 @@ export const useGameEditor = () => {
     const onFinishGame = async () => {
         try {
             await finishPoint(point._id)
+            if (!offline) {
+                await nextPoint(point._id)
+            }
             await finishGame()
             dispatch(resetGame())
             dispatch(resetPoint())
@@ -309,8 +285,7 @@ export const useGameEditor = () => {
         point,
         team,
         waiting,
-        onPlayerAction,
-        onTeamAction,
+        onAction,
         onUndo,
         onFinishPoint,
         onFinishGame,
