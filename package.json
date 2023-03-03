@@ -10,8 +10,12 @@
     "test:e2e": "./e2e/run-e2e-tests.sh",
     "test": "TZ=UTC jest --collectCoverage",
     "test-ci": "TZ=UTC jest --forceExit",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "updateperm": "react-native setup-ios-permissions && cd ios && pod install && cd .."
   },
+  "reactNativePermissionsIOS": [
+    "AppTrackingTransparency"
+  ],
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-native-clipboard/clipboard": "^1.11.1",
@@ -37,7 +41,9 @@
     "react-native-dotenv": "^3.4.6",
     "react-native-encrypted-storage": "^4.0.3",
     "react-native-get-random-values": "^1.8.0",
+    "react-native-google-mobile-ads": "^9.1.2",
     "react-native-paper": "^5.1.4",
+    "react-native-permissions": "^3.7.3",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "^3.18.2",
     "react-native-vector-icons": "^9.2.0",
