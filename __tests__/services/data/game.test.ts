@@ -444,7 +444,7 @@ describe('get active games', () => {
         jest.spyOn(LocalGameServices, 'getActiveGames').mockReturnValue(
             Promise.resolve([{ ...game, offline: false }]),
         )
-        const result = await getActiveGames('user1')
+        const result = await getActiveGames()
         expect(result.length).toBe(1)
         expect(result[0]).toMatchObject(game)
     })
@@ -452,7 +452,7 @@ describe('get active games', () => {
         jest.spyOn(LocalGameServices, 'getActiveGames').mockReturnValue(
             Promise.reject({ message: 'test error' }),
         )
-        await expect(getActiveGames('user')).rejects.toMatchObject({
+        await expect(getActiveGames()).rejects.toMatchObject({
             message: Constants.GET_GAME_ERROR,
         })
     })

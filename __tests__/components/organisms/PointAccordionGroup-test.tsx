@@ -28,6 +28,15 @@ jest.mock('@react-navigation/native', () => {
         }),
     }
 })
+jest.mock('react-native-google-mobile-ads', () => {
+    return {
+        default: { initialize: jest.fn(), setRequestConfiguration: jest.fn() },
+        MaxAdsContentRating: { T: 'T', PG: 'PG' },
+        BannerAd: 'Ad',
+        BannerAdSize: { BANNER: 'banner' },
+        TestIds: { BANNER: 'bannertest' },
+    }
+})
 
 const points: Point[] = [
     {

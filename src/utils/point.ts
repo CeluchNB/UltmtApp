@@ -33,7 +33,7 @@ export const isPullingNext = (
 export const normalizeActions = (
     teamOneActions: Action[],
     teamTwoActions: Action[],
-): Action[] => {
+): (Action | { ad: boolean })[] => {
     // dedupe actions
     const oneDeduped = [
         ...new Map(
@@ -47,7 +47,7 @@ export const normalizeActions = (
         ).values(),
     ].sort((a, b) => a.action.actionNumber - b.action.actionNumber)
 
-    const result: Action[] = []
+    const result: (Action | { ad: boolean })[] = []
     const turnovers = [ActionType.DROP, ActionType.THROWAWAY]
     const initiating = [ActionType.CATCH, ActionType.PICKUP]
     let offense: string = 'one'
@@ -100,22 +100,54 @@ export const normalizeActions = (
         if (offense === 'one' && oneDeduped.length > 0) {
             result.push(oneDeduped.shift() as Action)
             if (
-                turnovers.includes(result[result.length - 1].action.actionType)
+                turnovers.includes(
+                    (result[result.length - 1] as Action).action.actionType,
+                )
             ) {
+                result.push({ ad: true })
                 offense = 'two'
             }
         } else if (offense === 'two' && twoDeduped.length > 0) {
             result.push(twoDeduped.shift() as Action)
             if (
-                turnovers.includes(result[result.length - 1].action.actionType)
+                turnovers.includes(
+                    (result[result.length - 1] as Action).action.actionType,
+                )
             ) {
+                result.push({ ad: true })
                 offense = 'one'
             }
         } else if (offense === 'one' && oneDeduped.length === 0) {
-            result.push(...twoDeduped)
+            for (const action of twoDeduped) {
+                if (
+                    [
+                        ActionType.BLOCK,
+                        ActionType.DROP,
+                        ActionType.THROWAWAY,
+                    ].includes(action.action.actionType)
+                ) {
+                    result.push(action)
+                    result.push({ ad: true })
+                } else {
+                    result.push(action)
+                }
+            }
             break
         } else {
-            result.push(...oneDeduped)
+            for (const action of oneDeduped) {
+                if (
+                    [
+                        ActionType.BLOCK,
+                        ActionType.DROP,
+                        ActionType.THROWAWAY,
+                    ].includes(action.action.actionType)
+                ) {
+                    result.push(action)
+                    result.push({ ad: true })
+                } else {
+                    result.push(action)
+                }
+            }
             break
         }
     }
@@ -123,7 +155,9 @@ export const normalizeActions = (
     return result.reverse()
 }
 
-export const normalizeLiveActions = (liveActions: Action[]): Action[] => {
+export const normalizeLiveActions = (
+    liveActions: Action[],
+): (Action | { ad: boolean })[] => {
     const teamOneActions = liveActions.filter(
         action => (action.action as LiveServerActionData).teamNumber === 'one',
     )

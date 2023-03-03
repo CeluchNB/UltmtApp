@@ -1,4 +1,4 @@
-import ActionDisplayItem from '../atoms/ActionDisplayItem'
+import ActionDisplayMediator from './ActionDisplayMediator'
 import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
@@ -17,7 +17,7 @@ import React, { useEffect } from 'react'
 
 interface PointAccordionProps {
     point: Point
-    actions: Action[]
+    actions: (Action | { ad: boolean })[]
     expanded: boolean
     loading: boolean
     teamOne: GuestTeam
@@ -167,12 +167,10 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                 {!loading && (
                     <FlatList
                         data={actions}
-                        renderItem={({ item }) => {
+                        renderItem={({ item, index }) => {
                             return (
-                                <View
-                                    key={item.action.actionNumber}
-                                    style={styles.item}>
-                                    <ActionDisplayItem
+                                <View key={index} style={styles.item}>
+                                    <ActionDisplayMediator
                                         action={item}
                                         onPress={onActionPress}
                                         teamOne={teamOne}

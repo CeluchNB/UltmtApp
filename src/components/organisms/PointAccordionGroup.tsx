@@ -10,7 +10,7 @@ import { FlatList, RefreshControl } from 'react-native'
 export interface PointAccordionGroupProps {
     activePointId?: string
     points: Point[]
-    displayedActions: Action[]
+    displayedActions: (Action | { ad: boolean })[]
     teamOne: GuestTeam
     teamTwo: GuestTeam
     loading: boolean

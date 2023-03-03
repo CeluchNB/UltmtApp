@@ -9,6 +9,7 @@ import {
     normalizeActions,
 } from '../../src/utils/point'
 
+const ad = { ad: true }
 describe('isPulling', () => {
     it('with undefined values', () => {
         const result1 = isPulling(
@@ -136,10 +137,11 @@ describe('normalizeActions', () => {
             ),
             [],
         )
-        expect(result.length).toBe(3)
+        expect(result.length).toBe(4)
         expect(result[0].action).toMatchObject(action3)
-        expect(result[1].action).toMatchObject(action2)
-        expect(result[2].action).toMatchObject(action1)
+        expect(result[1]).toMatchObject(ad)
+        expect(result[2].action).toMatchObject(action2)
+        expect(result[3].action).toMatchObject(action1)
     })
 
     it('team two pull -> block -> pickup', () => {
@@ -152,10 +154,11 @@ describe('normalizeActions', () => {
                 ActionFactory.createFromAction(a),
             ),
         )
-        expect(result.length).toBe(3)
+        expect(result.length).toBe(4)
         expect(result[0].action).toMatchObject(action3)
-        expect(result[1].action).toMatchObject(action2)
-        expect(result[2].action).toMatchObject(action1)
+        expect(result[1]).toMatchObject(ad)
+        expect(result[2].action).toMatchObject(action2)
+        expect(result[3].action).toMatchObject(action1)
     })
 
     it('team one pickup -> catch -> catch', () => {
