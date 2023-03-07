@@ -25,6 +25,7 @@ const SearchTournamentScreen: React.FC<SeearchTournamentProps> = ({
     const search = async (q: string) => {
         try {
             setError('')
+            setTournaments([])
             const result = await searchTournaments(q)
             setTournaments(result)
         } catch (e: any) {

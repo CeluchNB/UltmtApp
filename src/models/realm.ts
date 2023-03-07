@@ -16,7 +16,7 @@ const SCHEMAS = [
     DisplayUserSchema,
     GameSchema.schema,
     GuestTeamSchema,
-    TournamentSchema,
+    TournamentSchema.schema,
     PointSchema.schema,
     ActionSchema.schema,
     CommentSchema,

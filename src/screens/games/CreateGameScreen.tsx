@@ -6,7 +6,6 @@ import { IconButton } from 'react-native-paper'
 import LabeledFormInput from '../../components/molecules/LabeledFormInput'
 import NetInfoIndicator from '../../components/atoms/NetInfoIndicator'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
-import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { selectAccount } from '../../store/reducers/features/account/accountReducer'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
@@ -106,6 +105,9 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     }
 
     useEffect(() => {
+        navigation.setOptions({
+            title: `${teamOne.name} vs. ${teamTwo.name}`,
+        })
         if (createStatus === 'success') {
             navigation.navigate('LiveGame', { screen: 'FirstPoint' })
         }
@@ -168,11 +170,6 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
         <SafeAreaView style={styles.screen}>
             <ScrollView>
                 <View style={styles.container}>
-                    <View style={styles.titleContainer}>
-                        <ScreenTitle title={teamOne.name} />
-                        <ScreenTitle title="vs." />
-                        <ScreenTitle title={teamTwo.name} />
-                    </View>
                     <View style={styles.netInfoContainer}>
                         <NetInfoIndicator />
                     </View>
