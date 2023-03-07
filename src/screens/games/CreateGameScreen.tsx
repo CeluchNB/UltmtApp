@@ -2,19 +2,28 @@ import { AppDispatch } from '../../store/store'
 import { CreateGame } from '../../types/game'
 import { CreateGameProps } from '../../types/navigation'
 import GameForm from '../../components/organisms/GameForm'
+import { IconButton } from 'react-native-paper'
 import LabeledFormInput from '../../components/molecules/LabeledFormInput'
 import NetInfoIndicator from '../../components/atoms/NetInfoIndicator'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
-import { Tournament } from '../../types/tournament'
 import { selectAccount } from '../../store/reducers/features/account/accountReducer'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import React, { useEffect } from 'react'
-import { SafeAreaView, StyleSheet, Switch, View } from 'react-native'
+import {
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Switch,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native'
 import {
     createGame,
     selectTeamOne,
+    selectTournament,
 } from '../../store/reducers/features/game/liveGameReducer'
 import {
     resetCreateStatus,
@@ -28,12 +37,13 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     // Flow SelectMyTeamScreen -> SelectOpponentScreen -> CreateGameScreen
     const { teamTwo } = route.params
     const {
-        theme: { colors },
+        theme: { colors, size, weight },
     } = useTheme()
     const dispatch = useDispatch<AppDispatch>()
     const account = useSelector(selectAccount)
     const createStatus = useSelector(selectCreateStatus)
     const teamOne = useSelector(selectTeamOne)
+    const tournament = useSelector(selectTournament)
 
     const {
         control,
@@ -49,7 +59,6 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
             playersPerPoint: 7,
             timeoutPerHalf: 1,
             floaterTimeout: true,
-            tournament: undefined,
         },
     })
 
@@ -62,15 +71,15 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
         playersPerPoint: number
         timeoutPerHalf: number
         floaterTimeout: boolean
-        tournament?: Tournament
     }) => {
         dispatch(resetCreateStatus())
         const { offline, ...data } = formData
         const createGameData: CreateGame = {
             ...data,
+            teamTwo,
+            tournament,
             teamTwoDefined: teamTwo._id !== undefined,
             startTime: new Date(),
-            teamTwo: teamTwo,
             teamOne: {
                 _id: teamOne._id,
                 place: teamOne.place,
@@ -111,6 +120,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
         container: {
             width: '80%',
             alignSelf: 'center',
+            marginBottom: 10,
         },
         titleContainer: {
             alignSelf: 'center',
@@ -123,67 +133,103 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
             display: 'flex',
             flexDirection: 'row',
         },
+        labelText: {
+            fontSize: size.fontTwenty,
+            fontWeight: weight.bold,
+            color: colors.textPrimary,
+            width: '50%',
+        },
+        tournamentContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 5,
+            marginBottom: 5,
+        },
+        tournamentText: {
+            fontSize: size.fontFifteen,
+            fontWeight: weight.bold,
+            color: colors.gray,
+            flex: 1,
+        },
+        tournamentValueContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '50%',
+        },
+        tournamentButtonStyle: {
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
     })
 
     return (
         <SafeAreaView style={styles.screen}>
-            <View style={styles.container}>
-                <View style={styles.titleContainer}>
-                    <ScreenTitle title={teamOne.name} />
-                    <ScreenTitle title="vs." />
-                    <ScreenTitle title={teamTwo.name} />
-                </View>
-                <View style={styles.netInfoContainer}>
-                    <NetInfoIndicator />
-                </View>
-                <Controller
-                    name="offline"
-                    control={control}
-                    rules={{}}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Offline"
-                                onChange={onChange}
-                                value={value}
-                                error={errors.offline?.message}>
-                                <Switch
-                                    trackColor={{
-                                        false: colors.gray,
-                                        true: colors.textSecondary,
-                                    }}
-                                    thumbColor={colors.textPrimary}
-                                    onValueChange={onChange}
+            <ScrollView>
+                <View style={styles.container}>
+                    <View style={styles.titleContainer}>
+                        <ScreenTitle title={teamOne.name} />
+                        <ScreenTitle title="vs." />
+                        <ScreenTitle title={teamTwo.name} />
+                    </View>
+                    <View style={styles.netInfoContainer}>
+                        <NetInfoIndicator />
+                    </View>
+                    <Controller
+                        name="offline"
+                        control={control}
+                        rules={{}}
+                        render={({ field: { onChange, value } }) => {
+                            return (
+                                <LabeledFormInput
+                                    label="Offline"
+                                    onChange={onChange}
                                     value={value}
-                                />
-                            </LabeledFormInput>
-                        )
-                    }}
-                />
-                <GameForm control={control} errors={errors} />
-                {/* <Controller
-                    name="tournament"
-                    control={control}
-                    rules={{
-                        required: true,
-                    }}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <LabeledFormInput
-                                label="Tournament"
-                                onChange={onChange}
-                                value={value}
+                                    error={errors.offline?.message}>
+                                    <Switch
+                                        trackColor={{
+                                            false: colors.gray,
+                                            true: colors.textSecondary,
+                                        }}
+                                        thumbColor={colors.textPrimary}
+                                        onValueChange={onChange}
+                                        value={value}
+                                    />
+                                </LabeledFormInput>
+                            )
+                        }}
+                    />
+                    <GameForm control={control} errors={errors} />
+                    <View style={styles.tournamentContainer}>
+                        <Text style={styles.labelText}>Tournament</Text>
+                        <TouchableOpacity
+                            style={styles.tournamentValueContainer}
+                            onPress={() => {
+                                navigation.navigate('SearchTournaments')
+                            }}>
+                            <Text style={styles.tournamentText}>
+                                {tournament ? tournament.name : 'N/A'}
+                            </Text>
+                            <IconButton
+                                style={styles.tournamentButtonStyle}
+                                iconColor={colors.textPrimary}
+                                icon="chevron-right"
+                                onPress={() => {
+                                    navigation.navigate('SearchTournaments')
+                                }}
+                                testID="go-button"
                             />
-                        )
-                    }}
-                /> */}
-                <PrimaryButton
-                    text="start"
-                    disabled={createStatus === 'loading'}
-                    loading={createStatus === 'loading'}
-                    onPress={handleSubmit(onCreate)}
-                />
-            </View>
+                        </TouchableOpacity>
+                    </View>
+                    <PrimaryButton
+                        text="start"
+                        disabled={createStatus === 'loading'}
+                        loading={createStatus === 'loading'}
+                        onPress={handleSubmit(onCreate)}
+                    />
+                </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }

@@ -2,6 +2,7 @@ import CreateGameScreen from '../screens/games/CreateGameScreen'
 import { GameCreationParamList } from '../types/navigation'
 import JoinGameScreen from '../screens/games/JoinGameScreen'
 import React from 'react'
+import SearchTournamentScreen from '../screens/games/SearchTournamentScreen'
 import SelectMyTeamScreen from '../screens/games/SelectMyTeamScreen'
 import SelectOpponentScreen from '../screens/games/SelectOpponentScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -25,14 +26,14 @@ const GameCreationNavigator: React.FC<{}> = () => {
                     title: route.name.split(/(?=[A-Z])/).join(' '),
                 }
             }}>
-            <Stack.Screen
-                name="SelectMyTeam"
-                component={SelectMyTeamScreen}
-                options={{}}
-            />
+            <Stack.Screen name="SelectMyTeam" component={SelectMyTeamScreen} />
             <Stack.Screen
                 name="SelectOpponent"
                 component={SelectOpponentScreen}
+            />
+            <Stack.Screen
+                name="SearchTournaments"
+                component={SearchTournamentScreen}
             />
             <Stack.Screen name="JoinGame" component={JoinGameScreen} />
             <Stack.Screen

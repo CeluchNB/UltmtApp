@@ -1,0 +1,42 @@
+import * as Constants from '../../utils/constants'
+import { throwApiError } from '../../utils/service-utils'
+import { LocalTournament, Tournament } from '../../types/tournament'
+import {
+    createTournament as networkCreateTournament,
+    searchTournaments as networkSearchTournaments,
+} from '../network/tournament'
+
+/**
+ * Creates a tournament in the backend
+ * @param data create tournament data
+ * @returns created tournament
+ */
+export const createTournament = async (
+    data: LocalTournament,
+): Promise<Tournament> => {
+    try {
+        const result = await networkCreateTournament(data)
+        const { tournament } = result.data
+        return tournament
+    } catch (e) {
+        return throwApiError(e, Constants.CREATE_TOURNAMENT_ERROR)
+    }
+}
+
+/**
+ * Searches locally and over the network for tournaments
+ * @param q query string
+ * @returns list of tournaments
+ */
+export const searchTournaments = async (q: string): Promise<Tournament[]> => {
+    try {
+        if (q.length < 3) {
+            throw new Error()
+        }
+        const result = await networkSearchTournaments(q)
+        const { tournaments } = result.data
+        return tournaments
+    } catch (e) {
+        return throwApiError(e, Constants.SEARCH_TOURNAMENT_ERROR)
+    }
+}
