@@ -1,4 +1,5 @@
 import CreateGameScreen from '../screens/games/CreateGameScreen'
+import CreateTournamentScreen from '../screens/games/CreateTournamentScreen'
 import { GameCreationParamList } from '../types/navigation'
 import JoinGameScreen from '../screens/games/JoinGameScreen'
 import React from 'react'
@@ -34,6 +35,11 @@ const GameCreationNavigator: React.FC<{}> = () => {
             <Stack.Screen
                 name="SearchTournaments"
                 component={SearchTournamentScreen}
+            />
+            <Stack.Screen
+                name="CreateTournament"
+                component={CreateTournamentScreen}
+                initialParams={{ name: '' }}
             />
             <Stack.Screen name="JoinGame" component={JoinGameScreen} />
             <Stack.Screen

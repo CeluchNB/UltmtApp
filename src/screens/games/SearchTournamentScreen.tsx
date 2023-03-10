@@ -19,11 +19,13 @@ const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
         theme: { colors, size },
     } = useTheme()
     const dispatch = useDispatch()
+    const [query, setQuery] = React.useState('')
     const [tournaments, setTournaments] = React.useState<Tournament[]>([])
     const [error, setError] = React.useState('')
 
     const search = async (q: string) => {
         try {
+            setQuery(q)
             setError('')
             setTournaments([])
             const result = await searchTournaments(q)
@@ -72,7 +74,9 @@ const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
             />
             <PrimaryButton
                 text="create tournament"
-                onPress={() => {}}
+                onPress={() => {
+                    navigation.navigate('CreateTournament', { name: query })
+                }}
                 loading={false}
             />
         </BaseScreen>

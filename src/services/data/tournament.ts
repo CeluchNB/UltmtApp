@@ -4,6 +4,7 @@ import { LocalTournament, Tournament } from '../../types/tournament'
 import {
     getTournaments as localGetTournaments,
     saveTournaments as localSaveTournaments,
+    saveTournaments,
 } from '../local/tournament'
 import {
     createTournament as networkCreateTournament,
@@ -21,6 +22,7 @@ export const createTournament = async (
     try {
         const result = await networkCreateTournament(data)
         const { tournament } = result.data
+        await saveTournaments([tournament])
         return tournament
     } catch (e) {
         return throwApiError(e, Constants.CREATE_TOURNAMENT_ERROR)
