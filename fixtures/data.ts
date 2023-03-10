@@ -97,7 +97,7 @@ const teamOne = {
     seasonEnd: '2022',
 }
 
-const tourney = {
+export const tourney = {
     _id: 'tourney1',
     name: 'Club Nationals 2022',
     startDate: '2022-10-20',
