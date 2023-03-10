@@ -200,7 +200,7 @@ export type SelectMyTeamProps = CompositeScreenProps<
         NativeStackScreenProps<LiveGameParamList>
     >
 >
-export type SeearchTournamentProps = NativeStackScreenProps<
+export type SearchTournamentProps = NativeStackScreenProps<
     GameCreationParamList,
     'SearchTournaments'
 >

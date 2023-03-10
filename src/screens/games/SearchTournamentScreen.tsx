@@ -3,7 +3,7 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import SearchBar from '../../components/atoms/SearchBar'
-import { SeearchTournamentProps } from '../../types/navigation'
+import { SearchTournamentProps } from '../../types/navigation'
 import { Tournament } from '../../types/tournament'
 import TournamentListItem from '../../components/atoms/TournamentListItem'
 import { searchTournaments } from '../../services/data/tournament'
@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux'
 import { useTheme } from '../../hooks'
 import { FlatList, StyleSheet, Text } from 'react-native'
 
-const SearchTournamentScreen: React.FC<SeearchTournamentProps> = ({
+const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
     navigation,
 }) => {
     const {
@@ -51,7 +51,7 @@ const SearchTournamentScreen: React.FC<SeearchTournamentProps> = ({
     return (
         <BaseScreen containerWidth="90%">
             <SearchBar
-                placeholder="Search tournaments..."
+                placeholder="Search Tournaments..."
                 onChangeText={search}
             />
             {error.length > 0 && <Text style={styles.error}>{error}</Text>}
