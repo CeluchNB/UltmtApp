@@ -1170,10 +1170,10 @@ exports[`should match snapshot 1`] = `
           "timeoutPerHalf": 1,
           "tournament": {
             "_id": "tourney1",
-            "endDate": 2022-10-23T00:00:00.000Z,
+            "endDate": "2022-10-23",
             "eventId": "nationals22",
             "name": "Club Nationals 2022",
-            "startDate": 2022-10-20T00:00:00.000Z,
+            "startDate": "2022-10-20",
           },
         },
       ]

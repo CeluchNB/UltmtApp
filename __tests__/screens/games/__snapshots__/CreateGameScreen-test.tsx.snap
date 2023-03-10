@@ -9,83 +9,1282 @@ exports[`CreateGameScreen should match snapshot 1`] = `
     }
   }
 >
-  <View
-    style={
-      {
-        "alignSelf": "center",
-        "width": "80%",
-      }
-    }
-  >
-    <View
-      style={
-        {
-          "alignItems": "center",
-          "alignSelf": "center",
-        }
-      }
-    >
-      <Text
-        numberOfLines={1}
-        style={
-          [
-            {
-              "color": "#ffd600",
-              "fontSize": 61.64383561643835,
-              "fontWeight": "bold",
-            },
-            undefined,
-          ]
-        }
-      >
-        Name 1
-      </Text>
-      <Text
-        numberOfLines={1}
-        style={
-          [
-            {
-              "color": "#ffd600",
-              "fontSize": 61.64383561643835,
-              "fontWeight": "bold",
-            },
-            undefined,
-          ]
-        }
-      >
-        vs.
-      </Text>
-      <Text
-        numberOfLines={1}
-        style={
-          [
-            {
-              "color": "#ffd600",
-              "fontSize": 61.64383561643835,
-              "fontWeight": "bold",
-            },
-            undefined,
-          ]
-        }
-      >
-        Name 2
-      </Text>
-    </View>
-    <View
-      style={
-        {
-          "alignSelf": "flex-end",
-        }
-      }
-    >
+  <RCTScrollView>
+    <View>
       <View
         style={
           {
-            "display": "flex",
-            "flexDirection": "row",
+            "alignSelf": "center",
+            "marginBottom": 10,
+            "width": "80%",
           }
         }
       >
+        <View
+          style={
+            {
+              "alignSelf": "flex-end",
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "display": "flex",
+                "flexDirection": "row",
+              }
+            }
+          >
+            <View
+              collapsable={false}
+              style={
+                {
+                  "alignSelf": undefined,
+                  "bottom": undefined,
+                  "end": undefined,
+                  "left": undefined,
+                  "position": undefined,
+                  "right": undefined,
+                  "shadowColor": "#000",
+                  "shadowOffset": {
+                    "height": 0,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0,
+                  "shadowRadius": 0,
+                  "start": undefined,
+                  "top": undefined,
+                }
+              }
+            >
+              <View
+                collapsable={false}
+                style={
+                  {
+                    "shadowColor": "#000",
+                    "shadowOffset": {
+                      "height": 0,
+                      "width": 0,
+                    },
+                    "shadowOpacity": 0,
+                    "shadowRadius": 0,
+                  }
+                }
+              >
+                <View
+                  collapsable={false}
+                  style={
+                    {
+                      "backgroundColor": undefined,
+                      "borderColor": "rgba(121, 116, 126, 1)",
+                      "borderRadius": 18,
+                      "borderWidth": 0,
+                      "elevation": 0,
+                      "height": 36,
+                      "margin": 0,
+                      "overflow": "hidden",
+                      "width": 36,
+                    }
+                  }
+                >
+                  <View
+                    accessibilityComponentType="button"
+                    accessibilityRole="button"
+                    accessibilityState={
+                      {
+                        "disabled": true,
+                      }
+                    }
+                    accessibilityTraits="button"
+                    accessible={true}
+                    centered={true}
+                    collapsable={false}
+                    focusable={true}
+                    hitSlop={
+                      {
+                        "bottom": 6,
+                        "left": 6,
+                        "right": 6,
+                        "top": 6,
+                      }
+                    }
+                    onBlur={[Function]}
+                    onClick={[Function]}
+                    onFocus={[Function]}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      [
+                        {
+                          "overflow": "hidden",
+                        },
+                        false,
+                        [
+                          {
+                            "alignItems": "center",
+                            "flexGrow": 1,
+                            "justifyContent": "center",
+                          },
+                          {
+                            "borderRadius": 18,
+                          },
+                        ],
+                      ]
+                    }
+                  >
+                    <Text
+                      accessibilityElementsHidden={true}
+                      allowFontScaling={false}
+                      importantForAccessibility="no-hide-descendants"
+                      pointerEvents="none"
+                      selectable={false}
+                      style={
+                        [
+                          {
+                            "color": "#40dd50",
+                            "fontSize": 20,
+                          },
+                          [
+                            {
+                              "lineHeight": 20,
+                              "transform": [
+                                {
+                                  "scaleX": 1,
+                                },
+                              ],
+                            },
+                            {
+                              "backgroundColor": "transparent",
+                            },
+                          ],
+                          {
+                            "fontFamily": "Material Design Icons",
+                            "fontStyle": "normal",
+                            "fontWeight": "normal",
+                          },
+                          {},
+                        ]
+                      }
+                    >
+                      󰣸
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <div>
+              Network status indicator
+            </div>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "display": "flex",
+              "flexDirection": "row",
+              "marginBottom": 5,
+              "marginTop": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#ffd600",
+                "fontSize": 41.0958904109589,
+                "fontWeight": "bold",
+                "width": "50%",
+              }
+            }
+          >
+            Offline
+          </Text>
+          <View
+            style={
+              {
+                "width": "50%",
+              }
+            }
+          >
+            <RCTSwitch
+              accessibilityRole="switch"
+              onChange={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              onTintColor="#31adff"
+              style={
+                {
+                  "height": 31,
+                  "width": 51,
+                }
+              }
+              thumbTintColor="#ffd600"
+              tintColor="#ababab"
+              value={false}
+            />
+          </View>
+        </View>
+        <View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "display": "flex",
+                "flexDirection": "row",
+                "marginBottom": 5,
+                "marginTop": 5,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "fontSize": 41.0958904109589,
+                  "fontWeight": "bold",
+                  "width": "50%",
+                }
+              }
+            >
+              Game to
+            </Text>
+            <View
+              style={
+                {
+                  "width": "30%",
+                }
+              }
+            >
+              <View
+                style={{}}
+              >
+                <View
+                  pointerEvents="none"
+                  style={
+                    [
+                      {
+                        "bottom": 0,
+                        "left": 0,
+                        "position": "absolute",
+                        "right": 0,
+                        "top": 6,
+                      },
+                      {
+                        "backgroundColor": "#303030",
+                        "borderColor": "#31adff",
+                        "borderRadius": 4,
+                        "borderWidth": 1,
+                      },
+                      undefined,
+                    ]
+                  }
+                  testID="text-input-outline"
+                />
+                <View>
+                  <View
+                    style={
+                      [
+                        {
+                          "paddingBottom": 0,
+                        },
+                        {
+                          "minHeight": 56,
+                          "paddingTop": 8,
+                        },
+                      ]
+                    }
+                  >
+                    <TextInput
+                      accessibilityLabel="Game to"
+                      autoCapitalize="none"
+                      editable={true}
+                      keyboardType="number-pad"
+                      maxFontSizeMultiplier={1.5}
+                      multiline={false}
+                      onBlur={[Function]}
+                      onChangeText={[Function]}
+                      onFocus={[Function]}
+                      placeholder="Game to"
+                      placeholderTextColor="#ffffff"
+                      selectionColor="#ffd600"
+                      style={
+                        [
+                          {
+                            "margin": 0,
+                            "zIndex": 1,
+                          },
+                          {
+                            "height": 48,
+                          },
+                          {
+                            "paddingBottom": 0,
+                            "paddingTop": 0,
+                          },
+                          {
+                            "color": "#ffd600",
+                            "fontFamily": "System",
+                            "fontSize": 16,
+                            "fontWeight": undefined,
+                            "letterSpacing": 0.15,
+                            "lineHeight": undefined,
+                            "paddingHorizontal": 16,
+                            "textAlign": "left",
+                            "textAlignVertical": "center",
+                          },
+                          false,
+                          [
+                            {},
+                          ],
+                          undefined,
+                        ]
+                      }
+                      testID="text-input-outlined"
+                      underlineColorAndroid="transparent"
+                      value="15"
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Text
+              style={
+                {
+                  "color": "#ababab",
+                  "fontSize": 30.821917808219176,
+                  "fontWeight": "bold",
+                  "marginLeft": 10,
+                }
+              }
+            >
+              points
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "display": "flex",
+                "flexDirection": "row",
+                "marginBottom": 5,
+                "marginTop": 5,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "fontSize": 41.0958904109589,
+                  "fontWeight": "bold",
+                  "width": "50%",
+                }
+              }
+            >
+              Half at
+            </Text>
+            <View
+              style={
+                {
+                  "width": "30%",
+                }
+              }
+            >
+              <View
+                style={{}}
+              >
+                <View
+                  pointerEvents="none"
+                  style={
+                    [
+                      {
+                        "bottom": 0,
+                        "left": 0,
+                        "position": "absolute",
+                        "right": 0,
+                        "top": 6,
+                      },
+                      {
+                        "backgroundColor": "#303030",
+                        "borderColor": "#31adff",
+                        "borderRadius": 4,
+                        "borderWidth": 1,
+                      },
+                      undefined,
+                    ]
+                  }
+                  testID="text-input-outline"
+                />
+                <View>
+                  <View
+                    style={
+                      [
+                        {
+                          "paddingBottom": 0,
+                        },
+                        {
+                          "minHeight": 56,
+                          "paddingTop": 8,
+                        },
+                      ]
+                    }
+                  >
+                    <TextInput
+                      accessibilityLabel="Half at"
+                      autoCapitalize="none"
+                      editable={true}
+                      keyboardType="number-pad"
+                      maxFontSizeMultiplier={1.5}
+                      multiline={false}
+                      onBlur={[Function]}
+                      onChangeText={[Function]}
+                      onFocus={[Function]}
+                      placeholder="Half at"
+                      placeholderTextColor="#ffffff"
+                      selectionColor="#ffd600"
+                      style={
+                        [
+                          {
+                            "margin": 0,
+                            "zIndex": 1,
+                          },
+                          {
+                            "height": 48,
+                          },
+                          {
+                            "paddingBottom": 0,
+                            "paddingTop": 0,
+                          },
+                          {
+                            "color": "#ffd600",
+                            "fontFamily": "System",
+                            "fontSize": 16,
+                            "fontWeight": undefined,
+                            "letterSpacing": 0.15,
+                            "lineHeight": undefined,
+                            "paddingHorizontal": 16,
+                            "textAlign": "left",
+                            "textAlignVertical": "center",
+                          },
+                          false,
+                          [
+                            {},
+                          ],
+                          undefined,
+                        ]
+                      }
+                      testID="text-input-outlined"
+                      underlineColorAndroid="transparent"
+                      value="8"
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Text
+              style={
+                {
+                  "color": "#ababab",
+                  "fontSize": 30.821917808219176,
+                  "fontWeight": "bold",
+                  "marginLeft": 10,
+                }
+              }
+            >
+              points
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "display": "flex",
+                "flexDirection": "row",
+                "marginBottom": 5,
+                "marginTop": 5,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "fontSize": 41.0958904109589,
+                  "fontWeight": "bold",
+                  "width": "50%",
+                }
+              }
+            >
+              Soft cap
+            </Text>
+            <View
+              style={
+                {
+                  "width": "30%",
+                }
+              }
+            >
+              <View
+                style={{}}
+              >
+                <View
+                  pointerEvents="none"
+                  style={
+                    [
+                      {
+                        "bottom": 0,
+                        "left": 0,
+                        "position": "absolute",
+                        "right": 0,
+                        "top": 6,
+                      },
+                      {
+                        "backgroundColor": "#303030",
+                        "borderColor": "#31adff",
+                        "borderRadius": 4,
+                        "borderWidth": 1,
+                      },
+                      undefined,
+                    ]
+                  }
+                  testID="text-input-outline"
+                />
+                <View>
+                  <View
+                    style={
+                      [
+                        {
+                          "paddingBottom": 0,
+                        },
+                        {
+                          "minHeight": 56,
+                          "paddingTop": 8,
+                        },
+                      ]
+                    }
+                  >
+                    <TextInput
+                      accessibilityLabel="Soft cap"
+                      autoCapitalize="none"
+                      editable={true}
+                      keyboardType="number-pad"
+                      maxFontSizeMultiplier={1.5}
+                      multiline={false}
+                      onBlur={[Function]}
+                      onChangeText={[Function]}
+                      onFocus={[Function]}
+                      placeholder="Soft cap"
+                      placeholderTextColor="#ffffff"
+                      selectionColor="#ffd600"
+                      style={
+                        [
+                          {
+                            "margin": 0,
+                            "zIndex": 1,
+                          },
+                          {
+                            "height": 48,
+                          },
+                          {
+                            "paddingBottom": 0,
+                            "paddingTop": 0,
+                          },
+                          {
+                            "color": "#ffd600",
+                            "fontFamily": "System",
+                            "fontSize": 16,
+                            "fontWeight": undefined,
+                            "letterSpacing": 0.15,
+                            "lineHeight": undefined,
+                            "paddingHorizontal": 16,
+                            "textAlign": "left",
+                            "textAlignVertical": "center",
+                          },
+                          false,
+                          [
+                            {},
+                          ],
+                          undefined,
+                        ]
+                      }
+                      testID="text-input-outlined"
+                      underlineColorAndroid="transparent"
+                      value="75"
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Text
+              style={
+                {
+                  "color": "#ababab",
+                  "fontSize": 30.821917808219176,
+                  "fontWeight": "bold",
+                  "marginLeft": 10,
+                }
+              }
+            >
+              minutes
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "display": "flex",
+                "flexDirection": "row",
+                "marginBottom": 5,
+                "marginTop": 5,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "fontSize": 41.0958904109589,
+                  "fontWeight": "bold",
+                  "width": "50%",
+                }
+              }
+            >
+              Hard cap
+            </Text>
+            <View
+              style={
+                {
+                  "width": "30%",
+                }
+              }
+            >
+              <View
+                style={{}}
+              >
+                <View
+                  pointerEvents="none"
+                  style={
+                    [
+                      {
+                        "bottom": 0,
+                        "left": 0,
+                        "position": "absolute",
+                        "right": 0,
+                        "top": 6,
+                      },
+                      {
+                        "backgroundColor": "#303030",
+                        "borderColor": "#31adff",
+                        "borderRadius": 4,
+                        "borderWidth": 1,
+                      },
+                      undefined,
+                    ]
+                  }
+                  testID="text-input-outline"
+                />
+                <View>
+                  <View
+                    style={
+                      [
+                        {
+                          "paddingBottom": 0,
+                        },
+                        {
+                          "minHeight": 56,
+                          "paddingTop": 8,
+                        },
+                      ]
+                    }
+                  >
+                    <TextInput
+                      accessibilityLabel="Hard cap"
+                      autoCapitalize="none"
+                      editable={true}
+                      keyboardType="number-pad"
+                      maxFontSizeMultiplier={1.5}
+                      multiline={false}
+                      onBlur={[Function]}
+                      onChangeText={[Function]}
+                      onFocus={[Function]}
+                      placeholder="Hard cap"
+                      placeholderTextColor="#ffffff"
+                      selectionColor="#ffd600"
+                      style={
+                        [
+                          {
+                            "margin": 0,
+                            "zIndex": 1,
+                          },
+                          {
+                            "height": 48,
+                          },
+                          {
+                            "paddingBottom": 0,
+                            "paddingTop": 0,
+                          },
+                          {
+                            "color": "#ffd600",
+                            "fontFamily": "System",
+                            "fontSize": 16,
+                            "fontWeight": undefined,
+                            "letterSpacing": 0.15,
+                            "lineHeight": undefined,
+                            "paddingHorizontal": 16,
+                            "textAlign": "left",
+                            "textAlignVertical": "center",
+                          },
+                          false,
+                          [
+                            {},
+                          ],
+                          undefined,
+                        ]
+                      }
+                      testID="text-input-outlined"
+                      underlineColorAndroid="transparent"
+                      value="90"
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Text
+              style={
+                {
+                  "color": "#ababab",
+                  "fontSize": 30.821917808219176,
+                  "fontWeight": "bold",
+                  "marginLeft": 10,
+                }
+              }
+            >
+              points
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "display": "flex",
+                "flexDirection": "row",
+                "marginBottom": 5,
+                "marginTop": 5,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "fontSize": 41.0958904109589,
+                  "fontWeight": "bold",
+                  "width": "50%",
+                }
+              }
+            >
+              Players
+            </Text>
+            <View
+              style={
+                {
+                  "width": "30%",
+                }
+              }
+            >
+              <View
+                style={{}}
+              >
+                <View
+                  pointerEvents="none"
+                  style={
+                    [
+                      {
+                        "bottom": 0,
+                        "left": 0,
+                        "position": "absolute",
+                        "right": 0,
+                        "top": 6,
+                      },
+                      {
+                        "backgroundColor": "#303030",
+                        "borderColor": "#31adff",
+                        "borderRadius": 4,
+                        "borderWidth": 1,
+                      },
+                      undefined,
+                    ]
+                  }
+                  testID="text-input-outline"
+                />
+                <View>
+                  <View
+                    style={
+                      [
+                        {
+                          "paddingBottom": 0,
+                        },
+                        {
+                          "minHeight": 56,
+                          "paddingTop": 8,
+                        },
+                      ]
+                    }
+                  >
+                    <TextInput
+                      accessibilityLabel="Players"
+                      autoCapitalize="none"
+                      editable={true}
+                      keyboardType="number-pad"
+                      maxFontSizeMultiplier={1.5}
+                      multiline={false}
+                      onBlur={[Function]}
+                      onChangeText={[Function]}
+                      onFocus={[Function]}
+                      placeholder="Players"
+                      placeholderTextColor="#ffffff"
+                      selectionColor="#ffd600"
+                      style={
+                        [
+                          {
+                            "margin": 0,
+                            "zIndex": 1,
+                          },
+                          {
+                            "height": 48,
+                          },
+                          {
+                            "paddingBottom": 0,
+                            "paddingTop": 0,
+                          },
+                          {
+                            "color": "#ffd600",
+                            "fontFamily": "System",
+                            "fontSize": 16,
+                            "fontWeight": undefined,
+                            "letterSpacing": 0.15,
+                            "lineHeight": undefined,
+                            "paddingHorizontal": 16,
+                            "textAlign": "left",
+                            "textAlignVertical": "center",
+                          },
+                          false,
+                          [
+                            {},
+                          ],
+                          undefined,
+                        ]
+                      }
+                      testID="text-input-outlined"
+                      underlineColorAndroid="transparent"
+                      value="7"
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Text
+              style={
+                {
+                  "color": "#ababab",
+                  "fontSize": 30.821917808219176,
+                  "fontWeight": "bold",
+                  "marginLeft": 10,
+                }
+              }
+            >
+              per point
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "display": "flex",
+                "flexDirection": "row",
+                "marginBottom": 5,
+                "marginTop": 5,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "fontSize": 41.0958904109589,
+                  "fontWeight": "bold",
+                  "width": "50%",
+                }
+              }
+            >
+              Timeouts
+            </Text>
+            <View
+              style={
+                {
+                  "width": "30%",
+                }
+              }
+            >
+              <View
+                style={{}}
+              >
+                <View
+                  pointerEvents="none"
+                  style={
+                    [
+                      {
+                        "bottom": 0,
+                        "left": 0,
+                        "position": "absolute",
+                        "right": 0,
+                        "top": 6,
+                      },
+                      {
+                        "backgroundColor": "#303030",
+                        "borderColor": "#31adff",
+                        "borderRadius": 4,
+                        "borderWidth": 1,
+                      },
+                      undefined,
+                    ]
+                  }
+                  testID="text-input-outline"
+                />
+                <View>
+                  <View
+                    style={
+                      [
+                        {
+                          "paddingBottom": 0,
+                        },
+                        {
+                          "minHeight": 56,
+                          "paddingTop": 8,
+                        },
+                      ]
+                    }
+                  >
+                    <TextInput
+                      accessibilityLabel="Timeouts"
+                      autoCapitalize="none"
+                      editable={true}
+                      keyboardType="number-pad"
+                      maxFontSizeMultiplier={1.5}
+                      multiline={false}
+                      onBlur={[Function]}
+                      onChangeText={[Function]}
+                      onFocus={[Function]}
+                      placeholder="Timeouts"
+                      placeholderTextColor="#ffffff"
+                      selectionColor="#ffd600"
+                      style={
+                        [
+                          {
+                            "margin": 0,
+                            "zIndex": 1,
+                          },
+                          {
+                            "height": 48,
+                          },
+                          {
+                            "paddingBottom": 0,
+                            "paddingTop": 0,
+                          },
+                          {
+                            "color": "#ffd600",
+                            "fontFamily": "System",
+                            "fontSize": 16,
+                            "fontWeight": undefined,
+                            "letterSpacing": 0.15,
+                            "lineHeight": undefined,
+                            "paddingHorizontal": 16,
+                            "textAlign": "left",
+                            "textAlignVertical": "center",
+                          },
+                          false,
+                          [
+                            {},
+                          ],
+                          undefined,
+                        ]
+                      }
+                      testID="text-input-outlined"
+                      underlineColorAndroid="transparent"
+                      value="1"
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Text
+              style={
+                {
+                  "color": "#ababab",
+                  "fontSize": 30.821917808219176,
+                  "fontWeight": "bold",
+                  "marginLeft": 10,
+                }
+              }
+            >
+              per half
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "display": "flex",
+                "flexDirection": "row",
+                "marginBottom": 5,
+                "marginTop": 5,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "fontSize": 41.0958904109589,
+                  "fontWeight": "bold",
+                  "width": "50%",
+                }
+              }
+            >
+              Floater timeout
+            </Text>
+            <View
+              style={
+                {
+                  "width": "50%",
+                }
+              }
+            >
+              <RCTSwitch
+                accessibilityRole="switch"
+                onChange={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                onTintColor="#31adff"
+                style={
+                  {
+                    "height": 31,
+                    "width": 51,
+                  }
+                }
+                thumbTintColor="#ffd600"
+                tintColor="#ababab"
+                value={true}
+              />
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "display": "flex",
+              "flexDirection": "row",
+              "marginBottom": 5,
+              "marginTop": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#ffd600",
+                "fontSize": 41.0958904109589,
+                "fontWeight": "bold",
+                "width": "50%",
+              }
+            }
+          >
+            Tournament
+          </Text>
+          <View
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "alignItems": "center",
+                "display": "flex",
+                "flexDirection": "row",
+                "opacity": 1,
+                "width": "50%",
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#ababab",
+                  "flex": 1,
+                  "fontSize": 30.821917808219176,
+                  "fontWeight": "bold",
+                }
+              }
+            >
+              N/A
+            </Text>
+            <View
+              collapsable={false}
+              style={
+                {
+                  "alignSelf": undefined,
+                  "bottom": undefined,
+                  "end": undefined,
+                  "left": undefined,
+                  "position": undefined,
+                  "right": undefined,
+                  "shadowColor": "#000",
+                  "shadowOffset": {
+                    "height": 0,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0,
+                  "shadowRadius": 0,
+                  "start": undefined,
+                  "top": undefined,
+                }
+              }
+            >
+              <View
+                collapsable={false}
+                style={
+                  {
+                    "shadowColor": "#000",
+                    "shadowOffset": {
+                      "height": 0,
+                      "width": 0,
+                    },
+                    "shadowOpacity": 0,
+                    "shadowRadius": 0,
+                  }
+                }
+              >
+                <View
+                  collapsable={false}
+                  style={
+                    {
+                      "alignItems": "center",
+                      "backgroundColor": undefined,
+                      "borderColor": "rgba(121, 116, 126, 1)",
+                      "borderRadius": 20,
+                      "borderWidth": 0,
+                      "elevation": 0,
+                      "height": 40,
+                      "justifyContent": "center",
+                      "margin": 6,
+                      "overflow": "hidden",
+                      "width": 40,
+                    }
+                  }
+                >
+                  <View
+                    accessibilityComponentType="button"
+                    accessibilityRole="button"
+                    accessibilityState={
+                      {
+                        "disabled": false,
+                      }
+                    }
+                    accessibilityTraits="button"
+                    accessible={true}
+                    centered={true}
+                    collapsable={false}
+                    focusable={true}
+                    hitSlop={
+                      {
+                        "bottom": 6,
+                        "left": 6,
+                        "right": 6,
+                        "top": 6,
+                      }
+                    }
+                    onBlur={[Function]}
+                    onClick={[Function]}
+                    onFocus={[Function]}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      [
+                        {
+                          "overflow": "hidden",
+                        },
+                        false,
+                        [
+                          {
+                            "alignItems": "center",
+                            "flexGrow": 1,
+                            "justifyContent": "center",
+                          },
+                          {
+                            "borderRadius": 20,
+                          },
+                        ],
+                      ]
+                    }
+                    testID="search-tournament-button"
+                  >
+                    <Text
+                      accessibilityElementsHidden={true}
+                      allowFontScaling={false}
+                      importantForAccessibility="no-hide-descendants"
+                      pointerEvents="none"
+                      selectable={false}
+                      style={
+                        [
+                          {
+                            "color": "#ffd600",
+                            "fontSize": 24,
+                          },
+                          [
+                            {
+                              "lineHeight": 24,
+                              "transform": [
+                                {
+                                  "scaleX": 1,
+                                },
+                              ],
+                            },
+                            {
+                              "backgroundColor": "transparent",
+                            },
+                          ],
+                          {
+                            "fontFamily": "Material Design Icons",
+                            "fontStyle": "normal",
+                            "fontWeight": "normal",
+                          },
+                          {},
+                        ]
+                      }
+                    >
+                      󰅂
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
         <View
           collapsable={false}
           style={
@@ -126,39 +1325,25 @@ exports[`CreateGameScreen should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": undefined,
-                  "borderColor": "rgba(121, 116, 126, 1)",
-                  "borderRadius": 18,
+                  "backgroundColor": "#ffd600",
+                  "borderColor": "transparent",
+                  "borderRadius": 20,
+                  "borderStyle": "solid",
                   "borderWidth": 0,
-                  "elevation": 0,
-                  "height": 36,
-                  "margin": 0,
-                  "overflow": "hidden",
-                  "width": 36,
+                  "minWidth": "auto",
                 }
               }
             >
               <View
-                accessibilityComponentType="button"
                 accessibilityRole="button"
                 accessibilityState={
                   {
-                    "disabled": true,
+                    "disabled": false,
                   }
                 }
-                accessibilityTraits="button"
                 accessible={true}
-                centered={true}
                 collapsable={false}
                 focusable={true}
-                hitSlop={
-                  {
-                    "bottom": 6,
-                    "left": 6,
-                    "right": 6,
-                    "top": 6,
-                  }
-                }
                 onBlur={[Function]}
                 onClick={[Function]}
                 onFocus={[Function]}
@@ -174,1115 +1359,83 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                       "overflow": "hidden",
                     },
                     false,
+                    {
+                      "borderRadius": 20,
+                    },
+                  ]
+                }
+                testID="button"
+              >
+                <View
+                  style={
                     [
                       {
                         "alignItems": "center",
-                        "flexGrow": 1,
+                        "flexDirection": "row",
                         "justifyContent": "center",
                       },
-                      {
-                        "borderRadius": 18,
-                      },
-                    ],
-                  ]
-                }
-              >
-                <Text
-                  accessibilityElementsHidden={true}
-                  allowFontScaling={false}
-                  importantForAccessibility="no-hide-descendants"
-                  pointerEvents="none"
-                  selectable={false}
-                  style={
-                    [
-                      {
-                        "color": "#40dd50",
-                        "fontSize": 20,
-                      },
-                      [
-                        {
-                          "lineHeight": 20,
-                          "transform": [
-                            {
-                              "scaleX": 1,
-                            },
-                          ],
-                        },
-                        {
-                          "backgroundColor": "transparent",
-                        },
-                      ],
-                      {
-                        "fontFamily": "Material Design Icons",
-                        "fontStyle": "normal",
-                        "fontWeight": "normal",
-                      },
-                      {},
+                      undefined,
                     ]
                   }
                 >
-                  󰣸
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <div>
-          Network status indicator
-        </div>
-      </View>
-    </View>
-    <View
-      style={
-        {
-          "alignItems": "center",
-          "display": "flex",
-          "flexDirection": "row",
-          "marginBottom": 5,
-          "marginTop": 5,
-        }
-      }
-    >
-      <Text
-        style={
-          {
-            "color": "#ffd600",
-            "fontSize": 41.0958904109589,
-            "fontWeight": "bold",
-            "width": "50%",
-          }
-        }
-      >
-        Offline
-      </Text>
-      <View
-        style={
-          {
-            "width": "50%",
-          }
-        }
-      >
-        <RCTSwitch
-          accessibilityRole="switch"
-          onChange={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          onTintColor="#31adff"
-          style={
-            {
-              "height": 31,
-              "width": 51,
-            }
-          }
-          thumbTintColor="#ffd600"
-          tintColor="#ababab"
-          value={false}
-        />
-      </View>
-    </View>
-    <View>
-      <View
-        style={
-          {
-            "alignItems": "center",
-            "display": "flex",
-            "flexDirection": "row",
-            "marginBottom": 5,
-            "marginTop": 5,
-          }
-        }
-      >
-        <Text
-          style={
-            {
-              "color": "#ffd600",
-              "fontSize": 41.0958904109589,
-              "fontWeight": "bold",
-              "width": "50%",
-            }
-          }
-        >
-          Game to
-        </Text>
-        <View
-          style={
-            {
-              "width": "30%",
-            }
-          }
-        >
-          <View
-            style={{}}
-          >
-            <View
-              pointerEvents="none"
-              style={
-                [
-                  {
-                    "bottom": 0,
-                    "left": 0,
-                    "position": "absolute",
-                    "right": 0,
-                    "top": 6,
-                  },
-                  {
-                    "backgroundColor": "#303030",
-                    "borderColor": "#31adff",
-                    "borderRadius": 4,
-                    "borderWidth": 1,
-                  },
-                  undefined,
-                ]
-              }
-              testID="text-input-outline"
-            />
-            <View>
-              <View
-                style={
-                  [
-                    {
-                      "paddingBottom": 0,
-                    },
-                    {
-                      "minHeight": 56,
-                      "paddingTop": 8,
-                    },
-                  ]
-                }
-              >
-                <TextInput
-                  accessibilityLabel="Game to"
-                  autoCapitalize="none"
-                  editable={true}
-                  keyboardType="number-pad"
-                  maxFontSizeMultiplier={1.5}
-                  multiline={false}
-                  onBlur={[Function]}
-                  onChangeText={[Function]}
-                  onFocus={[Function]}
-                  placeholder="Game to"
-                  placeholderTextColor="#ffffff"
-                  selectionColor="#ffd600"
-                  style={
-                    [
-                      {
-                        "margin": 0,
-                        "zIndex": 1,
-                      },
-                      {
-                        "height": 48,
-                      },
-                      {
-                        "paddingBottom": 0,
-                        "paddingTop": 0,
-                      },
-                      {
-                        "color": "#ffd600",
-                        "fontFamily": "System",
-                        "fontSize": 16,
-                        "fontWeight": undefined,
-                        "letterSpacing": 0.15,
-                        "lineHeight": undefined,
-                        "paddingHorizontal": 16,
-                        "textAlign": "left",
-                        "textAlignVertical": "center",
-                      },
-                      false,
+                  <Text
+                    numberOfLines={1}
+                    selectable={false}
+                    style={
                       [
-                        {},
-                      ],
-                      undefined,
-                    ]
-                  }
-                  testID="text-input-outlined"
-                  underlineColorAndroid="transparent"
-                  value="15"
-                />
+                        {
+                          "color": "rgba(28, 27, 31, 1)",
+                          "fontFamily": "System",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "letterSpacing": 0.1,
+                          "lineHeight": 20,
+                        },
+                        {
+                          "textAlign": "left",
+                        },
+                        {
+                          "writingDirection": "ltr",
+                        },
+                        [
+                          {
+                            "marginHorizontal": 16,
+                            "marginVertical": 9,
+                            "textAlign": "center",
+                          },
+                          false,
+                          {
+                            "marginHorizontal": 24,
+                            "marginVertical": 10,
+                          },
+                          {
+                            "marginHorizontal": 8,
+                          },
+                          {
+                            "textTransform": "uppercase",
+                          },
+                          {
+                            "color": "#000000",
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
+                          undefined,
+                        ],
+                      ]
+                    }
+                  >
+                    start
+                  </Text>
+                </View>
               </View>
-            </View>
-          </View>
-        </View>
-        <Text
-          style={
-            {
-              "color": "#ababab",
-              "fontSize": 30.821917808219176,
-              "fontWeight": "bold",
-              "marginLeft": 10,
-            }
-          }
-        >
-          points
-        </Text>
-      </View>
-      <View
-        style={
-          {
-            "alignItems": "center",
-            "display": "flex",
-            "flexDirection": "row",
-            "marginBottom": 5,
-            "marginTop": 5,
-          }
-        }
-      >
-        <Text
-          style={
-            {
-              "color": "#ffd600",
-              "fontSize": 41.0958904109589,
-              "fontWeight": "bold",
-              "width": "50%",
-            }
-          }
-        >
-          Half at
-        </Text>
-        <View
-          style={
-            {
-              "width": "30%",
-            }
-          }
-        >
-          <View
-            style={{}}
-          >
-            <View
-              pointerEvents="none"
-              style={
-                [
-                  {
-                    "bottom": 0,
-                    "left": 0,
-                    "position": "absolute",
-                    "right": 0,
-                    "top": 6,
-                  },
-                  {
-                    "backgroundColor": "#303030",
-                    "borderColor": "#31adff",
-                    "borderRadius": 4,
-                    "borderWidth": 1,
-                  },
-                  undefined,
-                ]
-              }
-              testID="text-input-outline"
-            />
-            <View>
-              <View
-                style={
-                  [
-                    {
-                      "paddingBottom": 0,
-                    },
-                    {
-                      "minHeight": 56,
-                      "paddingTop": 8,
-                    },
-                  ]
-                }
-              >
-                <TextInput
-                  accessibilityLabel="Half at"
-                  autoCapitalize="none"
-                  editable={true}
-                  keyboardType="number-pad"
-                  maxFontSizeMultiplier={1.5}
-                  multiline={false}
-                  onBlur={[Function]}
-                  onChangeText={[Function]}
-                  onFocus={[Function]}
-                  placeholder="Half at"
-                  placeholderTextColor="#ffffff"
-                  selectionColor="#ffd600"
-                  style={
-                    [
-                      {
-                        "margin": 0,
-                        "zIndex": 1,
-                      },
-                      {
-                        "height": 48,
-                      },
-                      {
-                        "paddingBottom": 0,
-                        "paddingTop": 0,
-                      },
-                      {
-                        "color": "#ffd600",
-                        "fontFamily": "System",
-                        "fontSize": 16,
-                        "fontWeight": undefined,
-                        "letterSpacing": 0.15,
-                        "lineHeight": undefined,
-                        "paddingHorizontal": 16,
-                        "textAlign": "left",
-                        "textAlignVertical": "center",
-                      },
-                      false,
-                      [
-                        {},
-                      ],
-                      undefined,
-                    ]
-                  }
-                  testID="text-input-outlined"
-                  underlineColorAndroid="transparent"
-                  value="8"
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-        <Text
-          style={
-            {
-              "color": "#ababab",
-              "fontSize": 30.821917808219176,
-              "fontWeight": "bold",
-              "marginLeft": 10,
-            }
-          }
-        >
-          points
-        </Text>
-      </View>
-      <View
-        style={
-          {
-            "alignItems": "center",
-            "display": "flex",
-            "flexDirection": "row",
-            "marginBottom": 5,
-            "marginTop": 5,
-          }
-        }
-      >
-        <Text
-          style={
-            {
-              "color": "#ffd600",
-              "fontSize": 41.0958904109589,
-              "fontWeight": "bold",
-              "width": "50%",
-            }
-          }
-        >
-          Soft cap
-        </Text>
-        <View
-          style={
-            {
-              "width": "30%",
-            }
-          }
-        >
-          <View
-            style={{}}
-          >
-            <View
-              pointerEvents="none"
-              style={
-                [
-                  {
-                    "bottom": 0,
-                    "left": 0,
-                    "position": "absolute",
-                    "right": 0,
-                    "top": 6,
-                  },
-                  {
-                    "backgroundColor": "#303030",
-                    "borderColor": "#31adff",
-                    "borderRadius": 4,
-                    "borderWidth": 1,
-                  },
-                  undefined,
-                ]
-              }
-              testID="text-input-outline"
-            />
-            <View>
-              <View
-                style={
-                  [
-                    {
-                      "paddingBottom": 0,
-                    },
-                    {
-                      "minHeight": 56,
-                      "paddingTop": 8,
-                    },
-                  ]
-                }
-              >
-                <TextInput
-                  accessibilityLabel="Soft cap"
-                  autoCapitalize="none"
-                  editable={true}
-                  keyboardType="number-pad"
-                  maxFontSizeMultiplier={1.5}
-                  multiline={false}
-                  onBlur={[Function]}
-                  onChangeText={[Function]}
-                  onFocus={[Function]}
-                  placeholder="Soft cap"
-                  placeholderTextColor="#ffffff"
-                  selectionColor="#ffd600"
-                  style={
-                    [
-                      {
-                        "margin": 0,
-                        "zIndex": 1,
-                      },
-                      {
-                        "height": 48,
-                      },
-                      {
-                        "paddingBottom": 0,
-                        "paddingTop": 0,
-                      },
-                      {
-                        "color": "#ffd600",
-                        "fontFamily": "System",
-                        "fontSize": 16,
-                        "fontWeight": undefined,
-                        "letterSpacing": 0.15,
-                        "lineHeight": undefined,
-                        "paddingHorizontal": 16,
-                        "textAlign": "left",
-                        "textAlignVertical": "center",
-                      },
-                      false,
-                      [
-                        {},
-                      ],
-                      undefined,
-                    ]
-                  }
-                  testID="text-input-outlined"
-                  underlineColorAndroid="transparent"
-                  value="75"
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-        <Text
-          style={
-            {
-              "color": "#ababab",
-              "fontSize": 30.821917808219176,
-              "fontWeight": "bold",
-              "marginLeft": 10,
-            }
-          }
-        >
-          minutes
-        </Text>
-      </View>
-      <View
-        style={
-          {
-            "alignItems": "center",
-            "display": "flex",
-            "flexDirection": "row",
-            "marginBottom": 5,
-            "marginTop": 5,
-          }
-        }
-      >
-        <Text
-          style={
-            {
-              "color": "#ffd600",
-              "fontSize": 41.0958904109589,
-              "fontWeight": "bold",
-              "width": "50%",
-            }
-          }
-        >
-          Hard cap
-        </Text>
-        <View
-          style={
-            {
-              "width": "30%",
-            }
-          }
-        >
-          <View
-            style={{}}
-          >
-            <View
-              pointerEvents="none"
-              style={
-                [
-                  {
-                    "bottom": 0,
-                    "left": 0,
-                    "position": "absolute",
-                    "right": 0,
-                    "top": 6,
-                  },
-                  {
-                    "backgroundColor": "#303030",
-                    "borderColor": "#31adff",
-                    "borderRadius": 4,
-                    "borderWidth": 1,
-                  },
-                  undefined,
-                ]
-              }
-              testID="text-input-outline"
-            />
-            <View>
-              <View
-                style={
-                  [
-                    {
-                      "paddingBottom": 0,
-                    },
-                    {
-                      "minHeight": 56,
-                      "paddingTop": 8,
-                    },
-                  ]
-                }
-              >
-                <TextInput
-                  accessibilityLabel="Hard cap"
-                  autoCapitalize="none"
-                  editable={true}
-                  keyboardType="number-pad"
-                  maxFontSizeMultiplier={1.5}
-                  multiline={false}
-                  onBlur={[Function]}
-                  onChangeText={[Function]}
-                  onFocus={[Function]}
-                  placeholder="Hard cap"
-                  placeholderTextColor="#ffffff"
-                  selectionColor="#ffd600"
-                  style={
-                    [
-                      {
-                        "margin": 0,
-                        "zIndex": 1,
-                      },
-                      {
-                        "height": 48,
-                      },
-                      {
-                        "paddingBottom": 0,
-                        "paddingTop": 0,
-                      },
-                      {
-                        "color": "#ffd600",
-                        "fontFamily": "System",
-                        "fontSize": 16,
-                        "fontWeight": undefined,
-                        "letterSpacing": 0.15,
-                        "lineHeight": undefined,
-                        "paddingHorizontal": 16,
-                        "textAlign": "left",
-                        "textAlignVertical": "center",
-                      },
-                      false,
-                      [
-                        {},
-                      ],
-                      undefined,
-                    ]
-                  }
-                  testID="text-input-outlined"
-                  underlineColorAndroid="transparent"
-                  value="90"
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-        <Text
-          style={
-            {
-              "color": "#ababab",
-              "fontSize": 30.821917808219176,
-              "fontWeight": "bold",
-              "marginLeft": 10,
-            }
-          }
-        >
-          points
-        </Text>
-      </View>
-      <View
-        style={
-          {
-            "alignItems": "center",
-            "display": "flex",
-            "flexDirection": "row",
-            "marginBottom": 5,
-            "marginTop": 5,
-          }
-        }
-      >
-        <Text
-          style={
-            {
-              "color": "#ffd600",
-              "fontSize": 41.0958904109589,
-              "fontWeight": "bold",
-              "width": "50%",
-            }
-          }
-        >
-          Players
-        </Text>
-        <View
-          style={
-            {
-              "width": "30%",
-            }
-          }
-        >
-          <View
-            style={{}}
-          >
-            <View
-              pointerEvents="none"
-              style={
-                [
-                  {
-                    "bottom": 0,
-                    "left": 0,
-                    "position": "absolute",
-                    "right": 0,
-                    "top": 6,
-                  },
-                  {
-                    "backgroundColor": "#303030",
-                    "borderColor": "#31adff",
-                    "borderRadius": 4,
-                    "borderWidth": 1,
-                  },
-                  undefined,
-                ]
-              }
-              testID="text-input-outline"
-            />
-            <View>
-              <View
-                style={
-                  [
-                    {
-                      "paddingBottom": 0,
-                    },
-                    {
-                      "minHeight": 56,
-                      "paddingTop": 8,
-                    },
-                  ]
-                }
-              >
-                <TextInput
-                  accessibilityLabel="Players"
-                  autoCapitalize="none"
-                  editable={true}
-                  keyboardType="number-pad"
-                  maxFontSizeMultiplier={1.5}
-                  multiline={false}
-                  onBlur={[Function]}
-                  onChangeText={[Function]}
-                  onFocus={[Function]}
-                  placeholder="Players"
-                  placeholderTextColor="#ffffff"
-                  selectionColor="#ffd600"
-                  style={
-                    [
-                      {
-                        "margin": 0,
-                        "zIndex": 1,
-                      },
-                      {
-                        "height": 48,
-                      },
-                      {
-                        "paddingBottom": 0,
-                        "paddingTop": 0,
-                      },
-                      {
-                        "color": "#ffd600",
-                        "fontFamily": "System",
-                        "fontSize": 16,
-                        "fontWeight": undefined,
-                        "letterSpacing": 0.15,
-                        "lineHeight": undefined,
-                        "paddingHorizontal": 16,
-                        "textAlign": "left",
-                        "textAlignVertical": "center",
-                      },
-                      false,
-                      [
-                        {},
-                      ],
-                      undefined,
-                    ]
-                  }
-                  testID="text-input-outlined"
-                  underlineColorAndroid="transparent"
-                  value="7"
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-        <Text
-          style={
-            {
-              "color": "#ababab",
-              "fontSize": 30.821917808219176,
-              "fontWeight": "bold",
-              "marginLeft": 10,
-            }
-          }
-        >
-          per point
-        </Text>
-      </View>
-      <View
-        style={
-          {
-            "alignItems": "center",
-            "display": "flex",
-            "flexDirection": "row",
-            "marginBottom": 5,
-            "marginTop": 5,
-          }
-        }
-      >
-        <Text
-          style={
-            {
-              "color": "#ffd600",
-              "fontSize": 41.0958904109589,
-              "fontWeight": "bold",
-              "width": "50%",
-            }
-          }
-        >
-          Timeouts
-        </Text>
-        <View
-          style={
-            {
-              "width": "30%",
-            }
-          }
-        >
-          <View
-            style={{}}
-          >
-            <View
-              pointerEvents="none"
-              style={
-                [
-                  {
-                    "bottom": 0,
-                    "left": 0,
-                    "position": "absolute",
-                    "right": 0,
-                    "top": 6,
-                  },
-                  {
-                    "backgroundColor": "#303030",
-                    "borderColor": "#31adff",
-                    "borderRadius": 4,
-                    "borderWidth": 1,
-                  },
-                  undefined,
-                ]
-              }
-              testID="text-input-outline"
-            />
-            <View>
-              <View
-                style={
-                  [
-                    {
-                      "paddingBottom": 0,
-                    },
-                    {
-                      "minHeight": 56,
-                      "paddingTop": 8,
-                    },
-                  ]
-                }
-              >
-                <TextInput
-                  accessibilityLabel="Timeouts"
-                  autoCapitalize="none"
-                  editable={true}
-                  keyboardType="number-pad"
-                  maxFontSizeMultiplier={1.5}
-                  multiline={false}
-                  onBlur={[Function]}
-                  onChangeText={[Function]}
-                  onFocus={[Function]}
-                  placeholder="Timeouts"
-                  placeholderTextColor="#ffffff"
-                  selectionColor="#ffd600"
-                  style={
-                    [
-                      {
-                        "margin": 0,
-                        "zIndex": 1,
-                      },
-                      {
-                        "height": 48,
-                      },
-                      {
-                        "paddingBottom": 0,
-                        "paddingTop": 0,
-                      },
-                      {
-                        "color": "#ffd600",
-                        "fontFamily": "System",
-                        "fontSize": 16,
-                        "fontWeight": undefined,
-                        "letterSpacing": 0.15,
-                        "lineHeight": undefined,
-                        "paddingHorizontal": 16,
-                        "textAlign": "left",
-                        "textAlignVertical": "center",
-                      },
-                      false,
-                      [
-                        {},
-                      ],
-                      undefined,
-                    ]
-                  }
-                  testID="text-input-outlined"
-                  underlineColorAndroid="transparent"
-                  value="1"
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-        <Text
-          style={
-            {
-              "color": "#ababab",
-              "fontSize": 30.821917808219176,
-              "fontWeight": "bold",
-              "marginLeft": 10,
-            }
-          }
-        >
-          per half
-        </Text>
-      </View>
-      <View
-        style={
-          {
-            "alignItems": "center",
-            "display": "flex",
-            "flexDirection": "row",
-            "marginBottom": 5,
-            "marginTop": 5,
-          }
-        }
-      >
-        <Text
-          style={
-            {
-              "color": "#ffd600",
-              "fontSize": 41.0958904109589,
-              "fontWeight": "bold",
-              "width": "50%",
-            }
-          }
-        >
-          Floater timeout
-        </Text>
-        <View
-          style={
-            {
-              "width": "50%",
-            }
-          }
-        >
-          <RCTSwitch
-            accessibilityRole="switch"
-            onChange={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            onTintColor="#31adff"
-            style={
-              {
-                "height": 31,
-                "width": 51,
-              }
-            }
-            thumbTintColor="#ffd600"
-            tintColor="#ababab"
-            value={true}
-          />
-        </View>
-      </View>
-    </View>
-    <View
-      collapsable={false}
-      style={
-        {
-          "alignSelf": undefined,
-          "bottom": undefined,
-          "end": undefined,
-          "left": undefined,
-          "position": undefined,
-          "right": undefined,
-          "shadowColor": "#000",
-          "shadowOffset": {
-            "height": 0,
-            "width": 0,
-          },
-          "shadowOpacity": 0,
-          "shadowRadius": 0,
-          "start": undefined,
-          "top": undefined,
-        }
-      }
-    >
-      <View
-        collapsable={false}
-        style={
-          {
-            "shadowColor": "#000",
-            "shadowOffset": {
-              "height": 0,
-              "width": 0,
-            },
-            "shadowOpacity": 0,
-            "shadowRadius": 0,
-          }
-        }
-      >
-        <View
-          collapsable={false}
-          style={
-            {
-              "backgroundColor": "#ffd600",
-              "borderColor": "transparent",
-              "borderRadius": 20,
-              "borderStyle": "solid",
-              "borderWidth": 0,
-              "minWidth": "auto",
-            }
-          }
-        >
-          <View
-            accessibilityRole="button"
-            accessibilityState={
-              {
-                "disabled": false,
-              }
-            }
-            accessible={true}
-            collapsable={false}
-            focusable={true}
-            onBlur={[Function]}
-            onClick={[Function]}
-            onFocus={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              [
-                {
-                  "overflow": "hidden",
-                },
-                false,
-                {
-                  "borderRadius": 20,
-                },
-              ]
-            }
-            testID="button"
-          >
-            <View
-              style={
-                [
-                  {
-                    "alignItems": "center",
-                    "flexDirection": "row",
-                    "justifyContent": "center",
-                  },
-                  undefined,
-                ]
-              }
-            >
-              <Text
-                numberOfLines={1}
-                selectable={false}
-                style={
-                  [
-                    {
-                      "color": "rgba(28, 27, 31, 1)",
-                      "fontFamily": "System",
-                      "fontSize": 14,
-                      "fontWeight": "500",
-                      "letterSpacing": 0.1,
-                      "lineHeight": 20,
-                    },
-                    {
-                      "textAlign": "left",
-                    },
-                    {
-                      "writingDirection": "ltr",
-                    },
-                    [
-                      {
-                        "marginHorizontal": 16,
-                        "marginVertical": 9,
-                        "textAlign": "center",
-                      },
-                      false,
-                      {
-                        "marginHorizontal": 24,
-                        "marginVertical": 10,
-                      },
-                      {
-                        "marginHorizontal": 8,
-                      },
-                      {
-                        "textTransform": "uppercase",
-                      },
-                      {
-                        "color": "#000000",
-                        "fontFamily": "System",
-                        "fontSize": 14,
-                        "fontWeight": "500",
-                        "letterSpacing": 0.1,
-                        "lineHeight": 20,
-                      },
-                      undefined,
-                    ],
-                  ]
-                }
-              >
-                start
-              </Text>
             </View>
           </View>
         </View>
       </View>
     </View>
-  </View>
+  </RCTScrollView>
 </RCTSafeAreaView>
 `;

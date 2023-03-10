@@ -108,6 +108,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
         navigation.setOptions({
             title: `${teamOne.name} vs. ${teamTwo.name}`,
         })
+        // TODO: refactor away from this use effect behavior
         if (createStatus === 'success') {
             navigation.navigate('LiveGame', { screen: 'FirstPoint' })
         }
@@ -215,7 +216,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
                                 onPress={() => {
                                     navigation.navigate('SearchTournaments')
                                 }}
-                                testID="go-button"
+                                testID="search-tournament-button"
                             />
                         </TouchableOpacity>
                     </View>
