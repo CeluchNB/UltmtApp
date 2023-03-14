@@ -120,6 +120,7 @@ const liveGameSlice = createSlice({
             state.createError = initialState.createError
             state.guestPlayerStatus = initialState.guestPlayerStatus
             state.guestPlayerError = initialState.guestPlayerError
+            state.teamOne = initialState.teamOne
         },
     },
     extraReducers: builder => {

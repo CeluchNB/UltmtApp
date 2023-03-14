@@ -10,7 +10,7 @@ import {
 
 describe('tournament data calls', () => {
     describe('creates tournament', () => {
-        it('successfully', async () => {
+        it('successfully online', async () => {
             jest.spyOn(
                 TournamentNetwork,
                 'createTournament',
@@ -23,6 +23,30 @@ describe('tournament data calls', () => {
                     headers: {},
                 }),
             )
+            jest.spyOn(TournamentLocal, 'createTournament').mockReturnValueOnce(
+                Promise.resolve(tourney._id),
+            )
+            jest.spyOn(
+                TournamentLocal,
+                'getTournamentById',
+            ).mockReturnValueOnce(Promise.resolve(tourney))
+
+            const result = await createTournament({} as LocalTournament)
+            expect(result).toMatchObject(tourney)
+        })
+
+        it('successfully offline', async () => {
+            jest.spyOn(
+                TournamentNetwork,
+                'createTournament',
+            ).mockReturnValueOnce(Promise.reject({ message: 'bad tourney' }))
+            jest.spyOn(TournamentLocal, 'createTournament').mockReturnValueOnce(
+                Promise.resolve(tourney._id),
+            )
+            jest.spyOn(
+                TournamentLocal,
+                'getTournamentById',
+            ).mockReturnValueOnce(Promise.resolve(tourney))
 
             const result = await createTournament({} as LocalTournament)
             expect(result).toMatchObject(tourney)

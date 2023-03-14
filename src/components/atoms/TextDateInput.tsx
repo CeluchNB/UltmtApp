@@ -2,14 +2,19 @@ import DatePicker from 'react-native-date-picker'
 import { TextInput } from 'react-native-paper'
 import { useTheme } from '../../hooks'
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
 
 interface TextDateInputProps {
     value: Date
+    style?: StyleProp<TextStyle>
     onChange: (date: Date) => void
 }
 
-const TextDateInput: React.FC<TextDateInputProps> = ({ value, onChange }) => {
+const TextDateInput: React.FC<TextDateInputProps> = ({
+    value,
+    style,
+    onChange,
+}) => {
     const {
         theme: { colors },
     } = useTheme()
@@ -20,16 +25,17 @@ const TextDateInput: React.FC<TextDateInputProps> = ({ value, onChange }) => {
             display: 'flex',
             flexDirection: 'row',
         },
+        input: {
+            backgroundColor: colors.primary,
+            color: colors.textPrimary,
+        },
     })
 
     return (
         <View>
             <View style={styles.container}>
                 <TextInput
-                    style={{
-                        backgroundColor: colors.primary,
-                        color: colors.textPrimary,
-                    }}
+                    style={[styles.input, style]}
                     outlineColor={colors.textPrimary}
                     activeOutlineColor={colors.textPrimary}
                     placeholder={value.toLocaleDateString('en-US')}

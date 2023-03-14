@@ -2,9 +2,10 @@ import * as Constants from '../../utils/constants'
 import { throwApiError } from '../../utils/service-utils'
 import { LocalTournament, Tournament } from '../../types/tournament'
 import {
+    createTournament as localCreateTournament,
+    getTournamentById as localGetTournamentById,
     getTournaments as localGetTournaments,
     saveTournaments as localSaveTournaments,
-    saveTournaments,
 } from '../local/tournament'
 import {
     createTournament as networkCreateTournament,
@@ -20,10 +21,16 @@ export const createTournament = async (
     data: LocalTournament,
 ): Promise<Tournament> => {
     try {
-        const result = await networkCreateTournament(data)
-        const { tournament } = result.data
-        await saveTournaments([tournament])
-        return tournament
+        let tournamentId = ''
+        try {
+            const result = await networkCreateTournament(data)
+            const { tournament } = result.data
+            tournamentId = await localCreateTournament(tournament)
+        } catch (e) {
+            tournamentId = await localCreateTournament(data)
+        } finally {
+            return await localGetTournamentById(tournamentId)
+        }
     } catch (e) {
         return throwApiError(e, Constants.CREATE_TOURNAMENT_ERROR)
     }
