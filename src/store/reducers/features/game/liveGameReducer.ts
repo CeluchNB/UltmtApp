@@ -3,6 +3,7 @@ import { CreateGame } from '../../../../types/game'
 import { DisplayUser } from '../../../../types/user'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
+import { Tournament } from '../../../../types/tournament'
 import {
     DisplayTeam,
     GuestTeam,
@@ -33,7 +34,7 @@ export interface LiveGameSlice {
         teamTwoActive: boolean
         teamOnePlayers: DisplayUser[]
         teamTwoPlayers: DisplayUser[]
-        tournament: undefined
+        tournament?: Tournament
         offline?: boolean
     }
     teamOne: Team
@@ -96,6 +97,9 @@ const liveGameSlice = createSlice({
         setTeam(state, action) {
             state.team = action.payload
         },
+        setTournament(state, action) {
+            state.game.tournament = action.payload
+        },
         resetGuestPlayerStatus(state) {
             state.guestPlayerStatus = 'idle'
             state.guestPlayerError = undefined
@@ -116,6 +120,7 @@ const liveGameSlice = createSlice({
             state.createError = initialState.createError
             state.guestPlayerStatus = initialState.guestPlayerStatus
             state.guestPlayerError = initialState.guestPlayerError
+            state.teamOne = initialState.teamOne
         },
     },
     extraReducers: builder => {
@@ -126,7 +131,6 @@ const liveGameSlice = createSlice({
             state.game = {
                 ...action.payload,
                 startTime: action.payload.startTime.toString(),
-                tournament: undefined,
             }
             // creator of game is always team one
             state.team = 'one'
@@ -182,11 +186,14 @@ export const selectGuestPlayerError = (state: RootState) =>
     state.liveGame.guestPlayerError
 export const selectTags = (state: RootState) => state.liveGame.activeTags
 export const selectTeamOne = (state: RootState) => state.liveGame.teamOne
+export const selectTournament = (state: RootState) =>
+    state.liveGame.game.tournament
 export const {
     resetCreateStatus,
     setGame,
     setTeam,
     setTeamOne,
+    setTournament,
     resetGuestPlayerStatus,
     addTag,
     updateScore,

@@ -19,6 +19,15 @@ import {
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 import { fetchProfileData, game } from '../../../fixtures/data'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+jest.mock('react-native-google-mobile-ads', () => {
+    return {
+        default: { initialize: jest.fn(), setRequestConfiguration: jest.fn() },
+        MaxAdsContentRating: { T: 'T', PG: 'PG' },
+        BannerAd: 'Ad',
+        BannerAdSize: { BANNER: 'banner' },
+        TestIds: { BANNER: 'bannertest' },
+    }
+})
 
 const mockedNavigate = jest.fn()
 jest.mock('@react-navigation/native', () => {

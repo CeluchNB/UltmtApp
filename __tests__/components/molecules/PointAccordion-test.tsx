@@ -4,6 +4,15 @@ import React from 'react'
 import { render } from '@testing-library/react-native'
 import { Action, ActionFactory, ActionType } from '../../../src/types/action'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+jest.mock('react-native-google-mobile-ads', () => {
+    return {
+        default: { initialize: jest.fn(), setRequestConfiguration: jest.fn() },
+        MaxAdsContentRating: { T: 'T', PG: 'PG' },
+        BannerAd: 'Ad',
+        BannerAdSize: { BANNER: 'banner' },
+        TestIds: { BANNER: 'bannertest' },
+    }
+})
 
 const point: Point = {
     _id: 'point1',

@@ -193,21 +193,6 @@ export const changePassword = async (
     )
 }
 
-// export const logoutAllDevices = async (
-//     token: string,
-// ): Promise<AxiosResponse> => {
-//     return await axios.post(
-//         `${API_URL_V1}/user/logoutAll`,
-//         {},
-//         {
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//                 'X-API-Key': API_KEY,
-//             },
-//         },
-//     )
-// }
-
 export const deleteAccount = async (token: string): Promise<AxiosResponse> => {
     return await axios.delete(`${API_URL_V1}/user/me`, {
         headers: {

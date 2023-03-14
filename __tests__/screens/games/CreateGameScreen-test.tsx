@@ -30,8 +30,9 @@ const teamTwo = {
     seasonEnd: '2022',
 }
 
+const navigate = jest.fn()
 const props: CreateGameProps = {
-    navigation: {} as any,
+    navigation: { setOptions: jest.fn(), navigate } as any,
     route: { params: { teamOne, teamTwo } } as any,
 }
 
@@ -151,5 +152,25 @@ describe('CreateGameScreen', () => {
             false,
             [],
         )
+    })
+
+    it('navigates to search tournaments screen', async () => {
+        const { getByText, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <CreateGameScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        const tournamentField = getByText('N/A')
+        fireEvent.press(tournamentField)
+        expect(navigate).toHaveBeenCalledWith('SearchTournaments')
+
+        navigate.mockClear()
+
+        const tournamentButton = getByTestId('search-tournament-button')
+        fireEvent.press(tournamentButton)
+        expect(navigate).toHaveBeenCalledWith('SearchTournaments')
     })
 })

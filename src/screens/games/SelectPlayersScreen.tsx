@@ -43,7 +43,6 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false)
 
     const playerList = React.useMemo(() => {
-        console.log('got team', team)
         if (team === 'one') {
             return game.teamOnePlayers
         }

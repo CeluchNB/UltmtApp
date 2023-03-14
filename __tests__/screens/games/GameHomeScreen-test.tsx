@@ -1,3 +1,4 @@
+import * as AdUtils from '../../../src/utils/ads'
 import * as GameServices from '../../../src/services/data/game'
 import GameHomeScreen from '../../../src/screens/games/GameHomeScreen'
 import { NavigationContainer } from '@react-navigation/native'
@@ -9,6 +10,29 @@ import { waitUntilRefreshComplete } from '../../../fixtures/utils'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('../../../src/components/atoms/GameCard', () => () => {
     return <div>Game</div>
+})
+
+jest.mock('react-native-permissions', () => {
+    return {
+        PERMISSIONS: {},
+        RESULTS: {},
+        check: jest.fn(),
+        checkLocationAccuracy: jest.fn(),
+        checkMultiple: jest.fn(),
+        checkNotifications: jest.fn(),
+        openLimitedPhotoLibraryPicker: jest.fn(),
+        openSettings: jest.fn(),
+        request: jest.fn(),
+        requestLocationAccuracy: jest.fn(),
+        requestMultiple: jest.fn(),
+        requestNotifications: jest.fn(),
+    }
+})
+jest.mock('react-native-google-mobile-ads', () => {
+    return {
+        default: { initialize: jest.fn(), setRequestConfiguration: jest.fn() },
+        MaxAdsContentRating: { T: 'T', PG: 'PG' },
+    }
 })
 
 const props = {
@@ -30,6 +54,7 @@ beforeEach(() => {
             },
         ]),
     )
+    jest.spyOn(AdUtils, 'setupMobileAds').mockReturnValue(Promise.resolve())
 })
 
 it('should match snapshot with live and recent data', async () => {

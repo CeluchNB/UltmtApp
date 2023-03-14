@@ -1,4 +1,9 @@
 {
   "name": "UltmtApp",
-  "displayName": "The Ultmt App"
+  "displayName": "The Ultmt App",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-9973584791627416~7024120451",
+    "ios_app_id": "ca-app-pub-9973584791627416~5981118635",
+    "user_tracking_usage_description": "This identifier will be used to deliver personalized ads to you."
+  }
 }

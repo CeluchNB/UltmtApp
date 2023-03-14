@@ -43,6 +43,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             fontSize: size.fontTwenty,
             fontWeight: weight.bold,
         },
+        radioLabel: { width: 250 },
         toText: {
             margin: 20,
         },
@@ -97,7 +98,13 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                 onValueChange={onChange}
                                 value={value}>
                                 <View style={styles.container}>
-                                    <Text style={styles.text}>All Games</Text>
+                                    <Text
+                                        style={{
+                                            ...styles.text,
+                                            ...styles.radioLabel,
+                                        }}>
+                                        All Games
+                                    </Text>
                                     <RadioButton
                                         value="undefined"
                                         color={colors.textPrimary}
@@ -105,7 +112,13 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                     />
                                 </View>
                                 <View style={styles.container}>
-                                    <Text style={styles.text}>Live Games</Text>
+                                    <Text
+                                        style={{
+                                            ...styles.text,
+                                            ...styles.radioLabel,
+                                        }}>
+                                        Live Games
+                                    </Text>
                                     <RadioButton
                                         value="true"
                                         color={colors.textPrimary}
@@ -113,7 +126,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                     />
                                 </View>
                                 <View style={styles.container}>
-                                    <Text style={styles.text}>
+                                    <Text
+                                        style={{
+                                            ...styles.text,
+                                            ...styles.radioLabel,
+                                        }}>
                                         Completed Games
                                     </Text>
                                     <RadioButton

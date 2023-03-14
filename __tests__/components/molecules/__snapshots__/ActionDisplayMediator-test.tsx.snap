@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ActionDisplayMediator renders with ad 1`] = `
+<div
+  aria-label="ad"
+>
+  Ad
+</div>
+`;

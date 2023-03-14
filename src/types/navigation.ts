@@ -56,6 +56,8 @@ export type GameCreationParamList = {
     CreateGame: { teamTwo: GuestTeam }
     SelectMyTeam: undefined
     SelectOpponent: { initialValue?: string }
+    SearchTournaments: undefined
+    CreateTournament: { name?: string }
     JoinGame: undefined
 }
 
@@ -198,6 +200,14 @@ export type SelectMyTeamProps = CompositeScreenProps<
         NativeStackScreenProps<TopLevelParamList>,
         NativeStackScreenProps<LiveGameParamList>
     >
+>
+export type SearchTournamentProps = NativeStackScreenProps<
+    GameCreationParamList,
+    'SearchTournaments'
+>
+export type CreateTournamentProps = NativeStackScreenProps<
+    GameCreationParamList,
+    'CreateTournament'
 >
 
 // Live Game
