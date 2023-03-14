@@ -51,11 +51,11 @@ const CreateTournamentScreen: React.FC<CreateTournamentProps> = ({
             const tournament = await createTournament({
                 name: data.name || '',
                 eventId: data.eventId,
-                startDate: data.startDate.toDateString(),
-                endDate: data.endDate.toDateString(),
+                startDate: data.startDate.toISOString(),
+                endDate: data.endDate.toISOString(),
             })
             dispatch(setTournament(tournament))
-            setLoading(true)
+            setLoading(false)
 
             navigation.pop(2)
         } catch (e: any) {

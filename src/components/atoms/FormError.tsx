@@ -20,7 +20,11 @@ const FormError: React.FC<{ error?: FieldError }> = ({ error }) => {
         },
     })
 
-    return <Text style={styles.error}>{error.message}</Text>
+    return (
+        <Text style={styles.error} testID="form-error">
+            {error.message}
+        </Text>
+    )
 }
 
 export default FormError
