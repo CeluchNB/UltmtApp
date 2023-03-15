@@ -128,7 +128,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
                         }}
                     />
                 )}
-                {(!data || data?.length < 1) && (
+                {(!data || data?.length < 1) && !loading && (
                     <Text style={styles.errorText}>
                         No games available currently. Try refreshing or
                         searching.

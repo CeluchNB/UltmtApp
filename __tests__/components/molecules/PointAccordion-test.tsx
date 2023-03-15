@@ -1,8 +1,10 @@
+import { List } from 'react-native-paper'
 import Point from '../../../src/types/point'
 import PointAccordion from '../../../src/components/molecules/PointAccordion'
 import React from 'react'
 import { render } from '@testing-library/react-native'
 import { Action, ActionFactory, ActionType } from '../../../src/types/action'
+
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native-google-mobile-ads', () => {
     return {
@@ -75,15 +77,18 @@ const onActionPress = jest.fn()
 describe('PointAccordion', () => {
     it('should match snapshot closed', () => {
         const snapshot = render(
-            <PointAccordion
-                point={point}
-                actions={actions}
-                loading={false}
-                expanded={false}
-                teamOne={{ name: 'Temper' }}
-                teamTwo={{ name: 'Truck' }}
-                onActionPress={onActionPress}
-            />,
+            <List.AccordionGroup expandedId="other1">
+                <PointAccordion
+                    point={point}
+                    actions={actions}
+                    loading={false}
+                    expanded={false}
+                    teamOne={{ name: 'Temper' }}
+                    teamTwo={{ name: 'Truck' }}
+                    error={''}
+                    onActionPress={onActionPress}
+                />
+            </List.AccordionGroup>,
         )
 
         expect(snapshot.getByText('Temper')).toBeTruthy()
@@ -96,17 +101,39 @@ describe('PointAccordion', () => {
 
     it('should match snapshot open', async () => {
         const snapshot = render(
-            <PointAccordion
-                point={point}
-                actions={actions}
-                loading={false}
-                expanded={true}
-                teamOne={{ name: 'Temper' }}
-                teamTwo={{ name: 'Truck' }}
-                onActionPress={onActionPress}
-            />,
+            <List.AccordionGroup expandedId={point._id}>
+                <PointAccordion
+                    point={point}
+                    actions={actions}
+                    loading={false}
+                    expanded={true}
+                    teamOne={{ name: 'Temper' }}
+                    teamTwo={{ name: 'Truck' }}
+                    error={''}
+                    onActionPress={onActionPress}
+                />
+            </List.AccordionGroup>,
         )
 
         expect(snapshot).toMatchSnapshot()
+    })
+
+    it('displays error', () => {
+        const { getByText } = render(
+            <List.AccordionGroup expandedId={point._id}>
+                <PointAccordion
+                    point={point}
+                    actions={actions}
+                    loading={false}
+                    expanded={false}
+                    teamOne={{ name: 'Temper' }}
+                    teamTwo={{ name: 'Truck' }}
+                    error={'test error'}
+                    onActionPress={onActionPress}
+                />
+            </List.AccordionGroup>,
+        )
+
+        expect(getByText('test error')).toBeTruthy()
     })
 })

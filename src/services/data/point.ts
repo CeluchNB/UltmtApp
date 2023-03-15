@@ -219,7 +219,7 @@ export const getViewableActionsByPoint = async (
         })
         return actions
     } catch (e) {
-        return throwApiError(e, Constants.GET_POINT_ERROR)
+        return []
     }
 }
 

@@ -27,6 +27,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         loading,
         displayedActions,
         managingTeamId,
+        error,
         onSelectAction,
         onSelectPoint,
         onReactivateGame,
@@ -131,6 +132,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                         teamTwo={game?.teamTwo || { name: '' }}
                         loading={loading}
                         displayedActions={displayedActions}
+                        error={error}
                         onSelectPoint={onSelectPoint}
                         onSelectAction={handleSelectAction}
                         onRefresh={onRefresh}

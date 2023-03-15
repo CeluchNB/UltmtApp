@@ -425,9 +425,7 @@ describe('test get actions by point', () => {
 
         await expect(
             getViewableActionsByPoint('one', 'point1', []),
-        ).rejects.toMatchObject({
-            message: Constants.GET_POINT_ERROR,
-        })
+        ).resolves.toEqual([])
     })
 
     it('should handle local success', async () => {

@@ -15,8 +15,7 @@ const setMobileAdsConfiguration = async () => {
 }
 
 const initializeMobileAds = async () => {
-    const statuses = await mobileAds().initialize()
-    console.log('statuses', statuses)
+    await mobileAds().initialize()
 }
 
 const requestPermissionsForAdvertising = async () => {
