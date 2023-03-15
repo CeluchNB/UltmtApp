@@ -107,7 +107,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
 
     return (
         <BaseScreen containerWidth="90%">
-            {game && <GameHeader game={game} />}
+            {game && <GameHeader game={game} header />}
             {game && (
                 <GameUtilityBar
                     loading={reactivateLoading}

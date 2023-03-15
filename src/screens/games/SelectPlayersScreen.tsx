@@ -10,7 +10,7 @@ import { SelectPlayersProps } from '../../types/navigation'
 import { isPulling } from '../../utils/point'
 import { reactivatePoint } from '../../services/data/point'
 import { useTheme } from '../../hooks'
-import { FlatList, LogBox, StyleSheet, Text } from 'react-native'
+import { FlatList, LogBox, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import {
     resetSetPlayersStatus,
@@ -98,16 +98,18 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     const styles = StyleSheet.create({
         description: {
             color: colors.gray,
-            fontSize: size.fontThirty,
+            fontSize: size.fontTwenty,
             marginBottom: 10,
             textAlign: 'center',
         },
+        container: {
+            alignSelf: 'center',
+        },
+        headerFooterContainer: { width: '100%' },
         flatListContainer: {
             flexDirection: 'row',
             flexWrap: 'wrap',
-        },
-        list: {
-            height: '55%',
+            alignSelf: 'center',
         },
         chip: {
             borderRadius: 8,
@@ -126,70 +128,85 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     })
 
     return (
-        <BaseScreen containerWidth="80%">
-            <GameHeader game={game} />
-            <Text style={styles.description}>
-                {game.playersPerPoint} players on next{'\n'}
-                {isPulling(point, game, team) ? 'D ' : 'O '}
-                point
-            </Text>
-            <LivePointUtilityBar
-                loading={false}
-                undoDisabled={point.pointNumber === 1 || game.teamTwoActive}
-                onUndo={onLastPoint}
-                onEdit={() => {
-                    navigation.navigate('EditGame')
-                }}
-            />
-            <FlatList
-                style={styles.list}
-                contentContainerStyle={styles.flatListContainer}
-                data={playerList}
-                renderItem={({ item, index }) => {
-                    return (
-                        <Chip
-                            style={styles.chip}
-                            mode="outlined"
-                            onPress={() => {
-                                toggleSelection(index)
-                            }}
-                            selectedColor={
-                                selectedPlayers.includes(index)
-                                    ? colors.textPrimary
-                                    : colors.gray
-                            }
-                            ellipsizeMode="tail">
-                            {item.firstName} {item.lastName}
-                        </Chip>
-                    )
-                }}
-            />
-            {status === 'failed' && (
-                <Text style={styles.errorText}>{error}</Text>
-            )}
-            <SecondaryButton
-                style={styles.button}
-                onPress={async () => {
-                    setModalVisible(true)
-                }}
-                text="add guest"
-            />
-            <PrimaryButton
-                style={styles.button}
-                text="start"
-                disabled={
-                    selectedPlayers.length !== game.playersPerPoint ||
-                    status === 'loading'
-                }
-                onPress={onSetPlayers}
-                loading={status === 'loading'}
-            />
-            <GuestPlayerModal
-                visible={modalVisible}
-                onClose={() => {
-                    setModalVisible(false)
-                }}
-            />
+        <BaseScreen containerWidth="90%">
+            <View style={styles.container}>
+                <FlatList
+                    contentContainerStyle={styles.flatListContainer}
+                    ListHeaderComponentStyle={styles.headerFooterContainer}
+                    ListFooterComponentStyle={styles.headerFooterContainer}
+                    data={playerList}
+                    ListHeaderComponent={
+                        <View>
+                            <GameHeader header game={game} />
+                            <Text style={styles.description}>
+                                {game.playersPerPoint} players on next{' '}
+                                {isPulling(point, game, team) ? 'D ' : 'O '}
+                                point
+                            </Text>
+                            <LivePointUtilityBar
+                                loading={false}
+                                undoDisabled={
+                                    point.pointNumber === 1 ||
+                                    game.teamTwoActive
+                                }
+                                onUndo={onLastPoint}
+                                onEdit={() => {
+                                    navigation.navigate('EditGame')
+                                }}
+                            />
+                        </View>
+                    }
+                    renderItem={({ item, index }) => {
+                        return (
+                            <Chip
+                                style={styles.chip}
+                                mode="outlined"
+                                onPress={() => {
+                                    toggleSelection(index)
+                                }}
+                                selectedColor={
+                                    selectedPlayers.includes(index)
+                                        ? colors.textPrimary
+                                        : colors.gray
+                                }
+                                ellipsizeMode="tail">
+                                {item.firstName} {item.lastName}
+                            </Chip>
+                        )
+                    }}
+                    ListFooterComponent={
+                        <View>
+                            {status === 'failed' && (
+                                <Text style={styles.errorText}>{error}</Text>
+                            )}
+                            <SecondaryButton
+                                style={styles.button}
+                                onPress={async () => {
+                                    setModalVisible(true)
+                                }}
+                                text="add guest"
+                            />
+                            <PrimaryButton
+                                style={styles.button}
+                                text="start"
+                                disabled={
+                                    selectedPlayers.length !==
+                                        game.playersPerPoint ||
+                                    status === 'loading'
+                                }
+                                onPress={onSetPlayers}
+                                loading={status === 'loading'}
+                            />
+                            <GuestPlayerModal
+                                visible={modalVisible}
+                                onClose={() => {
+                                    setModalVisible(false)
+                                }}
+                            />
+                        </View>
+                    }
+                />
+            </View>
         </BaseScreen>
     )
 }

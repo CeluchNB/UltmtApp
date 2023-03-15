@@ -122,7 +122,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                 renderItem={() => <View />}
                 ListHeaderComponent={
                     <View style={styles.container}>
-                        <GameHeader game={game} />
+                        <GameHeader header game={game} />
                         <LivePointUtilityBar
                             error={error}
                             loading={waiting}
