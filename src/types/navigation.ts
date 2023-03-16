@@ -74,6 +74,7 @@ export type TopLevelParamList = {
     LiveGame: NavigatorScreenParams<LiveGameParamList>
     Settings: undefined
     SecureEdit: { title: string; value: string; field: SecureEditField }
+    Information: undefined
 }
 
 export type AllScreenProps = NativeStackScreenProps<

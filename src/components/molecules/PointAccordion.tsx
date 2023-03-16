@@ -15,16 +15,6 @@ import {
 } from 'react-native'
 import React, { useEffect } from 'react'
 
-interface PointAccordionProps {
-    point: Point
-    actions: (Action | { ad: boolean })[]
-    expanded: boolean
-    loading: boolean
-    teamOne: GuestTeam
-    teamTwo: GuestTeam
-    onActionPress: (action: ServerActionData) => void
-}
-
 const AccordionRightView = (props: { point: Point; isExpanded: boolean }) => {
     const {
         theme: { colors },
@@ -91,6 +81,17 @@ const getAccordionRightView = (point: Point) => {
     }
 }
 
+interface PointAccordionProps {
+    point: Point
+    actions: (Action | { ad: boolean })[]
+    expanded: boolean
+    loading: boolean
+    teamOne: GuestTeam
+    teamTwo: GuestTeam
+    error: string
+    onActionPress: (action: ServerActionData) => void
+}
+
 const PointAccordion: React.FC<PointAccordionProps> = ({
     point,
     actions,
@@ -98,6 +99,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
     loading,
     teamOne,
     teamTwo,
+    error,
     onActionPress,
 }) => {
     const {
@@ -132,6 +134,10 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             fontSize: size.fontFifteen,
             fontWeight: weight.bold,
         },
+        error: {
+            color: colors.error,
+            fontSize: size.fontFifteen,
+        },
     })
 
     return (
@@ -164,6 +170,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                         color={colors.textPrimary}
                     />
                 )}
+                {error.length > 0 && <Text style={styles.error}>{error}</Text>}
                 {!loading && (
                     <FlatList
                         data={actions}

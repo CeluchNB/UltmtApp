@@ -1,193 +1,213 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match snapshot 1`] = `
+exports[`Game Header should match snapshot 1`] = `
 <View
   style={
     {
-      "flexDirection": "row",
+      "display": "flex",
+      "flexDirection": "column",
     }
   }
 >
-  <View>
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 41.0958904109589,
-          "fontWeight": "900",
-          "textAlign": "center",
-        }
-      }
-    >
-      Temper
-    </Text>
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 30.821917808219176,
-          "textAlign": "center",
-        }
-      }
-    >
-      @pghtemper
-    </Text>
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 41.0958904109589,
-          "fontWeight": "900",
-          "textAlign": "center",
-        }
-      }
-    >
-      3
-    </Text>
-  </View>
-  <Text
+  <View
     style={
       {
-        "color": "#ababab",
-        "flex": 1,
-        "fontSize": 30.821917808219176,
-        "fontWeight": "900",
-        "marginTop": 20,
-        "textAlign": "center",
+        "display": "flex",
+        "flexDirection": "row",
       }
     }
   >
-    Game to 15
-  </Text>
-  <View>
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 41.0958904109589,
-          "fontWeight": "900",
-          "textAlign": "center",
+    <View>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+            "textAlign": "center",
+          }
         }
-      }
-    >
-      Sockeye
-    </Text>
+      >
+        Temper
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 30.821917808219176,
+            "textAlign": "center",
+          }
+        }
+      >
+        @pghtemper
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+            "textAlign": "center",
+          }
+        }
+      >
+        3
+      </Text>
+    </View>
     <Text
       style={
         {
-          "color": "#ffd600",
+          "color": "#ababab",
+          "flex": 1,
           "fontSize": 30.821917808219176,
-          "textAlign": "center",
-        }
-      }
-    />
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 41.0958904109589,
           "fontWeight": "900",
+          "marginTop": 20,
           "textAlign": "center",
         }
       }
     >
-      0
+      Game to 15
     </Text>
+    <View>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+            "textAlign": "center",
+          }
+        }
+      >
+        Sockeye
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 30.821917808219176,
+            "textAlign": "center",
+          }
+        }
+      />
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+            "textAlign": "center",
+          }
+        }
+      >
+        0
+      </Text>
+    </View>
   </View>
 </View>
 `;
 
-exports[`should match snapshot with no description 1`] = `
+exports[`Game Header should match snapshot with no description 1`] = `
 <View
   style={
     {
-      "flexDirection": "row",
+      "display": "flex",
+      "flexDirection": "column",
     }
   }
 >
-  <View>
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 41.0958904109589,
-          "fontWeight": "900",
-          "textAlign": "center",
-        }
-      }
-    >
-      Temper
-    </Text>
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 30.821917808219176,
-          "textAlign": "center",
-        }
-      }
-    >
-      @pghtemper
-    </Text>
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 41.0958904109589,
-          "fontWeight": "900",
-          "textAlign": "center",
-        }
-      }
-    >
-      3
-    </Text>
-  </View>
-  <Text
+  <View
     style={
       {
-        "color": "#ababab",
-        "flex": 1,
-        "fontSize": 30.821917808219176,
-        "fontWeight": "900",
-        "marginTop": 20,
-        "textAlign": "center",
+        "display": "flex",
+        "flexDirection": "row",
       }
     }
-  />
-  <View>
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 41.0958904109589,
-          "fontWeight": "900",
-          "textAlign": "center",
+  >
+    <View>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+            "textAlign": "center",
+          }
         }
-      }
-    >
-      Sockeye
-    </Text>
+      >
+        Temper
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 30.821917808219176,
+            "textAlign": "center",
+          }
+        }
+      >
+        @pghtemper
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+            "textAlign": "center",
+          }
+        }
+      >
+        3
+      </Text>
+    </View>
     <Text
       style={
         {
-          "color": "#ffd600",
+          "color": "#ababab",
+          "flex": 1,
           "fontSize": 30.821917808219176,
+          "fontWeight": "900",
+          "marginTop": 20,
           "textAlign": "center",
         }
       }
     />
-    <Text
-      style={
-        {
-          "color": "#ffd600",
-          "fontSize": 41.0958904109589,
-          "fontWeight": "900",
-          "textAlign": "center",
+    <View>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+            "textAlign": "center",
+          }
         }
-      }
-    >
-      0
-    </Text>
+      >
+        Sockeye
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 30.821917808219176,
+            "textAlign": "center",
+          }
+        }
+      />
+      <Text
+        style={
+          {
+            "color": "#ffd600",
+            "fontSize": 41.0958904109589,
+            "fontWeight": "900",
+            "textAlign": "center",
+          }
+        }
+      >
+        0
+      </Text>
+    </View>
   </View>
 </View>
 `;

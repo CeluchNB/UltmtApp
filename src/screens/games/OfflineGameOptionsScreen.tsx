@@ -55,7 +55,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
         <BaseScreen containerWidth="80%">
             {game && (
                 <View>
-                    <GameHeader game={game} />
+                    <GameHeader header game={game} />
                     <PrimaryButton
                         style={styles.button}
                         text="push to cloud"

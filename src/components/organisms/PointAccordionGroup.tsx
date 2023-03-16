@@ -14,6 +14,7 @@ export interface PointAccordionGroupProps {
     teamOne: GuestTeam
     teamTwo: GuestTeam
     loading: boolean
+    error: string
     onSelectPoint: (pointId: string) => void
     onSelectAction: (action: ServerActionData) => void
     onRefresh: () => Promise<void>
@@ -26,6 +27,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     teamOne,
     teamTwo,
     loading,
+    error,
     onSelectPoint,
     onSelectAction,
     onRefresh,
@@ -81,6 +83,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                             loading={loading}
                             teamOne={teamOne}
                             teamTwo={teamTwo}
+                            error={error}
                             onActionPress={onSelectAction}
                         />
                     )

@@ -216,6 +216,7 @@ describe('PointAccordionGroup', () => {
             points,
             teamOne,
             teamTwo,
+            error: '',
             onSelectPoint: jest.fn(),
             onSelectAction: jest.fn(),
             onRefresh: jest.fn(),

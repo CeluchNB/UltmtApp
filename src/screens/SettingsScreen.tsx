@@ -2,10 +2,10 @@ import * as Constants from '../utils/constants'
 import * as React from 'react'
 import * as UserData from '../services/data/user'
 import { AppDispatch } from '../store/store'
-import { Button } from 'react-native-paper'
 import EditField from '../components/molecules/EditField'
 import { logout } from '../services/data/auth'
 import { useTheme } from '../hooks'
+import { Button, IconButton } from 'react-native-paper'
 import {
     Modal,
     SafeAreaView,
@@ -13,6 +13,7 @@ import {
     StyleSheet,
     Switch,
     Text,
+    TouchableOpacity,
     View,
 } from 'react-native'
 import { SecureEditField, SettingsScreenProps } from '../types/navigation'
@@ -60,6 +61,17 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             fontSize: size.fontTwenty,
             color: colors.textPrimary,
             fontWeight: weight.bold,
+        },
+        moreInfoText: {
+            fontSize: size.fontTwenty,
+            color: colors.gray,
+            fontWeight: weight.bold,
+            flex: 1,
+        },
+        moreInfoContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
         },
         error: {
             color: colors.error,
@@ -218,6 +230,18 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                         }}
                         onSubmit={async () => {}}
                     />
+                    <TouchableOpacity
+                        style={styles.moreInfoContainer}
+                        onPress={() => {
+                            navigation.navigate('Information')
+                        }}>
+                        <Text style={styles.moreInfoText}>More Info</Text>
+                        <IconButton
+                            icon="chevron-right"
+                            iconColor={colors.textPrimary}
+                            size={30}
+                        />
+                    </TouchableOpacity>
                     <Button
                         mode="text"
                         textColor={colors.error}
