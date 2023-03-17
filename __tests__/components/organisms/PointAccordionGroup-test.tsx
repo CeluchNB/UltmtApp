@@ -5,9 +5,10 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import store from '../../../src/store/store'
 import {
+    Action,
+    ActionFactory,
     ActionType,
-    LiveServerAction,
-    SavedServerAction,
+    LiveServerActionData,
 } from '../../../src/types/action'
 import PointAccordionGroup, {
     PointAccordionGroupProps,
@@ -25,6 +26,15 @@ jest.mock('@react-navigation/native', () => {
             addListener: jest.fn().mockReturnValue(() => {}),
             navigate: mockedNavigate,
         }),
+    }
+})
+jest.mock('react-native-google-mobile-ads', () => {
+    return {
+        default: { initialize: jest.fn(), setRequestConfiguration: jest.fn() },
+        MaxAdsContentRating: { T: 'T', PG: 'PG' },
+        BannerAd: 'Ad',
+        BannerAdSize: { BANNER: 'banner' },
+        TestIds: { BANNER: 'bannertest' },
     }
 })
 
@@ -76,7 +86,7 @@ const points: Point[] = [
 const teamOne: GuestTeam = { name: 'Temper' }
 const teamTwo: GuestTeam = { name: 'Truck' }
 
-const savedActions: SavedServerAction[] = [
+const savedActions: Action[] = [
     {
         _id: 'action1',
         actionNumber: 1,
@@ -152,8 +162,9 @@ const savedActions: SavedServerAction[] = [
             username: 'firstlast2',
         },
     },
-]
-const liveActions: LiveServerAction[] = [
+].map(a => ActionFactory.createFromAction(a))
+
+const liveActions: Action[] = [
     {
         comments: [],
         tags: ['huck'],
@@ -193,7 +204,7 @@ const liveActions: LiveServerAction[] = [
             username: 'firstlast2',
         },
     },
-]
+].map(a => ActionFactory.createFromAction(a))
 
 describe('PointAccordionGroup', () => {
     let props: PointAccordionGroupProps
@@ -205,8 +216,10 @@ describe('PointAccordionGroup', () => {
             points,
             teamOne,
             teamTwo,
+            error: '',
             onSelectPoint: jest.fn(),
             onSelectAction: jest.fn(),
+            onRefresh: jest.fn(),
         }
     })
 
@@ -277,13 +290,15 @@ describe('PointAccordionGroup', () => {
             expect(props.onSelectPoint).toHaveBeenCalled()
         })
 
-        props.displayedActions.push({
-            tags: ['newaction'],
-            comments: [],
-            actionType: ActionType.CATCH,
-            actionNumber: 4,
-            teamNumber: 'one',
-        } as LiveServerAction)
+        props.displayedActions.push(
+            ActionFactory.createFromAction({
+                tags: ['newaction'],
+                comments: [],
+                actionType: ActionType.CATCH,
+                actionNumber: 4,
+                teamNumber: 'one',
+            } as LiveServerActionData),
+        )
 
         rerender(
             <NavigationContainer>

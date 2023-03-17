@@ -4,7 +4,7 @@ import GameHeader from '../../components/molecules/GameHeader'
 import GameUtilityBar from '../../components/molecules/GameUtilityBar'
 import PointAccordionGroup from '../../components/organisms/PointAccordionGroup'
 import React from 'react'
-import { ServerAction } from '../../types/action'
+import { ServerActionData } from '../../types/action'
 import { ViewGameProps } from '../../types/navigation'
 import { deleteGame } from '../../services/data/game'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
@@ -27,13 +27,16 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         loading,
         displayedActions,
         managingTeamId,
+        error,
         onSelectAction,
         onSelectPoint,
         onReactivateGame,
+        onRefresh,
     } = useGameViewer(gameId)
     const { navigateToGame } = useGameReactivation()
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deleteLoading, setDeleteLoading] = React.useState(false)
+    const [reactivateLoading, setReactivateLoading] = React.useState(false)
 
     React.useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
@@ -46,7 +49,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         }
     }, [activePoint, navigation, onSelectPoint])
 
-    const handleSelectAction = (action: ServerAction) => {
+    const handleSelectAction = (action: ServerActionData) => {
         const { pointId, live } = onSelectAction(action)
         navigation.navigate('Comment', {
             gameId,
@@ -56,12 +59,20 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     }
 
     const handleReactivateGame = React.useCallback(async () => {
-        if (!onReactivateGame) {
-            return undefined
-        }
-        const reactivatedGame = await onReactivateGame()
-        if (reactivatedGame) {
-            navigateToGame(reactivatedGame)
+        try {
+            if (!onReactivateGame) {
+                return undefined
+            }
+            setReactivateLoading(true)
+            const reactivatedGame = await onReactivateGame()
+            setReactivateLoading(false)
+            if (reactivatedGame) {
+                navigateToGame(reactivatedGame)
+            }
+        } catch (e) {
+            // TODO: error display?
+        } finally {
+            setReactivateLoading(false)
         }
     }, [navigateToGame, onReactivateGame])
 
@@ -76,6 +87,8 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                 throw new Error()
             }
             await deleteGame(gameId, managingTeamId)
+        } catch (e) {
+            // do nothing
         } finally {
             setDeleteLoading(false)
             setModalVisible(false)
@@ -97,9 +110,10 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
 
     return (
         <BaseScreen containerWidth="90%">
-            {game && <GameHeader game={game} />}
+            {game && <GameHeader game={game} header />}
             {game && (
                 <GameUtilityBar
+                    loading={reactivateLoading}
                     onReactivateGame={
                         managingTeamId ? handleReactivateGame : undefined
                     }
@@ -120,8 +134,10 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                         teamTwo={game?.teamTwo || { name: '' }}
                         loading={loading}
                         displayedActions={displayedActions}
+                        error={error}
                         onSelectPoint={onSelectPoint}
                         onSelectAction={handleSelectAction}
+                        onRefresh={onRefresh}
                     />
                 </View>
             )}

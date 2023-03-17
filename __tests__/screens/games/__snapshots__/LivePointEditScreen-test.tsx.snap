@@ -111,6 +111,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                 "tournament": undefined,
               }
             }
+            header={true}
           />
           <LivePointUtilityBar
             error=""
@@ -170,6 +171,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
               ]
             }
             pulling={true}
+            team="one"
           />
           <TeamActionView
             actions={[]}
@@ -231,95 +233,251 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
             <View
               style={
                 {
-                  "flexDirection": "row",
+                  "display": "flex",
+                  "flexDirection": "column",
                 }
               }
             >
-              <View>
-                <Text
-                  style={
-                    {
-                      "color": "#ffd600",
-                      "fontSize": 41.0958904109589,
-                      "fontWeight": "900",
-                      "textAlign": "center",
-                    }
-                  }
-                >
-                  Temper
-                </Text>
-                <Text
-                  style={
-                    {
-                      "color": "#ffd600",
-                      "fontSize": 30.821917808219176,
-                      "textAlign": "center",
-                    }
-                  }
-                >
-                  @pghtemper
-                </Text>
-                <Text
-                  style={
-                    {
-                      "color": "#ffd600",
-                      "fontSize": 41.0958904109589,
-                      "fontWeight": "900",
-                      "textAlign": "center",
-                    }
-                  }
-                >
-                  3
-                </Text>
-              </View>
-              <Text
+              <View
                 style={
                   {
-                    "color": "#ababab",
-                    "flex": 1,
-                    "fontSize": 30.821917808219176,
-                    "fontWeight": "900",
-                    "marginTop": 20,
-                    "textAlign": "center",
+                    "display": "flex",
+                    "flexDirection": "row",
                   }
                 }
               >
-                Game to 15
-              </Text>
-              <View>
-                <Text
-                  style={
-                    {
-                      "color": "#ffd600",
-                      "fontSize": 41.0958904109589,
-                      "fontWeight": "900",
-                      "textAlign": "center",
+                <View>
+                  <Text
+                    style={
+                      {
+                        "color": "#ffd600",
+                        "fontSize": 41.0958904109589,
+                        "fontWeight": "900",
+                        "textAlign": "center",
+                      }
                     }
-                  }
-                >
-                  Sockeye
-                </Text>
+                  >
+                    Temper
+                  </Text>
+                  <Text
+                    style={
+                      {
+                        "color": "#ffd600",
+                        "fontSize": 30.821917808219176,
+                        "textAlign": "center",
+                      }
+                    }
+                  >
+                    @pghtemper
+                  </Text>
+                  <Text
+                    style={
+                      {
+                        "color": "#ffd600",
+                        "fontSize": 41.0958904109589,
+                        "fontWeight": "900",
+                        "textAlign": "center",
+                      }
+                    }
+                  >
+                    3
+                  </Text>
+                </View>
                 <Text
                   style={
                     {
-                      "color": "#ffd600",
+                      "color": "#ababab",
+                      "flex": 1,
                       "fontSize": 30.821917808219176,
-                      "textAlign": "center",
-                    }
-                  }
-                />
-                <Text
-                  style={
-                    {
-                      "color": "#ffd600",
-                      "fontSize": 41.0958904109589,
                       "fontWeight": "900",
+                      "marginTop": 20,
                       "textAlign": "center",
                     }
                   }
                 >
-                  0
+                  Game to 15
                 </Text>
+                <View>
+                  <Text
+                    style={
+                      {
+                        "color": "#ffd600",
+                        "fontSize": 41.0958904109589,
+                        "fontWeight": "900",
+                        "textAlign": "center",
+                      }
+                    }
+                  >
+                    Sockeye
+                  </Text>
+                  <Text
+                    style={
+                      {
+                        "color": "#ffd600",
+                        "fontSize": 30.821917808219176,
+                        "textAlign": "center",
+                      }
+                    }
+                  />
+                  <Text
+                    style={
+                      {
+                        "color": "#ffd600",
+                        "fontSize": 41.0958904109589,
+                        "fontWeight": "900",
+                        "textAlign": "center",
+                      }
+                    }
+                  >
+                    0
+                  </Text>
+                </View>
+              </View>
+              <View
+                collapsable={false}
+                style={
+                  {
+                    "alignSelf": "center",
+                    "bottom": undefined,
+                    "end": undefined,
+                    "left": undefined,
+                    "position": undefined,
+                    "right": undefined,
+                    "shadowColor": "#000",
+                    "shadowOffset": {
+                      "height": 0,
+                      "width": 0,
+                    },
+                    "shadowOpacity": 0,
+                    "shadowRadius": 0,
+                    "start": undefined,
+                    "top": undefined,
+                  }
+                }
+              >
+                <View
+                  collapsable={false}
+                  style={
+                    {
+                      "shadowColor": "#000",
+                      "shadowOffset": {
+                        "height": 0,
+                        "width": 0,
+                      },
+                      "shadowOpacity": 0,
+                      "shadowRadius": 0,
+                    }
+                  }
+                >
+                  <View
+                    collapsable={false}
+                    style={
+                      {
+                        "backgroundColor": "transparent",
+                        "borderColor": "transparent",
+                        "borderRadius": 20,
+                        "borderStyle": "solid",
+                        "borderWidth": 0,
+                        "minWidth": 64,
+                      }
+                    }
+                  >
+                    <View
+                      accessibilityRole="button"
+                      accessibilityState={
+                        {
+                          "disabled": false,
+                        }
+                      }
+                      accessible={true}
+                      collapsable={false}
+                      focusable={true}
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onResponderGrant={[Function]}
+                      onResponderMove={[Function]}
+                      onResponderRelease={[Function]}
+                      onResponderTerminate={[Function]}
+                      onResponderTerminationRequest={[Function]}
+                      onStartShouldSetResponder={[Function]}
+                      style={
+                        [
+                          {
+                            "overflow": "hidden",
+                          },
+                          false,
+                          {
+                            "borderRadius": 20,
+                          },
+                        ]
+                      }
+                      testID="button"
+                    >
+                      <View
+                        style={
+                          [
+                            {
+                              "alignItems": "center",
+                              "flexDirection": "row",
+                              "justifyContent": "center",
+                            },
+                            undefined,
+                          ]
+                        }
+                      >
+                        <Text
+                          numberOfLines={1}
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "fontFamily": "System",
+                                "fontSize": 14,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.1,
+                                "lineHeight": 20,
+                              },
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "writingDirection": "ltr",
+                              },
+                              [
+                                {
+                                  "marginHorizontal": 16,
+                                  "marginVertical": 9,
+                                  "textAlign": "center",
+                                },
+                                false,
+                                {
+                                  "marginHorizontal": 12,
+                                },
+                                undefined,
+                                {
+                                  "textTransform": "uppercase",
+                                },
+                                {
+                                  "color": "#ffd600",
+                                  "fontFamily": "System",
+                                  "fontSize": 14,
+                                  "fontWeight": "500",
+                                  "letterSpacing": 0.1,
+                                  "lineHeight": 20,
+                                },
+                                undefined,
+                              ],
+                            ]
+                          }
+                        >
+                          show info
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
               </View>
             </View>
             <View
@@ -628,9 +786,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                 data={
                   [
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p8",
+                                "firstName": "First 8",
+                                "lastName": "Last 8",
+                                "username": "fl8",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 8 Last 8 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p8",
                         "firstName": "First 8",
@@ -639,9 +814,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p9",
+                                "firstName": "First 9",
+                                "lastName": "Last 9",
+                                "username": "fl9",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 9 Last 9 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p9",
                         "firstName": "First 9",
@@ -650,9 +842,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p10",
+                                "firstName": "First 10",
+                                "lastName": "Last 10",
+                                "username": "fl10",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 10 Last 10 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p10",
                         "firstName": "First 10",
@@ -661,9 +870,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p11",
+                                "firstName": "First 11",
+                                "lastName": "Last 11",
+                                "username": "fl11",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 11 Last 11 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p11",
                         "firstName": "First 11",
@@ -672,9 +898,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p12",
+                                "firstName": "First 12",
+                                "lastName": "Last 12",
+                                "username": "fl12",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 12 Last 12 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p12",
                         "firstName": "First 12",
@@ -683,9 +926,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p13",
+                                "firstName": "First 13",
+                                "lastName": "Last 13",
+                                "username": "fl13",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 13 Last 13 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p13",
                         "firstName": "First 13",
@@ -694,9 +954,26 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                       },
                     },
                     {
-                      "actions": [
-                        "Pull",
-                      ],
+                      "actions": PlayerActionList {
+                        "actionList": [
+                          PullAction {
+                            "action": {
+                              "actionNumber": Infinity,
+                              "actionType": "Pull",
+                              "comments": [],
+                              "playerOne": {
+                                "_id": "p14",
+                                "firstName": "First 14",
+                                "lastName": "Last 14",
+                                "username": "fl14",
+                              },
+                              "tags": [],
+                            },
+                            "reporterDisplay": "Pull",
+                            "viewerDisplay": "First 14 Last 14 pulls the disc",
+                          },
+                        ],
+                      },
                       "player": {
                         "_id": "p14",
                         "firstName": "First 14",

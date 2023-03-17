@@ -1,25 +1,22 @@
 import { DisplayUser } from '../../types/user'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
-import { getValidPlayerActions } from '../../utils/action'
-import { ClientActionType, LiveServerAction } from '../../types/action'
+import { TeamNumber } from '../../types/team'
+import { Action, ActionList, PlayerActionList } from '../../types/action'
 import { FlatList, View } from 'react-native'
 
 interface PlayerActionViewProps {
     players: DisplayUser[]
     pulling: boolean
-    actionStack: LiveServerAction[]
+    actionStack: Action[]
     loading: boolean
-    onAction: (
-        action: ClientActionType,
-        tags: string[],
-        playerOne: DisplayUser,
-    ) => void
+    team: TeamNumber
+    onAction: (action: Action) => Promise<void>
 }
 
 type PlayerAction = {
     player: DisplayUser
-    actions: ClientActionType[]
+    actions: ActionList
 }
 
 const PlayerActionView: React.FC<PlayerActionViewProps> = ({
@@ -27,14 +24,16 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     pulling,
     actionStack,
     loading,
+    team,
     onAction,
 }) => {
     const playerActions: PlayerAction[] = React.useMemo(() => {
-        const actions = []
+        const actions: ActionList[] = []
         for (const player of players) {
-            let action = getValidPlayerActions(
-                player._id,
-                actionStack.slice(),
+            let action = new PlayerActionList(
+                player,
+                actionStack,
+                team,
                 pulling,
             )
             actions.push(action)
@@ -43,15 +42,7 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
         return actions.map((action, index) => {
             return { player: players[index], actions: action }
         })
-    }, [players, actionStack, pulling])
-
-    const onPress = (
-        action: ClientActionType,
-        tags: string[],
-        player: DisplayUser,
-    ) => {
-        onAction(action, tags, player)
-    }
+    }, [players, actionStack, pulling, team])
 
     return (
         <View>
@@ -64,11 +55,9 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
                         <PlayerActionItem
                             key={index}
                             player={player}
-                            actions={actions}
+                            actions={actions.actionList}
                             loading={loading}
-                            onAction={(action, tags) => {
-                                onPress(action, tags, player)
-                            }}
+                            onAction={onAction}
                         />
                     )
                 }}

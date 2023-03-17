@@ -3,9 +3,8 @@ import BaseScreen from '../components/atoms/BaseScreen'
 import ConfirmModal from '../components/molecules/ConfirmModal'
 import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
-import { selectAccount } from '../store/reducers/features/account/accountReducer'
+import { getUserId } from '../services/data/user'
 import { useGameReactivation } from '../hooks/useGameReactivation'
-import { useSelector } from 'react-redux'
 import { FlatList, StyleSheet, Text } from 'react-native'
 import { Game, LocalGame } from '../types/game'
 import { deleteGame, getActiveGames } from '../services/data/game'
@@ -15,12 +14,10 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
-    const account = useSelector(selectAccount)
     const { navigateToGame, onResurrect } = useGameReactivation()
-    const { data: games, refetch } = useData<(Game & { offline: boolean })[]>(
-        getActiveGames,
-        account._id,
-    )
+    const { data: userId } = useData(getUserId)
+    const { data: games, refetch } =
+        useData<(Game & { offline: boolean })[]>(getActiveGames)
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deletingGame, setDeletingGame] = React.useState<Game>()
     const [deleteLoading, setDeleteLoading] = React.useState(false)
@@ -34,13 +31,16 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
         }
     }, [navigation, refetch])
 
-    const getMyTeamId = (game: Game): string => {
-        return (
-            (game.creator._id === account._id
-                ? game.teamOne._id
-                : game.teamTwo._id) || ''
-        )
-    }
+    const getMyTeamId = React.useCallback(
+        (game: Game): string => {
+            return (
+                (game.creator._id === userId
+                    ? game.teamOne._id
+                    : game.teamTwo._id) || ''
+            )
+        },
+        [userId],
+    )
 
     const onGamePress = async (activeGame: LocalGame) => {
         // get game data
@@ -62,6 +62,8 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
             setDeleteLoading(true)
             try {
                 await deleteGame(deletingGame._id, getMyTeamId(deletingGame))
+            } catch (e) {
+                // do nothing
             } finally {
                 refetch()
                 setDeleteLoading(false)

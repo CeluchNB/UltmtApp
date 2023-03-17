@@ -10,14 +10,24 @@ import ViewGameScreen from '../../../src/screens/games/ViewGameScreen'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
 import {
+    Action,
+    ActionFactory,
     ActionType,
-    LiveServerAction,
-    SavedServerAction,
+    LiveServerActionData,
     SubscriptionObject,
 } from '../../../src/types/action'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 import { fetchProfileData, game } from '../../../fixtures/data'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+jest.mock('react-native-google-mobile-ads', () => {
+    return {
+        default: { initialize: jest.fn(), setRequestConfiguration: jest.fn() },
+        MaxAdsContentRating: { T: 'T', PG: 'PG' },
+        BannerAd: 'Ad',
+        BannerAdSize: { BANNER: 'banner' },
+        TestIds: { BANNER: 'bannertest' },
+    }
+})
 
 const mockedNavigate = jest.fn()
 jest.mock('@react-navigation/native', () => {
@@ -84,7 +94,7 @@ const points: Point[] = [
         teamTwoActions: [],
     },
 ]
-const savedActions: SavedServerAction[] = [
+const savedActions: Action[] = [
     {
         _id: 'action1',
         actionNumber: 1,
@@ -160,8 +170,9 @@ const savedActions: SavedServerAction[] = [
             username: 'firstlast2',
         },
     },
-]
-const liveActions: LiveServerAction[] = [
+].map(a => ActionFactory.createFromAction(a))
+
+const liveActions: Action[] = [
     {
         comments: [],
         tags: ['huck'],
@@ -201,7 +212,7 @@ const liveActions: LiveServerAction[] = [
             username: 'firstlast2',
         },
     },
-]
+].map(a => ActionFactory.createFromAction(a))
 
 describe('ViewGameScreen', () => {
     const gameSpy = jest
@@ -222,7 +233,7 @@ describe('ViewGameScreen', () => {
         jest.spyOn(PointData, 'deleteLocalActionsByPoint').mockReturnValue(
             Promise.resolve(),
         )
-        jest.spyOn(PointData, 'getActionsByPoint').mockReturnValue(
+        jest.spyOn(PointData, 'getViewableActionsByPoint').mockReturnValue(
             Promise.resolve(savedActions),
         )
         jest.spyOn(PointData, 'getLiveActionsByPoint').mockReturnValue(
@@ -309,7 +320,7 @@ describe('ViewGameScreen', () => {
                     username: 'firstlast1',
                 },
                 teamNumber: 'one',
-            } as LiveServerAction)
+            } as LiveServerActionData)
         })
 
         await waitFor(async () => {
@@ -383,9 +394,25 @@ describe('ViewGameScreen', () => {
             live: true,
         })
 
-        expect(store.getState().viewAction.liveAction).toMatchObject(
-            liveActions[0],
-        )
+        expect(store.getState().viewAction.liveAction).toMatchObject({
+            comments: [],
+            tags: ['huck'],
+            actionNumber: 1,
+            actionType: ActionType.CATCH,
+            teamNumber: 'one',
+            playerOne: {
+                _id: 'user1',
+                firstName: 'First 1',
+                lastName: 'Last 1',
+                username: 'firstlast1',
+            },
+            playerTwo: {
+                _id: 'user2',
+                firstName: 'First 2',
+                lastName: 'Last 2',
+                username: 'firstlast2',
+            },
+        })
         expect(store.getState().viewAction.teamOne).toMatchObject(game.teamOne)
         expect(store.getState().viewAction.teamTwo).toMatchObject(game.teamTwo)
     })
@@ -418,9 +445,27 @@ describe('ViewGameScreen', () => {
             live: false,
         })
 
-        expect(store.getState().viewAction.savedAction).toMatchObject(
-            savedActions[0],
-        )
+        expect(store.getState().viewAction.savedAction).toMatchObject({
+            _id: 'action1',
+            actionNumber: 1,
+            actionType: ActionType.PICKUP,
+            tags: ['pickup'],
+            team: {
+                _id: 'team1',
+                place: 'Pgh',
+                name: 'Temper',
+                teamname: 'pghtemper',
+                seasonStart: '2022',
+                seasonEnd: '2022',
+            },
+            comments: [],
+            playerOne: {
+                _id: 'user1',
+                firstName: 'First 1',
+                lastName: 'Last 1',
+                username: 'firstlast1',
+            },
+        })
         expect(store.getState().viewAction.teamOne).toMatchObject(game.teamOne)
         expect(store.getState().viewAction.teamTwo).toMatchObject(game.teamTwo)
     })

@@ -1,17 +1,12 @@
 import { DisplayUser } from '../../src/types/user'
 import {
-    ACTION_MAP,
+    Action,
+    ActionFactory,
     ActionType,
-    LiveServerAction,
-    TEAM_ACTION_MAP,
+    LiveServerActionData,
+    PlayerActionList,
+    TeamActionList,
 } from '../../src/types/action'
-
-import {
-    getAction,
-    getValidPlayerActions,
-    getValidTeamActions,
-    mapActionToDisplayName,
-} from '../../src/utils/action'
 
 const playerOne: DisplayUser = {
     _id: 'user1',
@@ -27,10 +22,10 @@ const playerTwo: DisplayUser = {
     username: 'firstlast2',
 }
 
-const getTestAction = (
-    overrides?: Partial<LiveServerAction>,
-): LiveServerAction => {
-    return {
+const getTestLiveAction = (
+    overrides?: Partial<LiveServerActionData>,
+): Action => {
+    return ActionFactory.createFromAction({
         actionType: ActionType.CATCH,
         actionNumber: 1,
         playerOne,
@@ -39,68 +34,104 @@ const getTestAction = (
         comments: [],
         tags: [],
         ...overrides,
-    }
+    })
 }
 
 describe('test get player valid actions', () => {
     it('with pulling team', () => {
-        const result = getValidPlayerActions('', [], true)
-        expect(result).toBe(ACTION_MAP.PULLING)
+        const result = new PlayerActionList(playerOne, [], 'one', true)
+        expect(result.actionList.length).toBe(1)
+        expect(result.actionList[0].action.actionType).toBe(ActionType.PULL)
     })
     it('with receiving team', () => {
-        const result = getValidPlayerActions('', [], false)
-        expect(result).toBe(ACTION_MAP.RECEIVING)
+        const result = new PlayerActionList(playerOne, [], 'one', false)
+        expect(result.actionList.length).toBe(3)
+        expect(result.actionList[0].action.actionType).toBe(ActionType.CATCH)
+        expect(result.actionList[1].action.actionType).toBe(ActionType.PICKUP)
+        expect(result.actionList[2].action.actionType).toBe(ActionType.DROP)
     })
     it('after pull', () => {
-        const stack: LiveServerAction[] = [
-            getTestAction({
+        const stack: Action[] = [
+            getTestLiveAction({
                 actionType: ActionType.PULL,
                 playerTwo: undefined,
             }),
         ]
-        const result = getValidPlayerActions('user1', stack, true)
-        expect(result).toBe(ACTION_MAP.DEFENSE)
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
+        expect(result.actionList.length).toBe(3)
+        expect(result.actionList[0].action.actionType).toBe(ActionType.BLOCK)
+        expect(result.actionList[1].action.actionType).toBe(ActionType.PICKUP)
+        expect(result.actionList[2].action.actionType).toBe(
+            ActionType.TEAM_ONE_SCORE,
+        )
     })
+
     it('after player catch', () => {
-        const stack = [getTestAction({ actionType: ActionType.CATCH })]
-        const result = getValidPlayerActions('user1', stack, true)
-        expect(result).toBe(ACTION_MAP.OFFENSE_WITH_POSSESSION)
+        const stack = [getTestLiveAction({ actionType: ActionType.CATCH })]
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
+        expect(result.actionList.length).toBe(1)
+        expect(result.actionList[0].action.actionType).toBe(
+            ActionType.THROWAWAY,
+        )
     })
+
     it('after teammate catch', () => {
-        const stack = [getTestAction({ actionType: ActionType.CATCH })]
-        const result = getValidPlayerActions('user2', stack, true)
-        expect(result).toBe(ACTION_MAP.OFFENSE_NO_POSSESSION)
+        const stack = [getTestLiveAction({ actionType: ActionType.CATCH })]
+        const result = new PlayerActionList(playerTwo, stack, 'one', true)
+
+        expect(result.actionList.length).toBe(3)
+        expect(result.actionList[0].action.actionType).toBe(ActionType.CATCH)
+        expect(result.actionList[1].action.actionType).toBe(ActionType.DROP)
+        expect(result.actionList[2].action.actionType).toBe(
+            ActionType.TEAM_ONE_SCORE,
+        )
     })
     it('after turnover', () => {
-        const stack = [getTestAction({ actionType: ActionType.DROP })]
-        const result = getValidPlayerActions('user1', stack, true)
-        expect(result).toBe(ACTION_MAP.DEFENSE)
+        const stack = [getTestLiveAction({ actionType: ActionType.DROP })]
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
+        expect(result.actionList.length).toBe(3)
+        expect(result.actionList[0].action.actionType).toBe(ActionType.BLOCK)
+        expect(result.actionList[1].action.actionType).toBe(ActionType.PICKUP)
+        expect(result.actionList[2].action.actionType).toBe(
+            ActionType.TEAM_ONE_SCORE,
+        )
     })
+
     it('after block', () => {
-        const stack = [getTestAction({ actionType: ActionType.BLOCK })]
-        const result = getValidPlayerActions('user1', stack, true)
-        expect(result).toBe(ACTION_MAP.DEFENSE_AFTER_BLOCK)
+        const stack = [getTestLiveAction({ actionType: ActionType.BLOCK })]
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
+
+        expect(result.actionList.length).toBe(1)
+        expect(result.actionList[0].action.actionType).toBe(ActionType.PICKUP)
     })
+
     it('after score', () => {
-        const stack = [getTestAction({ actionType: ActionType.TEAM_ONE_SCORE })]
-        const result = getValidPlayerActions('user1', stack, true)
-        expect(result).toBe(ACTION_MAP.AFTER_SCORE)
+        const stack = [
+            getTestLiveAction({ actionType: ActionType.TEAM_ONE_SCORE }),
+        ]
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
+        expect(result.actionList.length).toBe(0)
     })
+
     it('after timeout', () => {
         const stack = [
-            getTestAction(),
-            getTestAction({ actionType: ActionType.TIMEOUT }),
+            getTestLiveAction(),
+            getTestLiveAction({ actionType: ActionType.TIMEOUT }),
         ]
-        const result = getValidPlayerActions('user1', stack, true)
-        expect(result).toBe(ACTION_MAP.OFFENSE_WITH_POSSESSION)
+        const result = new PlayerActionList(playerOne, stack, 'one', true)
+
+        expect(result.actionList.length).toBe(1)
+        expect(result.actionList[0].action.actionType).toBe(
+            ActionType.THROWAWAY,
+        )
     })
 
     it('after substitution of active player', () => {
         const stack = [
-            getTestAction({
+            getTestLiveAction({
                 actionType: ActionType.CATCH,
             }),
-            getTestAction({
+            getTestLiveAction({
                 actionType: ActionType.SUBSTITUTION,
                 playerTwo: {
                     _id: 'user3',
@@ -110,90 +141,73 @@ describe('test get player valid actions', () => {
                 },
             }),
         ]
-        const result = getValidPlayerActions('user3', stack, true)
-        expect(result).toBe(ACTION_MAP.OFFENSE_WITH_POSSESSION)
-    })
-})
-
-describe('test get action', () => {
-    it('with team one score and two players', () => {
-        const result = getAction('score', 'one', ['tag'], playerOne, playerTwo)
-        expect(result).toMatchObject({
-            actionType: ActionType.TEAM_ONE_SCORE,
-            playerOne,
-            playerTwo,
-            tags: ['tag'],
-        })
-    })
-
-    it('with team two score and two players', () => {
-        const result = getAction('score', 'two', ['tag'], playerOne, playerTwo)
-        expect(result).toMatchObject({
-            actionType: ActionType.TEAM_TWO_SCORE,
-            playerOne,
-            playerTwo,
-            tags: ['tag'],
-        })
-    })
-
-    it('with single player action', () => {
-        const result = getAction(
-            ActionType.PULL,
+        const result = new PlayerActionList(
+            {
+                _id: 'user3',
+                firstName: 'First 3',
+                lastName: 'Last 3',
+                username: 'firstlast3',
+            },
+            stack,
             'one',
-            ['tag'],
-            playerOne,
-            playerTwo,
+            true,
         )
-        expect(result).toMatchObject({
-            actionType: ActionType.PULL,
-            playerOne,
-            tags: ['tag'],
-        })
+
+        expect(result.actionList.length).toBe(1)
+        expect(result.actionList[0].action.actionType).toBe(
+            ActionType.THROWAWAY,
+        )
     })
 })
 
 describe('getValidTeamActions', () => {
     it('prepoint', () => {
-        const stack = [
-            { playerIndex: 0, actionType: ActionType.CATCH },
-            { playerIndex: 1, actionType: ActionType.TEAM_ONE_SCORE },
-        ]
-        const result = getValidTeamActions(stack)
-        expect(result).toBe(TEAM_ACTION_MAP.PREPOINT)
+        const result = new TeamActionList([], 'one')
+        expect(result.actionList.length).toBe(0)
     })
+
+    it('after point', () => {
+        const stack = [
+            getTestLiveAction({ actionType: ActionType.CATCH }),
+            getTestLiveAction({ actionType: ActionType.TEAM_ONE_SCORE }),
+        ]
+        const result = new TeamActionList(stack, 'one')
+        expect(result.actionList.length).toBe(0)
+    })
+
     it('on offense', () => {
         const stack = [
-            { playerIndex: 0, actionType: ActionType.CATCH },
-            { playerIndex: 1, actionType: ActionType.CATCH },
+            getTestLiveAction({ actionType: ActionType.CATCH }),
+            getTestLiveAction({ actionType: ActionType.CATCH }),
         ]
-        const result = getValidTeamActions(stack)
-        expect(result).toBe(TEAM_ACTION_MAP.OFFENSE)
+        const result = new TeamActionList(stack, 'one')
+
+        expect(result.actionList.length).toBe(3)
+        expect(result.actionList[0].action.actionType).toBe(ActionType.TIMEOUT)
+        expect(result.actionList[1].action.actionType).toBe(
+            ActionType.CALL_ON_FIELD,
+        )
+        expect(result.actionList[2].action.actionType).toBe(
+            ActionType.SUBSTITUTION,
+        )
     })
+
     it('on defense', () => {
         const stack = [
-            { playerIndex: 0, actionType: ActionType.CATCH },
-            { playerIndex: 1, actionType: ActionType.DROP },
+            getTestLiveAction({ actionType: ActionType.CATCH }),
+            getTestLiveAction({ actionType: ActionType.DROP }),
         ]
-        const result = getValidTeamActions(stack)
-        expect(result).toBe(TEAM_ACTION_MAP.DEFENSE)
-    })
-    it('with empty stack', () => {
-        const result = getValidTeamActions([])
-        expect(result).toBe(TEAM_ACTION_MAP.PREPOINT)
-    })
-})
+        const result = new TeamActionList(stack, 'one')
 
-describe('mapActionToDisplayName', () => {
-    it('score', () => {
-        const result = mapActionToDisplayName('score')
-        expect(result).toBe('they score')
-    })
-    it('call on field', () => {
-        const result = mapActionToDisplayName(ActionType.CALL_ON_FIELD)
-        expect(result).toBe('call on field')
-    })
-    it('any other action', () => {
-        const result = mapActionToDisplayName(ActionType.CATCH)
-        expect(result).toBe(ActionType.CATCH)
+        expect(result.actionList.length).toBe(3)
+        expect(result.actionList[0].action.actionType).toBe(
+            ActionType.TEAM_TWO_SCORE,
+        )
+        expect(result.actionList[1].action.actionType).toBe(
+            ActionType.CALL_ON_FIELD,
+        )
+        expect(result.actionList[2].action.actionType).toBe(
+            ActionType.SUBSTITUTION,
+        )
     })
 })

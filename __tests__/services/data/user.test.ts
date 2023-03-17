@@ -1,3 +1,4 @@
+import * as LocalTeamServices from '../../../src/services/local/team'
 import * as UserServices from '../../../src/services/network/user'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import jwt from 'jsonwebtoken'
@@ -71,12 +72,15 @@ describe('test user data calls', () => {
     it('should handle network fetch profile success', async () => {
         jest.spyOn(UserServices, 'fetchProfile').mockReturnValueOnce(
             Promise.resolve({
-                data: { user },
+                data: { user, fullManagerTeams: [] },
                 status: 200,
                 statusText: 'Good',
                 headers: {},
                 config: {},
             }),
+        )
+        jest.spyOn(LocalTeamServices, 'saveTeams').mockReturnValueOnce(
+            Promise.resolve(),
         )
 
         const result = await fetchProfile()

@@ -70,5 +70,7 @@
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
+	<key>NSUserTrackingUsageDescription</key>
+  	<string>This app provides personalized advertisements</string>
 </dict>
 </plist>

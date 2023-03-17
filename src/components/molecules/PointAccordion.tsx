@@ -1,10 +1,10 @@
-import ActionDisplayItem from '../atoms/ActionDisplayItem'
+import ActionDisplayMediator from './ActionDisplayMediator'
 import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
-import { ServerAction } from '../../types/action'
 import { isLivePoint } from '../../utils/point'
 import { useTheme } from '../../hooks'
+import { Action, ServerActionData } from '../../types/action'
 import {
     ActivityIndicator,
     Animated,
@@ -14,16 +14,6 @@ import {
     View,
 } from 'react-native'
 import React, { useEffect } from 'react'
-
-interface PointAccordionProps {
-    point: Point
-    actions: ServerAction[]
-    expanded: boolean
-    loading: boolean
-    teamOne: GuestTeam
-    teamTwo: GuestTeam
-    onActionPress: (action: ServerAction) => void
-}
 
 const AccordionRightView = (props: { point: Point; isExpanded: boolean }) => {
     const {
@@ -91,6 +81,17 @@ const getAccordionRightView = (point: Point) => {
     }
 }
 
+interface PointAccordionProps {
+    point: Point
+    actions: (Action | { ad: boolean })[]
+    expanded: boolean
+    loading: boolean
+    teamOne: GuestTeam
+    teamTwo: GuestTeam
+    error: string
+    onActionPress: (action: ServerActionData) => void
+}
+
 const PointAccordion: React.FC<PointAccordionProps> = ({
     point,
     actions,
@@ -98,6 +99,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
     loading,
     teamOne,
     teamTwo,
+    error,
     onActionPress,
 }) => {
     const {
@@ -132,6 +134,10 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             fontSize: size.fontFifteen,
             fontWeight: weight.bold,
         },
+        error: {
+            color: colors.error,
+            fontSize: size.fontFifteen,
+        },
     })
 
     return (
@@ -164,15 +170,14 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                         color={colors.textPrimary}
                     />
                 )}
+                {error.length > 0 && <Text style={styles.error}>{error}</Text>}
                 {!loading && (
                     <FlatList
                         data={actions}
-                        renderItem={({ item }) => {
+                        renderItem={({ item, index }) => {
                             return (
-                                <View
-                                    key={item.actionNumber}
-                                    style={styles.item}>
-                                    <ActionDisplayItem
+                                <View key={index} style={styles.item}>
+                                    <ActionDisplayMediator
                                         action={item}
                                         onPress={onActionPress}
                                         teamOne={teamOne}

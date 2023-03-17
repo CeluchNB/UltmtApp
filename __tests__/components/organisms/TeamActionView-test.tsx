@@ -5,7 +5,7 @@ import TeamActionView from '../../../src/components/organisms/TeamActionView'
 import { game } from '../../../fixtures/data'
 import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
-import { ActionType, ClientActionType } from '../../../src/types/action'
+import { Action, ActionType } from '../../../src/types/action'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import {
     setGame,
@@ -22,15 +22,6 @@ beforeAll(() => {
 afterAll(() => {
     console.warn = originalWarn
 })
-
-const props = {
-    actions: [
-        ActionType.TIMEOUT,
-        'score',
-        ActionType.SUBSTITUTION,
-    ] as ClientActionType[],
-    onAction: jest.fn(),
-}
 
 const playerList1 = [
     {
@@ -101,6 +92,51 @@ const playerList1 = [
     },
 ]
 
+const actions: Action[] = [
+    {
+        action: {
+            actionNumber: Infinity,
+            actionType: ActionType.TIMEOUT,
+            playerOne: playerList1[0],
+            tags: [],
+            comments: [],
+        },
+        reporterDisplay: ActionType.TIMEOUT,
+        viewerDisplay: 'Timeout called',
+        setTags: jest.fn(),
+        setPlayersAndUpdateViewerDisplay: jest.fn(),
+    },
+    {
+        action: {
+            actionNumber: Infinity,
+            actionType: ActionType.TEAM_ONE_SCORE,
+            tags: [],
+            comments: [],
+        },
+        reporterDisplay: 'they score',
+        viewerDisplay: 'They score',
+        setTags: jest.fn(),
+        setPlayersAndUpdateViewerDisplay: jest.fn(),
+    },
+    {
+        action: {
+            actionNumber: Infinity,
+            actionType: ActionType.SUBSTITUTION,
+            tags: [],
+            comments: [],
+        },
+        reporterDisplay: ActionType.SUBSTITUTION,
+        viewerDisplay: 'Substitution',
+        setTags: jest.fn(),
+        setPlayersAndUpdateViewerDisplay: jest.fn(),
+    },
+]
+
+const props = {
+    actions,
+    onAction: jest.fn(),
+}
+
 const point: Point = {
     _id: 'point1',
     pointNumber: 1,
@@ -147,7 +183,7 @@ it('should handle non-substitution press', () => {
     )
     fireEvent.press(getByText(ActionType.TIMEOUT.toString()))
 
-    expect(props.onAction).toHaveBeenCalledWith(ActionType.TIMEOUT, [])
+    expect(props.onAction).toHaveBeenCalledWith(actions[0])
 })
 
 it('should handle non-substitution long press', async () => {
@@ -166,7 +202,8 @@ it('should handle non-substitution long press', async () => {
     await waitFor(() => {
         expect(queryByText('Tags')).not.toBeTruthy()
     })
-    expect(props.onAction).toHaveBeenCalledWith(ActionType.TIMEOUT, ['huck'])
+    expect(actions[0].setTags).toHaveBeenCalledWith(['huck'])
+    expect(props.onAction).toHaveBeenCalledWith(actions[0])
 })
 
 it('should handle tag modal non submit', async () => {
@@ -184,9 +221,7 @@ it('should handle tag modal non submit', async () => {
     await waitFor(() => {
         expect(queryByText('Tags')).not.toBeTruthy()
     })
-    expect(props.onAction).not.toHaveBeenCalledWith(ActionType.TIMEOUT, [
-        'huck',
-    ])
+    expect(props.onAction).not.toHaveBeenCalledWith(actions[0])
 })
 
 it('should handle substitution press', async () => {
@@ -204,16 +239,14 @@ it('should handle substitution press', async () => {
     fireEvent.press(getByText('First 10 Last 10'))
     fireEvent.press(getByText('substitute'))
 
-    // fireEvent(getAllByTestId('base-modal')[0], 'onRequestClose')
     await waitFor(() => {
         expect(queryByText('Player to Remove')).not.toBeTruthy()
     })
-    expect(props.onAction).toHaveBeenCalledWith(
-        ActionType.SUBSTITUTION,
-        [],
+    expect(actions[2].setPlayersAndUpdateViewerDisplay).toHaveBeenCalledWith(
         playerList1[0],
         playerList1[9],
     )
+    expect(props.onAction).toHaveBeenCalledWith(actions[2])
 })
 
 it('should handle subsitution long press', async () => {

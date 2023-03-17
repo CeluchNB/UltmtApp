@@ -1,11 +1,14 @@
 import * as Constants from '../../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { TeamNumber } from '../../types/team'
+import { parseClientAction } from '../../utils/action'
 import { refreshTokenIfNecessary } from './auth'
 import { throwApiError } from '../../utils/service-utils'
 import {
+    Action,
+    ActionFactory,
     ActionType,
-    ClientAction,
-    LiveServerAction,
+    LiveServerActionData,
     SubscriptionObject,
 } from '../../types/action'
 import {
@@ -42,8 +45,9 @@ export const joinPoint = async (gameId: string, pointId: string) => {
  * @param action action data
  * @param pointId point action belongs to
  */
-export const addAction = async (action: ClientAction, pointId: string) => {
-    await networkCreateAction(action, pointId)
+export const addAction = async (action: Action, pointId: string) => {
+    const clientAction = parseClientAction({ ...action.action })
+    await networkCreateAction(clientAction, pointId)
 }
 
 /**
@@ -66,7 +70,7 @@ export const addLiveComment = async (
     gameId: string,
     pointId: string,
     actionNumber: number,
-    teamNumber: 'one' | 'two',
+    teamNumber: TeamNumber,
     comment: string,
 ) => {
     try {
@@ -97,7 +101,7 @@ export const deleteLiveComment = async (
     gameId: string,
     pointId: string,
     actionNumber: number,
-    teamNumber: 'one' | 'two',
+    teamNumber: TeamNumber,
     commentNumber: string,
 ) => {
     try {
@@ -146,22 +150,33 @@ export const unsubscribe = () => {
  * @returns live server action
  */
 export const saveLocalAction = async (
-    action: LiveServerAction,
+    action: LiveServerActionData,
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<Action> => {
     try {
+        const point = await localGetPointById(pointId)
         if (action.actionType === ActionType.SUBSTITUTION) {
             if (action.playerTwo) {
-                const point = await localGetPointById(pointId)
                 if (action.teamNumber === 'one') {
                     point.teamOnePlayers.push(action.playerTwo)
                 } else {
                     point.teamTwoPlayers.push(action.playerTwo)
                 }
-                await localSavePoint(point)
             }
         }
-        return await localSaveAction(action, pointId)
+        const actionData = await localSaveAction(action, pointId)
+        if (actionData.teamNumber === 'one') {
+            point.teamOneActions = [
+                ...new Set([...point.teamOneActions, actionData._id]),
+            ]
+        } else {
+            point.teamTwoActions = [
+                ...new Set([...point.teamTwoActions, actionData._id]),
+            ]
+        }
+
+        await localSavePoint(point)
+        return ActionFactory.createFromAction(actionData)
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
@@ -174,17 +189,18 @@ export const saveLocalAction = async (
  * @returns live server action
  */
 export const createOfflineAction = async (
-    action: ClientAction,
+    action: Action,
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<Action> => {
     try {
         const point = await localGetPointById(pointId)
-        const liveAction: LiveServerAction = {
-            ...action,
+        const liveAction: LiveServerActionData = {
+            ...action.action,
             teamNumber: 'one',
             comments: [],
             actionNumber: point.teamOneActions.length + 1,
         }
+
         const newAction = await saveLocalAction(liveAction, pointId)
         return newAction
     } catch (e) {
@@ -199,20 +215,42 @@ export const createOfflineAction = async (
  * @param pointId point id of action
  */
 export const deleteLocalAction = async (
-    teamNumber: 'one' | 'two',
+    teamNumber: TeamNumber,
     actionNumber: number,
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<LiveServerActionData> => {
     try {
-        return await localDeleteAction(teamNumber, actionNumber, pointId)
+        const action = await localDeleteAction(
+            teamNumber,
+            actionNumber,
+            pointId,
+        )
+
+        await removeActionFromPoint(teamNumber, actionNumber, pointId)
+
+        return action
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }
 
+const removeActionFromPoint = async (
+    teamNumber: TeamNumber,
+    actionNumber: number,
+    pointId: string,
+) => {
+    const point = await localGetPointById(pointId)
+    if (teamNumber === 'one') {
+        point.teamOneActions.splice(actionNumber - 1)
+    } else {
+        point.teamTwoActions.splice(actionNumber - 1)
+    }
+    await localSavePoint(point)
+}
+
 export const undoOfflineAction = async (
     pointId: string,
-): Promise<LiveServerAction> => {
+): Promise<LiveServerActionData> => {
     try {
         const point = await localGetPointById(pointId)
         const actionNumber = point.teamOneActions.length
@@ -230,9 +268,10 @@ export const undoOfflineAction = async (
  */
 export const getLocalActionsByPoint = async (
     pointId: string,
-): Promise<LiveServerAction[]> => {
+): Promise<Action[]> => {
     try {
-        return await localGetActionsByPoint(pointId)
+        const actions = await localGetActionsByPoint(pointId)
+        return actions.map(action => ActionFactory.createFromAction(action))
     } catch (e) {
         return throwApiError(e, Constants.GET_ACTION_ERROR)
     }

@@ -1,20 +1,23 @@
-import { FlatList } from 'react-native'
 import { GuestTeam } from '../../types/team'
 import { List } from 'react-native-paper'
 import Point from '../../types/point'
 import PointAccordion from '../molecules/PointAccordion'
 import React from 'react'
-import { ServerAction } from '../../types/action'
+import { useTheme } from '../../hooks'
+import { Action, ServerActionData } from '../../types/action'
+import { FlatList, RefreshControl } from 'react-native'
 
 export interface PointAccordionGroupProps {
     activePointId?: string
     points: Point[]
-    displayedActions: ServerAction[]
+    displayedActions: (Action | { ad: boolean })[]
     teamOne: GuestTeam
     teamTwo: GuestTeam
     loading: boolean
+    error: string
     onSelectPoint: (pointId: string) => void
-    onSelectAction: (action: ServerAction) => void
+    onSelectAction: (action: ServerActionData) => void
+    onRefresh: () => Promise<void>
 }
 
 const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
@@ -24,10 +27,16 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
     teamOne,
     teamTwo,
     loading,
+    error,
     onSelectPoint,
     onSelectAction,
+    onRefresh,
 }) => {
+    const {
+        theme: { colors },
+    } = useTheme()
     const [expandedId, setExpandedId] = React.useState('')
+    const [refreshing, setRefreshing] = React.useState(false)
 
     React.useEffect(() => {
         setExpandedId(curr => activePointId || curr)
@@ -53,6 +62,17 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
             expandedId={expandedId}>
             <FlatList
                 data={points}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        colors={[colors.textSecondary]}
+                        onRefresh={async () => {
+                            setRefreshing(true)
+                            await onRefresh()
+                            setRefreshing(false)
+                        }}
+                    />
+                }
                 renderItem={({ item: point }) => {
                     return (
                         <PointAccordion
@@ -63,6 +83,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                             loading={loading}
                             teamOne={teamOne}
                             teamTwo={teamTwo}
+                            error={error}
                             onActionPress={onSelectAction}
                         />
                     )

@@ -233,6 +233,7 @@ exports[`should match snapshot 1`] = `
                     "color": "#ffd600",
                     "fontSize": 41.0958904109589,
                     "fontWeight": "bold",
+                    "width": 250,
                   }
                 }
               >
@@ -335,6 +336,7 @@ exports[`should match snapshot 1`] = `
                     "color": "#ffd600",
                     "fontSize": 41.0958904109589,
                     "fontWeight": "bold",
+                    "width": 250,
                   }
                 }
               >
@@ -437,6 +439,7 @@ exports[`should match snapshot 1`] = `
                     "color": "#ffd600",
                     "fontSize": 41.0958904109589,
                     "fontWeight": "bold",
+                    "width": 250,
                   }
                 }
               >

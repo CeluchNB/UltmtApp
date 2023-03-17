@@ -1,9 +1,5 @@
-import {
-    ActionType,
-    ClientActionType,
-    LiveServerAction,
-    ServerAction,
-} from '../types/action'
+import { TeamNumber } from '../types/team'
+import { Action, ActionType, LiveServerActionData } from '../types/action'
 import Point, { ClientPoint } from '../types/point'
 
 export const isLivePoint = (point?: Point): boolean => {
@@ -13,7 +9,7 @@ export const isLivePoint = (point?: Point): boolean => {
 export const isPulling = (
     point?: { pullingTeam: { _id?: string } },
     game?: { teamOne: { _id: string } },
-    team?: 'one' | 'two',
+    team?: TeamNumber,
 ): boolean => {
     if (!point || !game || !team) {
         return false
@@ -25,8 +21,8 @@ export const isPulling = (
 }
 
 export const isPullingNext = (
-    team: 'one' | 'two',
-    action?: ClientActionType,
+    team: TeamNumber,
+    action?: ActionType,
 ): boolean => {
     return (
         (team === 'one' && action === ActionType.TEAM_ONE_SCORE) ||
@@ -35,24 +31,23 @@ export const isPullingNext = (
 }
 
 export const normalizeActions = (
-    teamOneActions: ServerAction[],
-    teamTwoActions: ServerAction[],
-): ServerAction[] => {
+    teamOneActions: Action[],
+    teamTwoActions: Action[],
+): (Action | { ad: boolean })[] => {
     // dedupe actions
     const oneDeduped = [
         ...new Map(
-            teamOneActions.map(action => [action.actionNumber, action]),
+            teamOneActions.map(action => [action.action.actionNumber, action]),
         ).values(),
-    ].sort((a, b) => a.actionNumber - b.actionNumber)
+    ].sort((a, b) => a.action.actionNumber - b.action.actionNumber)
 
     const twoDeduped = [
         ...new Map(
-            teamTwoActions.map(action => [action.actionNumber, action]),
+            teamTwoActions.map(action => [action.action.actionNumber, action]),
         ).values(),
-    ].sort((a, b) => a.actionNumber - b.actionNumber)
+    ].sort((a, b) => a.action.actionNumber - b.action.actionNumber)
 
-    // helper values
-    const result: ServerAction[] = []
+    const result: (Action | { ad: boolean })[] = []
     const turnovers = [ActionType.DROP, ActionType.THROWAWAY]
     const initiating = [ActionType.CATCH, ActionType.PICKUP]
     let offense: string = 'one'
@@ -62,37 +57,40 @@ export const normalizeActions = (
     // 2) Catch from either team
     // 3) Drop from either team
     // Order of the if/else VERY IMPORTANT
-    if (oneDeduped.length > 0 && oneDeduped[0].actionType === ActionType.PULL) {
-        result.push(oneDeduped.shift() as ServerAction)
+    if (
+        oneDeduped.length > 0 &&
+        oneDeduped[0].action.actionType === ActionType.PULL
+    ) {
+        result.push(oneDeduped.shift() as Action)
         offense = 'two'
     } else if (
         twoDeduped.length > 0 &&
-        twoDeduped[0].actionType === ActionType.PULL
+        twoDeduped[0].action.actionType === ActionType.PULL
     ) {
-        result.push(twoDeduped.shift() as ServerAction)
+        result.push(twoDeduped.shift() as Action)
         offense = 'one'
     } else if (
         oneDeduped.length > 0 &&
-        oneDeduped[0].actionType === ActionType.DROP
+        oneDeduped[0].action.actionType === ActionType.DROP
     ) {
-        result.push(oneDeduped.shift() as ServerAction)
+        result.push(oneDeduped.shift() as Action)
         offense = 'two'
     } else if (
         twoDeduped.length > 0 &&
-        twoDeduped[0].actionType === ActionType.DROP
+        twoDeduped[0].action.actionType === ActionType.DROP
     ) {
-        result.push(twoDeduped.shift() as ServerAction)
+        result.push(twoDeduped.shift() as Action)
         offense = 'one'
     } else if (
         twoDeduped.length === 0 &&
         oneDeduped.length > 0 &&
-        initiating.includes(oneDeduped[0].actionType)
+        initiating.includes(oneDeduped[0].action.actionType)
     ) {
         offense = 'one'
     } else if (
         oneDeduped.length === 0 &&
         twoDeduped.length > 0 &&
-        initiating.includes(twoDeduped[0].actionType)
+        initiating.includes(twoDeduped[0].action.actionType)
     ) {
         offense = 'two'
     }
@@ -100,20 +98,56 @@ export const normalizeActions = (
     // alternate offense actions until we have no more actions
     while (oneDeduped.length > 0 || twoDeduped.length > 0) {
         if (offense === 'one' && oneDeduped.length > 0) {
-            result.push(oneDeduped.shift() as ServerAction)
-            if (turnovers.includes(result[result.length - 1].actionType)) {
+            result.push(oneDeduped.shift() as Action)
+            if (
+                turnovers.includes(
+                    (result[result.length - 1] as Action).action.actionType,
+                )
+            ) {
+                result.push({ ad: true })
                 offense = 'two'
             }
         } else if (offense === 'two' && twoDeduped.length > 0) {
-            result.push(twoDeduped.shift() as ServerAction)
-            if (turnovers.includes(result[result.length - 1].actionType)) {
+            result.push(twoDeduped.shift() as Action)
+            if (
+                turnovers.includes(
+                    (result[result.length - 1] as Action).action.actionType,
+                )
+            ) {
+                result.push({ ad: true })
                 offense = 'one'
             }
         } else if (offense === 'one' && oneDeduped.length === 0) {
-            result.push(...twoDeduped)
+            for (const action of twoDeduped) {
+                if (
+                    [
+                        ActionType.BLOCK,
+                        ActionType.DROP,
+                        ActionType.THROWAWAY,
+                    ].includes(action.action.actionType)
+                ) {
+                    result.push(action)
+                    result.push({ ad: true })
+                } else {
+                    result.push(action)
+                }
+            }
             break
         } else {
-            result.push(...oneDeduped)
+            for (const action of oneDeduped) {
+                if (
+                    [
+                        ActionType.BLOCK,
+                        ActionType.DROP,
+                        ActionType.THROWAWAY,
+                    ].includes(action.action.actionType)
+                ) {
+                    result.push(action)
+                    result.push({ ad: true })
+                } else {
+                    result.push(action)
+                }
+            }
             break
         }
     }
@@ -122,13 +156,13 @@ export const normalizeActions = (
 }
 
 export const normalizeLiveActions = (
-    liveActions: LiveServerAction[],
-): ServerAction[] => {
+    liveActions: Action[],
+): (Action | { ad: boolean })[] => {
     const teamOneActions = liveActions.filter(
-        action => action.teamNumber === 'one',
+        action => (action.action as LiveServerActionData).teamNumber === 'one',
     )
     const teamTwoActions = liveActions.filter(
-        action => action.teamNumber === 'two',
+        action => (action.action as LiveServerActionData).teamNumber === 'two',
     )
 
     return normalizeActions(teamOneActions, teamTwoActions)

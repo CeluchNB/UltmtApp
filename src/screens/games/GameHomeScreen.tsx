@@ -5,6 +5,7 @@ import { GameHomeProps } from '../../types/navigation'
 import MapSection from '../../components/molecules/MapSection'
 import SearchBar from '../../components/atoms/SearchBar'
 import { searchGames } from '../../services/data/game'
+import { setupMobileAds } from '../../utils/ads'
 import React, { useMemo } from 'react'
 import {
     RefreshControl,
@@ -21,6 +22,17 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     } = useTheme()
 
     const { data, loading, refetch } = useData<Game[]>(searchGames)
+    const liveGames = useMemo(() => {
+        return data?.filter(g => g.teamOneActive)
+    }, [data])
+
+    const recentGames = useMemo(() => {
+        return data?.filter(g => !g.teamOneActive)
+    }, [data])
+
+    React.useEffect(() => {
+        setupMobileAds()
+    }, [])
 
     const navigateToSearch = (live: string) => {
         navigation.navigate('GameSearch', { live })
@@ -45,14 +57,6 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
             />
         )
     }
-
-    const liveGames = useMemo(() => {
-        return data?.filter(g => g.teamOneActive)
-    }, [data])
-
-    const recentGames = useMemo(() => {
-        return data?.filter(g => !g.teamOneActive)
-    }, [data])
 
     const styles = StyleSheet.create({
         screen: {
@@ -124,7 +128,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
                         }}
                     />
                 )}
-                {(!data || data?.length < 1) && (
+                {(!data || data?.length < 1) && !loading && (
                     <Text style={styles.errorText}>
                         No games available currently. Try refreshing or
                         searching.

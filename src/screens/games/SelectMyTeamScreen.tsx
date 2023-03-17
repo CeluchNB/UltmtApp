@@ -1,15 +1,15 @@
 import * as Constants from '../../utils/constants'
 import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
-import { DisplayTeam } from '../../types/team'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import { SelectMyTeamProps } from '../../types/navigation'
+import { Team } from '../../types/team'
 import TeamListItem from '../../components/atoms/TeamListItem'
-import { fetchProfile } from '../../store/reducers/features/account/accountReducer'
-import { getTeam } from '../../services/data/team'
+import { getManagingTeams } from '../../services/data/team'
 import { isLoggedIn } from '../../services/data/auth'
 import { setTeamOne } from '../../store/reducers/features/game/liveGameReducer'
+import { useDispatch } from 'react-redux'
 import {
     ActivityIndicator,
     FlatList,
@@ -17,21 +17,16 @@ import {
     Text,
     View,
 } from 'react-native'
-import {
-    selectFetchProfileLoading,
-    selectManagerTeams,
-} from '../../store/reducers/features/account/accountReducer'
 import { useData, useTheme } from '../../hooks'
-import { useDispatch, useSelector } from 'react-redux'
 
 const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
     const dispatch = useDispatch<AppDispatch>()
-    const managerTeams = useSelector(selectManagerTeams)
-    const fetchProfileLoading = useSelector(selectFetchProfileLoading)
 
+    const { data: managerTeams, loading: teamsLoading } =
+        useData(getManagingTeams)
     const { data: isAuth, loading, refetch } = useData(isLoggedIn)
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -41,17 +36,9 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
         return unsubscribe
     })
 
-    React.useEffect(() => {
-        if (isAuth && managerTeams.length < 1) {
-            dispatch(fetchProfile())
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAuth])
-
-    const onSelect = async (teamOne: DisplayTeam) => {
+    const onSelect = async (teamOne: Team) => {
         try {
-            const team = await getTeam(teamOne._id)
-            dispatch(setTeamOne(team))
+            dispatch(setTeamOne(teamOne))
             navigation.navigate('SelectOpponent', {})
         } catch (e) {}
     }
@@ -85,7 +72,7 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
 
     return (
         <BaseScreen containerWidth="80%">
-            {(loading || fetchProfileLoading) && (
+            {(loading || teamsLoading) && (
                 <ActivityIndicator
                     color={colors.textPrimary}
                     testID="select-team-loading"
@@ -101,19 +88,22 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
                     />
                 </View>
             )}
-            {managerTeams.length < 1 && isAuth && !fetchProfileLoading && (
-                <View>
-                    <Text style={styles.error}>
-                        {Constants.MANAGE_TO_CREATE}
-                    </Text>
-                    <PrimaryButton
-                        text="create team"
-                        loading={false}
-                        onPress={onCreateTeam}
-                    />
-                </View>
-            )}
-            {managerTeams.length > 0 && (
+            {managerTeams &&
+                managerTeams.length < 1 &&
+                isAuth &&
+                !teamsLoading && (
+                    <View>
+                        <Text style={styles.error}>
+                            {Constants.MANAGE_TO_CREATE}
+                        </Text>
+                        <PrimaryButton
+                            text="create team"
+                            loading={false}
+                            onPress={onCreateTeam}
+                        />
+                    </View>
+                )}
+            {managerTeams && managerTeams.length > 0 && (
                 <FlatList
                     style={styles.list}
                     data={managerTeams}

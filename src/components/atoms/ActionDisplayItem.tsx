@@ -1,21 +1,20 @@
 import { GuestTeam } from '../../types/team'
-import { GuestUser } from '../../types/user'
 import React from 'react'
-import { mapActionToDescription } from '../../utils/action'
 import { useTheme } from '../../hooks'
-import { Chip, IconButton } from 'react-native-paper'
 import {
-    LiveServerAction,
-    SavedServerAction,
-    ServerAction,
+    Action,
+    LiveServerActionData,
+    SavedServerActionData,
+    ServerActionData,
 } from '../../types/action'
+import { Chip, IconButton } from 'react-native-paper'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 interface ActionDisplayItemProps {
-    action: ServerAction
+    action: Action
     teamOne: GuestTeam
     teamTwo: GuestTeam
-    onPress?: (action: ServerAction) => void
+    onPress?: (action: ServerActionData) => void
 }
 
 const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
@@ -27,19 +26,16 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
     const {
         theme: { colors, size, weight },
     } = useTheme()
-    const { actionType, playerOne, playerTwo, tags } = action
-
-    const getName = (player?: GuestUser): string => {
-        return `${player?.firstName} ${player?.lastName}`
-    }
+    const { action: actionData, viewerDisplay } = action
+    const { tags, comments } = actionData
 
     const getTeamName = (): string => {
-        if ((action as any).teamNumber) {
-            return (action as LiveServerAction).teamNumber === 'one'
+        if ((actionData as any).teamNumber) {
+            return (actionData as LiveServerActionData).teamNumber === 'one'
                 ? teamOne.name
                 : teamTwo.name
-        } else if ((action as any).team) {
-            return (action as SavedServerAction).team.name
+        } else if ((actionData as any).team) {
+            return (actionData as SavedServerActionData).team.name
         }
         return teamOne.name
     }
@@ -99,32 +95,16 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
             android_ripple={{ color: colors.textPrimary }}
             onPress={() => {
                 if (onPress) {
-                    onPress(action)
+                    onPress(actionData)
                 }
             }}>
             <Text style={styles.action}>{getTeamName()}</Text>
             <View style={styles.dataContainer}>
                 <View style={styles.textContainer}>
                     <View style={styles.lineContainer}>
-                        {playerOne && (
-                            <View>
-                                <Text style={styles.player}>
-                                    {getName(playerOne)}
-                                </Text>
-                            </View>
-                        )}
                         <View>
-                            <Text style={styles.action}>
-                                {mapActionToDescription(actionType)}
-                            </Text>
+                            <Text style={styles.action}>{viewerDisplay}</Text>
                         </View>
-                        {playerTwo && (
-                            <View>
-                                <Text style={styles.player}>
-                                    {getName(playerTwo)}
-                                </Text>
-                            </View>
-                        )}
                     </View>
                     <View style={styles.lineContainer}>
                         {tags.map(tag => (
@@ -142,9 +122,9 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
                             icon="comment-text-outline"
                             iconColor={colors.textPrimary}
                         />
-                        {action.comments.length > 0 && (
+                        {comments.length > 0 && (
                             <Text style={styles.commentCount}>
-                                ({action.comments.length})
+                                ({comments.length})
                             </Text>
                         )}
                     </View>

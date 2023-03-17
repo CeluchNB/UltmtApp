@@ -58,7 +58,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                         onSend={handleSubmitComment}
                     />
                     <FlatList
-                        data={action.comments}
+                        data={action.action.comments}
                         ItemSeparatorComponent={divider}
                         renderItem={({ item }) => {
                             return (

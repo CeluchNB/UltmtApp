@@ -1,4 +1,5 @@
 import GameCreationNavigator from './src/navigation/GameCreationNavigator'
+import InformationScreen from './src/screens/InformationScreen'
 import LiveGameNavigator from './src/navigation/LiveGameNavigator'
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
@@ -66,6 +67,18 @@ const App: React.FC<{}> = () => {
                     <Stack.Screen
                         name="LiveGame"
                         component={LiveGameNavigator}
+                    />
+                    <Stack.Screen
+                        name="Information"
+                        component={InformationScreen}
+                        options={{
+                            title: 'More Info',
+                            headerShown: true,
+                            headerStyle: {
+                                backgroundColor: colors.primary,
+                            },
+                            headerTintColor: colors.textPrimary,
+                        }}
                     />
                 </Stack.Navigator>
             </QueryClientProvider>

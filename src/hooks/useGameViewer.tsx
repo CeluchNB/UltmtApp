@@ -4,15 +4,16 @@ import React from 'react'
 import { isLivePoint } from '../utils/point'
 import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
 import {
-    LiveServerAction,
-    SavedServerAction,
-    ServerAction,
+    Action,
+    ActionFactory,
+    LiveServerActionData,
+    ServerActionData,
     SubscriptionObject,
 } from '../types/action'
 import {
     deleteLocalActionsByPoint,
-    getActionsByPoint,
     getLiveActionsByPoint,
+    getViewableActionsByPoint,
 } from '../services/data/point'
 import {
     getGameById,
@@ -35,15 +36,11 @@ import { useDispatch, useSelector } from 'react-redux'
 export const useGameViewer = (gameId: string) => {
     const dispatch = useDispatch()
     const managerTeams = useSelector(selectManagerTeams)
-    const [liveActions, setLiveActions] = React.useState<LiveServerAction[]>([])
+    const [liveActions, setLiveActions] = React.useState<Action[]>([])
     const [game, setGame] = React.useState<Game>()
     const [points, setPoints] = React.useState<Point[]>([])
-    const [teamOneActions, setTeamOneActions] = React.useState<
-        SavedServerAction[]
-    >([])
-    const [teamTwoActions, setTeamTwoActions] = React.useState<
-        SavedServerAction[]
-    >([])
+    const [teamOneActions, setTeamOneActions] = React.useState<Action[]>([])
+    const [teamTwoActions, setTeamTwoActions] = React.useState<Action[]>([])
     const [activePoint, setActivePoint] = React.useState<Point | undefined>(
         undefined,
     )
@@ -88,30 +85,7 @@ export const useGameViewer = (gameId: string) => {
     }, [liveActions, teamOneActions, teamTwoActions, activePoint])
 
     React.useEffect(() => {
-        setGameLoading(true)
-        setAllPointsLoading(true)
-
-        getGameById(gameId)
-            .then(data => {
-                setGame(data)
-            })
-            .catch((e: any) => {
-                setError(e.message)
-            })
-            .finally(() => {
-                setAllPointsLoading(false)
-            })
-
-        getPointsByGame(gameId)
-            .then(data => {
-                setPoints(data)
-            })
-            .catch((e: any) => {
-                setError(e.message)
-            })
-            .finally(() => {
-                setGameLoading(false)
-            })
+        initializeGame()
 
         return () => {
             unsubscribe()
@@ -122,16 +96,35 @@ export const useGameViewer = (gameId: string) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gameId])
 
+    const initializeGame = async () => {
+        try {
+            setGameLoading(true)
+            setAllPointsLoading(true)
+
+            const gameData = await getGameById(gameId)
+            setGame(gameData)
+
+            const pointsData = await getPointsByGame(gameId)
+            setPoints(pointsData)
+        } catch (e: any) {
+            setError(e?.message)
+        } finally {
+            setAllPointsLoading(false)
+            setGameLoading(false)
+        }
+    }
+
     const subscriptions: SubscriptionObject = {
-        client: (data: LiveServerAction) => {
-            setLiveActions(curr => [data, ...curr])
+        client: (data: LiveServerActionData) => {
+            const action = ActionFactory.createFromAction(data)
+            setLiveActions(curr => [action, ...curr])
         },
         undo: ({ team, actionNumber }) => {
             setLiveActions(curr => {
                 return curr.filter(
                     a =>
-                        a.actionNumber !== actionNumber ||
-                        a.teamNumber !== team,
+                        a.action.actionNumber !== actionNumber ||
+                        (a.action as LiveServerActionData).teamNumber !== team,
                 )
             })
         },
@@ -149,7 +142,7 @@ export const useGameViewer = (gameId: string) => {
 
             getPointsByGame(gameId)
                 .then(data => {
-                    // TODO: games gauranteed to come in order?
+                    // TODO: points gauranteed to come in order?
                     setPoints(data)
                     if (data.length > 0) {
                         setActivePoint(data[0])
@@ -188,7 +181,7 @@ export const useGameViewer = (gameId: string) => {
 
     // public
     const onSelectAction = (
-        action: ServerAction,
+        action: ServerActionData,
     ): { gameId: string; pointId: string; live: boolean } => {
         const live = isLivePoint(activePoint)
         if (live) {
@@ -216,13 +209,13 @@ export const useGameViewer = (gameId: string) => {
 
     // private
     const getSavedActions = async (point: Point) => {
-        const oneActions = await getActionsByPoint(
+        const oneActions = await getViewableActionsByPoint(
             'one',
             point._id,
             point.teamOneActions,
         )
         setTeamOneActions(oneActions)
-        const twoActions = await getActionsByPoint(
+        const twoActions = await getViewableActionsByPoint(
             'two',
             point._id,
             point.teamTwoActions,
@@ -249,5 +242,6 @@ export const useGameViewer = (gameId: string) => {
         onSelectAction,
         onSelectPoint,
         onReactivateGame,
+        onRefresh: initializeGame,
     }
 }

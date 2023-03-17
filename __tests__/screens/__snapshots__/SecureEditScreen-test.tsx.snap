@@ -27,6 +27,7 @@ exports[`should match snapshot 1`] = `
         }
       }
     >
+      New 
       Email
     </Text>
     <View

@@ -4,8 +4,8 @@ import Point from '../src/types/point'
 import { User } from '../src/types/user'
 import {
     ActionType,
-    LiveServerAction,
-    SavedServerAction,
+    LiveServerActionData,
+    SavedServerActionData,
 } from '../src/types/action'
 
 export const fetchProfileData: User = {
@@ -97,11 +97,11 @@ const teamOne = {
     seasonEnd: '2022',
 }
 
-const tourney = {
+export const tourney = {
     _id: 'tourney1',
     name: 'Club Nationals 2022',
-    startDate: new Date('2022-10-20'),
-    endDate: new Date('2022-10-23'),
+    startDate: '2022-10-20',
+    endDate: '2022-10-23',
     eventId: 'nationals22',
 }
 
@@ -186,7 +186,7 @@ export const point: Point = {
     teamTwoActions: [],
 }
 
-export const liveAction: LiveServerAction = {
+export const liveAction: LiveServerActionData = {
     comments: [
         {
             comment: 'Test comment',
@@ -204,7 +204,7 @@ export const liveAction: LiveServerAction = {
     tags: ['ib'],
     teamNumber: 'one',
 }
-export const savedAction: SavedServerAction = {
+export const savedAction: SavedServerActionData = {
     _id: 'action1',
     comments: [],
     actionNumber: 1,

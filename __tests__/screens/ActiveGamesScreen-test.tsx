@@ -1,11 +1,11 @@
 import * as GameData from '../../src/services/data/game'
 import * as PointData from '../../src/services/data/point'
+import * as UserData from '../../src/services/data/user'
 import { ActiveGamesProps } from '../../src/types/navigation'
 import ActiveGamesScreen from '../../src/screens/ActiveGamesScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
-import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
 import { Game, LocalGame } from '../../src/types/game'
 import { fetchProfileData, game, point } from '../../fixtures/data'
@@ -46,7 +46,6 @@ const props: ActiveGamesProps = {
 
 beforeEach(() => {
     jest.resetAllMocks()
-    store.dispatch(setProfile(fetchProfileData))
     jest.spyOn(GameData, 'getActiveGames').mockReturnValue(
         Promise.resolve([
             createGame({
@@ -66,6 +65,9 @@ beforeEach(() => {
                 },
             }),
         ]),
+    )
+    jest.spyOn(UserData, 'getUserId').mockReturnValue(
+        Promise.resolve(fetchProfileData._id),
     )
 })
 
