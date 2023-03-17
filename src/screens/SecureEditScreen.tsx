@@ -152,7 +152,9 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.screen}>
             <View style={styles.container}>
-                <Text style={styles.label}>{capitalizeFirstLetter(title)}</Text>
+                <Text style={styles.label}>
+                    New {capitalizeFirstLetter(title)}
+                </Text>
                 <Controller
                     name="value"
                     control={control}
@@ -209,6 +211,7 @@ const SecureEditScreen: React.FC<SecureEditProps> = ({ navigation, route }) => {
                     style={styles.button}
                     text={`Change ${title}`}
                     loading={loading}
+                    disabled={loading}
                     onPress={handleSubmit(onSubmit)}
                 />
             </View>
