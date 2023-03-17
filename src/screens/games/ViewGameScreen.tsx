@@ -87,6 +87,8 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                 throw new Error()
             }
             await deleteGame(gameId, managingTeamId)
+        } catch (e) {
+            // do nothing
         } finally {
             setDeleteLoading(false)
             setModalVisible(false)

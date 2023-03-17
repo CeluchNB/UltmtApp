@@ -62,6 +62,8 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
             setDeleteLoading(true)
             try {
                 await deleteGame(deletingGame._id, getMyTeamId(deletingGame))
+            } catch (e) {
+                // do nothing
             } finally {
                 refetch()
                 setDeleteLoading(false)
