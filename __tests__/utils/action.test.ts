@@ -69,10 +69,11 @@ describe('test get player valid actions', () => {
     it('after player catch', () => {
         const stack = [getTestLiveAction({ actionType: ActionType.CATCH })]
         const result = new PlayerActionList(playerOne, stack, 'one', true)
-        expect(result.actionList.length).toBe(1)
+        expect(result.actionList.length).toBe(2)
         expect(result.actionList[0].action.actionType).toBe(
             ActionType.THROWAWAY,
         )
+        expect(result.actionList[1].action.actionType).toBe(ActionType.STALL)
     })
 
     it('after teammate catch', () => {
@@ -120,10 +121,11 @@ describe('test get player valid actions', () => {
         ]
         const result = new PlayerActionList(playerOne, stack, 'one', true)
 
-        expect(result.actionList.length).toBe(1)
+        expect(result.actionList.length).toBe(2)
         expect(result.actionList[0].action.actionType).toBe(
             ActionType.THROWAWAY,
         )
+        expect(result.actionList.length).toBe(2)
     })
 
     it('after substitution of active player', () => {
@@ -153,10 +155,11 @@ describe('test get player valid actions', () => {
             true,
         )
 
-        expect(result.actionList.length).toBe(1)
+        expect(result.actionList.length).toBe(2)
         expect(result.actionList[0].action.actionType).toBe(
             ActionType.THROWAWAY,
         )
+        expect(result.actionList[1].action.actionType).toBe(ActionType.STALL)
     })
 })
 

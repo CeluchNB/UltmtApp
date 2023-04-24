@@ -12,6 +12,7 @@ import {
     PullAction,
     ScoreAction,
     ServerActionData,
+    StallAction,
     SubstitutionAction,
     ThrowawayAction,
     TimeoutAction,
@@ -57,7 +58,10 @@ export const getPlayerActionList = (
             case ActionType.PICKUP:
             case ActionType.CATCH:
                 if (currentUser === action.playerOne?._id) {
-                    return [new ThrowawayAction(playerOne)]
+                    return [
+                        new ThrowawayAction(playerOne),
+                        new StallAction(playerOne),
+                    ]
                 } else {
                     return [
                         new CatchAction(playerOne, playerTwo),
@@ -73,6 +77,7 @@ export const getPlayerActionList = (
             case ActionType.DROP:
             case ActionType.THROWAWAY:
             case ActionType.PULL:
+            case ActionType.STALL:
                 return [
                     new BlockAction(playerOne),
                     new PickupAction(playerOne),

@@ -103,7 +103,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const styles = StyleSheet.create({
         pointsContainer: {
             marginTop: 10,
-            height: '80%',
+            height: '70%',
             backgroundColor: colors.primary,
         },
     })
