@@ -34,9 +34,12 @@ const isScore = (type: ActionType): boolean => {
 }
 
 const isTurnover = (type: ActionType): boolean => {
-    return [ActionType.PULL, ActionType.DROP, ActionType.THROWAWAY].includes(
-        type,
-    )
+    return [
+        ActionType.PULL,
+        ActionType.DROP,
+        ActionType.THROWAWAY,
+        ActionType.STALL,
+    ].includes(type)
 }
 
 const isRetainingPossession = (type: ActionType): boolean => {

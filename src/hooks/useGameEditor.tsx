@@ -267,6 +267,7 @@ export const useGameEditor = () => {
         return {
             scoreLimit: Number(data.scoreLimit),
             halfScore: Number(data.halfScore),
+            startTime: data.startTime,
             softcapMins: Number(data.softcapMins),
             hardcapMins: Number(data.hardcapMins),
             playersPerPoint: Number(data.playersPerPoint),
