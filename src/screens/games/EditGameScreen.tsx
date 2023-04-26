@@ -24,6 +24,7 @@ const EditGameScreen: React.FC<EditGameProps> = ({ navigation }) => {
         defaultValues: {
             scoreLimit: game.scoreLimit,
             halfScore: game.halfScore,
+            startTime: new Date(game.startTime),
             softcapMins: game.softcapMins,
             hardcapMins: game.hardcapMins,
             playersPerPoint: game.playersPerPoint,

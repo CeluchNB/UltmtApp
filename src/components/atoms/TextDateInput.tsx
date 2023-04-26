@@ -1,5 +1,6 @@
 import DatePicker from 'react-native-date-picker'
 import { TextInput } from 'react-native-paper'
+import dayjs from 'dayjs'
 import { useTheme } from '../../hooks'
 import React, { useState } from 'react'
 import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
@@ -7,12 +8,16 @@ import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
 interface TextDateInputProps {
     value: Date
     style?: StyleProp<TextStyle>
+    mode?: 'date' | 'datetime' | 'time'
+    format?: string
     onChange: (date: Date) => void
 }
 
 const TextDateInput: React.FC<TextDateInputProps> = ({
     value,
     style,
+    mode = 'date',
+    format = 'MM/DD/YY',
     onChange,
 }) => {
     const {
@@ -36,9 +41,9 @@ const TextDateInput: React.FC<TextDateInputProps> = ({
             <View style={styles.container}>
                 <TextInput
                     style={[styles.input, style]}
-                    outlineColor={colors.textPrimary}
+                    outlineColor={colors.textSecondary}
                     activeOutlineColor={colors.textPrimary}
-                    placeholder={value.toLocaleDateString('en-US')}
+                    placeholder={dayjs(value).format(format)}
                     placeholderTextColor={colors.textPrimary}
                     mode="outlined"
                     onPressOut={() => {
@@ -52,7 +57,7 @@ const TextDateInput: React.FC<TextDateInputProps> = ({
                 modal
                 open={open}
                 date={value}
-                mode="date"
+                mode={mode}
                 onConfirm={date => {
                     setOpen(false)
                     onChange(date)

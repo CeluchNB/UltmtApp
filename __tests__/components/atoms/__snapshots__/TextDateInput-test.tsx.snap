@@ -30,7 +30,7 @@ exports[`should match snapshot while closed 1`] = `
             },
             {
               "backgroundColor": "#303030",
-              "borderColor": "#ffd600",
+              "borderColor": "#31adff",
               "borderRadius": 4,
               "borderWidth": 1,
             },
@@ -62,7 +62,7 @@ exports[`should match snapshot while closed 1`] = `
             onChangeText={[Function]}
             onFocus={[Function]}
             onPressOut={[Function]}
-            placeholder="1/1/2022"
+            placeholder="01/01/22"
             placeholderTextColor="#ffd600"
             selectionColor="#ffd600"
             style={

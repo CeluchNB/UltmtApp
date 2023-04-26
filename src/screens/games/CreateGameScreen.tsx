@@ -53,6 +53,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
             offline: false,
             scoreLimit: 15,
             halfScore: 8,
+            startTime: new Date(),
             softcapMins: 75,
             hardcapMins: 90,
             playersPerPoint: 7,
@@ -65,6 +66,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
         offline: boolean
         scoreLimit: number
         halfScore: number
+        startTime: Date
         softcapMins: number
         hardcapMins: number
         playersPerPoint: number
@@ -78,7 +80,6 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
             teamTwo,
             tournament,
             teamTwoDefined: teamTwo._id !== undefined,
-            startTime: new Date(),
             teamOne: {
                 _id: teamOne._id,
                 place: teamOne.place,

@@ -307,6 +307,134 @@ exports[`EditGameScreen matches snapshot 1`] = `
             }
           }
         >
+          Start Time
+        </Text>
+        <View>
+          <View
+            style={
+              {
+                "display": "flex",
+                "flexDirection": "row",
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "color": "#ffd600",
+                  "width": "70%",
+                }
+              }
+            >
+              <View
+                pointerEvents="none"
+                style={
+                  [
+                    {
+                      "bottom": 0,
+                      "left": 0,
+                      "position": "absolute",
+                      "right": 0,
+                      "top": 6,
+                    },
+                    {
+                      "backgroundColor": "#303030",
+                      "borderColor": "#31adff",
+                      "borderRadius": 4,
+                      "borderWidth": 1,
+                    },
+                    undefined,
+                  ]
+                }
+                testID="text-input-outline"
+              />
+              <View>
+                <View
+                  style={
+                    [
+                      {
+                        "paddingBottom": 0,
+                      },
+                      {
+                        "minHeight": 56,
+                        "paddingTop": 8,
+                      },
+                    ]
+                  }
+                >
+                  <TextInput
+                    editable={true}
+                    focusable={false}
+                    maxFontSizeMultiplier={1.5}
+                    multiline={false}
+                    onBlur={[Function]}
+                    onChangeText={[Function]}
+                    onFocus={[Function]}
+                    onPressOut={[Function]}
+                    placeholder="12:00am"
+                    placeholderTextColor="#ffd600"
+                    selectionColor="#ffd600"
+                    style={
+                      [
+                        {
+                          "margin": 0,
+                          "zIndex": 1,
+                        },
+                        {
+                          "height": 48,
+                        },
+                        {
+                          "paddingBottom": 0,
+                          "paddingTop": 0,
+                        },
+                        {
+                          "color": "rgba(28, 27, 31, 1)",
+                          "fontFamily": "System",
+                          "fontSize": 16,
+                          "fontWeight": undefined,
+                          "letterSpacing": 0.15,
+                          "lineHeight": undefined,
+                          "paddingHorizontal": 16,
+                          "textAlign": "center",
+                          "textAlignVertical": "center",
+                        },
+                        false,
+                        [
+                          {},
+                        ],
+                        undefined,
+                      ]
+                    }
+                    testID="date-text-input"
+                    underlineColorAndroid="transparent"
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "display": "flex",
+            "flexDirection": "row",
+            "marginBottom": 5,
+            "marginTop": 5,
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "color": "#ffd600",
+              "fontSize": 41.0958904109589,
+              "fontWeight": "bold",
+              "width": "50%",
+            }
+          }
+        >
           Soft cap
         </Text>
         <View
