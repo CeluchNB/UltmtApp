@@ -12,6 +12,7 @@ import {
     PullAction,
     ScoreAction,
     ServerActionData,
+    StallAction,
     SubstitutionAction,
     ThrowawayAction,
     TimeoutAction,
@@ -33,9 +34,12 @@ const isScore = (type: ActionType): boolean => {
 }
 
 const isTurnover = (type: ActionType): boolean => {
-    return [ActionType.PULL, ActionType.DROP, ActionType.THROWAWAY].includes(
-        type,
-    )
+    return [
+        ActionType.PULL,
+        ActionType.DROP,
+        ActionType.THROWAWAY,
+        ActionType.STALL,
+    ].includes(type)
 }
 
 const isRetainingPossession = (type: ActionType): boolean => {
@@ -57,7 +61,10 @@ export const getPlayerActionList = (
             case ActionType.PICKUP:
             case ActionType.CATCH:
                 if (currentUser === action.playerOne?._id) {
-                    return [new ThrowawayAction(playerOne)]
+                    return [
+                        new ThrowawayAction(playerOne),
+                        new StallAction(playerOne),
+                    ]
                 } else {
                     return [
                         new CatchAction(playerOne, playerTwo),
@@ -73,6 +80,7 @@ export const getPlayerActionList = (
             case ActionType.DROP:
             case ActionType.THROWAWAY:
             case ActionType.PULL:
+            case ActionType.STALL:
                 return [
                     new BlockAction(playerOne),
                     new PickupAction(playerOne),

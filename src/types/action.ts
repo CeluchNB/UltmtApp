@@ -26,6 +26,7 @@ export enum ActionType {
     TIMEOUT = 'Timeout',
     SUBSTITUTION = 'Substitution',
     CALL_ON_FIELD = 'CallOnField',
+    STALL = 'Stall',
 }
 
 export type SubscriptionType = 'client' | 'undo' | 'error' | 'point'
@@ -292,6 +293,14 @@ export class TimeoutAction extends BaseAction {
     }
 }
 
+export class StallAction extends BaseAction {
+    constructor(playerOne?: DisplayUser) {
+        const playerOneDisplay = getUserDisplayName(playerOne)
+        const viewerDisplay = `${playerOneDisplay} is stalled out`
+        super({ playerOne, actionType: ActionType.STALL }, viewerDisplay)
+    }
+}
+
 export class ActionFactory {
     static createFromAction = (action: ServerActionData): Action => {
         switch (action.actionType) {
@@ -340,6 +349,10 @@ export class ActionFactory {
                 )
             case ActionType.TIMEOUT:
                 return new TimeoutAction().createFromAction(action)
+            case ActionType.STALL:
+                return new StallAction(action.playerOne).createFromAction(
+                    action,
+                )
         }
     }
 }

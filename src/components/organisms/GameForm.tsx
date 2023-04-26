@@ -1,13 +1,15 @@
 import LabeledFormInput from '../molecules/LabeledFormInput'
 import React from 'react'
+import TextDateInput from '../atoms/TextDateInput'
 import { getFormFieldRules } from '../../utils/form-utils'
 import { useTheme } from '../../hooks'
 import { Control, Controller, FieldErrorsImpl } from 'react-hook-form'
-import { Switch, View } from 'react-native'
+import { StyleSheet, Switch, Text, View } from 'react-native'
 
 interface EditGameData {
     scoreLimit: number
     halfScore: number
+    startTime: Date
     softcapMins: number
     hardcapMins: number
     playersPerPoint: number
@@ -23,12 +25,32 @@ interface GameFormProps {
 const GameForm: React.FC<GameFormProps> = props => {
     const { control, errors } = props
     const {
-        theme: { colors },
+        theme: { colors, size, weight },
     } = useTheme()
 
     const onNumberChange = (text: any): string => {
         return text.toString().replace(/\D/, '')
     }
+
+    const styles = StyleSheet.create({
+        container: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 5,
+            marginBottom: 5,
+        },
+        labelText: {
+            fontSize: size.fontTwenty,
+            fontWeight: weight.bold,
+            color: colors.textPrimary,
+            width: '50%',
+        },
+        timeInput: {
+            width: '70%',
+            textAlign: 'center',
+        },
+    })
 
     return (
         <View>
@@ -77,6 +99,25 @@ const GameForm: React.FC<GameFormProps> = props => {
                             keyboardType="number-pad"
                             error={errors.halfScore?.message}
                         />
+                    )
+                }}
+            />
+            <Controller
+                name="startTime"
+                control={control}
+                rules={getFormFieldRules<number>('Start time', true)}
+                render={({ field: { onChange, value } }) => {
+                    return (
+                        <View style={styles.container}>
+                            <Text style={styles.labelText}>Start Time</Text>
+                            <TextDateInput
+                                mode="time"
+                                format="hh:mma"
+                                style={styles.timeInput}
+                                value={value}
+                                onChange={onChange}
+                            />
+                        </View>
                     )
                 }}
             />
