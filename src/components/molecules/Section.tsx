@@ -1,7 +1,14 @@
 import * as React from 'react'
 import { useTheme } from '../../hooks'
+import {
+    ActivityIndicator,
+    FlatList,
+    ListRenderItem,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import { Button, IconButton } from 'react-native-paper'
-import { FlatList, ListRenderItem, StyleSheet, Text, View } from 'react-native'
 
 interface SectionProps {
     title: string
@@ -11,6 +18,7 @@ interface SectionProps {
     renderItem: ListRenderItem<any>
     showButton: boolean
     buttonText: string
+    loading?: boolean
     error?: string
     showCreateButton?: boolean
     onCreatePress?: () => void
@@ -25,6 +33,7 @@ const Section: React.FC<SectionProps> = ({
     showButton,
     buttonText,
     error,
+    loading = false,
     showCreateButton = false,
     onCreatePress = () => {},
 }) => {
@@ -81,9 +90,8 @@ const Section: React.FC<SectionProps> = ({
                     testID="create-button"
                 />
             </View>
-            {error ? (
-                <Text style={styles.error}>{error}</Text>
-            ) : (
+            {!loading && error && <Text style={styles.error}>{error}</Text>}
+            {!loading && !error && (
                 <FlatList
                     listKey={title}
                     data={listData}
@@ -92,7 +100,7 @@ const Section: React.FC<SectionProps> = ({
                     renderItem={renderItem}
                 />
             )}
-            {showButton && (
+            {!loading && showButton && (
                 <Button
                     mode="text"
                     style={styles.button}
@@ -101,6 +109,13 @@ const Section: React.FC<SectionProps> = ({
                     onPress={onButtonPress}>
                     {buttonText}
                 </Button>
+            )}
+            {loading && (
+                <ActivityIndicator
+                    size="large"
+                    color={colors.textPrimary}
+                    animating={loading}
+                />
             )}
         </View>
     )
