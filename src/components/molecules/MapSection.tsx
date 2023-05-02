@@ -4,7 +4,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { Button, IconButton } from 'react-native-paper'
 
 interface MapSectionProps<T> {
-    title: string
+    title?: string
     listData?: T[]
     renderItem: (item: T) => JSX.Element
     showButton: boolean
@@ -68,7 +68,7 @@ const MapSection = <T,>({
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
-                <Text style={styles.title}>{title}</Text>
+                {title && <Text style={styles.title}>{title}</Text>}
                 {showCreateButton && (
                     <IconButton
                         iconColor={colors.primary}

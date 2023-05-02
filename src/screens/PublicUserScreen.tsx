@@ -11,17 +11,27 @@ import {
     StyleSheet,
     Text,
     View,
+    useWindowDimensions,
 } from 'react-native'
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import { useData, useTheme } from './../hooks'
 
 const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     route,
     navigation,
 }) => {
+    const layout = useWindowDimensions()
+
     const { userId } = route.params
     const {
         theme: { colors, size },
     } = useTheme()
+
+    const [index, setIndex] = React.useState(0)
+    const [routes] = React.useState([
+        { key: 'teams', title: 'Teams' },
+        { key: 'games', title: 'Games' },
+    ])
 
     const {
         data: user,
@@ -68,8 +78,9 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         },
     })
 
-    return (
-        <SafeAreaView style={styles.screen}>
+    const renderScene = SceneMap({
+        // eslint-disable-next-line react/no-unstable-nested-components
+        teams: () => (
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -80,13 +91,11 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     />
                 }
                 testID="public-user-scroll-view">
-                <Text style={styles.titleText}>@{user?.username}</Text>
                 {error ? (
                     <Text style={styles.error}>{error.message}</Text>
                 ) : (
                     <View style={styles.sectionContainer}>
                         <MapSection
-                            title="Teams"
                             listData={user?.playerTeams ?? []}
                             renderItem={team => {
                                 return (
@@ -111,6 +120,31 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     </View>
                 )}
             </ScrollView>
+        ),
+        // eslint-disable-next-line react/no-unstable-nested-components
+        games: () => <Text>Stats</Text>,
+    })
+
+    return (
+        <SafeAreaView style={styles.screen}>
+            <Text style={styles.titleText}>@{user?.username}</Text>
+            <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={{ width: layout.width }}
+                renderTabBar={props => {
+                    return (
+                        <TabBar
+                            {...props}
+                            style={{ backgroundColor: colors.primary }}
+                            indicatorStyle={{
+                                backgroundColor: colors.textPrimary,
+                            }}
+                        />
+                    )
+                }}
+            />
         </SafeAreaView>
     )
 }
