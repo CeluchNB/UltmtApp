@@ -270,7 +270,12 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                             <Section
                                 title="Stats"
                                 showButton={true}
-                                onButtonPress={() => ({})}
+                                onButtonPress={() => {
+                                    navigation.navigate('PublicUserDetails', {
+                                        userId: account._id,
+                                        tab: 'stats',
+                                    })
+                                }}
                                 buttonText="see all stats"
                                 error={
                                     !statsList || statsList.length === 0

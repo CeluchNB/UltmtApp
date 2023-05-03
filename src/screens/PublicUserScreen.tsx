@@ -50,12 +50,12 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 }) => {
     const layout = useWindowDimensions()
 
-    const { userId } = route.params
+    const { userId, tab = 'games' } = route.params
     const {
         theme: { colors, size },
     } = useTheme()
 
-    const [index, setIndex] = React.useState(0)
+    const [index, setIndex] = React.useState(tab === 'games' ? 0 : 1)
     const [routes] = React.useState([
         { key: 'teams', title: 'Teams' },
         { key: 'stats', title: 'Stats' },

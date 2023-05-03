@@ -24,7 +24,10 @@ export type AccountStackParamList = {
         id: string
         archive?: boolean
     }
-    PublicUserDetails: { userId: string }
+    PublicUserDetails: {
+        userId: string
+        tab?: 'games' | 'stats'
+    }
     RequestUser: { type: RequestType }
     ResetPassword: undefined
     RolloverTeam: undefined
