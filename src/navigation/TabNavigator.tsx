@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unstable-nested-components */
 import * as React from 'react'
 import AccountNavigator from './../navigation/AccountNavigator'
 import { AllScreenProps } from '../types/navigation'
@@ -8,6 +7,15 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { useTheme } from './../hooks'
 
 const Tab = createMaterialBottomTabNavigator()
+
+const AccountIcon = ({ color }: { color: string }) => (
+    <MaterialCommunityIcons name="account" color={color} size={26} />
+)
+
+const HomeIcon = ({ color }: { color: string }) => (
+    <MaterialCommunityIcons name="home" color={color} size={26} />
+)
+
 const TabNavigator: React.FC<AllScreenProps> = () => {
     const {
         theme: { colors },
@@ -24,13 +32,7 @@ const TabNavigator: React.FC<AllScreenProps> = () => {
                 component={AccountNavigator}
                 options={{
                     tabBarLabel: 'Account',
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons
-                            name="account"
-                            color={color}
-                            size={26}
-                        />
-                    ),
+                    tabBarIcon: AccountIcon,
                 }}
             />
             <Tab.Screen
@@ -38,13 +40,7 @@ const TabNavigator: React.FC<AllScreenProps> = () => {
                 component={GameNavigator}
                 options={{
                     tabBarLabel: 'Games',
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons
-                            name="home"
-                            color={color}
-                            size={26}
-                        />
-                    ),
+                    tabBarIcon: HomeIcon,
                 }}
             />
         </Tab.Navigator>

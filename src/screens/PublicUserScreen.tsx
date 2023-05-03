@@ -1,20 +1,36 @@
 import * as React from 'react'
 import * as UserData from './../services/data/user'
-import MapSection from '../components/molecules/MapSection'
 import { PublicUserDetailsProps } from '../types/navigation'
-import TeamListItem from '../components/atoms/TeamListItem'
 import { User } from '../types/user'
+import PublicUserTeamScene, {
+    PublicUserTeamSceneProps,
+} from '../components/organisms/PublicUserTeamScene'
 import {
-    RefreshControl,
     SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
     View,
     useWindowDimensions,
 } from 'react-native'
-import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
+import { TabBar, TabView } from 'react-native-tab-view'
 import { useData, useTheme } from './../hooks'
+
+const renderScene = (teamProps: PublicUserTeamSceneProps) => {
+    return ({ route }: { route: { key: string } }) => {
+        switch (route.key) {
+            case 'teams':
+                return (
+                    <View style={{ marginTop: 10 }}>
+                        <PublicUserTeamScene {...teamProps} />
+                    </View>
+                )
+            case 'stats':
+                return <Text>Stats</Text>
+            default:
+                return null
+        }
+    }
+}
 
 const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     route,
@@ -30,7 +46,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     const [index, setIndex] = React.useState(0)
     const [routes] = React.useState([
         { key: 'teams', title: 'Teams' },
-        { key: 'games', title: 'Games' },
+        { key: 'stats', title: 'Stats' },
     ])
 
     const {
@@ -78,59 +94,12 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         },
     })
 
-    const renderScene = SceneMap({
-        // eslint-disable-next-line react/no-unstable-nested-components
-        teams: () => (
-            <ScrollView
-                refreshControl={
-                    <RefreshControl
-                        refreshing={loading}
-                        onRefresh={() => {
-                            refetch()
-                        }}
-                    />
-                }
-                testID="public-user-scroll-view">
-                {error ? (
-                    <Text style={styles.error}>{error.message}</Text>
-                ) : (
-                    <View style={styles.sectionContainer}>
-                        <MapSection
-                            listData={user?.playerTeams ?? []}
-                            renderItem={team => {
-                                return (
-                                    <TeamListItem
-                                        key={team._id}
-                                        team={team}
-                                        onPress={async () => {
-                                            navigation.navigate(
-                                                'PublicTeamDetails',
-                                                {
-                                                    id: team._id,
-                                                },
-                                            )
-                                        }}
-                                    />
-                                )
-                            }}
-                            loading={loading}
-                            showButton={false}
-                            showCreateButton={false}
-                        />
-                    </View>
-                )}
-            </ScrollView>
-        ),
-        // eslint-disable-next-line react/no-unstable-nested-components
-        games: () => <Text>Stats</Text>,
-    })
-
     return (
         <SafeAreaView style={styles.screen}>
             <Text style={styles.titleText}>@{user?.username}</Text>
             <TabView
                 navigationState={{ index, routes }}
-                renderScene={renderScene}
+                renderScene={renderScene({ loading, refetch, user, error })}
                 onIndexChange={setIndex}
                 initialLayout={{ width: layout.width }}
                 renderTabBar={props => {
