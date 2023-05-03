@@ -1,7 +1,12 @@
 import * as React from 'react'
+import * as StatsData from './../services/data/stats'
 import * as UserData from './../services/data/user'
+import { PlayerStats } from '../types/stats'
 import { PublicUserDetailsProps } from '../types/navigation'
 import { User } from '../types/user'
+import PublicUserStatsScene, {
+    PublicUserStatsSceneProps,
+} from '../components/organisms/PublicUserStatsScene'
 import PublicUserTeamScene, {
     PublicUserTeamSceneProps,
 } from '../components/organisms/PublicUserTeamScene'
@@ -15,7 +20,10 @@ import {
 import { TabBar, TabView } from 'react-native-tab-view'
 import { useData, useTheme } from './../hooks'
 
-const renderScene = (teamProps: PublicUserTeamSceneProps) => {
+const renderScene = (
+    teamProps: PublicUserTeamSceneProps,
+    statsProps: PublicUserStatsSceneProps,
+) => {
     return ({ route }: { route: { key: string } }) => {
         switch (route.key) {
             case 'teams':
@@ -25,7 +33,11 @@ const renderScene = (teamProps: PublicUserTeamSceneProps) => {
                     </View>
                 )
             case 'stats':
-                return <Text>Stats</Text>
+                return (
+                    <View style={{ marginTop: 10 }}>
+                        <PublicUserStatsScene {...statsProps} />
+                    </View>
+                )
             default:
                 return null
         }
@@ -55,6 +67,13 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         error,
         refetch,
     } = useData<User>(UserData.getPublicUser, userId)
+
+    const {
+        data: stats,
+        loading: statsLoading,
+        error: statsError,
+        refetch: statsRefetch,
+    } = useData<PlayerStats>(StatsData.getPlayerStats, userId)
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -99,7 +118,15 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
             <Text style={styles.titleText}>@{user?.username}</Text>
             <TabView
                 navigationState={{ index, routes }}
-                renderScene={renderScene({ loading, refetch, user, error })}
+                renderScene={renderScene(
+                    { loading, refetch, user, error },
+                    {
+                        loading: statsLoading,
+                        refetch: statsRefetch,
+                        stats,
+                        error: statsError,
+                    },
+                )}
                 onIndexChange={setIndex}
                 initialLayout={{ width: layout.width }}
                 renderTabBar={props => {
@@ -110,6 +137,8 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                             indicatorStyle={{
                                 backgroundColor: colors.textPrimary,
                             }}
+                            activeColor={colors.textPrimary}
+                            inactiveColor={colors.darkGray}
                         />
                     )
                 }}
