@@ -61,6 +61,11 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         return `${team.name} (${teamStart} - ${teamEnd})`
     }
 
+    const filterStats = async () => {
+        await StatsData.filterPlayerStats(userId, [teams[0]._id], [])
+        setModalVisible(false)
+    }
+
     const styles = StyleSheet.create({
         titleCell: {
             color: colors.textPrimary,
@@ -141,9 +146,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             )}
             <StatsFilterModal
                 visible={modalVisible}
-                onClose={() => {
-                    setModalVisible(false)
-                }}
+                onClose={filterStats}
                 title="Teams"
                 data={teams.map(team => ({
                     display: formatTeamName(team),
