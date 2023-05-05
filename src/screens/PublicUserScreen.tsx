@@ -1,7 +1,5 @@
 import * as React from 'react'
-import * as StatsData from './../services/data/stats'
 import * as UserData from './../services/data/user'
-import { PlayerStats } from '../types/stats'
 import { PublicUserDetailsProps } from '../types/navigation'
 import { User } from '../types/user'
 import PublicUserStatsScene, {
@@ -25,16 +23,17 @@ const renderScene = (
     statsProps: PublicUserStatsSceneProps,
 ) => {
     return ({ route }: { route: { key: string } }) => {
+        const sceneStyle = { marginTop: 10 }
         switch (route.key) {
             case 'teams':
                 return (
-                    <View style={{ marginTop: 10 }}>
+                    <View style={sceneStyle}>
                         <PublicUserTeamScene {...teamProps} />
                     </View>
                 )
             case 'stats':
                 return (
-                    <View style={{ marginTop: 10 }}>
+                    <View style={sceneStyle}>
                         <PublicUserStatsScene {...statsProps} />
                     </View>
                 )
@@ -67,13 +66,6 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         error,
         refetch,
     } = useData<User>(UserData.getPublicUser, userId)
-
-    const {
-        data: stats,
-        loading: statsLoading,
-        error: statsError,
-        refetch: statsRefetch,
-    } = useData<PlayerStats>(StatsData.getPlayerStats, userId)
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -120,12 +112,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                 navigationState={{ index, routes }}
                 renderScene={renderScene(
                     { loading, refetch, user, error },
-                    {
-                        loading: statsLoading,
-                        refetch: statsRefetch,
-                        stats,
-                        error: statsError,
-                    },
+                    { userId },
                 )}
                 onIndexChange={setIndex}
                 initialLayout={{ width: layout.width }}
