@@ -112,7 +112,13 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                 navigationState={{ index, routes }}
                 renderScene={renderScene(
                     { loading, refetch, user, error },
-                    { userId },
+                    {
+                        userId,
+                        teams: [
+                            ...(user?.playerTeams || []),
+                            ...(user?.archiveTeams || []),
+                        ],
+                    },
                 )}
                 onIndexChange={setIndex}
                 initialLayout={{ width: layout.width }}

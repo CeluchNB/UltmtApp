@@ -1,4 +1,4 @@
-import FilterModal from '../../../src/components/molecules/FilterModal'
+import GameFilterModal from '../../../src/components/molecules/GameFilterModal'
 import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
@@ -17,7 +17,7 @@ afterAll(() => {
 
 it('should match snapshot', () => {
     const snapshot = render(
-        <FilterModal
+        <GameFilterModal
             visible={true}
             defaultValues={{
                 live: 'true',
@@ -34,7 +34,7 @@ it('should match snapshot', () => {
 it('should call on close with correct data', async () => {
     const onClose = jest.fn()
     const { getByText } = render(
-        <FilterModal
+        <GameFilterModal
             visible={true}
             defaultValues={{
                 live: 'true',
@@ -78,7 +78,7 @@ it('should call on close with correct data', async () => {
 it('should close on request close', () => {
     const onClose = jest.fn()
     const { getByTestId } = render(
-        <FilterModal
+        <GameFilterModal
             visible={true}
             defaultValues={{
                 live: 'true',

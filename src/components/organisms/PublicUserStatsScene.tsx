@@ -1,8 +1,10 @@
 import * as StatsData from './../../services/data/stats'
 import { DataTable } from 'react-native-paper'
+import { DisplayTeam } from '../../types/team'
 import { PlayerStats } from '../../types/stats'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
+import StatsFilterModal from '../molecules/StatsFilterModal'
 import {
     ActivityIndicator,
     RefreshControl,
@@ -16,14 +18,18 @@ import { useData, useTheme } from '../../hooks'
 
 export interface PublicUserStatsSceneProps {
     userId: string
+    teams: DisplayTeam[]
 }
 
 const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     userId,
+    teams,
 }) => {
     const {
         theme: { colors },
     } = useTheme()
+
+    const [modalVisible, setModalVisible] = React.useState(false)
 
     const {
         data: stats,
@@ -46,12 +52,28 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         return updatedStats
     }, [stats])
 
+    const formatTeamName = (team: DisplayTeam): string => {
+        const teamStart = new Date(team.seasonStart).getUTCFullYear()
+        const teamEnd = new Date(team.seasonEnd).getUTCFullYear()
+        if (teamStart === teamEnd) {
+            return `${team.name} (${teamStart})`
+        }
+        return `${team.name} (${teamStart} - ${teamEnd})`
+    }
+
     const styles = StyleSheet.create({
         titleCell: {
             color: colors.textPrimary,
         },
         valueCell: {
             color: colors.textSecondary,
+        },
+        button: {
+            flexGrow: 1,
+        },
+        buttonContainer: {
+            display: 'flex',
+            flexDirection: 'row',
         },
         error: {
             color: colors.error,
@@ -70,27 +92,27 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                     }}
                 />
             }
-            testID="public-user-scroll-view">
+            testID="public-user-stats-scroll-view">
             {loading && (
                 <ActivityIndicator color={colors.textPrimary} size="large" />
             )}
             {error && <Text style={styles.error}>{error.message}</Text>}
             {!loading && !error && (
                 <View>
-                    <View
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                        }}>
+                    <View style={styles.buttonContainer}>
                         <SecondaryButton
-                            style={{ flexGrow: 1 }}
-                            text="Filter by Game"
-                            onPress={async () => {}}
+                            style={styles.button}
+                            text="Filter by Team"
+                            onPress={async () => {
+                                setModalVisible(true)
+                            }}
                         />
                         <SecondaryButton
-                            style={{ flexGrow: 1 }}
-                            text="Filter by Team"
-                            onPress={async () => {}}
+                            style={styles.button}
+                            text="Filter by Game"
+                            onPress={async () => {
+                                setModalVisible(true)
+                            }}
                         />
                     </View>
                     <DataTable>
@@ -117,6 +139,17 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                     </DataTable>
                 </View>
             )}
+            <StatsFilterModal
+                visible={modalVisible}
+                onClose={() => {
+                    setModalVisible(false)
+                }}
+                title="Teams"
+                data={teams.map(team => ({
+                    display: formatTeamName(team),
+                    value: team._id,
+                }))}
+            />
         </ScrollView>
     )
 }

@@ -8,13 +8,13 @@ import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
-interface FilterModalProps {
+interface GameFilterModalProps {
     visible: boolean
     defaultValues: { live: string; after: Date; before: Date }
     onClose: (data: any) => void
 }
 
-const FilterModal: React.FC<FilterModalProps> = ({
+const GameFilterModal: React.FC<GameFilterModalProps> = ({
     visible,
     defaultValues,
     onClose,
@@ -172,4 +172,4 @@ const FilterModal: React.FC<FilterModalProps> = ({
     )
 }
 
-export default FilterModal
+export default GameFilterModal

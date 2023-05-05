@@ -49,15 +49,15 @@ export const mapStatDisplayName = (value: string): string => {
         case 'throwingPercentage':
             return 'Throwing Percentage'
         case 'ppGoals':
-            return 'PP Goals'
+            return 'Goals per point'
         case 'ppAssists':
-            return 'PP Assists'
+            return 'Assists per point'
         case 'ppThrowaways':
-            return 'PP Throwaways'
+            return 'Throwaways per point'
         case 'ppDrops':
-            return 'PP Drops'
+            return 'Drops per point'
         case 'ppBlocks':
-            return 'PP Blocks'
+            return 'Blocks per point'
         case 'winPercentage':
             return 'Win Percentage'
         default:

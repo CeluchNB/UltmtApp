@@ -53,7 +53,7 @@ const PublicUserTeamScene: React.FC<PublicUserTeamSceneProps> = ({
                     }}
                 />
             }
-            testID="public-user-scroll-view">
+            testID="public-user-team-scroll-view">
             {error ? (
                 <Text style={styles.error}>{error.message}</Text>
             ) : (
