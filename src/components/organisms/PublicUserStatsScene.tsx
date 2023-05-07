@@ -1,20 +1,19 @@
 import * as StatsData from './../../services/data/stats'
+import { AllPlayerStats } from '../../types/stats'
 import { DataTable } from 'react-native-paper'
 import { DisplayTeam } from '../../types/team'
-import { PlayerStats } from '../../types/stats'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import StatsFilterModal from '../molecules/StatsFilterModal'
+import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     RefreshControl,
     ScrollView,
     StyleSheet,
-    Text,
     View,
 } from 'react-native'
 import { formatNumber, mapStatDisplayName } from '../../utils/stats'
-import { useData, useTheme } from '../../hooks'
 
 export interface PublicUserStatsSceneProps {
     userId: string
@@ -30,22 +29,48 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     } = useTheme()
 
     const [modalVisible, setModalVisible] = React.useState(false)
+    const [stats, setStats] = React.useState<AllPlayerStats>()
+    const [loading, setLoading] = React.useState(false)
+    const [teamFilter, setTeamFilter] = React.useState<string[]>([])
+    const [gameFilter, setGameFilter] = React.useState<string[]>([])
 
-    const {
-        data: stats,
-        loading,
-        error,
-        refetch,
-    } = useData<PlayerStats>(StatsData.getPlayerStats, userId)
+    const getStats = () => {
+        setLoading(true)
+        if (teamFilter.length > 0 || gameFilter.length > 0) {
+            StatsData.filterPlayerStats(userId, teamFilter, gameFilter)
+                .then(result => {
+                    setStats(result)
+                })
+                .catch(_e => {})
+                .finally(() => {
+                    setLoading(false)
+                })
+        } else {
+            StatsData.getPlayerStats(userId)
+                .then(result => {
+                    setStats(result)
+                })
+                .catch(_e => {})
+                .finally(() => {
+                    setLoading(false)
+                })
+        }
+    }
+
+    React.useEffect(() => {
+        getStats()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const filteredStats = React.useMemo(() => {
-        const updatedStats: Partial<PlayerStats> = Object.assign({}, stats)
-        delete updatedStats._id
-        delete updatedStats.games
-        delete updatedStats.teams
-        delete updatedStats.firstName
-        delete updatedStats.lastName
-        delete updatedStats.username
+        const updatedStats: Partial<AllPlayerStats> = Object.assign({}, stats)
+
+        delete (updatedStats as any)._id
+        delete (updatedStats as any).games
+        delete (updatedStats as any).teams
+        delete (updatedStats as any).firstName
+        delete (updatedStats as any).lastName
+        delete (updatedStats as any).username
         delete (updatedStats as any).__v
         delete (updatedStats as any).id
 
@@ -61,10 +86,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         return `${team.name} (${teamStart} - ${teamEnd})`
     }
 
-    const filterStats = async () => {
-        await StatsData.filterPlayerStats(userId, [teams[0]._id], [])
-        setModalVisible(false)
-    }
+    const setFilterOptions = () => {}
 
     const styles = StyleSheet.create({
         titleCell: {
@@ -93,7 +115,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                 <RefreshControl
                     refreshing={loading}
                     onRefresh={() => {
-                        refetch()
+                        getStats()
                     }}
                 />
             }
@@ -101,8 +123,8 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             {loading && (
                 <ActivityIndicator color={colors.textPrimary} size="large" />
             )}
-            {error && <Text style={styles.error}>{error.message}</Text>}
-            {!loading && !error && (
+            {/* {error && <Text style={styles.error}>{error.message}</Text>} */}
+            {!loading /*&& !error*/ && (
                 <View>
                     <View style={styles.buttonContainer}>
                         <SecondaryButton
@@ -146,7 +168,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             )}
             <StatsFilterModal
                 visible={modalVisible}
-                onClose={filterStats}
+                onClose={setFilterOptions}
                 title="Teams"
                 data={teams.map(team => ({
                     display: formatTeamName(team),

@@ -1,7 +1,13 @@
-import { DisplayStat, PlayerStats } from '../types/stats'
+import {
+    AllPlayerStats,
+    CalculatedPlayerStats,
+    DisplayStat,
+    IdentifiedPlayerStats,
+    PlayerStats,
+} from '../types/stats'
 
 export const convertProfileScreenStatsToStatListItem = (
-    stats?: PlayerStats,
+    stats?: IdentifiedPlayerStats,
 ): DisplayStat[] => {
     if (!stats) return []
     return [
@@ -63,4 +69,65 @@ export const mapStatDisplayName = (value: string): string => {
         default:
             return value.charAt(0).toUpperCase() + value.slice(1)
     }
+}
+
+export const addPlayerStats = (
+    data1: PlayerStats,
+    data2: PlayerStats,
+): PlayerStats => {
+    return {
+        goals: data1.goals + data2.goals,
+        assists: data1.assists + data2.assists,
+        touches: data1.touches + data2.touches,
+        catches: data1.catches + data2.catches,
+        callahans: data1.callahans + data2.callahans,
+        throwaways: data1.throwaways + data2.throwaways,
+        blocks: data1.blocks + data2.blocks,
+        drops: data1.drops + data2.drops,
+        stalls: data1.stalls + data2.stalls,
+        completedPasses: data1.completedPasses + data2.completedPasses,
+        droppedPasses: data1.droppedPasses + data2.droppedPasses,
+        pointsPlayed: data1.pointsPlayed + data2.pointsPlayed,
+        pulls: data1.pulls + data2.pulls,
+        wins: data1.wins + data2.wins,
+        losses: data1.losses + data2.losses,
+    }
+}
+
+export const calculatePlayerStats = (stats: PlayerStats): AllPlayerStats => {
+    console.log('got dropped passes', stats.droppedPasses)
+    const calcStats: CalculatedPlayerStats = {
+        winPercentage: createSafeFraction(
+            stats.wins,
+            stats.wins + stats.losses,
+        ),
+        plusMinus:
+            stats.goals +
+            stats.assists +
+            stats.blocks -
+            stats.throwaways -
+            stats.drops,
+        catchingPercentage: createSafeFraction(
+            stats.catches,
+            stats.catches + stats.drops,
+        ),
+        throwingPercentage: createSafeFraction(
+            stats.completedPasses,
+            stats.completedPasses + stats.throwaways + stats.droppedPasses,
+        ),
+        ppGoals: createSafeFraction(stats.goals, stats.pointsPlayed),
+        ppAssists: createSafeFraction(stats.assists, stats.pointsPlayed),
+        ppThrowaways: createSafeFraction(stats.throwaways, stats.pointsPlayed),
+        ppDrops: createSafeFraction(stats.drops, stats.pointsPlayed),
+        ppBlocks: createSafeFraction(stats.blocks, stats.pointsPlayed),
+    }
+
+    return { ...stats, ...calcStats }
+}
+
+const createSafeFraction = (numerator: number, denominator: number): number => {
+    if (denominator === 0) {
+        return 0
+    }
+    return numerator / denominator
 }

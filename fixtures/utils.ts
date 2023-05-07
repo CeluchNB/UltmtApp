@@ -1,4 +1,4 @@
-import { PlayerStats } from '../src/types/stats'
+import { IdentifiedPlayerStats } from '../src/types/stats'
 import { ReactTestInstance } from 'react-test-renderer'
 import { expect } from '@jest/globals'
 import { waitFor } from '@testing-library/react-native'
@@ -10,8 +10,8 @@ export const waitUntilRefreshComplete = async (node: ReactTestInstance) => {
 }
 
 export const getInitialPlayerData = (
-    overrides: Partial<PlayerStats>,
-): PlayerStats => {
+    overrides: Partial<IdentifiedPlayerStats>,
+): IdentifiedPlayerStats => {
     return {
         _id: 'user1',
         firstName: 'First 1',

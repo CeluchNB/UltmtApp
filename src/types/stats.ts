@@ -5,7 +5,7 @@ export interface DisplayStat {
     points: number
 }
 
-export interface PlayerStats extends DisplayUser {
+export interface PlayerStats {
     goals: number
     assists: number
     blocks: number
@@ -21,6 +21,9 @@ export interface PlayerStats extends DisplayUser {
     pulls: number
     wins: number
     losses: number
+}
+
+export interface CalculatedPlayerStats {
     plusMinus: number
     catchingPercentage: number
     throwingPercentage: number
@@ -30,6 +33,11 @@ export interface PlayerStats extends DisplayUser {
     ppDrops: number
     ppBlocks: number
     winPercentage: number
+}
+
+export interface AllPlayerStats extends PlayerStats, CalculatedPlayerStats {}
+
+export interface IdentifiedPlayerStats extends DisplayUser, AllPlayerStats {
     games: string[]
     teams: string[]
 }

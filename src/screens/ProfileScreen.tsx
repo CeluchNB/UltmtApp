@@ -15,7 +15,7 @@ import { convertProfileScreenStatsToStatListItem } from '../utils/stats'
 import { fetchProfile } from '../services/data/user'
 import { getPlayerStats } from '../services/data/stats'
 import { logout } from '../services/data/auth'
-import { DisplayStat, PlayerStats } from '../types/stats'
+import { DisplayStat, IdentifiedPlayerStats } from '../types/stats'
 import {
     FlatList,
     RefreshControl,
@@ -58,7 +58,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         data: stats,
         loading: statsLoading,
         refetch: statsRefetch,
-    } = useData<PlayerStats>(getPlayerStats, account._id)
+    } = useData<IdentifiedPlayerStats>(getPlayerStats, account._id)
 
     const teamToGet = React.useMemo(() => {
         if (!profile) {
