@@ -15,7 +15,7 @@ import { convertProfileScreenStatsToStatListItem } from '../utils/stats'
 import { fetchProfile } from '../services/data/user'
 import { getPlayerStats } from '../services/data/stats'
 import { logout } from '../services/data/auth'
-import { DisplayStat, IdentifiedPlayerStats } from '../types/stats'
+import { AllPlayerStats, DisplayStat } from '../types/stats'
 import {
     FlatList,
     RefreshControl,
@@ -58,7 +58,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         data: stats,
         loading: statsLoading,
         refetch: statsRefetch,
-    } = useData<IdentifiedPlayerStats>(getPlayerStats, account._id)
+    } = useData<AllPlayerStats>(getPlayerStats, account._id)
 
     const teamToGet = React.useMemo(() => {
         if (!profile) {
@@ -296,7 +296,13 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                     showCreateButton={true}
                                     onCreatePress={onCreateGame}
                                     onButtonPress={async () => {
-                                        navigation.navigate('TeamGames')
+                                        navigation.navigate(
+                                            'PublicUserDetails',
+                                            {
+                                                userId: account._id,
+                                                tab: 'games',
+                                            },
+                                        )
                                     }}
                                     buttonText="see all games"
                                     listData={sortedGames}

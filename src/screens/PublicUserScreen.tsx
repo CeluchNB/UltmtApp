@@ -1,7 +1,10 @@
-import * as React from 'react'
 import * as UserData from './../services/data/user'
+import { Game } from '../types/game'
 import { PublicUserDetailsProps } from '../types/navigation'
+import React from 'react'
 import { User } from '../types/user'
+import { getGamesByTeam } from '../services/data/game'
+import { useSelector } from 'react-redux'
 import PublicUserStatsScene, {
     PublicUserStatsSceneProps,
 } from '../components/organisms/PublicUserStatsScene'
@@ -16,10 +19,18 @@ import {
     useWindowDimensions,
 } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
+import UserGamesScene, {
+    UserGamesSceneProps,
+} from '../components/organisms/UserGamesScene'
+import {
+    selectManagerTeams,
+    selectPlayerTeams,
+} from '../store/reducers/features/account/accountReducer'
 import { useData, useTheme } from './../hooks'
 
 const renderScene = (
     teamProps: PublicUserTeamSceneProps,
+    gameProps: UserGamesSceneProps,
     statsProps: PublicUserStatsSceneProps,
 ) => {
     return ({ route }: { route: { key: string } }) => {
@@ -29,6 +40,12 @@ const renderScene = (
                 return (
                     <View style={sceneStyle}>
                         <PublicUserTeamScene {...teamProps} />
+                    </View>
+                )
+            case 'games':
+                return (
+                    <View style={sceneStyle}>
+                        <UserGamesScene {...gameProps} />
                     </View>
                 )
             case 'stats':
@@ -54,9 +71,10 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         theme: { colors, size },
     } = useTheme()
 
-    const [index, setIndex] = React.useState(tab === 'games' ? 0 : 1)
+    const [index, setIndex] = React.useState(tab === 'stats' ? 0 : 1)
     const [routes] = React.useState([
         { key: 'teams', title: 'Teams' },
+        { key: 'games', title: 'Games' },
         { key: 'stats', title: 'Stats' },
     ])
 
@@ -83,6 +101,49 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user])
+
+    const managerTeams = useSelector(selectManagerTeams)
+    const playerTeams = useSelector(selectPlayerTeams)
+    const [games, setGames] = React.useState<Game[][]>([])
+
+    const allTeams = React.useMemo(() => {
+        const map = new Map()
+        managerTeams.forEach(team => {
+            map.set(team._id, team)
+        })
+        playerTeams.forEach(team => {
+            map.set(team._id, team)
+        })
+        return [...map.values()]
+    }, [managerTeams, playerTeams])
+
+    const gameLists = React.useMemo(() => {
+        const tempGames: { title: string; data: Game[]; index: number }[] = []
+        games.forEach((g, i) => {
+            if (g.length === 0) {
+                return
+            }
+            const sortedGames = g.sort(
+                (a, b) =>
+                    new Date(b.startTime).getTime() -
+                    new Date(a.startTime).getTime(),
+            )
+            tempGames.push({
+                title: `${allTeams[i].place} ${allTeams[i].name}`,
+                data: sortedGames,
+                index: i,
+            })
+        })
+        return tempGames
+    }, [games, allTeams])
+
+    React.useEffect(() => {
+        const promises = allTeams.map(team => getGamesByTeam(team._id))
+
+        Promise.all(promises).then(g => {
+            setGames(g)
+        })
+    }, [allTeams])
 
     const styles = StyleSheet.create({
         screen: {
@@ -112,12 +173,14 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                 navigationState={{ index, routes }}
                 renderScene={renderScene(
                     { loading, refetch, user, error },
+                    { gameLists, teams: allTeams },
                     {
                         userId,
                         teams: [
                             ...(user?.playerTeams || []),
                             ...(user?.archiveTeams || []),
                         ],
+                        games: games.flat(),
                     },
                 )}
                 onIndexChange={setIndex}

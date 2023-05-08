@@ -2,6 +2,8 @@ import * as StatsData from './../../services/data/stats'
 import { AllPlayerStats } from '../../types/stats'
 import { DataTable } from 'react-native-paper'
 import { DisplayTeam } from '../../types/team'
+import { Game } from '../../types/game'
+import GameListItem from '../atoms/GameListItem'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import StatsFilterModal from '../molecules/StatsFilterModal'
@@ -18,17 +20,20 @@ import { formatNumber, mapStatDisplayName } from '../../utils/stats'
 export interface PublicUserStatsSceneProps {
     userId: string
     teams: DisplayTeam[]
+    games: Game[]
 }
 
 const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     userId,
     teams,
+    games,
 }) => {
     const {
         theme: { colors },
     } = useTheme()
 
-    const [modalVisible, setModalVisible] = React.useState(false)
+    const [teamFilterVisible, setTeamFilterVisible] = React.useState(false)
+    const [gameFilterVisible, setGameFilterVisible] = React.useState(false)
     const [stats, setStats] = React.useState<AllPlayerStats>()
     const [loading, setLoading] = React.useState(false)
     const [teamFilter, setTeamFilter] = React.useState<string[]>([])
@@ -86,7 +91,15 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         return `${team.name} (${teamStart} - ${teamEnd})`
     }
 
-    const setFilterOptions = () => {}
+    const updateTeamFilters = (teamFilters: string[]) => {
+        setTeamFilter(teamFilters)
+        setTeamFilterVisible(false)
+    }
+
+    const updateGameFilters = (gameFilters: string[]) => {
+        setGameFilter(gameFilters)
+        setGameFilterVisible(false)
+    }
 
     const styles = StyleSheet.create({
         titleCell: {
@@ -131,14 +144,14 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                             style={styles.button}
                             text="Filter by Team"
                             onPress={async () => {
-                                setModalVisible(true)
+                                setTeamFilterVisible(true)
                             }}
                         />
                         <SecondaryButton
                             style={styles.button}
                             text="Filter by Game"
                             onPress={async () => {
-                                setModalVisible(true)
+                                setGameFilterVisible(true)
                             }}
                         />
                     </View>
@@ -167,12 +180,24 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                 </View>
             )}
             <StatsFilterModal
-                visible={modalVisible}
-                onClose={setFilterOptions}
+                visible={teamFilterVisible}
+                onClose={updateTeamFilters}
                 title="Teams"
                 data={teams.map(team => ({
                     display: formatTeamName(team),
                     value: team._id,
+                }))}
+            />
+            <StatsFilterModal
+                visible={gameFilterVisible}
+                onClose={updateGameFilters}
+                title="Games"
+                data={games.map(game => ({
+                    // TODO: teamId is currently the wrong value
+                    display: (
+                        <GameListItem game={game} teamId={game.teamOne._id} />
+                    ),
+                    value: game._id,
                 }))}
             />
         </ScrollView>

@@ -2,12 +2,11 @@ import {
     AllPlayerStats,
     CalculatedPlayerStats,
     DisplayStat,
-    IdentifiedPlayerStats,
     PlayerStats,
 } from '../types/stats'
 
 export const convertProfileScreenStatsToStatListItem = (
-    stats?: IdentifiedPlayerStats,
+    stats?: AllPlayerStats,
 ): DisplayStat[] => {
     if (!stats) return []
     return [

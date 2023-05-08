@@ -4,13 +4,13 @@ import PrimaryButton from '../atoms/PrimaryButton'
 import SecondaryButton from '../atoms/SecondaryButton'
 import { useTheme } from '../../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 
 interface StatsFilterModalProps {
     title: string
-    data: { display: string; value: string }[]
+    data: { display: string | ReactNode; value: string }[]
     visible: boolean
-    onClose: () => void
+    onClose: (filters: string[]) => void
 }
 
 const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
@@ -98,7 +98,17 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
                 }}
             />
             <SecondaryButton text="clear all" onPress={onResetFilters} />
-            <PrimaryButton text="done" loading={false} onPress={onClose} />
+            <PrimaryButton
+                text="done"
+                loading={false}
+                onPress={() => {
+                    onClose(
+                        boxData
+                            .filter(box => box.checked)
+                            .map(box => box.value),
+                    )
+                }}
+            />
         </BaseModal>
     )
 }
