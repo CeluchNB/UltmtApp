@@ -94,7 +94,6 @@ export const addPlayerStats = (
 }
 
 export const calculatePlayerStats = (stats: PlayerStats): AllPlayerStats => {
-    console.log('got dropped passes', stats.droppedPasses)
     const calcStats: CalculatedPlayerStats = {
         winPercentage: createSafeFraction(
             stats.wins,

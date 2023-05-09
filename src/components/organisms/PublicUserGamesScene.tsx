@@ -7,12 +7,12 @@ import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
 import { SectionList, StyleSheet, Text } from 'react-native'
 
-export interface UserGamesSceneProps {
+export interface PublicUserGamesSceneProps {
     gameLists: { title: string; data: Game[]; index: number }[]
     teams: DisplayTeam[]
 }
 
-const UserGamesScene: React.FC<UserGamesSceneProps> = ({
+const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
     gameLists,
     teams,
 }) => {
@@ -59,4 +59,4 @@ const UserGamesScene: React.FC<UserGamesSceneProps> = ({
     )
 }
 
-export default UserGamesScene
+export default PublicUserGamesScene

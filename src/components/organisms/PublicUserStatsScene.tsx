@@ -1,26 +1,29 @@
 import * as StatsData from './../../services/data/stats'
 import { AllPlayerStats } from '../../types/stats'
+import { ApiError } from '../../types/services'
 import { DataTable } from 'react-native-paper'
 import { DisplayTeam } from '../../types/team'
 import { Game } from '../../types/game'
 import GameListItem from '../atoms/GameListItem'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
-import StatsFilterModal from '../molecules/StatsFilterModal'
+import TeamListItem from '../atoms/TeamListItem'
 import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     RefreshControl,
     ScrollView,
     StyleSheet,
+    Text,
     View,
 } from 'react-native'
+import StatsFilterModal, { CheckBoxItem } from '../molecules/StatsFilterModal'
 import { formatNumber, mapStatDisplayName } from '../../utils/stats'
 
 export interface PublicUserStatsSceneProps {
     userId: string
     teams: DisplayTeam[]
-    games: Game[]
+    games: { game: Game; teamId: string }[]
 }
 
 const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
@@ -29,24 +32,58 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     games,
 }) => {
     const {
-        theme: { colors },
+        theme: { colors, size },
     } = useTheme()
 
     const [teamFilterVisible, setTeamFilterVisible] = React.useState(false)
     const [gameFilterVisible, setGameFilterVisible] = React.useState(false)
     const [stats, setStats] = React.useState<AllPlayerStats>()
     const [loading, setLoading] = React.useState(false)
-    const [teamFilter, setTeamFilter] = React.useState<string[]>([])
-    const [gameFilter, setGameFilter] = React.useState<string[]>([])
+    const [error, setError] = React.useState<ApiError | undefined>(undefined)
+    const [teamFilterOptions, setTeamFilterOptions] = React.useState<
+        CheckBoxItem[]
+    >([])
+    const [gameFilterOptions, setGameFilterOptions] = React.useState<
+        CheckBoxItem[]
+    >([])
+
+    React.useEffect(() => {
+        setTeamFilterOptions(
+            teams.map(team => ({
+                display: <TeamListItem team={team} />,
+                value: team._id,
+                checked: false,
+            })),
+        )
+    }, [teams])
+
+    React.useEffect(() => {
+        setGameFilterOptions(
+            games.map(({ game, teamId }) => ({
+                display: <GameListItem game={game} teamId={teamId} />,
+                value: game._id,
+                checked: false,
+            })),
+        )
+    }, [games])
 
     const getStats = () => {
         setLoading(true)
+        setError(undefined)
+        const teamFilter = teamFilterOptions
+            .filter(value => value.checked)
+            .map(value => value.value)
+        const gameFilter = gameFilterOptions
+            .filter(value => value.checked)
+            .map(value => value.value)
         if (teamFilter.length > 0 || gameFilter.length > 0) {
             StatsData.filterPlayerStats(userId, teamFilter, gameFilter)
                 .then(result => {
                     setStats(result)
                 })
-                .catch(_e => {})
+                .catch(e => {
+                    setError(e)
+                })
                 .finally(() => {
                     setLoading(false)
                 })
@@ -55,11 +92,15 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                 .then(result => {
                     setStats(result)
                 })
-                .catch(_e => {})
+                .catch(e => {
+                    setError(e)
+                })
                 .finally(() => {
                     setLoading(false)
                 })
         }
+        setTeamFilterVisible(false)
+        setGameFilterVisible(false)
     }
 
     React.useEffect(() => {
@@ -78,27 +119,45 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         delete (updatedStats as any).username
         delete (updatedStats as any).__v
         delete (updatedStats as any).id
+        delete (updatedStats as any).playerId
+        delete (updatedStats as any).gameId
+        delete (updatedStats as any).teamId
 
         return updatedStats
     }, [stats])
 
-    const formatTeamName = (team: DisplayTeam): string => {
-        const teamStart = new Date(team.seasonStart).getUTCFullYear()
-        const teamEnd = new Date(team.seasonEnd).getUTCFullYear()
-        if (teamStart === teamEnd) {
-            return `${team.name} (${teamStart})`
-        }
-        return `${team.name} (${teamStart} - ${teamEnd})`
+    const onTeamSelect = (teamId: string) => {
+        setTeamFilterOptions(curr => {
+            return curr.map(value => {
+                if (value.value === teamId) {
+                    return { ...value, checked: !value.checked }
+                }
+                return value
+            })
+        })
     }
 
-    const updateTeamFilters = (teamFilters: string[]) => {
-        setTeamFilter(teamFilters)
-        setTeamFilterVisible(false)
+    const onTeamClear = () => {
+        setTeamFilterOptions(curr => {
+            return curr.map(value => ({ ...value, checked: false }))
+        })
     }
 
-    const updateGameFilters = (gameFilters: string[]) => {
-        setGameFilter(gameFilters)
-        setGameFilterVisible(false)
+    const onGameSelect = (gameId: string) => {
+        setGameFilterOptions(curr => {
+            return curr.map(value => {
+                if (value.value === gameId) {
+                    return { ...value, checked: !value.checked }
+                }
+                return value
+            })
+        })
+    }
+
+    const onGameClear = () => {
+        setGameFilterOptions(curr => {
+            return curr.map(value => ({ ...value, checked: false }))
+        })
     }
 
     const styles = StyleSheet.create({
@@ -116,7 +175,8 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             flexDirection: 'row',
         },
         error: {
-            color: colors.error,
+            color: colors.gray,
+            fontSize: size.fontThirty,
             width: '80%',
             alignSelf: 'center',
         },
@@ -133,28 +193,28 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                 />
             }
             testID="public-user-stats-scroll-view">
+            <View style={styles.buttonContainer}>
+                <SecondaryButton
+                    style={styles.button}
+                    text="Filter by Team"
+                    onPress={async () => {
+                        setTeamFilterVisible(true)
+                    }}
+                />
+                <SecondaryButton
+                    style={styles.button}
+                    text="Filter by Game"
+                    onPress={async () => {
+                        setGameFilterVisible(true)
+                    }}
+                />
+            </View>
             {loading && (
                 <ActivityIndicator color={colors.textPrimary} size="large" />
             )}
-            {/* {error && <Text style={styles.error}>{error.message}</Text>} */}
-            {!loading /*&& !error*/ && (
+            {error && <Text style={styles.error}>{error.message}</Text>}
+            {!loading && !error && (
                 <View>
-                    <View style={styles.buttonContainer}>
-                        <SecondaryButton
-                            style={styles.button}
-                            text="Filter by Team"
-                            onPress={async () => {
-                                setTeamFilterVisible(true)
-                            }}
-                        />
-                        <SecondaryButton
-                            style={styles.button}
-                            text="Filter by Game"
-                            onPress={async () => {
-                                setGameFilterVisible(true)
-                            }}
-                        />
-                    </View>
                     <DataTable>
                         {stats &&
                             Object.entries(filteredStats).map(
@@ -181,24 +241,19 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             )}
             <StatsFilterModal
                 visible={teamFilterVisible}
-                onClose={updateTeamFilters}
+                onSelect={onTeamSelect}
+                onClear={onTeamClear}
+                onDone={getStats}
                 title="Teams"
-                data={teams.map(team => ({
-                    display: formatTeamName(team),
-                    value: team._id,
-                }))}
+                data={teamFilterOptions}
             />
             <StatsFilterModal
                 visible={gameFilterVisible}
-                onClose={updateGameFilters}
+                onSelect={onGameSelect}
+                onClear={onGameClear}
+                onDone={getStats}
                 title="Games"
-                data={games.map(game => ({
-                    // TODO: teamId is currently the wrong value
-                    display: (
-                        <GameListItem game={game} teamId={game.teamOne._id} />
-                    ),
-                    value: game._id,
-                }))}
+                data={gameFilterOptions}
             />
         </ScrollView>
     )

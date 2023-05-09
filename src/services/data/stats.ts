@@ -1,4 +1,5 @@
 import * as Constants from '../../utils/constants'
+import { getInitialPlayerData } from '../../../fixtures/utils'
 import { throwApiError } from '../../utils/service-utils'
 import { AllPlayerStats, PlayerStats } from '../../types/stats'
 import { addPlayerStats, calculatePlayerStats } from '../../utils/stats'
@@ -25,14 +26,13 @@ export const filterPlayerStats = async (
     try {
         const response = await networkFilterPlayerStats(id, teams, games)
         const { stats } = response.data
-        console.log('got result', stats)
 
         const statAggregate: PlayerStats = stats.reduce(
             (a: PlayerStats, b: PlayerStats) => addPlayerStats(a, b),
+            getInitialPlayerData({}),
         )
         return calculatePlayerStats(statAggregate)
     } catch (e) {
-        console.log('got e', e)
         return throwApiError(e, Constants.UNABLE_TO_GET_PLAYER_STATS)
     }
 }

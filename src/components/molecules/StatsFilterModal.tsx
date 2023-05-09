@@ -4,51 +4,34 @@ import PrimaryButton from '../atoms/PrimaryButton'
 import SecondaryButton from '../atoms/SecondaryButton'
 import { useTheme } from '../../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode } from 'react'
+
+export interface CheckBoxItem {
+    display: string | ReactNode
+    value: string
+    checked: boolean
+}
 
 interface StatsFilterModalProps {
     title: string
-    data: { display: string | ReactNode; value: string }[]
+    data: CheckBoxItem[]
     visible: boolean
-    onClose: (filters: string[]) => void
+    onSelect: (value: string) => void
+    onClear: () => void
+    onDone: () => void
 }
 
 const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
     title,
     data,
     visible,
-    onClose,
+    onSelect,
+    onClear,
+    onDone,
 }) => {
     const {
         theme: { colors, size },
     } = useTheme()
-
-    const [boxData, setBoxData] = React.useState(
-        data.map(item => ({ ...item, checked: false })),
-    )
-
-    useEffect(() => {
-        setBoxData(data.map(item => ({ ...item, checked: false })))
-    }, [data])
-
-    const onCheckboxChange = (value: string) => {
-        setBoxData(curr => {
-            return curr.map(item => {
-                if (item.value === value) {
-                    return { ...item, checked: !item.checked }
-                }
-                return item
-            })
-        })
-    }
-
-    const onResetFilters = async () => {
-        setBoxData(curr => {
-            return curr.map(item => {
-                return { ...item, checked: false }
-            })
-        })
-    }
 
     const styles = StyleSheet.create({
         title: {
@@ -56,28 +39,28 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
             fontSize: size.fontThirty,
             marginBottom: 10,
         },
+        list: { width: '100%' },
         itemContainer: {
-            display: 'flex',
             flexDirection: 'row',
         },
-        item: {
-            color: colors.textPrimary,
-            fontSize: size.fontTwenty,
+        clearButton: {
+            marginBottom: 10,
         },
     })
 
     return (
-        <BaseModal visible={visible} onClose={onClose}>
+        <BaseModal visible={visible} onClose={onDone}>
             <Text style={styles.title}>{title}</Text>
             <FlatList
-                data={boxData}
+                data={data}
+                style={styles.list}
                 renderItem={({ item: { display, value, checked } }) => {
                     return (
                         <View style={styles.itemContainer}>
                             <CheckBox
                                 value={checked}
                                 onChange={() => {
-                                    onCheckboxChange(value)
+                                    onSelect(value)
                                 }}
                                 tintColors={{
                                     true: colors.textPrimary,
@@ -86,29 +69,19 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
                                 onFillColor={colors.textPrimary}
                                 onCheckColor={colors.textPrimary}
                             />
-                            <Text
-                                style={styles.item}
-                                onPress={() => {
-                                    onCheckboxChange(value)
-                                }}>
-                                {display}
-                            </Text>
+                            <Text>{display}</Text>
                         </View>
                     )
                 }}
             />
-            <SecondaryButton text="clear all" onPress={onResetFilters} />
-            <PrimaryButton
-                text="done"
-                loading={false}
-                onPress={() => {
-                    onClose(
-                        boxData
-                            .filter(box => box.checked)
-                            .map(box => box.value),
-                    )
+            <SecondaryButton
+                text="clear all"
+                style={styles.clearButton}
+                onPress={async () => {
+                    onClear()
                 }}
             />
+            <PrimaryButton text="done" loading={false} onPress={onDone} />
         </BaseModal>
     )
 }

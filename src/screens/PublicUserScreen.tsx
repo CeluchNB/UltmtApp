@@ -5,6 +5,9 @@ import React from 'react'
 import { User } from '../types/user'
 import { getGamesByTeam } from '../services/data/game'
 import { useSelector } from 'react-redux'
+import PublicUserGamesScene, {
+    PublicUserGamesSceneProps,
+} from '../components/organisms/PublicUserGamesScene'
 import PublicUserStatsScene, {
     PublicUserStatsSceneProps,
 } from '../components/organisms/PublicUserStatsScene'
@@ -19,9 +22,6 @@ import {
     useWindowDimensions,
 } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
-import UserGamesScene, {
-    UserGamesSceneProps,
-} from '../components/organisms/UserGamesScene'
 import {
     selectManagerTeams,
     selectPlayerTeams,
@@ -30,7 +30,7 @@ import { useData, useTheme } from './../hooks'
 
 const renderScene = (
     teamProps: PublicUserTeamSceneProps,
-    gameProps: UserGamesSceneProps,
+    gameProps: PublicUserGamesSceneProps,
     statsProps: PublicUserStatsSceneProps,
 ) => {
     return ({ route }: { route: { key: string } }) => {
@@ -45,7 +45,7 @@ const renderScene = (
             case 'games':
                 return (
                     <View style={sceneStyle}>
-                        <UserGamesScene {...gameProps} />
+                        <PublicUserGamesScene {...gameProps} />
                     </View>
                 )
             case 'stats':
@@ -71,7 +71,18 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         theme: { colors, size },
     } = useTheme()
 
-    const [index, setIndex] = React.useState(tab === 'stats' ? 0 : 1)
+    const mapTabNameToIndex = (name: 'teams' | 'games' | 'stats'): number => {
+        switch (name) {
+            case 'teams':
+                return 0
+            case 'games':
+                return 1
+            case 'stats':
+                return 2
+        }
+    }
+
+    const [index, setIndex] = React.useState(mapTabNameToIndex(tab))
     const [routes] = React.useState([
         { key: 'teams', title: 'Teams' },
         { key: 'games', title: 'Games' },
@@ -137,12 +148,32 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         return tempGames
     }, [games, allTeams])
 
+    const filterableGames = React.useMemo(() => {
+        const tempGames: { game: Game; teamId: string }[] = []
+
+        for (let i = 0; i < games.length; i++) {
+            // only include games player played in
+            if (!playerTeams.some(team => team._id === allTeams[i]._id)) {
+                continue
+            }
+            tempGames.push(
+                ...games[i].map(value => ({
+                    game: value,
+                    teamId: allTeams[i]._id,
+                })),
+            )
+        }
+        return tempGames
+    }, [games, allTeams, playerTeams])
+
     React.useEffect(() => {
         const promises = allTeams.map(team => getGamesByTeam(team._id))
 
-        Promise.all(promises).then(g => {
-            setGames(g)
-        })
+        Promise.all(promises)
+            .then(g => {
+                setGames(g)
+            })
+            .catch(_e => {})
     }, [allTeams])
 
     const styles = StyleSheet.create({
@@ -180,7 +211,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                             ...(user?.playerTeams || []),
                             ...(user?.archiveTeams || []),
                         ],
-                        games: games.flat(),
+                        games: filterableGames,
                     },
                 )}
                 onIndexChange={setIndex}
