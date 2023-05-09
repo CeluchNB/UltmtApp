@@ -175,10 +175,9 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             flexDirection: 'row',
         },
         error: {
-            color: colors.gray,
-            fontSize: size.fontThirty,
-            width: '80%',
             alignSelf: 'center',
+            fontSize: size.fontThirty,
+            color: colors.gray,
         },
     })
 

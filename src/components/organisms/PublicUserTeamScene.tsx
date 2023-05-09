@@ -28,7 +28,7 @@ const PublicUserTeamScene: React.FC<PublicUserTeamSceneProps> = ({
 }) => {
     const navigation = useNavigation()
     const {
-        theme: { size },
+        theme: { size, colors },
     } = useTheme()
 
     const styles = StyleSheet.create({
@@ -37,9 +37,9 @@ const PublicUserTeamScene: React.FC<PublicUserTeamSceneProps> = ({
             alignSelf: 'center',
         },
         error: {
-            width: '75%',
             alignSelf: 'center',
             fontSize: size.fontThirty,
+            color: colors.gray,
         },
     })
 

@@ -1,3 +1,4 @@
+import { ApiError } from '../../types/services'
 import BaseScreen from '../atoms/BaseScreen'
 import { DisplayTeam } from '../../types/team'
 import { Game } from '../../types/game'
@@ -5,16 +6,28 @@ import GameListItem from '../atoms/GameListItem'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
-import { SectionList, StyleSheet, Text } from 'react-native'
+import {
+    ActivityIndicator,
+    RefreshControl,
+    SectionList,
+    StyleSheet,
+    Text,
+} from 'react-native'
 
 export interface PublicUserGamesSceneProps {
     gameLists: { title: string; data: Game[]; index: number }[]
     teams: DisplayTeam[]
+    loading: boolean
+    error?: ApiError
+    refetch: () => void
 }
 
 const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
     gameLists,
     teams,
+    loading,
+    error,
+    refetch,
 }) => {
     const {
         theme: { colors, size, weight },
@@ -27,34 +40,53 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
             fontSize: size.fontThirty,
             fontWeight: weight.bold,
         },
+        error: {
+            alignSelf: 'center',
+            fontSize: size.fontThirty,
+            color: colors.gray,
+        },
     })
 
     return (
         <BaseScreen containerWidth="80%">
-            <SectionList
-                sections={gameLists}
-                keyExtractor={item => item._id}
-                renderSectionHeader={({ section: { title } }) => {
-                    return <Text style={styles.teamTitle}>{title}</Text>
-                }}
-                renderItem={({ item, section }) => {
-                    return (
-                        <GameListItem
-                            game={item}
-                            teamId={teams[section.index]._id}
-                            onPress={() => {
-                                navigation.navigate('Tabs', {
-                                    screen: 'Games',
-                                    params: {
-                                        screen: 'ViewGame',
-                                        params: { gameId: item._id },
-                                    },
-                                })
+            {error && <Text style={styles.error}>{error.message}</Text>}
+            {loading && (
+                <ActivityIndicator size="large" color={colors.textPrimary} />
+            )}
+            {!loading && !error && (
+                <SectionList
+                    sections={gameLists}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={loading}
+                            onRefresh={() => {
+                                refetch()
                             }}
                         />
-                    )
-                }}
-            />
+                    }
+                    keyExtractor={item => item._id}
+                    renderSectionHeader={({ section: { title } }) => {
+                        return <Text style={styles.teamTitle}>{title}</Text>
+                    }}
+                    renderItem={({ item, section }) => {
+                        return (
+                            <GameListItem
+                                game={item}
+                                teamId={teams[section.index]._id}
+                                onPress={() => {
+                                    navigation.navigate('Tabs', {
+                                        screen: 'Games',
+                                        params: {
+                                            screen: 'ViewGame',
+                                            params: { gameId: item._id },
+                                        },
+                                    })
+                                }}
+                            />
+                        )
+                    }}
+                />
+            )}
         </BaseScreen>
     )
 }

@@ -1,4 +1,5 @@
 import * as UserData from './../services/data/user'
+import { ApiError } from '../types/services'
 import { Game } from '../types/game'
 import { PublicUserDetailsProps } from '../types/navigation'
 import React from 'react'
@@ -25,6 +26,7 @@ import { TabBar, TabView } from 'react-native-tab-view'
 import {
     selectManagerTeams,
     selectPlayerTeams,
+    setError,
 } from '../store/reducers/features/account/accountReducer'
 import { useData, useTheme } from './../hooks'
 
@@ -116,6 +118,10 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     const managerTeams = useSelector(selectManagerTeams)
     const playerTeams = useSelector(selectPlayerTeams)
     const [games, setGames] = React.useState<Game[][]>([])
+    const [gameLoading, setGameLoading] = React.useState(false)
+    const [gameError, setGameError] = React.useState<ApiError | undefined>(
+        undefined,
+    )
 
     const allTeams = React.useMemo(() => {
         const map = new Map()
@@ -166,15 +172,26 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         return tempGames
     }, [games, allTeams, playerTeams])
 
-    React.useEffect(() => {
+    const fetchGames = React.useCallback(() => {
+        setError(undefined)
+        setGameLoading(true)
         const promises = allTeams.map(team => getGamesByTeam(team._id))
 
         Promise.all(promises)
             .then(g => {
                 setGames(g)
             })
-            .catch(_e => {})
+            .catch(e => {
+                setGameError(e)
+            })
+            .finally(() => {
+                setGameLoading(false)
+            })
     }, [allTeams])
+
+    React.useEffect(() => {
+        fetchGames()
+    }, [fetchGames])
 
     const styles = StyleSheet.create({
         screen: {
@@ -203,8 +220,19 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene(
-                    { loading, refetch, user, error },
-                    { gameLists, teams: allTeams },
+                    {
+                        loading,
+                        refetch,
+                        user,
+                        error,
+                    },
+                    {
+                        gameLists,
+                        teams: allTeams,
+                        loading: gameLoading,
+                        error: gameError,
+                        refetch: fetchGames,
+                    },
                     {
                         userId,
                         teams: [
