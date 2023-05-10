@@ -54,7 +54,7 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
             <FlatList
                 data={data}
                 style={styles.list}
-                renderItem={({ item: { display, value, checked } }) => {
+                renderItem={({ item: { display, value, checked }, index }) => {
                     return (
                         <View style={styles.itemContainer}>
                             <CheckBox
@@ -62,12 +62,16 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
                                 onChange={() => {
                                     onSelect(value)
                                 }}
+                                onValueChange={() => {
+                                    console.log('on value change')
+                                }}
                                 tintColors={{
                                     true: colors.textPrimary,
                                     false: colors.gray,
                                 }}
                                 onFillColor={colors.textPrimary}
                                 onCheckColor={colors.textPrimary}
+                                testID={`checkbox-${index}`}
                             />
                             <Text>{display}</Text>
                         </View>
