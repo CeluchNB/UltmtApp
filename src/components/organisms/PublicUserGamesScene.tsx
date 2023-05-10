@@ -85,6 +85,7 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
                             />
                         )
                     }}
+                    testID="public-user-game-section-list"
                 />
             )}
         </BaseScreen>
