@@ -28,7 +28,7 @@ const StatListItem: React.FC<StatListItemProps> = ({ stat }) => {
         },
         ratioView: {
             backgroundColor: colors.textSecondary,
-            width: 100 * (Math.min(stat.value + 50, stat.points) / stat.points),
+            width: 100 * Math.min(1, stat.value / stat.points),
             height: 10,
             borderRadius: 5,
         },

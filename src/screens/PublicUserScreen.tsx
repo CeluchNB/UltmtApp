@@ -1,27 +1,95 @@
-import * as React from 'react'
 import * as UserData from './../services/data/user'
-import MapSection from '../components/molecules/MapSection'
+import { ApiError } from '../types/services'
+import { Game } from '../types/game'
 import { PublicUserDetailsProps } from '../types/navigation'
-import TeamListItem from '../components/atoms/TeamListItem'
+import React from 'react'
 import { User } from '../types/user'
+import { getGamesByTeam } from '../services/data/game'
+import { useSelector } from 'react-redux'
+import PublicUserGamesScene, {
+    PublicUserGamesSceneProps,
+} from '../components/organisms/PublicUserGamesScene'
+import PublicUserStatsScene, {
+    PublicUserStatsSceneProps,
+} from '../components/organisms/PublicUserStatsScene'
+import PublicUserTeamScene, {
+    PublicUserTeamSceneProps,
+} from '../components/organisms/PublicUserTeamScene'
 import {
-    RefreshControl,
     SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
     View,
+    useWindowDimensions,
 } from 'react-native'
+import { TabBar, TabView } from 'react-native-tab-view'
+import {
+    selectManagerTeams,
+    selectPlayerTeams,
+    setError,
+} from '../store/reducers/features/account/accountReducer'
 import { useData, useTheme } from './../hooks'
+
+const renderScene = (
+    teamProps: PublicUserTeamSceneProps,
+    gameProps: PublicUserGamesSceneProps,
+    statsProps: PublicUserStatsSceneProps,
+) => {
+    return ({ route }: { route: { key: string } }) => {
+        const sceneStyle = { marginTop: 10 }
+        switch (route.key) {
+            case 'teams':
+                return (
+                    <View style={sceneStyle}>
+                        <PublicUserTeamScene {...teamProps} />
+                    </View>
+                )
+            case 'games':
+                return (
+                    <View style={sceneStyle}>
+                        <PublicUserGamesScene {...gameProps} />
+                    </View>
+                )
+            case 'stats':
+                return (
+                    <View style={sceneStyle}>
+                        <PublicUserStatsScene {...statsProps} />
+                    </View>
+                )
+            default:
+                return null
+        }
+    }
+}
 
 const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     route,
     navigation,
 }) => {
-    const { userId } = route.params
+    const layout = useWindowDimensions()
+
+    const { userId, tab = 'games' } = route.params
     const {
         theme: { colors, size },
     } = useTheme()
+
+    const mapTabNameToIndex = (name: 'teams' | 'games' | 'stats'): number => {
+        switch (name) {
+            case 'teams':
+                return 0
+            case 'games':
+                return 1
+            case 'stats':
+                return 2
+        }
+    }
+
+    const [index, setIndex] = React.useState(mapTabNameToIndex(tab))
+    const [routes] = React.useState([
+        { key: 'teams', title: 'Teams' },
+        { key: 'games', title: 'Games' },
+        { key: 'stats', title: 'Stats' },
+    ])
 
     const {
         data: user,
@@ -47,6 +115,84 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user])
 
+    const managerTeams = useSelector(selectManagerTeams)
+    const playerTeams = useSelector(selectPlayerTeams)
+    const [games, setGames] = React.useState<Game[][]>([])
+    const [gameLoading, setGameLoading] = React.useState(false)
+    const [gameError, setGameError] = React.useState<ApiError | undefined>(
+        undefined,
+    )
+
+    const allTeams = React.useMemo(() => {
+        const map = new Map()
+        managerTeams.forEach(team => {
+            map.set(team._id, team)
+        })
+        playerTeams.forEach(team => {
+            map.set(team._id, team)
+        })
+        return [...map.values()]
+    }, [managerTeams, playerTeams])
+
+    const gameLists = React.useMemo(() => {
+        const tempGames: { title: string; data: Game[]; index: number }[] = []
+        games.forEach((g, i) => {
+            if (g.length === 0) {
+                return
+            }
+            const sortedGames = g.sort(
+                (a, b) =>
+                    new Date(b.startTime).getTime() -
+                    new Date(a.startTime).getTime(),
+            )
+            tempGames.push({
+                title: `${allTeams[i].place} ${allTeams[i].name}`,
+                data: sortedGames,
+                index: i,
+            })
+        })
+        return tempGames
+    }, [games, allTeams])
+
+    const filterableGames = React.useMemo(() => {
+        const tempGames: { game: Game; teamId: string }[] = []
+
+        for (let i = 0; i < games.length; i++) {
+            // only include games player played in
+            if (!playerTeams.some(team => team._id === allTeams[i]._id)) {
+                continue
+            }
+            tempGames.push(
+                ...games[i].map(value => ({
+                    game: value,
+                    teamId: allTeams[i]._id,
+                })),
+            )
+        }
+        return tempGames
+    }, [games, allTeams, playerTeams])
+
+    const fetchGames = React.useCallback(() => {
+        setError(undefined)
+        setGameLoading(true)
+        const promises = allTeams.map(team => getGamesByTeam(team._id))
+
+        Promise.all(promises)
+            .then(g => {
+                setGames(g)
+            })
+            .catch(e => {
+                setGameError(e)
+            })
+            .finally(() => {
+                setGameLoading(false)
+            })
+    }, [allTeams])
+
+    React.useEffect(() => {
+        fetchGames()
+    }, [fetchGames])
+
     const styles = StyleSheet.create({
         screen: {
             height: '100%',
@@ -70,47 +216,48 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 
     return (
         <SafeAreaView style={styles.screen}>
-            <ScrollView
-                refreshControl={
-                    <RefreshControl
-                        refreshing={loading}
-                        onRefresh={() => {
-                            refetch()
-                        }}
-                    />
-                }
-                testID="public-user-scroll-view">
-                <Text style={styles.titleText}>@{user?.username}</Text>
-                {error ? (
-                    <Text style={styles.error}>{error.message}</Text>
-                ) : (
-                    <View style={styles.sectionContainer}>
-                        <MapSection
-                            title="Teams"
-                            listData={user?.playerTeams ?? []}
-                            renderItem={team => {
-                                return (
-                                    <TeamListItem
-                                        key={team._id}
-                                        team={team}
-                                        onPress={async () => {
-                                            navigation.navigate(
-                                                'PublicTeamDetails',
-                                                {
-                                                    id: team._id,
-                                                },
-                                            )
-                                        }}
-                                    />
-                                )
-                            }}
-                            loading={loading}
-                            showButton={false}
-                            showCreateButton={false}
-                        />
-                    </View>
+            <Text style={styles.titleText}>@{user?.username}</Text>
+            <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene(
+                    {
+                        loading,
+                        refetch,
+                        user,
+                        error,
+                    },
+                    {
+                        gameLists,
+                        teams: allTeams,
+                        loading: gameLoading,
+                        error: gameError,
+                        refetch: fetchGames,
+                    },
+                    {
+                        userId,
+                        teams: [
+                            ...(user?.playerTeams || []),
+                            ...(user?.archiveTeams || []),
+                        ],
+                        games: filterableGames,
+                    },
                 )}
-            </ScrollView>
+                onIndexChange={setIndex}
+                initialLayout={{ width: layout.width }}
+                renderTabBar={props => {
+                    return (
+                        <TabBar
+                            {...props}
+                            style={{ backgroundColor: colors.primary }}
+                            indicatorStyle={{
+                                backgroundColor: colors.textPrimary,
+                            }}
+                            activeColor={colors.textPrimary}
+                            inactiveColor={colors.darkGray}
+                        />
+                    )
+                }}
+            />
         </SafeAreaView>
     )
 }

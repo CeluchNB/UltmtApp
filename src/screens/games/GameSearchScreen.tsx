@@ -1,7 +1,7 @@
 import { Chip } from 'react-native-paper'
-import FilterModal from '../../components/molecules/FilterModal'
 import { Game } from '../../types/game'
 import GameCard from '../../components/atoms/GameCard'
+import GameFilterModal from '../../components/molecules/GameFilterModal'
 import { GameSearchProps } from '../../types/navigation'
 import SearchBar from '../../components/atoms/SearchBar'
 import { parseLiveValue } from '../../utils/form-utils'
@@ -139,7 +139,7 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
                     }}
                 />
             </View>
-            <FilterModal
+            <GameFilterModal
                 visible={modalVisible}
                 defaultValues={{ live, after, before }}
                 onClose={closeFilters}
