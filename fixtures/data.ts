@@ -88,7 +88,7 @@ export const requestObject: DetailedRequest = {
     status: 'pending',
 }
 
-const teamOne = {
+export const teamOne = {
     _id: 'team1',
     name: 'Temper',
     place: 'Pittsburgh',

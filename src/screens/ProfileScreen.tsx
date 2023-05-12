@@ -11,8 +11,11 @@ import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { User } from '../types/user'
+import { convertProfileScreenStatsToStatListItem } from '../utils/stats'
 import { fetchProfile } from '../services/data/user'
+import { getPlayerStats } from '../services/data/stats'
 import { logout } from '../services/data/auth'
+import { AllPlayerStats, DisplayStat } from '../types/stats'
 import {
     FlatList,
     RefreshControl,
@@ -51,6 +54,12 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         refetch: profileRefetch,
     } = useData<User>(fetchProfile)
 
+    const {
+        data: stats,
+        loading: statsLoading,
+        refetch: statsRefetch,
+    } = useData<AllPlayerStats>(getPlayerStats, account._id)
+
     const teamToGet = React.useMemo(() => {
         if (!profile) {
             return undefined
@@ -74,6 +83,10 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         return games?.reverse().slice(0, 3)
     }, [games])
 
+    const statsList: DisplayStat[] = React.useMemo(() => {
+        return convertProfileScreenStatsToStatListItem(stats)
+    }, [stats])
+
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
             // TODO: causing poor UI effect on back navigation
@@ -82,6 +95,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                 // profileRefetch()
                 gameRefetch()
                 activeGameRefetch()
+                statsRefetch()
             }
         })
         return unsubscribe
@@ -184,6 +198,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                             profileRefetch()
                             gameRefetch()
                             activeGameRefetch()
+                            statsRefetch()
                         }}
                     />
                 }
@@ -254,11 +269,21 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                         <View style={styles.footerContainer}>
                             <Section
                                 title="Stats"
-                                showButton={false}
-                                onButtonPress={() => ({})}
+                                showButton={true}
+                                onButtonPress={() => {
+                                    navigation.navigate('PublicUserDetails', {
+                                        userId: account._id,
+                                        tab: 'stats',
+                                    })
+                                }}
                                 buttonText="see all stats"
-                                error="No stats available"
-                                listData={[]}
+                                error={
+                                    !statsList || statsList.length === 0
+                                        ? 'No stats available'
+                                        : ''
+                                }
+                                listData={statsList}
+                                loading={statsLoading}
                                 numColumns={2}
                                 renderItem={({ item }) => {
                                     return <StatListItem stat={item} />
@@ -271,7 +296,13 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                     showCreateButton={true}
                                     onCreatePress={onCreateGame}
                                     onButtonPress={async () => {
-                                        navigation.navigate('TeamGames')
+                                        navigation.navigate(
+                                            'PublicUserDetails',
+                                            {
+                                                userId: account._id,
+                                                tab: 'games',
+                                            },
+                                        )
                                     }}
                                     buttonText="see all games"
                                     listData={sortedGames}

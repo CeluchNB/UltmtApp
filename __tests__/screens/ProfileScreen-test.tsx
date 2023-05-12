@@ -1,5 +1,6 @@
 import * as AuthData from '../../src/services/data/auth'
 import * as GameData from '../../src/services/data/game'
+import * as StatsData from '../../src/services/data/stats'
 import * as UserData from '../../src/services/data/user'
 import { NavigationContainer } from '@react-navigation/native'
 import { ProfileProps } from '../../src/types/navigation'
@@ -8,9 +9,12 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
-import { waitUntilRefreshComplete } from '../../fixtures/utils'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 import { fetchProfileData, game } from '../../fixtures/data'
+import {
+    getInitialPlayerData,
+    waitUntilRefreshComplete,
+} from '../../fixtures/utils'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -40,6 +44,16 @@ beforeAll(async () => {
     )
     jest.spyOn(GameData, 'getActiveGames').mockReturnValue(
         Promise.resolve([{ ...game, offline: false }]),
+    )
+    jest.spyOn(StatsData, 'getPlayerStats').mockReturnValue(
+        Promise.resolve(
+            getInitialPlayerData({
+                goals: 1,
+                assists: 1,
+                plusMinus: 2,
+                blocks: 1,
+            }),
+        ),
     )
     store.dispatch(
         setProfile({ ...fetchProfileData, managerTeams: [game.teamOne] }),
