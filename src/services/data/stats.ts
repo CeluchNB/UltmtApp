@@ -33,6 +33,7 @@ export const filterPlayerStats = async (
         )
         return calculatePlayerStats(statAggregate)
     } catch (e) {
+        console.log('got e', e)
         return throwApiError(e, Constants.UNABLE_TO_GET_PLAYER_STATS)
     }
 }
