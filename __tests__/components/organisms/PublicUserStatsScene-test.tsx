@@ -65,8 +65,8 @@ describe('PublicUserStatsScene', () => {
         const teamItem1 = screen.getByTestId('checkbox-0')
         fireEvent(teamItem1, 'onChange')
 
-        // test clear all
-        const clearBtn = screen.getByText('clear all')
+        // test clear
+        const clearBtn = screen.getByText('clear')
         fireEvent.press(clearBtn)
 
         const teamItem2 = screen.getByTestId('checkbox-0')
@@ -77,6 +77,7 @@ describe('PublicUserStatsScene', () => {
 
         expect(spy).toHaveBeenCalledWith('user1', [teamOne._id], [])
 
+        expect(await screen.findByText('Filter by Team (1)')).toBeTruthy()
         expect(await screen.findByText('6')).toBeTruthy()
     })
 
@@ -99,8 +100,8 @@ describe('PublicUserStatsScene', () => {
         const gameItem1 = screen.getByTestId('checkbox-0')
         fireEvent(gameItem1, 'onChange')
 
-        // test clear all
-        const clearBtn = screen.getByText('clear all')
+        // test clear
+        const clearBtn = screen.getByText('clear')
         fireEvent.press(clearBtn)
 
         const gameItem2 = screen.getByTestId('checkbox-0')
@@ -111,6 +112,7 @@ describe('PublicUserStatsScene', () => {
 
         expect(spy).toHaveBeenCalledWith('user1', [], [game._id])
 
+        expect(await screen.findByText('Filter by Game (1)')).toBeTruthy()
         expect(await screen.findByText('6')).toBeTruthy()
     })
 

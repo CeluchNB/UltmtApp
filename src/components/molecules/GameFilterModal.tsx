@@ -76,7 +76,7 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
     return (
         <BaseModal
             onClose={() => {
-                onClose({})
+                onClose({ ...defaultValues })
             }}
             visible={visible}>
             <View style={styles.titleContainer}>

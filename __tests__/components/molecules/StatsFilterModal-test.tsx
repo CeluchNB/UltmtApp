@@ -57,7 +57,7 @@ describe('StatsFilterModal', () => {
             />,
         )
 
-        const clearBtn = screen.getByText('clear all')
+        const clearBtn = screen.getByText('clear')
         fireEvent.press(clearBtn)
         expect(onClear).toHaveBeenCalledTimes(1)
     })

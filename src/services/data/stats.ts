@@ -1,14 +1,20 @@
 import * as Constants from '../../utils/constants'
 import { getInitialPlayerData } from '../../../fixtures/utils'
 import { throwApiError } from '../../utils/service-utils'
-import { AllPlayerStats, PlayerStats } from '../../types/stats'
+import {
+    AllPlayerStats,
+    IdentifiedPlayerStats,
+    PlayerStats,
+} from '../../types/stats'
 import { addPlayerStats, calculatePlayerStats } from '../../utils/stats'
 import {
     filterPlayerStats as networkFilterPlayerStats,
     getPlayerStats as networkGetPlayerStats,
 } from '../network/stats'
 
-export const getPlayerStats = async (id: string): Promise<AllPlayerStats> => {
+export const getPlayerStats = async (
+    id: string,
+): Promise<IdentifiedPlayerStats> => {
     try {
         const response = await networkGetPlayerStats(id)
         const { player } = response.data
@@ -33,7 +39,6 @@ export const filterPlayerStats = async (
         )
         return calculatePlayerStats(statAggregate)
     } catch (e) {
-        console.log('got e', e)
         return throwApiError(e, Constants.UNABLE_TO_GET_PLAYER_STATS)
     }
 }

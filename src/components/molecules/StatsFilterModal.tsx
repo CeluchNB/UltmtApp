@@ -34,23 +34,36 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
     } = useTheme()
 
     const styles = StyleSheet.create({
+        titleContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            marginBottom: 10,
+        },
         title: {
             color: colors.textPrimary,
             fontSize: size.fontThirty,
-            marginBottom: 10,
+            flex: 1,
         },
         list: { width: '100%' },
         itemContainer: {
             flexDirection: 'row',
         },
-        clearButton: {
-            marginBottom: 10,
+        doneButton: {
+            marginTop: 10,
         },
     })
 
     return (
         <BaseModal visible={visible} onClose={onDone}>
-            <Text style={styles.title}>{title}</Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>{title}</Text>
+                <SecondaryButton
+                    text="clear"
+                    onPress={async () => {
+                        onClear()
+                    }}
+                />
+            </View>
             <FlatList
                 data={data}
                 style={styles.list}
@@ -61,9 +74,6 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
                                 value={checked}
                                 onChange={() => {
                                     onSelect(value)
-                                }}
-                                onValueChange={() => {
-                                    console.log('on value change')
                                 }}
                                 tintColors={{
                                     true: colors.textPrimary,
@@ -78,14 +88,13 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
                     )
                 }}
             />
-            <SecondaryButton
-                text="clear all"
-                style={styles.clearButton}
-                onPress={async () => {
-                    onClear()
-                }}
+
+            <PrimaryButton
+                style={styles.doneButton}
+                text="done"
+                loading={false}
+                onPress={onDone}
             />
-            <PrimaryButton text="done" loading={false} onPress={onDone} />
         </BaseModal>
     )
 }

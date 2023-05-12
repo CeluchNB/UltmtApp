@@ -38,6 +38,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     const [teamFilterVisible, setTeamFilterVisible] = React.useState(false)
     const [gameFilterVisible, setGameFilterVisible] = React.useState(false)
     const [stats, setStats] = React.useState<AllPlayerStats>()
+    const [availableGames, setAvailableGames] = React.useState<string[]>([])
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState<ApiError | undefined>(undefined)
     const [teamFilterOptions, setTeamFilterOptions] = React.useState<
@@ -58,14 +59,19 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     }, [teams])
 
     React.useEffect(() => {
+        const tempGames = games.filter(
+            g =>
+                availableGames.length === 0 ||
+                availableGames.includes(g.game._id),
+        )
         setGameFilterOptions(
-            games.map(({ game, teamId }) => ({
+            tempGames.map(({ game, teamId }) => ({
                 display: <GameListItem game={game} teamId={teamId} />,
                 value: game._id,
                 checked: false,
             })),
         )
-    }, [games])
+    }, [games, availableGames])
 
     const getStats = () => {
         setLoading(true)
@@ -91,6 +97,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             StatsData.getPlayerStats(userId)
                 .then(result => {
                     setStats(result)
+                    setAvailableGames(result.games)
                 })
                 .catch(e => {
                     setError(e)
@@ -160,6 +167,17 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         })
     }
 
+    const getButtonText = (
+        filterType: string,
+        filter: CheckBoxItem[],
+    ): string => {
+        const checkedItems = filter.filter(item => item.checked).length
+        if (checkedItems === 0) {
+            return `Filter by ${filterType}`
+        }
+        return `Filter by ${filterType} (${checkedItems})`
+    }
+
     const styles = StyleSheet.create({
         titleCell: {
             color: colors.textPrimary,
@@ -195,14 +213,14 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             <View style={styles.buttonContainer}>
                 <SecondaryButton
                     style={styles.button}
-                    text="Filter by Team"
+                    text={getButtonText('Team', teamFilterOptions)}
                     onPress={async () => {
                         setTeamFilterVisible(true)
                     }}
                 />
                 <SecondaryButton
                     style={styles.button}
-                    text="Filter by Game"
+                    text={getButtonText('Game', gameFilterOptions)}
                     onPress={async () => {
                         setGameFilterVisible(true)
                     }}
