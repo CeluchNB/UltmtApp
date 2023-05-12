@@ -141,7 +141,7 @@ it('should match snapshot', async () => {
 
     await waitUntilRefreshComplete(scrollView)
 
-    expect(snapshot).toMatchSnapshot()
+    expect(snapshot.toJSON()).toMatchSnapshot()
 })
 
 // it('should call refetch', async () => {
