@@ -31,3 +31,14 @@ export const filterPlayerStats = async (
         },
     })
 }
+
+export const getGameStats = async (id: string): Promise<AxiosResponse> => {
+    return await axios.get(`${API_URL_V1}/stats/game/${id}`)
+}
+
+export const getGameStatsByTeam = async (
+    gameId: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(`${API_URL_V1}/stats/game/${gameId}?team=${teamId}`)
+}
