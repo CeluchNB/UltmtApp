@@ -1,6 +1,7 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
 import ConfirmModal from '../../components/molecules/ConfirmModal'
 import GameHeader from '../../components/molecules/GameHeader'
+import GameLeadersScene from '../../components/organisms/GameLeadersScene'
 import GameUtilityBar from '../../components/molecules/GameUtilityBar'
 import React from 'react'
 import { ViewGameProps } from '../../types/navigation'
@@ -21,7 +22,7 @@ const renderScene = (gameId: string) => {
             case 'points':
                 return <ViewPointsScene gameId={gameId} />
             case 'stats':
-                return <View />
+                return <GameLeadersScene gameId={gameId} />
             default:
                 return null
         }
@@ -63,7 +64,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const [index, setIndex] = React.useState(mapTabNameToIndex('points'))
     const [routes] = React.useState([
         { key: 'points', title: 'Points' },
-        { key: 'stats', title: 'Stats' },
+        { key: 'stats', title: 'Leaderboard' },
     ])
     const [tabHeight, setTabHeight] = React.useState(0)
 
