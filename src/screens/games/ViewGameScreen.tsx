@@ -1,16 +1,36 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
 import ConfirmModal from '../../components/molecules/ConfirmModal'
 import GameHeader from '../../components/molecules/GameHeader'
+import GameLeadersScene from '../../components/organisms/GameLeadersScene'
 import GameUtilityBar from '../../components/molecules/GameUtilityBar'
-import PointAccordionGroup from '../../components/organisms/PointAccordionGroup'
 import React from 'react'
-import { ServerActionData } from '../../types/action'
 import { ViewGameProps } from '../../types/navigation'
+import ViewPointsScene from '../../components/organisms/ViewPointsScene'
 import { deleteGame } from '../../services/data/game'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import {
+    ActivityIndicator,
+    StyleSheet,
+    View,
+    useWindowDimensions,
+} from 'react-native'
+import { TabBar, TabView } from 'react-native-tab-view'
 import { useGameReactivation, useGameViewer, useTheme } from '../../hooks'
 
+const renderScene = (gameId: string) => {
+    return ({ route }: { route: { key: string } }) => {
+        switch (route.key) {
+            case 'points':
+                return <ViewPointsScene gameId={gameId} />
+            case 'stats':
+                return <GameLeadersScene gameId={gameId} />
+            default:
+                return null
+        }
+    }
+}
+
 const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
+    const layout = useWindowDimensions()
     const {
         params: { gameId },
     } = route
@@ -18,25 +38,35 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const {
         theme: { colors },
     } = useTheme()
+
+    const mapTabNameToIndex = (name: 'points' | 'stats'): number => {
+        switch (name) {
+            case 'points':
+                return 0
+            case 'stats':
+                return 1
+        }
+    }
+
     const {
         activePoint,
         allPointsLoading,
         game,
-        points,
         gameLoading,
-        loading,
-        displayedActions,
         managingTeamId,
-        error,
-        onSelectAction,
         onSelectPoint,
         onReactivateGame,
-        onRefresh,
     } = useGameViewer(gameId)
     const { navigateToGame } = useGameReactivation()
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deleteLoading, setDeleteLoading] = React.useState(false)
     const [reactivateLoading, setReactivateLoading] = React.useState(false)
+    const [index, setIndex] = React.useState(mapTabNameToIndex('points'))
+    const [routes] = React.useState([
+        { key: 'points', title: 'Points' },
+        { key: 'stats', title: 'Leaderboard' },
+    ])
+    const [tabHeight, setTabHeight] = React.useState(0)
 
     React.useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
@@ -48,15 +78,6 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
             removeListener()
         }
     }, [activePoint, navigation, onSelectPoint])
-
-    const handleSelectAction = (action: ServerActionData) => {
-        const { pointId, live } = onSelectAction(action)
-        navigation.navigate('Comment', {
-            gameId,
-            live,
-            pointId,
-        })
-    }
 
     const handleReactivateGame = React.useCallback(async () => {
         try {
@@ -101,10 +122,8 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     }
 
     const styles = StyleSheet.create({
-        pointsContainer: {
-            marginTop: 10,
-            height: '70%',
-            backgroundColor: colors.primary,
+        tabContainer: {
+            height: tabHeight,
         },
     })
 
@@ -123,24 +142,32 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
             {(allPointsLoading || gameLoading) && (
                 <ActivityIndicator color={colors.textPrimary} />
             )}
-            {points && (
-                <View style={styles.pointsContainer}>
-                    <PointAccordionGroup
-                        activePointId={activePoint?._id}
-                        points={points.sort(
-                            (a, b) => b.pointNumber - a.pointNumber,
-                        )}
-                        teamOne={game?.teamOne || { name: '' }}
-                        teamTwo={game?.teamTwo || { name: '' }}
-                        loading={loading}
-                        displayedActions={displayedActions}
-                        error={error}
-                        onSelectPoint={onSelectPoint}
-                        onSelectAction={handleSelectAction}
-                        onRefresh={onRefresh}
-                    />
-                </View>
-            )}
+            <View
+                style={styles.tabContainer}
+                onLayout={event => {
+                    // TODO: this is not good enough, need to calculate height better
+                    setTabHeight(layout.height - event.nativeEvent.layout.y)
+                }}>
+                <TabView
+                    navigationState={{ index, routes }}
+                    renderScene={renderScene(gameId)}
+                    onIndexChange={setIndex}
+                    initialLayout={{ width: layout.width }}
+                    renderTabBar={props => {
+                        return (
+                            <TabBar
+                                {...props}
+                                style={{ backgroundColor: colors.primary }}
+                                indicatorStyle={{
+                                    backgroundColor: colors.textPrimary,
+                                }}
+                                activeColor={colors.textPrimary}
+                                inactiveColor={colors.darkGray}
+                            />
+                        )
+                    }}
+                />
+            </View>
             <ConfirmModal
                 displayText="Are you sure you want to delete the game? This cannot be undone."
                 visible={modalVisible}

@@ -1,6 +1,8 @@
 import * as ActionData from '../../../src/services/data/live-action'
 import * as GameData from '../../../src/services/data/game'
 import * as PointData from '../../../src/services/data/point'
+import * as StatsData from '../../../src/services/data/stats'
+import { GameStats } from '../../../src/types/stats'
 import { NavigationContainer } from '@react-navigation/native'
 import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
@@ -16,8 +18,16 @@ import {
     LiveServerActionData,
     SubscriptionObject,
 } from '../../../src/types/action'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import {
+    act,
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 import { fetchProfileData, game } from '../../../fixtures/data'
+
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native-google-mobile-ads', () => {
     return {
@@ -214,6 +224,45 @@ const liveActions: Action[] = [
     },
 ].map(a => ActionFactory.createFromAction(a))
 
+const playerOne = {
+    _id: 'user1',
+    firstName: 'First 1',
+    lastName: 'Last 1',
+    username: 'firstlast1',
+}
+const gameStats: GameStats = {
+    _id: 'game1',
+    startTime: '01/01/2023',
+    teamOneId: 'team1',
+    points: [],
+    goalsLeader: {
+        player: playerOne,
+        total: 1,
+    },
+    assistsLeader: {
+        player: playerOne,
+        total: 1,
+    },
+    blocksLeader: {
+        player: playerOne,
+        total: 1,
+    },
+    turnoversLeader: {
+        player: playerOne,
+        total: 1,
+    },
+    plusMinusLeader: {
+        player: playerOne,
+        total: 1,
+    },
+    pointsPlayedLeader: {
+        player: playerOne,
+        total: 1,
+    },
+}
+
+const client = new QueryClient()
+
 describe('ViewGameScreen', () => {
     const gameSpy = jest
         .spyOn(GameData, 'getGameById')
@@ -221,6 +270,9 @@ describe('ViewGameScreen', () => {
     const pointsSpy = jest
         .spyOn(GameData, 'getPointsByGame')
         .mockReturnValue(Promise.resolve(points))
+    const gameStatsSpy = jest
+        .spyOn(StatsData, 'getGameStats')
+        .mockReturnValue(Promise.resolve(gameStats))
     let subs: SubscriptionObject
     jest.spyOn(ActionData, 'subscribe').mockImplementation(
         async subscriptions => {
@@ -228,6 +280,15 @@ describe('ViewGameScreen', () => {
         },
     )
     jest.spyOn(ActionData, 'joinPoint').mockReturnValue(Promise.resolve())
+
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     beforeEach(() => {
         jest.clearAllMocks()
         jest.spyOn(PointData, 'deleteLocalActionsByPoint').mockReturnValue(
@@ -242,29 +303,34 @@ describe('ViewGameScreen', () => {
     })
 
     it('should match snapshot after data loaded', async () => {
-        const snapshot = render(
+        render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <ViewGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
 
         await waitFor(() => {
-            expect(snapshot.queryAllByText('Temper').length).toBe(4)
+            expect(screen.queryAllByText('Temper').length).toBe(4)
         })
 
-        expect(snapshot.getAllByText('Sockeye').length).toBe(4)
+        expect(screen.getAllByText('Sockeye').length).toBe(4)
 
         expect(gameSpy).toHaveBeenCalled()
         expect(pointsSpy).toHaveBeenCalled()
+        expect(gameStatsSpy).toHaveBeenCalled()
     })
 
     it('should handle next point', async () => {
         const { getAllByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <ViewGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -291,7 +357,9 @@ describe('ViewGameScreen', () => {
         const { getAllByText, queryByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <ViewGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -340,16 +408,18 @@ describe('ViewGameScreen', () => {
         })
 
         await waitFor(async () => {
-            expect(gameSpy).toHaveBeenCalledTimes(2)
+            expect(gameSpy).toHaveBeenCalledTimes(3)
         })
-        expect(pointsSpy).toHaveBeenCalledTimes(2)
+        expect(pointsSpy).toHaveBeenCalledTimes(3)
     })
 
     it('handles saved point functionality', async () => {
         const { getAllByText, queryAllByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <ViewGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -370,7 +440,9 @@ describe('ViewGameScreen', () => {
         const { getAllByText, getByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <ViewGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -388,10 +460,16 @@ describe('ViewGameScreen', () => {
 
         fireEvent.press(getByText('huck'))
 
-        expect(props.navigation.navigate).toHaveBeenCalledWith('Comment', {
-            gameId: 'game1',
-            pointId: 'point3',
-            live: true,
+        expect(mockedNavigate).toHaveBeenCalledWith('Tabs', {
+            screen: 'Games',
+            params: {
+                screen: 'Comment',
+                params: {
+                    gameId: 'game1',
+                    live: true,
+                    pointId: 'point3',
+                },
+            },
         })
 
         expect(store.getState().viewAction.liveAction).toMatchObject({
@@ -421,7 +499,9 @@ describe('ViewGameScreen', () => {
         const { getAllByText, queryAllByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <ViewGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -439,10 +519,16 @@ describe('ViewGameScreen', () => {
 
         fireEvent.press(queryAllByText('pickup')[0])
 
-        expect(props.navigation.navigate).toHaveBeenCalledWith('Comment', {
-            gameId: 'game1',
-            pointId: 'point2',
-            live: false,
+        expect(mockedNavigate).toHaveBeenCalledWith('Tabs', {
+            screen: 'Games',
+            params: {
+                screen: 'Comment',
+                params: {
+                    gameId: 'game1',
+                    live: false,
+                    pointId: 'point2',
+                },
+            },
         })
 
         expect(store.getState().viewAction.savedAction).toMatchObject({
@@ -503,7 +589,9 @@ describe('ViewGameScreen', () => {
         const { getByTestId, getAllByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <ViewGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -540,7 +628,9 @@ describe('ViewGameScreen', () => {
         const { getByTestId, getAllByText, getByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <ViewGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -558,5 +648,32 @@ describe('ViewGameScreen', () => {
             expect(goBack).toHaveBeenCalled()
         })
         expect(spy).toHaveBeenCalled()
+    })
+
+    it('displays stats', async () => {
+        render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
+                </Provider>
+            </NavigationContainer>,
+        )
+
+        await waitFor(() => {
+            expect(screen.queryAllByText('Temper').length).toBe(4)
+            expect(screen.queryAllByText('Leaderboard').length).toBe(2)
+        })
+
+        const statsButton = screen.getAllByText('Leaderboard')[0]
+        fireEvent.press(statsButton)
+
+        expect(screen.getByText('Goals')).toBeTruthy()
+        expect(screen.getByText('Assists')).toBeTruthy()
+        expect(screen.getByText('Points Played')).toBeTruthy()
+        expect(screen.getByText('+ / -')).toBeTruthy()
+        expect(screen.getByText('Turnovers')).toBeTruthy()
+        expect(screen.getByText('Blocks')).toBeTruthy()
     })
 })
