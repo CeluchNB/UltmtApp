@@ -1,7 +1,9 @@
+import { DisplayUser } from '../types/user'
 import {
     AllPlayerStats,
     CalculatedPlayerStats,
     DisplayStat,
+    GameStats,
     PlayerStats,
 } from '../types/stats'
 
@@ -21,6 +23,45 @@ export const convertProfileScreenStatsToStatListItem = (
             name: '+ / -',
             value: stats.plusMinus,
             points: stats.pointsPlayed,
+        },
+    ]
+}
+
+export const convertGameStatsToLeaderItems = (
+    stats?: GameStats,
+): { title: string; player?: DisplayUser; total?: number }[] => {
+    if (!stats) return []
+
+    return [
+        {
+            title: 'Goals',
+            player: stats?.goalsLeader.player,
+            total: stats?.goalsLeader.total,
+        },
+        {
+            title: 'Assists',
+            player: stats?.assistsLeader.player,
+            total: stats?.assistsLeader.total,
+        },
+        {
+            title: '+ / -',
+            player: stats?.plusMinusLeader.player,
+            total: stats?.plusMinusLeader.total,
+        },
+        {
+            title: 'Blocks',
+            player: stats?.blocksLeader.player,
+            total: stats?.blocksLeader.total,
+        },
+        {
+            title: 'Points Played',
+            player: stats?.pointsPlayedLeader.player,
+            total: stats?.pointsPlayedLeader.total,
+        },
+        {
+            title: 'Turnovers',
+            player: stats?.turnoversLeader.player,
+            total: stats?.turnoversLeader.total,
         },
     ]
 }

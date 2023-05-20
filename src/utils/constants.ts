@@ -39,3 +39,4 @@ export const CREATE_TOURNAMENT_ERROR = 'Unable to create this tournament. Please
 export const SEARCH_TOURNAMENT_ERROR = 'No tournaments found.'
 export const GET_TOURNAMENT_ERROR = 'Cannot find this tournament.'
 export const UNABLE_TO_GET_PLAYER_STATS = 'Cannot get stats for this player.'
+export const UNABLE_TO_GET_GAME_STATS = 'Cannot get stats for this game.'

@@ -37,7 +37,59 @@ export interface CalculatedPlayerStats {
 
 export interface AllPlayerStats extends PlayerStats, CalculatedPlayerStats {}
 
+export interface TeamStats {
+    wins: number
+    losses: number
+    goalsFor: number
+    goalsAgainst: number
+    holds: number
+    breaks: number
+    turnoverFreeHolds: number
+    offensePoints: number
+    defensePoints: number
+    turnovers: number
+    turnoversForced: number
+}
+
+export interface IdentifiedTeamStats extends TeamStats {
+    _id?: string
+}
+
 export interface IdentifiedPlayerStats extends DisplayUser, AllPlayerStats {
     games: string[]
     teams: string[]
+}
+
+interface IdentifiedPlayerStatsSubset extends AllPlayerStats {
+    _id: string
+}
+
+interface PointStats {
+    _id: string
+    players: IdentifiedPlayerStatsSubset[]
+    teamOne: IdentifiedTeamStats
+    teamTwo: IdentifiedTeamStats
+}
+
+export interface Leader {
+    player?: DisplayUser
+    total: number
+}
+
+export interface GameData {
+    goalsLeader: Leader
+    assistsLeader: Leader
+    blocksLeader: Leader
+    turnoversLeader: Leader
+    plusMinusLeader: Leader
+    pointsPlayedLeader: Leader
+}
+
+export interface GameStats extends GameData {
+    _id: string
+    startTime: string
+    teamOneId: string
+    teamTwoId?: string
+    winningTeam?: 'one' | 'two'
+    points: PointStats[]
 }
