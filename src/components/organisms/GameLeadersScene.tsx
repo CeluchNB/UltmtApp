@@ -1,17 +1,31 @@
+import { ApiError } from '../../types/services'
 import LeaderListItem from '../atoms/LeaderListItem'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import { convertGameStatsToLeaderItems } from '../../utils/stats'
 import { getGameStats } from '../../services/data/stats'
 import { useQuery } from 'react-query'
-import { FlatList, StyleSheet, View } from 'react-native'
+import { useTheme } from '../../hooks'
+import {
+    ActivityIndicator,
+    FlatList,
+    RefreshControl,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 interface GameLeadersSceneProps {
     gameId: string
 }
 const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
-    const { data } = useQuery(['gameStats', { gameId }], () =>
-        getGameStats(gameId),
+    const {
+        theme: { colors, size },
+    } = useTheme()
+
+    const { data, isLoading, isRefetching, error, refetch } = useQuery(
+        ['gameStats', { gameId }],
+        () => getGameStats(gameId),
     )
 
     const leaderList = React.useMemo(() => {
@@ -24,6 +38,10 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
             alignSelf: 'flex-end',
             margin: 5,
         },
+        error: {
+            color: colors.gray,
+            fontSize: size.fontTwenty,
+        },
     })
 
     return (
@@ -33,12 +51,29 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
                 text="more stats"
                 onPress={async () => {}}
             />
-            <FlatList
-                data={leaderList}
-                renderItem={({ item }) => {
-                    return <LeaderListItem leader={item} />
-                }}
-            />
+            {isLoading && (
+                <ActivityIndicator size="large" color={colors.textPrimary} />
+            )}
+            {error ? (
+                <Text style={styles.error}>{(error as ApiError).message}</Text>
+            ) : null}
+            {!isLoading && (
+                <FlatList
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefetching}
+                            onRefresh={() => {
+                                refetch()
+                            }}
+                        />
+                    }
+                    data={leaderList}
+                    renderItem={({ item }) => {
+                        return <LeaderListItem leader={item} />
+                    }}
+                    testID="leaderboard-list"
+                />
+            )}
         </View>
     )
 }
