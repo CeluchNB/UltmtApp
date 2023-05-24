@@ -4,6 +4,7 @@ import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import { convertGameStatsToLeaderItems } from '../../utils/stats'
 import { getGameStats } from '../../services/data/stats'
+import { useNavigation } from '@react-navigation/native'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import {
@@ -22,6 +23,7 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
     const {
         theme: { colors, size },
     } = useTheme()
+    const navigation = useNavigation()
 
     const { data, isLoading, isRefetching, error, refetch } = useQuery(
         ['gameStats', { gameId }],
@@ -49,7 +51,12 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
             <SecondaryButton
                 style={styles.button}
                 text="more stats"
-                onPress={async () => {}}
+                onPress={async () => {
+                    navigation.navigate('Tabs', {
+                        screen: 'Games',
+                        params: { screen: 'GameStats', params: { gameId } },
+                    })
+                }}
             />
             {isLoading && (
                 <ActivityIndicator size="large" color={colors.textPrimary} />
