@@ -2,6 +2,7 @@ import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
 import { GameStatsProps } from '../../types/navigation'
 import React from 'react'
+import TeamGameStatsScene from '../../components/organisms/TeamGameStatsScene'
 import { getGameById } from '../../services/data/game'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
@@ -14,13 +15,13 @@ import {
 } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
 
-const renderScene = (gameId: string, teamId: string) => {
+const renderScene = (gameId: string, teamOneId: string, teamTwoId?: string) => {
     return ({ route }: { route: { key: string } }) => {
         switch (route.key) {
-            case 'points':
-                return <View>Team One</View>
-            case 'stats':
-                return <View>Team One</View>
+            case 'teamOne':
+                return <TeamGameStatsScene gameId={gameId} teamId={teamOneId} />
+            case 'teamTwo':
+                return <TeamGameStatsScene gameId={gameId} teamId={teamTwoId} />
             default:
                 return null
         }
@@ -33,6 +34,7 @@ const GameStatsScreen: React.FC<GameStatsProps> = ({ route }) => {
     const {
         theme: { colors, size },
     } = useTheme()
+
     const {
         data: game,
         isLoading,
@@ -79,7 +81,12 @@ const GameStatsScreen: React.FC<GameStatsProps> = ({ route }) => {
                     <GameHeader game={game} />
                     <TabView
                         navigationState={{ index, routes }}
-                        renderScene={renderScene(gameId, 'teamOne')}
+                        renderScene={renderScene(
+                            gameId,
+                            game.teamOne._id,
+                            game.teamTwo._id,
+                        )}
+                        swipeEnabled={false}
                         onIndexChange={setIndex}
                         initialLayout={{ width: layout.width }}
                         renderTabBar={props => {
