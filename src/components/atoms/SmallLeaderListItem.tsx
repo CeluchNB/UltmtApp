@@ -47,8 +47,9 @@ const SmallLeaderListItem: React.FC<SmallLeaderListItemProps> = ({
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
-            {!total && !player && <Text style={styles.total}>N/A</Text>}
-            {player && <Text style={styles.total}>{total}</Text>}
+            {total !== undefined && total !== null && (
+                <Text style={styles.total}>{total}</Text>
+            )}
             {player && (
                 <Text style={styles.playerName}>
                     {getUserDisplayName(player)}

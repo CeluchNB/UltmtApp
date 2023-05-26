@@ -52,9 +52,9 @@ export const getTeamStatsByGame = async (
     teamId: string,
     gameIds: string[],
 ): Promise<AxiosResponse> => {
-    let url = `${API_URL_V1}/stats/filter/${teamId}`
+    let url = `${API_URL_V1}/stats/filter/team/${teamId}`
     if (gameIds.length > 0) {
-        url += `games=${gameIds.join(',')}`
+        url += `?games=${gameIds.join(',')}`
     }
     return await axios.get(url, { headers: { 'X-API-Key': API_KEY } })
 }

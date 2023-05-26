@@ -1,7 +1,5 @@
 import React from 'react'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
-import { convertGameStatsToLeaderItems } from '../../utils/stats'
-import { getGameStatsByTeam } from '../../services/data/stats'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import {
@@ -11,6 +9,14 @@ import {
     Text,
     View,
 } from 'react-native'
+import {
+    convertGameStatsToLeaderItems,
+    convertTeamStatsToGameOverviewItems,
+} from '../../utils/stats'
+import {
+    getGameStatsByTeam,
+    getTeamStatsByGame,
+} from '../../services/data/stats'
 
 interface TeamGameStatsSceneProps {
     gameId: string
@@ -25,14 +31,23 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
         theme: { colors, size },
     } = useTheme()
 
-    const { data, isLoading } = useQuery(
+    const { data: gameStats, isLoading: gameLoading } = useQuery(
         ['getGameStatsByTeam', { gameId, teamId }],
         () => getGameStatsByTeam(gameId, teamId || ''),
     )
 
+    const { data: teamStats, isLoading: teamLoading } = useQuery(
+        ['getTeamStatsByGame', { gameIds: [gameId], teamId }],
+        () => getTeamStatsByGame(teamId || '', [gameId]),
+    )
+
     const leaderData = React.useMemo(() => {
-        return convertGameStatsToLeaderItems(data)
-    }, [data])
+        return convertGameStatsToLeaderItems(gameStats)
+    }, [gameStats])
+
+    const gameOverviewData = React.useMemo(() => {
+        return convertTeamStatsToGameOverviewItems(teamStats)
+    }, [teamStats])
 
     const styles = StyleSheet.create({
         title: {
@@ -51,12 +66,15 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
 
     return (
         <View>
-            {isLoading && (
-                <ActivityIndicator size="large" color={colors.textPrimary} />
-            )}
-            {data && (
-                <View>
-                    <Text style={styles.title}>Leaderboard</Text>
+            <View>
+                <Text style={styles.title}>Leaderboard</Text>
+                {gameLoading && (
+                    <ActivityIndicator
+                        size="large"
+                        color={colors.textPrimary}
+                    />
+                )}
+                {leaderData.length > 0 && (
                     <FlatList
                         data={leaderData}
                         horizontal
@@ -64,8 +82,26 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
                             return <SmallLeaderListItem leader={item} />
                         }}
                     />
-                </View>
-            )}
+                )}
+            </View>
+            <View>
+                <Text style={styles.title}>Game Overview</Text>
+                {teamLoading && (
+                    <ActivityIndicator
+                        size="large"
+                        color={colors.textPrimary}
+                    />
+                )}
+                {gameOverviewData.length > 0 && (
+                    <FlatList
+                        data={gameOverviewData}
+                        horizontal
+                        renderItem={({ item }) => {
+                            return <SmallLeaderListItem leader={item} />
+                        }}
+                    />
+                )}
+            </View>
         </View>
     )
 }

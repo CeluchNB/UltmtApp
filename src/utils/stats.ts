@@ -5,6 +5,7 @@ import {
     DisplayStat,
     GameStats,
     PlayerStats,
+    TeamStats,
 } from '../types/stats'
 
 export const convertProfileScreenStatsToStatListItem = (
@@ -62,6 +63,43 @@ export const convertGameStatsToLeaderItems = (
             title: 'Turnovers',
             player: stats?.turnoversLeader.player,
             total: stats?.turnoversLeader.total,
+        },
+    ]
+}
+
+export const convertTeamStatsToGameOverviewItems = (
+    stats?: TeamStats,
+): { title: string; total: number }[] => {
+    if (!stats) return []
+
+    return [
+        {
+            title: 'Holds',
+            total: stats.holds,
+        },
+        {
+            title: 'Turnover Free Holds',
+            total: stats.turnoverFreeHolds,
+        },
+        {
+            title: 'Breaks',
+            total: stats.breaks,
+        },
+        {
+            title: 'Offensive Points',
+            total: stats.offensePoints,
+        },
+        {
+            title: 'Defensive Points',
+            total: stats.defensePoints,
+        },
+        {
+            title: 'Turnovers',
+            total: stats.turnovers,
+        },
+        {
+            title: 'Turnovers Forces',
+            total: stats.turnoversForced,
         },
     ]
 }

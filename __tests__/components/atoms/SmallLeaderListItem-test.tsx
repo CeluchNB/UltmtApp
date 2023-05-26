@@ -24,16 +24,17 @@ describe('LeaderListItem', () => {
         expect(screen.getByText('10')).toBeTruthy()
     })
 
-    it('renders without value', () => {
+    it('renders without players', () => {
         render(
             <SmallLeaderListItem
                 leader={{
                     title: 'Goals',
+                    total: 0,
                 }}
             />,
         )
 
         expect(screen.getByText('Goals')).toBeTruthy()
-        expect(screen.getByText('N/A')).toBeTruthy()
+        expect(screen.getByText('0')).toBeTruthy()
     })
 })
