@@ -6,6 +6,7 @@ import {
     GameStats,
     IdentifiedPlayerStats,
     PlayerStats,
+    TeamStats,
 } from '../../types/stats'
 import { addPlayerStats, calculatePlayerStats } from '../../utils/stats'
 import {
@@ -13,6 +14,7 @@ import {
     getGameStats as networkGetGameStats,
     getGameStatsByTeam as networkGetGameStatsByTeam,
     getPlayerStats as networkGetPlayerStats,
+    getTeamStatsByGame as networkGetTeamStatsByGame,
 } from '../network/stats'
 
 export const getPlayerStats = async (
@@ -67,5 +69,19 @@ export const getGameStatsByTeam = async (
         return game
     } catch (e) {
         return throwApiError(e, Constants.UNABLE_TO_GET_GAME_STATS)
+    }
+}
+
+export const getTeamStatsByGame = async (
+    teamId: string,
+    gameIds: string[],
+): Promise<TeamStats> => {
+    try {
+        const response = await networkGetTeamStatsByGame(teamId, gameIds)
+        const { team } = response.data
+
+        return team
+    } catch (e) {
+        return throwApiError(e, Constants.UNABLE_TO_GET_TEAM_STATS)
     }
 }

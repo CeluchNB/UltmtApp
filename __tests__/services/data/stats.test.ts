@@ -2,13 +2,15 @@ import * as Constants from '../../../src/utils/constants'
 import * as StatsNetwork from '../../../src/services/network/stats'
 import { ApiError } from '../../../src/types/services'
 import { DisplayUser } from '../../../src/types/user'
-import { GameStats } from '../../../src/types/stats'
 import { getInitialPlayerData } from '../../../fixtures/utils'
+import { teamOne } from '../../../fixtures/data'
+import { GameStats, TeamStats } from '../../../src/types/stats'
 import {
     filterPlayerStats,
     getGameStats,
     getGameStatsByTeam,
     getPlayerStats,
+    getTeamStatsByGame,
 } from '../../../src/services/data/stats'
 
 const playerOne: DisplayUser = {
@@ -214,5 +216,57 @@ describe('getGameStatsByTeam', () => {
         ).rejects.toMatchObject({
             message: 'test error',
         })
+    })
+})
+
+const team: TeamStats = {
+    ...teamOne,
+    players: [],
+    games: [],
+    winPercentage: 1,
+    offensiveConversion: 0.8,
+    defensiveConversion: 0.4,
+    wins: 10,
+    losses: 0,
+    goalsFor: 100,
+    goalsAgainst: 67,
+    holds: 87,
+    breaks: 13,
+    turnoverFreeHolds: 45,
+    offensePoints: 23,
+    defensePoints: 54,
+    turnovers: 4,
+    turnoversForced: 45,
+}
+describe('getTeamStatsByGame', () => {
+    it('handles network success', async () => {
+        jest.spyOn(StatsNetwork, 'getTeamStatsByGame').mockReturnValueOnce(
+            Promise.resolve({
+                data: { team },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        const result = await getTeamStatsByGame('team1', ['game1'])
+        expect(result).toMatchObject(team)
+    })
+
+    it('handles network error', async () => {
+        jest.spyOn(StatsNetwork, 'getTeamStatsByGame').mockReturnValueOnce(
+            Promise.reject({
+                data: { message: 'test error' },
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        await expect(
+            getTeamStatsByGame('team1', ['game1']),
+        ).rejects.toMatchObject({ message: 'test error' })
     })
 })
