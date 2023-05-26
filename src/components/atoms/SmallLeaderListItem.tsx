@@ -43,12 +43,20 @@ const SmallLeaderListItem: React.FC<SmallLeaderListItemProps> = ({
             fontSize: size.fontFifteen,
         },
     })
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
-            <Text style={styles.total}>{total}</Text>
-            <Text style={styles.playerName}>{getUserDisplayName(player)}</Text>
-            <Text style={styles.playerUsername}>@{player?.username}</Text>
+            {!total && !player && <Text style={styles.total}>N/A</Text>}
+            {player && <Text style={styles.total}>{total}</Text>}
+            {player && (
+                <Text style={styles.playerName}>
+                    {getUserDisplayName(player)}
+                </Text>
+            )}
+            {player && (
+                <Text style={styles.playerUsername}>@{player?.username}</Text>
+            )}
         </View>
     )
 }

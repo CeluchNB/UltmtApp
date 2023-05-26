@@ -3,7 +3,7 @@ import SmallLeaderListItem from '../../../src/components/atoms/SmallLeaderListIt
 import { render, screen } from '@testing-library/react-native'
 
 describe('LeaderListItem', () => {
-    it('renders correctly', () => {
+    it('renders with value', () => {
         render(
             <SmallLeaderListItem
                 leader={{
@@ -22,5 +22,18 @@ describe('LeaderListItem', () => {
         expect(screen.getByText('Goals')).toBeTruthy()
         expect(screen.getByText('Noah Celuch')).toBeTruthy()
         expect(screen.getByText('10')).toBeTruthy()
+    })
+
+    it('renders without value', () => {
+        render(
+            <SmallLeaderListItem
+                leader={{
+                    title: 'Goals',
+                }}
+            />,
+        )
+
+        expect(screen.getByText('Goals')).toBeTruthy()
+        expect(screen.getByText('N/A')).toBeTruthy()
     })
 })
