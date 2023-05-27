@@ -1,3 +1,4 @@
+import MultiPlayerStatsTable from '../molecules/MultiPlayerStatsTable'
 import React from 'react'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
 import { useQuery } from 'react-query'
@@ -5,6 +6,7 @@ import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     FlatList,
+    ScrollView,
     StyleSheet,
     Text,
     View,
@@ -65,7 +67,7 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
     }
 
     return (
-        <View>
+        <ScrollView>
             <View>
                 <Text style={styles.title}>Leaderboard</Text>
                 {gameLoading && (
@@ -102,7 +104,11 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
                     />
                 )}
             </View>
-        </View>
+            <View>
+                <Text style={styles.title}>Stats</Text>
+                {gameStats && <MultiPlayerStatsTable stats={gameStats} />}
+            </View>
+        </ScrollView>
     )
 }
 

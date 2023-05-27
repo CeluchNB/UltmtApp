@@ -69,6 +69,7 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
                     refreshControl={
                         <RefreshControl
                             refreshing={isRefetching}
+                            colors={[colors.textSecondary]}
                             onRefresh={() => {
                                 refetch()
                             }}

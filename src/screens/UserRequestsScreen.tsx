@@ -130,6 +130,7 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
             <ScrollView
                 refreshControl={
                     <RefreshControl
+                        colors={[colors.textSecondary]}
                         onRefresh={async () => {
                             refetch()
                         }}
