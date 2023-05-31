@@ -102,3 +102,13 @@ export interface GameStats extends GameData {
     winningTeam?: 'one' | 'two'
     points: PointStats[]
 }
+
+export type FilteredGamePlayer = AllPlayerStats & DisplayUser
+export interface FilteredGameStats extends GameData {
+    _id: string
+    startTime: string
+    teamOneId: string
+    teamTwoId?: string
+    winningTeam?: 'one' | 'two'
+    players: FilteredGamePlayer[]
+}

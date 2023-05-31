@@ -3,6 +3,7 @@ import { getInitialPlayerData } from '../../../fixtures/utils'
 import { throwApiError } from '../../utils/service-utils'
 import {
     AllPlayerStats,
+    FilteredGameStats,
     GameStats,
     IdentifiedPlayerStats,
     PlayerStats,
@@ -61,7 +62,7 @@ export const getGameStats = async (id: string): Promise<GameStats> => {
 export const getGameStatsByTeam = async (
     gameId: string,
     teamId: string,
-): Promise<GameStats> => {
+): Promise<FilteredGameStats> => {
     try {
         const response = await networkGetGameStatsByTeam(gameId, teamId)
         const { game } = response.data

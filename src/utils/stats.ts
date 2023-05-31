@@ -3,6 +3,7 @@ import {
     AllPlayerStats,
     CalculatedPlayerStats,
     DisplayStat,
+    FilteredGameStats,
     GameStats,
     PlayerStats,
     TeamStats,
@@ -29,7 +30,7 @@ export const convertProfileScreenStatsToStatListItem = (
 }
 
 export const convertGameStatsToLeaderItems = (
-    stats?: GameStats,
+    stats?: FilteredGameStats | GameStats,
 ): { title: string; player?: DisplayUser; total?: number }[] => {
     if (!stats) return []
 
@@ -98,7 +99,7 @@ export const convertTeamStatsToGameOverviewItems = (
             total: stats.turnovers,
         },
         {
-            title: 'Turnovers Forces',
+            title: 'Turnovers Forced',
             total: stats.turnoversForced,
         },
     ]

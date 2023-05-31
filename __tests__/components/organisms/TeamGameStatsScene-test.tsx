@@ -80,7 +80,7 @@ describe('TeamGameStatsScene', () => {
     it('renders leaders', async () => {
         const spy = jest
             .spyOn(StatsData, 'getGameStatsByTeam')
-            .mockReturnValue(Promise.resolve(gameStats))
+            .mockReturnValue(Promise.resolve({ ...gameStats, players: [] }))
 
         render(
             <QueryClientProvider client={client}>

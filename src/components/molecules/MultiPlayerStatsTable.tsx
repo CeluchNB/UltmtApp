@@ -1,15 +1,12 @@
 import React from 'react'
+import { getUserDisplayName } from '../../utils/player'
+import { mapStatDisplayName } from '../../utils/stats'
 import { useTheme } from '../../hooks'
-import { AllPlayerStats, GameStats, PlayerStats } from '../../types/stats'
+import { FilteredGameStats, PlayerStats } from '../../types/stats'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import {
-    addPlayerStats,
-    calculatePlayerStats,
-    mapStatDisplayName,
-} from '../../utils/stats'
 
 interface MultiPlayerStatsTableProps {
-    stats: GameStats
+    stats: FilteredGameStats
 }
 
 const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
@@ -20,45 +17,51 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
     } = useTheme()
 
     const data = React.useMemo(() => {
-        const playerMap = new Map<string, AllPlayerStats>()
-        for (const point of stats.points) {
-            for (const player of point.players) {
-                const current = playerMap.get(player._id)
-                if (current) {
-                    const playerStats = addPlayerStats(current, player)
-                    playerMap.set(player._id, {
-                        ...playerStats,
-                        ...calculatePlayerStats(playerStats),
-                    })
-                } else {
-                    playerMap.set(player._id, {
-                        ...player,
-                        ...calculatePlayerStats(player),
-                    })
-                }
-            }
-        }
-
         const columns: {
             [x: string]: { _id: string; value: number | string }[]
         } = {}
 
-        const firstPlayer = playerMap.get(stats.points[0].players[0]._id)
-        if (!firstPlayer) return []
+        if (!stats || stats?.players.length < 1) return []
+
+        columns.display = []
+        for (const player of stats.players) {
+            columns.display.push({
+                _id: player._id,
+                value: getUserDisplayName(player),
+            })
+        }
+
+        const firstPlayer = stats.players[0]
+        delete (firstPlayer as any).firstName
+        delete (firstPlayer as any).lastName
+        delete (firstPlayer as any).username
+        delete (firstPlayer as any)._id
+        delete (firstPlayer as any).games
+        delete (firstPlayer as any).teams
+        delete (firstPlayer as any).__v
+        delete (firstPlayer as any).id
+        delete (firstPlayer as any).teamId
+        delete (firstPlayer as any).gameId
+        delete (firstPlayer as any).playerId
 
         for (const key in firstPlayer) {
-            for (const entry of playerMap.entries()) {
+            for (const player of stats.players) {
                 if (!columns[key]) {
                     columns[key] = []
                 }
                 columns[key].push({
-                    _id: entry[0],
-                    value: entry[1][key as keyof PlayerStats],
+                    _id: player._id,
+                    value: player[key as keyof PlayerStats],
                 })
             }
         }
+
         return columns
     }, [stats])
+
+    const getBackgroundColor = (idx: number): string => {
+        return idx % 2 === 0 ? colors.primary : colors.darkPrimary
+    }
 
     const styles = StyleSheet.create({
         table: { display: 'flex', flexDirection: 'row' },
@@ -70,51 +73,72 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
         titleCell: {
             color: colors.textPrimary,
             textAlign: 'center',
+            textAlignVertical: 'center',
             margin: 10,
-            height: 50,
+            height: 55,
             borderBottomColor: colors.textPrimary,
             borderBottomWidth: 1,
         },
         valueCell: {
             color: colors.textSecondary,
             textAlign: 'center',
-            borderBottomColor: colors.darkPrimary,
-            borderBottomWidth: 1,
-            margin: 5,
-        },
-        cell: {
-            borderLeftWidth: 1,
-            borderLeftColor: colors.gray,
-            justifyContent: 'center',
-            textAlign: 'center',
-            borderBottomColor: colors.darkPrimary,
-            borderBottomWidth: 1,
+            textAlignVertical: 'center',
+            height: 50,
+            padding: 5,
         },
     })
 
     return (
         <View style={styles.table}>
+            {/* Sticky Player Column */}
             <View style={styles.column}>
                 <Text style={styles.titleCell}>Player</Text>
                 {(
                     data as {
-                        [x: string]: { _id: string; value: number | string }[]
+                        [x: string]: {
+                            _id: string
+                            value: number | string
+                        }[]
                     }
-                ).wins.map(record => {
-                    return <Text style={styles.valueCell}>{record.value}</Text>
+                ).display?.map((record, idx) => {
+                    return (
+                        <Text
+                            key={`display_${record._id}`}
+                            numberOfLines={2}
+                            style={[
+                                styles.valueCell,
+                                {
+                                    backgroundColor: getBackgroundColor(idx),
+                                },
+                            ]}>
+                            {record.value}
+                        </Text>
+                    )
                 })}
             </View>
             <ScrollView horizontal>
                 <View style={styles.table}>
                     {Object.entries(data).map(value => {
+                        if (value[0] === 'display') return null
                         return (
-                            <View style={styles.column}>
-                                <Text style={styles.titleCell}>
+                            <View key={value[0]} style={styles.column}>
+                                <Text
+                                    style={styles.titleCell}
+                                    numberOfLines={3}>
                                     {mapStatDisplayName(value[0])}
                                 </Text>
-                                {value[1].map(record => {
+                                {value[1].map((record, idx) => {
                                     return (
-                                        <Text style={styles.valueCell}>
+                                        <Text
+                                            key={`${value[0]}_${record._id}`}
+                                            numberOfLines={2}
+                                            style={[
+                                                styles.valueCell,
+                                                {
+                                                    backgroundColor:
+                                                        getBackgroundColor(idx),
+                                                },
+                                            ]}>
                                             {record.value}
                                         </Text>
                                     )
