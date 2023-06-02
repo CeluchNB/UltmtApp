@@ -1,6 +1,6 @@
-import { Chip } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import React from 'react'
+import StatFilterChip from '../atoms/StatFilterChip'
 import { getUserDisplayName } from '../../utils/player'
 import { mapStatDisplayName } from '../../utils/stats'
 import { useTheme } from '../../hooks'
@@ -58,6 +58,9 @@ const PER_POINT_COLUMNS = [
     'pointsPlayed',
 ]
 
+type Record = { _id: string; value: number | string }
+type Columns = { [x: string]: Record[] }
+
 interface MultiPlayerStatsTableProps {
     stats: FilteredGameStats
 }
@@ -80,11 +83,7 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
     const scrollRef = React.useRef<ScrollView>(null)
 
     const sortColumns = React.useCallback(
-        (columns: {
-            [x: string]: { _id: string; value: number | string }[]
-        }): {
-            [x: string]: { _id: string; value: number | string }[]
-        } => {
+        (columns: Columns): Columns => {
             if (sortColumn === '') return columns
 
             columns[sortColumn].sort((a, b) => {
@@ -113,9 +112,7 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
     )
 
     const data = React.useMemo(() => {
-        const columns: {
-            [x: string]: { _id: string; value: number | string }[]
-        } = {}
+        const columns: Columns = {}
 
         if (!stats || stats?.players.length < 1) return []
 
@@ -159,27 +156,13 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
         }
     }
 
-    const displaySortArrow = (column: string): boolean => {
-        return column === sortColumn
-    }
-
-    const displayUpSortArrow = (
+    const displaySortArrow = (
         column: string,
+        direction: 'asc' | 'desc',
     ): { display: 'none' | 'flex' } => {
         return {
             display:
-                displaySortArrow(column) && sortDirection === 'asc'
-                    ? 'flex'
-                    : 'none',
-        }
-    }
-
-    const displayDownSortArrow = (
-        column: string,
-    ): { display: 'none' | 'flex' } => {
-        return {
-            display:
-                displaySortArrow(column) && sortDirection === 'desc'
+                column === sortColumn && sortDirection === direction
                     ? 'flex'
                     : 'none',
         }
@@ -237,95 +220,44 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
     return (
         <View>
             <View style={styles.table}>
-                <Chip
-                    mode="outlined"
-                    textStyle={{
-                        color: overallSelected
-                            ? colors.primary
-                            : colors.textPrimary,
-                    }}
-                    style={{
-                        backgroundColor: overallSelected
-                            ? colors.textPrimary
-                            : colors.primary,
-                        borderColor: colors.textPrimary,
-                    }}
+                <StatFilterChip
+                    name="Overall"
+                    selected={overallSelected}
                     onPress={() => {
                         setOverallSelected(curr => !curr)
                         scrollRef.current?.scrollTo({ x: 0, y: 0 })
-                    }}>
-                    Overall
-                </Chip>
-                <Chip
-                    mode="outlined"
-                    textStyle={{
-                        color: offenseSelected
-                            ? colors.primary
-                            : colors.textPrimary,
                     }}
-                    style={{
-                        backgroundColor: offenseSelected
-                            ? colors.textPrimary
-                            : colors.primary,
-                        borderColor: colors.textPrimary,
-                    }}
+                />
+                <StatFilterChip
+                    name="Offense"
+                    selected={offenseSelected}
                     onPress={() => {
                         setOffenseSelected(curr => !curr)
                         scrollRef.current?.scrollTo({ x: 0, y: 0 })
-                    }}>
-                    Offense
-                </Chip>
-                <Chip
-                    mode="outlined"
-                    textStyle={{
-                        color: defenseSelected
-                            ? colors.primary
-                            : colors.textPrimary,
                     }}
-                    style={{
-                        backgroundColor: defenseSelected
-                            ? colors.textPrimary
-                            : colors.primary,
-                        borderColor: colors.textPrimary,
-                    }}
+                />
+                <StatFilterChip
+                    name="Defense"
+                    selected={defenseSelected}
                     onPress={() => {
                         setDefenseSelected(curr => !curr)
                         scrollRef.current?.scrollTo({ x: 0, y: 0 })
-                    }}>
-                    Defense
-                </Chip>
-                <Chip
-                    mode="outlined"
-                    textStyle={{
-                        color: perPointSelected
-                            ? colors.primary
-                            : colors.textPrimary,
                     }}
-                    style={{
-                        backgroundColor: perPointSelected
-                            ? colors.textPrimary
-                            : colors.primary,
-                        borderColor: colors.textPrimary,
-                    }}
+                />
+                <StatFilterChip
+                    name="Per Point"
+                    selected={perPointSelected}
                     onPress={() => {
                         setPerPointSelected(curr => !curr)
                         scrollRef.current?.scrollTo({ x: 0, y: 0 })
-                    }}>
-                    Per Point
-                </Chip>
+                    }}
+                />
             </View>
             <View style={styles.table}>
                 {/* Sticky Player Column */}
                 <View style={styles.column}>
                     <Text style={[styles.titleCell, styles.title]}>Player</Text>
-                    {(
-                        data as {
-                            [x: string]: {
-                                _id: string
-                                value: number | string
-                            }[]
-                        }
-                    ).display?.map((record, idx) => {
+                    {(data as Columns).display?.map((record, idx) => {
                         return (
                             <Text
                                 key={`display_${record._id}`}
@@ -355,7 +287,10 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
                                         <Icon
                                             name="chevron-up"
                                             color={colors.textPrimary}
-                                            style={displayUpSortArrow(value[0])}
+                                            style={displaySortArrow(
+                                                value[0],
+                                                'asc',
+                                            )}
                                         />
                                         <Text
                                             numberOfLines={2}
@@ -365,8 +300,9 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
                                         <Icon
                                             name="chevron-down"
                                             color={colors.textPrimary}
-                                            style={displayDownSortArrow(
+                                            style={displaySortArrow(
                                                 value[0],
+                                                'desc',
                                             )}
                                         />
                                     </TouchableOpacity>
