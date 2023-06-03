@@ -1,62 +1,17 @@
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import HeaderCell from '../atoms/HeaderCell'
 import React from 'react'
 import StatFilterChip from '../atoms/StatFilterChip'
 import { getUserDisplayName } from '../../utils/player'
-import { mapStatDisplayName } from '../../utils/stats'
 import { useTheme } from '../../hooks'
-import { FilteredGameStats, PlayerStats } from '../../types/stats'
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native'
-
-const INVALID_COLUMNS = [
-    'display',
-    'firstName',
-    'lastName',
-    '_id',
-    'username',
-    'games',
-    'teams',
-    '__v',
-    'id',
-    'teamId',
-    'gameId',
-    'playerId',
-    'wins',
-    'losses',
-]
-
-const OVERALL_COLUMNS = [
-    'plusMinus',
-    'pointsPlayed',
-    'catchingPercentage',
-    'throwingPercentage',
-]
-const OFFENSE_COLUMNS = [
-    'goals',
-    'assists',
-    'touches',
-    'completions',
-    'throwaways',
-    'drops',
-    'stalls',
-    'catches',
-    'completedPasses',
-    'droppedPasses',
-]
-const DEFENSE_COLUMNS = ['blocks', 'pulls', 'callahans']
-const PER_POINT_COLUMNS = [
-    'ppGoals',
-    'ppAssists',
-    'ppThrowaways',
-    'ppDrops',
-    'ppBlocks',
-    'pointsPlayed',
-]
+    DEFENSE_COLUMNS,
+    INVALID_COLUMNS,
+    OFFENSE_COLUMNS,
+    OVERALL_COLUMNS,
+    PER_POINT_COLUMNS,
+} from '../../utils/stats'
+import { FilteredGameStats, PlayerStats } from '../../types/stats'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 type Record = { _id: string; value: number | string }
 type Columns = { [x: string]: Record[] }
@@ -80,10 +35,8 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
     const [perPointSelected, setPerPointSelected] = React.useState(false)
     const scrollRef = React.useRef<ScrollView>(null)
 
-    const sortColumns = React.useCallback(
-        (columns: Columns): Columns => {
-            if (sortColumn === '') return columns
-
+    const sortByChosenColumn = React.useCallback(
+        (columns: Columns) => {
             columns[sortColumn].sort((a, b) => {
                 if (sortDirection === 'asc') {
                     return Number(a.value) - Number(b.value)
@@ -91,7 +44,12 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
                     return Number(b.value) - Number(a.value)
                 }
             })
+        },
+        [sortColumn, sortDirection],
+    )
 
+    const sortColumnsToMatchChosenColumn = React.useCallback(
+        (columns: Columns) => {
             for (const key of Object.keys(columns)) {
                 if (key === sortColumn) continue
                 columns[key].sort(
@@ -104,9 +62,51 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
                         ),
                 )
             }
+        },
+        [sortColumn],
+    )
+
+    const sortColumns = React.useCallback(
+        (columns: Columns): Columns => {
+            if (sortColumn === '') return columns
+
+            sortByChosenColumn(columns)
+            sortColumnsToMatchChosenColumn(columns)
+
             return columns
         },
-        [sortColumn, sortDirection],
+        [sortByChosenColumn, sortColumn, sortColumnsToMatchChosenColumn],
+    )
+
+    const populateDisplayColumn = React.useCallback(
+        (columns: Columns) => {
+            columns.display = []
+            for (const player of stats.players) {
+                columns.display.push({
+                    _id: player._id,
+                    value: getUserDisplayName(player),
+                })
+            }
+        },
+        [stats.players],
+    )
+
+    const populateAllColumns = React.useCallback(
+        (columns: Columns) => {
+            const firstPlayer = stats.players[0]
+            for (const key in firstPlayer) {
+                for (const player of stats.players) {
+                    if (!columns[key]) {
+                        columns[key] = []
+                    }
+                    columns[key].push({
+                        _id: player._id,
+                        value: player[key as keyof PlayerStats],
+                    })
+                }
+            }
+        },
+        [stats],
     )
 
     const data = React.useMemo(() => {
@@ -114,29 +114,11 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
 
         if (!stats || stats?.players.length < 1) return []
 
-        columns.display = []
-        for (const player of stats.players) {
-            columns.display.push({
-                _id: player._id,
-                value: getUserDisplayName(player),
-            })
-        }
-
-        const firstPlayer = stats.players[0]
-        for (const key in firstPlayer) {
-            for (const player of stats.players) {
-                if (!columns[key]) {
-                    columns[key] = []
-                }
-                columns[key].push({
-                    _id: player._id,
-                    value: player[key as keyof PlayerStats],
-                })
-            }
-        }
+        populateDisplayColumn(columns)
+        populateAllColumns(columns)
 
         return sortColumns(columns)
-    }, [stats, sortColumns])
+    }, [stats, populateDisplayColumn, populateAllColumns, sortColumns])
 
     const getBackgroundColor = (idx: number): string => {
         return idx % 2 === 0 ? colors.primary : colors.darkPrimary
@@ -151,18 +133,6 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
         } else {
             setSortColumn('')
             setSortDirection('desc')
-        }
-    }
-
-    const displaySortArrow = (
-        column: string,
-        direction: 'asc' | 'desc',
-    ): { display: 'none' | 'flex' } => {
-        return {
-            display:
-                column === sortColumn && sortDirection === direction
-                    ? 'flex'
-                    : 'none',
         }
     }
 
@@ -218,38 +188,40 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
     return (
         <View>
             <View style={styles.table}>
-                <StatFilterChip
-                    name="Overall"
-                    selected={overallSelected}
-                    onPress={() => {
-                        setOverallSelected(curr => !curr)
-                        scrollRef.current?.scrollTo({ x: 0, y: 0 })
-                    }}
-                />
-                <StatFilterChip
-                    name="Offense"
-                    selected={offenseSelected}
-                    onPress={() => {
-                        setOffenseSelected(curr => !curr)
-                        scrollRef.current?.scrollTo({ x: 0, y: 0 })
-                    }}
-                />
-                <StatFilterChip
-                    name="Defense"
-                    selected={defenseSelected}
-                    onPress={() => {
-                        setDefenseSelected(curr => !curr)
-                        scrollRef.current?.scrollTo({ x: 0, y: 0 })
-                    }}
-                />
-                <StatFilterChip
-                    name="Per Point"
-                    selected={perPointSelected}
-                    onPress={() => {
-                        setPerPointSelected(curr => !curr)
-                        scrollRef.current?.scrollTo({ x: 0, y: 0 })
-                    }}
-                />
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <StatFilterChip
+                        name="Overall"
+                        selected={overallSelected}
+                        onPress={() => {
+                            setOverallSelected(curr => !curr)
+                            scrollRef.current?.scrollTo({ x: 0, y: 0 })
+                        }}
+                    />
+                    <StatFilterChip
+                        name="Offense"
+                        selected={offenseSelected}
+                        onPress={() => {
+                            setOffenseSelected(curr => !curr)
+                            scrollRef.current?.scrollTo({ x: 0, y: 0 })
+                        }}
+                    />
+                    <StatFilterChip
+                        name="Defense"
+                        selected={defenseSelected}
+                        onPress={() => {
+                            setDefenseSelected(curr => !curr)
+                            scrollRef.current?.scrollTo({ x: 0, y: 0 })
+                        }}
+                    />
+                    <StatFilterChip
+                        name="Per Point"
+                        selected={perPointSelected}
+                        onPress={() => {
+                            setPerPointSelected(curr => !curr)
+                            scrollRef.current?.scrollTo({ x: 0, y: 0 })
+                        }}
+                    />
+                </ScrollView>
             </View>
             <View style={styles.table}>
                 {/* Sticky Player Column */}
@@ -280,31 +252,12 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
                             if (invalidColumn(value[0])) return null
                             return (
                                 <View key={value[0]} style={styles.column}>
-                                    <TouchableOpacity
-                                        style={styles.titleCell}
-                                        onPress={() => toggleSort(value[0])}>
-                                        <Icon
-                                            name="chevron-up"
-                                            color={colors.textPrimary}
-                                            style={displaySortArrow(
-                                                value[0],
-                                                'asc',
-                                            )}
-                                        />
-                                        <Text
-                                            numberOfLines={2}
-                                            style={styles.title}>
-                                            {mapStatDisplayName(value[0])}
-                                        </Text>
-                                        <Icon
-                                            name="chevron-down"
-                                            color={colors.textPrimary}
-                                            style={displaySortArrow(
-                                                value[0],
-                                                'desc',
-                                            )}
-                                        />
-                                    </TouchableOpacity>
+                                    <HeaderCell
+                                        value={value[0]}
+                                        sortColumn={sortColumn}
+                                        sortDirection={sortDirection}
+                                        onPress={() => toggleSort(value[0])}
+                                    />
                                     {value[1].map((record, idx) => {
                                         return (
                                             <Text

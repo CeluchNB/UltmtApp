@@ -150,37 +150,6 @@ export const mapStatDisplayName = (value: string): string => {
     }
 }
 
-export const mapStatDisplayToShortName = (value: string): string => {
-    switch (value) {
-        case 'completedPasses':
-            return 'CP'
-        case 'droppedPasses':
-            return 'DP'
-        case 'pointsPlayed':
-            return 'PP'
-        case 'plusMinus':
-            return '+ / -'
-        case 'catchingPercentage':
-            return 'C%'
-        case 'throwingPercentage':
-            return 'T%'
-        case 'ppGoals':
-            return 'Gpp'
-        case 'ppAssists':
-            return 'App'
-        case 'ppThrowaways':
-            return 'Tpp'
-        case 'ppDrops':
-            return 'Dpp'
-        case 'ppBlocks':
-            return 'Bpp'
-        case 'winPercentage':
-            return 'W%'
-        default:
-            return value.charAt(0).toUpperCase()
-    }
-}
-
 export const addPlayerStats = (
     data1: PlayerStats,
     data2: PlayerStats,
@@ -240,3 +209,47 @@ const createSafeFraction = (numerator: number, denominator: number): number => {
     }
     return numerator / denominator
 }
+
+export const INVALID_COLUMNS = [
+    'display',
+    'firstName',
+    'lastName',
+    '_id',
+    'username',
+    'games',
+    'teams',
+    '__v',
+    'id',
+    'teamId',
+    'gameId',
+    'playerId',
+    'wins',
+    'losses',
+]
+export const OVERALL_COLUMNS = [
+    'plusMinus',
+    'pointsPlayed',
+    'catchingPercentage',
+    'throwingPercentage',
+]
+export const OFFENSE_COLUMNS = [
+    'goals',
+    'assists',
+    'touches',
+    'completions',
+    'throwaways',
+    'drops',
+    'stalls',
+    'catches',
+    'completedPasses',
+    'droppedPasses',
+]
+export const DEFENSE_COLUMNS = ['blocks', 'pulls', 'callahans']
+export const PER_POINT_COLUMNS = [
+    'ppGoals',
+    'ppAssists',
+    'ppThrowaways',
+    'ppDrops',
+    'ppBlocks',
+    'pointsPlayed',
+]
