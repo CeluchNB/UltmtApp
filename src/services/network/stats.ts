@@ -48,6 +48,12 @@ export const getGameStatsByTeam = async (
     )
 }
 
+export const getTeamStats = async (id: string): Promise<AxiosResponse> => {
+    return await axios.get(`${API_URL_V1}/stats/team/${id}`, {
+        headers: { 'X-API-Key': API_KEY },
+    })
+}
+
 export const getTeamStatsByGame = async (
     teamId: string,
     gameIds: string[],

@@ -10,6 +10,7 @@ import {
     getGameStats,
     getGameStatsByTeam,
     getPlayerStats,
+    getTeamStats,
     getTeamStatsByGame,
 } from '../../../src/services/data/stats'
 
@@ -268,5 +269,38 @@ describe('getTeamStatsByGame', () => {
         await expect(
             getTeamStatsByGame('team1', ['game1']),
         ).rejects.toMatchObject({ message: 'test error' })
+    })
+})
+
+describe('getTeamStats', () => {
+    it('handles network success', async () => {
+        jest.spyOn(StatsNetwork, 'getTeamStats').mockReturnValueOnce(
+            Promise.resolve({
+                data: { team },
+                status: 200,
+                statusText: '200',
+                config: {},
+                headers: {},
+            }),
+        )
+
+        const result = await getTeamStats('team1')
+        expect(result).toMatchObject(team)
+    })
+
+    it('handles network error', async () => {
+        jest.spyOn(StatsNetwork, 'getTeamStats').mockReturnValueOnce(
+            Promise.reject({
+                data: { message: 'test error' },
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        await expect(getTeamStats('team1')).rejects.toMatchObject({
+            message: 'test error',
+        })
     })
 })
