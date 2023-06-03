@@ -1,18 +1,40 @@
 import * as React from 'react'
 import * as TeamData from '../services/data/team'
 import BaseScreen from '../components/atoms/BaseScreen'
-import MapSection from '../components/molecules/MapSection'
 import { PublicTeamDetailsProps } from '../types/navigation'
+import PublicTeamPlayersScene from '../components/organisms/PublicTeamPlayersScene'
 import { Team } from '../types/team'
-import UserListItem from '../components/atoms/UserListItem'
 import { useTheme } from '../hooks'
 import {
-    RefreshControl,
-    ScrollView,
+    // RefreshControl,
+    // ScrollView,
     StyleSheet,
     Text,
     View,
+    useWindowDimensions,
 } from 'react-native'
+import { TabBar, TabView } from 'react-native-tab-view'
+
+const renderScene = (
+    team: Team,
+    error: string,
+    onRefresh: () => Promise<void>,
+) => {
+    return ({ route }: { route: { key: string } }) => {
+        switch (route.key) {
+            case 'players':
+                return (
+                    <PublicTeamPlayersScene
+                        team={team}
+                        error={error}
+                        onRefresh={onRefresh}
+                    />
+                )
+            case 'stats':
+                return <View />
+        }
+    }
+}
 
 const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     route,
@@ -21,10 +43,25 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     const {
         theme: { colors, size, weight },
     } = useTheme()
+    const layout = useWindowDimensions()
+
+    const mapTabNameToIndex = (name: 'players' | 'stats'): number => {
+        switch (name) {
+            case 'players':
+                return 0
+            case 'stats':
+                return 1
+        }
+    }
+
     const { id, archive } = route.params
     const [team, setTeam] = React.useState({} as Team)
-    const [refreshing, setRefreshing] = React.useState(false)
     const [error, setError] = React.useState<string>('')
+    const [index, setIndex] = React.useState(mapTabNameToIndex('players'))
+    const [routes] = React.useState([
+        { key: 'players', title: 'Players' },
+        { key: 'stats', title: 'Stats' },
+    ])
 
     const initializeScreen = async () => {
         const getTeam = async (): Promise<Team> => {
@@ -96,66 +133,39 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
 
     return (
         <BaseScreen containerWidth="90%">
-            <ScrollView
-                testID="public-team-scroll-view"
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        colors={[colors.textSecondary]}
-                        onRefresh={async () => {
-                            setRefreshing(true)
-                            await initializeScreen()
-                            setRefreshing(false)
-                        }}
-                    />
-                }>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.teamname}>@{team?.teamname}</Text>
-                    {team?.seasonStart === team?.seasonEnd ? (
-                        <Text style={styles.date}>
-                            {new Date(team?.seasonStart || '').getUTCFullYear()}
-                        </Text>
-                    ) : (
-                        <Text style={styles.date}>
-                            {new Date(
-                                team?.seasonStart || '',
-                            ).getUTCFullYear() +
-                                ' - ' +
-                                new Date(
-                                    team?.seasonEnd || '',
-                                ).getUTCFullYear()}
-                        </Text>
-                    )}
-                </View>
-                <View style={styles.bodyContainer}>
-                    {error.length > 0 ? (
-                        <Text style={styles.error}>{error}</Text>
-                    ) : (
-                        <MapSection
-                            title="Players"
-                            listData={team.players}
-                            showButton={false}
-                            showCreateButton={false}
-                            renderItem={user => {
-                                return (
-                                    <UserListItem
-                                        key={user._id}
-                                        user={user}
-                                        showDelete={false}
-                                        showAccept={false}
-                                        onPress={async () => {
-                                            navigation.navigate(
-                                                'PublicUserDetails',
-                                                { userId: user._id },
-                                            )
-                                        }}
-                                    />
-                                )
+            <View style={styles.headerContainer}>
+                <Text style={styles.teamname}>@{team?.teamname}</Text>
+                {team?.seasonStart === team?.seasonEnd ? (
+                    <Text style={styles.date}>
+                        {new Date(team?.seasonStart || '').getUTCFullYear()}
+                    </Text>
+                ) : (
+                    <Text style={styles.date}>
+                        {new Date(team?.seasonStart || '').getUTCFullYear() +
+                            ' - ' +
+                            new Date(team?.seasonEnd || '').getUTCFullYear()}
+                    </Text>
+                )}
+            </View>
+            <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene(team, error, initializeScreen)}
+                onIndexChange={setIndex}
+                initialLayout={{ width: layout.width }}
+                renderTabBar={props => {
+                    return (
+                        <TabBar
+                            {...props}
+                            style={{ backgroundColor: colors.primary }}
+                            indicatorStyle={{
+                                backgroundColor: colors.textPrimary,
                             }}
+                            activeColor={colors.textPrimary}
+                            inactiveColor={colors.darkGray}
                         />
-                    )}
-                </View>
-            </ScrollView>
+                    )
+                }}
+            />
         </BaseScreen>
     )
 }
