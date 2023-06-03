@@ -61,13 +61,11 @@ const PER_POINT_COLUMNS = [
 type Record = { _id: string; value: number | string }
 type Columns = { [x: string]: Record[] }
 
-interface MultiPlayerStatsTableProps {
+interface StatsTableProps {
     stats: FilteredGameStats
 }
 
-const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
-    stats,
-}) => {
+const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
     const {
         theme: { colors },
     } = useTheme()
@@ -261,6 +259,7 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
                         return (
                             <Text
                                 key={`display_${record._id}`}
+                                testID="name-record"
                                 numberOfLines={2}
                                 style={[
                                     styles.valueCell,
@@ -334,4 +333,4 @@ const MultiPlayerStatsTable: React.FC<MultiPlayerStatsTableProps> = ({
     )
 }
 
-export default MultiPlayerStatsTable
+export default StatsTable

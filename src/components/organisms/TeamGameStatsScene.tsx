@@ -1,6 +1,6 @@
-import MultiPlayerStatsTable from '../molecules/MultiPlayerStatsTable'
 import React from 'react'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
+import StatsTable from '../molecules/StatsTable'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import {
@@ -106,7 +106,7 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
             </View>
             <View>
                 <Text style={styles.title}>Stats</Text>
-                {gameStats && <MultiPlayerStatsTable stats={gameStats} />}
+                {gameStats && <StatsTable stats={gameStats} />}
             </View>
         </ScrollView>
     )
