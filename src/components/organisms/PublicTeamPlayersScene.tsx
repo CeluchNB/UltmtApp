@@ -15,19 +15,20 @@ import {
 interface PublicTeamPlayersSceneProps {
     team: Team
     error: string
+    refreshing: boolean
     onRefresh: () => Promise<void>
 }
 
 const PublicTeamPlayersScene: React.FC<PublicTeamPlayersSceneProps> = ({
     team,
     error,
+    refreshing,
     onRefresh,
 }) => {
     const {
         theme: { colors, size, weight },
     } = useTheme()
     const navigation = useNavigation()
-    const [refreshing, setRefreshing] = React.useState(false)
     const styles = StyleSheet.create({
         screen: {
             height: '100%',
@@ -69,9 +70,7 @@ const PublicTeamPlayersScene: React.FC<PublicTeamPlayersSceneProps> = ({
                     refreshing={refreshing}
                     colors={[colors.textSecondary]}
                     onRefresh={async () => {
-                        setRefreshing(true)
                         await onRefresh()
-                        setRefreshing(false)
                     }}
                 />
             }>

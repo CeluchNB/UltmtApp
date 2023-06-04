@@ -3,6 +3,7 @@ import * as TeamData from '../services/data/team'
 import BaseScreen from '../components/atoms/BaseScreen'
 import { PublicTeamDetailsProps } from '../types/navigation'
 import PublicTeamPlayersScene from '../components/organisms/PublicTeamPlayersScene'
+import PublicTeamStatsScene from '../components/organisms/PublicTeamStatsScene'
 import { Team } from '../types/team'
 import { useTheme } from '../hooks'
 import {
@@ -17,6 +18,8 @@ import { TabBar, TabView } from 'react-native-tab-view'
 const renderScene = (
     team: Team,
     error: string,
+    loading: boolean,
+    teamId: string,
     onRefresh: () => Promise<void>,
 ) => {
     return ({ route }: { route: { key: string } }) => {
@@ -26,11 +29,12 @@ const renderScene = (
                     <PublicTeamPlayersScene
                         team={team}
                         error={error}
+                        refreshing={loading}
                         onRefresh={onRefresh}
                     />
                 )
             case 'stats':
-                return <View />
+                return <PublicTeamStatsScene teamId={teamId} />
         }
     }
 }
@@ -57,6 +61,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     const [team, setTeam] = React.useState({} as Team)
     const [error, setError] = React.useState<string>('')
     const [index, setIndex] = React.useState(mapTabNameToIndex('players'))
+    const [loading, setLoading] = React.useState(false)
     const [routes] = React.useState([
         { key: 'players', title: 'Players' },
         { key: 'stats', title: 'Stats' },
@@ -71,6 +76,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         }
 
         setError('')
+        setLoading(true)
         getTeam()
             .then(teamResponse => {
                 setTeam(teamResponse)
@@ -80,6 +86,9 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                     e.message ??
                         'An error occurred looking for this team. Please try again',
                 )
+            })
+            .finally(() => {
+                setLoading(false)
             })
     }, [archive, id])
 
@@ -152,7 +161,13 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                 }}>
                 <TabView
                     navigationState={{ index, routes }}
-                    renderScene={renderScene(team, error, initializeScreen)}
+                    renderScene={renderScene(
+                        team,
+                        error,
+                        loading,
+                        id,
+                        initializeScreen,
+                    )}
                     onIndexChange={setIndex}
                     initialLayout={{ width: layout.width }}
                     renderTabBar={props => {
