@@ -27,10 +27,7 @@ const PublicTeamPlayersScene: React.FC<PublicTeamPlayersSceneProps> = ({
         theme: { colors, size, weight },
     } = useTheme()
     const navigation = useNavigation()
-    // const [team, setTeam] = React.useState({} as Team)
     const [refreshing, setRefreshing] = React.useState(false)
-    // const [error, setError] = React.useState<string>('')
-
     const styles = StyleSheet.create({
         screen: {
             height: '100%',

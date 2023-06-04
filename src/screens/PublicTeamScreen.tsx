@@ -6,8 +6,7 @@ import PublicTeamPlayersScene from '../components/organisms/PublicTeamPlayersSce
 import { Team } from '../types/team'
 import { useTheme } from '../hooks'
 import {
-    // RefreshControl,
-    // ScrollView,
+    SafeAreaView,
     StyleSheet,
     Text,
     View,
@@ -63,7 +62,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         { key: 'stats', title: 'Stats' },
     ])
 
-    const initializeScreen = async () => {
+    const initializeScreen = React.useCallback(async () => {
         const getTeam = async (): Promise<Team> => {
             if (archive) {
                 return TeamData.getArchivedTeam(id)
@@ -82,7 +81,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                         'An error occurred looking for this team. Please try again',
                 )
             })
-    }
+    }, [archive, id])
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -90,8 +89,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         })
 
         return unsubscribe
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [initializeScreen, navigation])
 
     React.useEffect(() => {
         navigation.setOptions({ title: `${team.place} ${team.name}` })
@@ -147,25 +145,31 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                     </Text>
                 )}
             </View>
-            <TabView
-                navigationState={{ index, routes }}
-                renderScene={renderScene(team, error, initializeScreen)}
-                onIndexChange={setIndex}
-                initialLayout={{ width: layout.width }}
-                renderTabBar={props => {
-                    return (
-                        <TabBar
-                            {...props}
-                            style={{ backgroundColor: colors.primary }}
-                            indicatorStyle={{
-                                backgroundColor: colors.textPrimary,
-                            }}
-                            activeColor={colors.textPrimary}
-                            inactiveColor={colors.darkGray}
-                        />
-                    )
-                }}
-            />
+            <SafeAreaView
+                style={{
+                    // TODO: check this height on multiple devices
+                    height: layout.height - 225,
+                }}>
+                <TabView
+                    navigationState={{ index, routes }}
+                    renderScene={renderScene(team, error, initializeScreen)}
+                    onIndexChange={setIndex}
+                    initialLayout={{ width: layout.width }}
+                    renderTabBar={props => {
+                        return (
+                            <TabBar
+                                {...props}
+                                style={{ backgroundColor: colors.primary }}
+                                indicatorStyle={{
+                                    backgroundColor: colors.textPrimary,
+                                }}
+                                activeColor={colors.textPrimary}
+                                inactiveColor={colors.darkGray}
+                            />
+                        )
+                    }}
+                />
+            </SafeAreaView>
         </BaseScreen>
     )
 }
