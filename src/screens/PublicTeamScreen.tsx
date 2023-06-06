@@ -168,6 +168,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                         id,
                         initializeScreen,
                     )}
+                    swipeEnabled={false}
                     onIndexChange={setIndex}
                     initialLayout={{ width: layout.width }}
                     renderTabBar={props => {

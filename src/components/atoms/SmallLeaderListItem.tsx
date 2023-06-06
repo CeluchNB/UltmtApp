@@ -8,7 +8,7 @@ interface SmallLeaderListItemProps {
     leader: {
         title: string
         player?: DisplayUser
-        total?: number
+        total?: number | string
     }
 }
 
