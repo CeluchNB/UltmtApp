@@ -31,9 +31,6 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
         () => getTeamStats(teamId),
     )
 
-    console.log('data', data)
-    console.log('isloading', isLoading)
-
     const teamOverview = React.useMemo(() => {
         return convertTeamStatsToTeamOverviewItems(data)
     }, [data])

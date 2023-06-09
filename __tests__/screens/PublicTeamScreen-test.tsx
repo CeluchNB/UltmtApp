@@ -7,7 +7,7 @@ import React from 'react'
 import { Team } from '../../src/types/team'
 import { GameStats, TeamStats } from '../../src/types/stats'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { act, fireEvent, render } from '@testing-library/react-native'
+import { act, fireEvent, render, screen } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -124,9 +124,87 @@ beforeEach(() => {
     addListener.mockReset()
 })
 
+beforeAll(() => {
+    jest.useFakeTimers({ legacyFakeTimers: true })
+})
+afterAll(() => {
+    jest.useRealTimers()
+})
+
 it('should handle player click', async () => {
     const spy = jest
         .spyOn(TeamData, 'getTeam')
+        .mockReturnValueOnce(Promise.resolve(team))
+    jest.spyOn(StatsData, 'getTeamStats').mockImplementation(() => {
+        return Promise.resolve({
+            ...teamStats,
+            ...team,
+            ...gameStats,
+            players: [],
+        })
+    })
+
+    render(
+        <NavigationContainer>
+            <QueryClientProvider client={client}>
+                <PublicTeamScreen {...props} />
+            </QueryClientProvider>
+        </NavigationContainer>,
+    )
+    await act(async () => {
+        const scrollView = screen.getByTestId('public-team-scroll-view')
+        const { refreshControl } = scrollView.props
+        refreshControl.props.onRefresh()
+    })
+
+    const playerView = screen.getByText(
+        `${team.players[0].firstName} ${team.players[0].lastName}`,
+    )
+    expect(screen.getAllByText('Players').length).toBeGreaterThan(1)
+    expect(screen.getAllByText('Stats').length).toBeGreaterThan(1)
+
+    fireEvent.press(playerView)
+    expect(mockedNavigate).toHaveBeenCalled()
+    spy.mockRestore()
+})
+
+it('should handle get team error', async () => {
+    const spy = jest
+        .spyOn(TeamData, 'getTeam')
+        .mockReturnValueOnce(Promise.reject({ message: 'error' }))
+    jest.spyOn(StatsData, 'getTeamStats').mockReturnValue(
+        Promise.resolve({
+            ...teamStats,
+            ...team,
+            ...gameStats,
+            players: [],
+        }),
+    )
+    render(
+        <NavigationContainer>
+            <QueryClientProvider client={client}>
+                <PublicTeamScreen {...props} />
+            </QueryClientProvider>
+        </NavigationContainer>,
+    )
+
+    await act(async () => {
+        const scrollView = screen.getByTestId('public-team-scroll-view')
+        const { refreshControl } = scrollView.props
+        refreshControl.props.onRefresh()
+    })
+
+    const errorText = screen.getByText('error')
+    expect(screen.getAllByText('Players').length).toBeGreaterThan(1)
+    expect(screen.getAllByText('Stats').length).toBeGreaterThan(1)
+
+    expect(errorText).toBeTruthy()
+    spy.mockRestore()
+})
+
+it('should get archive team and handle player click', async () => {
+    const spy = jest
+        .spyOn(TeamData, 'getArchivedTeam')
         .mockReturnValueOnce(Promise.resolve(team))
     jest.spyOn(StatsData, 'getTeamStats').mockReturnValue(
         Promise.resolve({
@@ -136,102 +214,39 @@ it('should handle player click', async () => {
             players: [],
         }),
     )
-
-    const { getByText, getByTestId } = render(
+    const tempProps: PublicTeamDetailsProps = {
+        navigation: {
+            navigate,
+            addListener,
+            setOptions,
+            isFocused: () => true,
+        } as any,
+        route: {
+            params: { id: 'id1', place: 'Place', name: 'Name', archive: true },
+        } as any,
+    }
+    render(
         <NavigationContainer>
             <QueryClientProvider client={client}>
-                <PublicTeamScreen {...props} />
+                <PublicTeamScreen {...tempProps} />
             </QueryClientProvider>
         </NavigationContainer>,
     )
+
     await act(async () => {
-        const scrollView = getByTestId('public-team-scroll-view')
+        const scrollView = screen.getByTestId('public-team-scroll-view')
         const { refreshControl } = scrollView.props
         refreshControl.props.onRefresh()
     })
 
-    const playerView = getByText(
+    const playerView = screen.getByText(
         `${team.players[0].firstName} ${team.players[0].lastName}`,
     )
+
+    expect(screen.getAllByText('Players').length).toBeGreaterThan(1)
+    expect(screen.getAllByText('Stats').length).toBeGreaterThan(1)
 
     fireEvent.press(playerView)
     expect(mockedNavigate).toHaveBeenCalled()
     spy.mockRestore()
 })
-
-// it('should handle get team error', async () => {
-//     const spy = jest
-//         .spyOn(TeamData, 'getTeam')
-//         .mockReturnValueOnce(Promise.reject({ message: 'error' }))
-//     jest.spyOn(StatsData, 'getTeamStats').mockReturnValue(
-//         Promise.resolve({
-//             ...teamStats,
-//             ...team,
-//             ...gameStats,
-//             players: [],
-//         }),
-//     )
-//     const { getByText, getByTestId } = render(
-//         <NavigationContainer>
-//             <QueryClientProvider client={client}>
-//                 <PublicTeamScreen {...props} />
-//             </QueryClientProvider>
-//         </NavigationContainer>,
-//     )
-
-//     await act(async () => {
-//         const scrollView = getByTestId('public-team-scroll-view')
-//         const { refreshControl } = scrollView.props
-//         refreshControl.props.onRefresh()
-//     })
-
-//     const errorText = getByText('error')
-//     expect(errorText).toBeTruthy()
-//     spy.mockRestore()
-// })
-
-// it('should get archive team and handle player click', async () => {
-//     const spy = jest
-//         .spyOn(TeamData, 'getArchivedTeam')
-//         .mockReturnValueOnce(Promise.resolve(team))
-//     jest.spyOn(StatsData, 'getTeamStats').mockReturnValue(
-//         Promise.resolve({
-//             ...teamStats,
-//             ...team,
-//             ...gameStats,
-//             players: [],
-//         }),
-//     )
-//     const tempProps: PublicTeamDetailsProps = {
-//         navigation: {
-//             navigate,
-//             addListener,
-//             setOptions,
-//             isFocused: () => true,
-//         } as any,
-//         route: {
-//             params: { id: 'id1', place: 'Place', name: 'Name', archive: true },
-//         } as any,
-//     }
-//     const { getByText, getByTestId } = render(
-//         <NavigationContainer>
-//             <QueryClientProvider client={client}>
-//                 <PublicTeamScreen {...tempProps} />
-//             </QueryClientProvider>
-//         </NavigationContainer>,
-//     )
-
-//     await act(async () => {
-//         const scrollView = getByTestId('public-team-scroll-view')
-//         const { refreshControl } = scrollView.props
-//         refreshControl.props.onRefresh()
-//     })
-
-//     const playerView = getByText(
-//         `${team.players[0].firstName} ${team.players[0].lastName}`,
-//     )
-
-//     fireEvent.press(playerView)
-//     expect(mockedNavigate).toHaveBeenCalled()
-//     spy.mockRestore()
-// })
