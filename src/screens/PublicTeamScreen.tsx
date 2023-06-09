@@ -1,10 +1,11 @@
-import * as React from 'react'
 import * as TeamData from '../services/data/team'
 import BaseScreen from '../components/atoms/BaseScreen'
 import { PublicTeamDetailsProps } from '../types/navigation'
 import PublicTeamPlayersScene from '../components/organisms/PublicTeamPlayersScene'
 import PublicTeamStatsScene from '../components/organisms/PublicTeamStatsScene'
+import React from 'react'
 import { Team } from '../types/team'
+import TeamGameScene from '../components/organisms/TeamGameScene'
 import { useTheme } from '../hooks'
 import {
     SafeAreaView,
@@ -33,6 +34,8 @@ const renderScene = (
                         onRefresh={onRefresh}
                     />
                 )
+            case 'games':
+                return <TeamGameScene teamId={teamId} />
             case 'stats':
                 return <PublicTeamStatsScene teamId={teamId} />
         }
@@ -48,12 +51,14 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     } = useTheme()
     const layout = useWindowDimensions()
 
-    const mapTabNameToIndex = (name: 'players' | 'stats'): number => {
+    const mapTabNameToIndex = (name: 'players' | 'stats' | 'games'): number => {
         switch (name) {
             case 'players':
                 return 0
-            case 'stats':
+            case 'games':
                 return 1
+            case 'stats':
+                return 2
         }
     }
 
@@ -64,6 +69,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     const [loading, setLoading] = React.useState(false)
     const [routes] = React.useState([
         { key: 'players', title: 'Players' },
+        { key: 'games', title: 'Games' },
         { key: 'stats', title: 'Stats' },
     ])
 
