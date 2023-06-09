@@ -10,17 +10,17 @@ import {
     OVERALL_COLUMNS,
     PER_POINT_COLUMNS,
 } from '../../utils/stats'
-import { FilteredGameStats, PlayerStats } from '../../types/stats'
+import { FilteredGamePlayer, PlayerStats } from '../../types/stats'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 type Record = { _id: string; value: number | string }
 type Columns = { [x: string]: Record[] }
 
 interface StatsTableProps {
-    stats: FilteredGameStats
+    players: FilteredGamePlayer[]
 }
 
-const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
+const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
     const {
         theme: { colors },
     } = useTheme()
@@ -81,21 +81,21 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
     const populateDisplayColumn = React.useCallback(
         (columns: Columns) => {
             columns.display = []
-            for (const player of stats.players) {
+            for (const player of players) {
                 columns.display.push({
                     _id: player._id,
                     value: getUserDisplayName(player),
                 })
             }
         },
-        [stats.players],
+        [players],
     )
 
     const populateAllColumns = React.useCallback(
         (columns: Columns) => {
-            const firstPlayer = stats.players[0]
+            const firstPlayer = players[0]
             for (const key in firstPlayer) {
-                for (const player of stats.players) {
+                for (const player of players) {
                     if (!columns[key]) {
                         columns[key] = []
                     }
@@ -106,19 +106,19 @@ const StatsTable: React.FC<StatsTableProps> = ({ stats }) => {
                 }
             }
         },
-        [stats],
+        [players],
     )
 
     const data = React.useMemo(() => {
         const columns: Columns = {}
 
-        if (!stats || stats?.players.length < 1) return []
+        if (!players || players.length < 1) return []
 
         populateDisplayColumn(columns)
         populateAllColumns(columns)
 
         return sortColumns(columns)
-    }, [stats, populateDisplayColumn, populateAllColumns, sortColumns])
+    }, [players, populateDisplayColumn, populateAllColumns, sortColumns])
 
     const getBackgroundColor = (idx: number): string => {
         return idx % 2 === 0 ? colors.primary : colors.darkPrimary

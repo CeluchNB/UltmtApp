@@ -106,7 +106,7 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
             </View>
             <View>
                 <Text style={styles.title}>Stats</Text>
-                {gameStats && <StatsTable stats={gameStats} />}
+                {gameStats && <StatsTable players={gameStats.players} />}
             </View>
         </ScrollView>
     )

@@ -112,3 +112,9 @@ export interface FilteredGameStats extends GameData {
     winningTeam?: 'one' | 'two'
     players: FilteredGamePlayer[]
 }
+export interface FilteredTeamStats extends GameData, TeamData {
+    players: FilteredGamePlayer[]
+    winPercentage: number
+    offensiveConversion: number
+    defensiveConversion: number
+}

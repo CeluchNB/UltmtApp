@@ -4,10 +4,10 @@ import { throwApiError } from '../../utils/service-utils'
 import {
     AllPlayerStats,
     FilteredGameStats,
+    FilteredTeamStats,
     GameStats,
     IdentifiedPlayerStats,
     PlayerStats,
-    TeamStats,
 } from '../../types/stats'
 import { addPlayerStats, calculatePlayerStats } from '../../utils/stats'
 import {
@@ -74,7 +74,9 @@ export const getGameStatsByTeam = async (
     }
 }
 
-export const getTeamStats = async (teamId: string): Promise<TeamStats> => {
+export const getTeamStats = async (
+    teamId: string,
+): Promise<FilteredTeamStats> => {
     try {
         const response = await networkGetTeamStats(teamId)
         const { team } = response.data
@@ -88,7 +90,7 @@ export const getTeamStats = async (teamId: string): Promise<TeamStats> => {
 export const getTeamStatsByGame = async (
     teamId: string,
     gameIds: string[],
-): Promise<TeamStats> => {
+): Promise<FilteredTeamStats> => {
     try {
         const response = await networkGetTeamStatsByGame(teamId, gameIds)
         const { team } = response.data

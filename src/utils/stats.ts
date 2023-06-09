@@ -3,10 +3,10 @@ import {
     AllPlayerStats,
     CalculatedPlayerStats,
     DisplayStat,
-    FilteredGameStats,
-    GameStats,
+    FilteredTeamStats,
+    GameData,
     PlayerStats,
-    TeamStats,
+    TeamData,
 } from '../types/stats'
 
 export const convertProfileScreenStatsToStatListItem = (
@@ -30,7 +30,7 @@ export const convertProfileScreenStatsToStatListItem = (
 }
 
 export const convertGameStatsToLeaderItems = (
-    stats?: FilteredGameStats | GameStats,
+    stats?: GameData,
 ): { title: string; player?: DisplayUser; total?: number }[] => {
     if (!stats) return []
 
@@ -69,7 +69,7 @@ export const convertGameStatsToLeaderItems = (
 }
 
 export const convertTeamStatsToGameOverviewItems = (
-    stats?: TeamStats,
+    stats?: TeamData,
 ): { title: string; total: number }[] => {
     if (!stats) return []
 
@@ -106,7 +106,7 @@ export const convertTeamStatsToGameOverviewItems = (
 }
 
 export const convertTeamStatsToTeamOverviewItems = (
-    stats?: TeamStats,
+    stats?: FilteredTeamStats,
 ): { title: string; total: number | string }[] => {
     if (!stats) return []
 

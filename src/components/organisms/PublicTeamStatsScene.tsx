@@ -1,10 +1,20 @@
 import React from 'react'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
-import { convertTeamStatsToTeamOverviewItems } from '../../utils/stats'
+import StatsTable from '../molecules/StatsTable'
 import { getTeamStats } from '../../services/data/stats'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
-import { FlatList, ScrollView, StyleSheet, Text } from 'react-native'
+import {
+    FlatList,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+} from 'react-native'
+import {
+    convertGameStatsToLeaderItems,
+    convertTeamStatsToTeamOverviewItems,
+} from '../../utils/stats'
 
 interface PublicTeamStatsSceneProps {
     teamId: string
@@ -16,12 +26,20 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const { data, error } = useQuery(['getTeamStats', { teamId }], () =>
-        getTeamStats(teamId),
+    const { data, isLoading, isRefetching, refetch } = useQuery(
+        ['getTeamStats', { teamId }],
+        () => getTeamStats(teamId),
     )
+
+    console.log('data', data)
+    console.log('isloading', isLoading)
 
     const teamOverview = React.useMemo(() => {
         return convertTeamStatsToTeamOverviewItems(data)
+    }, [data])
+
+    const leaders = React.useMemo(() => {
+        return convertGameStatsToLeaderItems(data)
     }, [data])
 
     const styles = StyleSheet.create({
@@ -32,7 +50,14 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
     })
 
     return (
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    onRefresh={refetch}
+                    refreshing={isLoading || isRefetching}
+                    colors={[colors.textSecondary]}
+                />
+            }>
             <Text style={styles.title}>Overview</Text>
             <FlatList
                 horizontal
@@ -41,6 +66,16 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                     return <SmallLeaderListItem leader={item} />
                 }}
             />
+            <Text style={styles.title}>Leaders</Text>
+            <FlatList
+                horizontal
+                data={leaders}
+                renderItem={({ item }) => {
+                    return <SmallLeaderListItem leader={item} />
+                }}
+            />
+            <Text style={styles.title}>Players</Text>
+            {data && <StatsTable players={data.players || []} />}
         </ScrollView>
     )
 }

@@ -108,7 +108,7 @@ const data: FilteredGameStats = {
 
 describe('StatsTable', () => {
     it('render initial stats', () => {
-        render(<StatsTable stats={data} />)
+        render(<StatsTable players={data.players} />)
 
         expect(screen.getByText('Player')).toBeTruthy()
         expect(screen.getByText('Overall')).toBeTruthy()
@@ -123,7 +123,7 @@ describe('StatsTable', () => {
     })
 
     it('renders defense and per point stats', () => {
-        render(<StatsTable stats={data} />)
+        render(<StatsTable players={data.players} />)
 
         const overallBtn = screen.getByText('Overall')
         const offenseBtn = screen.getByText('Offense')
@@ -144,7 +144,7 @@ describe('StatsTable', () => {
     })
 
     it('handles sort', () => {
-        render(<StatsTable stats={data} />)
+        render(<StatsTable players={data.players} />)
 
         expect(screen.getByText('Player')).toBeTruthy()
         expect(screen.getByText('First 1 Last 1')).toBeTruthy()

@@ -143,7 +143,7 @@ describe('TeamGameStatsScene', () => {
                 Promise.resolve({ ...gameStats, players: [player] }),
             )
         jest.spyOn(StatsData, 'getTeamStatsByGame').mockReturnValue(
-            Promise.resolve(teamStats),
+            Promise.resolve({ ...teamStats, ...gameStats, players: [player] }),
         )
 
         render(
