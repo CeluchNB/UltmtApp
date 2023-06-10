@@ -11,7 +11,6 @@ import {
     getGameStatsByTeam,
     getPlayerStats,
     getTeamStats,
-    getTeamStatsByGame,
 } from '../../../src/services/data/stats'
 
 const playerOne: DisplayUser = {
@@ -239,53 +238,42 @@ const team: TeamStats = {
     turnovers: 4,
     turnoversForced: 45,
 }
-describe('getTeamStatsByGame', () => {
-    it('handles network success', async () => {
-        jest.spyOn(StatsNetwork, 'getTeamStatsByGame').mockReturnValueOnce(
-            Promise.resolve({
-                data: { team },
-                status: 200,
-                statusText: 'Good',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        const result = await getTeamStatsByGame('team1', ['game1'])
-        expect(result).toMatchObject(team)
-    })
-
-    it('handles network error', async () => {
-        jest.spyOn(StatsNetwork, 'getTeamStatsByGame').mockReturnValueOnce(
-            Promise.reject({
-                data: { message: 'test error' },
-                status: 400,
-                statusText: 'Bad',
-                headers: {},
-                config: {},
-            }),
-        )
-
-        await expect(
-            getTeamStatsByGame('team1', ['game1']),
-        ).rejects.toMatchObject({ message: 'test error' })
-    })
-})
 
 describe('getTeamStats', () => {
-    it('handles network success', async () => {
-        jest.spyOn(StatsNetwork, 'getTeamStats').mockReturnValueOnce(
-            Promise.resolve({
-                data: { team },
-                status: 200,
-                statusText: '200',
-                config: {},
-                headers: {},
-            }),
-        )
+    it('handles unfiltered network success', async () => {
+        const spy = jest
+            .spyOn(StatsNetwork, 'getTeamStats')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    data: { team },
+                    status: 200,
+                    statusText: '200',
+                    config: {},
+                    headers: {},
+                }),
+            )
 
-        const result = await getTeamStats('team1')
+        const result = await getTeamStats('team1', [])
         expect(result).toMatchObject(team)
+        expect(spy).toHaveBeenCalled()
+    })
+
+    it('handles filtered network success', async () => {
+        const spy = jest
+            .spyOn(StatsNetwork, 'getTeamStatsByGame')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    data: { team },
+                    status: 200,
+                    statusText: 'Good',
+                    headers: {},
+                    config: {},
+                }),
+            )
+
+        const result = await getTeamStats('team1', ['game1'])
+        expect(result).toMatchObject(team)
+        expect(spy).toHaveBeenCalled()
     })
 
     it('handles network error', async () => {
@@ -299,7 +287,7 @@ describe('getTeamStats', () => {
             }),
         )
 
-        await expect(getTeamStats('team1')).rejects.toMatchObject({
+        await expect(getTeamStats('team1', [])).rejects.toMatchObject({
             message: 'test error',
         })
     })

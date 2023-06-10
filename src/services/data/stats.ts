@@ -76,23 +76,16 @@ export const getGameStatsByTeam = async (
 
 export const getTeamStats = async (
     teamId: string,
-): Promise<FilteredTeamStats> => {
-    try {
-        const response = await networkGetTeamStats(teamId)
-        const { team } = response.data
-
-        return team
-    } catch (e) {
-        return throwApiError(e, Constants.UNABLE_TO_GET_TEAM_STATS)
-    }
-}
-
-export const getTeamStatsByGame = async (
-    teamId: string,
     gameIds: string[],
 ): Promise<FilteredTeamStats> => {
     try {
-        const response = await networkGetTeamStatsByGame(teamId, gameIds)
+        let response
+        if (gameIds.length > 0) {
+            response = await networkGetTeamStatsByGame(teamId, gameIds)
+        } else {
+            response = await networkGetTeamStats(teamId)
+        }
+
         const { team } = response.data
 
         return team

@@ -1,25 +1,27 @@
+import { Game } from '../../types/game'
 import GameListItem from '../atoms/GameListItem'
 import React from 'react'
-import { getGamesByTeam } from '../../services/data/game'
+import { UseQueryResult } from 'react-query'
 import { useNavigation } from '@react-navigation/native'
-import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import { FlatList, RefreshControl } from 'react-native'
 
 interface TeamGamesSceneProps {
     teamId: string
+    queryResult: UseQueryResult<Game[]>
 }
 
-const TeamGamesScene: React.FC<TeamGamesSceneProps> = ({ teamId }) => {
+const TeamGamesScene: React.FC<TeamGamesSceneProps> = ({
+    teamId,
+    queryResult,
+}) => {
     const {
         theme: { colors },
     } = useTheme()
     const navigation = useNavigation()
 
-    const { data, isLoading, isRefetching, refetch } = useQuery(
-        ['getGamesByTeam', { teamId }],
-        () => getGamesByTeam(teamId),
-    )
+    const { data, isLoading, isRefetching, refetch } = queryResult
+
     return (
         <FlatList
             refreshControl={

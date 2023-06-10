@@ -108,7 +108,7 @@ describe('PublicTeamStatsScene', () => {
 
         render(
             <QueryClientProvider client={client}>
-                <PublicTeamStatsScene teamId="" />
+                <PublicTeamStatsScene teamId="" games={[]} />
             </QueryClientProvider>,
         )
 

@@ -1,11 +1,13 @@
 import * as TeamData from '../services/data/team'
 import BaseScreen from '../components/atoms/BaseScreen'
+import { Game } from '../types/game'
 import { PublicTeamDetailsProps } from '../types/navigation'
 import PublicTeamPlayersScene from '../components/organisms/PublicTeamPlayersScene'
 import PublicTeamStatsScene from '../components/organisms/PublicTeamStatsScene'
 import React from 'react'
 import { Team } from '../types/team'
 import TeamGameScene from '../components/organisms/TeamGameScene'
+import { getGamesByTeam } from '../services/data/game'
 import { useTheme } from '../hooks'
 import {
     SafeAreaView,
@@ -15,12 +17,14 @@ import {
     useWindowDimensions,
 } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
+import { UseQueryResult, useQuery } from 'react-query'
 
 const renderScene = (
     team: Team,
     error: string,
     loading: boolean,
     teamId: string,
+    gamesQuery: UseQueryResult<Game[]>,
     onRefresh: () => Promise<void>,
 ) => {
     return ({ route }: { route: { key: string } }) => {
@@ -35,9 +39,16 @@ const renderScene = (
                     />
                 )
             case 'games':
-                return <TeamGameScene teamId={teamId} />
+                return (
+                    <TeamGameScene teamId={teamId} queryResult={gamesQuery} />
+                )
             case 'stats':
-                return <PublicTeamStatsScene teamId={teamId} />
+                return (
+                    <PublicTeamStatsScene
+                        teamId={teamId}
+                        games={gamesQuery.data || []}
+                    />
+                )
         }
     }
 }
@@ -46,10 +57,15 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     route,
     navigation,
 }) => {
+    const { id, archive } = route.params
     const {
         theme: { colors, size, weight },
     } = useTheme()
     const layout = useWindowDimensions()
+
+    const gamesQuery = useQuery(['getGamesByTeam', { teamId: id }], () =>
+        getGamesByTeam(id),
+    )
 
     const mapTabNameToIndex = (name: 'players' | 'stats' | 'games'): number => {
         switch (name) {
@@ -62,7 +78,6 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         }
     }
 
-    const { id, archive } = route.params
     const [team, setTeam] = React.useState({} as Team)
     const [error, setError] = React.useState<string>('')
     const [index, setIndex] = React.useState(mapTabNameToIndex('players'))
@@ -172,6 +187,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                         error,
                         loading,
                         id,
+                        gamesQuery,
                         initializeScreen,
                     )}
                     swipeEnabled={false}
