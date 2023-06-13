@@ -88,7 +88,6 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
         setGameFilterOptions(curr => {
             return curr.map(value => ({ ...value, checked: false }))
         })
-        onFilter()
     }
 
     const onFilter = () => {

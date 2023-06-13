@@ -2,9 +2,15 @@ import * as StatsData from '../../../src/services/data/stats'
 import PublicTeamStatsScene from '../../../src/components/organisms/PublicTeamStatsScene'
 import React from 'react'
 import { Team } from '../../../src/types/team'
+import { game } from '../../../fixtures/data'
 import { GameStats, TeamStats } from '../../../src/types/stats'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { render, screen, waitFor } from '@testing-library/react-native'
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 
 const client = new QueryClient()
 
@@ -65,13 +71,13 @@ const team: Team = {
     continuationId: 'id123',
     rosterOpen: true,
     requests: [],
-    games: [],
+    games: [game._id],
 }
 
 const teamStats: TeamStats = {
     ...team,
     players: [],
-    games: [],
+    games: [game._id],
     winPercentage: 1,
     offensiveConversion: 0.8,
     defensiveConversion: 0.4,
@@ -96,16 +102,16 @@ afterAll(() => {
 })
 
 describe('PublicTeamStatsScene', () => {
-    it('displays elements', async () => {
-        jest.spyOn(StatsData, 'getTeamStats').mockImplementation(() => {
-            return Promise.resolve({
-                ...teamStats,
-                ...team,
-                ...gameStats,
-                players: [],
-            })
+    const spy = jest.spyOn(StatsData, 'getTeamStats').mockImplementation(() => {
+        return Promise.resolve({
+            ...teamStats,
+            ...team,
+            ...gameStats,
+            players: [],
         })
+    })
 
+    it('displays elements', async () => {
         render(
             <QueryClientProvider client={client}>
                 <PublicTeamStatsScene teamId="" games={[]} />
@@ -123,5 +129,32 @@ describe('PublicTeamStatsScene', () => {
         expect(screen.getByText('Defensive Points')).toBeTruthy()
 
         expect(screen.getByText('Goals')).toBeTruthy()
+    })
+
+    it('calls filter', async () => {
+        render(
+            <QueryClientProvider client={client}>
+                <PublicTeamStatsScene teamId="team1" games={[game]} />
+            </QueryClientProvider>,
+        )
+
+        await waitFor(async () =>
+            expect(screen.getByText('Overview')).toBeTruthy(),
+        )
+
+        spy.mockClear()
+
+        const filterBtn = screen.getByText('Filter by Game')
+        fireEvent.press(filterBtn)
+
+        expect(screen.getByText(`vs. ${game.teamTwo.name}`)).toBeTruthy()
+
+        const checkbox = screen.getByTestId('checkbox-0')
+        fireEvent(checkbox, 'onChange')
+
+        const doneBtn = screen.getByText('done')
+        fireEvent.press(doneBtn)
+
+        expect(spy).toHaveBeenCalledTimes(1)
     })
 })
