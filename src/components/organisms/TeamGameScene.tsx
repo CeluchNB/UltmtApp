@@ -51,6 +51,7 @@ const TeamGamesScene: React.FC<TeamGamesSceneProps> = ({
                     />
                 )
             }}
+            testID="team-game-scene-list"
         />
     )
 }

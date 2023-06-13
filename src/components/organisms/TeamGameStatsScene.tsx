@@ -15,10 +15,7 @@ import {
     convertGameStatsToLeaderItems,
     convertTeamStatsToGameOverviewItems,
 } from '../../utils/stats'
-import {
-    getGameStatsByTeam,
-    getTeamStatsByGame,
-} from '../../services/data/stats'
+import { getGameStatsByTeam, getTeamStats } from '../../services/data/stats'
 
 interface TeamGameStatsSceneProps {
     gameId: string
@@ -40,7 +37,7 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
 
     const { data: teamStats, isLoading: teamLoading } = useQuery(
         ['getTeamStatsByGame', { gameIds: [gameId], teamId }],
-        () => getTeamStatsByGame(teamId || '', [gameId]),
+        () => getTeamStats(teamId || '', [gameId]),
     )
 
     const leaderData = React.useMemo(() => {
