@@ -51,18 +51,28 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
 
     React.useEffect(() => {
         if (!data) return
-        // TODO: simplify this
-        setGameFilterOptions(curr =>
-            games
-                .filter(game => data?.games.includes(game._id))
-                .map(game => ({
-                    display: <GameListItem game={game} teamId={teamId} />,
-                    value: game._id,
-                    checked:
-                        curr.find(value => value.value === game._id)?.checked ||
-                        false,
-                })),
-        )
+        const gamesMap = new Map<string, Game>()
+        for (const game of games) {
+            gamesMap.set(game?._id, game)
+        }
+
+        setGameFilterOptions(curr => {
+            const currentChecked = new Map<string, boolean>()
+            for (const item of curr) {
+                currentChecked.set(item.value, item.checked)
+            }
+
+            return data?.games
+                .filter(gameId => gamesMap.has(gameId))
+                .map(gameId => {
+                    const game = gamesMap.get(gameId)
+                    return {
+                        display: <GameListItem game={game!} teamId={teamId} />,
+                        value: game!._id,
+                        checked: currentChecked.get(gameId) || false,
+                    }
+                })
+        })
     }, [games, data, teamId])
 
     const teamOverview = React.useMemo(() => {
