@@ -1,3 +1,4 @@
+import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
 import StatsTable from '../../../src/components/molecules/StatsTable'
 import { FilteredGamePlayer, FilteredGameStats } from '../../../src/types/stats'
@@ -9,6 +10,18 @@ import {
 } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+
+const mockedNavigate = jest.fn()
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native')
+    return {
+        ...actualNav,
+        useNavigation: () => ({
+            addListener: jest.fn().mockReturnValue(() => {}),
+            navigate: mockedNavigate,
+        }),
+    }
+})
 
 const playerOne = {
     _id: 'user1',
@@ -108,7 +121,11 @@ const data: FilteredGameStats = {
 
 describe('StatsTable', () => {
     it('render initial stats', () => {
-        render(<StatsTable players={data.players} />)
+        render(
+            <NavigationContainer>
+                <StatsTable players={data.players} />
+            </NavigationContainer>,
+        )
 
         expect(screen.getByText('Player')).toBeTruthy()
         expect(screen.getByText('Overall')).toBeTruthy()
@@ -122,8 +139,26 @@ describe('StatsTable', () => {
         expect(screen.queryByText('Assists per point')).toBeNull()
     })
 
+    it('handles player press', () => {
+        render(
+            <NavigationContainer>
+                <StatsTable players={data.players} />
+            </NavigationContainer>,
+        )
+
+        expect(screen.getByText('Player')).toBeTruthy()
+        const playerItem = screen.getByText('First 1 Last 1')
+        fireEvent.press(playerItem)
+
+        expect(mockedNavigate).toHaveBeenCalledTimes(1)
+    })
+
     it('renders defense and per point stats', () => {
-        render(<StatsTable players={data.players} />)
+        render(
+            <NavigationContainer>
+                <StatsTable players={data.players} />
+            </NavigationContainer>,
+        )
 
         const overallBtn = screen.getByText('Overall')
         const offenseBtn = screen.getByText('Offense')
@@ -144,7 +179,11 @@ describe('StatsTable', () => {
     })
 
     it('handles sort', () => {
-        render(<StatsTable players={data.players} />)
+        render(
+            <NavigationContainer>
+                <StatsTable players={data.players} />
+            </NavigationContainer>,
+        )
 
         expect(screen.getByText('Player')).toBeTruthy()
         expect(screen.getByText('First 1 Last 1')).toBeTruthy()

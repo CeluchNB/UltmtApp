@@ -2,6 +2,7 @@ import HeaderCell from '../atoms/HeaderCell'
 import React from 'react'
 import StatFilterChip from '../atoms/StatFilterChip'
 import { getUserDisplayName } from '../../utils/player'
+import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
 import {
     DEFENSE_COLUMNS,
@@ -11,7 +12,7 @@ import {
     PER_POINT_COLUMNS,
 } from '../../utils/stats'
 import { FilteredGamePlayer, PlayerStats } from '../../types/stats'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 type Record = { _id: string; value: number | string }
 type Columns = { [x: string]: Record[] }
@@ -24,6 +25,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
     const {
         theme: { colors },
     } = useTheme()
+    const navigation = useNavigation()
 
     const [sortColumn, setSortColumn] = React.useState('')
     const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>(
@@ -83,7 +85,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
             columns.display = []
             for (const player of players) {
                 columns.display.push({
-                    _id: player._id,
+                    _id: player.playerId ?? player._id,
                     value: getUserDisplayName(player),
                 })
             }
@@ -100,7 +102,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                         columns[key] = []
                     }
                     columns[key].push({
-                        _id: player._id,
+                        _id: player.playerId ?? player._id,
                         value: player[key as keyof PlayerStats],
                     })
                 }
@@ -183,6 +185,9 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
             height: 50,
             padding: 5,
         },
+        playerCell: {
+            textDecorationLine: 'underline',
+        },
     })
 
     return (
@@ -229,19 +234,33 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                     <Text style={[styles.titleCell, styles.title]}>Player</Text>
                     {(data as Columns).display?.map((record, idx) => {
                         return (
-                            <Text
+                            <Pressable
                                 key={`display_${record._id}`}
-                                testID="name-record"
-                                numberOfLines={2}
-                                style={[
-                                    styles.valueCell,
-                                    {
-                                        backgroundColor:
-                                            getBackgroundColor(idx),
-                                    },
-                                ]}>
-                                {record.value}
-                            </Text>
+                                onPress={() => {
+                                    navigation.navigate('Tabs', {
+                                        screen: 'Account',
+                                        params: {
+                                            screen: 'PublicUserDetails',
+                                            params: {
+                                                userId: record._id,
+                                            },
+                                        },
+                                    })
+                                }}>
+                                <Text
+                                    testID="name-record"
+                                    numberOfLines={2}
+                                    style={[
+                                        styles.valueCell,
+                                        styles.playerCell,
+                                        {
+                                            backgroundColor:
+                                                getBackgroundColor(idx),
+                                        },
+                                    ]}>
+                                    {record.value}
+                                </Text>
+                            </Pressable>
                         )
                     })}
                 </View>

@@ -12,13 +12,31 @@ import {
     SavedServerActionData,
     SubscriptionObject,
 } from '../../../src/types/action'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import {
+    act,
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 import { liveAction, savedAction } from '../../../fixtures/data'
 import {
     setLiveAction,
     setSavedAction,
 } from '../../../src/store/reducers/features/action/viewAction'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+
+const mockedNavigate = jest.fn()
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native')
+    return {
+        ...actualNav,
+        useNavigation: () => ({
+            addListener: jest.fn().mockReturnValue(() => {}),
+            navigate: mockedNavigate,
+        }),
+    }
+})
 
 const updatedSavedAction: SavedServerActionData = {
     ...savedAction,
@@ -278,38 +296,56 @@ describe('Saved CommentScreen', () => {
         })
     })
 
-    // TODO: fix this test
-    // it('should handle delete comment', async () => {
-    //     const spy = jest
-    //         .spyOn(SavedActionData, 'deleteComment')
-    //         .mockImplementation(async () => {
-    //             return {
-    //                 ...updatedSavedAction,
-    //                 comments: [],
-    //             }
-    //         })
+    it('should handle delete comment', async () => {
+        const spy = jest
+            .spyOn(SavedActionData, 'deleteComment')
+            .mockImplementation(async () => {
+                return {
+                    ...updatedSavedAction,
+                    comments: [],
+                }
+            })
 
-    //     const { queryByText, getAllByRole } = render(
-    //         <NavigationContainer>
-    //             <Provider store={store}>
-    //                 <CommentScreen {...props} />
-    //             </Provider>
-    //         </NavigationContainer>,
-    //     )
+        const { queryByText, getAllByRole } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <CommentScreen {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
 
-    //     await waitFor(() => {
-    //         expect(queryByText('Test comment')).toBeTruthy()
-    //     })
+        await waitFor(() => {
+            expect(queryByText('Test comment')).toBeTruthy()
+        })
 
-    //     const xButton = getAllByRole('button')[3]
-    //     fireEvent.press(xButton)
+        const xButton = getAllByRole('button')[3]
+        fireEvent.press(xButton)
 
-    //     expect(spy).toHaveBeenCalled()
+        expect(spy).toHaveBeenCalled()
 
-    //     await waitFor(() => {
-    //         expect(queryByText('Test comment')).toBeFalsy()
-    //     })
-    // }, 10000)
+        await waitFor(() => {
+            expect(queryByText('Test comment')).toBeFalsy()
+        })
+    })
+
+    it('should handle item press', async () => {
+        render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <CommentScreen {...props} />
+                </Provider>
+            </NavigationContainer>,
+        )
+
+        await waitFor(() => {
+            expect(screen.queryByText('Test comment')).toBeTruthy()
+        })
+
+        const userDisplay = screen.getByText('First1 Last1')
+        fireEvent.press(userDisplay)
+
+        expect(mockedNavigate).toHaveBeenCalledTimes(1)
+    })
 
     it('should handle add error', async () => {
         const spy = jest

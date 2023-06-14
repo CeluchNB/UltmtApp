@@ -1,19 +1,21 @@
-import { DisplayUser } from '../../types/user'
+import { PlayerIdUser } from '../../types/stats'
 import React from 'react'
 import { getUserDisplayName } from '../../utils/player'
 import { useTheme } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text } from 'react-native'
 
 interface SmallLeaderListItemProps {
     leader: {
         title: string
-        player?: DisplayUser
+        player?: PlayerIdUser
         total?: number | string
     }
+    onPress?: (player?: PlayerIdUser) => void
 }
 
 const SmallLeaderListItem: React.FC<SmallLeaderListItemProps> = ({
     leader: { title, player, total },
+    onPress,
 }) => {
     const {
         theme: { colors, size },
@@ -45,7 +47,11 @@ const SmallLeaderListItem: React.FC<SmallLeaderListItemProps> = ({
     })
 
     return (
-        <View style={styles.container}>
+        <Pressable
+            style={styles.container}
+            onPress={() => {
+                if (onPress) onPress(player)
+            }}>
             <Text style={styles.title}>{title}</Text>
             {total !== undefined && total !== null && (
                 <Text style={styles.total}>{total}</Text>
@@ -58,7 +64,7 @@ const SmallLeaderListItem: React.FC<SmallLeaderListItemProps> = ({
             {player && (
                 <Text style={styles.playerUsername}>@{player?.username}</Text>
             )}
-        </View>
+        </Pressable>
     )
 }
 

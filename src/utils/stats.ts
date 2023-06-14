@@ -1,10 +1,10 @@
-import { DisplayUser } from '../types/user'
 import {
     AllPlayerStats,
     CalculatedPlayerStats,
     DisplayStat,
     FilteredTeamStats,
     GameData,
+    PlayerIdUser,
     PlayerStats,
     TeamData,
 } from '../types/stats'
@@ -31,7 +31,11 @@ export const convertProfileScreenStatsToStatListItem = (
 
 export const convertGameStatsToLeaderItems = (
     stats?: GameData,
-): { title: string; player?: DisplayUser; total?: number }[] => {
+): {
+    title: string
+    player?: PlayerIdUser
+    total?: number
+}[] => {
     if (!stats) return []
 
     return [

@@ -5,6 +5,7 @@ import SecondaryButton from '../atoms/SecondaryButton'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
 import StatsTable from '../molecules/StatsTable'
 import { getTeamStats } from '../../services/data/stats'
+import { useNavigation } from '@react-navigation/native'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import {
@@ -32,6 +33,7 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
+    const navigation = useNavigation()
 
     const [modalVisible, setModalVisible] = React.useState(false)
     const [gameFilterOptions, setGameFilterOptions] = React.useState<
@@ -145,7 +147,26 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                 horizontal
                 data={leaders}
                 renderItem={({ item }) => {
-                    return <SmallLeaderListItem leader={item} />
+                    return (
+                        <SmallLeaderListItem
+                            leader={item}
+                            onPress={player => {
+                                if (player?.playerId || player?._id) {
+                                    navigation.navigate('Tabs', {
+                                        screen: 'Account',
+                                        params: {
+                                            screen: 'PublicUserDetails',
+                                            params: {
+                                                userId:
+                                                    player?.playerId ??
+                                                    player?._id,
+                                            },
+                                        },
+                                    })
+                                }
+                            }}
+                        />
+                    )
                 }}
             />
             <Text style={styles.title}>Players</Text>

@@ -81,7 +81,7 @@ interface PointStats {
 }
 
 export interface Leader {
-    player?: DisplayUser
+    player?: PlayerIdUser
     total: number
 }
 
@@ -103,7 +103,8 @@ export interface GameStats extends GameData {
     points: PointStats[]
 }
 
-export type FilteredGamePlayer = AllPlayerStats & DisplayUser
+export type PlayerIdUser = DisplayUser & { playerId?: string }
+export type FilteredGamePlayer = AllPlayerStats & PlayerIdUser
 export interface FilteredGameStats extends GameData {
     _id: string
     startTime: string

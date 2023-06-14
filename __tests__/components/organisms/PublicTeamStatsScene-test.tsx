@@ -1,4 +1,5 @@
 import * as StatsData from '../../../src/services/data/stats'
+import { NavigationContainer } from '@react-navigation/native'
 import PublicTeamStatsScene from '../../../src/components/organisms/PublicTeamStatsScene'
 import React from 'react'
 import { Team } from '../../../src/types/team'
@@ -11,6 +12,18 @@ import {
     screen,
     waitFor,
 } from '@testing-library/react-native'
+
+const mockedNavigate = jest.fn()
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native')
+    return {
+        ...actualNav,
+        useNavigation: () => ({
+            addListener: jest.fn().mockReturnValue(() => {}),
+            navigate: mockedNavigate,
+        }),
+    }
+})
 
 const client = new QueryClient()
 
@@ -113,9 +126,11 @@ describe('PublicTeamStatsScene', () => {
 
     it('displays elements', async () => {
         render(
-            <QueryClientProvider client={client}>
-                <PublicTeamStatsScene teamId="" games={[]} />
-            </QueryClientProvider>,
+            <NavigationContainer>
+                <QueryClientProvider client={client}>
+                    <PublicTeamStatsScene teamId="" games={[]} />
+                </QueryClientProvider>
+            </NavigationContainer>,
         )
 
         await waitFor(async () =>
@@ -133,9 +148,11 @@ describe('PublicTeamStatsScene', () => {
 
     it('calls filter', async () => {
         render(
-            <QueryClientProvider client={client}>
-                <PublicTeamStatsScene teamId="team1" games={[game]} />
-            </QueryClientProvider>,
+            <NavigationContainer>
+                <QueryClientProvider client={client}>
+                    <PublicTeamStatsScene teamId="team1" games={[game]} />
+                </QueryClientProvider>
+            </NavigationContainer>,
         )
 
         await waitFor(async () =>
@@ -156,5 +173,24 @@ describe('PublicTeamStatsScene', () => {
         fireEvent.press(doneBtn)
 
         expect(spy).toHaveBeenCalledTimes(1)
+    })
+
+    it('calls navigate', async () => {
+        render(
+            <NavigationContainer>
+                <QueryClientProvider client={client}>
+                    <PublicTeamStatsScene teamId="" games={[]} />
+                </QueryClientProvider>
+            </NavigationContainer>,
+        )
+
+        await waitFor(async () =>
+            expect(screen.getByText('Overview')).toBeTruthy(),
+        )
+
+        const userDisplay = screen.getAllByText('@firstlast1')[1]
+        fireEvent.press(userDisplay)
+
+        expect(mockedNavigate).toHaveBeenCalledTimes(1)
     })
 })

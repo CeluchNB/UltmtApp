@@ -680,6 +680,18 @@ exports[`Live CommentScreen should match snapshot 1`] = `
                 }
               >
                 <View
+                  accessible={true}
+                  collapsable={false}
+                  focusable={true}
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onFocus={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
                   style={
                     {
                       "alignItems": "flex-start",
@@ -692,6 +704,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
                       {
                         "color": "#ababab",
                         "fontSize": 30.821917808219176,
+                        "textDecorationLine": "underline",
                       }
                     }
                   >
@@ -1541,6 +1554,18 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
                 }
               >
                 <View
+                  accessible={true}
+                  collapsable={false}
+                  focusable={true}
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onFocus={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
                   style={
                     {
                       "alignItems": "flex-start",
@@ -1553,6 +1578,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
                       {
                         "color": "#ababab",
                         "fontSize": 30.821917808219176,
+                        "textDecorationLine": "underline",
                       }
                     }
                   >

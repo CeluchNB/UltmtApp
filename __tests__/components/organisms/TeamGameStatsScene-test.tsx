@@ -1,4 +1,5 @@
 import * as StatsData from '../../../src/services/data/stats'
+import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
 import TeamGameStatsScene from '../../../src/components/organisms/TeamGameStatsScene'
 import { teamOne } from '../../../fixtures/data'
@@ -121,7 +122,9 @@ describe('TeamGameStatsScene', () => {
 
         render(
             <QueryClientProvider client={client}>
-                <TeamGameStatsScene gameId="game1" />
+                <NavigationContainer>
+                    <TeamGameStatsScene gameId="game1" />
+                </NavigationContainer>
             </QueryClientProvider>,
         )
 
@@ -148,7 +151,9 @@ describe('TeamGameStatsScene', () => {
 
         render(
             <QueryClientProvider client={client}>
-                <TeamGameStatsScene gameId="game1" teamId="team1" />
+                <NavigationContainer>
+                    <TeamGameStatsScene gameId="game1" teamId="team1" />
+                </NavigationContainer>
             </QueryClientProvider>,
         )
 
