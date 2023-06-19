@@ -1,32 +1,94 @@
-import * as React from 'react'
 import * as TeamData from '../services/data/team'
 import BaseScreen from '../components/atoms/BaseScreen'
-import MapSection from '../components/molecules/MapSection'
+import { Game } from '../types/game'
 import { PublicTeamDetailsProps } from '../types/navigation'
+import PublicTeamPlayersScene from '../components/organisms/PublicTeamPlayersScene'
+import PublicTeamStatsScene from '../components/organisms/PublicTeamStatsScene'
+import React from 'react'
 import { Team } from '../types/team'
-import UserListItem from '../components/atoms/UserListItem'
+import TeamGameScene from '../components/organisms/TeamGameScene'
+import { getGamesByTeam } from '../services/data/game'
 import { useTheme } from '../hooks'
 import {
-    RefreshControl,
-    ScrollView,
+    SafeAreaView,
     StyleSheet,
     Text,
     View,
+    useWindowDimensions,
 } from 'react-native'
+import { TabBar, TabView } from 'react-native-tab-view'
+import { UseQueryResult, useQuery } from 'react-query'
+
+const renderScene = (
+    team: Team,
+    error: string,
+    loading: boolean,
+    teamId: string,
+    gamesQuery: UseQueryResult<Game[]>,
+    onRefresh: () => Promise<void>,
+) => {
+    return ({ route }: { route: { key: string } }) => {
+        switch (route.key) {
+            case 'players':
+                return (
+                    <PublicTeamPlayersScene
+                        team={team}
+                        error={error}
+                        refreshing={loading}
+                        onRefresh={onRefresh}
+                    />
+                )
+            case 'games':
+                return (
+                    <TeamGameScene teamId={teamId} queryResult={gamesQuery} />
+                )
+            case 'stats':
+                return (
+                    <PublicTeamStatsScene
+                        teamId={teamId}
+                        games={gamesQuery.data || []}
+                    />
+                )
+        }
+    }
+}
 
 const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     route,
     navigation,
 }) => {
+    const { id, archive } = route.params
     const {
         theme: { colors, size, weight },
     } = useTheme()
-    const { id, archive } = route.params
-    const [team, setTeam] = React.useState({} as Team)
-    const [refreshing, setRefreshing] = React.useState(false)
-    const [error, setError] = React.useState<string>('')
+    const layout = useWindowDimensions()
 
-    const initializeScreen = async () => {
+    const gamesQuery = useQuery(['getGamesByTeam', { teamId: id }], () =>
+        getGamesByTeam(id),
+    )
+
+    const mapTabNameToIndex = (name: 'players' | 'stats' | 'games'): number => {
+        switch (name) {
+            case 'players':
+                return 0
+            case 'games':
+                return 1
+            case 'stats':
+                return 2
+        }
+    }
+
+    const [team, setTeam] = React.useState({} as Team)
+    const [error, setError] = React.useState<string>('')
+    const [index, setIndex] = React.useState(mapTabNameToIndex('players'))
+    const [loading, setLoading] = React.useState(false)
+    const [routes] = React.useState([
+        { key: 'players', title: 'Players' },
+        { key: 'games', title: 'Games' },
+        { key: 'stats', title: 'Stats' },
+    ])
+
+    const initializeScreen = React.useCallback(async () => {
         const getTeam = async (): Promise<Team> => {
             if (archive) {
                 return TeamData.getArchivedTeam(id)
@@ -35,6 +97,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         }
 
         setError('')
+        setLoading(true)
         getTeam()
             .then(teamResponse => {
                 setTeam(teamResponse)
@@ -45,7 +108,10 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                         'An error occurred looking for this team. Please try again',
                 )
             })
-    }
+            .finally(() => {
+                setLoading(false)
+            })
+    }, [archive, id])
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -53,8 +119,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         })
 
         return unsubscribe
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [initializeScreen, navigation])
 
     React.useEffect(() => {
         navigation.setOptions({ title: `${team.place} ${team.name}` })
@@ -96,66 +161,53 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
 
     return (
         <BaseScreen containerWidth="90%">
-            <ScrollView
-                testID="public-team-scroll-view"
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        colors={[colors.textSecondary]}
-                        onRefresh={async () => {
-                            setRefreshing(true)
-                            await initializeScreen()
-                            setRefreshing(false)
-                        }}
-                    />
-                }>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.teamname}>@{team?.teamname}</Text>
-                    {team?.seasonStart === team?.seasonEnd ? (
-                        <Text style={styles.date}>
-                            {new Date(team?.seasonStart || '').getUTCFullYear()}
-                        </Text>
-                    ) : (
-                        <Text style={styles.date}>
-                            {new Date(
-                                team?.seasonStart || '',
-                            ).getUTCFullYear() +
-                                ' - ' +
-                                new Date(
-                                    team?.seasonEnd || '',
-                                ).getUTCFullYear()}
-                        </Text>
+            <View style={styles.headerContainer}>
+                <Text style={styles.teamname}>@{team?.teamname}</Text>
+                {team?.seasonStart === team?.seasonEnd ? (
+                    <Text style={styles.date}>
+                        {new Date(team?.seasonStart || '').getUTCFullYear()}
+                    </Text>
+                ) : (
+                    <Text style={styles.date}>
+                        {new Date(team?.seasonStart || '').getUTCFullYear() +
+                            ' - ' +
+                            new Date(team?.seasonEnd || '').getUTCFullYear()}
+                    </Text>
+                )}
+            </View>
+            <SafeAreaView
+                style={{
+                    // TODO: check this height on multiple devices
+                    height: layout.height - 225,
+                }}>
+                <TabView
+                    navigationState={{ index, routes }}
+                    renderScene={renderScene(
+                        team,
+                        error,
+                        loading,
+                        id,
+                        gamesQuery,
+                        initializeScreen,
                     )}
-                </View>
-                <View style={styles.bodyContainer}>
-                    {error.length > 0 ? (
-                        <Text style={styles.error}>{error}</Text>
-                    ) : (
-                        <MapSection
-                            title="Players"
-                            listData={team.players}
-                            showButton={false}
-                            showCreateButton={false}
-                            renderItem={user => {
-                                return (
-                                    <UserListItem
-                                        key={user._id}
-                                        user={user}
-                                        showDelete={false}
-                                        showAccept={false}
-                                        onPress={async () => {
-                                            navigation.navigate(
-                                                'PublicUserDetails',
-                                                { userId: user._id },
-                                            )
-                                        }}
-                                    />
-                                )
-                            }}
-                        />
-                    )}
-                </View>
-            </ScrollView>
+                    swipeEnabled={false}
+                    onIndexChange={setIndex}
+                    initialLayout={{ width: layout.width }}
+                    renderTabBar={props => {
+                        return (
+                            <TabBar
+                                {...props}
+                                style={{ backgroundColor: colors.primary }}
+                                indicatorStyle={{
+                                    backgroundColor: colors.textPrimary,
+                                }}
+                                activeColor={colors.textPrimary}
+                                inactiveColor={colors.darkGray}
+                            />
+                        )
+                    }}
+                />
+            </SafeAreaView>
         </BaseScreen>
     )
 }

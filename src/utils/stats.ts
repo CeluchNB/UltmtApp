@@ -1,10 +1,12 @@
-import { DisplayUser } from '../types/user'
 import {
     AllPlayerStats,
     CalculatedPlayerStats,
     DisplayStat,
-    GameStats,
+    FilteredTeamStats,
+    GameData,
+    PlayerIdUser,
     PlayerStats,
+    TeamData,
 } from '../types/stats'
 
 export const convertProfileScreenStatsToStatListItem = (
@@ -28,8 +30,12 @@ export const convertProfileScreenStatsToStatListItem = (
 }
 
 export const convertGameStatsToLeaderItems = (
-    stats?: GameStats,
-): { title: string; player?: DisplayUser; total?: number }[] => {
+    stats?: GameData,
+): {
+    title: string
+    player?: PlayerIdUser
+    total?: number
+}[] => {
     if (!stats) return []
 
     return [
@@ -64,6 +70,73 @@ export const convertGameStatsToLeaderItems = (
             total: stats?.turnoversLeader.total,
         },
     ]
+}
+
+export const convertTeamStatsToGameOverviewItems = (
+    stats?: TeamData,
+): { title: string; total: number }[] => {
+    if (!stats) return []
+
+    return [
+        {
+            title: 'Offensive Points',
+            total: stats.offensePoints,
+        },
+        {
+            title: 'Holds',
+            total: stats.holds,
+        },
+        {
+            title: 'Turnover Free Holds',
+            total: stats.turnoverFreeHolds,
+        },
+        {
+            title: 'Turnovers',
+            total: stats.turnovers,
+        },
+        {
+            title: 'Defensive Points',
+            total: stats.defensePoints,
+        },
+        {
+            title: 'Breaks',
+            total: stats.breaks,
+        },
+        {
+            title: 'Turnovers Forced',
+            total: stats.turnoversForced,
+        },
+    ]
+}
+
+export const convertTeamStatsToTeamOverviewItems = (
+    stats?: FilteredTeamStats,
+): { title: string; total: number | string }[] => {
+    if (!stats) return []
+
+    const items = [
+        {
+            title: 'Wins',
+            total: stats.wins,
+        },
+        {
+            title: 'Losses',
+            total: stats.losses,
+        },
+        {
+            title: 'Win Percentage',
+            total: `${Number(stats.winPercentage * 100).toFixed(0)}%`,
+        },
+        {
+            title: 'Offensive Conversion',
+            total: `${Number(stats.offensiveConversion * 100).toFixed(0)}%`,
+        },
+        {
+            title: 'Defensive Conversion',
+            total: `${Number(stats.defensiveConversion * 100).toFixed(0)}%`,
+        },
+    ]
+    return [...items, ...convertTeamStatsToGameOverviewItems(stats)]
 }
 
 export const formatNumber = (key: string, value: number | string): string => {
@@ -170,3 +243,47 @@ const createSafeFraction = (numerator: number, denominator: number): number => {
     }
     return numerator / denominator
 }
+
+export const INVALID_COLUMNS = [
+    'display',
+    'firstName',
+    'lastName',
+    '_id',
+    'username',
+    'games',
+    'teams',
+    '__v',
+    'id',
+    'teamId',
+    'gameId',
+    'playerId',
+    'wins',
+    'losses',
+]
+export const OVERALL_COLUMNS = [
+    'plusMinus',
+    'pointsPlayed',
+    'catchingPercentage',
+    'throwingPercentage',
+]
+export const OFFENSE_COLUMNS = [
+    'goals',
+    'assists',
+    'touches',
+    'completions',
+    'throwaways',
+    'drops',
+    'stalls',
+    'catches',
+    'completedPasses',
+    'droppedPasses',
+]
+export const DEFENSE_COLUMNS = ['blocks', 'pulls', 'callahans']
+export const PER_POINT_COLUMNS = [
+    'ppGoals',
+    'ppAssists',
+    'ppThrowaways',
+    'ppDrops',
+    'ppBlocks',
+    'pointsPlayed',
+]

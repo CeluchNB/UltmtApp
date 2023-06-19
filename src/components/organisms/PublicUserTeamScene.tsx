@@ -47,6 +47,7 @@ const PublicUserTeamScene: React.FC<PublicUserTeamSceneProps> = ({
         <ScrollView
             refreshControl={
                 <RefreshControl
+                    colors={[colors.textSecondary]}
                     refreshing={loading}
                     onRefresh={() => {
                         refetch()

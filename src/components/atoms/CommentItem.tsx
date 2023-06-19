@@ -2,18 +2,20 @@ import { Comment } from '../../types/action'
 import { IconButton } from 'react-native-paper'
 import React from 'react'
 import { useTheme } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 interface CommentInputProps {
     comment: Comment
     userId: string
     onDelete: (number: number) => void
+    onPress: (userId: string) => void
 }
 
 const CommentItem: React.FC<CommentInputProps> = ({
     comment,
     userId,
     onDelete,
+    onPress,
 }) => {
     const { user, comment: commentText } = comment
     const {
@@ -34,6 +36,7 @@ const CommentItem: React.FC<CommentInputProps> = ({
         name: {
             fontSize: size.fontFifteen,
             color: colors.gray,
+            textDecorationLine: 'underline',
         },
         comment: {
             fontSize: size.fontFifteen,
@@ -42,12 +45,14 @@ const CommentItem: React.FC<CommentInputProps> = ({
     })
     return (
         <View style={styles.container}>
-            <View style={styles.commentContainer}>
+            <Pressable
+                style={styles.commentContainer}
+                onPress={() => onPress(userId)}>
                 <Text style={styles.name}>
                     {user.firstName} {user.lastName}
                 </Text>
                 <Text style={styles.comment}>{commentText}</Text>
-            </View>
+            </Pressable>
             {userId.length > 0 && userId === comment.user._id && (
                 <IconButton
                     icon="close"

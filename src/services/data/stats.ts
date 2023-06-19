@@ -3,6 +3,8 @@ import { getInitialPlayerData } from '../../../fixtures/utils'
 import { throwApiError } from '../../utils/service-utils'
 import {
     AllPlayerStats,
+    FilteredGameStats,
+    FilteredTeamStats,
     GameStats,
     IdentifiedPlayerStats,
     PlayerStats,
@@ -13,6 +15,8 @@ import {
     getGameStats as networkGetGameStats,
     getGameStatsByTeam as networkGetGameStatsByTeam,
     getPlayerStats as networkGetPlayerStats,
+    getTeamStats as networkGetTeamStats,
+    getTeamStatsByGame as networkGetTeamStatsByGame,
 } from '../network/stats'
 
 export const getPlayerStats = async (
@@ -59,7 +63,7 @@ export const getGameStats = async (id: string): Promise<GameStats> => {
 export const getGameStatsByTeam = async (
     gameId: string,
     teamId: string,
-): Promise<GameStats> => {
+): Promise<FilteredGameStats> => {
     try {
         const response = await networkGetGameStatsByTeam(gameId, teamId)
         const { game } = response.data
@@ -67,5 +71,25 @@ export const getGameStatsByTeam = async (
         return game
     } catch (e) {
         return throwApiError(e, Constants.UNABLE_TO_GET_GAME_STATS)
+    }
+}
+
+export const getTeamStats = async (
+    teamId: string,
+    gameIds: string[],
+): Promise<FilteredTeamStats> => {
+    try {
+        let response
+        if (gameIds.length > 0) {
+            response = await networkGetTeamStatsByGame(teamId, gameIds)
+        } else {
+            response = await networkGetTeamStats(teamId)
+        }
+
+        const { team } = response.data
+
+        return team
+    } catch (e) {
+        return throwApiError(e, Constants.UNABLE_TO_GET_TEAM_STATS)
     }
 }

@@ -68,7 +68,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 }) => {
     const layout = useWindowDimensions()
 
-    const { userId, tab = 'games' } = route.params
+    const { userId, tab = 'teams' } = route.params
     const {
         theme: { colors, size },
     } = useTheme()

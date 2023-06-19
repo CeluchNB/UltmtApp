@@ -3,6 +3,7 @@ import CommentScreen from '../screens/games/CommentScreen'
 import GameHomeScreen from '../screens/games/GameHomeScreen'
 import GameSearchScreen from '../screens/games/GameSearchScreen'
 import { GameStackParamList } from '../types/navigation'
+import GameStatsScreen from '../screens/games/GameStatsScreen'
 import ViewGameScreen from '../screens/games/ViewGameScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useTheme } from '../hooks'
@@ -47,6 +48,11 @@ const GameNavigator: React.FC<{}> = () => {
                     headerBackTitle: 'Back',
                     title: 'Comments',
                 }}
+            />
+            <Stack.Screen
+                name="GameStats"
+                component={GameStatsScreen}
+                options={{ title: '' }}
             />
         </Stack.Navigator>
     )
