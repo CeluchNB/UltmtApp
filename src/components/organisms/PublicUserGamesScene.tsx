@@ -58,6 +58,7 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
                     sections={gameLists}
                     refreshControl={
                         <RefreshControl
+                            colors={[colors.textSecondary]}
                             refreshing={loading}
                             onRefresh={() => {
                                 refetch()

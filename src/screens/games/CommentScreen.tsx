@@ -4,11 +4,13 @@ import CommentInput from '../../components/atoms/CommentInput'
 import CommentItem from '../../components/atoms/CommentItem'
 import { CommentProps } from '../../types/navigation'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { useCommenter, useTheme } from '../../hooks'
 
 const CommentScreen: React.FC<CommentProps> = ({ route }) => {
     const { gameId, pointId, live } = route.params
+    const navigation = useNavigation()
     const {
         theme: { colors },
     } = useTheme()
@@ -66,6 +68,15 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                                     userId={userId || ''}
                                     comment={item}
                                     onDelete={handleDeleteComment}
+                                    onPress={id => {
+                                        navigation.navigate('Tabs', {
+                                            screen: 'Account',
+                                            params: {
+                                                screen: 'PublicUserDetails',
+                                                params: { userId: id },
+                                            },
+                                        })
+                                    }}
                                 />
                             )
                         }}

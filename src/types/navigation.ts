@@ -48,6 +48,7 @@ export type GameStackParamList = {
         pointId: string
         live: boolean
     }
+    GameStats: { gameId: string }
 }
 
 export type TabParamList = {
@@ -178,6 +179,10 @@ export type ViewGameProps = NativeStackScreenProps<
     'ViewGame'
 >
 export type CommentProps = NativeStackScreenProps<GameStackParamList, 'Comment'>
+export type GameStatsProps = NativeStackScreenProps<
+    GameStackParamList,
+    'GameStats'
+>
 
 // Game Creation Flow
 export type CreateGameProps = CompositeScreenProps<

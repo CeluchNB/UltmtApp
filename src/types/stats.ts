@@ -1,3 +1,4 @@
+import { DisplayTeam } from './team'
 import { DisplayUser } from './user'
 export interface DisplayStat {
     name: string
@@ -37,7 +38,7 @@ export interface CalculatedPlayerStats {
 
 export interface AllPlayerStats extends PlayerStats, CalculatedPlayerStats {}
 
-export interface TeamStats {
+export interface TeamData {
     wins: number
     losses: number
     goalsFor: number
@@ -51,8 +52,16 @@ export interface TeamStats {
     turnoversForced: number
 }
 
-export interface IdentifiedTeamStats extends TeamStats {
+export interface IdentifiedTeamStats extends TeamData {
     _id?: string
+}
+
+export interface TeamStats extends TeamData, DisplayTeam {
+    players: string[]
+    games: string[]
+    winPercentage: number
+    offensiveConversion: number
+    defensiveConversion: number
 }
 
 export interface IdentifiedPlayerStats extends DisplayUser, AllPlayerStats {
@@ -72,7 +81,7 @@ interface PointStats {
 }
 
 export interface Leader {
-    player?: DisplayUser
+    player?: PlayerIdUser
     total: number
 }
 
@@ -92,4 +101,22 @@ export interface GameStats extends GameData {
     teamTwoId?: string
     winningTeam?: 'one' | 'two'
     points: PointStats[]
+}
+
+export type PlayerIdUser = DisplayUser & { playerId?: string }
+export type FilteredGamePlayer = AllPlayerStats & PlayerIdUser
+export interface FilteredGameStats extends GameData {
+    _id: string
+    startTime: string
+    teamOneId: string
+    teamTwoId?: string
+    winningTeam?: 'one' | 'two'
+    players: FilteredGamePlayer[]
+}
+export interface FilteredTeamStats extends GameData, TeamData {
+    players: FilteredGamePlayer[]
+    games: string[]
+    winPercentage: number
+    offensiveConversion: number
+    defensiveConversion: number
 }

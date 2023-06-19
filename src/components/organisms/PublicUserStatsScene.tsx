@@ -204,6 +204,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             refreshControl={
                 <RefreshControl
                     refreshing={loading}
+                    colors={[colors.textSecondary]}
                     onRefresh={() => {
                         getStats()
                     }}
