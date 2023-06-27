@@ -142,8 +142,9 @@ export const useGameViewer = (gameId: string) => {
 
             getPointsByGame(gameId)
                 .then(data => {
-                    // TODO: points gauranteed to come in order?
-                    setPoints(data)
+                    setPoints(
+                        data.sort((a, b) => a.pointNumber - b.pointNumber),
+                    )
                     if (data.length > 0) {
                         setActivePoint(data[0])
                     }

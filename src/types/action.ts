@@ -270,7 +270,6 @@ export class ScoreAction extends BaseAction {
         if (playerOneDisplay && playerTwoDisplay) {
             viewerDisplay = `${playerOneDisplay} scores from ${playerTwoDisplay}`
         } else if (playerOneDisplay) {
-            // TODO: is a callahan the only way to get here?
             viewerDisplay = `${playerOneDisplay} scores a callahan`
         } else {
             viewerDisplay = `The opposing team scores`
