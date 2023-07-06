@@ -10,6 +10,7 @@ import {
     OFFENSE_COLUMNS,
     OVERALL_COLUMNS,
     PER_POINT_COLUMNS,
+    formatNumber,
 } from '../../utils/stats'
 import { FilteredGamePlayer, PlayerStats } from '../../types/stats'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
@@ -291,7 +292,10 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                                                             ),
                                                     },
                                                 ]}>
-                                                {record.value}
+                                                {formatNumber(
+                                                    value[0],
+                                                    record.value,
+                                                )}
                                             </Text>
                                         )
                                     })}
