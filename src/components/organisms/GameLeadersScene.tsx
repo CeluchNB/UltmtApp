@@ -36,7 +36,6 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
 
     const styles = StyleSheet.create({
         button: {
-            width: '50%',
             alignSelf: 'flex-end',
             margin: 5,
         },
