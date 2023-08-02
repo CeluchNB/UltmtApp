@@ -25,5 +25,4 @@ const requestPermissionsForAdvertising = async () => {
             await request(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY)
         }
     }
-    return
 }
