@@ -27,12 +27,16 @@
 		<key>NSAppTransportSecurity</key>
 		<dict>
 			<key>NSAllowsArbitraryLoads</key>
-			<false/>
+			<true/>
+			<key>NSAllowsArbitraryLoadsForMedia</key>
+			<true/>
+			<key>NSAllowsArbitraryLoadsInWebContent</key>
+			<true/>
 		</dict>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string></string>
 		<key>NSUserTrackingUsageDescription</key>
-		<string>This app provides personalized advertisements</string>
+		<string>This identifier will be used to deliver personalized ads to you.</string>
 		<key>UIAppFonts</key>
 		<array>
 			<string>AntDesign.ttf</string>
