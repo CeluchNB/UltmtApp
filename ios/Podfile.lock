@@ -429,7 +429,7 @@ PODS:
     - Google-Mobile-Ads-SDK (= 9.14.0)
     - GoogleUserMessagingPlatform (= 2.0.0)
     - React-Core
-  - RNPermissions (3.7.3):
+  - RNPermissions (3.8.4):
     - React-Core
   - RNScreens (3.18.2):
     - React-Core
@@ -698,7 +698,7 @@ SPEC CHECKSUMS:
   RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
   RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNGoogleMobileAds: 6b2f80de78d8644f5220f9bd7df7953542b550c6
-  RNPermissions: 6efdcac8db5e775091a663432b789f34c9dbecca
+  RNPermissions: e9b97579430ca3d83d53b3cf9b48814f8763f6cd
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
