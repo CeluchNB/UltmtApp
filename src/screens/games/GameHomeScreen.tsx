@@ -98,6 +98,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
                         onRefresh={refetch}
                         refreshing={loading}
                         colors={[colors.textSecondary]}
+                        tintColor={colors.textSecondary}
                     />
                 }>
                 {liveGames && liveGames.length > 0 && (

@@ -1,5 +1,7 @@
 import ActiveGameWarning from '../components/atoms/ActiveGameWarning'
+import { ApiError } from '../types/services'
 import { Button } from 'react-native-paper'
+import { DisplayStat } from '../types/stats'
 import { Game } from '../types/game'
 import GameListItem from '../components/atoms/GameListItem'
 import IconButtonText from '../components/atoms/IconButtonText'
@@ -10,12 +12,10 @@ import ScreenTitle from '../components/atoms/ScreenTitle'
 import Section from '../components/molecules/Section'
 import StatListItem from '../components/atoms/StatListItem'
 import TeamListItem from '../components/atoms/TeamListItem'
-import { User } from '../types/user'
 import { convertProfileScreenStatsToStatListItem } from '../utils/stats'
 import { fetchProfile } from '../services/data/user'
 import { getPlayerStats } from '../services/data/stats'
 import { logout } from '../services/data/auth'
-import { AllPlayerStats, DisplayStat } from '../types/stats'
 import {
     FlatList,
     RefreshControl,
@@ -31,6 +31,7 @@ import {
     selectPlayerTeams,
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
+import { setLogger, useQuery } from 'react-query'
 import { useData, useTheme } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -38,46 +39,63 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
+
+    const dispatch = useDispatch()
     const account = useSelector(selectAccount)
     const playerTeams = useSelector(selectPlayerTeams)
-    const dispatch = useDispatch()
     const [loading, setLoading] = React.useState(false)
+
+    const teamToGet = React.useMemo(() => {
+        if (!account) {
+            return undefined
+        }
+        if (account.managerTeams.length > 0) {
+            return account.managerTeams[0]._id
+        }
+        if (account.playerTeams.length > 0) {
+            return account.playerTeams[0]._id
+        }
+        return undefined
+    }, [account])
 
     const { data: activeGames, refetch: activeGameRefetch } = useData<Game[]>(
         getActiveGames,
         account._id,
     )
+
     const {
-        data: profile,
-        loading: profileLoading,
+        isLoading: profileLoading,
         error: profileError,
         refetch: profileRefetch,
-    } = useData<User>(fetchProfile)
-
-    const {
-        data: stats,
-        loading: statsLoading,
-        refetch: statsRefetch,
-    } = useData<AllPlayerStats>(getPlayerStats, account._id)
-
-    const teamToGet = React.useMemo(() => {
-        if (!profile) {
-            return undefined
-        }
-        if (profile.managerTeams.length > 0) {
-            return profile.managerTeams[0]._id
-        }
-        if (profile.playerTeams.length > 0) {
-            return profile.playerTeams[0]._id
-        }
-        return undefined
-    }, [profile])
+    } = useQuery(['fetchProfile'], () => fetchProfile(), {
+        retry: 3,
+        onSuccess: data => {
+            dispatch(setProfile(data))
+        },
+    })
 
     const {
         data: games,
-        loading: gameLoading,
+        isLoading: gameLoading,
         refetch: gameRefetch,
-    } = useData<Game[]>(getGamesByTeam, teamToGet)
+    } = useQuery(
+        ['getGamesByTeam', { teamId: teamToGet }],
+        () => getGamesByTeam(teamToGet || ''),
+        { enabled: !!teamToGet },
+    )
+
+    const {
+        data: stats,
+        isLoading: statsLoading,
+        refetch: statsRefetch,
+    } = useQuery(
+        ['getPlayersStats', { id: account._id }],
+        () => getPlayerStats(account._id),
+        {
+            enabled: !!account?._id,
+            retry: false,
+        },
+    )
 
     const sortedGames = React.useMemo(() => {
         return games?.reverse().slice(0, 3)
@@ -88,24 +106,12 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     }, [stats])
 
     React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', async () => {
-            // TODO: causing poor UI effect on back navigation
-            // investigate consequences of removing this
-            if (!profileLoading) {
-                // profileRefetch()
-                gameRefetch()
-                activeGameRefetch()
-                statsRefetch()
-            }
-        })
-        return unsubscribe
-    })
-
-    React.useEffect(() => {
-        if (!profileLoading && profile) {
-            dispatch(setProfile(profile))
+        // Disable react-query warning logs b/c players stats result is often an error
+        setLogger({ warn: () => {}, error: () => {}, log: console.log })
+        return () => {
+            setLogger(console)
         }
-    }, [profileLoading, profile, dispatch])
+    }, [])
 
     const onLogout = async () => {
         try {
@@ -193,8 +199,10 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                 refreshControl={
                     <RefreshControl
                         colors={[colors.textSecondary]}
+                        tintColor={colors.textSecondary}
                         refreshing={profileLoading}
                         onRefresh={async () => {
+                            console.log('refreshing')
                             profileRefetch()
                             gameRefetch()
                             activeGameRefetch()
@@ -262,7 +270,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                     profileError ? (
                         <View style={styles.footerContainer}>
                             <Text style={styles.error}>
-                                {profileError.message}
+                                {(profileError as ApiError).message}
                             </Text>
                         </View>
                     ) : (

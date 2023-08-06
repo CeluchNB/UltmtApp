@@ -31,6 +31,7 @@ import {
  */
 export const fetchProfile = async (): Promise<User> => {
     try {
+        console.log('calling fetch profile')
         const response = await withToken(networkFetchProfile)
         const { user, fullManagerTeams } = response.data
         await localSaveTeams(fullManagerTeams)
