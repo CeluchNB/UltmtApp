@@ -352,7 +352,9 @@ exports[`should match snapshot 1`] = `
           {
             "height": 216,
           },
-          undefined,
+          {
+            "color": "#ffd600",
+          },
         ]
       }
     />

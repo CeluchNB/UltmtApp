@@ -169,6 +169,7 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
                     <Picker
                         style={styles.picker}
                         selectedValue={value}
+                        itemStyle={{ color: colors.textPrimary }}
                         prompt="Season"
                         onValueChange={onChange}>
                         {years.map(year => {
