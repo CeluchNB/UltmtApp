@@ -29,6 +29,7 @@ const TeamGamesScene: React.FC<TeamGamesSceneProps> = ({
                     refreshing={isLoading || isRefetching}
                     onRefresh={refetch}
                     colors={[colors.textSecondary]}
+                    tintColor={colors.textSecondary}
                 />
             }
             data={data}

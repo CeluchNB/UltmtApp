@@ -48,6 +48,7 @@ const PublicUserTeamScene: React.FC<PublicUserTeamSceneProps> = ({
             refreshControl={
                 <RefreshControl
                     colors={[colors.textSecondary]}
+                    tintColor={colors.textSecondary}
                     refreshing={loading}
                     onRefresh={() => {
                         refetch()

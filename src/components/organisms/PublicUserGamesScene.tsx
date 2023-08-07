@@ -50,15 +50,13 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
     return (
         <BaseScreen containerWidth="80%">
             {error && <Text style={styles.error}>{error.message}</Text>}
-            {loading && (
-                <ActivityIndicator size="large" color={colors.textPrimary} />
-            )}
             {!loading && !error && (
                 <SectionList
                     sections={gameLists}
                     refreshControl={
                         <RefreshControl
                             colors={[colors.textSecondary]}
+                            tintColor={colors.textSecondary}
                             refreshing={loading}
                             onRefresh={() => {
                                 refetch()

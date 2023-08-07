@@ -20,6 +20,7 @@ exports[`should match snapshot 1`] = `
         }
         onRefresh={[Function]}
         refreshing={false}
+        tintColor="#31adff"
       />
     }
     testID="mtd-flat-list"

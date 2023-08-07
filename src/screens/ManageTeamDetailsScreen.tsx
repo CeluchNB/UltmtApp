@@ -120,6 +120,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     refreshControl={
                         <RefreshControl
                             colors={[colors.textSecondary]}
+                            tintColor={colors.textSecondary}
                             refreshing={teamLoading}
                             onRefresh={async () => {
                                 refetch()
@@ -141,6 +142,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                 refreshControl={
                     <RefreshControl
                         colors={[colors.textSecondary]}
+                        tintColor={colors.textSecondary}
                         refreshing={teamLoading}
                         onRefresh={async () => {
                             refetch()
