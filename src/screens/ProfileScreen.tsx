@@ -202,7 +202,6 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                         tintColor={colors.textSecondary}
                         refreshing={profileLoading}
                         onRefresh={async () => {
-                            console.log('refreshing')
                             profileRefetch()
                             gameRefetch()
                             activeGameRefetch()

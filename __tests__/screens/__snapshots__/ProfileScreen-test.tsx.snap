@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`profile screen matches snapshot 1`] = `
+exports[`ProfileScreen profile screen matches snapshot 1`] = `
 <RCTSafeAreaView
   style={
     {
@@ -250,6 +250,7 @@ exports[`profile screen matches snapshot 1`] = `
         }
         onRefresh={[Function]}
         refreshing={false}
+        tintColor="#31adff"
       />
     }
     removeClippedSubviews={false}

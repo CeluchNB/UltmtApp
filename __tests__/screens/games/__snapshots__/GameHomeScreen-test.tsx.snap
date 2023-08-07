@@ -131,6 +131,7 @@ exports[`should match snapshot with live and recent data 1`] = `
         }
         onRefresh={[Function]}
         refreshing={false}
+        tintColor="#31adff"
       />
     }
     showsVerticalScrollIndicator={false}
@@ -642,6 +643,7 @@ exports[`should match snapshot with no data 1`] = `
         }
         onRefresh={[Function]}
         refreshing={false}
+        tintColor="#31adff"
       />
     }
     showsVerticalScrollIndicator={false}
