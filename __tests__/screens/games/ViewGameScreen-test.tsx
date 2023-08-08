@@ -408,9 +408,9 @@ describe('ViewGameScreen', () => {
         })
 
         await waitFor(async () => {
-            expect(gameSpy).toHaveBeenCalledTimes(3)
+            expect(gameSpy).toHaveBeenCalledTimes(2)
         })
-        expect(pointsSpy).toHaveBeenCalledTimes(3)
+        expect(pointsSpy).toHaveBeenCalledTimes(2)
     })
 
     it('handles saved point functionality', async () => {

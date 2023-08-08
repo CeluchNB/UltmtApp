@@ -6,13 +6,7 @@ import GameListItem from '../atoms/GameListItem'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
-import {
-    ActivityIndicator,
-    RefreshControl,
-    SectionList,
-    StyleSheet,
-    Text,
-} from 'react-native'
+import { RefreshControl, SectionList, StyleSheet, Text } from 'react-native'
 
 export interface PublicUserGamesSceneProps {
     gameLists: { title: string; data: Game[]; index: number }[]

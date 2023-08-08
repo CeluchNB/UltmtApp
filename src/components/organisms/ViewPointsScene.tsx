@@ -2,14 +2,18 @@ import PointAccordionGroup from './PointAccordionGroup'
 import React from 'react'
 import { ServerActionData } from '../../types/action'
 import { useNavigation } from '@react-navigation/native'
+import { GameViewerData, useTheme } from '../../hooks'
 import { StyleSheet, View } from 'react-native'
-import { useGameViewer, useTheme } from '../../hooks'
 
 interface ViewPointsScene {
     gameId: string
+    gameViewerData: GameViewerData
 }
 
-const ViewPointsScene: React.FC<ViewPointsScene> = ({ gameId }) => {
+const ViewPointsScene: React.FC<ViewPointsScene> = ({
+    gameId,
+    gameViewerData,
+}) => {
     const navigation = useNavigation()
 
     const {
@@ -25,7 +29,7 @@ const ViewPointsScene: React.FC<ViewPointsScene> = ({ gameId }) => {
         onSelectAction,
         onSelectPoint,
         onRefresh,
-    } = useGameViewer(gameId)
+    } = gameViewerData
 
     const handleSelectAction = (action: ServerActionData) => {
         const { pointId, live } = onSelectAction(action)
