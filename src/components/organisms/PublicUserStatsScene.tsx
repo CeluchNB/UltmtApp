@@ -118,6 +118,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     const filteredStats = React.useMemo(() => {
         const updatedStats: Partial<AllPlayerStats> = Object.assign({}, stats)
 
+        // TODO: this is not ideal, at least move it to a separate function
         delete (updatedStats as any)._id
         delete (updatedStats as any).games
         delete (updatedStats as any).teams
@@ -185,12 +186,11 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         valueCell: {
             color: colors.textSecondary,
         },
-        button: {
-            flexGrow: 1,
-        },
+        button: {},
         buttonContainer: {
             display: 'flex',
             flexDirection: 'row',
+            alignSelf: 'center',
         },
         error: {
             alignSelf: 'center',

@@ -44,6 +44,11 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
     return (
         <BaseScreen containerWidth="80%">
             {error && <Text style={styles.error}>{error.message}</Text>}
+            {gameLists.length === 0 && (
+                <Text style={styles.error}>
+                    This user has not participated in any games yet
+                </Text>
+            )}
             {!loading && !error && (
                 <SectionList
                     sections={gameLists}

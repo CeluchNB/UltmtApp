@@ -37,6 +37,29 @@ describe('PublicUserTeamScene', () => {
         expect(
             screen.getByText(`@${fetchProfileData.playerTeams[2].teamname}`),
         ).toBeTruthy()
+        expect(
+            screen.getByText(`@${fetchProfileData.managerTeams[0].teamname}`),
+        ).toBeTruthy()
+    })
+
+    it('renders no team message', () => {
+        render(
+            <NavigationContainer>
+                <PublicUserTeamScene
+                    loading={false}
+                    refetch={jest.fn()}
+                    user={{
+                        ...fetchProfileData,
+                        playerTeams: [],
+                        managerTeams: [],
+                    }}
+                />
+            </NavigationContainer>,
+        )
+
+        expect(
+            screen.getByText('This user has not joined any teams yet'),
+        ).toBeTruthy()
     })
 
     it('renders error', () => {

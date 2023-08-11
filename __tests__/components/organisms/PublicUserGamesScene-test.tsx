@@ -33,6 +33,23 @@ describe('PublicUserGamesScene', () => {
         expect(screen.getByText(`vs. ${game.teamTwo.name}`)).toBeTruthy()
     })
 
+    it('renders no games error', () => {
+        render(
+            <NavigationContainer>
+                <PublicUserGamesScene
+                    gameLists={[]}
+                    teams={[teamOne]}
+                    loading={false}
+                    refetch={jest.fn()}
+                />
+            </NavigationContainer>,
+        )
+
+        expect(
+            screen.getByText('This user has not participated in any games yet'),
+        ).toBeTruthy()
+    })
+
     it('renders error', () => {
         render(
             <NavigationContainer>
