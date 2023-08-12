@@ -245,6 +245,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                                             params: {
                                                 userId: record._id,
                                             },
+                                            initial: false,
                                         },
                                     })
                                 }}>

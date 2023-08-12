@@ -46,6 +46,7 @@ const TeamGamesScene: React.FC<TeamGamesSceneProps> = ({
                                     params: {
                                         gameId: item._id,
                                     },
+                                    initial: false,
                                 },
                             })
                         }}

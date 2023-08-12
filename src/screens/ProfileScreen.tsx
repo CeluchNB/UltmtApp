@@ -134,13 +134,14 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     }
 
     const onViewGame = (gameId: string) => {
-        navigation.push('Tabs', {
+        navigation.navigate('Tabs', {
             screen: 'Games',
             params: {
                 screen: 'ViewGame',
                 params: {
                     gameId,
                 },
+                initial: false,
             },
         })
     }
