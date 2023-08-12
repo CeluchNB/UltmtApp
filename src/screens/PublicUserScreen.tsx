@@ -157,6 +157,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     const filterableGames = React.useMemo(() => {
         const tempGames: { game: Game; teamId: string }[] = []
 
+        console.log('in filterable games', games)
         for (let i = 0; i < games.length; i++) {
             // only include games player played in
             if (!playerTeams.some(team => team._id === allTeams[i]._id)) {
@@ -169,6 +170,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                 })),
             )
         }
+        console.log('after filter', tempGames)
         return tempGames
     }, [games, allTeams, playerTeams])
 

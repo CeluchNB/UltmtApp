@@ -27,7 +27,14 @@ const GameCreationNavigator: React.FC<{}> = () => {
                     title: route.name.split(/(?=[A-Z])/).join(' '),
                 }
             }}>
-            <Stack.Screen name="SelectMyTeam" component={SelectMyTeamScreen} />
+            <Stack.Screen
+                name="SelectMyTeam"
+                component={SelectMyTeamScreen}
+                options={{
+                    headerBackTitleVisible: true,
+                    headerBackTitle: 'Back',
+                }}
+            />
             <Stack.Screen
                 name="SelectOpponent"
                 component={SelectOpponentScreen}

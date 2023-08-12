@@ -35,7 +35,7 @@ const BaseListItem: React.FC<BaseListItemProps> = ({
             marginBottom: 5,
         },
         textContainer: {
-            // flex: 1,
+            flex: showDelete || showAccept || onPress ? 1 : 0,
             alignSelf: 'center',
         },
         text: {

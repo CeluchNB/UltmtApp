@@ -7,6 +7,7 @@ import React from 'react'
 import { ViewGameProps } from '../../types/navigation'
 import ViewPointsScene from '../../components/organisms/ViewPointsScene'
 import { deleteGame } from '../../services/data/game'
+import { setupMobileAds } from '../../utils/ads'
 import {
     ActivityIndicator,
     StyleSheet,
@@ -78,6 +79,10 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         { key: 'stats', title: 'Leaderboard' },
     ])
     const [tabHeight, setTabHeight] = React.useState(0)
+
+    React.useEffect(() => {
+        setupMobileAds()
+    }, [])
 
     React.useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
