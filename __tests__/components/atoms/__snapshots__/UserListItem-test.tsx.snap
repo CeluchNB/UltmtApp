@@ -15,6 +15,7 @@ exports[`matches snapshot with all props 1`] = `
       style={
         {
           "alignSelf": "center",
+          "flex": 1,
         }
       }
     >

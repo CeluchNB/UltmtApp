@@ -1568,6 +1568,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     style={
                       {
                         "alignSelf": "center",
+                        "flex": 1,
                       }
                     }
                   >
@@ -2095,6 +2096,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                   style={
                     {
                       "alignSelf": "center",
+                      "flex": 1,
                     }
                   }
                 >
@@ -2311,6 +2313,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                   style={
                     {
                       "alignSelf": "center",
+                      "flex": 1,
                     }
                   }
                 >
@@ -2527,6 +2530,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                   style={
                     {
                       "alignSelf": "center",
+                      "flex": 1,
                     }
                   }
                 >
