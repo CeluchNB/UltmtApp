@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match snapshot 1`] = `
+exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
 <RCTSafeAreaView
   style={
     {
@@ -746,6 +746,50 @@ exports[`should match snapshot 1`] = `
               </View>
             </View>
           </View>
+        </View>
+        <View
+          style={
+            {
+              "display": "flex",
+              "flexDirection": "row",
+              "margin": 5,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#ababab",
+                "flex": 1,
+                "fontSize": 41.0958904109589,
+              }
+            }
+          >
+            Roster Open
+          </Text>
+          <RCTSwitch
+            accessibilityRole="switch"
+            onChange={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            onTintColor="#31adff"
+            style={
+              [
+                {
+                  "height": 31,
+                  "width": 51,
+                },
+                {
+                  "backgroundColor": "#ababab",
+                  "borderRadius": 16,
+                },
+              ]
+            }
+            testID="roster-open-switch"
+            thumbTintColor="#ffd600"
+            tintColor="#ababab"
+            value={false}
+          />
         </View>
         <View
           style={
