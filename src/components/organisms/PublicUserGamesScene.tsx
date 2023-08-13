@@ -77,6 +77,7 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
                                         params: {
                                             screen: 'ViewGame',
                                             params: { gameId: item._id },
+                                            initial: false,
                                         },
                                     })
                                 }}

@@ -106,6 +106,7 @@ describe('PublicUserGamesScene', () => {
             params: {
                 screen: 'ViewGame',
                 params: { gameId: game._id },
+                initial: false,
             },
         })
     })

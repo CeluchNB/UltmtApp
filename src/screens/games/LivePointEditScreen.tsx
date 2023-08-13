@@ -76,7 +76,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
             await finishGame()
             navigation.navigate('Tabs', {
                 screen: 'Account',
-                params: { screen: 'Profile' },
+                params: { screen: 'Profile', initial: false },
             })
         } catch (e) {
             setFinishError(

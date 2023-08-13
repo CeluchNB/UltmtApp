@@ -227,6 +227,7 @@ exports[`should match snapshot 1`] = `
                 style={
                   {
                     "alignSelf": "center",
+                    "flex": 1,
                   }
                 }
               >
@@ -762,6 +763,7 @@ exports[`should match snapshot 1`] = `
                 style={
                   {
                     "alignSelf": "center",
+                    "flex": 1,
                   }
                 }
               >

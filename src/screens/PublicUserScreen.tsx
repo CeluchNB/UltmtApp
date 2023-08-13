@@ -5,7 +5,7 @@ import { PublicUserDetailsProps } from '../types/navigation'
 import React from 'react'
 import { User } from '../types/user'
 import { getGamesByTeam } from '../services/data/game'
-import { useSelector } from 'react-redux'
+import { setError } from '../store/reducers/features/account/accountReducer'
 import PublicUserGamesScene, {
     PublicUserGamesSceneProps,
 } from '../components/organisms/PublicUserGamesScene'
@@ -23,11 +23,6 @@ import {
     useWindowDimensions,
 } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
-import {
-    selectManagerTeams,
-    selectPlayerTeams,
-    setError,
-} from '../store/reducers/features/account/accountReducer'
 import { useData, useTheme } from './../hooks'
 
 const renderScene = (
@@ -115,13 +110,21 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user])
 
-    const managerTeams = useSelector(selectManagerTeams)
-    const playerTeams = useSelector(selectPlayerTeams)
     const [games, setGames] = React.useState<Game[][]>([])
     const [gameLoading, setGameLoading] = React.useState(false)
     const [gameError, setGameError] = React.useState<ApiError | undefined>(
         undefined,
     )
+
+    const managerTeams = React.useMemo(() => {
+        if (user) return user.managerTeams
+        return []
+    }, [user])
+
+    const playerTeams = React.useMemo(() => {
+        if (user) return user.playerTeams
+        return []
+    }, [user])
 
     const allTeams = React.useMemo(() => {
         const map = new Map()

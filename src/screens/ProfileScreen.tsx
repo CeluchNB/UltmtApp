@@ -130,17 +130,18 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     }
 
     const onCreateGame = () => {
-        navigation.navigate('GameCreationFlow', { screen: 'SelectMyTeam' })
+        navigation.navigate('SelectMyTeam')
     }
 
     const onViewGame = (gameId: string) => {
-        navigation.push('Tabs', {
+        navigation.navigate('Tabs', {
             screen: 'Games',
             params: {
                 screen: 'ViewGame',
                 params: {
                     gameId,
                 },
+                initial: false,
             },
         })
     }

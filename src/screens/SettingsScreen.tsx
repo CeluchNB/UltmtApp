@@ -61,6 +61,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             fontSize: size.fontTwenty,
             color: colors.textPrimary,
             fontWeight: weight.bold,
+            flex: 1,
         },
         moreInfoText: {
             fontSize: size.fontTwenty,
@@ -149,6 +150,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                 false: colors.gray,
                                 true: colors.textSecondary,
                             }}
+                            ios_backgroundColor={colors.gray}
                             value={themeId === 'dark'}
                             onValueChange={async () => {
                                 toggleTheme()
@@ -165,6 +167,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                 false: colors.gray,
                                 true: colors.textSecondary,
                             }}
+                            ios_backgroundColor={colors.gray}
                             value={!account.privateProfile}
                             onValueChange={() => {
                                 dispatch(

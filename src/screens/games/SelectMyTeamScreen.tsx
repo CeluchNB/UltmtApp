@@ -44,7 +44,7 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
     }
 
     const onCreateTeam = async () => {
-        navigation.push('Tabs', {
+        navigation.navigate('Tabs', {
             screen: 'Account',
             params: { screen: 'CreateTeam' },
         })

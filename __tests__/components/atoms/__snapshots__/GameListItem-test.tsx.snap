@@ -15,6 +15,7 @@ exports[`GameListItem test matches snapshot 1`] = `
       style={
         {
           "alignSelf": "center",
+          "flex": 0,
         }
       }
     >

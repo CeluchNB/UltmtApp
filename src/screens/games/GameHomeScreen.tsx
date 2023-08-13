@@ -5,7 +5,6 @@ import { GameHomeProps } from '../../types/navigation'
 import MapSection from '../../components/molecules/MapSection'
 import SearchBar from '../../components/atoms/SearchBar'
 import { searchGames } from '../../services/data/game'
-import { setupMobileAds } from '../../utils/ads'
 import React, { useMemo } from 'react'
 import {
     RefreshControl,
@@ -30,16 +29,12 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
         return data?.filter(g => !g.teamOneActive)
     }, [data])
 
-    React.useEffect(() => {
-        setupMobileAds()
-    }, [])
-
     const navigateToSearch = (live: string) => {
         navigation.navigate('GameSearch', { live })
     }
 
     const navigateToCreate = () => {
-        navigation.navigate('GameCreationFlow', { screen: 'SelectMyTeam' })
+        navigation.navigate('SelectMyTeam')
     }
 
     const navigateToViewGame = (gameId: string) => {

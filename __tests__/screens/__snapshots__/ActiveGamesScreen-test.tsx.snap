@@ -152,6 +152,7 @@ exports[`ActiveGamesScreen renders 1`] = `
                 style={
                   {
                     "alignSelf": "center",
+                    "flex": 1,
                   }
                 }
               >
@@ -505,6 +506,7 @@ exports[`ActiveGamesScreen renders 1`] = `
                 style={
                   {
                     "alignSelf": "center",
+                    "flex": 1,
                   }
                 }
               >
