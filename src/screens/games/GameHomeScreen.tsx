@@ -34,7 +34,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     }
 
     const navigateToCreate = () => {
-        navigation.navigate('GameCreationFlow', { screen: 'SelectMyTeam' })
+        navigation.navigate('SelectMyTeam')
     }
 
     const navigateToViewGame = (gameId: string) => {

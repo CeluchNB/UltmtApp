@@ -130,7 +130,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     }
 
     const onCreateGame = () => {
-        navigation.navigate('GameCreationFlow', { screen: 'SelectMyTeam' })
+        navigation.navigate('SelectMyTeam')
     }
 
     const onViewGame = (gameId: string) => {
