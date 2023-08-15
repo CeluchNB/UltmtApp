@@ -91,7 +91,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
         },
         modalView: {
             margin: 20,
-            backgroundColor: colors.darkGray,
+            backgroundColor: colors.darkPrimary,
             borderRadius: 10,
             padding: 25,
             alignItems: 'center',
@@ -256,6 +256,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                     <Button
                         mode="contained"
                         buttonColor={colors.error}
+                        textColor={colors.primary}
                         uppercase={true}
                         style={styles.deleteButton}
                         onPress={async () => {
@@ -282,6 +283,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                         mode="contained"
                                         buttonColor={colors.success}
                                         uppercase={true}
+                                        textColor={colors.darkPrimary}
                                         style={styles.modalButton}
                                         onPress={() => {
                                             setModalVisible(false)
@@ -292,6 +294,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                         mode="contained"
                                         buttonColor={colors.error}
                                         uppercase={true}
+                                        textColor={colors.darkPrimary}
                                         style={styles.modalButton}
                                         onPress={async () => {
                                             try {

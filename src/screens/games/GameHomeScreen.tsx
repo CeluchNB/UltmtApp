@@ -131,7 +131,12 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
                     </Text>
                 )}
             </ScrollView>
-            <FAB icon="plus" style={styles.fab} onPress={navigateToCreate} />
+            <FAB
+                icon="plus"
+                style={styles.fab}
+                color={colors.primary}
+                onPress={navigateToCreate}
+            />
         </SafeAreaView>
     )
 }

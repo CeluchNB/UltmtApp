@@ -227,7 +227,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                             ios_backgroundColor={colors.gray}
                             value={team?.rosterOpen}
                             onValueChange={() => {
-                                console.log('dispatching')
                                 dispatch(
                                     toggleRosterStatus({
                                         id: team?._id || '',

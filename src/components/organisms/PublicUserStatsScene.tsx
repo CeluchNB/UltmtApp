@@ -18,7 +18,11 @@ import {
     View,
 } from 'react-native'
 import StatsFilterModal, { CheckBoxItem } from '../molecules/StatsFilterModal'
-import { formatNumber, mapStatDisplayName } from '../../utils/stats'
+import {
+    formatNumber,
+    mapStatDisplayName,
+    sortAlphabetically,
+} from '../../utils/stats'
 
 export interface PublicUserStatsSceneProps {
     userId: string
@@ -236,8 +240,9 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                 <View>
                     <DataTable>
                         {stats &&
-                            Object.entries(filteredStats).map(
-                                ([key, value]) => {
+                            Object.entries(filteredStats)
+                                .sort((a, b) => sortAlphabetically(a[0], b[0]))
+                                .map(([key, value]) => {
                                     return (
                                         <DataTable.Row key={key}>
                                             <DataTable.Cell
@@ -253,8 +258,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                                             </DataTable.Cell>
                                         </DataTable.Row>
                                     )
-                                },
-                            )}
+                                })}
                     </DataTable>
                 </View>
             )}

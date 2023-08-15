@@ -53,12 +53,18 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
             fontSize: size.fontThirty,
             color: colors.textPrimary,
         },
+        error: {
+            color: colors.gray,
+            fontSize: size.fontThirty,
+        },
     })
 
     if (!teamId) {
         return (
             <View>
-                <Text>This team is not contributing stats for this game.</Text>
+                <Text style={styles.error}>
+                    This team is not contributing stats for this game.
+                </Text>
             </View>
         )
     }
