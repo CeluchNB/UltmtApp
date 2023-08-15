@@ -33,7 +33,7 @@ exports[`ActionDisplayItem match snapshot with live action 1`] = `
   <Text
     style={
       {
-        "color": "#ffd600",
+        "color": "#7AC6FF",
         "fontSize": 30.821917808219176,
         "fontWeight": "900",
       }
@@ -72,7 +72,7 @@ exports[`ActionDisplayItem match snapshot with live action 1`] = `
               {
                 "color": "#ffd600",
                 "fontSize": 30.821917808219176,
-                "fontWeight": "900",
+                "fontWeight": "bold",
               }
             }
           >
@@ -592,7 +592,7 @@ exports[`ActionDisplayItem should match snapshot with server action 1`] = `
   <Text
     style={
       {
-        "color": "#ffd600",
+        "color": "#7AC6FF",
         "fontSize": 30.821917808219176,
         "fontWeight": "900",
       }
@@ -631,7 +631,7 @@ exports[`ActionDisplayItem should match snapshot with server action 1`] = `
               {
                 "color": "#ffd600",
                 "fontSize": 30.821917808219176,
-                "fontWeight": "900",
+                "fontWeight": "bold",
               }
             }
           >

@@ -332,7 +332,7 @@ exports[`matches snapshot 1`] = `
                       "textTransform": "uppercase",
                     },
                     {
-                      "color": "#ffd600",
+                      "color": "#7AC6FF",
                       "fontFamily": "System",
                       "fontSize": 14,
                       "fontWeight": "500",

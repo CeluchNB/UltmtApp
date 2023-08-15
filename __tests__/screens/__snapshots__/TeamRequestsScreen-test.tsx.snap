@@ -15,12 +15,12 @@ exports[`should match snapshot 1`] = `
       <RefreshControlMock
         colors={
           [
-            "#31adff",
+            "#7AC6FF",
           ]
         }
         onRefresh={[Function]}
         refreshing={false}
-        tintColor="#31adff"
+        tintColor="#7AC6FF"
       />
     }
     testID="mtd-flat-list"
@@ -252,7 +252,7 @@ exports[`should match snapshot 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -531,7 +531,7 @@ exports[`should match snapshot 1`] = `
                         style={
                           [
                             {
-                              "color": "#ff0000",
+                              "color": "#FFB4AB",
                               "fontSize": 24,
                             },
                             [
@@ -777,7 +777,7 @@ exports[`should match snapshot 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -800,7 +800,7 @@ exports[`should match snapshot 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "fontSize": 20.54794520547945,
                         "fontWeight": "bold",
                       }
@@ -923,7 +923,7 @@ exports[`should match snapshot 1`] = `
                         style={
                           [
                             {
-                              "color": "#ff0000",
+                              "color": "#FFB4AB",
                               "fontSize": 24,
                             },
                             [

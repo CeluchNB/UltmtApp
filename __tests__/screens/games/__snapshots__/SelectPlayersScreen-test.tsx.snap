@@ -192,7 +192,7 @@ exports[`should match snapshot 1`] = `
             <Text
               style={
                 {
-                  "color": "#ababab",
+                  "color": "#CEC6B4",
                   "fontSize": 41.0958904109589,
                   "marginBottom": 10,
                   "textAlign": "center",
@@ -353,7 +353,7 @@ exports[`should match snapshot 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "flex": 1,
                         "fontSize": 30.821917808219176,
                         "fontWeight": "900",
@@ -550,7 +550,7 @@ exports[`should match snapshot 1`] = `
               <Text
                 style={
                   {
-                    "color": "#ababab",
+                    "color": "#CEC6B4",
                     "fontSize": 41.0958904109589,
                     "marginBottom": 10,
                     "textAlign": "center",
@@ -574,7 +574,7 @@ exports[`should match snapshot 1`] = `
                 <Text
                   style={
                     {
-                      "color": "#ff0000",
+                      "color": "#FFB4AB",
                       "width": "80%",
                     }
                   }
@@ -916,7 +916,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -1007,7 +1007,7 @@ exports[`should match snapshot 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -1078,7 +1078,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -1169,7 +1169,7 @@ exports[`should match snapshot 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -1240,7 +1240,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -1331,7 +1331,7 @@ exports[`should match snapshot 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -1402,7 +1402,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -1493,7 +1493,7 @@ exports[`should match snapshot 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -1564,7 +1564,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -1655,7 +1655,7 @@ exports[`should match snapshot 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -1726,7 +1726,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -1817,7 +1817,7 @@ exports[`should match snapshot 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -1888,7 +1888,7 @@ exports[`should match snapshot 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -1979,7 +1979,7 @@ exports[`should match snapshot 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -2202,7 +2202,7 @@ exports[`should match snapshot 1`] = `
                     collapsable={false}
                     style={
                       {
-                        "backgroundColor": "#ababab",
+                        "backgroundColor": "#CEC6B4",
                         "borderColor": "transparent",
                         "borderRadius": 20,
                         "borderStyle": "solid",
@@ -2521,7 +2521,7 @@ exports[`should match snapshot for team two 1`] = `
             <Text
               style={
                 {
-                  "color": "#ababab",
+                  "color": "#CEC6B4",
                   "fontSize": 41.0958904109589,
                   "marginBottom": 10,
                   "textAlign": "center",
@@ -2682,7 +2682,7 @@ exports[`should match snapshot for team two 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "flex": 1,
                         "fontSize": 30.821917808219176,
                         "fontWeight": "900",
@@ -2879,7 +2879,7 @@ exports[`should match snapshot for team two 1`] = `
               <Text
                 style={
                   {
-                    "color": "#ababab",
+                    "color": "#CEC6B4",
                     "fontSize": 41.0958904109589,
                     "marginBottom": 10,
                     "textAlign": "center",
@@ -2903,7 +2903,7 @@ exports[`should match snapshot for team two 1`] = `
                 <Text
                   style={
                     {
-                      "color": "#ff0000",
+                      "color": "#FFB4AB",
                       "width": "80%",
                     }
                   }
@@ -3245,7 +3245,7 @@ exports[`should match snapshot for team two 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -3336,7 +3336,7 @@ exports[`should match snapshot for team two 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -3407,7 +3407,7 @@ exports[`should match snapshot for team two 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -3498,7 +3498,7 @@ exports[`should match snapshot for team two 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -3569,7 +3569,7 @@ exports[`should match snapshot for team two 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -3660,7 +3660,7 @@ exports[`should match snapshot for team two 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -3731,7 +3731,7 @@ exports[`should match snapshot for team two 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -3822,7 +3822,7 @@ exports[`should match snapshot for team two 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -3893,7 +3893,7 @@ exports[`should match snapshot for team two 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -3984,7 +3984,7 @@ exports[`should match snapshot for team two 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -4055,7 +4055,7 @@ exports[`should match snapshot for team two 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -4146,7 +4146,7 @@ exports[`should match snapshot for team two 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -4217,7 +4217,7 @@ exports[`should match snapshot for team two 1`] = `
                   style={
                     {
                       "backgroundColor": "#303030",
-                      "borderColor": "rgba(171, 171, 171, 0.29)",
+                      "borderColor": "rgba(206, 198, 180, 0.29)",
                       "borderRadius": 8,
                       "borderStyle": "solid",
                       "borderWidth": 2,
@@ -4308,7 +4308,7 @@ exports[`should match snapshot for team two 1`] = `
                                 "textAlignVertical": "center",
                               },
                               {
-                                "color": "#ababab",
+                                "color": "#CEC6B4",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -4531,7 +4531,7 @@ exports[`should match snapshot for team two 1`] = `
                     collapsable={false}
                     style={
                       {
-                        "backgroundColor": "#ababab",
+                        "backgroundColor": "#CEC6B4",
                         "borderColor": "transparent",
                         "borderRadius": 20,
                         "borderStyle": "solid",

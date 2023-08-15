@@ -74,7 +74,7 @@ exports[`OfflineGameOptionsScreen renders 1`] = `
           <Text
             style={
               {
-                "color": "#ababab",
+                "color": "#CEC6B4",
                 "flex": 1,
                 "fontSize": 30.821917808219176,
                 "fontWeight": "900",

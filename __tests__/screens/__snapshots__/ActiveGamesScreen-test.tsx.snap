@@ -176,7 +176,7 @@ exports[`ActiveGamesScreen renders 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -310,7 +310,7 @@ exports[`ActiveGamesScreen renders 1`] = `
                         style={
                           [
                             {
-                              "color": "#ff0000",
+                              "color": "#FFB4AB",
                               "fontSize": 24,
                             },
                             [
@@ -530,7 +530,7 @@ exports[`ActiveGamesScreen renders 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -664,7 +664,7 @@ exports[`ActiveGamesScreen renders 1`] = `
                         style={
                           [
                             {
-                              "color": "#ff0000",
+                              "color": "#FFB4AB",
                               "fontSize": 24,
                             },
                             [

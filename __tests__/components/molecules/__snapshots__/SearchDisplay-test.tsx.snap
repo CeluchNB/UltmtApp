@@ -72,7 +72,7 @@ exports[`should match snapshot 1`] = `
           onFocus={[Function]}
           onPressOut={[Function]}
           placeholder="Search teams..."
-          placeholderTextColor="#ababab"
+          placeholderTextColor="#CEC6B4"
           selectionColor="#ffd600"
           style={
             [

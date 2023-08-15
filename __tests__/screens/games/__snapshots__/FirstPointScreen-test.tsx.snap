@@ -48,7 +48,7 @@ exports[`should match snapshot with data 1`] = `
       <Text
         style={
           {
-            "color": "#ababab",
+            "color": "#CEC6B4",
             "fontSize": 41.0958904109589,
             "textAlign": "center",
           }
@@ -82,7 +82,7 @@ exports[`should match snapshot with data 1`] = `
       <Text
         style={
           {
-            "color": "#ababab",
+            "color": "#CEC6B4",
             "fontSize": 41.0958904109589,
             "textAlign": "center",
           }

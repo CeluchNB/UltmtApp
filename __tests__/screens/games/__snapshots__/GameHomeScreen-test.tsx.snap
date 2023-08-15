@@ -79,7 +79,7 @@ exports[`should match snapshot with live and recent data 1`] = `
           onFocus={[Function]}
           onPressOut={[Function]}
           placeholder="Search games..."
-          placeholderTextColor="#ababab"
+          placeholderTextColor="#CEC6B4"
           selectionColor="#ffd600"
           style={
             [
@@ -126,12 +126,12 @@ exports[`should match snapshot with live and recent data 1`] = `
       <RefreshControlMock
         colors={
           [
-            "#31adff",
+            "#7AC6FF",
           ]
         }
         onRefresh={[Function]}
         refreshing={false}
-        tintColor="#31adff"
+        tintColor="#7AC6FF"
       />
     }
     showsVerticalScrollIndicator={false}
@@ -309,7 +309,7 @@ exports[`should match snapshot with live and recent data 1`] = `
                             "textTransform": "uppercase",
                           },
                           {
-                            "color": "#ffd600",
+                            "color": "#7AC6FF",
                             "fontFamily": "System",
                             "fontSize": 14,
                             "fontWeight": "500",
@@ -475,7 +475,7 @@ exports[`should match snapshot with live and recent data 1`] = `
                   style={
                     [
                       {
-                        "color": "rgba(33, 0, 93, 1)",
+                        "color": "#303030",
                         "fontSize": 24,
                       },
                       [
@@ -591,7 +591,7 @@ exports[`should match snapshot with no data 1`] = `
           onFocus={[Function]}
           onPressOut={[Function]}
           placeholder="Search games..."
-          placeholderTextColor="#ababab"
+          placeholderTextColor="#CEC6B4"
           selectionColor="#ffd600"
           style={
             [
@@ -638,12 +638,12 @@ exports[`should match snapshot with no data 1`] = `
       <RefreshControlMock
         colors={
           [
-            "#31adff",
+            "#7AC6FF",
           ]
         }
         onRefresh={[Function]}
         refreshing={false}
-        tintColor="#31adff"
+        tintColor="#7AC6FF"
       />
     }
     showsVerticalScrollIndicator={false}
@@ -661,7 +661,7 @@ exports[`should match snapshot with no data 1`] = `
         style={
           {
             "alignSelf": "center",
-            "color": "#ababab",
+            "color": "#CEC6B4",
             "fontSize": 61.64383561643835,
           }
         }
@@ -814,7 +814,7 @@ exports[`should match snapshot with no data 1`] = `
                   style={
                     [
                       {
-                        "color": "rgba(33, 0, 93, 1)",
+                        "color": "#303030",
                         "fontSize": 24,
                       },
                       [

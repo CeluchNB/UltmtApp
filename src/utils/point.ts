@@ -180,8 +180,6 @@ export const normalizeLiveActions = (
 }
 
 const lastTwoActionsAreScores = (action1: Action, action2: Action): boolean => {
-    console.log('action1', action1)
-    console.log('action2', action2)
     return (
         Object.keys(action1).includes('action') &&
         Object.keys(action2).includes('action') &&

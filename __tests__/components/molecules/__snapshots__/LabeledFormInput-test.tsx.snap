@@ -47,7 +47,7 @@ exports[`should match basic snapshot 1`] = `
             },
             {
               "backgroundColor": "#303030",
-              "borderColor": "#31adff",
+              "borderColor": "#7AC6FF",
               "borderRadius": 4,
               "borderWidth": 1,
             },
@@ -124,7 +124,7 @@ exports[`should match basic snapshot 1`] = `
     <Text
       style={
         {
-          "color": "#ff0000",
+          "color": "#FFB4AB",
           "fontSize": 20.54794520547945,
         }
       }
@@ -135,7 +135,7 @@ exports[`should match basic snapshot 1`] = `
   <Text
     style={
       {
-        "color": "#ababab",
+        "color": "#CEC6B4",
         "fontSize": 30.821917808219176,
         "fontWeight": "bold",
         "marginLeft": 10,
@@ -184,7 +184,7 @@ exports[`should match snapshot with non-user input 1`] = `
     <Text
       style={
         {
-          "color": "#ff0000",
+          "color": "#FFB4AB",
           "fontSize": 20.54794520547945,
         }
       }
@@ -195,7 +195,7 @@ exports[`should match snapshot with non-user input 1`] = `
   <Text
     style={
       {
-        "color": "#ababab",
+        "color": "#CEC6B4",
         "fontSize": 30.821917808219176,
         "fontWeight": "bold",
         "marginLeft": 10,
@@ -254,7 +254,7 @@ exports[`should match snapshot without unit 1`] = `
             },
             {
               "backgroundColor": "#303030",
-              "borderColor": "#31adff",
+              "borderColor": "#7AC6FF",
               "borderRadius": 4,
               "borderWidth": 1,
             },
@@ -331,7 +331,7 @@ exports[`should match snapshot without unit 1`] = `
     <Text
       style={
         {
-          "color": "#ff0000",
+          "color": "#FFB4AB",
           "fontSize": 20.54794520547945,
         }
       }

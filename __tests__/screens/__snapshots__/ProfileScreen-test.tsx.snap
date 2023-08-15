@@ -219,7 +219,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
               "marginTop": 5,
             }
           }
-          textColor="#ff0000"
+          textColor="#FFB4AB"
           uppercase={true}
         >
           Sign Out
@@ -245,12 +245,12 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
       <RefreshControlMock
         colors={
           [
-            "#31adff",
+            "#7AC6FF",
           ]
         }
         onRefresh={[Function]}
         refreshing={false}
-        tintColor="#31adff"
+        tintColor="#7AC6FF"
       />
     }
     removeClippedSubviews={false}
@@ -554,7 +554,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                               "textTransform": "uppercase",
                             },
                             {
-                              "color": "#ff0000",
+                              "color": "#FFB4AB",
                               "fontFamily": "System",
                               "fontSize": 14,
                               "fontWeight": "500",
@@ -1065,7 +1065,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <Text
                       style={
                         {
-                          "color": "#ababab",
+                          "color": "#CEC6B4",
                           "fontSize": 41.0958904109589,
                           "fontWeight": "bold",
                         }
@@ -1087,7 +1087,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <View
                       style={
                         {
-                          "backgroundColor": "#31adff",
+                          "backgroundColor": "#7AC6FF",
                           "borderRadius": 5,
                           "height": 10,
                           "width": 100,
@@ -1105,7 +1105,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <Text
                       style={
                         {
-                          "color": "#ababab",
+                          "color": "#CEC6B4",
                           "fontSize": 41.0958904109589,
                           "fontWeight": "bold",
                         }
@@ -1127,7 +1127,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <View
                       style={
                         {
-                          "backgroundColor": "#31adff",
+                          "backgroundColor": "#7AC6FF",
                           "borderRadius": 5,
                           "height": 10,
                           "width": 100,
@@ -1158,7 +1158,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <Text
                       style={
                         {
-                          "color": "#ababab",
+                          "color": "#CEC6B4",
                           "fontSize": 41.0958904109589,
                           "fontWeight": "bold",
                         }
@@ -1180,7 +1180,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <View
                       style={
                         {
-                          "backgroundColor": "#31adff",
+                          "backgroundColor": "#7AC6FF",
                           "borderRadius": 5,
                           "height": 10,
                           "width": 100,
@@ -1198,7 +1198,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <Text
                       style={
                         {
-                          "color": "#ababab",
+                          "color": "#CEC6B4",
                           "fontSize": 41.0958904109589,
                           "fontWeight": "bold",
                         }
@@ -1220,7 +1220,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <View
                       style={
                         {
-                          "backgroundColor": "#31adff",
+                          "backgroundColor": "#7AC6FF",
                           "borderRadius": 5,
                           "height": 10,
                           "width": 100,
@@ -1359,7 +1359,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                                 "textTransform": "uppercase",
                               },
                               {
-                                "color": "#ffd600",
+                                "color": "#7AC6FF",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",
@@ -1592,7 +1592,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                       <Text
                         style={
                           {
-                            "color": "#ababab",
+                            "color": "#CEC6B4",
                             "fontSize": 41.0958904109589,
                             "fontWeight": "bold",
                           }
@@ -1887,7 +1887,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                                   "textTransform": "uppercase",
                                 },
                                 {
-                                  "color": "#ffd600",
+                                  "color": "#7AC6FF",
                                   "fontFamily": "System",
                                   "fontSize": 14,
                                   "fontWeight": "500",
@@ -2120,7 +2120,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <Text
                       style={
                         {
-                          "color": "#ababab",
+                          "color": "#CEC6B4",
                           "fontSize": 41.0958904109589,
                           "fontWeight": "bold",
                         }
@@ -2337,7 +2337,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <Text
                       style={
                         {
-                          "color": "#ababab",
+                          "color": "#CEC6B4",
                           "fontSize": 41.0958904109589,
                           "fontWeight": "bold",
                         }
@@ -2554,7 +2554,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                     <Text
                       style={
                         {
-                          "color": "#ababab",
+                          "color": "#CEC6B4",
                           "fontSize": 41.0958904109589,
                           "fontWeight": "bold",
                         }
@@ -2861,7 +2861,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                                 "textTransform": "uppercase",
                               },
                               {
-                                "color": "#ffd600",
+                                "color": "#7AC6FF",
                                 "fontFamily": "System",
                                 "fontSize": 14,
                                 "fontWeight": "500",

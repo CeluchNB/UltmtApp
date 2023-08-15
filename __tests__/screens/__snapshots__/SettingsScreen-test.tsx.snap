@@ -60,7 +60,7 @@ exports[`should match snapshot 1`] = `
             onChange={[Function]}
             onResponderTerminationRequest={[Function]}
             onStartShouldSetResponder={[Function]}
-            onTintColor="#31adff"
+            onTintColor="#7AC6FF"
             style={
               [
                 {
@@ -68,14 +68,14 @@ exports[`should match snapshot 1`] = `
                   "width": 51,
                 },
                 {
-                  "backgroundColor": "#ababab",
+                  "backgroundColor": "#CEC6B4",
                   "borderRadius": 16,
                 },
               ]
             }
             testID="dark-mode-switch"
             thumbTintColor="#ffd600"
-            tintColor="#ababab"
+            tintColor="#CEC6B4"
             value={true}
           />
         </View>
@@ -118,7 +118,7 @@ exports[`should match snapshot 1`] = `
             onChange={[Function]}
             onResponderTerminationRequest={[Function]}
             onStartShouldSetResponder={[Function]}
-            onTintColor="#31adff"
+            onTintColor="#7AC6FF"
             style={
               [
                 {
@@ -126,14 +126,14 @@ exports[`should match snapshot 1`] = `
                   "width": 51,
                 },
                 {
-                  "backgroundColor": "#ababab",
+                  "backgroundColor": "#CEC6B4",
                   "borderRadius": 16,
                 },
               ]
             }
             testID="private-switch"
             thumbTintColor="#ffd600"
-            tintColor="#ababab"
+            tintColor="#CEC6B4"
             value={true}
           />
         </View>
@@ -320,7 +320,7 @@ exports[`should match snapshot 1`] = `
               <Text
                 style={
                   {
-                    "color": "#ababab",
+                    "color": "#CEC6B4",
                     "fontSize": 41.0958904109589,
                   }
                 }
@@ -513,7 +513,7 @@ exports[`should match snapshot 1`] = `
               <Text
                 style={
                   {
-                    "color": "#ababab",
+                    "color": "#CEC6B4",
                     "fontSize": 41.0958904109589,
                   }
                 }
@@ -706,7 +706,7 @@ exports[`should match snapshot 1`] = `
               <Text
                 style={
                   {
-                    "color": "#ababab",
+                    "color": "#CEC6B4",
                     "fontSize": 41.0958904109589,
                   }
                 }
@@ -899,7 +899,7 @@ exports[`should match snapshot 1`] = `
               <Text
                 style={
                   {
-                    "color": "#ababab",
+                    "color": "#CEC6B4",
                     "fontSize": 41.0958904109589,
                   }
                 }
@@ -932,7 +932,7 @@ exports[`should match snapshot 1`] = `
           <Text
             style={
               {
-                "color": "#ababab",
+                "color": "#CEC6B4",
                 "flex": 1,
                 "fontSize": 41.0958904109589,
                 "fontWeight": "bold",
@@ -1210,7 +1210,7 @@ exports[`should match snapshot 1`] = `
                             "textTransform": "uppercase",
                           },
                           {
-                            "color": "#ff0000",
+                            "color": "#FFB4AB",
                             "fontFamily": "System",
                             "fontSize": 14,
                             "fontWeight": "500",
@@ -1269,7 +1269,7 @@ exports[`should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#ff0000",
+                  "backgroundColor": "#FFB4AB",
                   "borderColor": "transparent",
                   "borderRadius": 20,
                   "borderStyle": "solid",
@@ -1358,7 +1358,7 @@ exports[`should match snapshot 1`] = `
                             "textTransform": "uppercase",
                           },
                           {
-                            "color": "rgba(255, 255, 255, 1)",
+                            "color": "#303030",
                             "fontFamily": "System",
                             "fontSize": 14,
                             "fontWeight": "500",

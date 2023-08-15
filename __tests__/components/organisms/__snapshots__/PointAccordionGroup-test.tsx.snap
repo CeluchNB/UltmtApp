@@ -74,12 +74,12 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
     <RefreshControlMock
       colors={
         [
-          "#31adff",
+          "#7AC6FF",
         ]
       }
       onRefresh={[Function]}
       refreshing={false}
-      tintColor="#31adff"
+      tintColor="#7AC6FF"
     />
   }
   removeClippedSubviews={false}

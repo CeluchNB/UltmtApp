@@ -15,12 +15,12 @@ exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
       <RefreshControlMock
         colors={
           [
-            "#31adff",
+            "#7AC6FF",
           ]
         }
         onRefresh={[Function]}
         refreshing={false}
-        tintColor="#31adff"
+        tintColor="#7AC6FF"
       />
     }
     testID="mtd-flat-list"
@@ -578,7 +578,7 @@ exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -759,7 +759,7 @@ exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
           <Text
             style={
               {
-                "color": "#ababab",
+                "color": "#CEC6B4",
                 "flex": 1,
                 "fontSize": 41.0958904109589,
               }
@@ -772,7 +772,7 @@ exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
             onChange={[Function]}
             onResponderTerminationRequest={[Function]}
             onStartShouldSetResponder={[Function]}
-            onTintColor="#31adff"
+            onTintColor="#7AC6FF"
             style={
               [
                 {
@@ -780,14 +780,14 @@ exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
                   "width": 51,
                 },
                 {
-                  "backgroundColor": "#ababab",
+                  "backgroundColor": "#CEC6B4",
                   "borderRadius": 16,
                 },
               ]
             }
             testID="roster-open-switch"
             thumbTintColor="#ffd600"
-            tintColor="#ababab"
+            tintColor="#CEC6B4"
             value={false}
           />
         </View>
@@ -1003,7 +1003,7 @@ exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -1138,7 +1138,7 @@ exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
                         style={
                           [
                             {
-                              "color": "#ff0000",
+                              "color": "#FFB4AB",
                               "fontSize": 24,
                             },
                             [

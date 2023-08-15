@@ -72,7 +72,7 @@ exports[`JoinByCodeModal should match snapshot 1`] = `
                 },
                 {
                   "backgroundColor": "#303030",
-                  "borderColor": "#31adff",
+                  "borderColor": "#7AC6FF",
                   "borderRadius": 4,
                   "borderWidth": 1,
                 },

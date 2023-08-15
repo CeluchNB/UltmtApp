@@ -216,7 +216,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
               onChange={[Function]}
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
-              onTintColor="#31adff"
+              onTintColor="#7AC6FF"
               style={
                 {
                   "height": 31,
@@ -224,7 +224,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                 }
               }
               thumbTintColor="#ffd600"
-              tintColor="#ababab"
+              tintColor="#CEC6B4"
               value={false}
             />
           </View>
@@ -276,7 +276,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                       },
                       {
                         "backgroundColor": "#303030",
-                        "borderColor": "#31adff",
+                        "borderColor": "#7AC6FF",
                         "borderRadius": 4,
                         "borderWidth": 1,
                       },
@@ -354,7 +354,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
             <Text
               style={
                 {
-                  "color": "#ababab",
+                  "color": "#CEC6B4",
                   "fontSize": 30.821917808219176,
                   "fontWeight": "bold",
                   "marginLeft": 10,
@@ -410,7 +410,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                       },
                       {
                         "backgroundColor": "#303030",
-                        "borderColor": "#31adff",
+                        "borderColor": "#7AC6FF",
                         "borderRadius": 4,
                         "borderWidth": 1,
                       },
@@ -488,7 +488,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
             <Text
               style={
                 {
-                  "color": "#ababab",
+                  "color": "#CEC6B4",
                   "fontSize": 30.821917808219176,
                   "fontWeight": "bold",
                   "marginLeft": 10,
@@ -551,7 +551,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                         },
                         {
                           "backgroundColor": "#303030",
-                          "borderColor": "#31adff",
+                          "borderColor": "#7AC6FF",
                           "borderRadius": 4,
                           "borderWidth": 1,
                         },
@@ -672,7 +672,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                       },
                       {
                         "backgroundColor": "#303030",
-                        "borderColor": "#31adff",
+                        "borderColor": "#7AC6FF",
                         "borderRadius": 4,
                         "borderWidth": 1,
                       },
@@ -750,7 +750,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
             <Text
               style={
                 {
-                  "color": "#ababab",
+                  "color": "#CEC6B4",
                   "fontSize": 30.821917808219176,
                   "fontWeight": "bold",
                   "marginLeft": 10,
@@ -806,7 +806,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                       },
                       {
                         "backgroundColor": "#303030",
-                        "borderColor": "#31adff",
+                        "borderColor": "#7AC6FF",
                         "borderRadius": 4,
                         "borderWidth": 1,
                       },
@@ -884,7 +884,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
             <Text
               style={
                 {
-                  "color": "#ababab",
+                  "color": "#CEC6B4",
                   "fontSize": 30.821917808219176,
                   "fontWeight": "bold",
                   "marginLeft": 10,
@@ -940,7 +940,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                       },
                       {
                         "backgroundColor": "#303030",
-                        "borderColor": "#31adff",
+                        "borderColor": "#7AC6FF",
                         "borderRadius": 4,
                         "borderWidth": 1,
                       },
@@ -1018,7 +1018,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
             <Text
               style={
                 {
-                  "color": "#ababab",
+                  "color": "#CEC6B4",
                   "fontSize": 30.821917808219176,
                   "fontWeight": "bold",
                   "marginLeft": 10,
@@ -1074,7 +1074,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                       },
                       {
                         "backgroundColor": "#303030",
-                        "borderColor": "#31adff",
+                        "borderColor": "#7AC6FF",
                         "borderRadius": 4,
                         "borderWidth": 1,
                       },
@@ -1152,7 +1152,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
             <Text
               style={
                 {
-                  "color": "#ababab",
+                  "color": "#CEC6B4",
                   "fontSize": 30.821917808219176,
                   "fontWeight": "bold",
                   "marginLeft": 10,
@@ -1197,7 +1197,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                 onChange={[Function]}
                 onResponderTerminationRequest={[Function]}
                 onStartShouldSetResponder={[Function]}
-                onTintColor="#31adff"
+                onTintColor="#7AC6FF"
                 style={
                   {
                     "height": 31,
@@ -1205,7 +1205,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                   }
                 }
                 thumbTintColor="#ffd600"
-                tintColor="#ababab"
+                tintColor="#CEC6B4"
                 value={true}
               />
             </View>
@@ -1258,7 +1258,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
             <Text
               style={
                 {
-                  "color": "#ababab",
+                  "color": "#CEC6B4",
                   "flex": 1,
                   "fontSize": 30.821917808219176,
                   "fontWeight": "bold",

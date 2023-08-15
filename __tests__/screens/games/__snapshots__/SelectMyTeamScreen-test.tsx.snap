@@ -101,7 +101,7 @@ exports[`SelectMyTeamScreen should match snapshot with manager teams 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#CEC6B4",
                         "fontSize": 41.0958904109589,
                         "fontWeight": "bold",
                       }
@@ -308,7 +308,7 @@ exports[`SelectMyTeamScreen should match snapshot with unauthenticated user 1`] 
       <Text
         style={
           {
-            "color": "#ababab",
+            "color": "#CEC6B4",
             "fontSize": 61.64383561643835,
           }
         }
@@ -490,7 +490,7 @@ exports[`SelectMyTeamScreen should match snapshot without manager teams 1`] = `
       <Text
         style={
           {
-            "color": "#ababab",
+            "color": "#CEC6B4",
             "fontSize": 61.64383561643835,
           }
         }
