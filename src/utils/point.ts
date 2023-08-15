@@ -152,6 +152,17 @@ export const normalizeActions = (
         }
     }
 
+    // Remove 'the opposing team score' action from two-teamed games
+    if (
+        result.length > 1 &&
+        lastTwoActionsAreScores(
+            result[result.length - 1] as Action,
+            result[result.length - 2] as Action,
+        )
+    ) {
+        result.pop()
+    }
+
     return result.reverse()
 }
 
@@ -166,6 +177,18 @@ export const normalizeLiveActions = (
     )
 
     return normalizeActions(teamOneActions, teamTwoActions)
+}
+
+const lastTwoActionsAreScores = (action1: Action, action2: Action): boolean => {
+    console.log('action1', action1)
+    console.log('action2', action2)
+    return (
+        Object.keys(action1).includes('action') &&
+        Object.keys(action2).includes('action') &&
+        (action1.action.actionType === ActionType.TEAM_ONE_SCORE ||
+            action1.action.actionType === ActionType.TEAM_TWO_SCORE) &&
+        action1.action.actionType === action2.action.actionType
+    )
 }
 
 export const parseClientPoint = (point: Point): ClientPoint => {
