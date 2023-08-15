@@ -17,7 +17,7 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
     onAction,
 }) => {
     const {
-        theme: { colors, size },
+        theme: { colors },
     } = useTheme()
     const [subModalVisible, setSubModalVisible] = React.useState(false)
     const [tagModalVisible, setTagModalVisible] = React.useState(false)
@@ -86,9 +86,6 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
             marginRight: 5,
             marginTop: 5,
         },
-        buttonText: {
-            fontSize: size.fontFifteen,
-        },
     })
 
     return (
@@ -105,7 +102,6 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
                             <Button
                                 compact={true}
                                 style={styles.button}
-                                labelStyle={styles.buttonText}
                                 textColor={colors.textPrimary}
                                 uppercase={true}
                                 collapsable={true}
