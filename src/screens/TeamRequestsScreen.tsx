@@ -107,6 +107,7 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
                 refreshControl={
                     <RefreshControl
                         colors={[colors.textSecondary]}
+                        tintColor={colors.textSecondary}
                         refreshing={requestsLoading}
                         onRefresh={() => {
                             refetch()

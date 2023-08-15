@@ -11,7 +11,7 @@ exports[`test matches snapshot 1`] = `
   <Text
     style={
       {
-        "color": "#ababab",
+        "color": "#CEC6B4",
         "fontSize": 41.0958904109589,
         "fontWeight": "bold",
       }
@@ -33,7 +33,7 @@ exports[`test matches snapshot 1`] = `
   <View
     style={
       {
-        "backgroundColor": "#31adff",
+        "backgroundColor": "#7AC6FF",
         "borderRadius": 5,
         "height": 10,
         "width": 10,

@@ -316,7 +316,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
               },
               {
                 "backgroundColor": "#303030",
-                "borderColor": "#31adff",
+                "borderColor": "#7AC6FF",
                 "borderRadius": 4,
                 "borderStyle": "solid",
                 "borderWidth": 1,
@@ -647,7 +647,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
               <Text
                 style={
                   {
-                    "color": "#ffd600",
+                    "color": "#7AC6FF",
                     "fontSize": 30.821917808219176,
                     "fontWeight": "900",
                   }
@@ -686,7 +686,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
                           {
                             "color": "#ffd600",
                             "fontSize": 30.821917808219176,
-                            "fontWeight": "900",
+                            "fontWeight": "bold",
                           }
                         }
                       >
@@ -1051,7 +1051,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
               <Text
                 style={
                   {
-                    "color": "#ffd600",
+                    "color": "#7AC6FF",
                     "fontSize": 30.821917808219176,
                     "fontWeight": "900",
                   }
@@ -1090,7 +1090,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
                           {
                             "color": "#ffd600",
                             "fontSize": 30.821917808219176,
-                            "fontWeight": "900",
+                            "fontWeight": "bold",
                           }
                         }
                       >

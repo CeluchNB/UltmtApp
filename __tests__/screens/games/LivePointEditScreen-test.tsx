@@ -380,7 +380,7 @@ describe('LivePointEditScreen', () => {
         await waitFor(() => {
             expect(navigate).toHaveBeenCalledWith('Tabs', {
                 screen: 'Account',
-                params: { screen: 'Profile' },
+                params: { screen: 'Profile', initial: false },
             })
         })
         expect(finishPointSpy).toHaveBeenCalledWith(point._id)

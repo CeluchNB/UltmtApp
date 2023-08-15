@@ -7,20 +7,31 @@ import React from 'react'
 import { ViewGameProps } from '../../types/navigation'
 import ViewPointsScene from '../../components/organisms/ViewPointsScene'
 import { deleteGame } from '../../services/data/game'
+import { setupMobileAds } from '../../utils/ads'
 import {
     ActivityIndicator,
     StyleSheet,
     View,
     useWindowDimensions,
 } from 'react-native'
+import {
+    GameViewerData,
+    useGameReactivation,
+    useGameViewer,
+    useTheme,
+} from '../../hooks'
 import { TabBar, TabView } from 'react-native-tab-view'
-import { useGameReactivation, useGameViewer, useTheme } from '../../hooks'
 
-const renderScene = (gameId: string) => {
+const renderScene = (gameId: string, gameViewerData: GameViewerData) => {
     return ({ route }: { route: { key: string } }) => {
         switch (route.key) {
             case 'points':
-                return <ViewPointsScene gameId={gameId} />
+                return (
+                    <ViewPointsScene
+                        gameId={gameId}
+                        gameViewerData={gameViewerData}
+                    />
+                )
             case 'stats':
                 return <GameLeadersScene gameId={gameId} />
             default:
@@ -48,6 +59,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         }
     }
 
+    const gameViewerData = useGameViewer(gameId)
     const {
         activePoint,
         allPointsLoading,
@@ -56,7 +68,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         managingTeamId,
         onSelectPoint,
         onReactivateGame,
-    } = useGameViewer(gameId)
+    } = gameViewerData
     const { navigateToGame } = useGameReactivation()
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deleteLoading, setDeleteLoading] = React.useState(false)
@@ -67,6 +79,10 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         { key: 'stats', title: 'Leaderboard' },
     ])
     const [tabHeight, setTabHeight] = React.useState(0)
+
+    React.useEffect(() => {
+        setupMobileAds()
+    }, [])
 
     React.useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
@@ -150,7 +166,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                 }}>
                 <TabView
                     navigationState={{ index, routes }}
-                    renderScene={renderScene(gameId)}
+                    renderScene={renderScene(gameId, gameViewerData)}
                     onIndexChange={setIndex}
                     initialLayout={{ width: layout.width }}
                     renderTabBar={props => {

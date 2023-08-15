@@ -57,7 +57,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
         <Text
           style={
             {
-              "color": "#ffd600",
+              "color": "#7AC6FF",
               "fontSize": 30.821917808219176,
               "fontWeight": "900",
             }
@@ -96,7 +96,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
                     {
                       "color": "#ffd600",
                       "fontSize": 30.821917808219176,
-                      "fontWeight": "900",
+                      "fontWeight": "bold",
                     }
                   }
                 >
@@ -459,7 +459,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
               multiline={true}
               onChangeText={[Function]}
               placeholder="Add a comment..."
-              placeholderTextColor="#ababab"
+              placeholderTextColor="#CEC6B4"
               style={
                 {
                   "backgroundColor": "#1a1a1a",
@@ -521,7 +521,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
                   collapsable={false}
                   style={
                     {
-                      "backgroundColor": "#ababab",
+                      "backgroundColor": "#CEC6B4",
                       "borderColor": "transparent",
                       "borderRadius": 20,
                       "borderStyle": "solid",
@@ -702,7 +702,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#7AC6FF",
                         "fontSize": 30.821917808219176,
                         "textDecorationLine": "underline",
                       }
@@ -833,7 +833,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
                           style={
                             [
                               {
-                                "color": "#ff0000",
+                                "color": "#FFB4AB",
                                 "fontSize": 24,
                               },
                               [
@@ -931,7 +931,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
         <Text
           style={
             {
-              "color": "#ffd600",
+              "color": "#7AC6FF",
               "fontSize": 30.821917808219176,
               "fontWeight": "900",
             }
@@ -970,7 +970,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
                     {
                       "color": "#ffd600",
                       "fontSize": 30.821917808219176,
-                      "fontWeight": "900",
+                      "fontWeight": "bold",
                     }
                   }
                 >
@@ -1333,7 +1333,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
               multiline={true}
               onChangeText={[Function]}
               placeholder="Add a comment..."
-              placeholderTextColor="#ababab"
+              placeholderTextColor="#CEC6B4"
               style={
                 {
                   "backgroundColor": "#1a1a1a",
@@ -1395,7 +1395,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
                   collapsable={false}
                   style={
                     {
-                      "backgroundColor": "#ababab",
+                      "backgroundColor": "#CEC6B4",
                       "borderColor": "transparent",
                       "borderRadius": 20,
                       "borderStyle": "solid",
@@ -1576,7 +1576,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
                   <Text
                     style={
                       {
-                        "color": "#ababab",
+                        "color": "#7AC6FF",
                         "fontSize": 30.821917808219176,
                         "textDecorationLine": "underline",
                       }
@@ -1707,7 +1707,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
                           style={
                             [
                               {
-                                "color": "#ff0000",
+                                "color": "#FFB4AB",
                                 "fontSize": 24,
                               },
                               [

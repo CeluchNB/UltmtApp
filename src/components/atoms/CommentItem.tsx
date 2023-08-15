@@ -35,7 +35,7 @@ const CommentItem: React.FC<CommentInputProps> = ({
         },
         name: {
             fontSize: size.fontFifteen,
-            color: colors.gray,
+            color: colors.textSecondary,
             textDecorationLine: 'underline',
         },
         comment: {

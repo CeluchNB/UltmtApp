@@ -286,7 +286,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                 <Text
                   style={
                     {
-                      "color": "#ababab",
+                      "color": "#CEC6B4",
                       "flex": 1,
                       "fontSize": 30.821917808219176,
                       "fontWeight": "900",
@@ -491,7 +491,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
               <Text
                 style={
                   {
-                    "color": "#ff0000",
+                    "color": "#FFB4AB",
                     "width": "80%",
                   }
                 }
@@ -2612,7 +2612,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                   collapsable={false}
                   style={
                     {
-                      "backgroundColor": "#ababab",
+                      "backgroundColor": "#CEC6B4",
                       "borderColor": "transparent",
                       "borderRadius": 20,
                       "borderStyle": "solid",
@@ -2762,7 +2762,7 @@ exports[`LivePointEditScreen matches snapshot 1`] = `
                   collapsable={false}
                   style={
                     {
-                      "backgroundColor": "#ababab",
+                      "backgroundColor": "#CEC6B4",
                       "borderColor": "transparent",
                       "borderRadius": 20,
                       "borderStyle": "solid",

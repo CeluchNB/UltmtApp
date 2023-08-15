@@ -112,6 +112,7 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
                     refreshControl={
                         <RefreshControl
                             colors={[colors.textSecondary]}
+                            tintColor={colors.textSecondary}
                             refreshing={loading}
                             onRefresh={async () => {
                                 refetch()
@@ -131,6 +132,7 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
                 refreshControl={
                     <RefreshControl
                         colors={[colors.textSecondary]}
+                        tintColor={colors.textSecondary}
                         onRefresh={async () => {
                             refetch()
                         }}

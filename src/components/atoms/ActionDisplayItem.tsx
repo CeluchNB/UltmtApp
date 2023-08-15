@@ -62,14 +62,14 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
             flexWrap: 'wrap',
             alignItems: 'center',
         },
-        player: {
-            color: colors.textPrimary,
-            fontWeight: weight.bold,
+        team: {
+            color: colors.textSecondary,
+            fontWeight: weight.full,
             fontSize: size.fontFifteen,
         },
         action: {
             color: colors.textPrimary,
-            fontWeight: weight.full,
+            fontWeight: weight.bold,
             fontSize: size.fontFifteen,
         },
         chipContainer: {
@@ -98,7 +98,7 @@ const ActionDisplayItem: React.FC<ActionDisplayItemProps> = ({
                     onPress(actionData)
                 }
             }}>
-            <Text style={styles.action}>{getTeamName()}</Text>
+            <Text style={styles.team}>{getTeamName()}</Text>
             <View style={styles.dataContainer}>
                 <View style={styles.textContainer}>
                     <View style={styles.lineContainer}>

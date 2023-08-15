@@ -1,9 +1,14 @@
-import GameCreationNavigator from './src/navigation/GameCreationNavigator'
+import CreateGameScreen from './src/screens/games/CreateGameScreen'
+import CreateTournamentScreen from './src/screens/games/CreateTournamentScreen'
 import InformationScreen from './src/screens/InformationScreen'
+import JoinGameScreen from './src/screens/games/JoinGameScreen'
 import LiveGameNavigator from './src/navigation/LiveGameNavigator'
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
+import SearchTournamentScreen from './src/screens/games/SearchTournamentScreen'
 import SecureEditScreen from './src/screens/SecureEditScreen'
+import SelectMyTeamScreen from './src/screens/games/SelectMyTeamScreen'
+import SelectOpponentScreen from './src/screens/games/SelectOpponentScreen'
 import SettingsScreen from './src/screens/SettingsScreen'
 import TabNavigator from './src/navigation/TabNavigator'
 import { TopLevelParamList } from './src/types/navigation'
@@ -60,10 +65,48 @@ const App: React.FC<{}> = () => {
                             headerBackTitle: 'Back',
                         }}
                     />
-                    <Stack.Screen
-                        name="GameCreationFlow"
-                        component={GameCreationNavigator}
-                    />
+                    <Stack.Group
+                        screenOptions={({ route }) => {
+                            return {
+                                headerShown: true,
+                                headerStyle: {
+                                    backgroundColor: colors.primary,
+                                },
+                                headerTintColor: colors.textPrimary,
+                                title: route.name.split(/(?=[A-Z])/).join(' '),
+                            }
+                        }}>
+                        <Stack.Screen
+                            name="SelectMyTeam"
+                            component={SelectMyTeamScreen}
+                            options={{
+                                headerBackTitleVisible: true,
+                                headerBackTitle: 'Back',
+                            }}
+                        />
+                        <Stack.Screen
+                            name="SelectOpponent"
+                            component={SelectOpponentScreen}
+                        />
+                        <Stack.Screen
+                            name="SearchTournaments"
+                            component={SearchTournamentScreen}
+                        />
+                        <Stack.Screen
+                            name="CreateTournament"
+                            component={CreateTournamentScreen}
+                            initialParams={{ name: '' }}
+                        />
+                        <Stack.Screen
+                            name="JoinGame"
+                            component={JoinGameScreen}
+                        />
+                        <Stack.Screen
+                            name="CreateGame"
+                            component={CreateGameScreen}
+                            options={{ title: '' }}
+                        />
+                    </Stack.Group>
                     <Stack.Screen
                         name="LiveGame"
                         component={LiveGameNavigator}

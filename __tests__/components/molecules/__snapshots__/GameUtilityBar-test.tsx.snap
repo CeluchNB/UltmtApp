@@ -264,7 +264,7 @@ exports[`GameUtilityBar renders with all actions 1`] = `
             style={
               [
                 {
-                  "color": "#ff0000",
+                  "color": "#FFB4AB",
                   "fontSize": 20,
                 },
                 [

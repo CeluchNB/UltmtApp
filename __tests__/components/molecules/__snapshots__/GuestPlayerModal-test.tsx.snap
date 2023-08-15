@@ -40,7 +40,7 @@ exports[`GuestPlayerModal should match snapshot 1`] = `
       <Text
         style={
           {
-            "color": "#31adff",
+            "color": "#7AC6FF",
             "fontSize": 41.0958904109589,
           }
         }
@@ -75,7 +75,7 @@ exports[`GuestPlayerModal should match snapshot 1`] = `
                 },
                 {
                   "backgroundColor": "#303030",
-                  "borderColor": "#31adff",
+                  "borderColor": "#7AC6FF",
                   "borderRadius": 4,
                   "borderWidth": 1,
                 },
@@ -178,7 +178,7 @@ exports[`GuestPlayerModal should match snapshot 1`] = `
                 },
                 {
                   "backgroundColor": "#303030",
-                  "borderColor": "#31adff",
+                  "borderColor": "#7AC6FF",
                   "borderRadius": 4,
                   "borderWidth": 1,
                 },

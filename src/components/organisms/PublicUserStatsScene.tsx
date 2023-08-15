@@ -18,7 +18,11 @@ import {
     View,
 } from 'react-native'
 import StatsFilterModal, { CheckBoxItem } from '../molecules/StatsFilterModal'
-import { formatNumber, mapStatDisplayName } from '../../utils/stats'
+import {
+    formatNumber,
+    mapStatDisplayName,
+    sortAlphabetically,
+} from '../../utils/stats'
 
 export interface PublicUserStatsSceneProps {
     userId: string
@@ -118,6 +122,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     const filteredStats = React.useMemo(() => {
         const updatedStats: Partial<AllPlayerStats> = Object.assign({}, stats)
 
+        // TODO: this is not ideal, at least move it to a separate function
         delete (updatedStats as any)._id
         delete (updatedStats as any).games
         delete (updatedStats as any).teams
@@ -185,12 +190,11 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         valueCell: {
             color: colors.textSecondary,
         },
-        button: {
-            flexGrow: 1,
-        },
+        button: {},
         buttonContainer: {
             display: 'flex',
             flexDirection: 'row',
+            alignSelf: 'center',
         },
         error: {
             alignSelf: 'center',
@@ -205,6 +209,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                 <RefreshControl
                     refreshing={loading}
                     colors={[colors.textSecondary]}
+                    tintColor={colors.textSecondary}
                     onRefresh={() => {
                         getStats()
                     }}
@@ -235,8 +240,9 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                 <View>
                     <DataTable>
                         {stats &&
-                            Object.entries(filteredStats).map(
-                                ([key, value]) => {
+                            Object.entries(filteredStats)
+                                .sort((a, b) => sortAlphabetically(a[0], b[0]))
+                                .map(([key, value]) => {
                                     return (
                                         <DataTable.Row key={key}>
                                             <DataTable.Cell
@@ -252,8 +258,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                                             </DataTable.Cell>
                                         </DataTable.Row>
                                     )
-                                },
-                            )}
+                                })}
                     </DataTable>
                 </View>
             )}

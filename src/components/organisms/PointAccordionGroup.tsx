@@ -66,6 +66,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
                     <RefreshControl
                         refreshing={refreshing}
                         colors={[colors.textSecondary]}
+                        tintColor={colors.textSecondary}
                         onRefresh={async () => {
                             setRefreshing(true)
                             await onRefresh()

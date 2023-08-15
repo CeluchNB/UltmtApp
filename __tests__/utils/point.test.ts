@@ -506,11 +506,20 @@ describe('normalizeActions', () => {
             tags: [],
             comments: [],
         }
+        const a22: LiveServerActionData = {
+            actionNumber: 2,
+            actionType: ActionType.TEAM_ONE_SCORE,
+            teamNumber: 'two',
+            tags: [],
+            comments: [],
+        }
 
         const teamOneActions = [a11, a12, a13, a11].map(a =>
             ActionFactory.createFromAction(a),
         )
-        const teamTwoActions = [a21].map(a => ActionFactory.createFromAction(a))
+        const teamTwoActions = [a21, a22].map(a =>
+            ActionFactory.createFromAction(a),
+        )
         const result = normalizeActions(teamOneActions, teamTwoActions)
         expect(result.length).toBe(5)
         expect(result[4]).toMatchObject(teamOneActions[0])
@@ -544,13 +553,22 @@ describe('normalizeActions', () => {
         }
         const a23: LiveServerActionData = {
             actionNumber: 3,
-            actionType: ActionType.TEAM_ONE_SCORE,
+            actionType: ActionType.TEAM_TWO_SCORE,
             teamNumber: 'two',
             tags: [],
             comments: [],
         }
+        const a12: LiveServerActionData = {
+            actionNumber: 2,
+            actionType: ActionType.TEAM_TWO_SCORE,
+            teamNumber: 'one',
+            tags: [],
+            comments: [],
+        }
 
-        const teamOneActions = [a11].map(a => ActionFactory.createFromAction(a))
+        const teamOneActions = [a11, a12].map(a =>
+            ActionFactory.createFromAction(a),
+        )
         const teamTwoActions = [a21, a22, a23].map(a =>
             ActionFactory.createFromAction(a),
         )

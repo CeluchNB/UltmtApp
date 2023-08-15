@@ -52,7 +52,7 @@ const GameNavigator: React.FC<{}> = () => {
             <Stack.Screen
                 name="GameStats"
                 component={GameStatsScreen}
-                options={{ title: '' }}
+                options={{ title: '', headerBackTitle: 'Back' }}
             />
         </Stack.Navigator>
     )

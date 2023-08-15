@@ -125,6 +125,7 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                     onRefresh={refetch}
                     refreshing={isLoading || isRefetching}
                     colors={[colors.textSecondary]}
+                    tintColor={colors.textSecondary}
                 />
             }>
             <SecondaryButton

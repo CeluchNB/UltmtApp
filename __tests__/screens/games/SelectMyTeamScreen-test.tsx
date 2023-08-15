@@ -18,13 +18,11 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const navigate = jest.fn()
 const addListener = jest.fn()
-const push = jest.fn()
 
 const props: SelectMyTeamProps = {
     navigation: {
         navigate,
         addListener,
-        push,
     } as any,
     route: {} as any,
 }
@@ -81,7 +79,7 @@ describe('SelectMyTeamScreen', () => {
         expect(snapshot.toJSON()).toMatchSnapshot()
         expect(snapshot.getByText(Constants.MANAGE_TO_CREATE)).not.toBeNull()
         fireEvent.press(snapshot.getByText('create team'))
-        expect(push).toHaveBeenCalledWith('Tabs', {
+        expect(navigate).toHaveBeenCalledWith('Tabs', {
             screen: 'Account',
             params: { screen: 'CreateTeam' },
         })

@@ -56,15 +56,6 @@ export type TabParamList = {
     Games: NavigatorScreenParams<GameStackParamList>
 }
 
-export type GameCreationParamList = {
-    CreateGame: { teamTwo: GuestTeam }
-    SelectMyTeam: undefined
-    SelectOpponent: { initialValue?: string }
-    SearchTournaments: undefined
-    CreateTournament: { name?: string }
-    JoinGame: undefined
-}
-
 export type LiveGameParamList = {
     FirstPoint: undefined
     SelectPlayers: undefined // consider passing point id and not relying on live point reducer
@@ -74,7 +65,12 @@ export type LiveGameParamList = {
 
 export type TopLevelParamList = {
     Tabs: NavigatorScreenParams<TabParamList>
-    GameCreationFlow: NavigatorScreenParams<GameCreationParamList>
+    CreateGame: { teamTwo: GuestTeam }
+    SelectMyTeam: undefined
+    SelectOpponent: { initialValue?: string }
+    SearchTournaments: undefined
+    CreateTournament: { name?: string }
+    JoinGame: undefined
     LiveGame: NavigatorScreenParams<LiveGameParamList>
     Settings: undefined
     SecureEdit: { title: string; value: string; field: SecureEditField }
@@ -86,7 +82,7 @@ export type AllScreenProps = NativeStackScreenProps<
         TabParamList &
         AccountStackParamList &
         GameStackParamList &
-        GameCreationParamList &
+        // GameCreationParamList &
         LiveGameParamList,
     'Tabs'
 >
@@ -186,36 +182,33 @@ export type GameStatsProps = NativeStackScreenProps<
 
 // Game Creation Flow
 export type CreateGameProps = CompositeScreenProps<
-    NativeStackScreenProps<GameCreationParamList, 'CreateGame'>,
-    CompositeScreenProps<
-        NativeStackScreenProps<TopLevelParamList>,
-        NativeStackScreenProps<LiveGameParamList>
-    >
+    NativeStackScreenProps<TopLevelParamList, 'CreateGame'>,
+    NativeStackScreenProps<AllScreenProps>
 >
 export type SelectOpponentProps = NativeStackScreenProps<
-    GameCreationParamList,
+    TopLevelParamList,
     'SelectOpponent'
 >
 export type JoinGameProps = CompositeScreenProps<
-    NativeStackScreenProps<GameCreationParamList, 'JoinGame'>,
+    NativeStackScreenProps<TopLevelParamList, 'JoinGame'>,
     CompositeScreenProps<
         NativeStackScreenProps<TopLevelParamList>,
         NativeStackScreenProps<LiveGameParamList>
     >
 >
 export type SelectMyTeamProps = CompositeScreenProps<
-    NativeStackScreenProps<GameCreationParamList, 'SelectMyTeam'>,
+    NativeStackScreenProps<TopLevelParamList, 'SelectMyTeam'>,
     CompositeScreenProps<
         NativeStackScreenProps<TopLevelParamList>,
         NativeStackScreenProps<LiveGameParamList>
     >
 >
 export type SearchTournamentProps = NativeStackScreenProps<
-    GameCreationParamList,
+    TopLevelParamList,
     'SearchTournaments'
 >
 export type CreateTournamentProps = NativeStackScreenProps<
-    GameCreationParamList,
+    TopLevelParamList,
     'CreateTournament'
 >
 

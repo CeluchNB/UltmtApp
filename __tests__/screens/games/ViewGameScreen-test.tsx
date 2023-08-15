@@ -29,6 +29,22 @@ import {
 import { fetchProfileData, game } from '../../../fixtures/data'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+jest.mock('react-native-permissions', () => {
+    return {
+        PERMISSIONS: {},
+        RESULTS: {},
+        check: jest.fn(),
+        checkLocationAccuracy: jest.fn(),
+        checkMultiple: jest.fn(),
+        checkNotifications: jest.fn(),
+        openLimitedPhotoLibraryPicker: jest.fn(),
+        openSettings: jest.fn(),
+        request: jest.fn(),
+        requestLocationAccuracy: jest.fn(),
+        requestMultiple: jest.fn(),
+        requestNotifications: jest.fn(),
+    }
+})
 jest.mock('react-native-google-mobile-ads', () => {
     return {
         default: { initialize: jest.fn(), setRequestConfiguration: jest.fn() },
@@ -408,9 +424,9 @@ describe('ViewGameScreen', () => {
         })
 
         await waitFor(async () => {
-            expect(gameSpy).toHaveBeenCalledTimes(3)
+            expect(gameSpy).toHaveBeenCalledTimes(2)
         })
-        expect(pointsSpy).toHaveBeenCalledTimes(3)
+        expect(pointsSpy).toHaveBeenCalledTimes(2)
     })
 
     it('handles saved point functionality', async () => {
