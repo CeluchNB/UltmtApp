@@ -34,7 +34,7 @@ exports[`CommentItem should match snapshot 1`] = `
     <Text
       style={
         {
-          "color": "#ababab",
+          "color": "#7AC6FF",
           "fontSize": 30.821917808219176,
           "textDecorationLine": "underline",
         }

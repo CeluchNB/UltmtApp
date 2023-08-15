@@ -108,6 +108,7 @@ describe('TeamGamesScene', () => {
                 params: {
                     gameId: game._id,
                 },
+                initial: false,
             },
         })
     })

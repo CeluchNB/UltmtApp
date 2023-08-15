@@ -69,6 +69,7 @@ const PublicTeamPlayersScene: React.FC<PublicTeamPlayersSceneProps> = ({
                 <RefreshControl
                     refreshing={refreshing}
                     colors={[colors.textSecondary]}
+                    tintColor={colors.textSecondary}
                     onRefresh={async () => {
                         await onRefresh()
                     }}

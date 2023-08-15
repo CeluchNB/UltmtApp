@@ -24,7 +24,7 @@ interface StatsTableProps {
 
 const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
     const {
-        theme: { colors },
+        theme: { colors, size },
     } = useTheme()
     const navigation = useNavigation()
 
@@ -185,9 +185,11 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
             textAlignVertical: 'center',
             height: 50,
             padding: 5,
+            fontSize: size.fontTwenty,
         },
         playerCell: {
             textDecorationLine: 'underline',
+            fontSize: size.fontFifteen,
         },
     })
 
@@ -232,7 +234,12 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
             <View style={styles.table}>
                 {/* Sticky Player Column */}
                 <View style={styles.column}>
-                    <Text style={[styles.titleCell, styles.title]}>Player</Text>
+                    <HeaderCell
+                        value="Player"
+                        sortColumn={sortColumn}
+                        sortDirection={sortDirection}
+                        onPress={() => {}}
+                    />
                     {(data as Columns).display?.map((record, idx) => {
                         return (
                             <Pressable
@@ -245,6 +252,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                                             params: {
                                                 userId: record._id,
                                             },
+                                            initial: false,
                                         },
                                     })
                                 }}>

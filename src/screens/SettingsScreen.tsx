@@ -61,6 +61,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             fontSize: size.fontTwenty,
             color: colors.textPrimary,
             fontWeight: weight.bold,
+            flex: 1,
         },
         moreInfoText: {
             fontSize: size.fontTwenty,
@@ -90,7 +91,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
         },
         modalView: {
             margin: 20,
-            backgroundColor: colors.darkGray,
+            backgroundColor: colors.darkPrimary,
             borderRadius: 10,
             padding: 25,
             alignItems: 'center',
@@ -149,6 +150,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                 false: colors.gray,
                                 true: colors.textSecondary,
                             }}
+                            ios_backgroundColor={colors.gray}
                             value={themeId === 'dark'}
                             onValueChange={async () => {
                                 toggleTheme()
@@ -165,6 +167,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                 false: colors.gray,
                                 true: colors.textSecondary,
                             }}
+                            ios_backgroundColor={colors.gray}
                             value={!account.privateProfile}
                             onValueChange={() => {
                                 dispatch(
@@ -253,6 +256,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                     <Button
                         mode="contained"
                         buttonColor={colors.error}
+                        textColor={colors.primary}
                         uppercase={true}
                         style={styles.deleteButton}
                         onPress={async () => {
@@ -279,6 +283,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                         mode="contained"
                                         buttonColor={colors.success}
                                         uppercase={true}
+                                        textColor={colors.darkPrimary}
                                         style={styles.modalButton}
                                         onPress={() => {
                                             setModalVisible(false)
@@ -289,6 +294,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                         mode="contained"
                                         buttonColor={colors.error}
                                         uppercase={true}
+                                        textColor={colors.darkPrimary}
                                         style={styles.modalButton}
                                         onPress={async () => {
                                             try {

@@ -44,10 +44,13 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
             fontSize: size.fontThirty,
             flex: 1,
         },
-        list: { width: '100%' },
+        list: { width: '95%' },
         itemContainer: {
             flexDirection: 'row',
+            marginTop: 1,
+            marginLeft: 1,
         },
+        itemDisplay: { marginLeft: 5 },
         doneButton: {
             marginTop: 10,
         },
@@ -79,11 +82,16 @@ const StatsFilterModal: React.FC<StatsFilterModalProps> = ({
                                     true: colors.textPrimary,
                                     false: colors.gray,
                                 }}
+                                boxType="square"
+                                tintColor={colors.gray}
                                 onFillColor={colors.textPrimary}
-                                onCheckColor={colors.textPrimary}
+                                onCheckColor={colors.primary}
+                                onTintColor={colors.textPrimary}
+                                onAnimationType="bounce"
+                                offAnimationType="bounce"
                                 testID={`checkbox-${index}`}
                             />
-                            <Text>{display}</Text>
+                            <Text style={styles.itemDisplay}>{display}</Text>
                         </View>
                     )
                 }}

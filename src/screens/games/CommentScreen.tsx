@@ -74,6 +74,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                                             params: {
                                                 screen: 'PublicUserDetails',
                                                 params: { userId: id },
+                                                initial: false,
                                             },
                                         })
                                     }}

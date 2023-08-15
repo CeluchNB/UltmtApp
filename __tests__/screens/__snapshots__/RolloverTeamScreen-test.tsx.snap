@@ -70,7 +70,7 @@ exports[`should match snapshot 1`] = `
         }
         tintColors={
           {
-            "false": "#ababab",
+            "false": "#CEC6B4",
             "true": "#ffd600",
           }
         }
@@ -82,7 +82,7 @@ exports[`should match snapshot 1`] = `
     style={
       {
         "alignSelf": "center",
-        "color": "#31adff",
+        "color": "#7AC6FF",
         "marginBottom": 10,
         "width": "75%",
       }
@@ -154,7 +154,7 @@ exports[`should match snapshot 1`] = `
     style={
       {
         "alignSelf": "center",
-        "color": "#31adff",
+        "color": "#7AC6FF",
         "marginBottom": 10,
         "width": "75%",
       }
@@ -166,7 +166,7 @@ exports[`should match snapshot 1`] = `
     style={
       {
         "alignSelf": "center",
-        "color": "#31adff",
+        "color": "#7AC6FF",
         "marginBottom": 10,
         "width": "75%",
       }
@@ -396,7 +396,7 @@ exports[`should match snapshot with open requests 1`] = `
         }
         tintColors={
           {
-            "false": "#ababab",
+            "false": "#CEC6B4",
             "true": "#ffd600",
           }
         }
@@ -408,7 +408,7 @@ exports[`should match snapshot with open requests 1`] = `
     style={
       {
         "alignSelf": "center",
-        "color": "#31adff",
+        "color": "#7AC6FF",
         "marginBottom": 10,
         "width": "75%",
       }
@@ -480,7 +480,7 @@ exports[`should match snapshot with open requests 1`] = `
     style={
       {
         "alignSelf": "center",
-        "color": "#31adff",
+        "color": "#7AC6FF",
         "marginBottom": 10,
         "width": "75%",
       }
@@ -492,7 +492,7 @@ exports[`should match snapshot with open requests 1`] = `
     style={
       {
         "alignSelf": "center",
-        "color": "#31adff",
+        "color": "#7AC6FF",
         "marginBottom": 10,
         "width": "75%",
       }

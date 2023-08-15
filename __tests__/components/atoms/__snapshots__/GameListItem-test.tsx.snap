@@ -1,62 +1,64 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GameListItem test matches snapshot 1`] = `
-<View
-  style={
-    {
-      "display": "flex",
-      "flexDirection": "row",
-      "marginBottom": 5,
-    }
-  }
->
+<View>
   <View
     style={
       {
-        "alignSelf": "center",
-        "flex": 1,
+        "display": "flex",
+        "flexDirection": "row",
+        "marginBottom": 5,
       }
     }
   >
     <View
-      accessible={true}
-      collapsable={false}
-      focusable={false}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
       style={
         {
-          "opacity": 1,
+          "alignSelf": "center",
+          "flex": 0,
         }
       }
     >
-      <Text
+      <View
+        accessible={true}
+        collapsable={false}
+        focusable={false}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
           {
-            "color": "#ababab",
-            "fontSize": 41.0958904109589,
-            "fontWeight": "bold",
+            "opacity": 1,
           }
         }
       >
-        vs. Sockeye
-      </Text>
-      <Text
-        style={
-          {
-            "color": "#ffd600",
-            "fontSize": 20.54794520547945,
-            "fontWeight": "bold",
+        <Text
+          style={
+            {
+              "color": "#CEC6B4",
+              "fontSize": 41.0958904109589,
+              "fontWeight": "bold",
+            }
           }
-        }
-      >
-        3 - 0
-      </Text>
+        >
+          vs. Sockeye
+        </Text>
+        <Text
+          style={
+            {
+              "color": "#ffd600",
+              "fontSize": 20.54794520547945,
+              "fontWeight": "bold",
+            }
+          }
+        >
+          3 - 0
+        </Text>
+      </View>
     </View>
   </View>
 </View>

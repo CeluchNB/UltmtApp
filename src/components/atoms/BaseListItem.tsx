@@ -35,7 +35,7 @@ const BaseListItem: React.FC<BaseListItemProps> = ({
             marginBottom: 5,
         },
         textContainer: {
-            flex: 1,
+            flex: showDelete || showAccept || onPress ? 1 : 0,
             alignSelf: 'center',
         },
         text: {
@@ -70,49 +70,53 @@ const BaseListItem: React.FC<BaseListItemProps> = ({
     })
 
     return (
-        <View style={styles.container}>
-            <View style={styles.textContainer}>
-                <TouchableOpacity onPress={onPress}>
-                    {children}
-                    {requestStatus === 'approved' && (
-                        <Text style={styles.acceptedText}>Accepted</Text>
-                    )}
-                    {requestStatus === 'denied' && (
-                        <Text style={styles.deniedText}>Denied</Text>
-                    )}
-                    {requestStatus === 'pending' && (
-                        <Text style={styles.pendingText}>Pending</Text>
-                    )}
-                    {error && <Text style={styles.deniedText}>{error}</Text>}
-                </TouchableOpacity>
+        <View>
+            <View style={styles.container}>
+                <View style={styles.textContainer}>
+                    <TouchableOpacity onPress={onPress}>
+                        {children}
+                        {requestStatus === 'approved' && (
+                            <Text style={styles.acceptedText}>Accepted</Text>
+                        )}
+                        {requestStatus === 'denied' && (
+                            <Text style={styles.deniedText}>Denied</Text>
+                        )}
+                        {requestStatus === 'pending' && (
+                            <Text style={styles.pendingText}>Pending</Text>
+                        )}
+                        {error && (
+                            <Text style={styles.deniedText}>{error}</Text>
+                        )}
+                    </TouchableOpacity>
+                </View>
+                {showAccept && (
+                    <IconButton
+                        style={styles.buttonStyle}
+                        iconColor={colors.success}
+                        icon="plus"
+                        onPress={onAccept}
+                        testID="accept-button"
+                    />
+                )}
+                {showDelete && (
+                    <IconButton
+                        style={styles.buttonStyle}
+                        iconColor={colors.error}
+                        icon="close"
+                        onPress={onDelete}
+                        testID="delete-button"
+                    />
+                )}
+                {onPress && (
+                    <IconButton
+                        style={styles.buttonStyle}
+                        iconColor={colors.textPrimary}
+                        icon="chevron-right"
+                        onPress={onPress}
+                        testID="go-button"
+                    />
+                )}
             </View>
-            {showAccept && (
-                <IconButton
-                    style={styles.buttonStyle}
-                    iconColor={colors.success}
-                    icon="plus"
-                    onPress={onAccept}
-                    testID="accept-button"
-                />
-            )}
-            {showDelete && (
-                <IconButton
-                    style={styles.buttonStyle}
-                    iconColor={colors.error}
-                    icon="close"
-                    onPress={onDelete}
-                    testID="delete-button"
-                />
-            )}
-            {onPress && (
-                <IconButton
-                    style={styles.buttonStyle}
-                    iconColor={colors.textPrimary}
-                    icon="chevron-right"
-                    onPress={onPress}
-                    testID="go-button"
-                />
-            )}
         </View>
     )
 }

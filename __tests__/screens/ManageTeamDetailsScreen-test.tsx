@@ -1,3 +1,4 @@
+import * as ManagedTeamReducer from '../../src/store/reducers/features/team/managedTeamReducer'
 import * as RequestData from '../../src/services/data/request'
 import * as TeamData from '../../src/services/data/team'
 import { DetailedRequest } from '../../src/types/request'
@@ -7,9 +8,10 @@ import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { Team } from '../../src/types/team'
+import { setTeam } from '../../src/store/reducers/features/team/managedTeamReducer'
 import store from '../../src/store/store'
 import { waitUntilRefreshComplete } from '../../fixtures/utils'
-import { act, fireEvent, render } from '@testing-library/react-native'
+import { act, fireEvent, render, screen } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -122,106 +124,108 @@ beforeEach(() => {
     jest.spyOn(TeamData, 'getManagedTeam').mockReturnValue(
         Promise.resolve(getManagedTeamResponse),
     )
+    store.dispatch(setTeam(getManagedTeamResponse))
 })
 
-it('should match snapshot', async () => {
-    const snapshot = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+describe('ManageTeamDetailsScreen', () => {
+    it('should match snapshot', async () => {
+        const snapshot = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    await waitUntilRefreshComplete(snapshot.getByTestId('mtd-flat-list'))
+        await waitUntilRefreshComplete(snapshot.getByTestId('mtd-flat-list'))
 
-    expect(snapshot.toJSON()).toMatchSnapshot()
-})
+        expect(snapshot.toJSON()).toMatchSnapshot()
+    })
 
-it('should navigate to rollover a team with pending requests', async () => {
-    const { getByText, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+    it('should navigate to rollover a team with pending requests', async () => {
+        const { getByText, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-    const button = getByText('Start New Season')
+        const button = getByText('Start New Season')
 
-    fireEvent.press(button)
+        fireEvent.press(button)
 
-    expect(navigate).toHaveBeenCalledWith('RolloverTeam')
-})
+        expect(navigate).toHaveBeenCalledWith('RolloverTeam')
+    })
 
-it('should handle swipe to refresh', async () => {
-    const teamSpy = jest.spyOn(TeamData, 'getManagedTeam')
+    it('should handle swipe to refresh', async () => {
+        const teamSpy = jest.spyOn(TeamData, 'getManagedTeam')
 
-    const { getByText, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        const { getByText, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-    // expect getManagedTeam to be called
-    expect(teamSpy).toHaveBeenCalled()
+        // expect getManagedTeam to be called
+        expect(teamSpy).toHaveBeenCalled()
 
-    // check data is passed and displayed correctly
-    const teamname = getByText('@placename')
-    expect(teamname).toBeTruthy()
+        // check data is passed and displayed correctly
+        const teamname = getByText('@placename')
+        expect(teamname).toBeTruthy()
 
-    // player displayed correctly
-    const player = getByText('@first1last1')
-    expect(player).toBeTruthy()
-})
+        // player displayed correctly
+        const player = getByText('@first1last1')
+        expect(player).toBeTruthy()
+    })
 
-it('should handle a page load error', async () => {
-    jest.spyOn(TeamData, 'getManagedTeam').mockReturnValueOnce(
-        Promise.reject({ message: 'test error' }),
-    )
+    it('should handle a page load error', async () => {
+        jest.spyOn(TeamData, 'getManagedTeam').mockReturnValueOnce(
+            Promise.reject({ message: 'test error' }),
+        )
 
-    const { getByText, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        const { getByText, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-    const errorText = getByText('test error')
-    expect(errorText).toBeTruthy()
-})
+        const errorText = getByText('test error')
+        expect(errorText).toBeTruthy()
+    })
 
-it('should remove player correctly', async () => {
-    const removeSpy = jest
-        .spyOn(TeamData, 'removePlayer')
-        .mockImplementationOnce(async () => {
-            return { ...getManagedTeamResponse, players: [] }
-        })
+    it('should remove player correctly', async () => {
+        const removeSpy = jest
+            .spyOn(TeamData, 'removePlayer')
+            .mockImplementationOnce(async () => {
+                return { ...getManagedTeamResponse, players: [] }
+            })
 
-    const { queryByText, getAllByTestId, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        const { queryByText, getAllByTestId, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-    const username = '@first1last1'
-    expect(queryByText(username)).not.toBeNull()
-    const deleteButtons = getAllByTestId('delete-button')
-    fireEvent.press(deleteButtons[0])
-    /*
+        const username = '@first1last1'
+        expect(queryByText(username)).not.toBeNull()
+        const deleteButtons = getAllByTestId('delete-button')
+        fireEvent.press(deleteButtons[0])
+        /*
         Should not need act() after fireEvent, however test fails if it's not there.
         The alternative, preferred method of
 
@@ -235,106 +239,132 @@ it('should remove player correctly', async () => {
         Another option is wrapping fireEvent in act, but
         this makes it more obvious something weird is going on
     */
-    await act(async () => {})
+        await act(async () => {})
 
-    expect(removeSpy).toHaveBeenCalled()
-    expect(queryByText(username)).toBeNull()
-})
-
-it('should handle error swipe', async () => {
-    jest.spyOn(TeamData, 'getManagedTeam').mockClear()
-    const spy = jest
-        .spyOn(TeamData, 'getManagedTeam')
-        .mockReturnValueOnce(
-            Promise.reject({ message: 'test error getting team' }),
-        )
-        .mockReturnValue(Promise.resolve(getManagedTeamResponse))
-
-    const { queryByText, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
-
-    expect(queryByText('test error getting team')).not.toBeNull()
-
-    const scrollViewError = getByTestId('mtd-flat-list')
-    const { refreshControl: refreshControlError } = scrollViewError.props
-    await act(async () => {
-        refreshControlError.props.onRefresh()
+        expect(removeSpy).toHaveBeenCalled()
+        expect(queryByText(username)).toBeNull()
     })
 
-    expect(spy).toHaveBeenCalled()
-})
+    it('should handle error swipe', async () => {
+        jest.spyOn(TeamData, 'getManagedTeam').mockClear()
+        const spy = jest
+            .spyOn(TeamData, 'getManagedTeam')
+            .mockReturnValueOnce(
+                Promise.reject({ message: 'test error getting team' }),
+            )
+            .mockReturnValue(Promise.resolve(getManagedTeamResponse))
 
-it('should navigate to public user', async () => {
-    const { getByText, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        const { queryByText, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-    const username = getByText('@first1last1')
-    fireEvent.press(username)
+        expect(queryByText('test error getting team')).not.toBeNull()
 
-    expect(navigate).toHaveBeenCalled()
-})
+        const scrollViewError = getByTestId('mtd-flat-list')
+        const { refreshControl: refreshControlError } = scrollViewError.props
+        await act(async () => {
+            refreshControlError.props.onRefresh()
+        })
 
-it('should handle add players text', async () => {
-    const { getAllByTestId, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        expect(spy).toHaveBeenCalled()
+    })
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+    it('should navigate to public user', async () => {
+        const { getByText, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    const buttons = getAllByTestId('create-button')
-    fireEvent.press(buttons[1])
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-    expect(navigate).toHaveBeenCalled()
-})
+        const username = getByText('@first1last1')
+        fireEvent.press(username)
 
-it('should navigate to public user screen on manager click', async () => {
-    const { getByText, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        expect(navigate).toHaveBeenCalled()
+    })
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+    it('should handle add players text', async () => {
+        const { getAllByTestId, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    const button = getByText('@first4last4')
-    fireEvent.press(button)
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-    expect(navigate).toHaveBeenCalled()
-})
+        const buttons = getAllByTestId('create-button')
+        fireEvent.press(buttons[1])
 
-it('should navigate to request manager screen', async () => {
-    const { getAllByTestId, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <ManageTeamDetailsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        expect(navigate).toHaveBeenCalled()
+    })
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+    it('should navigate to public user screen on manager click', async () => {
+        const { getByText, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    const buttons = getAllByTestId('create-button')
-    fireEvent.press(buttons[0])
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-    expect(navigate).toHaveBeenCalled()
+        const button = getByText('@first4last4')
+        fireEvent.press(button)
+
+        expect(navigate).toHaveBeenCalled()
+    })
+
+    it('should navigate to request manager screen', async () => {
+        const { getAllByTestId, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+        const buttons = getAllByTestId('create-button')
+        fireEvent.press(buttons[0])
+
+        expect(navigate).toHaveBeenCalled()
+    })
+
+    it('should toggle roster status', async () => {
+        const dataFn = jest
+            .fn()
+            .mockImplementationOnce(async (_token, id, open) => {
+                return { rosterOpen: open } as Team
+            })
+        const spy = jest.spyOn(ManagedTeamReducer, 'toggleRosterStatus')
+
+        jest.spyOn(TeamData, 'toggleRosterStatus').mockImplementationOnce(
+            dataFn,
+        )
+        render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <ManageTeamDetailsScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        const toggleSwitch = screen.getByTestId('roster-open-switch')
+        fireEvent(toggleSwitch, 'valueChange')
+
+        expect(spy).toHaveBeenCalled()
+    })
 })

@@ -113,6 +113,7 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
                     <RefreshControl
                         refreshing={refreshing}
                         colors={[colors.textSecondary]}
+                        tintColor={colors.textSecondary}
                         onRefresh={async () => {
                             setRefreshing(true)
                             dispatch(fetchProfile())

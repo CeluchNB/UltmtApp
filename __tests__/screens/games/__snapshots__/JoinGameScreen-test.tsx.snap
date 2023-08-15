@@ -88,7 +88,7 @@ exports[`JoinGameScreen should match snapshot 1`] = `
               onFocus={[Function]}
               onPressOut={[Function]}
               placeholder="Search Games..."
-              placeholderTextColor="#ababab"
+              placeholderTextColor="#CEC6B4"
               selectionColor="#ffd600"
               style={
                 [

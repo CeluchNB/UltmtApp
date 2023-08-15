@@ -13,6 +13,7 @@ import {
     SafeAreaView,
     ScrollView,
     StyleSheet,
+    Switch,
     Text,
     View,
 } from 'react-native'
@@ -20,6 +21,7 @@ import {
     removePlayer,
     selectTeam,
     setTeam,
+    toggleRosterStatus,
 } from '../store/reducers/features/team/managedTeamReducer'
 import { useData, useTheme } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
@@ -111,6 +113,16 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         newSeasonButton: {
             marginTop: 10,
         },
+        rosterOpenContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            margin: 5,
+        },
+        rosterOpenText: {
+            color: colors.gray,
+            fontSize: size.fontTwenty,
+            flex: 1,
+        },
     })
 
     if (error) {
@@ -120,6 +132,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     refreshControl={
                         <RefreshControl
                             colors={[colors.textSecondary]}
+                            tintColor={colors.textSecondary}
                             refreshing={teamLoading}
                             onRefresh={async () => {
                                 refetch()
@@ -141,6 +154,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                 refreshControl={
                     <RefreshControl
                         colors={[colors.textSecondary]}
+                        tintColor={colors.textSecondary}
                         refreshing={teamLoading}
                         onRefresh={async () => {
                             refetch()
@@ -202,6 +216,27 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                             })
                         }}
                     />
+                    <View style={styles.rosterOpenContainer}>
+                        <Text style={styles.rosterOpenText}>Roster Open</Text>
+                        <Switch
+                            thumbColor={colors.textPrimary}
+                            trackColor={{
+                                false: colors.gray,
+                                true: colors.textSecondary,
+                            }}
+                            ios_backgroundColor={colors.gray}
+                            value={team?.rosterOpen}
+                            onValueChange={() => {
+                                dispatch(
+                                    toggleRosterStatus({
+                                        id: team?._id || '',
+                                        open: !team?.rosterOpen,
+                                    }),
+                                )
+                            }}
+                            testID="roster-open-switch"
+                        />
+                    </View>
                     <MapSection
                         title="Players"
                         listData={team?.players || []}

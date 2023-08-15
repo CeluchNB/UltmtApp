@@ -233,9 +233,7 @@ exports[`should match snapshot 1`] = `
                                 "letterSpacing": 0.1,
                                 "lineHeight": 20,
                               },
-                              {
-                                "fontSize": 30.821917808219176,
-                              },
+                              undefined,
                             ],
                           ]
                         }
@@ -396,9 +394,7 @@ exports[`should match snapshot 1`] = `
                                 "letterSpacing": 0.1,
                                 "lineHeight": 20,
                               },
-                              {
-                                "fontSize": 30.821917808219176,
-                              },
+                              undefined,
                             ],
                           ]
                         }
@@ -572,9 +568,7 @@ exports[`should match snapshot 1`] = `
                                 "letterSpacing": 0.1,
                                 "lineHeight": 20,
                               },
-                              {
-                                "fontSize": 30.821917808219176,
-                              },
+                              undefined,
                             ],
                           ]
                         }

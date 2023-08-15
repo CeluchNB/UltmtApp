@@ -42,7 +42,7 @@ exports[`should match snapshot when visible 1`] = `
           style={
             {
               "alignSelf": "center",
-              "color": "#31adff",
+              "color": "#7AC6FF",
               "fontSize": 30.821917808219176,
               "fontWeight": "900",
             }
@@ -60,7 +60,7 @@ exports[`should match snapshot when visible 1`] = `
           <Text
             style={
               {
-                "color": "#31adff",
+                "color": "#7AC6FF",
                 "fontSize": 61.64383561643835,
                 "fontWeight": "900",
                 "letterSpacing": 2,
@@ -218,7 +218,7 @@ exports[`should match snapshot when visible 1`] = `
           style={
             {
               "alignSelf": "center",
-              "color": "#31adff",
+              "color": "#7AC6FF",
               "fontSize": 30.821917808219176,
               "fontWeight": "900",
             }
@@ -422,7 +422,7 @@ exports[`should match snapshot with error 1`] = `
       <Text
         style={
           {
-            "color": "#ff0000",
+            "color": "#FFB4AB",
             "fontSize": 30.821917808219176,
             "marginBottom": 10,
           }

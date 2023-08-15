@@ -29,11 +29,41 @@ import {
 } from '../store/reducers/features/action/viewAction'
 import { useDispatch, useSelector } from 'react-redux'
 
+export interface GameViewerData {
+    activePoint: Point | undefined
+    allPointsLoading: boolean
+    displayedActions: (
+        | Action
+        | {
+              ad: boolean
+          }
+    )[]
+    error: string
+    game: Game | undefined
+    gameLoading: boolean
+    pointLoading: boolean
+    loading: boolean
+    points: Point[]
+    managingTeamId: string | undefined
+    onSelectAction: (action: ServerActionData) => {
+        gameId: string
+        pointId: string
+        live: boolean
+    }
+    onSelectPoint: (id: string) => Promise<void>
+    onReactivateGame: () => Promise<
+        | (Game & {
+              offline: boolean
+          })
+        | undefined
+    >
+    onRefresh: () => Promise<void>
+}
 /**
  * This hook enables easy use of common game viewing functions. Many methods perform mediation
  * between live and saved points.
  */
-export const useGameViewer = (gameId: string) => {
+export const useGameViewer = (gameId: string): GameViewerData => {
     const dispatch = useDispatch()
     const managerTeams = useSelector(selectManagerTeams)
     const [liveActions, setLiveActions] = React.useState<Action[]>([])

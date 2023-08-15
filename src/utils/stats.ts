@@ -244,6 +244,15 @@ const createSafeFraction = (numerator: number, denominator: number): number => {
     return numerator / denominator
 }
 
+export const sortAlphabetically = (str1: string, str2: string): number => {
+    if (str1 < str2) {
+        return -1
+    } else if (str2 < str1) {
+        return 1
+    }
+    return 0
+}
+
 export const INVALID_COLUMNS = [
     'display',
     'firstName',

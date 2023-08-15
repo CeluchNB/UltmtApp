@@ -37,7 +37,7 @@ exports[`test matches snapshot 1`] = `
       <Text
         style={
           {
-            "color": "#ababab",
+            "color": "#CEC6B4",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
           }
@@ -241,7 +241,7 @@ exports[`test matches snapshot while loading displays 1`] = `
       <Text
         style={
           {
-            "color": "#ababab",
+            "color": "#CEC6B4",
             "fontSize": 41.0958904109589,
             "fontWeight": "900",
           }
@@ -263,7 +263,7 @@ exports[`test matches snapshot while loading displays 1`] = `
     </View>
     <ActivityIndicator
       animating={true}
-      color="#ababab"
+      color="#CEC6B4"
       size="small"
       testID="loading-spinner"
     />

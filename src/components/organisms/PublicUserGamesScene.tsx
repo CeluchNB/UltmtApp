@@ -6,13 +6,7 @@ import GameListItem from '../atoms/GameListItem'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
-import {
-    ActivityIndicator,
-    RefreshControl,
-    SectionList,
-    StyleSheet,
-    Text,
-} from 'react-native'
+import { RefreshControl, SectionList, StyleSheet, Text } from 'react-native'
 
 export interface PublicUserGamesSceneProps {
     gameLists: { title: string; data: Game[]; index: number }[]
@@ -50,8 +44,10 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
     return (
         <BaseScreen containerWidth="80%">
             {error && <Text style={styles.error}>{error.message}</Text>}
-            {loading && (
-                <ActivityIndicator size="large" color={colors.textPrimary} />
+            {gameLists.length === 0 && (
+                <Text style={styles.error}>
+                    This user has not participated in any games yet
+                </Text>
             )}
             {!loading && !error && (
                 <SectionList
@@ -59,6 +55,7 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
                     refreshControl={
                         <RefreshControl
                             colors={[colors.textSecondary]}
+                            tintColor={colors.textSecondary}
                             refreshing={loading}
                             onRefresh={() => {
                                 refetch()
@@ -80,6 +77,7 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
                                         params: {
                                             screen: 'ViewGame',
                                             params: { gameId: item._id },
+                                            initial: false,
                                         },
                                     })
                                 }}
