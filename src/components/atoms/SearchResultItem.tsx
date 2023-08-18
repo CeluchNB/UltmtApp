@@ -59,7 +59,10 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
 
     return (
         <View>
-            <TouchableOpacity style={styles.opacity} onPress={onPress}>
+            <TouchableOpacity
+                style={styles.opacity}
+                onPress={onPress}
+                testID="search-result-item">
                 <View style={styles.itemContainer}>
                     <Text style={styles.header}>{header}</Text>
                     {subheader && (

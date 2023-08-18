@@ -107,7 +107,7 @@ exports[`should match snapshot 1`] = `
               undefined,
             ]
           }
-          testID="text-input-flat"
+          testID="search-input"
           underlineColorAndroid="transparent"
           value="test"
         />

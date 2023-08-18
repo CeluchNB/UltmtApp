@@ -77,6 +77,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
                 }}
                 value={searchText}
                 focusable={focusable}
+                testID="search-input"
             />
             {filter && (
                 <Button
