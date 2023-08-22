@@ -5,6 +5,7 @@ describe('Auth Flow', () => {
 
     beforeEach(async () => {
         await device.launchApp({ newInstance: true })
+        await element(by.id('account')).tap()
     })
 
     it('Forgot Password', async () => {

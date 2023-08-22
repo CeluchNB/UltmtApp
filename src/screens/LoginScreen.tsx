@@ -12,7 +12,6 @@ import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
 const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
-    // const hasCheckedLocalToken = React.useRef(false)
     const dispatch = useDispatch()
     const {
         theme: { colors },

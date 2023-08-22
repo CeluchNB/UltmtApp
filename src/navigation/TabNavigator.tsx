@@ -33,6 +33,7 @@ const TabNavigator: React.FC<AllScreenProps> = () => {
                 options={{
                     tabBarLabel: 'Account',
                     tabBarIcon: AccountIcon,
+                    tabBarTestID: 'account',
                 }}
             />
             <Tab.Screen
@@ -41,6 +42,7 @@ const TabNavigator: React.FC<AllScreenProps> = () => {
                 options={{
                     tabBarLabel: 'Games',
                     tabBarIcon: HomeIcon,
+                    tabBarTestID: 'games',
                 }}
             />
         </Tab.Navigator>

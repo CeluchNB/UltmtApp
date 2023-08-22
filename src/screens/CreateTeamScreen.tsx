@@ -114,6 +114,7 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
                         placeholder="Team Place"
                         onChangeText={onChange}
                         value={value}
+                        testID="team-place-input"
                     />
                 )}
             />
@@ -130,6 +131,7 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
                         placeholder="Team Name"
                         onChangeText={onChange}
                         value={value}
+                        testID="team-name-input"
                     />
                 )}
             />
@@ -154,6 +156,7 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
                         placeholder="Team Handle"
                         onChangeText={onChange}
                         value={value}
+                        testID="team-handle-input"
                     />
                 )}
             />

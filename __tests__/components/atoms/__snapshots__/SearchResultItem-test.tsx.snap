@@ -20,6 +20,7 @@ exports[`test matches snapshot 1`] = `
         "opacity": 1,
       }
     }
+    testID="search-result-item"
   >
     <View
       style={
@@ -90,6 +91,7 @@ exports[`test matches snapshot with loading 1`] = `
         "opacity": 1,
       }
     }
+    testID="search-result-item"
   >
     <View
       style={
@@ -160,6 +162,7 @@ exports[`test matches snapshot without subheader 1`] = `
         "opacity": 1,
       }
     }
+    testID="search-result-item"
   >
     <View
       style={
