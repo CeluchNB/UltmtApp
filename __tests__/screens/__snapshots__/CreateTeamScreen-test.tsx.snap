@@ -98,7 +98,7 @@ exports[`should match snapshot 1`] = `
               undefined,
             ]
           }
-          testID="text-input-outlined"
+          testID="team-place-input"
           underlineColorAndroid="transparent"
           value=""
         />
@@ -194,7 +194,7 @@ exports[`should match snapshot 1`] = `
               undefined,
             ]
           }
-          testID="text-input-outlined"
+          testID="team-name-input"
           underlineColorAndroid="transparent"
           value=""
         />
@@ -290,7 +290,7 @@ exports[`should match snapshot 1`] = `
               undefined,
             ]
           }
-          testID="text-input-outlined"
+          testID="team-handle-input"
           underlineColorAndroid="transparent"
           value=""
         />

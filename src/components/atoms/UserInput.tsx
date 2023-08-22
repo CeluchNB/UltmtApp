@@ -10,6 +10,7 @@ interface UserInputProps {
     value?: string
     style?: StyleProp<ViewStyle>
     rightIcon?: boolean
+    testID?: string
     onRightPress?: () => {}
     keyboardType?: 'default' | 'number-pad'
 }
@@ -21,6 +22,7 @@ const UserInput: React.FC<UserInputProps> = ({
     value,
     style,
     rightIcon,
+    testID,
     onRightPress,
     keyboardType = 'default',
 }) => {
@@ -52,6 +54,7 @@ const UserInput: React.FC<UserInputProps> = ({
             value={value}
             keyboardType={keyboardType}
             autoCapitalize="none"
+            testID={testID}
             right={
                 rightIcon && (
                     <TextInput.Icon

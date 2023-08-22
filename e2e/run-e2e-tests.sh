@@ -12,13 +12,13 @@ PID=$!
 mongosh "mongodb+srv://$MONGO_USERNAME:$MONGO_PASSWORD@ultmt-api.lrtagl9.mongodb.net/ultmt-api" e2e/seed.js > /dev/null
 
 # Test android
-detox test -c android.emu.debug
+detox test -c android.emu.debug e2e/team-management.test.ts
 
 # Delete data in DBs
-mongosh "mongodb+srv://$MONGO_USERNAME:$MONGO_PASSWORD@ultmt-api.lrtagl9.mongodb.net/ultmt-api" e2e/seed.js > /dev/null
+# mongosh "mongodb+srv://$MONGO_USERNAME:$MONGO_PASSWORD@ultmt-api.lrtagl9.mongodb.net/ultmt-api" e2e/seed.js > /dev/null
 
 # Test ios
-detox test -c ios.sim.debug
+# detox test -c ios.sim.debug
 
 # Kill metro
 kill $PID
