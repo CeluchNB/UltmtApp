@@ -1,17 +1,12 @@
 import { by, device, element, expect } from 'detox'
 
-describe('Team Management', () => {
-    beforeAll(async () => {
-        await device.uninstallApp()
-        await device.installApp()
-        await device.launchApp({ newInstance: true })
-        await element(by.id('account')).tap()
-        await createAccount('Ignacio', 'Varga', 'nacho')
-        await createAccount('Gustavo', 'Fring', 'gus')
-        await createAccount('Jesse', 'Pinkman', 'jesse')
-        await createAccount('Walter', 'White', 'heisenberg')
-        await createAccount('Skyler', 'White', 'sky')
-    })
+describe('Account Management', () => {
+    // beforeAll(async () => {
+    //     await device.uninstallApp()
+    //     await device.installApp()
+    //     await device.launchApp({ newInstance: true })
+    //     await element(by.id('account')).tap()
+    // })
 
     beforeEach(async () => {
         await device.uninstallApp()
@@ -21,6 +16,23 @@ describe('Team Management', () => {
         try {
             await element(by.text('SIGN OUT')).tap()
         } catch {}
+    })
+
+    it('Create account', async () => {
+        await element(by.text('CREATE ACCOUNT')).tap()
+        await element(by.label('First Name')).atIndex(0).typeText('Saul')
+        await element(by.label('Last Name')).atIndex(0).typeText('Goodman')
+        await element(by.label('Username'))
+            .atIndex(0)
+            .typeText('bettercallsaul')
+        await element(by.label('Email'))
+            .atIndex(0)
+            .typeText('bettercallsaul@email.com')
+        await element(by.label('Password')).atIndex(0).typeText('12Pass!!')
+        await element(by.text('CREATE')).tap()
+        await expect(element(by.text('Saul Goodman'))).toBeVisible()
+        await expect(element(by.text('@bettercallsaul'))).toBeVisible()
+        await expect(element(by.text('Stats'))).toBeVisible()
     })
 
     it('Create team', async () => {
