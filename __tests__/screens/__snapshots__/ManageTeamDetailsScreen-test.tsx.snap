@@ -350,7 +350,7 @@ exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
                       ]
                     }
                   >
-                    Start New Season
+                    Rollover Team
                   </Text>
                 </View>
               </View>

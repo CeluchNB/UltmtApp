@@ -68,10 +68,18 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
             height: '100%',
             alignItems: 'center',
         },
+        explainText: {
+            color: colors.textPrimary,
+            fontSize: size.fontTwenty,
+            width: '75%',
+            alignSelf: 'center',
+            textAlign: 'center',
+        },
         checkboxContainer: {
             flexDirection: 'row',
             alignItems: 'center',
             width: '75%',
+            marginBottom: 15,
         },
         checkboxTitle: {
             flex: 1,
@@ -110,9 +118,15 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
 
     return (
         <View style={styles.screen}>
+            <Text style={styles.explainText}>
+                Create a new team with the same name for a new year
+            </Text>
             <View style={styles.checkboxContainer}>
                 <Text
-                    style={{ ...styles.sectionTitle, ...styles.checkboxTitle }}>
+                    style={{
+                        ...styles.sectionTitle,
+                        ...styles.checkboxTitle,
+                    }}>
                     Keep Current Players
                 </Text>
                 <Controller
@@ -126,8 +140,13 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
                                 true: colors.textPrimary,
                                 false: colors.gray,
                             }}
+                            boxType="square"
+                            tintColor={colors.gray}
                             onFillColor={colors.textPrimary}
-                            onCheckColor={colors.textPrimary}
+                            onCheckColor={colors.primary}
+                            onTintColor={colors.textPrimary}
+                            onAnimationType="bounce"
+                            offAnimationType="bounce"
                             style={styles.checkbox}
                         />
                     )}
@@ -145,6 +164,7 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
                     <Picker
                         style={styles.picker}
                         selectedValue={value}
+                        itemStyle={{ color: colors.textPrimary }}
                         dropdownIconColor={colors.textPrimary}
                         prompt="Season"
                         onValueChange={onChange}>

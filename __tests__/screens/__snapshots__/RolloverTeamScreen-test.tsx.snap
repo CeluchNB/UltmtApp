@@ -10,11 +10,25 @@ exports[`should match snapshot 1`] = `
     }
   }
 >
+  <Text
+    style={
+      {
+        "alignSelf": "center",
+        "color": "#ffd600",
+        "fontSize": 41.0958904109589,
+        "textAlign": "center",
+        "width": "75%",
+      }
+    }
+  >
+    Create a new team with the same name for a new year
+  </Text>
   <View
     style={
       {
         "alignItems": "center",
         "flexDirection": "row",
+        "marginBottom": 15,
         "width": "75%",
       }
     }
@@ -51,9 +65,13 @@ exports[`should match snapshot 1`] = `
       pointerEvents="auto"
     >
       <RNCCheckbox
+        boxType="square"
         forwardedRef={null}
-        onCheckColor="#ffd600"
+        offAnimationType="bounce"
+        onAnimationType="bounce"
+        onCheckColor="#303030"
         onFillColor="#ffd600"
+        onTintColor="#ffd600"
         onValueChange={[Function]}
         style={
           [
@@ -68,6 +86,7 @@ exports[`should match snapshot 1`] = `
             },
           ]
         }
+        tintColor="#CEC6B4"
         tintColors={
           {
             "false": "#CEC6B4",
@@ -145,7 +164,9 @@ exports[`should match snapshot 1`] = `
           {
             "height": 216,
           },
-          undefined,
+          {
+            "color": "#ffd600",
+          },
         ]
       }
     />
@@ -336,11 +357,25 @@ exports[`should match snapshot with open requests 1`] = `
     }
   }
 >
+  <Text
+    style={
+      {
+        "alignSelf": "center",
+        "color": "#ffd600",
+        "fontSize": 41.0958904109589,
+        "textAlign": "center",
+        "width": "75%",
+      }
+    }
+  >
+    Create a new team with the same name for a new year
+  </Text>
   <View
     style={
       {
         "alignItems": "center",
         "flexDirection": "row",
+        "marginBottom": 15,
         "width": "75%",
       }
     }
@@ -377,9 +412,13 @@ exports[`should match snapshot with open requests 1`] = `
       pointerEvents="auto"
     >
       <RNCCheckbox
+        boxType="square"
         forwardedRef={null}
-        onCheckColor="#ffd600"
+        offAnimationType="bounce"
+        onAnimationType="bounce"
+        onCheckColor="#303030"
         onFillColor="#ffd600"
+        onTintColor="#ffd600"
         onValueChange={[Function]}
         style={
           [
@@ -394,6 +433,7 @@ exports[`should match snapshot with open requests 1`] = `
             },
           ]
         }
+        tintColor="#CEC6B4"
         tintColors={
           {
             "false": "#CEC6B4",
@@ -471,7 +511,9 @@ exports[`should match snapshot with open requests 1`] = `
           {
             "height": 216,
           },
-          undefined,
+          {
+            "color": "#ffd600",
+          },
         ]
       }
     />
