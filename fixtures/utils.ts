@@ -19,6 +19,7 @@ export const getInitialPlayerData = (
         username: 'first1last1',
         goals: 0,
         assists: 0,
+        hockeyAssists: 0,
         blocks: 0,
         throwaways: 0,
         drops: 0,

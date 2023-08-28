@@ -9,6 +9,7 @@ export interface DisplayStat {
 export interface PlayerStats {
     goals: number
     assists: number
+    hockeyAssists: number
     blocks: number
     throwaways: number
     drops: number
