@@ -108,7 +108,10 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     }, [stats])
 
     const teams = React.useMemo(() => {
-        return [...managerTeams, ...playerTeams]
+        return [
+            ...managerTeams.map(team => ({ ...team, managing: true })),
+            ...playerTeams.map(team => ({ ...team, managing: false })),
+        ]
     }, [managerTeams, playerTeams])
 
     React.useEffect(() => {
@@ -352,14 +355,15 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                 renderItem={team => {
                                     return (
                                         <TeamListItem
-                                            key={team._id}
+                                            key={`${team._id}-${
+                                                team.managing
+                                                    ? 'manage'
+                                                    : 'player'
+                                            }`}
                                             team={team}
+                                            managing={team.managing}
                                             onPress={async () => {
-                                                if (
-                                                    managerTeams.find(
-                                                        t => t._id === team._id,
-                                                    )
-                                                ) {
+                                                if (team.managing) {
                                                     navigation.navigate(
                                                         'ManagedTeamDetails',
                                                         {

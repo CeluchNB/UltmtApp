@@ -119,6 +119,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
             [
               {
                 "_id": "team1",
+                "managing": true,
                 "name": "Temper",
                 "place": "Pittsburgh",
                 "seasonEnd": "2022",
@@ -127,6 +128,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
               },
               {
                 "_id": "id1",
+                "managing": false,
                 "name": "Name1",
                 "place": "Place1",
                 "seasonEnd": "2019",
@@ -135,6 +137,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
               },
               {
                 "_id": "id2",
+                "managing": false,
                 "name": "Name2",
                 "place": "Place2",
                 "seasonEnd": "2020",
@@ -2150,6 +2153,17 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                       }
                     >
                       2022
+                    </Text>
+                    <Text
+                      style={
+                        {
+                          "color": "#ffd600",
+                          "fontSize": 20.54794520547945,
+                          "fontWeight": "bold",
+                        }
+                      }
+                    >
+                      Managing
                     </Text>
                   </View>
                 </View>
