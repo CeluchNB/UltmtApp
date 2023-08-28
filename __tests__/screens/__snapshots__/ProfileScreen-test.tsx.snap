@@ -1093,7 +1093,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                           "backgroundColor": "#7AC6FF",
                           "borderRadius": 5,
                           "height": 10,
-                          "width": 100,
+                          "width": 0,
                         }
                       }
                     />
@@ -1133,7 +1133,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                           "backgroundColor": "#7AC6FF",
                           "borderRadius": 5,
                           "height": 10,
-                          "width": 100,
+                          "width": 0,
                         }
                       }
                     />
@@ -1186,7 +1186,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                           "backgroundColor": "#7AC6FF",
                           "borderRadius": 5,
                           "height": 10,
-                          "width": 100,
+                          "width": 0,
                         }
                       }
                     />
@@ -1226,7 +1226,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                           "backgroundColor": "#7AC6FF",
                           "borderRadius": 5,
                           "height": 10,
-                          "width": 100,
+                          "width": 0,
                         }
                       }
                     />
