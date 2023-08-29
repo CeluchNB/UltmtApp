@@ -10,7 +10,13 @@ import React from 'react'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import {
+    act,
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 import { fetchProfileData, game } from '../../fixtures/data'
 import {
     getInitialPlayerData,
@@ -121,19 +127,47 @@ describe('ProfileScreen', () => {
             expect(username).toBeTruthy()
 
             const team1 = getByText(
-                `${fetchProfileData.playerTeams[0].place} ${fetchProfileData.playerTeams[0].name}`,
+                `${game.teamOne.place} ${game.teamOne.name}`,
             )
             expect(team1).toBeTruthy()
 
             const team2 = getByText(
-                `${fetchProfileData.playerTeams[1].place} ${fetchProfileData.playerTeams[1].name}`,
+                `${fetchProfileData.playerTeams[0].place} ${fetchProfileData.playerTeams[0].name}`,
             )
             expect(team2).toBeTruthy()
 
             const team3 = getByText(
-                `${fetchProfileData.playerTeams[2].place} ${fetchProfileData.playerTeams[2].name}`,
+                `${fetchProfileData.playerTeams[1].place} ${fetchProfileData.playerTeams[1].name}`,
             )
             expect(team3).toBeTruthy()
+        })
+    })
+
+    it('handles player team click functionality', async () => {
+        render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <ProfileScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        const team1 = screen.getByText(
+            `${game.teamOne.place} ${game.teamOne.name}`,
+        )
+        fireEvent.press(team1)
+        expect(navigate).toHaveBeenCalledWith('ManagedTeamDetails', {
+            id: game.teamOne._id,
+        })
+
+        const team2 = screen.getByText(
+            `${fetchProfileData.playerTeams[0].place} ${fetchProfileData.playerTeams[0].name}`,
+        )
+        fireEvent.press(team2)
+        expect(navigate).toHaveBeenCalledWith('PublicTeamDetails', {
+            id: fetchProfileData.playerTeams[0]._id,
         })
     })
 

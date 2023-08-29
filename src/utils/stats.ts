@@ -167,6 +167,8 @@ export const mapStatDisplayName = (value: string): string => {
             return 'Catching Percentage'
         case 'throwingPercentage':
             return 'Throwing Percentage'
+        case 'hockeyAssists':
+            return 'Hockey Assists'
         case 'ppGoals':
             return 'Goals per point'
         case 'ppAssists':
@@ -191,6 +193,7 @@ export const addPlayerStats = (
     return {
         goals: data1.goals + data2.goals,
         assists: data1.assists + data2.assists,
+        hockeyAssists: data1.hockeyAssists + data2.hockeyAssists,
         touches: data1.touches + data2.touches,
         catches: data1.catches + data2.catches,
         callahans: data1.callahans + data2.callahans,
@@ -286,6 +289,7 @@ export const OFFENSE_COLUMNS = [
     'catches',
     'completedPasses',
     'droppedPasses',
+    'hockeyAssists',
 ]
 export const DEFENSE_COLUMNS = ['blocks', 'pulls', 'callahans']
 export const PER_POINT_COLUMNS = [

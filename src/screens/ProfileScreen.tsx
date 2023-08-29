@@ -28,6 +28,7 @@ import { getActiveGames, getGamesByTeam } from '../services/data/game'
 import {
     resetState,
     selectAccount,
+    selectManagerTeams,
     selectPlayerTeams,
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
@@ -43,6 +44,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     const dispatch = useDispatch()
     const account = useSelector(selectAccount)
     const playerTeams = useSelector(selectPlayerTeams)
+    const managerTeams = useSelector(selectManagerTeams)
     const [loading, setLoading] = React.useState(false)
 
     const teamToGet = React.useMemo(() => {
@@ -104,6 +106,13 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     const statsList: DisplayStat[] = React.useMemo(() => {
         return convertProfileScreenStatsToStatListItem(stats)
     }, [stats])
+
+    const teams = React.useMemo(() => {
+        return [
+            ...managerTeams.map(team => ({ ...team, managing: true })),
+            ...playerTeams.map(team => ({ ...team, managing: false })),
+        ]
+    }, [managerTeams, playerTeams])
 
     React.useEffect(() => {
         // Disable react-query warning logs b/c players stats result is often an error
@@ -342,25 +351,39 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                     navigation.navigate('ManageTeams')
                                 }}
                                 buttonText="manage teams"
-                                listData={playerTeams}
+                                listData={teams.slice(0, 3)}
                                 renderItem={team => {
                                     return (
                                         <TeamListItem
-                                            key={team._id}
+                                            key={`${team._id}-${
+                                                team.managing
+                                                    ? 'manage'
+                                                    : 'player'
+                                            }`}
                                             team={team}
+                                            managing={team.managing}
                                             onPress={async () => {
-                                                navigation.navigate(
-                                                    'PublicTeamDetails',
-                                                    {
-                                                        id: team._id,
-                                                    },
-                                                )
+                                                if (team.managing) {
+                                                    navigation.navigate(
+                                                        'ManagedTeamDetails',
+                                                        {
+                                                            id: team._id,
+                                                        },
+                                                    )
+                                                } else {
+                                                    navigation.navigate(
+                                                        'PublicTeamDetails',
+                                                        {
+                                                            id: team._id,
+                                                        },
+                                                    )
+                                                }
                                             }}
                                         />
                                     )
                                 }}
                                 error={
-                                    playerTeams.length === 0
+                                    teams.length === 0
                                         ? 'No teams available'
                                         : undefined
                                 }
