@@ -456,6 +456,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
             }
           >
             <TextInput
+              accessibilityLabel="Comment"
               multiline={true}
               onChangeText={[Function]}
               placeholder="Add a comment..."
@@ -1330,6 +1331,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
             }
           >
             <TextInput
+              accessibilityLabel="Comment"
               multiline={true}
               onChangeText={[Function]}
               placeholder="Add a comment..."

@@ -14,20 +14,20 @@ yarn start:e2e & disown > /dev/null
 PID=$!
 
 # Build Android
-# cd android ; ./gradlew clean ; cd ..
-# detox build -c android.emu.debug -s
+cd android ; ./gradlew clean ; cd ..
+detox build -c android.emu.debug -s
 
 # Test android
-# detox test -c android.emu.debug e2e/game.test.ts
+detox test -c android.emu.debug e2e/game.test.ts --loglevel trace
 
 # Seed data
 # ./seed-data.sh
 
 # Build iOS
-detox build -c ios.sim.debug -s
+# detox build -c ios.sim.debug -s
 
 # Test ios
-detox test -c ios.sim.debug e2e/game.test.ts
+# detox test -c ios.sim.debug e2e/game.test.ts
 
 # Kill metro
 kill $PID

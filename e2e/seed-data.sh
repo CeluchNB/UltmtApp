@@ -24,6 +24,7 @@ function join_with_bulk_code {
 
 mongosh "mongodb+srv://$MONGO_USERNAME:$MONGO_USERS_PASSWORD@ultmt-api.lrtagl9.mongodb.net/ultmt-api" e2e/seed-users.js > /dev/null
 mongosh "mongodb+srv://$MONGO_USERNAME:$MONGO_GAMES_PASSWORD@stall-one.7loivjz.mongodb.net/stall-one" e2e/seed-game.js > /dev/null
+mongosh "mongodb+srv://$MONGO_STATS_USERNAME:$MONGO_STATS_PASSWORD@ultmt-stats.qmxclrf.mongodb.net/" e2e/seed-stats.js > /dev/null
 
 # Team Management Users
 nacho=$(create_user "Ignacio" "Varga" "nacho")

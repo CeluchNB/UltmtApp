@@ -75,6 +75,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
         <View style={styles.container}>
             <View style={styles.inputContainer}>
                 <TextInput
+                    accessibilityLabel="Comment"
                     style={styles.input}
                     placeholderTextColor={colors.gray}
                     multiline={true}

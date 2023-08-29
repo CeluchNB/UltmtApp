@@ -1,5 +1,5 @@
 describe('Game', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await device.uninstallApp()
         await device.installApp()
         await device.launchApp({ newInstance: true })
@@ -56,20 +56,20 @@ describe('Game', () => {
         await element(by.text('NEXT POINT')).tap()
 
         // ADD GUEST
-        await element(by.text('ADD GUEST')).tap()
-        await element(by.label('First Name')).atIndex(0).typeText('Trent')
-        await element(by.label('Last Name')).atIndex(0).typeText('Dillon')
-        await element(by.text('ADD')).tap()
+        // await element(by.text('ADD GUEST')).tap()
+        // await element(by.id('first-name-input')).typeText('Trent')
+        // await element(by.id('last-name-input')).typeText('Dillon')
+        // await element(by.text('ADD')).tap()
 
         // POINT 3
         await selectPlayers([
+            'Jack Brown',
             'Jesse Bolton',
             'Kahyee Fong',
             'Khalif El-Salaam',
             'Lexi Garrity',
             'Marc Munoz',
             "Mario O'Brien",
-            'Trent Dillon',
         ])
         await element(by.id('players-flat-list')).swipe('up')
         await element(by.text('START')).tap()
@@ -92,7 +92,7 @@ describe('Game', () => {
         await expect(element(by.text('test'))).toBeVisible()
         await expect(element(by.text('2'))).toBeVisible()
         await expect(element(by.text('1'))).toBeVisible()
-        await element(by.text('Mixtape')).tap()
+        await element(by.id('game-card-pressable')).tap()
 
         // VIEW GAME ON DETAILS SCREEN
         try {
@@ -107,9 +107,18 @@ describe('Game', () => {
         ).toBeVisible()
 
         // LEAVE COMMENT
-        // await element(by.text('Marc Munoz scores from Khalif El-Salaam')).tap()
+        await element(by.text('Marc Munoz scores from Khalif El-Salaam')).tap()
+        await element(by.label('Comment')).typeText('Test comment')
+        await element(by.text('SEND')).tap()
+        await expect(element(by.text('Test comment'))).toBeVisible()
+
+        // NAVIGATE BACK TO GAME
+        await element(by.id('games')).tap()
+        await element(by.id('game-home-scroll-view')).swipe('down')
+        await element(by.id('game-card-pressable')).tap()
 
         // VIEW LEADER STATS
+        await element(by.text('LEADERBOARD')).tap()
         await expect(element(by.text('Goals'))).toBeVisible()
         await expect(element(by.text('Brandon Li'))).toBeVisible()
         await expect(element(by.text('Assists'))).toBeVisible()
