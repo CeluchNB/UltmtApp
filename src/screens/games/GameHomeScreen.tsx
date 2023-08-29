@@ -133,6 +133,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
             </ScrollView>
             <FAB
                 icon="plus"
+                testID="create-button-fab"
                 style={styles.fab}
                 color={colors.primary}
                 onPress={navigateToCreate}
