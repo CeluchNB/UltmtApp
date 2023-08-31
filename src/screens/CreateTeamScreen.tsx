@@ -107,11 +107,11 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
             <Controller
                 name="place"
                 control={control}
-                rules={getFormFieldRules('Team place', true, undefined, 20)}
+                rules={getFormFieldRules('Team location', true, undefined, 20)}
                 render={({ field: { onChange, value } }) => (
                     <UserInput
                         style={styles.input}
-                        placeholder="Team Place"
+                        placeholder="Team Location"
                         onChangeText={onChange}
                         value={value}
                         testID="team-place-input"

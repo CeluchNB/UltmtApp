@@ -467,6 +467,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
                   "color": "#ffd600",
                 }
               }
+              testID="comment-input"
               value=""
             />
           </View>
@@ -663,6 +664,7 @@ exports[`Live CommentScreen should match snapshot 1`] = `
           renderItem={[Function]}
           scrollEventThrottle={50}
           stickyHeaderIndices={[]}
+          testID="comment-list"
           viewabilityConfigCallbackPairs={[]}
         >
           <View>
@@ -1342,6 +1344,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
                   "color": "#ffd600",
                 }
               }
+              testID="comment-input"
               value=""
             />
           </View>
@@ -1538,6 +1541,7 @@ exports[`Saved CommentScreen should match snapshot 1`] = `
           renderItem={[Function]}
           scrollEventThrottle={50}
           stickyHeaderIndices={[]}
+          testID="comment-list"
           viewabilityConfigCallbackPairs={[]}
         >
           <View>

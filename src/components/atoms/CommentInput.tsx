@@ -84,6 +84,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
                     onChangeText={v => {
                         setValue(v)
                     }}
+                    testID="comment-input"
                 />
                 {error.length > 0 && <Text style={styles.error}>{error}</Text>}
             </View>

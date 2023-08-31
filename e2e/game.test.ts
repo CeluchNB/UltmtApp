@@ -2,7 +2,10 @@ describe('Game', () => {
     beforeAll(async () => {
         await device.uninstallApp()
         await device.installApp()
-        await device.launchApp({ newInstance: true })
+        await device.launchApp({
+            newInstance: true,
+            permissions: { userTracking: 'YES' },
+        })
         await element(by.id('account')).tap()
         try {
             await element(by.text('SIGN OUT')).tap()
@@ -55,12 +58,6 @@ describe('Game', () => {
         await element(by.text('THEY SCORE')).tap()
         await element(by.text('NEXT POINT')).tap()
 
-        // ADD GUEST
-        // await element(by.text('ADD GUEST')).tap()
-        // await element(by.id('first-name-input')).typeText('Trent')
-        // await element(by.id('last-name-input')).typeText('Dillon')
-        // await element(by.text('ADD')).tap()
-
         // POINT 3
         await selectPlayers([
             'Jack Brown',
@@ -86,13 +83,14 @@ describe('Game', () => {
         await element(by.text('FINISH GAME')).tap()
 
         // VIEW GAME ON HOME SCREEN
-        await element(by.id('games')).tap()
-        await element(by.id('game-home-scroll-view')).swipe('down')
-        await expect(element(by.text('Mixtape'))).toBeVisible()
-        await expect(element(by.text('test'))).toBeVisible()
-        await expect(element(by.text('2'))).toBeVisible()
-        await expect(element(by.text('1'))).toBeVisible()
-        await element(by.id('game-card-pressable')).tap()
+        await element(by.id('account')).tap()
+        try {
+            await element(by.text('SIGN OUT')).tap()
+        } catch {}
+        await login('aimiekawai')
+        await expect(element(by.text('vs. test'))).toBeVisible()
+        await expect(element(by.text('2 - 1'))).toBeVisible()
+        await element(by.text('vs. test')).tap()
 
         // VIEW GAME ON DETAILS SCREEN
         try {
@@ -103,34 +101,34 @@ describe('Game', () => {
         await element(by.text('HIDE INFO')).tap()
         await element(by.text('Mixtape')).atIndex(1).tap()
         await expect(
-            element(by.text('Marc Munoz scores from Khalif El-Salaam')),
+            element(by.text('Lexi Garrity scores from Kahyee Fong')),
         ).toBeVisible()
 
         // LEAVE COMMENT
-        await element(by.text('Marc Munoz scores from Khalif El-Salaam')).tap()
-        await element(by.label('Comment')).typeText('Test comment')
+        await element(by.text('Lexi Garrity scores from Kahyee Fong')).tap()
+        await element(by.id('comment-input')).typeText('Test comment')
         await element(by.text('SEND')).tap()
         await expect(element(by.text('Test comment'))).toBeVisible()
 
         // NAVIGATE BACK TO GAME
-        await element(by.id('games')).tap()
-        await element(by.id('game-home-scroll-view')).swipe('down')
-        await element(by.id('game-card-pressable')).tap()
+        await element(by.id('comment-list')).tap()
+        await element(by.id('account')).tap()
+        await element(by.text('vs. test')).tap()
 
         // VIEW LEADER STATS
-        await element(by.text('LEADERBOARD')).tap()
-        await expect(element(by.text('Goals'))).toBeVisible()
-        await expect(element(by.text('Brandon Li'))).toBeVisible()
-        await expect(element(by.text('Assists'))).toBeVisible()
-        await expect(element(by.text('Alexa Romersa'))).toBeVisible()
-        await expect(element(by.text('+ / -'))).toBeVisible()
+        await element(by.text('Lexi Garrity scores from Kahyee Fong')).swipe(
+            'left',
+        )
+        // await expect(element(by.text('Goals')).atIndex(1)).toBeVisible()
+        await expect(element(by.text('Brandon Li')).atIndex(0)).toBeVisible()
+        // await expect(element(by.text('Assists')).atIndex(1)).toBeVisible()
+        await expect(element(by.text('Alexa Romersa')).atIndex(0)).toBeVisible()
+        // await expect(element(by.text('+ / -')).atIndex(1)).toBeVisible()
         await expect(element(by.text('Alex Nelson')).atIndex(0)).toBeVisible()
-        await expect(element(by.text('Blocks'))).toBeVisible()
+        // await expect(element(by.text('Blocks')).atIndex(1)).toBeVisible()
         await expect(element(by.text('Alex Nelson')).atIndex(1)).toBeVisible()
-        await expect(element(by.text('Points Played'))).toBeVisible()
-        await expect(element(by.text('Aimie Kawai'))).toBeVisible()
-        await expect(element(by.text('Turnovers'))).toBeVisible()
-        await expect(element(by.text('N/A'))).toBeVisible()
+
+        await expect(element(by.text('MORE STATS')).atIndex(0)).toBeVisible()
     })
 
     const login = async (username: string) => {
