@@ -148,7 +148,11 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
                         control={control}
                         name="after"
                         render={({ field: { value, onChange } }) => (
-                            <TextDateInput value={value} onChange={onChange} />
+                            <TextDateInput
+                                value={value}
+                                onChange={onChange}
+                                style={{ backgroundColor: colors.darkPrimary }}
+                            />
                         )}
                     />
                     <Text style={[styles.text, styles.toText]}>to</Text>
@@ -156,7 +160,11 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
                         control={control}
                         name="before"
                         render={({ field: { value, onChange } }) => (
-                            <TextDateInput value={value} onChange={onChange} />
+                            <TextDateInput
+                                value={value}
+                                onChange={onChange}
+                                style={{ backgroundColor: colors.darkPrimary }}
+                            />
                         )}
                     />
                 </View>

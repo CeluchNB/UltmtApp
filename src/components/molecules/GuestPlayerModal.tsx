@@ -86,6 +86,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
         },
         input: {
             width: '90%',
+            backgroundColor: colors.darkPrimary,
         },
         errorText: {
             color: colors.error,

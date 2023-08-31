@@ -1,3 +1,5 @@
+import { by, device, element, expect } from 'detox'
+
 describe('Game', () => {
     beforeAll(async () => {
         await device.uninstallApp()

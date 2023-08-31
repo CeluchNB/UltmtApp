@@ -24,7 +24,7 @@ const BaseModal: React.FC<BaseModalProps> = props => {
             backgroundColor: `${colors.primary}50`,
         },
         modalView: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.darkPrimary,
             borderColor: colors.textPrimary,
             color: colors.textPrimary,
             borderRadius: 10,

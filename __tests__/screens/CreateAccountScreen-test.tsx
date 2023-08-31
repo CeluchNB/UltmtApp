@@ -36,7 +36,6 @@ const user: User = {
     managerTeams: [],
     playerTeams: [],
     archiveTeams: [],
-    stats: [],
     openToRequests: true,
     private: false,
 }

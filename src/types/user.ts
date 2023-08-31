@@ -21,7 +21,6 @@ export interface User extends DisplayUser {
     playerTeams: DisplayTeam[]
     managerTeams: DisplayTeam[]
     archiveTeams: DisplayTeam[]
-    stats: string[]
     openToRequests: boolean
     private: boolean
 }

@@ -25,7 +25,7 @@ exports[`should match snapshot with team one 1`] = `
       style={
         {
           "alignItems": "center",
-          "backgroundColor": "#303030",
+          "backgroundColor": "#1a1a1a",
           "borderColor": "#ffd600",
           "borderRadius": 10,
           "color": "#ffd600",
@@ -2160,7 +2160,7 @@ exports[`should match snapshot with team two 1`] = `
       style={
         {
           "alignItems": "center",
-          "backgroundColor": "#303030",
+          "backgroundColor": "#1a1a1a",
           "borderColor": "#ffd600",
           "borderRadius": 10,
           "color": "#ffd600",

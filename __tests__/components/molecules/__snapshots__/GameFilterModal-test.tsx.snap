@@ -25,7 +25,7 @@ exports[`should match snapshot 1`] = `
       style={
         {
           "alignItems": "center",
-          "backgroundColor": "#303030",
+          "backgroundColor": "#1a1a1a",
           "borderColor": "#ffd600",
           "borderRadius": 10,
           "color": "#ffd600",
@@ -566,7 +566,7 @@ exports[`should match snapshot 1`] = `
                         "top": 6,
                       },
                       {
-                        "backgroundColor": "#303030",
+                        "backgroundColor": "#1a1a1a",
                         "borderColor": "#7AC6FF",
                         "borderRadius": 4,
                         "borderWidth": 1,
@@ -685,7 +685,7 @@ exports[`should match snapshot 1`] = `
                         "top": 6,
                       },
                       {
-                        "backgroundColor": "#303030",
+                        "backgroundColor": "#1a1a1a",
                         "borderColor": "#7AC6FF",
                         "borderRadius": 4,
                         "borderWidth": 1,
