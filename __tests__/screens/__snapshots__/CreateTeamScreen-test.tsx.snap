@@ -55,7 +55,7 @@ exports[`should match snapshot 1`] = `
         }
       >
         <TextInput
-          accessibilityLabel="Team Place"
+          accessibilityLabel="Team Location"
           autoCapitalize="none"
           editable={true}
           keyboardType="default"
@@ -64,7 +64,7 @@ exports[`should match snapshot 1`] = `
           onBlur={[Function]}
           onChangeText={[Function]}
           onFocus={[Function]}
-          placeholder="Team Place"
+          placeholder="Team Location"
           placeholderTextColor="#ffffff"
           selectionColor="#ffd600"
           style={

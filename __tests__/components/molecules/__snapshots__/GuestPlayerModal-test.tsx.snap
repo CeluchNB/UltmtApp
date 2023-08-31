@@ -142,7 +142,7 @@ exports[`GuestPlayerModal should match snapshot 1`] = `
                     undefined,
                   ]
                 }
-                testID="text-input-outlined"
+                testID="first-name-input"
                 underlineColorAndroid="transparent"
                 value=""
               />
@@ -245,7 +245,7 @@ exports[`GuestPlayerModal should match snapshot 1`] = `
                     undefined,
                   ]
                 }
-                testID="text-input-outlined"
+                testID="last-name-input"
                 underlineColorAndroid="transparent"
                 value=""
               />

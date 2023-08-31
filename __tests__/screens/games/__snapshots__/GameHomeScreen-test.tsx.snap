@@ -384,7 +384,7 @@ exports[`should match snapshot with live and recent data 1`] = `
             ],
           }
         }
-        testID="fab-container"
+        testID="create-button-fab-container"
       >
         <View
           accessibilityRole="button"
@@ -414,7 +414,7 @@ exports[`should match snapshot with live and recent data 1`] = `
               undefined,
             ]
           }
-          testID="fab"
+          testID="create-button-fab"
         >
           <View
             pointerEvents="none"
@@ -432,7 +432,7 @@ exports[`should match snapshot with live and recent data 1`] = `
                 },
               ]
             }
-            testID="fab-content"
+            testID="create-button-fab-content"
           >
             <View
               style={
@@ -723,7 +723,7 @@ exports[`should match snapshot with no data 1`] = `
             ],
           }
         }
-        testID="fab-container"
+        testID="create-button-fab-container"
       >
         <View
           accessibilityRole="button"
@@ -753,7 +753,7 @@ exports[`should match snapshot with no data 1`] = `
               undefined,
             ]
           }
-          testID="fab"
+          testID="create-button-fab"
         >
           <View
             pointerEvents="none"
@@ -771,7 +771,7 @@ exports[`should match snapshot with no data 1`] = `
                 },
               ]
             }
-            testID="fab-content"
+            testID="create-button-fab-content"
           >
             <View
               style={

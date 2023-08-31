@@ -48,6 +48,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     const [loading, setLoading] = React.useState(false)
 
     const teamToGet = React.useMemo(() => {
+        // TODO: fix this logic, just get all games?
         if (!account) {
             return undefined
         }
