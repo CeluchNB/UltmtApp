@@ -21,6 +21,15 @@ jobs:
       - name: Install dependencies # install project deps with --frozen-lockfile to make sure we will have the same packages version ( very recommended  on running yarn install on ci)
         run: yarn install --frozen-lockfile
       
+      - name: Create Environment
+        run: |
+          touch .env.production
+          echo API_URL_V1=${{ secrets.API_URL_V1 }} >> .env.production
+          echo API_KEY=${{ secrets.API_KEY }} >> .env.production
+          echo WEBSOCKET_URL=${{ secrets.WEBSOCKET_URL }} >> .env.production
+          echo ANDROID_AD_UNIT_ID=${{ secrets.ANDROID_AD_UNIT_ID }} >> .env.production
+          echo IOS_AD_UNIT_ID=${{ secrets.IOS_AD_UNIT_ID }} >> .env.production
+      
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.KEYSTORE_BASE64 }}
