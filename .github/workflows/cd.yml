@@ -22,15 +22,15 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       
-      - name: Build Android Release
-        run: | 
-          cd android ; ./gradlew clean ; ./gradlew bundleRelease
+      # - name: Build Android Release
+      #   run: | 
+      #     cd android ; ./gradlew clean ; ./gradlew bundleRelease
 
       - name: Sign Android release
         uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
-          releaseDirectory: app/build/outputs/apk/release
+          releaseDirectory: app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
           alias: ${{ secrets.KEY_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
