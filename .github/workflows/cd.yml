@@ -4,29 +4,48 @@ on:
   push:
     branches:
       - main
+      - cd-test
 
 jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Dependencies
         run: |
-          yarn
+          yarn install --frozen-lockfile
+        
+      - name: Set up our JDK environment
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       
       - name: Build Android Release
-        run: |
-          cd android && ./gradlew assembleRelease -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
+        run: | 
+          cd android ; ./gradlew clean ; ./gradlew bundleRelease
 
+      - name: Sign Android release
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "33.0.2"
+      
       - name: Upload Build
-        uses: actions/upload-artifact@v1
-        with: 
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/
+        uses: actions/upload-artifact@v2
+        with:
+          name: Signed app bundle
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
   # build-ios:
-  #   runs-on: macOS-latest
+  #   runs-on: macos-latest
   #   steps: 
   #     - uses: actions/checkout@v2
   #     - name: Install Node
