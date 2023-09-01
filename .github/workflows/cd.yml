@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: android-release
-          paths: app/build/outputs/bundle/release/*.aab
+          path: app/build/outputs/bundle/release/*.aab
 
   # build-ios:
   #   runs-on: macos-latest
