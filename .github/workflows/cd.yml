@@ -11,10 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Install Dependencies
-        run: |
-          yarn install --frozen-lockfile
         
       - name: Set up our JDK environment
         uses: actions/setup-java@v3
@@ -26,10 +22,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
+            ~/android/.gradle/caches
+            ~/android/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-
 
       - name: Decode Keystore
         env:
@@ -45,7 +40,7 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        run: ./gradlew bundleRelease
+        run: cd android ; ./gradlew bundleRelease
   
       - name: Upload Release Build to Artifacts
         uses: actions/upload-artifact@v3
@@ -53,14 +48,6 @@ jobs:
           name: release-artifacts
           paths: |
             app/build/outputs/bundle/release/
-      
-      - name: Create Github Release
-        uses: softprops/action-gh-release@v1
-        with:
-          generate_release_notes: true
-          prerelease: true
-          files: |
-            app/build/outputs/bundle/release/app-release.aab
 
   # build-ios:
   #   runs-on: macos-latest
