@@ -20,13 +20,16 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Navigate to Android app
+        run: cd android
       
       - name: Cache Gradle and wrapper
         uses: actions/cache@v2
         with:
           path: |
-            ~/android/.gradle/caches
-            ~/android/.gradle/wrapper
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
       - name: Decode Keystore
@@ -43,7 +46,7 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        run: cd android ; ./gradlew bundleRelease
+        run: ./gradlew bundleRelease
   
       - name: Upload Release Build to Artifacts
         uses: actions/upload-artifact@v3
