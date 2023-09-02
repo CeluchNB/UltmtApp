@@ -49,9 +49,13 @@ const LeaderListItem: React.FC<LeaderListItemProps> = ({
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
             <View style={styles.nameContainer}>
-                <Text style={styles.name}>
-                    {player?.firstName} {player?.lastName}
-                </Text>
+                {player ? (
+                    <Text style={styles.name}>
+                        {player.firstName} {player.lastName}
+                    </Text>
+                ) : (
+                    <Text style={styles.name}>N/A</Text>
+                )}
                 <Text style={styles.total}>{total}</Text>
             </View>
         </View>

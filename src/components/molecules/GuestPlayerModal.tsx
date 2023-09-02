@@ -86,6 +86,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
         },
         input: {
             width: '90%',
+            backgroundColor: colors.darkPrimary,
         },
         errorText: {
             color: colors.error,
@@ -116,6 +117,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
                                 placeholder="First Name"
                                 onChangeText={onChange}
                                 value={value}
+                                testID="first-name-input"
                             />
                         )
                     }}
@@ -136,6 +138,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
                                 placeholder="Last Name"
                                 onChangeText={onChange}
                                 value={value}
+                                testID="last-name-input"
                             />
                         )
                     }}

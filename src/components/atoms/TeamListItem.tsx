@@ -6,20 +6,21 @@ import { StyleSheet, Text } from 'react-native'
 
 interface TeamListItemProps {
     team: DisplayTeam
-    onPress?: () => {}
+    managing?: boolean
     showDelete?: boolean
     showAccept?: boolean
-    onDelete?: () => {}
-    onAccept?: () => {}
     requestStatus?: string
     error?: string
+    onPress?: () => {}
+    onDelete?: () => {}
+    onAccept?: () => {}
 }
 
 const TeamListItem: React.FC<TeamListItemProps> = props => {
     const {
         theme: { colors, size, weight },
     } = useTheme()
-    const { team } = props
+    const { team, managing } = props
 
     const styles = StyleSheet.create({
         name: {
@@ -52,6 +53,7 @@ const TeamListItem: React.FC<TeamListItemProps> = props => {
                           team.seasonEnd,
                       ).getUTCFullYear()}`}
             </Text>
+            {managing && <Text style={styles.season}>Managing</Text>}
         </BaseListItem>
     )
 }

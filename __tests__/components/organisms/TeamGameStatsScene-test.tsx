@@ -74,6 +74,7 @@ const player: FilteredGamePlayer = {
     ...playerOne,
     goals: 1,
     assists: 1,
+    hockeyAssists: 0,
     blocks: 1,
     throwaways: 1,
     throwingPercentage: 0.98,

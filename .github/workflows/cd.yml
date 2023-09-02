@@ -6,27 +6,70 @@ on:
       - main
 
 jobs:
-  build-android:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Install Dependencies
         run: |
-          yarn
-      
-      - name: Build Android Release
+          yarn install --frozen-lockfile
+      - name: Lint
         run: |
-          cd android && ./gradlew assembleRelease -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
+          yarn lint
+      - name: Test
+        run: |
+          yarn test-ci
 
-      - name: Upload Build
-        uses: actions/upload-artifact@v1
-        with: 
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/
+  build-android:
+    needs: [run-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        
+      - name: Set up our JDK environment
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install dependencies # install project deps with --frozen-lockfile to make sure we will have the same packages version ( very recommended  on running yarn install on ci)
+        run: yarn install --frozen-lockfile
+      
+      - name: Create Environment
+        run: |
+          touch .env.production
+          echo API_URL_V1=${{ secrets.API_URL_V1 }} >> .env.production
+          echo API_KEY=${{ secrets.API_KEY }} >> .env.production
+          echo WEBSOCKET_URL=${{ secrets.WEBSOCKET_URL }} >> .env.production
+          echo ANDROID_AD_UNIT_ID=${{ secrets.ANDROID_AD_UNIT_ID }} >> .env.production
+          echo IOS_AD_UNIT_ID=${{ secrets.IOS_AD_UNIT_ID }} >> .env.production
+      
+      - name: Decode Keystore
+        env:
+          ENCODED_STRING: ${{ secrets.KEYSTORE_BASE64 }}
+          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
+        run: |
+          echo $ENCODED_STRING > keystore-b64.txt
+          base64 -d keystore-b64.txt > android/app/$SIGNING_KEY_STORE_PATH
+
+      - name: Build Android App Bundle
+        env:
+          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
+          SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          cd android ; ./gradlew bundleRelease --no-daemon
+
+      - name: Upload Release Build to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-release
+          path: android/app/build/outputs/bundle/release/*.aab
 
   # build-ios:
-  #   runs-on: macOS-latest
+  #   runs-on: macos-latest
   #   steps: 
   #     - uses: actions/checkout@v2
   #     - name: Install Node

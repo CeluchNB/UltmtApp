@@ -61,7 +61,6 @@ export const fetchProfileData: User = {
             seasonEnd: '2019',
         },
     ],
-    stats: [],
     openToRequests: false,
     private: false,
 }

@@ -153,7 +153,7 @@ describe('ManageTeamDetailsScreen', () => {
 
         await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-        const button = getByText('Start New Season')
+        const button = getByText('Rollover Team')
 
         fireEvent.press(button)
 

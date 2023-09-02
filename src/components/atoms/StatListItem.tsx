@@ -12,6 +12,13 @@ const StatListItem: React.FC<StatListItemProps> = ({ stat }) => {
         theme: { colors, size, weight },
     } = useTheme()
 
+    const width = React.useMemo(() => {
+        if (!stat || stat.points === 0 || stat.value === 0) {
+            return 0
+        }
+        return 100 * (stat.value / stat.points)
+    }, [stat])
+
     const styles = StyleSheet.create({
         container: {
             minWidth: 150,
@@ -27,8 +34,8 @@ const StatListItem: React.FC<StatListItemProps> = ({ stat }) => {
             fontWeight: weight.bold,
         },
         ratioView: {
+            width,
             backgroundColor: colors.textSecondary,
-            width: 100 * Math.min(1, stat.value / stat.points),
             height: 10,
             borderRadius: 5,
         },

@@ -188,7 +188,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     />
                     <SecondaryButton
                         style={styles.newSeasonButton}
-                        text="Start New Season"
+                        text="Rollover Team"
                         onPress={rolloverSeason}
                     />
                 </View>
