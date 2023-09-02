@@ -4,10 +4,25 @@ on:
   push:
     branches:
       - main
-      - cd-test
 
 jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          yarn install --frozen-lockfile
+      - name: Lint
+        run: |
+          yarn lint
+      - name: Test
+        run: |
+          yarn test-ci
+
   build-android:
+    needs: [run-tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -46,17 +61,6 @@ jobs:
           SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
           cd android ; ./gradlew bundleRelease --no-daemon
-      
-      - name: Upload to Google Play
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-          packageName: com.ultmtapp
-          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
-          track: internal
-          status: inProgress
-          inAppUpdatePriority: 0
-          userFraction: 0.5
 
       - name: Upload Release Build to Artifacts
         uses: actions/upload-artifact@v3
