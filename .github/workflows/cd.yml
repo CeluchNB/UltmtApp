@@ -56,7 +56,7 @@ jobs:
           track: internal
           status: inProgress
           inAppUpdatePriority: 0
-          userFraction: 1.0
+          userFraction: 0.5
 
       - name: Upload Release Build to Artifacts
         uses: actions/upload-artifact@v3
