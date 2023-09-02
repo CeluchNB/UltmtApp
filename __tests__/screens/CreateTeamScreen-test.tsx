@@ -61,7 +61,7 @@ it('should handle create team correctly', async () => {
         </Provider>,
     )
 
-    const teamPlaceText = getByPlaceholderText('Team Place')
+    const teamPlaceText = getByPlaceholderText('Team Location')
     const teamNameText = getByPlaceholderText('Team Name')
     const teamHandleText = getByPlaceholderText('Team Handle')
     const button = getByText('Create')
@@ -96,7 +96,7 @@ it('should not call create team without input values', async () => {
 
     fireEvent.press(button)
 
-    await waitFor(() => queryByText('Team place is required'))
+    await waitFor(() => queryByText('Team location is required'))
     expect(mockFn).not.toHaveBeenCalled()
     expect(goBack).not.toHaveBeenCalled()
     spy.mockRestore()
@@ -118,7 +118,7 @@ it('should handle create team error correctly', async () => {
         </Provider>,
     )
 
-    const teamPlaceText = getByPlaceholderText('Team Place')
+    const teamPlaceText = getByPlaceholderText('Team Location')
     const teamNameText = getByPlaceholderText('Team Name')
     const teamHandleText = getByPlaceholderText('Team Handle')
     const button = getByText('Create')

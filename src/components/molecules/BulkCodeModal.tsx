@@ -72,7 +72,7 @@ const BulkCodeModal: React.FC<BulkCodeModalProps> = ({
                         />
                     </View>
                     <Text style={styles.codeIntro}>
-                        This code is valid for 1 hour.
+                        This code is valid for 24 hours.
                     </Text>
                 </View>
             )}

@@ -62,6 +62,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                     <FlatList
                         data={action.action.comments}
                         ItemSeparatorComponent={divider}
+                        testID="comment-list"
                         renderItem={({ item }) => {
                             return (
                                 <CommentItem

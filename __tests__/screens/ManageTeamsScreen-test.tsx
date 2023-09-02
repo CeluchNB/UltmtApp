@@ -194,7 +194,6 @@ it('should handle leave team', async () => {
                         seasonEnd: '2022',
                     },
                 ],
-                stats: [],
                 openToRequests: false,
                 private: false,
             }
@@ -253,7 +252,6 @@ it('should handle leave manager role', async () => {
                 requests: ['request1', 'request2'],
                 managerTeams: [],
                 archiveTeams: [],
-                stats: [],
                 openToRequests: false,
                 private: false,
             }

@@ -33,6 +33,7 @@ const playerStatsOne: FilteredGamePlayer = {
     ...playerOne,
     goals: 1,
     assists: 1,
+    hockeyAssists: 0,
     blocks: 1,
     throwaways: 1,
     throwingPercentage: 0.98,
@@ -64,6 +65,7 @@ const playerStatsTwo: FilteredGamePlayer = {
     username: 'player2',
     goals: 2,
     assists: 1,
+    hockeyAssists: 0,
     blocks: 1,
     throwaways: 1,
     throwingPercentage: 0.98,
@@ -135,6 +137,7 @@ describe('StatsTable', () => {
         expect(screen.getByText('First 1 Last 1')).toBeTruthy()
         expect(screen.getByText('Plus / Minus')).toBeTruthy()
         expect(screen.getByText('Catches')).toBeTruthy()
+        expect(screen.getByText('Hockey Assists')).toBeTruthy()
         expect(screen.queryByText('Blocks')).toBeNull()
         expect(screen.queryByText('Assists per point')).toBeNull()
     })

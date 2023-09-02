@@ -58,6 +58,7 @@ describe('calculatePlayerStats', () => {
         const stats: PlayerStats = {
             goals: 1,
             assists: 1,
+            hockeyAssists: 0,
             blocks: 1,
             throwaways: 0,
             drops: 1,
@@ -94,6 +95,7 @@ describe('addPlayerStats', () => {
         const stats: PlayerStats = {
             goals: 1,
             assists: 1,
+            hockeyAssists: 1,
             blocks: 1,
             throwaways: 0,
             drops: 1,
@@ -139,6 +141,9 @@ describe('mapStatDisplayName', () => {
         expect(mapStatDisplayName('throwingPercentage')).toBe(
             'Throwing Percentage',
         )
+    })
+    it('hockeyAssists', () => {
+        expect(mapStatDisplayName('hockeyAssists')).toBe('Hockey Assists')
     })
     it('ppGoals', () => {
         expect(mapStatDisplayName('ppGoals')).toBe('Goals per point')

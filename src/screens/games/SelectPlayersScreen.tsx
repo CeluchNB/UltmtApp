@@ -135,6 +135,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                     ListHeaderComponentStyle={styles.headerFooterContainer}
                     ListFooterComponentStyle={styles.headerFooterContainer}
                     data={playerList}
+                    testID="players-flat-list"
                     ListHeaderComponent={
                         <View>
                             <GameHeader header game={game} />
