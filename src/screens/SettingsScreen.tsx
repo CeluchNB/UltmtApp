@@ -19,7 +19,7 @@ import {
 import { SecureEditField, SettingsScreenProps } from '../types/navigation'
 import {
     selectAccount,
-    setPrivate,
+    setOpenToRequests,
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -168,11 +168,11 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                 true: colors.textSecondary,
                             }}
                             ios_backgroundColor={colors.gray}
-                            value={!account.privateProfile}
+                            value={account.openToRequests}
                             onValueChange={() => {
                                 dispatch(
-                                    setPrivate({
-                                        privateAccount: !account.privateProfile,
+                                    setOpenToRequests({
+                                        open: !account.openToRequests,
                                     }),
                                 )
                             }}

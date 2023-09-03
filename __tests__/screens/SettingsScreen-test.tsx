@@ -67,7 +67,7 @@ it('should handle logout press', async () => {
 })
 
 it('should handle private account switch press', async () => {
-    const spy = jest.spyOn(UserData, 'setPrivate')
+    const spy = jest.spyOn(UserData, 'setOpenToRequests')
 
     const { getByTestId } = render(
         <Provider store={store}>
