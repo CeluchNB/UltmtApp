@@ -12,6 +12,10 @@ jest.mock('react-native/Libraries/Linking/Linking', () => {
 })
 
 describe('Information Screen', () => {
+    beforeEach(() => {
+        mockOpenURL.mockClear()
+    })
+
     it('renders correctly', () => {
         const date = new Date().getFullYear()
         render(
@@ -20,7 +24,7 @@ describe('Information Screen', () => {
             </NavigationContainer>,
         )
 
-        expect(screen.getByText(`The Ultmt App ${date}`)).toBeTruthy()
+        expect(screen.getByText(`© ${date} The Ultmt App`)).toBeTruthy()
     })
 
     it('presses developer email', () => {
@@ -32,6 +36,19 @@ describe('Information Screen', () => {
 
         const emailButton = screen.getByText('developer@theultmtapp.com')
         fireEvent.press(emailButton)
+
+        expect(mockOpenURL).toHaveBeenCalled()
+    })
+
+    it('presses buy me a disc button', () => {
+        render(
+            <NavigationContainer>
+                <InformationScreen />
+            </NavigationContainer>,
+        )
+
+        const bmadButton = screen.getByText('Buy Me a Disc')
+        fireEvent.press(bmadButton)
 
         expect(mockOpenURL).toHaveBeenCalled()
     })
