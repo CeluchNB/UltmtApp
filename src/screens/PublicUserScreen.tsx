@@ -104,9 +104,15 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     }, [navigation, loading, user, refetch])
 
     React.useEffect(() => {
-        navigation.setOptions({
-            title: `${user?.firstName} ${user?.lastName}`,
-        })
+        if (user) {
+            navigation.setOptions({
+                title: `${user?.firstName} ${user?.lastName}`,
+            })
+        } else {
+            navigation.setOptions({
+                title: 'Player',
+            })
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user])
 
@@ -219,7 +225,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 
     return (
         <SafeAreaView style={styles.screen}>
-            <Text style={styles.titleText}>@{user?.username}</Text>
+            {user && <Text style={styles.titleText}>@{user?.username}</Text>}
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene(
