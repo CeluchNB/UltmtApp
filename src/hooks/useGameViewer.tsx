@@ -1,8 +1,8 @@
 import { Game } from '../types/game'
 import Point from '../types/point'
 import React from 'react'
-import { isLivePoint } from '../utils/point'
 import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
+import { useData } from './useData'
 import {
     Action,
     ActionFactory,
@@ -16,12 +16,17 @@ import {
     getViewableActionsByPoint,
 } from '../services/data/point'
 import {
+    getActiveGames,
     getGameById,
     getPointsByGame,
     reactivateInactiveGame,
 } from '../services/data/game'
+import {
+    isLivePoint,
+    normalizeActions,
+    normalizeLiveActions,
+} from '../utils/point'
 import { joinPoint, subscribe, unsubscribe } from '../services/data/live-action'
-import { normalizeActions, normalizeLiveActions } from '../utils/point'
 import {
     setLiveAction,
     setSavedAction,
@@ -45,6 +50,7 @@ export interface GameViewerData {
     loading: boolean
     points: Point[]
     managingTeamId: string | undefined
+    myTeamActive?: boolean
     onSelectAction: (action: ServerActionData) => {
         gameId: string
         pointId: string
@@ -90,10 +96,20 @@ export const useGameViewer = (gameId: string): GameViewerData => {
         if (teamOneId) return teamOneId
 
         if (game?.teamTwo?._id) {
-            return managerTeams.find(team => team._id === game.teamTwo._id)?._id
+            return managerTeams.find(team => team._id === game.teamTwo?._id)
+                ?._id
         }
         return undefined
     }, [game, managerTeams])
+
+    const { data: activeGames } = useData<Game[]>(
+        getActiveGames,
+        managingTeamId,
+    )
+
+    const myTeamActive = React.useMemo(() => {
+        return activeGames?.find(g => g._id === game?._id) !== undefined
+    }, [game, activeGames])
 
     const onReactivateGame = React.useCallback(async () => {
         if (!managingTeamId) {
@@ -270,6 +286,7 @@ export const useGameViewer = (gameId: string): GameViewerData => {
         loading,
         points,
         managingTeamId,
+        myTeamActive,
         onSelectAction,
         onSelectPoint,
         onReactivateGame,
