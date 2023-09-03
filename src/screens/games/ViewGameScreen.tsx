@@ -116,7 +116,6 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                 navigateToGame(reactivatedGame)
             }
         } catch (e) {
-            console.log('e', e)
             // TODO: error display?
         } finally {
             setReactivateLoading(false)

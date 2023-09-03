@@ -65,20 +65,37 @@ const GameListItem: React.FC<GameListItemProps> = ({
         },
     })
 
-    return (
-        <BaseListItem
-            onPress={handlePress}
-            onDelete={handleDelete}
-            showDelete={showDelete}>
-            <Text style={styles.teamName}>{`vs.${
-                opponent.place ? ` ${opponent.place}` : ''
-            } ${opponent.name}`}</Text>
-            <Text
-                style={
-                    styles.score
-                }>{`${scores.mine} - ${scores.opponent}`}</Text>
-        </BaseListItem>
-    )
+    if (teamId) {
+        return (
+            <BaseListItem
+                onPress={handlePress}
+                onDelete={handleDelete}
+                showDelete={showDelete}>
+                <Text style={styles.teamName}>{`vs.${
+                    opponent.place ? ` ${opponent.place}` : ''
+                } ${opponent.name}`}</Text>
+                <Text
+                    style={
+                        styles.score
+                    }>{`${scores.mine} - ${scores.opponent}`}</Text>
+            </BaseListItem>
+        )
+    } else {
+        return (
+            <BaseListItem
+                onPress={handlePress}
+                onDelete={handleDelete}
+                showDelete={showDelete}>
+                <Text style={styles.teamName}>
+                    {game.teamOne.name} vs. {game.teamTwo.name}
+                </Text>
+                <Text
+                    style={
+                        styles.score
+                    }>{`${game.teamOneScore} - ${game.teamTwoScore}`}</Text>
+            </BaseListItem>
+        )
+    }
 }
 
 export default GameListItem

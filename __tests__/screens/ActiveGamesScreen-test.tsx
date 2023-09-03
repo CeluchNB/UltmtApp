@@ -9,7 +9,12 @@ import React from 'react'
 import store from '../../src/store/store'
 import { Game, LocalGame } from '../../src/types/game'
 import { fetchProfileData, game, point } from '../../fixtures/data'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -83,13 +88,13 @@ describe('ActiveGamesScreen', () => {
 
         await waitFor(async () => {
             expect(
-                snapshot.getByText(
-                    `vs. ${game.teamOne.place} ${game.teamOne.name}`,
+                screen.getByText(
+                    `${game.teamOne.name} vs. ${game.teamTwo.name}`,
                 ),
             ).toBeTruthy()
         })
 
-        expect(snapshot.getByText(`vs. ${game.teamTwo.name}`)).toBeTruthy()
+        expect(screen.getByText(`vs. ${game.teamTwo.name}`)).toBeTruthy()
         expect(snapshot.toJSON()).toMatchSnapshot()
     })
 
@@ -114,12 +119,12 @@ describe('ActiveGamesScreen', () => {
         )
         await waitFor(async () => {
             expect(
-                getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+                getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
             ).toBeTruthy()
         })
 
         fireEvent.press(
-            getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+            getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
         )
 
         await waitFor(async () => {
@@ -156,12 +161,12 @@ describe('ActiveGamesScreen', () => {
         )
         await waitFor(async () => {
             expect(
-                getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+                getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
             ).toBeTruthy()
         })
 
         fireEvent.press(
-            getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+            getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
         )
 
         await waitFor(async () => {
@@ -198,12 +203,12 @@ describe('ActiveGamesScreen', () => {
         )
         await waitFor(async () => {
             expect(
-                getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+                getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
             ).toBeTruthy()
         })
 
         fireEvent.press(
-            getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+            getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
         )
 
         await waitFor(async () => {
@@ -240,12 +245,12 @@ describe('ActiveGamesScreen', () => {
         )
         await waitFor(async () => {
             expect(
-                getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+                getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
             ).toBeTruthy()
         })
 
         fireEvent.press(
-            getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+            getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
         )
 
         await waitFor(async () => {
@@ -269,7 +274,7 @@ describe('ActiveGamesScreen', () => {
 
         await waitFor(async () => {
             expect(
-                getByText(`vs. ${game.teamOne.place} ${game.teamOne.name}`),
+                getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
             ).toBeTruthy()
         })
 
