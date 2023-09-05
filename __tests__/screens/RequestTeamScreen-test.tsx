@@ -7,7 +7,13 @@ import React from 'react'
 import { RequestTeamProps } from '../../src/types/navigation'
 import RequestTeamScreen from '../../src/screens/RequestTeamScreen'
 import store from '../../src/store/store'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import {
+    act,
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -50,7 +56,7 @@ beforeAll(async () => {
                 seasonStart: '2021',
                 seasonEnd: '2021',
                 continuationId: '2',
-                rosterOpen: true,
+                rosterOpen: false,
                 requests: [],
                 games: [],
             },
@@ -59,7 +65,7 @@ beforeAll(async () => {
 })
 
 beforeEach(() => {
-    goBack.mockClear()
+    jest.clearAllMocks()
 })
 
 it('should match snapshot', async () => {
@@ -168,6 +174,39 @@ it('should request team when pressed', async () => {
     const state = store.getState()
     expect(state.account.requests[0]).toBe('request1')
     expect(goBack).toHaveBeenCalled()
+})
+
+it('should display modal on closed team', async () => {
+    const spy = jest.spyOn(RequestData, 'requestTeam')
+
+    render(
+        <Provider store={store}>
+            <NavigationContainer>
+                <RequestTeamScreen {...props} />
+            </NavigationContainer>
+        </Provider>,
+    )
+
+    const searchInput = screen.getByPlaceholderText('Search teams...')
+    fireEvent.changeText(searchInput, 'place')
+
+    const team2 = await screen.findByText('@place2name2')
+    fireEvent.press(team2)
+
+    expect(spy).not.toHaveBeenCalled()
+    expect(goBack).not.toHaveBeenCalled()
+
+    const warning = screen.getByText(
+        "You cannot request to join this team. A team's manager can permit requests from the team's page.",
+    )
+    expect(warning).toBeTruthy()
+
+    const doneBtn = screen.getByText('done')
+    fireEvent.press(doneBtn)
+    const warning2 = screen.queryByText(
+        "You cannot request to join this team. A team's manager can permit requests from the team's page.",
+    )
+    expect(warning2).toBeFalsy()
 })
 
 it('should display error when request is unsuccessful', async () => {
