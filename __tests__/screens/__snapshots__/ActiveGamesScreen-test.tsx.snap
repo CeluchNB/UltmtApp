@@ -536,7 +536,9 @@ exports[`ActiveGamesScreen renders 1`] = `
                       }
                     }
                   >
-                    vs. Pittsburgh Temper
+                    Temper
+                     vs. 
+                    Sockeye
                   </Text>
                   <Text
                     style={
@@ -547,7 +549,7 @@ exports[`ActiveGamesScreen renders 1`] = `
                       }
                     }
                   >
-                    0 - 3
+                    3 - 0
                   </Text>
                 </View>
               </View>

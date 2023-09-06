@@ -134,7 +134,7 @@ exports[`should match snapshot 1`] = `
             testID="private-switch"
             thumbTintColor="#ffd600"
             tintColor="#CEC6B4"
-            value={true}
+            value={false}
           />
         </View>
         <View>

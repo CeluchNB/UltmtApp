@@ -175,6 +175,8 @@ export const mapStatDisplayName = (value: string): string => {
             return 'Assists per point'
         case 'ppThrowaways':
             return 'Throwaways per point'
+        case 'ppHockeyAssists':
+            return 'Hockey Assists per point'
         case 'ppDrops':
             return 'Drops per point'
         case 'ppBlocks':
