@@ -90,9 +90,9 @@ describe('Game', () => {
             await element(by.text('SIGN OUT')).tap()
         } catch {}
         await login('aimiekawai')
-        await expect(element(by.text('vs. test'))).toBeVisible()
+        await expect(element(by.text('Mixtape vs. test'))).toBeVisible()
         await expect(element(by.text('2 - 1'))).toBeVisible()
-        await element(by.text('vs. test')).tap()
+        await element(by.text('Mixtape vs. test')).tap()
 
         // VIEW GAME ON DETAILS SCREEN
         try {
@@ -115,7 +115,7 @@ describe('Game', () => {
         // NAVIGATE BACK TO GAME
         await element(by.id('comment-list')).tap()
         await element(by.id('account')).tap()
-        await element(by.text('vs. test')).tap()
+        await element(by.text('Mixtape vs. test')).tap()
 
         // VIEW LEADER STATS
         await element(by.text('Lexi Garrity scores from Kahyee Fong')).swipe(
