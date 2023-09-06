@@ -295,5 +295,13 @@ exports[`should match snapshot 1`] = `
   >
     <View />
   </RCTScrollView>
+  <Modal
+    animationType="slide"
+    hardwareAccelerated={false}
+    onRequestClose={[Function]}
+    testID="base-modal"
+    transparent={true}
+    visible={false}
+  />
 </View>
 `;

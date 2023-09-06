@@ -353,6 +353,10 @@ export const reactivateInactiveGame = async (
         const team = game.teamOne._id === teamId ? 'one' : 'two'
         // get actions
         let activePoint: Point | undefined
+        // TODO: need to handle if active point is actually active
+        // CASE: user's phone dies in middle of point -> switches to different phone
+        // currently the active point loses non-saved actions b/c we don't get live actions here
+        // workable but not ideal
         for (const point of points) {
             if (!activePoint || activePoint.pointNumber < point.pointNumber) {
                 activePoint = point

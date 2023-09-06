@@ -66,10 +66,11 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         game,
         gameLoading,
         managingTeamId,
+        myTeamActive,
         onSelectPoint,
         onReactivateGame,
     } = gameViewerData
-    const { navigateToGame } = useGameReactivation()
+    const { navigateToGame, onResurrect } = useGameReactivation()
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deleteLoading, setDeleteLoading] = React.useState(false)
     const [reactivateLoading, setReactivateLoading] = React.useState(false)
@@ -101,7 +102,15 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                 return undefined
             }
             setReactivateLoading(true)
-            const reactivatedGame = await onReactivateGame()
+
+            let reactivatedGame
+            if (game && myTeamActive) {
+                // resurrect game if live
+                reactivatedGame = await onResurrect(game)
+            } else {
+                // reactivate game if finished
+                reactivatedGame = await onReactivateGame()
+            }
             setReactivateLoading(false)
             if (reactivatedGame) {
                 navigateToGame(reactivatedGame)
@@ -111,7 +120,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         } finally {
             setReactivateLoading(false)
         }
-    }, [navigateToGame, onReactivateGame])
+    }, [navigateToGame, onReactivateGame, game, onResurrect, myTeamActive])
 
     const onDelete = () => {
         setModalVisible(true)

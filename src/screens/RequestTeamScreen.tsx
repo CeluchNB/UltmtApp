@@ -1,6 +1,8 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
 import * as TeamData from '../services/data/team'
+import BaseModal from '../components/atoms/BaseModal'
+import PrimaryButton from '../components/atoms/PrimaryButton'
 import { RequestTeamProps } from '../types/navigation'
 import SearchBar from '../components/atoms/SearchBar'
 import SearchResultItem from '../components/atoms/SearchResultItem'
@@ -21,6 +23,7 @@ const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
     const [selectedId, setSelectedId] = React.useState('')
     const [error, setError] = React.useState('')
     const [searchError, setSearchError] = React.useState('')
+    const [modalVisible, setModalVisible] = React.useState(false)
 
     const search = async (text: string) => {
         setSearchError('')
@@ -29,19 +32,23 @@ const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
             return
         }
         try {
-            const teamsResponse = await TeamData.searchTeam(text, true)
+            const teamsResponse = await TeamData.searchTeam(text)
             setTeams(teamsResponse)
         } catch (e: any) {
             setSearchError(e.message ?? 'No search results from this query.')
         }
     }
 
-    const requestTeam = async (id: string) => {
+    const requestTeam = async (team: Team) => {
+        if (!team.rosterOpen) {
+            setModalVisible(true)
+            return
+        }
         try {
             setError('')
             setLoading(true)
-            setSelectedId(id)
-            const request = await RequestData.requestTeam(id)
+            setSelectedId(team._id)
+            const request = await RequestData.requestTeam(team._id)
             dispatch(addRequest(request._id))
 
             setLoading(false)
@@ -50,6 +57,15 @@ const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
             setLoading(false)
             setError(e.message)
         }
+    }
+
+    const displayError = (item: Team) => {
+        if (error.length > 0 && selectedId === item._id) {
+            return error
+        } else if (!item.rosterOpen) {
+            return 'Closed'
+        }
+        return undefined
     }
 
     const styles = StyleSheet.create({
@@ -75,6 +91,11 @@ const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
         list: {
             width: '75%',
             alignSelf: 'center',
+        },
+        modalText: {
+            color: colors.textSecondary,
+            fontSize: size.fontFifteen,
+            marginBottom: 15,
         },
     })
 
@@ -104,18 +125,27 @@ const RequestTeamScreen: React.FC<RequestTeamProps> = ({ navigation }) => {
                             <SearchResultItem
                                 header={`${item.place} ${item.name}`}
                                 subheader={`@${item.teamname}`}
-                                onPress={() => requestTeam(item._id)}
+                                onPress={() => requestTeam(item)}
                                 loading={selectedId === item._id && loading}
-                                error={
-                                    error.length > 0 && selectedId === item._id
-                                        ? error
-                                        : undefined
-                                }
+                                error={displayError(item)}
                             />
                         )
                     }}
                 />
             )}
+            <BaseModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}>
+                <Text style={styles.modalText}>
+                    You cannot request to join this team. A team's manager can
+                    permit requests from the team's page.
+                </Text>
+                <PrimaryButton
+                    text="done"
+                    onPress={() => setModalVisible(false)}
+                    loading={false}
+                />
+            </BaseModal>
         </View>
     )
 }

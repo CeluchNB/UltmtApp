@@ -96,10 +96,10 @@ describe('ProfileScreen', () => {
         )
         await waitFor(async () => {
             expect(
-                snapshot.getByText(
+                snapshot.getAllByText(
                     `${game.teamOneScore} - ${game.teamTwoScore}`,
-                ),
-            ).toBeTruthy()
+                ).length,
+            ).toBeGreaterThan(1)
         })
 
         expect(snapshot.toJSON()).toMatchSnapshot()

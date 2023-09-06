@@ -573,6 +573,12 @@ describe('ViewGameScreen', () => {
     })
 
     it('reactivates game', async () => {
+        jest.spyOn(GameData, 'getGameById').mockReturnValueOnce(
+            Promise.resolve({
+                ...game,
+                teamOneActive: false,
+            }),
+        )
         store.dispatch(
             setProfile({
                 ...fetchProfileData,
@@ -590,6 +596,58 @@ describe('ViewGameScreen', () => {
         )
         const spy = jest
             .spyOn(GameData, 'reactivateInactiveGame')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    ...game,
+                    startTime: '2022' as unknown as Date,
+                    tournament: undefined,
+                    offline: false,
+                }),
+            )
+
+        jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
+            Promise.resolve(points[0]),
+        )
+        const { getByTestId, getAllByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
+                </Provider>
+            </NavigationContainer>,
+        )
+        await waitFor(async () => {
+            expect(getAllByText('Temper').length).toBe(4)
+        })
+
+        const button = getByTestId('reactivate-button')
+        fireEvent.press(button)
+
+        expect(spy).toHaveBeenCalled()
+    })
+
+    it('resurrects game', async () => {
+        store.dispatch(
+            setProfile({
+                ...fetchProfileData,
+                managerTeams: [
+                    {
+                        _id: game.teamOne._id,
+                        place: game.teamOne.place,
+                        name: game.teamOne.name,
+                        teamname: game.teamOne.teamname,
+                        seasonStart: game.teamOne.seasonStart,
+                        seasonEnd: game.teamOne.seasonEnd,
+                    },
+                ],
+            }),
+        )
+        jest.spyOn(GameData, 'getActiveGames').mockReturnValue(
+            Promise.resolve([{ ...game, offline: false }]),
+        )
+        const spy = jest
+            .spyOn(GameData, 'resurrectActiveGame')
             .mockReturnValueOnce(
                 Promise.resolve({
                     ...game,

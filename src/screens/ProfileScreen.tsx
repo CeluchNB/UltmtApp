@@ -15,6 +15,7 @@ import TeamListItem from '../components/atoms/TeamListItem'
 import { convertProfileScreenStatsToStatListItem } from '../utils/stats'
 import { fetchProfile } from '../services/data/user'
 import { getPlayerStats } from '../services/data/stats'
+import { getUniqueTeamIds } from '../utils/player'
 import { logout } from '../services/data/auth'
 import {
     FlatList,
@@ -47,19 +48,14 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     const managerTeams = useSelector(selectManagerTeams)
     const [loading, setLoading] = React.useState(false)
 
-    const teamToGet = React.useMemo(() => {
-        // TODO: fix this logic, just get all games?
-        if (!account) {
-            return undefined
-        }
-        if (account.managerTeams.length > 0) {
-            return account.managerTeams[0]._id
-        }
-        if (account.playerTeams.length > 0) {
-            return account.playerTeams[0]._id
-        }
-        return undefined
+    const allTeams = React.useMemo(() => {
+        return getUniqueTeamIds(account)
     }, [account])
+
+    const getAllGames = React.useCallback(async () => {
+        const games = await Promise.all(allTeams.map(id => getGamesByTeam(id)))
+        return games.flat()
+    }, [allTeams])
 
     const { data: activeGames, refetch: activeGameRefetch } = useData<Game[]>(
         getActiveGames,
@@ -81,10 +77,8 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         data: games,
         isLoading: gameLoading,
         refetch: gameRefetch,
-    } = useQuery(
-        ['getGamesByTeam', { teamId: teamToGet }],
-        () => getGamesByTeam(teamToGet || ''),
-        { enabled: !!teamToGet },
+    } = useQuery(['getAllGamesByUser', { userId: account._id }], () =>
+        getAllGames(),
     )
 
     const {
@@ -101,7 +95,13 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     )
 
     const sortedGames = React.useMemo(() => {
-        return games?.reverse().slice(0, 3)
+        return games
+            ?.sort(
+                (a, b) =>
+                    new Date(b.startTime).getTime() -
+                    new Date(a.startTime).getTime(),
+            )
+            .slice(0, 3)
     }, [games])
 
     const statsList: DisplayStat[] = React.useMemo(() => {
@@ -330,7 +330,6 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                                             <GameListItem
                                                 key={item._id}
                                                 game={item}
-                                                teamId={teamToGet}
                                                 onPress={() => {
                                                     onViewGame(item._id)
                                                 }}

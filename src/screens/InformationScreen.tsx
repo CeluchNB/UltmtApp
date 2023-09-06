@@ -54,7 +54,20 @@ const InformationScreen: React.FC<{}> = () => {
                     </Button>
                     <Text style={styles.emailText}>for help.</Text>
                 </View>
-                <Text style={styles.companyText}>The Ultmt App {date}</Text>
+                <Button
+                    mode="outlined"
+                    style={{ borderColor: colors.textSecondary }}
+                    textColor={colors.textSecondary}
+                    onPress={async () => {
+                        Linking.openURL(
+                            'https://www.buymeacoffee.com/theultmtapp',
+                        )
+                    }}>
+                    Buy Me a Disc
+                </Button>
+                <Text style={styles.companyText}>
+                    &copy; {date} The Ultmt App
+                </Text>
             </View>
         </BaseScreen>
     )
