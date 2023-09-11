@@ -17,7 +17,7 @@
 //     getInitialPlayerData,
 //     waitUntilRefreshComplete,
 // } from '../../fixtures/utils'
-import React from 'react'
+// import React from 'react'
 
 // jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 describe('placeholder', () => {

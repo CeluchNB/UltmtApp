@@ -1,6 +1,5 @@
 import PrimaryButton from '../../../src/components/atoms/PrimaryButton'
 import React from 'react'
-import ReactNative from 'react-native'
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer'

@@ -81,19 +81,10 @@ const Section: React.FC<SectionProps> = ({
         <View style={styles.container}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{title}</Text>
-                <IconButton
-                    iconColor={colors.primary}
-                    style={styles.createButton}
-                    onPress={onCreatePress}
-                    icon="plus"
-                    disabled={!showCreateButton}
-                    testID="create-button"
-                />
             </View>
             {!loading && error && <Text style={styles.error}>{error}</Text>}
             {!loading && !error && (
                 <FlatList
-                    listKey={title}
                     data={listData}
                     scrollEnabled={false}
                     numColumns={numColumns}
