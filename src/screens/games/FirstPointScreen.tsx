@@ -70,7 +70,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
     })
 
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             <ScreenTitle style={styles.title} title="First Point" />
             <View style={styles.container}>
                 <Text style={styles.description}>Join Passcode:</Text>

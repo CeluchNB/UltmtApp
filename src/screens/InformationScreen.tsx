@@ -36,7 +36,7 @@ const InformationScreen: React.FC<{}> = () => {
         },
     })
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             <View>
                 <Text style={styles.paragraphText}>
                     The Ultmt App is developed and maintained by a small team in

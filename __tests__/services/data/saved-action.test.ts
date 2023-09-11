@@ -1,6 +1,7 @@
 import * as ActionServices from '../../../src/services/network/saved-action'
 import * as Constants from '../../../src/utils/constants'
 import * as LocalServices from '../../../src/services/local/action'
+import { AxiosResponse } from 'axios'
 import { savedAction } from '../../../fixtures/data'
 import {
     addComment,
@@ -16,7 +17,7 @@ describe('test add comment', () => {
                 status: 200,
                 statusText: 'Good',
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         const localSpy = jest
             .spyOn(LocalServices, 'saveDisplayActions')
@@ -59,7 +60,7 @@ describe('delete comment', () => {
                 status: 200,
                 statusText: 'Good',
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         const localSpy = jest
             .spyOn(LocalServices, 'saveDisplayActions')

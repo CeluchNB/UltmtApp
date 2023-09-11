@@ -91,6 +91,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
   <RCTRefreshControl />
   <View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >
@@ -113,8 +114,19 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 {
+                  "busy": undefined,
+                  "checked": undefined,
                   "disabled": false,
                   "expanded": false,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
                 }
               }
               accessible={true}
@@ -134,10 +146,10 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   {
                     "overflow": "hidden",
                   },
-                  false,
                   [
                     {
-                      "padding": 8,
+                      "paddingRight": 24,
+                      "paddingVertical": 8,
                     },
                     {
                       "backgroundColor": "#303030",
@@ -157,8 +169,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                 pointerEvents="none"
                 style={
                   {
-                    "alignItems": "center",
                     "flexDirection": "row",
+                    "marginVertical": 6,
                   }
                 }
               >
@@ -166,7 +178,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   style={
                     [
                       {
-                        "margin": 8,
+                        "paddingLeft": 16,
                       },
                       {
                         "flex": 1,
@@ -275,7 +287,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   style={
                     [
                       {
-                        "margin": 8,
+                        "marginVertical": 6,
+                        "paddingLeft": 8,
                       },
                       undefined,
                     ]
@@ -361,6 +374,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
       </View>
     </View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >
@@ -383,8 +397,19 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 {
+                  "busy": undefined,
+                  "checked": undefined,
                   "disabled": false,
                   "expanded": false,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
                 }
               }
               accessible={true}
@@ -404,10 +429,10 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   {
                     "overflow": "hidden",
                   },
-                  false,
                   [
                     {
-                      "padding": 8,
+                      "paddingRight": 24,
+                      "paddingVertical": 8,
                     },
                     {
                       "backgroundColor": "#303030",
@@ -427,8 +452,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                 pointerEvents="none"
                 style={
                   {
-                    "alignItems": "center",
                     "flexDirection": "row",
+                    "marginVertical": 6,
                   }
                 }
               >
@@ -436,7 +461,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   style={
                     [
                       {
-                        "margin": 8,
+                        "paddingLeft": 16,
                       },
                       {
                         "flex": 1,
@@ -545,7 +570,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   style={
                     [
                       {
-                        "margin": 8,
+                        "marginVertical": 6,
+                        "paddingLeft": 8,
                       },
                       undefined,
                     ]
@@ -610,6 +636,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
       </View>
     </View>
     <View
+      onFocusCapture={[Function]}
       onLayout={[Function]}
       style={null}
     >
@@ -632,8 +659,19 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
               accessibilityRole="button"
               accessibilityState={
                 {
+                  "busy": undefined,
+                  "checked": undefined,
                   "disabled": false,
                   "expanded": false,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
                 }
               }
               accessible={true}
@@ -653,10 +691,10 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   {
                     "overflow": "hidden",
                   },
-                  false,
                   [
                     {
-                      "padding": 8,
+                      "paddingRight": 24,
+                      "paddingVertical": 8,
                     },
                     {
                       "backgroundColor": "#303030",
@@ -676,8 +714,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                 pointerEvents="none"
                 style={
                   {
-                    "alignItems": "center",
                     "flexDirection": "row",
+                    "marginVertical": 6,
                   }
                 }
               >
@@ -685,7 +723,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   style={
                     [
                       {
-                        "margin": 8,
+                        "paddingLeft": 16,
                       },
                       {
                         "flex": 1,
@@ -794,7 +832,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                   style={
                     [
                       {
-                        "margin": 8,
+                        "marginVertical": 6,
+                        "paddingLeft": 8,
                       },
                       undefined,
                     ]

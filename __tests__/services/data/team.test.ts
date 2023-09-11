@@ -1,5 +1,6 @@
 import * as LocalTeamServices from '../../../src/services/local/team'
 import * as TeamServices from '../../../src/services/network/team'
+import { AxiosResponse } from 'axios'
 import { CreateTeam, Team } from '../../../src/types/team'
 import {
     addManager,
@@ -46,7 +47,7 @@ const teamSuccess = Promise.resolve({
     statusText: 'Good',
     headers: {},
     config: {},
-})
+} as AxiosResponse)
 
 const teamError = Promise.reject({
     data: { message: errorText },
@@ -143,7 +144,7 @@ describe('test team services', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await searchTeam('1234')
@@ -210,7 +211,7 @@ describe('test team services', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await createBulkJoinCode('')

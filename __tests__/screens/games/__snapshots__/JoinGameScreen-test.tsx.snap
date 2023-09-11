@@ -79,6 +79,7 @@ exports[`JoinGameScreen should match snapshot 1`] = `
             }
           >
             <TextInput
+              cursorColor="#ffd600"
               editable={true}
               focusable={true}
               maxFontSizeMultiplier={1.5}
@@ -96,10 +97,6 @@ exports[`JoinGameScreen should match snapshot 1`] = `
                     "margin": 0,
                   },
                   {
-                    "paddingLeft": 16,
-                    "paddingRight": 16,
-                  },
-                  {
                     "height": 56,
                   },
                   {
@@ -113,6 +110,8 @@ exports[`JoinGameScreen should match snapshot 1`] = `
                     "fontWeight": undefined,
                     "letterSpacing": 0.15,
                     "lineHeight": undefined,
+                    "paddingLeft": 16,
+                    "paddingRight": 16,
                     "textAlign": "left",
                     "textAlignVertical": "center",
                   },

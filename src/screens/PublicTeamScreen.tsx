@@ -160,7 +160,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     })
 
     return (
-        <BaseScreen containerWidth="90%">
+        <BaseScreen containerWidth={90}>
             <View style={styles.headerContainer}>
                 <Text style={styles.teamname}>@{team?.teamname}</Text>
                 {team?.seasonStart === team?.seasonEnd ? (

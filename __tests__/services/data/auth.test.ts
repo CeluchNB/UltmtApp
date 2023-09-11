@@ -1,5 +1,6 @@
 import * as AuthData from '../../../src/services/data/auth'
 import * as AuthServices from '../../../src/services/network/auth'
+import { AxiosResponse } from 'axios'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import jwt from 'jsonwebtoken'
 import {
@@ -30,7 +31,7 @@ it('should handle network login success', async () => {
             statusText: 'Good',
             headers: {},
             config: {},
-        }),
+        } as AxiosResponse),
     )
 
     await login('', '')
@@ -59,7 +60,7 @@ it('should handle network logout success', async () => {
             statusText: 'Good',
             headers: {},
             config: {},
-        }),
+        } as AxiosResponse),
     )
 
     await logout()
@@ -129,7 +130,7 @@ describe('refresh token', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const token = await refreshToken()
@@ -238,7 +239,7 @@ describe('should handle with token wrapper', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         const result = await withToken(networkCall)
         expect(result.status).toBe(200)
@@ -345,7 +346,7 @@ describe('refresh token if necessary', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         await refreshTokenIfNecessary()

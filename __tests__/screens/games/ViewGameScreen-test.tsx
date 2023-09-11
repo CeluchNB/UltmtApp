@@ -31,7 +31,9 @@ import { fetchProfileData, game } from '../../../fixtures/data'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native-permissions', () => {
     return {
-        PERMISSIONS: {},
+        PERMISSIONS: {
+            IOS: { APP_TRACKING_TRANSPARENCY: 'apptrackingtransparency' },
+        },
         RESULTS: {},
         check: jest.fn(),
         checkLocationAccuracy: jest.fn(),
@@ -47,11 +49,15 @@ jest.mock('react-native-permissions', () => {
 })
 jest.mock('react-native-google-mobile-ads', () => {
     return {
-        default: { initialize: jest.fn(), setRequestConfiguration: jest.fn() },
-        MaxAdsContentRating: { T: 'T', PG: 'PG' },
+        default: () => ({
+            initialize: jest.fn(),
+            setRequestConfiguration: jest.fn(),
+        }),
+        MaxAdContentRating: { T: 'T', PG: 'PG' },
         BannerAd: 'Ad',
         BannerAdSize: { BANNER: 'banner' },
         TestIds: { BANNER: 'bannertest' },
+        __esModule: true,
     }
 })
 

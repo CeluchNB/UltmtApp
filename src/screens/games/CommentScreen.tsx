@@ -45,7 +45,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
     const divider = () => <View style={styles.divider} />
 
     return (
-        <BaseScreen containerWidth="100%">
+        <BaseScreen containerWidth={100}>
             <View style={styles.container}>
                 <ActionDisplayItem
                     action={action}

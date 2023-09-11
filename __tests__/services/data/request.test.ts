@@ -1,4 +1,5 @@
 import * as RequestServices from '../../../src/services/network/request'
+import { AxiosResponse } from 'axios'
 import { DetailedRequest } from '../../../src/types/request'
 import {
     deleteTeamRequest,
@@ -40,7 +41,7 @@ const requestSuccess = Promise.resolve({
     statusText: 'Good',
     headers: {},
     config: {},
-})
+} as AxiosResponse)
 
 const requestError = Promise.reject({
     data: { message: 'error from test' },
@@ -48,7 +49,7 @@ const requestError = Promise.reject({
     statusText: 'Bad',
     headers: {},
     config: {},
-})
+} as AxiosResponse)
 
 describe('test request data calls', () => {
     it('should handle network delete team request success', async () => {
@@ -179,7 +180,7 @@ describe('test request data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await getRequestsByTeam('')
@@ -202,7 +203,7 @@ describe('test request data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await getRequestsByUser()

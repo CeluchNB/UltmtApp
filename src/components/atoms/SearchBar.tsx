@@ -9,7 +9,7 @@ interface SearchBarProps {
     focusable?: boolean
     filter?: boolean
     value?: string
-    width?: string
+    width?: number
     onChangeText?: (text: string) => void
     onPress?: () => void
     onFilterPress?: () => void
@@ -25,7 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         focusable = true,
         filter = false,
         value,
-        width = '90%',
+        width = 90,
         onChangeText,
         onPress,
         onFilterPress,
@@ -37,7 +37,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         container: {
             display: 'flex',
             flexDirection: 'row',
-            width: width,
+            width: `${width}%`,
             alignSelf: 'center',
         },
         input: {

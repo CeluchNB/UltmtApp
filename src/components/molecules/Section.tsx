@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Button } from 'react-native-paper'
 import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
@@ -8,7 +9,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import { Button, IconButton } from 'react-native-paper'
 
 interface SectionProps {
     title: string
@@ -20,8 +20,6 @@ interface SectionProps {
     buttonText: string
     loading?: boolean
     error?: string
-    showCreateButton?: boolean
-    onCreatePress?: () => void
 }
 
 const Section: React.FC<SectionProps> = ({
@@ -34,8 +32,6 @@ const Section: React.FC<SectionProps> = ({
     buttonText,
     error,
     loading = false,
-    showCreateButton = false,
-    onCreatePress = () => {},
 }) => {
     const {
         theme: { colors, size, weight },
@@ -58,12 +54,6 @@ const Section: React.FC<SectionProps> = ({
             fontWeight: weight.bold,
             marginBottom: 10,
             flex: 1,
-        },
-        createButton: {
-            display: !showCreateButton ? 'none' : 'flex',
-            flexWrap: 'nowrap',
-            backgroundColor: colors.textPrimary,
-            borderRadius: 5,
         },
         list: {},
         button: {

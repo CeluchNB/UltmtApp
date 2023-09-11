@@ -43,6 +43,7 @@ exports[`test snapshot 1`] = `
       <TextInput
         accessibilityLabel="Placeholder"
         autoCapitalize="none"
+        cursorColor="#ffd600"
         editable={true}
         keyboardType="default"
         maxFontSizeMultiplier={1.5}
@@ -135,6 +136,7 @@ exports[`test with right icon 1`] = `
       <TextInput
         accessibilityLabel="Placeholder"
         autoCapitalize="none"
+        cursorColor="#ffd600"
         editable={true}
         keyboardType="default"
         maxFontSizeMultiplier={1.5}
@@ -202,12 +204,10 @@ exports[`test with right icon 1`] = `
         collapsable={false}
         style={
           {
-            "alignSelf": undefined,
-            "bottom": undefined,
-            "end": undefined,
-            "left": undefined,
-            "position": undefined,
-            "right": undefined,
+            "backgroundColor": "transparent",
+            "borderRadius": 20,
+            "height": 40,
+            "margin": 0,
             "shadowColor": "#000",
             "shadowOffset": {
               "height": 0,
@@ -215,15 +215,22 @@ exports[`test with right icon 1`] = `
             },
             "shadowOpacity": 0,
             "shadowRadius": 0,
-            "start": undefined,
-            "top": undefined,
+            "width": 40,
           }
         }
+        testID="right-button-container-outer-layer"
       >
         <View
           collapsable={false}
           style={
             {
+              "backgroundColor": "transparent",
+              "borderColor": "rgba(121, 116, 126, 1)",
+              "borderRadius": 20,
+              "borderWidth": 0,
+              "elevation": 0,
+              "flex": 1,
+              "overflow": "hidden",
               "shadowColor": "#000",
               "shadowOffset": {
                 "height": 0,
@@ -233,110 +240,105 @@ exports[`test with right icon 1`] = `
               "shadowRadius": 0,
             }
           }
+          testID="right-button-container"
         >
           <View
-            collapsable={false}
-            style={
+            accessibilityComponentType="button"
+            accessibilityRole="button"
+            accessibilityState={
               {
-                "backgroundColor": undefined,
-                "borderColor": "rgba(121, 116, 126, 1)",
-                "borderRadius": 20,
-                "borderWidth": 0,
-                "elevation": 0,
-                "height": 40,
-                "margin": 0,
-                "overflow": "hidden",
-                "width": 40,
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": false,
+                "expanded": undefined,
+                "selected": undefined,
               }
             }
+            accessibilityTraits="button"
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            centered={true}
+            collapsable={false}
+            focusable={true}
+            hitSlop={
+              {
+                "bottom": 6,
+                "left": 6,
+                "right": 6,
+                "top": 6,
+              }
+            }
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              [
+                {
+                  "overflow": "hidden",
+                },
+                [
+                  {
+                    "alignItems": "center",
+                    "flexGrow": 1,
+                    "justifyContent": "center",
+                  },
+                  {
+                    "borderRadius": 20,
+                  },
+                ],
+              ]
+            }
+            testID="right-button"
           >
-            <View
-              accessibilityComponentType="button"
-              accessibilityRole="button"
-              accessibilityState={
-                {
-                  "disabled": false,
-                }
-              }
-              accessibilityTraits="button"
-              accessible={true}
-              centered={true}
-              collapsable={false}
-              focusable={true}
-              hitSlop={
-                {
-                  "bottom": 6,
-                  "left": 6,
-                  "right": 6,
-                  "top": 6,
-                }
-              }
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
+            <Text
+              accessibilityElementsHidden={true}
+              allowFontScaling={false}
+              importantForAccessibility="no-hide-descendants"
+              pointerEvents="none"
+              selectable={false}
               style={
                 [
                   {
-                    "overflow": "hidden",
+                    "color": "#ffd600",
+                    "fontSize": 24,
                   },
-                  false,
                   [
                     {
-                      "alignItems": "center",
-                      "flexGrow": 1,
-                      "justifyContent": "center",
+                      "lineHeight": 24,
+                      "transform": [
+                        {
+                          "scaleX": 1,
+                        },
+                      ],
                     },
                     {
-                      "borderRadius": 20,
+                      "backgroundColor": "transparent",
                     },
                   ],
+                  {
+                    "fontFamily": "Material Design Icons",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  {},
                 ]
               }
-              testID="right-button"
             >
-              <Text
-                accessibilityElementsHidden={true}
-                allowFontScaling={false}
-                importantForAccessibility="no-hide-descendants"
-                pointerEvents="none"
-                selectable={false}
-                style={
-                  [
-                    {
-                      "color": "#ffd600",
-                      "fontSize": 24,
-                    },
-                    [
-                      {
-                        "lineHeight": 24,
-                        "transform": [
-                          {
-                            "scaleX": 1,
-                          },
-                        ],
-                      },
-                      {
-                        "backgroundColor": "transparent",
-                      },
-                    ],
-                    {
-                      "fontFamily": "Material Design Icons",
-                      "fontStyle": "normal",
-                      "fontWeight": "normal",
-                    },
-                    {},
-                  ]
-                }
-              >
-                󰈈
-              </Text>
-            </View>
+              󰈈
+            </Text>
           </View>
         </View>
       </View>

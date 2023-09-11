@@ -39,7 +39,7 @@ const GameNavigator: React.FC<{}> = () => {
                 component={ViewGameScreen}
                 options={{
                     title: '',
-                    headerBackTitle: 'Back'
+                    headerBackTitle: 'Back',
                 }}
             />
             <Stack.Screen

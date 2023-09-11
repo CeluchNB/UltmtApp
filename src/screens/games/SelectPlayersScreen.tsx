@@ -128,7 +128,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     })
 
     return (
-        <BaseScreen containerWidth="90%">
+        <BaseScreen containerWidth={90}>
             <View style={styles.container}>
                 <FlatList
                     contentContainerStyle={styles.flatListContainer}

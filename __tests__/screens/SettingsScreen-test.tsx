@@ -121,7 +121,7 @@ it('should handle first name edit', async () => {
 it('should handle first name edit error', async () => {
     const spy = jest
         .spyOn(UserData, 'changeName')
-        .mockReturnValueOnce(Promise.reject({ message: 'Error message' }))
+        .mockRejectedValueOnce({ message: 'Error message' })
 
     const { getAllByTestId, getByPlaceholderText, getByText } = render(
         <Provider store={store}>
@@ -183,7 +183,7 @@ it('should handle last name edit', async () => {
 it('should handle last name edit error', async () => {
     const spy = jest
         .spyOn(UserData, 'changeName')
-        .mockReturnValueOnce(Promise.reject({ message: 'Error message' }))
+        .mockRejectedValueOnce({ message: 'Error message' })
 
     const { getAllByTestId, getByPlaceholderText, getByText } = render(
         <Provider store={store}>
@@ -281,7 +281,7 @@ it('should delete account', async () => {
 it('should handle delete account error', async () => {
     const spy = jest
         .spyOn(UserData, 'deleteAccount')
-        .mockReturnValueOnce(Promise.reject({ message: 'Error message' }))
+        .mockRejectedValueOnce({ message: 'Error message' })
 
     const { getByText } = render(
         <Provider store={store}>
