@@ -291,22 +291,20 @@ beforeAll(() => {
 const client = new QueryClient()
 
 describe('ViewGameScreen', () => {
-    const gameSpy = jest
-        .spyOn(GameData, 'getGameById')
-        .mockReturnValue(Promise.resolve(game))
+    const gameSpy = jest.spyOn(GameData, 'getGameById').mockResolvedValue(game)
     const pointsSpy = jest
         .spyOn(GameData, 'getPointsByGame')
-        .mockReturnValue(Promise.resolve(points))
+        .mockResolvedValue(points)
     const gameStatsSpy = jest
         .spyOn(StatsData, 'getGameStats')
-        .mockReturnValue(Promise.resolve(gameStats))
+        .mockResolvedValue(gameStats)
     let subs: SubscriptionObject
     jest.spyOn(ActionData, 'subscribe').mockImplementation(
         async subscriptions => {
             subs = subscriptions
         },
     )
-    jest.spyOn(ActionData, 'joinPoint').mockReturnValue(Promise.resolve())
+    jest.spyOn(ActionData, 'joinPoint').mockResolvedValue()
 
     beforeAll(() => {
         jest.useFakeTimers({ legacyFakeTimers: true })
@@ -318,14 +316,12 @@ describe('ViewGameScreen', () => {
 
     beforeEach(() => {
         jest.clearAllMocks()
-        jest.spyOn(PointData, 'deleteLocalActionsByPoint').mockReturnValue(
-            Promise.resolve(),
+        jest.spyOn(PointData, 'deleteLocalActionsByPoint').mockResolvedValue()
+        jest.spyOn(PointData, 'getViewableActionsByPoint').mockResolvedValue(
+            savedActions,
         )
-        jest.spyOn(PointData, 'getViewableActionsByPoint').mockReturnValue(
-            Promise.resolve(savedActions),
-        )
-        jest.spyOn(PointData, 'getLiveActionsByPoint').mockReturnValue(
-            Promise.resolve(liveActions),
+        jest.spyOn(PointData, 'getLiveActionsByPoint').mockResolvedValue(
+            liveActions,
         )
     })
 
@@ -584,12 +580,10 @@ describe('ViewGameScreen', () => {
     })
 
     it('reactivates game', async () => {
-        jest.spyOn(GameData, 'getGameById').mockReturnValueOnce(
-            Promise.resolve({
-                ...game,
-                teamOneActive: false,
-            }),
-        )
+        jest.spyOn(GameData, 'getGameById').mockResolvedValueOnce({
+            ...game,
+            teamOneActive: false,
+        })
         store.dispatch(
             setProfile({
                 ...fetchProfileData,
@@ -607,17 +601,15 @@ describe('ViewGameScreen', () => {
         )
         const spy = jest
             .spyOn(GameData, 'reactivateInactiveGame')
-            .mockReturnValueOnce(
-                Promise.resolve({
-                    ...game,
-                    startTime: '2022' as unknown as Date,
-                    tournament: undefined,
-                    offline: false,
-                }),
-            )
+            .mockResolvedValueOnce({
+                ...game,
+                startTime: '2022' as unknown as Date,
+                tournament: undefined,
+                offline: false,
+            })
 
-        jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
-            Promise.resolve(points[0]),
+        jest.spyOn(PointData, 'getActivePointForGame').mockResolvedValueOnce(
+            points[0],
         )
         const { getByTestId, getAllByText } = render(
             <NavigationContainer>
@@ -654,22 +646,20 @@ describe('ViewGameScreen', () => {
                 ],
             }),
         )
-        jest.spyOn(GameData, 'getActiveGames').mockReturnValue(
-            Promise.resolve([{ ...game, offline: false }]),
-        )
+        jest.spyOn(GameData, 'getActiveGames').mockResolvedValue([
+            { ...game, offline: false },
+        ])
         const spy = jest
             .spyOn(GameData, 'resurrectActiveGame')
-            .mockReturnValueOnce(
-                Promise.resolve({
-                    ...game,
-                    startTime: '2022' as unknown as Date,
-                    tournament: undefined,
-                    offline: false,
-                }),
-            )
+            .mockResolvedValueOnce({
+                ...game,
+                startTime: '2022' as unknown as Date,
+                tournament: undefined,
+                offline: false,
+            })
 
-        jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
-            Promise.resolve(points[0]),
+        jest.spyOn(PointData, 'getActivePointForGame').mockResolvedValueOnce(
+            points[0],
         )
         const { getByTestId, getAllByText } = render(
             <NavigationContainer>
@@ -708,7 +698,7 @@ describe('ViewGameScreen', () => {
         )
         const spy = jest
             .spyOn(GameData, 'deleteGame')
-            .mockReturnValueOnce(Promise.resolve(undefined))
+            .mockResolvedValueOnce(undefined)
 
         const { getByTestId, getAllByText, getByText } = render(
             <NavigationContainer>
