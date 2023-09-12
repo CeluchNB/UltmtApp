@@ -113,9 +113,7 @@ describe('JoinGameScreen', () => {
     })
 
     it('should handle join error', async () => {
-        jest.spyOn(GameData, 'joinGame')
-            .mockReset()
-            .mockReturnValueOnce(Promise.reject())
+        jest.spyOn(GameData, 'joinGame').mockReset().mockRejectedValueOnce({})
 
         const { getByPlaceholderText, getByText } = render(
             <Provider store={store}>

@@ -247,42 +247,36 @@ describe('should handle with token wrapper', () => {
     })
 
     it('with failed refresh', async () => {
-        networkCall.mockReturnValueOnce(
-            Promise.reject({
-                data: {},
-                status: 401,
-                statusText: 'Unauth',
-                headers: {},
-                config: {},
-            }),
-        )
+        networkCall.mockRejectedValueOnce({
+            data: {},
+            status: 401,
+            statusText: 'Unauth',
+            headers: {},
+            config: {},
+        })
 
         jest.spyOn(RNEncryptedStorage, 'getItem').mockReturnValue(
             Promise.resolve(validToken),
         )
-        jest.spyOn(AuthServices, 'refreshToken').mockReturnValueOnce(
-            Promise.reject({
-                data: {},
-                status: 401,
-                statusText: 'Unauth',
-                headers: {},
-                config: {},
-            }),
-        )
+        jest.spyOn(AuthServices, 'refreshToken').mockRejectedValueOnce({
+            data: {},
+            status: 401,
+            statusText: 'Unauth',
+            headers: {},
+            config: {},
+        })
 
         await expect(withToken(networkCall)).rejects.toBeDefined()
     })
 
     it('with failed network call', async () => {
-        networkCall.mockReturnValueOnce(
-            Promise.reject({
-                data: {},
-                status: 401,
-                statusText: 'Unauth',
-                headers: {},
-                config: {},
-            }),
-        )
+        networkCall.mockRejectedValueOnce({
+            data: {},
+            status: 401,
+            statusText: 'Unauth',
+            headers: {},
+            config: {},
+        })
 
         await expect(withToken(networkCall)).rejects.toBeDefined()
     })

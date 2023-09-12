@@ -187,7 +187,6 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                 const { value } = data
                                 await onChangeName(value, account.lastName)
                             } catch (error: any) {
-                                console.log('in catch block', error)
                                 setFirstError(error.message)
                             }
                         }}

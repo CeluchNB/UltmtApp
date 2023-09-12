@@ -181,9 +181,13 @@ describe('test team services', () => {
     })
 
     it('should handle network add manager failure', async () => {
-        jest.spyOn(TeamServices, 'toggleRosterStatus').mockReturnValueOnce(
-            teamError,
-        )
+        jest.spyOn(TeamServices, 'toggleRosterStatus').mockRejectedValueOnce({
+            data: { message: errorText },
+            status: 400,
+            statusText: 'Good',
+            headers: {},
+            config: {},
+        })
 
         await expect(addManager('', '')).rejects.toBeDefined()
     })

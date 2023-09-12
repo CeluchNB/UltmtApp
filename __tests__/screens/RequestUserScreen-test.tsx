@@ -96,9 +96,9 @@ it('should not search with less than 3 characters', async () => {
 })
 
 it('should display search error', async () => {
-    jest.spyOn(UserData, 'searchUsers').mockReturnValueOnce(
-        Promise.reject({ message: 'search error' }),
-    )
+    jest.spyOn(UserData, 'searchUsers').mockRejectedValueOnce({
+        message: 'search error',
+    })
 
     const { getByPlaceholderText, queryByText } = render(
         <Provider store={store}>
@@ -162,11 +162,9 @@ it('should correctly request user join', async () => {
 })
 
 it('should handle request error', async () => {
-    const spy = jest.spyOn(RequestData, 'requestUser').mockReturnValueOnce(
-        Promise.reject({
-            message: 'request error',
-        }),
-    )
+    const spy = jest.spyOn(RequestData, 'requestUser').mockRejectedValueOnce({
+        message: 'request error',
+    })
     const { getByPlaceholderText, findByText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
@@ -224,11 +222,9 @@ it('should correctly add manager', async () => {
 })
 
 it('should handle add manager failure', async () => {
-    const spy = jest.spyOn(TeamData, 'addManager').mockReturnValueOnce(
-        Promise.reject({
-            message: 'add manager error',
-        }),
-    )
+    const spy = jest.spyOn(TeamData, 'addManager').mockRejectedValueOnce({
+        message: 'add manager error',
+    })
 
     const managerProps: RequestUserProps = {
         navigation: {
@@ -285,7 +281,7 @@ it('should get bulk code', async () => {
 it('should handle get bulk code error', async () => {
     const spy = jest
         .spyOn(TeamData, 'createBulkJoinCode')
-        .mockReturnValueOnce(Promise.reject({ message: 'bulk code error' }))
+        .mockRejectedValueOnce({ message: 'bulk code error' })
 
     const { getByText, getByTestId } = render(
         <Provider store={store}>

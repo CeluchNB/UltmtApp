@@ -112,7 +112,7 @@ describe('CreateGameScreen', () => {
     it('should create game', async () => {
         const spy = jest
             .spyOn(GameData, 'createGame')
-            .mockReturnValue(Promise.resolve({} as any))
+            .mockResolvedValue({ startTime: new Date('01-01-2022') } as any)
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
