@@ -3,6 +3,7 @@ import * as Constants from '../../../src/utils/constants'
 import * as LocalGameServices from '../../../src/services/local/game'
 import * as LocalPointServices from '../../../src/services/local/point'
 import * as PointServices from '../../../src/services/network/point'
+import { AxiosResponse } from 'axios'
 import Point from '../../../src/types/point'
 import { game } from '../../../fixtures/data'
 import {
@@ -74,7 +75,7 @@ describe('test create point', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValueOnce(
             Promise.resolve('1'),
@@ -173,7 +174,7 @@ describe('test set players', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
             Promise.resolve(undefined),
@@ -259,7 +260,7 @@ describe('test finish point', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
             Promise.resolve(undefined),
@@ -397,7 +398,7 @@ describe('test get actions by point', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(ActionLocal, 'getDisplayActions')
             .mockReturnValueOnce(Promise.resolve([]))
@@ -471,7 +472,7 @@ describe('test get live actions by point', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         const result = await getLiveActionsByPoint('one', 'point1')
         expect(result).toEqual([ActionFactory.createFromAction(liveAction)])
@@ -559,7 +560,7 @@ describe('test reactivate point', () => {
                     statusText: 'good',
                     config: {},
                     headers: {},
-                }),
+                } as AxiosResponse),
             )
         const reactivateSpy = jest
             .spyOn(PointServices, 'reactivatePoint')
@@ -570,7 +571,7 @@ describe('test reactivate point', () => {
                     statusText: 'Good',
                     config: {},
                     headers: {},
-                }),
+                } as AxiosResponse),
             )
         const getActionsSpy = jest
             .spyOn(PointServices, 'getLiveActionsByPoint')
@@ -581,7 +582,7 @@ describe('test reactivate point', () => {
                     statusText: 'Good',
                     config: {},
                     headers: {},
-                }),
+                } as AxiosResponse),
             )
         jest.spyOn(ActionLocal, 'deleteEditableActionsByPoint').mockReturnValue(
             Promise.resolve(),

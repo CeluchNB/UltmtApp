@@ -112,9 +112,9 @@ it('should not search with less than 3 characters', async () => {
 })
 
 it('should display search error', async () => {
-    jest.spyOn(TeamData, 'searchTeam').mockResolvedValueOnce(
-        Promise.reject({ message: 'search error' }),
-    )
+    jest.spyOn(TeamData, 'searchTeam').mockRejectedValueOnce({
+        message: 'search error',
+    })
 
     const { queryByText, getByPlaceholderText } = render(
         <Provider store={store}>
@@ -131,7 +131,7 @@ it('should display search error', async () => {
 })
 
 it('should display search error with no message', async () => {
-    jest.spyOn(TeamData, 'searchTeam').mockResolvedValueOnce(Promise.reject({}))
+    jest.spyOn(TeamData, 'searchTeam').mockRejectedValueOnce({})
 
     const { queryByText, getByPlaceholderText } = render(
         <Provider store={store}>
@@ -212,7 +212,7 @@ it('should display modal on closed team', async () => {
 it('should display error when request is unsuccessful', async () => {
     const spy = jest
         .spyOn(RequestData, 'requestTeam')
-        .mockReturnValueOnce(Promise.reject({ message: 'request error' }))
+        .mockRejectedValueOnce({ message: 'request error' })
     const { findByText, getByPlaceholderText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>

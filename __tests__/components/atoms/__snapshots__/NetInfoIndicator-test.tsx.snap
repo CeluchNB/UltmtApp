@@ -13,12 +13,10 @@ exports[`NetInfoIndicator with reachable internet 1`] = `
     collapsable={false}
     style={
       {
-        "alignSelf": undefined,
-        "bottom": undefined,
-        "end": undefined,
-        "left": undefined,
-        "position": undefined,
-        "right": undefined,
+        "backgroundColor": "transparent",
+        "borderRadius": 18,
+        "height": 36,
+        "margin": 0,
         "shadowColor": "#000",
         "shadowOffset": {
           "height": 0,
@@ -26,15 +24,22 @@ exports[`NetInfoIndicator with reachable internet 1`] = `
         },
         "shadowOpacity": 0,
         "shadowRadius": 0,
-        "start": undefined,
-        "top": undefined,
+        "width": 36,
       }
     }
+    testID="icon-button-container-outer-layer"
   >
     <View
       collapsable={false}
       style={
         {
+          "backgroundColor": "transparent",
+          "borderColor": "rgba(121, 116, 126, 1)",
+          "borderRadius": 18,
+          "borderWidth": 0,
+          "elevation": 0,
+          "flex": 1,
+          "overflow": "hidden",
           "shadowColor": "#000",
           "shadowOffset": {
             "height": 0,
@@ -44,109 +49,105 @@ exports[`NetInfoIndicator with reachable internet 1`] = `
           "shadowRadius": 0,
         }
       }
+      testID="icon-button-container"
     >
       <View
-        collapsable={false}
-        style={
+        accessibilityComponentType="button"
+        accessibilityRole="button"
+        accessibilityState={
           {
-            "backgroundColor": undefined,
-            "borderColor": "rgba(121, 116, 126, 1)",
-            "borderRadius": 18,
-            "borderWidth": 0,
-            "elevation": 0,
-            "height": 36,
-            "margin": 0,
-            "overflow": "hidden",
-            "width": 36,
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": true,
+            "expanded": undefined,
+            "selected": undefined,
           }
         }
+        accessibilityTraits="button"
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        centered={true}
+        collapsable={false}
+        focusable={true}
+        hitSlop={
+          {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6,
+          }
+        }
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          [
+            {
+              "overflow": "hidden",
+            },
+            [
+              {
+                "alignItems": "center",
+                "flexGrow": 1,
+                "justifyContent": "center",
+              },
+              {
+                "borderRadius": 18,
+              },
+            ],
+          ]
+        }
+        testID="icon-button"
       >
-        <View
-          accessibilityComponentType="button"
-          accessibilityRole="button"
-          accessibilityState={
-            {
-              "disabled": true,
-            }
-          }
-          accessibilityTraits="button"
-          accessible={true}
-          centered={true}
-          collapsable={false}
-          focusable={true}
-          hitSlop={
-            {
-              "bottom": 6,
-              "left": 6,
-              "right": 6,
-              "top": 6,
-            }
-          }
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
+        <Text
+          accessibilityElementsHidden={true}
+          allowFontScaling={false}
+          importantForAccessibility="no-hide-descendants"
+          pointerEvents="none"
+          selectable={false}
           style={
             [
               {
-                "overflow": "hidden",
+                "color": "#40dd50",
+                "fontSize": 20,
               },
-              false,
               [
                 {
-                  "alignItems": "center",
-                  "flexGrow": 1,
-                  "justifyContent": "center",
+                  "lineHeight": 20,
+                  "transform": [
+                    {
+                      "scaleX": 1,
+                    },
+                  ],
                 },
                 {
-                  "borderRadius": 18,
+                  "backgroundColor": "transparent",
                 },
               ],
+              {
+                "fontFamily": "Material Design Icons",
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+              },
+              {},
             ]
           }
         >
-          <Text
-            accessibilityElementsHidden={true}
-            allowFontScaling={false}
-            importantForAccessibility="no-hide-descendants"
-            pointerEvents="none"
-            selectable={false}
-            style={
-              [
-                {
-                  "color": "#40dd50",
-                  "fontSize": 20,
-                },
-                [
-                  {
-                    "lineHeight": 20,
-                    "transform": [
-                      {
-                        "scaleX": 1,
-                      },
-                    ],
-                  },
-                  {
-                    "backgroundColor": "transparent",
-                  },
-                ],
-                {
-                  "fontFamily": "Material Design Icons",
-                  "fontStyle": "normal",
-                  "fontWeight": "normal",
-                },
-                {},
-              ]
-            }
-          >
-            󰣸
-          </Text>
-        </View>
+          󰣸
+        </Text>
       </View>
     </View>
   </View>

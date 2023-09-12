@@ -1,4 +1,4 @@
-import { DisplayUser, User } from '../types/user'
+import { DisplayUser } from '../types/user'
 
 export const getUserDisplayName = (player?: DisplayUser): string => {
     if (!player) {

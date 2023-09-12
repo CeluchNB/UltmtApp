@@ -71,7 +71,7 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
     })
 
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             {(loading || teamsLoading) && (
                 <ActivityIndicator
                     color={colors.textPrimary}

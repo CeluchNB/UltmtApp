@@ -47,7 +47,6 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
     return (
         <View>
             <FlatList
-                listKey="player-action-list"
                 data={playerActions}
                 renderItem={({ item, index }) => {
                     const { player, actions } = item

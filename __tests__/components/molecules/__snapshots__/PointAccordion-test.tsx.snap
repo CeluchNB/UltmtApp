@@ -20,8 +20,19 @@ exports[`PointAccordion should match snapshot closed 1`] = `
         accessibilityRole="button"
         accessibilityState={
           {
+            "busy": undefined,
+            "checked": undefined,
             "disabled": false,
             "expanded": false,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
           }
         }
         accessible={true}
@@ -41,10 +52,10 @@ exports[`PointAccordion should match snapshot closed 1`] = `
             {
               "overflow": "hidden",
             },
-            false,
             [
               {
-                "padding": 8,
+                "paddingRight": 24,
+                "paddingVertical": 8,
               },
               {
                 "backgroundColor": "#303030",
@@ -64,8 +75,8 @@ exports[`PointAccordion should match snapshot closed 1`] = `
           pointerEvents="none"
           style={
             {
-              "alignItems": "center",
               "flexDirection": "row",
+              "marginVertical": 6,
             }
           }
         >
@@ -73,7 +84,7 @@ exports[`PointAccordion should match snapshot closed 1`] = `
             style={
               [
                 {
-                  "margin": 8,
+                  "paddingLeft": 16,
                 },
                 {
                   "flex": 1,
@@ -182,7 +193,8 @@ exports[`PointAccordion should match snapshot closed 1`] = `
             style={
               [
                 {
-                  "margin": 8,
+                  "marginVertical": 6,
+                  "paddingLeft": 8,
                 },
                 undefined,
               ]
@@ -288,8 +300,19 @@ exports[`PointAccordion should match snapshot open 1`] = `
         accessibilityRole="button"
         accessibilityState={
           {
+            "busy": undefined,
+            "checked": undefined,
             "disabled": false,
             "expanded": true,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
           }
         }
         accessible={true}
@@ -309,10 +332,10 @@ exports[`PointAccordion should match snapshot open 1`] = `
             {
               "overflow": "hidden",
             },
-            false,
             [
               {
-                "padding": 8,
+                "paddingRight": 24,
+                "paddingVertical": 8,
               },
               {
                 "backgroundColor": "#303030",
@@ -332,8 +355,8 @@ exports[`PointAccordion should match snapshot open 1`] = `
           pointerEvents="none"
           style={
             {
-              "alignItems": "center",
               "flexDirection": "row",
+              "marginVertical": 6,
             }
           }
         >
@@ -341,7 +364,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
             style={
               [
                 {
-                  "margin": 8,
+                  "paddingLeft": 16,
                 },
                 {
                   "flex": 1,
@@ -450,7 +473,8 @@ exports[`PointAccordion should match snapshot open 1`] = `
             style={
               [
                 {
-                  "margin": 8,
+                  "marginVertical": 6,
+                  "paddingLeft": 8,
                 },
                 undefined,
               ]
@@ -603,6 +627,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
     >
       <View>
         <View
+          onFocusCapture={[Function]}
           onLayout={[Function]}
           style={null}
         >
@@ -618,7 +643,19 @@ exports[`PointAccordion should match snapshot open 1`] = `
             <View
               accessibilityState={
                 {
+                  "busy": undefined,
+                  "checked": undefined,
                   "disabled": false,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
                 }
               }
               accessible={true}
@@ -708,12 +745,9 @@ exports[`PointAccordion should match snapshot open 1`] = `
                       collapsable={false}
                       style={
                         {
-                          "alignSelf": undefined,
-                          "bottom": undefined,
-                          "end": undefined,
-                          "left": undefined,
-                          "position": undefined,
-                          "right": undefined,
+                          "backgroundColor": "#303030",
+                          "borderRadius": 4,
+                          "margin": 2,
                           "shadowColor": "#000",
                           "shadowOffset": {
                             "height": 0,
@@ -721,15 +755,21 @@ exports[`PointAccordion should match snapshot open 1`] = `
                           },
                           "shadowOpacity": 0,
                           "shadowRadius": 0,
-                          "start": undefined,
-                          "top": undefined,
                         }
                       }
+                      testID="chip-container-outer-layer"
                     >
                       <View
                         collapsable={false}
                         style={
                           {
+                            "backgroundColor": "#303030",
+                            "borderColor": "rgba(255, 214, 0, 0.29)",
+                            "borderRadius": 4,
+                            "borderStyle": "solid",
+                            "borderWidth": 1,
+                            "flex": undefined,
+                            "flexDirection": "column",
                             "shadowColor": "#000",
                             "shadowOffset": {
                               "height": 0,
@@ -739,96 +779,94 @@ exports[`PointAccordion should match snapshot open 1`] = `
                             "shadowRadius": 0,
                           }
                         }
+                        testID="chip-container"
                       >
                         <View
-                          collapsable={false}
-                          style={
+                          accessibilityRole="button"
+                          accessibilityState={
                             {
-                              "backgroundColor": "#303030",
-                              "borderColor": "rgba(255, 214, 0, 0.29)",
-                              "borderRadius": 4,
-                              "borderStyle": "solid",
-                              "borderWidth": 1,
-                              "flexDirection": "column",
-                              "margin": 2,
+                              "busy": undefined,
+                              "checked": undefined,
+                              "disabled": true,
+                              "expanded": undefined,
+                              "selected": false,
                             }
                           }
+                          accessibilityValue={
+                            {
+                              "max": undefined,
+                              "min": undefined,
+                              "now": undefined,
+                              "text": undefined,
+                            }
+                          }
+                          accessible={true}
+                          collapsable={false}
+                          focusable={true}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onFocus={[Function]}
+                          onResponderGrant={[Function]}
+                          onResponderMove={[Function]}
+                          onResponderRelease={[Function]}
+                          onResponderTerminate={[Function]}
+                          onResponderTerminationRequest={[Function]}
+                          onStartShouldSetResponder={[Function]}
+                          style={
+                            [
+                              {
+                                "overflow": "hidden",
+                              },
+                              [
+                                {
+                                  "borderRadius": 4,
+                                },
+                                {
+                                  "width": "100%",
+                                },
+                              ],
+                            ]
+                          }
+                          testID="chip"
                         >
                           <View
-                            accessibilityRole="button"
-                            accessibilityState={
-                              {
-                                "disabled": true,
-                                "selected": false,
-                              }
-                            }
-                            accessible={true}
-                            collapsable={false}
-                            focusable={true}
-                            onBlur={[Function]}
-                            onClick={[Function]}
-                            onFocus={[Function]}
-                            onResponderGrant={[Function]}
-                            onResponderMove={[Function]}
-                            onResponderRelease={[Function]}
-                            onResponderTerminate={[Function]}
-                            onResponderTerminationRequest={[Function]}
-                            onStartShouldSetResponder={[Function]}
                             style={
                               [
                                 {
-                                  "overflow": "hidden",
+                                  "alignItems": "center",
+                                  "flexDirection": "row",
+                                  "paddingLeft": 4,
+                                  "position": "relative",
                                 },
-                                false,
-                                [
-                                  {
-                                    "borderRadius": 4,
-                                  },
-                                  {
-                                    "flexGrow": 1,
-                                  },
-                                ],
+                                {
+                                  "paddingLeft": 0,
+                                },
+                                {
+                                  "paddingRight": 0,
+                                },
                               ]
                             }
                           >
-                            <View
+                            <Text
+                              ellipsizeMode="tail"
+                              numberOfLines={1}
+                              selectable={false}
                               style={
                                 [
                                   {
-                                    "alignItems": "center",
-                                    "flexDirection": "row",
-                                    "flexGrow": 1,
-                                    "paddingLeft": 4,
-                                    "position": "relative",
+                                    "textAlign": "left",
                                   },
                                   {
-                                    "paddingLeft": 0,
+                                    "color": "rgba(28, 27, 31, 1)",
+                                    "writingDirection": "ltr",
                                   },
-                                  {
-                                    "paddingRight": 0,
-                                  },
-                                ]
-                              }
-                            >
-                              <Text
-                                ellipsizeMode="tail"
-                                numberOfLines={1}
-                                selectable={false}
-                                style={
                                   [
                                     {
-                                      "color": "rgba(28, 27, 31, 1)",
                                       "fontFamily": "System",
                                       "fontSize": 14,
                                       "fontWeight": "500",
                                       "letterSpacing": 0.1,
                                       "lineHeight": 20,
-                                    },
-                                    {
-                                      "textAlign": "left",
-                                    },
-                                    {
-                                      "writingDirection": "ltr",
                                     },
                                     [
                                       {
@@ -849,12 +887,12 @@ exports[`PointAccordion should match snapshot open 1`] = `
                                       },
                                       undefined,
                                     ],
-                                  ]
-                                }
-                              >
-                                huck
-                              </Text>
-                            </View>
+                                  ],
+                                ]
+                              }
+                            >
+                              huck
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -863,12 +901,10 @@ exports[`PointAccordion should match snapshot open 1`] = `
                       collapsable={false}
                       style={
                         {
-                          "alignSelf": undefined,
-                          "bottom": undefined,
-                          "end": undefined,
-                          "left": undefined,
-                          "position": undefined,
-                          "right": undefined,
+                          "backgroundColor": "transparent",
+                          "borderRadius": 15.5,
+                          "height": 31,
+                          "margin": 6,
                           "shadowColor": "#000",
                           "shadowOffset": {
                             "height": 0,
@@ -876,15 +912,22 @@ exports[`PointAccordion should match snapshot open 1`] = `
                           },
                           "shadowOpacity": 0,
                           "shadowRadius": 0,
-                          "start": undefined,
-                          "top": undefined,
+                          "width": 31,
                         }
                       }
+                      testID="icon-button-container-outer-layer"
                     >
                       <View
                         collapsable={false}
                         style={
                           {
+                            "backgroundColor": "transparent",
+                            "borderColor": "rgba(121, 116, 126, 1)",
+                            "borderRadius": 15.5,
+                            "borderWidth": 0,
+                            "elevation": 0,
+                            "flex": 1,
+                            "overflow": "hidden",
                             "shadowColor": "#000",
                             "shadowOffset": {
                               "height": 0,
@@ -894,109 +937,105 @@ exports[`PointAccordion should match snapshot open 1`] = `
                             "shadowRadius": 0,
                           }
                         }
+                        testID="icon-button-container"
                       >
                         <View
-                          collapsable={false}
-                          style={
+                          accessibilityComponentType="button"
+                          accessibilityRole="button"
+                          accessibilityState={
                             {
-                              "backgroundColor": undefined,
-                              "borderColor": "rgba(121, 116, 126, 1)",
-                              "borderRadius": 15.5,
-                              "borderWidth": 0,
-                              "elevation": 0,
-                              "height": 31,
-                              "margin": 6,
-                              "overflow": "hidden",
-                              "width": 31,
+                              "busy": undefined,
+                              "checked": undefined,
+                              "disabled": true,
+                              "expanded": undefined,
+                              "selected": undefined,
                             }
                           }
+                          accessibilityTraits="button"
+                          accessibilityValue={
+                            {
+                              "max": undefined,
+                              "min": undefined,
+                              "now": undefined,
+                              "text": undefined,
+                            }
+                          }
+                          accessible={true}
+                          centered={true}
+                          collapsable={false}
+                          focusable={true}
+                          hitSlop={
+                            {
+                              "bottom": 6,
+                              "left": 6,
+                              "right": 6,
+                              "top": 6,
+                            }
+                          }
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onFocus={[Function]}
+                          onResponderGrant={[Function]}
+                          onResponderMove={[Function]}
+                          onResponderRelease={[Function]}
+                          onResponderTerminate={[Function]}
+                          onResponderTerminationRequest={[Function]}
+                          onStartShouldSetResponder={[Function]}
+                          style={
+                            [
+                              {
+                                "overflow": "hidden",
+                              },
+                              [
+                                {
+                                  "alignItems": "center",
+                                  "flexGrow": 1,
+                                  "justifyContent": "center",
+                                },
+                                {
+                                  "borderRadius": 15.5,
+                                },
+                              ],
+                            ]
+                          }
+                          testID="icon-button"
                         >
-                          <View
-                            accessibilityComponentType="button"
-                            accessibilityRole="button"
-                            accessibilityState={
-                              {
-                                "disabled": true,
-                              }
-                            }
-                            accessibilityTraits="button"
-                            accessible={true}
-                            centered={true}
-                            collapsable={false}
-                            focusable={true}
-                            hitSlop={
-                              {
-                                "bottom": 6,
-                                "left": 6,
-                                "right": 6,
-                                "top": 6,
-                              }
-                            }
-                            onBlur={[Function]}
-                            onClick={[Function]}
-                            onFocus={[Function]}
-                            onResponderGrant={[Function]}
-                            onResponderMove={[Function]}
-                            onResponderRelease={[Function]}
-                            onResponderTerminate={[Function]}
-                            onResponderTerminationRequest={[Function]}
-                            onStartShouldSetResponder={[Function]}
+                          <Text
+                            accessibilityElementsHidden={true}
+                            allowFontScaling={false}
+                            importantForAccessibility="no-hide-descendants"
+                            pointerEvents="none"
+                            selectable={false}
                             style={
                               [
                                 {
-                                  "overflow": "hidden",
+                                  "color": "#ffd600",
+                                  "fontSize": 15,
                                 },
-                                false,
                                 [
                                   {
-                                    "alignItems": "center",
-                                    "flexGrow": 1,
-                                    "justifyContent": "center",
+                                    "lineHeight": 15,
+                                    "transform": [
+                                      {
+                                        "scaleX": 1,
+                                      },
+                                    ],
                                   },
                                   {
-                                    "borderRadius": 15.5,
+                                    "backgroundColor": "transparent",
                                   },
                                 ],
+                                {
+                                  "fontFamily": "Material Design Icons",
+                                  "fontStyle": "normal",
+                                  "fontWeight": "normal",
+                                },
+                                {},
                               ]
                             }
                           >
-                            <Text
-                              accessibilityElementsHidden={true}
-                              allowFontScaling={false}
-                              importantForAccessibility="no-hide-descendants"
-                              pointerEvents="none"
-                              selectable={false}
-                              style={
-                                [
-                                  {
-                                    "color": "#ffd600",
-                                    "fontSize": 15,
-                                  },
-                                  [
-                                    {
-                                      "lineHeight": 15,
-                                      "transform": [
-                                        {
-                                          "scaleX": 1,
-                                        },
-                                      ],
-                                    },
-                                    {
-                                      "backgroundColor": "transparent",
-                                    },
-                                  ],
-                                  {
-                                    "fontFamily": "Material Design Icons",
-                                    "fontStyle": "normal",
-                                    "fontWeight": "normal",
-                                  },
-                                  {},
-                                ]
-                              }
-                            >
-                              󰆉
-                            </Text>
-                          </View>
+                            󰆉
+                          </Text>
                         </View>
                       </View>
                     </View>
@@ -1007,6 +1046,7 @@ exports[`PointAccordion should match snapshot open 1`] = `
           </View>
         </View>
         <View
+          onFocusCapture={[Function]}
           onLayout={[Function]}
           style={null}
         >
@@ -1022,7 +1062,19 @@ exports[`PointAccordion should match snapshot open 1`] = `
             <View
               accessibilityState={
                 {
+                  "busy": undefined,
+                  "checked": undefined,
                   "disabled": false,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
                 }
               }
               accessible={true}
@@ -1112,12 +1164,10 @@ exports[`PointAccordion should match snapshot open 1`] = `
                       collapsable={false}
                       style={
                         {
-                          "alignSelf": undefined,
-                          "bottom": undefined,
-                          "end": undefined,
-                          "left": undefined,
-                          "position": undefined,
-                          "right": undefined,
+                          "backgroundColor": "transparent",
+                          "borderRadius": 15.5,
+                          "height": 31,
+                          "margin": 6,
                           "shadowColor": "#000",
                           "shadowOffset": {
                             "height": 0,
@@ -1125,15 +1175,22 @@ exports[`PointAccordion should match snapshot open 1`] = `
                           },
                           "shadowOpacity": 0,
                           "shadowRadius": 0,
-                          "start": undefined,
-                          "top": undefined,
+                          "width": 31,
                         }
                       }
+                      testID="icon-button-container-outer-layer"
                     >
                       <View
                         collapsable={false}
                         style={
                           {
+                            "backgroundColor": "transparent",
+                            "borderColor": "rgba(121, 116, 126, 1)",
+                            "borderRadius": 15.5,
+                            "borderWidth": 0,
+                            "elevation": 0,
+                            "flex": 1,
+                            "overflow": "hidden",
                             "shadowColor": "#000",
                             "shadowOffset": {
                               "height": 0,
@@ -1143,109 +1200,105 @@ exports[`PointAccordion should match snapshot open 1`] = `
                             "shadowRadius": 0,
                           }
                         }
+                        testID="icon-button-container"
                       >
                         <View
-                          collapsable={false}
-                          style={
+                          accessibilityComponentType="button"
+                          accessibilityRole="button"
+                          accessibilityState={
                             {
-                              "backgroundColor": undefined,
-                              "borderColor": "rgba(121, 116, 126, 1)",
-                              "borderRadius": 15.5,
-                              "borderWidth": 0,
-                              "elevation": 0,
-                              "height": 31,
-                              "margin": 6,
-                              "overflow": "hidden",
-                              "width": 31,
+                              "busy": undefined,
+                              "checked": undefined,
+                              "disabled": true,
+                              "expanded": undefined,
+                              "selected": undefined,
                             }
                           }
+                          accessibilityTraits="button"
+                          accessibilityValue={
+                            {
+                              "max": undefined,
+                              "min": undefined,
+                              "now": undefined,
+                              "text": undefined,
+                            }
+                          }
+                          accessible={true}
+                          centered={true}
+                          collapsable={false}
+                          focusable={true}
+                          hitSlop={
+                            {
+                              "bottom": 6,
+                              "left": 6,
+                              "right": 6,
+                              "top": 6,
+                            }
+                          }
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onFocus={[Function]}
+                          onResponderGrant={[Function]}
+                          onResponderMove={[Function]}
+                          onResponderRelease={[Function]}
+                          onResponderTerminate={[Function]}
+                          onResponderTerminationRequest={[Function]}
+                          onStartShouldSetResponder={[Function]}
+                          style={
+                            [
+                              {
+                                "overflow": "hidden",
+                              },
+                              [
+                                {
+                                  "alignItems": "center",
+                                  "flexGrow": 1,
+                                  "justifyContent": "center",
+                                },
+                                {
+                                  "borderRadius": 15.5,
+                                },
+                              ],
+                            ]
+                          }
+                          testID="icon-button"
                         >
-                          <View
-                            accessibilityComponentType="button"
-                            accessibilityRole="button"
-                            accessibilityState={
-                              {
-                                "disabled": true,
-                              }
-                            }
-                            accessibilityTraits="button"
-                            accessible={true}
-                            centered={true}
-                            collapsable={false}
-                            focusable={true}
-                            hitSlop={
-                              {
-                                "bottom": 6,
-                                "left": 6,
-                                "right": 6,
-                                "top": 6,
-                              }
-                            }
-                            onBlur={[Function]}
-                            onClick={[Function]}
-                            onFocus={[Function]}
-                            onResponderGrant={[Function]}
-                            onResponderMove={[Function]}
-                            onResponderRelease={[Function]}
-                            onResponderTerminate={[Function]}
-                            onResponderTerminationRequest={[Function]}
-                            onStartShouldSetResponder={[Function]}
+                          <Text
+                            accessibilityElementsHidden={true}
+                            allowFontScaling={false}
+                            importantForAccessibility="no-hide-descendants"
+                            pointerEvents="none"
+                            selectable={false}
                             style={
                               [
                                 {
-                                  "overflow": "hidden",
+                                  "color": "#ffd600",
+                                  "fontSize": 15,
                                 },
-                                false,
                                 [
                                   {
-                                    "alignItems": "center",
-                                    "flexGrow": 1,
-                                    "justifyContent": "center",
+                                    "lineHeight": 15,
+                                    "transform": [
+                                      {
+                                        "scaleX": 1,
+                                      },
+                                    ],
                                   },
                                   {
-                                    "borderRadius": 15.5,
+                                    "backgroundColor": "transparent",
                                   },
                                 ],
+                                {
+                                  "fontFamily": "Material Design Icons",
+                                  "fontStyle": "normal",
+                                  "fontWeight": "normal",
+                                },
+                                {},
                               ]
                             }
                           >
-                            <Text
-                              accessibilityElementsHidden={true}
-                              allowFontScaling={false}
-                              importantForAccessibility="no-hide-descendants"
-                              pointerEvents="none"
-                              selectable={false}
-                              style={
-                                [
-                                  {
-                                    "color": "#ffd600",
-                                    "fontSize": 15,
-                                  },
-                                  [
-                                    {
-                                      "lineHeight": 15,
-                                      "transform": [
-                                        {
-                                          "scaleX": 1,
-                                        },
-                                      ],
-                                    },
-                                    {
-                                      "backgroundColor": "transparent",
-                                    },
-                                  ],
-                                  {
-                                    "fontFamily": "Material Design Icons",
-                                    "fontStyle": "normal",
-                                    "fontWeight": "normal",
-                                  },
-                                  {},
-                                ]
-                              }
-                            >
-                              󰆉
-                            </Text>
-                          </View>
+                            󰆉
+                          </Text>
                         </View>
                       </View>
                     </View>

@@ -3,7 +3,7 @@ import { useTheme } from '../../hooks'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 
 interface BaseScreenProps {
-    containerWidth: string
+    containerWidth: number
     children?: React.ReactNode
 }
 
@@ -19,7 +19,7 @@ const BaseScreen: React.FC<BaseScreenProps> = props => {
             backgroundColor: colors.primary,
         },
         container: {
-            width: containerWidth,
+            width: `${containerWidth}%`,
             alignSelf: 'center',
         },
     })

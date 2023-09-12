@@ -52,7 +52,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
         },
     })
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             {game && (
                 <View>
                     <GameHeader header game={game} />
