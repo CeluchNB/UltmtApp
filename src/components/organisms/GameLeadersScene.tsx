@@ -1,5 +1,6 @@
 import { ApiError } from '../../types/services'
 import LeaderListItem from '../atoms/LeaderListItem'
+import { LineChart } from 'react-native-charts-wrapper'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import { convertGameStatsToLeaderItems } from '../../utils/stats'
@@ -14,6 +15,7 @@ import {
     StyleSheet,
     Text,
     View,
+    processColor,
 } from 'react-native'
 
 interface GameLeadersSceneProps {
@@ -63,8 +65,53 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
             {error ? (
                 <Text style={styles.error}>{(error as ApiError).message}</Text>
             ) : null}
+
             {!isLoading && (
                 <FlatList
+                    ListHeaderComponent={
+                        <View style={{ width: '100%', height: 200 }}>
+                            <LineChart
+                                style={{ flex: 1 }}
+                                dragEnabled={false}
+                                chartBackgroundColor={processColor(
+                                    colors.darkGray,
+                                )}
+                                drawGridBackground={false}
+                                xAxis={{
+                                    drawAxisLine: true,
+                                    drawGridLines: false,
+                                    position: 'BOTTOM',
+                                }}
+                                yAxis={{
+                                    left: {
+                                        drawAxisLine: false,
+                                        drawGridLines: false,
+                                    },
+                                    right: {
+                                        drawAxisLine: false,
+                                        drawGridLines: false,
+                                    },
+                                }}
+                                data={{
+                                    dataSets: [
+                                        {
+                                            label: 'momentum',
+                                            values: [
+                                                { y: 1 },
+                                                { y: 2 },
+                                                { y: 1, marker: undefined },
+                                            ],
+                                            config: {
+                                                color: processColor(
+                                                    colors.textSecondary,
+                                                ),
+                                            },
+                                        },
+                                    ],
+                                }}
+                            />
+                        </View>
+                    }
                     refreshControl={
                         <RefreshControl
                             refreshing={isRefetching}
