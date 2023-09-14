@@ -51,7 +51,7 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
     const styles = StyleSheet.create({
         title: {
             fontSize: size.fontThirty,
-            color: colors.textPrimary,
+            color: colors.textSecondary,
         },
         error: {
             color: colors.gray,

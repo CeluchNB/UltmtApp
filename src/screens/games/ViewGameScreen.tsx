@@ -77,7 +77,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const [index, setIndex] = React.useState(mapTabNameToIndex('points'))
     const [routes] = React.useState([
         { key: 'points', title: 'Points' },
-        { key: 'stats', title: 'Leaderboard' },
+        { key: 'stats', title: 'Overview' },
     ])
     const [tabHeight, setTabHeight] = React.useState(0)
 

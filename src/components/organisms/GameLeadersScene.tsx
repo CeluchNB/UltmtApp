@@ -1,6 +1,5 @@
 import { ApiError } from '../../types/services'
 import LeaderListItem from '../atoms/LeaderListItem'
-import { LineChart } from 'react-native-charts-wrapper'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import { convertGameStatsToLeaderItems } from '../../utils/stats'
@@ -15,8 +14,13 @@ import {
     StyleSheet,
     Text,
     View,
-    processColor,
 } from 'react-native'
+import {
+    Chart,
+    HorizontalAxis,
+    Line,
+    VerticalAxis,
+} from 'react-native-responsive-linechart'
 
 interface GameLeadersSceneProps {
     gameId: string
@@ -36,6 +40,15 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
         return convertGameStatsToLeaderItems(data)
     }, [data])
 
+    const chartData = React.useMemo(() => {
+        return [{ x: 0, y: 0 }] // TODO: get from backend
+    }, [])
+
+    const chartHeight = React.useMemo(() => {
+        return Math.max(100, ...chartData.map(value => value.y * 2))
+    }, [chartData])
+
+    console.log('chart data', chartData, chartHeight)
     const styles = StyleSheet.create({
         button: {
             alignSelf: 'flex-end',
@@ -44,6 +57,28 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
         error: {
             color: colors.gray,
             fontSize: size.fontTwenty,
+        },
+        listStyle: {
+            // TODO: check this margin on many devices
+            marginBottom: '60%',
+        },
+        teamLabel: {
+            color: colors.gray,
+            fontSize: size.fontFifteen,
+            marginLeft: 10,
+        },
+        title: {
+            color: colors.textSecondary,
+            fontSize: size.fontThirty,
+        },
+        leaderTitle: {
+            marginTop: 10,
+        },
+        chartStyle: {
+            width: '90%',
+            height: chartHeight,
+            marginLeft: 5,
+            backgroundColor: colors.darkPrimary,
         },
     })
 
@@ -68,48 +103,45 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({ gameId }) => {
 
             {!isLoading && (
                 <FlatList
+                    style={styles.listStyle}
                     ListHeaderComponent={
-                        <View style={{ width: '100%', height: 200 }}>
-                            <LineChart
-                                style={{ flex: 1 }}
-                                dragEnabled={false}
-                                chartBackgroundColor={processColor(
-                                    colors.darkGray,
-                                )}
-                                drawGridBackground={false}
-                                xAxis={{
-                                    drawAxisLine: true,
-                                    drawGridLines: false,
-                                    position: 'BOTTOM',
-                                }}
-                                yAxis={{
-                                    left: {
-                                        drawAxisLine: false,
-                                        drawGridLines: false,
-                                    },
-                                    right: {
-                                        drawAxisLine: false,
-                                        drawGridLines: false,
-                                    },
-                                }}
-                                data={{
-                                    dataSets: [
-                                        {
-                                            label: 'momentum',
-                                            values: [
-                                                { y: 1 },
-                                                { y: 2 },
-                                                { y: 1, marker: undefined },
-                                            ],
-                                            config: {
-                                                color: processColor(
-                                                    colors.textSecondary,
-                                                ),
+                        <View>
+                            <Text style={styles.title}>Game Momentum</Text>
+                            <Text style={styles.teamLabel}>Team One</Text>
+                            {/* @ts-ignore - chart is using react 17 which does not explicity declare children prop */}
+                            <Chart
+                                style={styles.chartStyle}
+                                data={chartData}
+                                yDomain={{ min: -100, max: 100 }}
+                                xDomain={{ min: 0, max: 15 }}
+                                disableTouch={true}
+                                disableGestures={true}>
+                                <VerticalAxis
+                                    theme={{
+                                        axis: {
+                                            stroke: {
+                                                color: colors.textSecondary,
                                             },
                                         },
-                                    ],
-                                }}
-                            />
+                                    }}
+                                />
+                                <HorizontalAxis
+                                    theme={{ axis: { dy: chartHeight / 2 } }}
+                                />
+                                <Line
+                                    theme={{
+                                        stroke: {
+                                            color: colors.textPrimary,
+                                            width: 4,
+                                        },
+                                    }}
+                                    smoothing="bezier"
+                                />
+                            </Chart>
+                            <Text style={styles.teamLabel}>Team Two</Text>
+                            <Text style={[styles.title, styles.leaderTitle]}>
+                                Leaders
+                            </Text>
                         </View>
                     }
                     refreshControl={

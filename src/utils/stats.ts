@@ -1,3 +1,4 @@
+import { ActionType, ServerActionData } from '../types/action'
 import {
     AllPlayerStats,
     CalculatedPlayerStats,
@@ -302,3 +303,57 @@ export const PER_POINT_COLUMNS = [
     'ppBlocks',
     'pointsPlayed',
 ]
+
+// TODO: remove below if unused
+export const calculateMomentumData = (
+    teamOneActions: ServerActionData[],
+): { x: number; y: number }[] => {
+    const data: { x: number; y: number }[] = [{ x: 0, y: 0 }]
+    let xCounter = 0
+    let yCounter = 0
+    teamOneActions.forEach((action, index) => {
+        if (action.actionType === ActionType.TEAM_ONE_SCORE) {
+            xCounter += 1
+            yCounter += 10
+            data.push({ x: xCounter, y: yCounter })
+        } else if (action.actionType === ActionType.TEAM_TWO_SCORE) {
+            xCounter += 1
+            yCounter -= 10
+            data.push({ x: xCounter, y: yCounter })
+        } else if (index > 0) {
+            if (isTeamOneTurnover(action)) {
+                xCounter += 1
+                yCounter -= 5
+                data.push({ x: xCounter, y: yCounter })
+            } else if (isTeamTwoTurnover(action, teamOneActions[index - 1])) {
+                xCounter += 1
+                yCounter += 5
+                data.push({ x: xCounter, y: yCounter })
+            }
+        }
+    })
+    return data
+}
+
+const isTeamOneTurnover = (action: ServerActionData): boolean => {
+    return [ActionType.THROWAWAY, ActionType.DROP, ActionType.STALL].includes(
+        action.actionType,
+    )
+}
+
+const isTeamTwoTurnover = (
+    action: ServerActionData,
+    prevAction: ServerActionData,
+): boolean => {
+    if (
+        [
+            ActionType.PULL,
+            ActionType.THROWAWAY,
+            ActionType.DROP,
+            ActionType.STALL,
+        ].includes(prevAction.actionType)
+    ) {
+        return [ActionType.PICKUP, ActionType.BLOCK].includes(action.actionType)
+    }
+    return false
+}
