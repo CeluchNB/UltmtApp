@@ -95,6 +95,10 @@ export interface GameData {
     pointsPlayedLeader: Leader
 }
 
+export interface MomentumPoint {
+    x: number
+    y: number
+}
 export interface GameStats extends GameData {
     _id: string
     startTime: string
@@ -102,6 +106,7 @@ export interface GameStats extends GameData {
     teamTwoId?: string
     winningTeam?: 'one' | 'two'
     points: PointStats[]
+    momentumData: MomentumPoint[]
 }
 
 export type PlayerIdUser = DisplayUser & { playerId?: string }

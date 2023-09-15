@@ -8,6 +8,7 @@ import { ViewGameProps } from '../../types/navigation'
 import ViewPointsScene from '../../components/organisms/ViewPointsScene'
 import { deleteGame } from '../../services/data/game'
 import { setupMobileAds } from '../../utils/ads'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
     ActivityIndicator,
     StyleSheet,
@@ -22,7 +23,12 @@ import {
 } from '../../hooks'
 import { TabBar, TabView } from 'react-native-tab-view'
 
-const renderScene = (gameId: string, gameViewerData: GameViewerData) => {
+const renderScene = (
+    gameId: string,
+    gameViewerData: GameViewerData,
+    teamOneName?: string,
+    teamTwoName?: string,
+) => {
     return ({ route }: { route: { key: string } }) => {
         switch (route.key) {
             case 'points':
@@ -33,7 +39,13 @@ const renderScene = (gameId: string, gameViewerData: GameViewerData) => {
                     />
                 )
             case 'stats':
-                return <GameLeadersScene gameId={gameId} />
+                return (
+                    <GameLeadersScene
+                        gameId={gameId}
+                        teamOneName={teamOneName}
+                        teamTwoName={teamTwoName}
+                    />
+                )
             default:
                 return null
         }
@@ -42,6 +54,8 @@ const renderScene = (gameId: string, gameViewerData: GameViewerData) => {
 
 const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const layout = useWindowDimensions()
+    const { bottom } = useSafeAreaInsets()
+
     const {
         params: { gameId },
     } = route
@@ -170,12 +184,22 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
             <View
                 style={styles.tabContainer}
                 onLayout={event => {
-                    // TODO: this is not good enough, need to calculate height better
-                    setTabHeight(layout.height - event.nativeEvent.layout.y)
+                    const adjustedHeight = layout.height / 4.75
+                    setTabHeight(
+                        layout.height -
+                            event.nativeEvent.layout.y -
+                            adjustedHeight -
+                            bottom,
+                    )
                 }}>
                 <TabView
                     navigationState={{ index, routes }}
-                    renderScene={renderScene(gameId, gameViewerData)}
+                    renderScene={renderScene(
+                        gameId,
+                        gameViewerData,
+                        game?.teamOne?.name,
+                        game?.teamTwo?.name,
+                    )}
                     onIndexChange={setIndex}
                     initialLayout={{ width: layout.width }}
                     renderTabBar={props => {
