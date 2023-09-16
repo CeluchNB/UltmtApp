@@ -48,6 +48,7 @@ const gameStats: GameStats = {
         player: playerOne,
         total: 1,
     },
+    momentumData: [],
 }
 
 const teamStats: TeamStats = {
@@ -162,7 +163,7 @@ describe('TeamGameStatsScene', () => {
             expect(screen.getByText('Leaderboard')).toBeTruthy()
         })
         expect(gameSpy).toHaveBeenCalledTimes(1)
-        expect(screen.getAllByText('1').length).toBe(10)
+        expect(screen.getAllByText('1').length).toBe(14)
         expect(screen.getAllByText('First 1 Last 1').length).toBe(7)
         expect(screen.getByText('Stats')).toBeTruthy()
         expect(screen.getByText('Game Overview')).toBeTruthy()

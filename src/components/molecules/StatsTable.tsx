@@ -1,3 +1,4 @@
+import { Columns } from '../../types/stats'
 import HeaderCell from '../atoms/HeaderCell'
 import React from 'react'
 import StatFilterChip from '../atoms/StatFilterChip'
@@ -10,13 +11,11 @@ import {
     OFFENSE_COLUMNS,
     OVERALL_COLUMNS,
     PER_POINT_COLUMNS,
+    calculateColumnTotals,
     formatNumber,
 } from '../../utils/stats'
 import { FilteredGamePlayer, PlayerStats } from '../../types/stats'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-
-type Record = { _id: string; value: number | string }
-type Columns = { [x: string]: Record[] }
 
 interface StatsTableProps {
     players: FilteredGamePlayer[]
@@ -81,7 +80,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
         [sortByChosenColumn, sortColumn, sortColumnsToMatchChosenColumn],
     )
 
-    const populateDisplayColumn = React.useCallback(
+    const populateUserDisplayColumn = React.useCallback(
         (columns: Columns) => {
             columns.display = []
             for (const player of players) {
@@ -132,65 +131,20 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
         }
     }
 
-    const calculatePercentageTotals = (totals: { [x: string]: number }) => {
-        return {
-            catchingPercentage:
-                totals.catches / (totals.catches + totals.drops),
-            throwingPercentage:
-                totals.completedPasses /
-                (totals.completedPasses +
-                    totals.throwaways +
-                    totals.droppedPasses),
-        }
-    }
-
-    const calculatePerPointTotals = (totals: { [x: string]: number }) => {
-        return {
-            ppAssists: totals.assists / totals.pointsPlayed,
-            ppBlocks: totals.blocks / totals.pointsPlayed,
-            ppDrops: totals.drops / totals.pointsPlayed,
-            ppGoals: totals.goals / totals.pointsPlayed,
-            ppHockeyAssists: totals.hockeyAssists / totals.pointsPlayed,
-            ppThrowaways: totals.throwaways / totals.pointsPlayed,
-        }
-    }
-
-    const calculateColumnTotals = (
-        columns: Columns,
-    ): { [x: string]: number } => {
-        const totals: { [x: string]: number } = {}
-        for (const col of Object.keys(columns)) {
-            if (invalidColumn(col)) continue
-            totals[col] = 0
-            for (const record of columns[col]) {
-                totals[col] += Number(record.value)
-            }
-        }
-
-        console.log('initital totals', totals)
-        return {
-            ...totals,
-            ...calculatePercentageTotals(totals),
-            ...calculatePerPointTotals(totals),
-        }
-    }
-
     const data = React.useMemo(() => {
         const columns: Columns = {}
 
         if (!players || players.length < 1) return {}
 
-        populateDisplayColumn(columns)
+        populateUserDisplayColumn(columns)
         populateAllColumns(columns)
 
         return sortColumns(columns)
-    }, [players, populateDisplayColumn, populateAllColumns, sortColumns])
+    }, [players, populateUserDisplayColumn, populateAllColumns, sortColumns])
 
     const totals = React.useMemo(() => {
         if (!data) return {}
         return calculateColumnTotals(data)
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
 
     const getBackgroundColor = (idx: number): string => {

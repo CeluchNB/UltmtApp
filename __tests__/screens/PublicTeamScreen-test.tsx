@@ -74,6 +74,7 @@ const gameStats: GameStats = {
         player: playerOne,
         total: 1,
     },
+    momentumData: [],
 }
 
 const team: Team = {

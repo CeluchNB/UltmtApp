@@ -126,3 +126,6 @@ export interface FilteredTeamStats extends GameData, TeamData {
     offensiveConversion: number
     defensiveConversion: number
 }
+
+export type Record = { _id: string; value: number | string }
+export type Columns = { [x: string]: Record[] }

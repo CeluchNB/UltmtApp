@@ -158,6 +158,7 @@ const game: GameStats = {
         total: 2,
     },
     points: [],
+    momentumData: [],
 }
 
 describe('getGameStats', () => {

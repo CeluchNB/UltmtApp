@@ -138,6 +138,7 @@ describe('StatsTable', () => {
         expect(screen.getByText('Plus / Minus')).toBeTruthy()
         expect(screen.getByText('Catches')).toBeTruthy()
         expect(screen.getByText('Hockey Assists')).toBeTruthy()
+        expect(screen.getByText('Totals')).toBeTruthy()
         expect(screen.queryByText('Blocks')).toBeNull()
         expect(screen.queryByText('Assists per point')).toBeNull()
     })

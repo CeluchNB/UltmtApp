@@ -1,6 +1,7 @@
 import {
     AllPlayerStats,
     CalculatedPlayerStats,
+    Columns,
     DisplayStat,
     FilteredTeamStats,
     GameData,
@@ -243,7 +244,7 @@ export const calculatePlayerStats = (stats: PlayerStats): AllPlayerStats => {
 }
 
 const createSafeFraction = (numerator: number, denominator: number): number => {
-    if (denominator === 0) {
+    if (denominator === 0 || !numerator || !denominator) {
         return 0
     }
     return numerator / denominator
@@ -256,6 +257,55 @@ export const sortAlphabetically = (str1: string, str2: string): number => {
         return 1
     }
     return 0
+}
+
+const calculatePercentageTotals = (totals: { [x: string]: number }) => {
+    return {
+        catchingPercentage: createSafeFraction(
+            totals.catches,
+            totals.catches + totals.drops,
+        ),
+        throwingPercentage: createSafeFraction(
+            totals.completedPasses,
+            totals.completedPasses + totals.throwaways + totals.droppedPasses,
+        ),
+    }
+}
+
+const calculatePerPointTotals = (totals: { [x: string]: number }) => {
+    return {
+        ppAssists: createSafeFraction(totals.assists, totals.pointsPlayed),
+        ppBlocks: createSafeFraction(totals.blocks, totals.pointsPlayed),
+        ppDrops: createSafeFraction(totals.drops, totals.pointsPlayed),
+        ppGoals: createSafeFraction(totals.goals, totals.pointsPlayed),
+        ppHockeyAssists: createSafeFraction(
+            totals.hockeyAssists,
+            totals.pointsPlayed,
+        ),
+        ppThrowaways: createSafeFraction(
+            totals.throwaways,
+            totals.pointsPlayed,
+        ),
+    }
+}
+
+export const calculateColumnTotals = (
+    columns: Columns,
+): { [x: string]: number } => {
+    const totals: { [x: string]: number } = {}
+    for (const col of Object.keys(columns)) {
+        if (INVALID_COLUMNS.includes(col)) continue
+        totals[col] = 0
+        for (const record of columns[col]) {
+            totals[col] += Number(record.value)
+        }
+    }
+
+    return {
+        ...totals,
+        ...calculatePercentageTotals(totals),
+        ...calculatePerPointTotals(totals),
+    }
 }
 
 export const INVALID_COLUMNS = [
