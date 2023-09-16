@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match snapshot with live and recent data 1`] = `
+exports[`GameHomeScreen should match snapshot with live and recent data 1`] = `
 <RCTSafeAreaView
   style={
     {
@@ -519,7 +519,7 @@ exports[`should match snapshot with live and recent data 1`] = `
 </RCTSafeAreaView>
 `;
 
-exports[`should match snapshot with no data 1`] = `
+exports[`GameHomeScreen should match snapshot with no data 1`] = `
 <RCTSafeAreaView
   style={
     {

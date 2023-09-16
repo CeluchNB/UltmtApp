@@ -1,11 +1,10 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
-import { getUserId } from './user'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
 import {
-    getManagingTeams as localGetManagingTeams,
+    getTeamsById as localGetTeamsById,
     saveTeams as localSaveTeams,
 } from '../local/team'
 import {
@@ -218,10 +217,9 @@ export const createBulkJoinCode = async (teamId: string): Promise<string> => {
  * @param userId
  * @returns list of teams
  */
-export const getManagingTeams = async (): Promise<Team[]> => {
+export const getTeamsById = async (ids: string[]): Promise<Team[]> => {
     try {
-        const userId = await getUserId()
-        return await localGetManagingTeams(userId)
+        return await localGetTeamsById(ids)
     } catch (error) {
         return throwApiError(error, Constants.GET_TEAM_ERROR)
     }

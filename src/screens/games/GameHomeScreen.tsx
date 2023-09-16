@@ -4,7 +4,12 @@ import GameCard from '../../components/atoms/GameCard'
 import { GameHomeProps } from '../../types/navigation'
 import MapSection from '../../components/molecules/MapSection'
 import SearchBar from '../../components/atoms/SearchBar'
+import { fetchProfile } from '../../services/data/user'
 import { searchGames } from '../../services/data/game'
+import { setProfile } from '../../store/reducers/features/account/accountReducer'
+import { useDispatch } from 'react-redux'
+import { useQuery } from 'react-query'
+import { useTheme } from '../../hooks'
 import React, { useMemo } from 'react'
 import {
     RefreshControl,
@@ -13,14 +18,23 @@ import {
     StyleSheet,
     Text,
 } from 'react-native'
-import { useData, useTheme } from '../../hooks'
 
 const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
+    const dispatch = useDispatch()
 
-    const { data, loading, refetch } = useData<Game[]>(searchGames)
+    useQuery(['fetchProfile'], () => fetchProfile(), {
+        retry: 3,
+        onSuccess: data => {
+            dispatch(setProfile(data))
+        },
+    })
+
+    const { data, isLoading, refetch } = useQuery(['searchGames'], () =>
+        searchGames(),
+    )
     const liveGames = useMemo(() => {
         return data?.filter(g => g.teamOneActive)
     }, [data])
@@ -91,7 +105,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
                 refreshControl={
                     <RefreshControl
                         onRefresh={refetch}
-                        refreshing={loading}
+                        refreshing={isLoading}
                         colors={[colors.textSecondary]}
                         tintColor={colors.textSecondary}
                     />
@@ -103,7 +117,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
                         showCreateButton={false}
                         listData={liveGames}
                         renderItem={renderGame}
-                        loading={loading}
+                        loading={isLoading}
                         buttonText="explore live games"
                         onButtonPress={() => {
                             navigateToSearch('true')
@@ -124,7 +138,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
                         }}
                     />
                 )}
-                {(!data || data?.length < 1) && !loading && (
+                {(!data || data?.length < 1) && !isLoading && (
                     <Text style={styles.errorText}>
                         No games available currently. Try refreshing or
                         searching.
