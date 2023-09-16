@@ -112,33 +112,6 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
         [players],
     )
 
-    const data = React.useMemo(() => {
-        const columns: Columns = {}
-
-        if (!players || players.length < 1) return []
-
-        populateDisplayColumn(columns)
-        populateAllColumns(columns)
-
-        return sortColumns(columns)
-    }, [players, populateDisplayColumn, populateAllColumns, sortColumns])
-
-    const getBackgroundColor = (idx: number): string => {
-        return idx % 2 === 0 ? colors.primary : colors.darkPrimary
-    }
-
-    const toggleSort = (column: string) => {
-        if (sortColumn !== column) {
-            setSortColumn(column)
-            setSortDirection('desc')
-        } else if (sortColumn === column && sortDirection === 'desc') {
-            setSortDirection('asc')
-        } else {
-            setSortColumn('')
-            setSortDirection('desc')
-        }
-    }
-
     const invalidColumn = (columnName: string): boolean => {
         if (INVALID_COLUMNS.includes(columnName)) {
             return true
@@ -156,6 +129,83 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                 return false
             }
             return true
+        }
+    }
+
+    const calculatePercentageTotals = (totals: { [x: string]: number }) => {
+        return {
+            catchingPercentage:
+                totals.catches / (totals.catches + totals.drops),
+            throwingPercentage:
+                totals.completedPasses /
+                (totals.completedPasses +
+                    totals.throwaways +
+                    totals.droppedPasses),
+        }
+    }
+
+    const calculatePerPointTotals = (totals: { [x: string]: number }) => {
+        return {
+            ppAssists: totals.assists / totals.pointsPlayed,
+            ppBlocks: totals.blocks / totals.pointsPlayed,
+            ppDrops: totals.drops / totals.pointsPlayed,
+            ppGoals: totals.goals / totals.pointsPlayed,
+            ppHockeyAssists: totals.hockeyAssists / totals.pointsPlayed,
+            ppThrowaways: totals.throwaways / totals.pointsPlayed,
+        }
+    }
+
+    const calculateColumnTotals = (
+        columns: Columns,
+    ): { [x: string]: number } => {
+        const totals: { [x: string]: number } = {}
+        for (const col of Object.keys(columns)) {
+            if (invalidColumn(col)) continue
+            totals[col] = 0
+            for (const record of columns[col]) {
+                totals[col] += Number(record.value)
+            }
+        }
+
+        console.log('initital totals', totals)
+        return {
+            ...totals,
+            ...calculatePercentageTotals(totals),
+            ...calculatePerPointTotals(totals),
+        }
+    }
+
+    const data = React.useMemo(() => {
+        const columns: Columns = {}
+
+        if (!players || players.length < 1) return {}
+
+        populateDisplayColumn(columns)
+        populateAllColumns(columns)
+
+        return sortColumns(columns)
+    }, [players, populateDisplayColumn, populateAllColumns, sortColumns])
+
+    const totals = React.useMemo(() => {
+        if (!data) return {}
+        return calculateColumnTotals(data)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data])
+
+    const getBackgroundColor = (idx: number): string => {
+        return idx % 2 === 0 ? colors.primary : colors.darkPrimary
+    }
+
+    const toggleSort = (column: string) => {
+        if (sortColumn !== column) {
+            setSortColumn(column)
+            setSortDirection('desc')
+        } else if (sortColumn === column && sortDirection === 'desc') {
+            setSortDirection('asc')
+        } else {
+            setSortColumn('')
+            setSortDirection('desc')
         }
     }
 
@@ -272,6 +322,17 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                             </Pressable>
                         )
                     })}
+                    <Text
+                        testID="total-record"
+                        numberOfLines={2}
+                        style={[
+                            styles.valueCell,
+                            {
+                                backgroundColor: getBackgroundColor(0),
+                            },
+                        ]}>
+                        Totals
+                    </Text>
                 </View>
                 {/* Other columns */}
                 <ScrollView horizontal ref={scrollRef}>
@@ -307,6 +368,21 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                                             </Text>
                                         )
                                     })}
+                                    <Text
+                                        key={`${value[0]}_total`}
+                                        numberOfLines={2}
+                                        style={[
+                                            styles.valueCell,
+                                            {
+                                                backgroundColor:
+                                                    getBackgroundColor(0),
+                                            },
+                                        ]}>
+                                        {formatNumber(
+                                            value[0],
+                                            totals[value[0]],
+                                        )}
+                                    </Text>
                                 </View>
                             )
                         })}
