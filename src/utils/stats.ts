@@ -308,6 +308,35 @@ export const calculateColumnTotals = (
     }
 }
 
+export const calculateCompletionsValues = (
+    completions: number[],
+): { value: number }[] => {
+    const data = [
+        { value: 0 },
+        { value: 0 },
+        { value: 0 },
+        { value: 0 },
+        { value: 0 },
+        { value: 0 },
+    ]
+    for (const throws of completions) {
+        if (throws <= 5) {
+            data[0].value += 1
+        } else if (throws > 5 && throws <= 10) {
+            data[1].value += 1
+        } else if (throws > 10 && throws <= 15) {
+            data[2].value += 1
+        } else if (throws > 15 && throws <= 20) {
+            data[3].value += 1
+        } else if (throws > 20 && throws <= 25) {
+            data[4].value += 1
+        } else {
+            data[5].value += 1
+        }
+    }
+    return data
+}
+
 export const INVALID_COLUMNS = [
     'display',
     'firstName',

@@ -51,6 +51,8 @@ export interface TeamData {
     defensePoints: number
     turnovers: number
     turnoversForced: number
+    completionsToScore: number[]
+    completionsToTurnover: number[]
 }
 
 export interface IdentifiedTeamStats extends TeamData {

@@ -1,3 +1,4 @@
+import CompletionsCountBarChart from '../atoms/CompletionsCountBarChart'
 import React from 'react'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
 import StatsTable from '../molecules/StatsTable'
@@ -12,6 +13,7 @@ import {
     View,
 } from 'react-native'
 import {
+    calculateCompletionsValues,
     convertGameStatsToLeaderItems,
     convertTeamStatsToGameOverviewItems,
 } from '../../utils/stats'
@@ -48,10 +50,23 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
         return convertTeamStatsToGameOverviewItems(teamStats)
     }, [teamStats])
 
+    const completionsToScores = React.useMemo(() => {
+        if (!teamStats) return []
+        return calculateCompletionsValues(teamStats.completionsToScore)
+    }, [teamStats])
+
+    const completionsToTurnovers = React.useMemo(() => {
+        if (!teamStats) return []
+        return calculateCompletionsValues(teamStats.completionsToTurnover)
+    }, [teamStats])
+
     const styles = StyleSheet.create({
         title: {
             fontSize: size.fontThirty,
             color: colors.textSecondary,
+        },
+        chartStyle: {
+            marginTop: 5,
         },
         error: {
             color: colors.gray,
@@ -105,6 +120,28 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
                             return <SmallLeaderListItem leader={item} />
                         }}
                     />
+                )}
+            </View>
+            <View>
+                {completionsToScores.length > 0 && (
+                    <View>
+                        <Text style={styles.title}>Completions to Score</Text>
+                        <CompletionsCountBarChart
+                            style={styles.chartStyle}
+                            data={completionsToScores}
+                        />
+                    </View>
+                )}
+                {completionsToTurnovers.length > 0 && (
+                    <View>
+                        <Text style={styles.title}>
+                            Completions to Turnover
+                        </Text>
+                        <CompletionsCountBarChart
+                            style={styles.chartStyle}
+                            data={completionsToTurnovers}
+                        />
+                    </View>
                 )}
             </View>
             <View>

@@ -9250,6 +9250,11 @@ react-native-get-random-values@^1.9.0:
   dependencies:
     fast-base64-decode "^1.0.0"
 
+react-native-gifted-charts@^1.3.7:
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/react-native-gifted-charts/-/react-native-gifted-charts-1.3.7.tgz#0f9c1240c0e9cbc651c1fa00deb68309e441c368"
+  integrity sha512-An6JZJTShtcQE1vqxxBF8pi+AQTAzdths42vJRgQORreFq4QpjFf14LdOd0RpIgu+QkJA9/FXInAjzi2dgWfiA==
+
 react-native-google-mobile-ads@^12.1.1:
   version "12.1.1"
   resolved "https://registry.yarnpkg.com/react-native-google-mobile-ads/-/react-native-google-mobile-ads-12.1.1.tgz#9c83eb482ed9bd8877479c473a0a041c753e871f"
@@ -9262,6 +9267,11 @@ react-native-gradle-plugin@^0.70.3:
   version "0.70.3"
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.3.tgz#cbcf0619cbfbddaa9128701aa2d7b4145f9c4fc8"
   integrity sha512-oOanj84fJEXUg9FoEAQomA8ISG+DVIrTZ3qF7m69VQUJyOGYyDZmPqKcjvRku4KXlEH6hWO9i4ACLzNBh8gC0A==
+
+react-native-linear-gradient@^2.8.3:
+  version "2.8.3"
+  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz#9a116649f86d74747304ee13db325e20b21e564f"
+  integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
 
 react-native-pager-view@^6.2.1:
   version "6.2.1"

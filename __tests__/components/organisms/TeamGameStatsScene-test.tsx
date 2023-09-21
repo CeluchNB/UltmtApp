@@ -12,6 +12,12 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { render, screen, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+jest.mock('react-native-gifted-charts', () => {
+    return {
+        BarChart: () => {},
+        __esModule: true,
+    }
+})
 
 const playerOne = {
     _id: 'user1',
@@ -69,6 +75,8 @@ const teamStats: TeamStats = {
     defensePoints: 54,
     turnovers: 4,
     turnoversForced: 45,
+    completionsToScore: [5, 6],
+    completionsToTurnover: [11, 12],
 }
 
 const player: FilteredGamePlayer = {
@@ -162,6 +170,8 @@ describe('TeamGameStatsScene', () => {
         await waitFor(() => {
             expect(screen.getByText('Leaderboard')).toBeTruthy()
         })
+        expect(screen.getByText('Completions to Score')).toBeTruthy()
+        expect(screen.getByText('Completions to Turnover')).toBeTruthy()
         expect(gameSpy).toHaveBeenCalledTimes(1)
         expect(screen.getAllByText('1').length).toBe(14)
         expect(screen.getAllByText('First 1 Last 1').length).toBe(7)

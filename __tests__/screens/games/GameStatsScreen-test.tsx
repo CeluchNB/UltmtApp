@@ -6,7 +6,14 @@ import React from 'react'
 import { game } from '../../../fixtures/data'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { render, screen, waitFor } from '@testing-library/react-native'
+
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+jest.mock('react-native-gifted-charts', () => {
+    return {
+        BarChart: () => {},
+        __esModule: true,
+    }
+})
 
 const props: GameStatsProps = {
     navigation: {} as any,
@@ -41,5 +48,7 @@ describe('GameStatsScreen', () => {
         })
         expect(screen.getAllByText(game.teamOne.name).length).toBeGreaterThan(1)
         expect(screen.getAllByText(game.teamTwo.name).length).toBeGreaterThan(1)
+        expect(screen.getByText('Leaderboard')).toBeTruthy()
+        expect(screen.getByText('Game Overview')).toBeTruthy()
     })
 })

@@ -3,6 +3,7 @@ import { getInitialPlayerData } from '../../fixtures/utils'
 import {
     addPlayerStats,
     calculateColumnTotals,
+    calculateCompletionsValues,
     calculatePlayerStats,
     convertProfileScreenStatsToStatListItem,
     formatNumber,
@@ -226,5 +227,33 @@ describe('calculateColumnTotals', () => {
             ppHockeyAssists: 0,
             throwingPercentage: 9 / 13,
         })
+    })
+})
+
+describe('calculateCompletionsValues', () => {
+    it('calculates correct values', () => {
+        const result = calculateCompletionsValues([
+            3, 4, 19, 26, 13, 18, 7, 20, 19, 22,
+        ])
+        expect(result).toEqual([
+            { value: 2 },
+            { value: 1 },
+            { value: 1 },
+            { value: 4 },
+            { value: 1 },
+            { value: 1 },
+        ])
+    })
+
+    it('calculates with no values', () => {
+        const result = calculateCompletionsValues([])
+        expect(result).toEqual([
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+        ])
     })
 })
