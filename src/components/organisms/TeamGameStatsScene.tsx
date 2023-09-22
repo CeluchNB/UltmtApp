@@ -125,7 +125,12 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
             <View>
                 {completionsToScores.length > 0 && (
                     <View>
-                        <Text style={styles.title}>Completions to Score</Text>
+                        <Text
+                            style={styles.title}
+                            numberOfLines={1}
+                            ellipsizeMode="tail">
+                            Completions to Score
+                        </Text>
                         <CompletionsCountBarChart
                             style={styles.chartStyle}
                             data={completionsToScores}
@@ -134,7 +139,10 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
                 )}
                 {completionsToTurnovers.length > 0 && (
                     <View>
-                        <Text style={styles.title}>
+                        <Text
+                            style={styles.title}
+                            numberOfLines={1}
+                            ellipsizeMode="tail">
                             Completions to Turnover
                         </Text>
                         <CompletionsCountBarChart

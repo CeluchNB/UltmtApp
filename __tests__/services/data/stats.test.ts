@@ -239,6 +239,8 @@ const team: TeamStats = {
     defensePoints: 54,
     turnovers: 4,
     turnoversForced: 45,
+    completionsToScore: [],
+    completionsToTurnover: [],
 }
 
 describe('getTeamStats', () => {

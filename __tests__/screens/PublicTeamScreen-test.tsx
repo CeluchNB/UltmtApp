@@ -26,6 +26,12 @@ jest.mock('@react-navigation/native', () => {
         }),
     }
 })
+jest.mock('react-native-gifted-charts', () => {
+    return {
+        BarChart: () => {},
+        __esModule: true,
+    }
+})
 
 const props: PublicTeamDetailsProps = {
     navigation: {
@@ -118,6 +124,8 @@ const teamStats: TeamStats = {
     defensePoints: 54,
     turnovers: 4,
     turnoversForced: 45,
+    completionsToScore: [],
+    completionsToTurnover: [],
 }
 
 beforeEach(() => {

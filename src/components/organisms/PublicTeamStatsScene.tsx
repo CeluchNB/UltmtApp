@@ -1,3 +1,4 @@
+import CompletionsCountBarChart from '../atoms/CompletionsCountBarChart'
 import { Game } from '../../types/game'
 import GameListItem from '../atoms/GameListItem'
 import React from 'react'
@@ -14,9 +15,11 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    View,
 } from 'react-native'
 import StatsFilterModal, { CheckBoxItem } from '../molecules/StatsFilterModal'
 import {
+    calculateCompletionsValues,
     convertGameStatsToLeaderItems,
     convertTeamStatsToTeamOverviewItems,
 } from '../../utils/stats'
@@ -85,6 +88,16 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
         return convertGameStatsToLeaderItems(data)
     }, [data])
 
+    const completionsToScores = React.useMemo(() => {
+        if (!data) return []
+        return calculateCompletionsValues(data.completionsToScore)
+    }, [data])
+
+    const completionsToTurnovers = React.useMemo(() => {
+        if (!data) return []
+        return calculateCompletionsValues(data.completionsToTurnover)
+    }, [data])
+
     const onGameSelect = (gameId: string) => {
         setGameFilterOptions(curr => {
             return curr.map(value => {
@@ -110,11 +123,14 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
     const styles = StyleSheet.create({
         title: {
             fontSize: size.fontThirty,
-            color: colors.textPrimary,
+            color: colors.textSecondary,
         },
         button: {
             alignSelf: 'flex-end',
             margin: 5,
+        },
+        chartStyle: {
+            marginTop: 5,
         },
     })
 
@@ -170,6 +186,36 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                     )
                 }}
             />
+            <View>
+                {completionsToScores.length > 0 && (
+                    <View>
+                        <Text
+                            style={styles.title}
+                            numberOfLines={1}
+                            ellipsizeMode="tail">
+                            Completions to Score
+                        </Text>
+                        <CompletionsCountBarChart
+                            style={styles.chartStyle}
+                            data={completionsToScores}
+                        />
+                    </View>
+                )}
+                {completionsToTurnovers.length > 0 && (
+                    <View>
+                        <Text
+                            style={styles.title}
+                            numberOfLines={1}
+                            ellipsizeMode="tail">
+                            Completions to Turnover
+                        </Text>
+                        <CompletionsCountBarChart
+                            style={styles.chartStyle}
+                            data={completionsToTurnovers}
+                        />
+                    </View>
+                )}
+            </View>
             <Text style={styles.title}>Players</Text>
             {data && <StatsTable players={data.players || []} />}
             <StatsFilterModal
