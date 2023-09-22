@@ -8,6 +8,7 @@ import GameListItem from '../atoms/GameListItem'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import TeamListItem from '../atoms/TeamListItem'
+import UserStatsPieChart from '../atoms/UserStatsPieChart'
 import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
@@ -238,6 +239,12 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             {error && <Text style={styles.error}>{error.message}</Text>}
             {!loading && !error && (
                 <View>
+                    <UserStatsPieChart
+                        goals={filteredStats.goals}
+                        assists={filteredStats.assists}
+                        blocks={filteredStats.blocks}
+                        throwaways={filteredStats.throwaways}
+                    />
                     <DataTable>
                         {stats &&
                             Object.entries(filteredStats)

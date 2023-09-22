@@ -132,6 +132,11 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         return []
     }, [user])
 
+    const archiveTeams = React.useMemo(() => {
+        if (user) return user.archiveTeams
+        return []
+    }, [user])
+
     const allTeams = React.useMemo(() => {
         const map = new Map()
         managerTeams.forEach(team => {
@@ -140,11 +145,19 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         playerTeams.forEach(team => {
             map.set(team._id, team)
         })
+        archiveTeams.forEach(team => {
+            map.set(team._id, team)
+        })
         return [...map.values()]
-    }, [managerTeams, playerTeams])
+    }, [managerTeams, playerTeams, archiveTeams])
 
     const gameLists = React.useMemo(() => {
-        const tempGames: { title: string; data: Game[]; index: number }[] = []
+        const tempGames: {
+            title: string
+            year: string
+            data: Game[]
+            index: number
+        }[] = []
         games.forEach((g, i) => {
             if (g.length === 0) {
                 return
@@ -154,8 +167,16 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     new Date(b.startTime).getTime() -
                     new Date(a.startTime).getTime(),
             )
+            const seasonStart = new Date(
+                allTeams[i].seasonStart,
+            ).getUTCFullYear()
+            const seasonEnd = new Date(allTeams[i].seasonEnd).getUTCFullYear()
             tempGames.push({
                 title: `${allTeams[i].place} ${allTeams[i].name}`,
+                year:
+                    seasonStart === seasonEnd
+                        ? seasonStart?.toString()
+                        : `${seasonStart} - ${seasonEnd}`,
                 data: sortedGames,
                 index: i,
             })
@@ -168,7 +189,10 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 
         for (let i = 0; i < games.length; i++) {
             // only include games player played in
-            if (!playerTeams.some(team => team._id === allTeams[i]._id)) {
+            if (
+                !playerTeams.some(team => team._id === allTeams[i]._id) &&
+                !archiveTeams.some(team => team._id === allTeams[i]._id)
+            ) {
                 continue
             }
             tempGames.push(
@@ -179,7 +203,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
             )
         }
         return tempGames
-    }, [games, allTeams, playerTeams])
+    }, [games, allTeams, playerTeams, archiveTeams])
 
     const fetchGames = React.useCallback(() => {
         setError(undefined)
