@@ -47,10 +47,6 @@ exports[`should match snapshot 1`] = `
               }
               text="start"
             />
-            <GuestPlayerModal
-              onClose={[Function]}
-              visible={false}
-            />
           </View>
         }
         ListFooterComponentStyle={
@@ -2338,19 +2334,19 @@ exports[`should match snapshot 1`] = `
                   </View>
                 </View>
               </View>
-              <Modal
-                animationType="slide"
-                hardwareAccelerated={false}
-                onRequestClose={[Function]}
-                testID="base-modal"
-                transparent={true}
-                visible={false}
-              />
             </View>
           </View>
         </View>
       </RCTScrollView>
     </View>
+    <Modal
+      animationType="slide"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      testID="base-modal"
+      transparent={true}
+      visible={false}
+    />
   </View>
 </RCTSafeAreaView>
 `;
@@ -2401,10 +2397,6 @@ exports[`should match snapshot for team two 1`] = `
                 }
               }
               text="start"
-            />
-            <GuestPlayerModal
-              onClose={[Function]}
-              visible={false}
             />
           </View>
         }
@@ -4693,19 +4685,19 @@ exports[`should match snapshot for team two 1`] = `
                   </View>
                 </View>
               </View>
-              <Modal
-                animationType="slide"
-                hardwareAccelerated={false}
-                onRequestClose={[Function]}
-                testID="base-modal"
-                transparent={true}
-                visible={false}
-              />
             </View>
           </View>
         </View>
       </RCTScrollView>
     </View>
+    <Modal
+      animationType="slide"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      testID="base-modal"
+      transparent={true}
+      visible={false}
+    />
   </View>
 </RCTSafeAreaView>
 `;

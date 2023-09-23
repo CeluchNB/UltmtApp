@@ -198,16 +198,16 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                 onPress={onSetPlayers}
                                 loading={status === 'loading'}
                             />
-                            <GuestPlayerModal
-                                visible={modalVisible}
-                                onClose={() => {
-                                    setModalVisible(false)
-                                }}
-                            />
                         </View>
                     }
                 />
             </View>
+            <GuestPlayerModal
+                visible={modalVisible}
+                onClose={() => {
+                    setModalVisible(false)
+                }}
+            />
         </BaseScreen>
     )
 }
