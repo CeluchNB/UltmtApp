@@ -90,8 +90,8 @@ const UserStatsPieChart: React.FC<UserStatsPieChartProps> = props => {
 
     const styles = StyleSheet.create({
         container: {
-            alignSelf: 'center',
-            margin: 10,
+            alignItems: 'center',
+            marginTop: 10,
         },
     })
 
@@ -143,8 +143,6 @@ const UserStatsPieChart: React.FC<UserStatsPieChartProps> = props => {
                 showText={true}
                 innerCircleColor={colors.primary}
                 centerLabelComponent={renderCenterLabelComponent}
-                labelsPosition="onBorder"
-                fontWeight="bold"
             />
         </View>
     )
