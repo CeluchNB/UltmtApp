@@ -1,5 +1,6 @@
 import * as LocalTeamServices from '../../../src/services/local/team'
 import * as UserServices from '../../../src/services/network/user'
+import { AxiosResponse } from 'axios'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import jwt from 'jsonwebtoken'
 import { CreateUserData, DisplayUser, User } from '../../../src/types/user'
@@ -76,7 +77,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalTeamServices, 'saveTeams').mockReturnValueOnce(
             Promise.resolve(),
@@ -111,7 +112,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await createAccount(createUser)
@@ -146,7 +147,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await searchUsers('123')
@@ -175,7 +176,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await leaveTeam('')
@@ -204,7 +205,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await getPublicUser('')
@@ -233,7 +234,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         const result = await leaveManagerRole('')
         expect(result).toEqual(user)
@@ -260,7 +261,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         const result = await requestPasswordRecovery('')
         expect(result).toBeUndefined()
@@ -290,7 +291,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         const result = await resetPassword('', '')
         expect(result.user).toBe(user)
@@ -318,7 +319,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         const result = await setOpenToRequests(true)
         expect(result).toBe(user)
@@ -345,7 +346,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         const result = await changeName('', '')
         expect(result).toBe(user)
@@ -373,7 +374,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         const result = await setPrivate(true)
         expect(result).toBe(user)
@@ -401,7 +402,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await changeEmail('', '', '')
@@ -430,7 +431,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await changePassword('', '', '')
@@ -459,7 +460,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         await expect(deleteAccount()).resolves.toEqual(undefined)
@@ -489,7 +490,7 @@ describe('test user data calls', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await joinTeamByCode('')

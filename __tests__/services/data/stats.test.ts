@@ -1,6 +1,7 @@
 import * as Constants from '../../../src/utils/constants'
 import * as StatsNetwork from '../../../src/services/network/stats'
 import { ApiError } from '../../../src/types/services'
+import { AxiosResponse } from 'axios'
 import { DisplayUser } from '../../../src/types/user'
 import { getInitialPlayerData } from '../../../fixtures/utils'
 import { teamOne } from '../../../fixtures/data'
@@ -35,7 +36,7 @@ describe('getPlayerStats', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await getPlayerStats('user1')
@@ -81,7 +82,7 @@ describe('filterPlayerStats', () => {
             config: {},
             status: 200,
             statusText: 'Good',
-        })
+        } as AxiosResponse)
 
         const result = await filterPlayerStats('id', [], [])
         expect(result).toMatchObject({
@@ -106,7 +107,7 @@ describe('filterPlayerStats', () => {
             config: {},
             status: 200,
             statusText: 'Good',
-        })
+        } as AxiosResponse)
         const result = await filterPlayerStats('id', [], [])
         expect(result).toMatchObject(getInitialPlayerData({}))
     })
@@ -167,7 +168,7 @@ describe('getGameStats', () => {
             data: { game },
             headers: {},
             config: {},
-        })
+        } as AxiosResponse)
 
         const result = await getGameStats('game1')
         expect(result).toMatchObject(game)
@@ -196,7 +197,7 @@ describe('getGameStatsByTeam', () => {
             data: { game },
             headers: {},
             config: {},
-        })
+        } as AxiosResponse)
 
         const result = await getGameStatsByTeam('game1', 'team1')
         expect(result).toMatchObject(game)
@@ -250,7 +251,7 @@ describe('getTeamStats', () => {
                     statusText: '200',
                     config: {},
                     headers: {},
-                }),
+                } as AxiosResponse),
             )
 
         const result = await getTeamStats('team1', [])
@@ -268,7 +269,7 @@ describe('getTeamStats', () => {
                     statusText: 'Good',
                     headers: {},
                     config: {},
-                }),
+                } as AxiosResponse),
             )
 
         const result = await getTeamStats('team1', ['game1'])

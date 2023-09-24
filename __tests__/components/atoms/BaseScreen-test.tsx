@@ -5,7 +5,7 @@ import { render } from '@testing-library/react-native'
 
 it('should match snapshot', () => {
     const snaphot = render(
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             <View />
         </BaseScreen>,
     )

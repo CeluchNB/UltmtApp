@@ -73,6 +73,7 @@ exports[`should match basic snapshot 1`] = `
           <TextInput
             accessibilityLabel="Test field"
             autoCapitalize="none"
+            cursorColor="#ffd600"
             editable={true}
             keyboardType="default"
             maxFontSizeMultiplier={1.5}
@@ -280,6 +281,7 @@ exports[`should match snapshot without unit 1`] = `
           <TextInput
             accessibilityLabel="Test field"
             autoCapitalize="none"
+            cursorColor="#ffd600"
             editable={true}
             keyboardType="default"
             maxFontSizeMultiplier={1.5}

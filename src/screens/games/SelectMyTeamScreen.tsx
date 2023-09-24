@@ -6,10 +6,12 @@ import React from 'react'
 import { SelectMyTeamProps } from '../../types/navigation'
 import { Team } from '../../types/team'
 import TeamListItem from '../../components/atoms/TeamListItem'
-import { getManagingTeams } from '../../services/data/team'
+import { getTeamsById } from '../../services/data/team'
 import { isLoggedIn } from '../../services/data/auth'
+import { selectManagerTeams } from '../../store/reducers/features/account/accountReducer'
 import { setTeamOne } from '../../store/reducers/features/game/liveGameReducer'
-import { useDispatch } from 'react-redux'
+import { useQuery } from 'react-query'
+import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     FlatList,
@@ -17,17 +19,25 @@ import {
     Text,
     View,
 } from 'react-native'
-import { useData, useTheme } from '../../hooks'
+import { useDispatch, useSelector } from 'react-redux'
 
 const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
     const dispatch = useDispatch<AppDispatch>()
+    const profileTeams = useSelector(selectManagerTeams)
 
-    const { data: managerTeams, loading: teamsLoading } =
-        useData(getManagingTeams)
-    const { data: isAuth, loading, refetch } = useData(isLoggedIn)
+    const { data: managerTeams, isLoading: teamsLoading } = useQuery(
+        ['getManagingTeams', ...profileTeams.map(team => team._id)],
+        () => getTeamsById(profileTeams.map(team => team._id)),
+    )
+    const {
+        data: isAuth,
+        isLoading,
+        refetch,
+    } = useQuery(['isLoggedIn'], () => isLoggedIn())
+
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             refetch()
@@ -71,14 +81,14 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
     })
 
     return (
-        <BaseScreen containerWidth="80%">
-            {(loading || teamsLoading) && (
+        <BaseScreen containerWidth={80}>
+            {(isLoading || teamsLoading) && (
                 <ActivityIndicator
                     color={colors.textPrimary}
                     testID="select-team-loading"
                 />
             )}
-            {!loading && !isAuth && (
+            {!isLoading && !isAuth && (
                 <View>
                     <Text style={styles.error}>{Constants.AUTH_TO_CREATE}</Text>
                     <PrimaryButton

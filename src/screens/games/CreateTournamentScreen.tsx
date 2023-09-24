@@ -110,7 +110,7 @@ const CreateTournamentScreen: React.FC<CreateTournamentProps> = ({
     })
 
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             <Controller
                 control={control}
                 name="name"

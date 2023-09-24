@@ -52,7 +52,7 @@ const EditGameScreen: React.FC<EditGameProps> = ({ navigation }) => {
         },
     })
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             <GameForm control={control} errors={errors} />
             {error.length > 0 && <Text style={styles.errorText}>{error}</Text>}
             <PrimaryButton

@@ -51,7 +51,7 @@ const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
     })
 
     return (
-        <BaseScreen containerWidth="90%">
+        <BaseScreen containerWidth={90}>
             <SearchBar
                 placeholder="Search Tournaments..."
                 onChangeText={search}

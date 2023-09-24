@@ -132,7 +132,7 @@ it('should match snapshot', async () => {
 it('should handle get request error', async () => {
     const spy = jest
         .spyOn(RequestData, 'getRequestsByTeam')
-        .mockReturnValueOnce(Promise.reject({ message: 'test error' }))
+        .mockRejectedValueOnce({ message: 'test error' })
 
     const { queryByText, getByTestId } = render(
         <Provider store={store}>
@@ -231,11 +231,9 @@ it('should respond to request correctly', async () => {
 })
 
 it('should handle respond to request error', async () => {
-    jest.spyOn(RequestData, 'respondToPlayerRequest').mockReturnValueOnce(
-        Promise.reject({
-            message: 'respond test error',
-        }),
-    )
+    jest.spyOn(RequestData, 'respondToPlayerRequest').mockRejectedValueOnce({
+        message: 'respond test error',
+    })
 
     const { queryByText, getByTestId, getAllByTestId } = render(
         <Provider store={store}>
@@ -356,11 +354,9 @@ it('should handle delete request correctly', async () => {
 })
 
 it('should handle delete request error correctly', async () => {
-    jest.spyOn(RequestData, 'deleteTeamRequest').mockReturnValueOnce(
-        Promise.reject({
-            message: 'delete error message',
-        }),
-    )
+    jest.spyOn(RequestData, 'deleteTeamRequest').mockRejectedValueOnce({
+        message: 'delete error message',
+    })
 
     const { queryByText, getByTestId, getAllByTestId } = render(
         <Provider store={store}>

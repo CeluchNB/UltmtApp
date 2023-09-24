@@ -37,7 +37,7 @@ const SmallLeaderListItem: React.FC<SmallLeaderListItemProps> = ({
         playerName: {
             alignSelf: 'flex-start',
             color: colors.textPrimary,
-            size: size.fontTwenty,
+            fontSize: size.fontTwenty,
         },
         playerUsername: {
             alignSelf: 'flex-start',

@@ -42,7 +42,7 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
     })
 
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             {error && <Text style={styles.error}>{error.message}</Text>}
             {gameLists.length === 0 && (
                 <Text style={styles.error}>

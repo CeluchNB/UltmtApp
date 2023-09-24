@@ -46,6 +46,7 @@ const ActiveGameWarning: React.FC<ActiveGameWarningProps> = ({
     return (
         <View style={styles.container}>
             <Chip
+                testID="active-warning-chip"
                 mode="outlined"
                 closeIcon={rightIcon}
                 onPress={onPress}

@@ -5,6 +5,7 @@ import * as LocalGameServices from '../../../src/services/local/game'
 import * as LocalPointServices from '../../../src/services/local/point'
 import * as PointServices from '../../../src/services/network/point'
 import * as UserServices from '../../../src/services/data/user'
+import { AxiosResponse } from 'axios'
 import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { game } from '../../../fixtures/data'
@@ -67,7 +68,7 @@ describe('test search games', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await searchGames()
@@ -101,7 +102,7 @@ describe('test create game', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
             Promise.resolve({ ...game, offline: false }),
@@ -167,7 +168,7 @@ describe('test add guest player', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         jest.spyOn(
@@ -253,7 +254,7 @@ describe('test get points by game', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await getPointsByGame('game1')
@@ -286,7 +287,7 @@ describe('test get game by id', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await getGameById('gameid')
@@ -319,7 +320,7 @@ describe('test join game', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
 
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
@@ -363,7 +364,7 @@ describe('test finish game', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalGameServices, 'deleteFullGame').mockReturnValueOnce(
             Promise.resolve(),
@@ -415,7 +416,7 @@ describe('get game by team', () => {
                 statusText: 'Good',
                 headers: {},
                 config: {},
-            }),
+            } as AxiosResponse),
         )
         const result = await getGamesByTeam('team')
         expect(result.length).toBe(1)
@@ -481,7 +482,7 @@ describe('resurrect active game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         RNEncryptedStorage.setItem.mockReturnValueOnce(Promise.resolve())
         const result = await resurrectActiveGame('game1', 'team1')
@@ -562,7 +563,7 @@ describe('test push offline game', () => {
                     statusText: 'error',
                     config: {},
                     headers: {},
-                }),
+                } as AxiosResponse),
             )
         const getGameSpy = jest
             .spyOn(LocalGameServices, 'getGameById')
@@ -695,7 +696,7 @@ describe('test reactivate inactive game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalGameServices, 'saveGame').mockReturnValueOnce(
             Promise.resolve(),
@@ -714,7 +715,7 @@ describe('test reactivate inactive game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalPointServices, 'savePoint').mockReturnValue(
             Promise.resolve(undefined),
@@ -726,7 +727,7 @@ describe('test reactivate inactive game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(
             LocalActionServices,
@@ -739,7 +740,7 @@ describe('test reactivate inactive game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
             Promise.resolve({ ...game, offline: false }),
@@ -757,7 +758,7 @@ describe('test reactivate inactive game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalGameServices, 'saveGame').mockReturnValueOnce(
             Promise.resolve(),
@@ -776,7 +777,7 @@ describe('test reactivate inactive game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalPointServices, 'savePoint').mockReturnValue(
             Promise.resolve(undefined),
@@ -788,7 +789,7 @@ describe('test reactivate inactive game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(
             LocalActionServices,
@@ -801,7 +802,7 @@ describe('test reactivate inactive game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
             Promise.resolve({ ...game, offline: false }),
@@ -840,7 +841,7 @@ describe('test delete game', () => {
                 statusText: 'good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
 
         await expect(deleteGame('game1', 'team1')).resolves.toBeUndefined()
@@ -878,7 +879,7 @@ describe('test edit game', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
 
         const result = await editGame('game', { scoreLimit: 11 })

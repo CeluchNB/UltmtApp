@@ -116,7 +116,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
     })
 
     return (
-        <BaseScreen containerWidth="100%">
+        <BaseScreen containerWidth={100}>
             <FlatList
                 data={[]}
                 renderItem={() => <View />}

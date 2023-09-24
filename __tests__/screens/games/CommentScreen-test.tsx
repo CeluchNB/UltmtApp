@@ -350,7 +350,7 @@ describe('Saved CommentScreen', () => {
     it('should handle add error', async () => {
         const spy = jest
             .spyOn(SavedActionData, 'addComment')
-            .mockReturnValue(Promise.reject({ message: 'Add error' }))
+            .mockRejectedValue({ message: 'Add error' })
 
         const { getByText, getByPlaceholderText } = render(
             <NavigationContainer>
@@ -379,7 +379,7 @@ describe('Saved CommentScreen', () => {
     it('should handle delete error', async () => {
         const spy = jest
             .spyOn(SavedActionData, 'deleteComment')
-            .mockReturnValue(Promise.reject({ message: 'Delete error' }))
+            .mockRejectedValue({ message: 'Delete error' })
 
         const { queryByText, getAllByRole } = render(
             <NavigationContainer>

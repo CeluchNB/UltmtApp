@@ -247,7 +247,7 @@ it('should deny request correctly', async () => {
 it('should handle request response error correctly', async () => {
     const requestSpy = jest
         .spyOn(RequestData, 'respondToTeamRequest')
-        .mockReturnValueOnce(Promise.reject({ message: 'test error message' }))
+        .mockRejectedValueOnce({ message: 'test error message' })
 
     const { queryByText, getAllByTestId, getByTestId } = render(
         <Provider store={store}>
@@ -319,9 +319,7 @@ it('should handle successful delete request', async () => {
 it('should handle failed delete request', async () => {
     const requestSpy = jest
         .spyOn(RequestData, 'deleteUserRequest')
-        .mockReturnValueOnce(
-            Promise.reject({ message: Constants.REQUEST_RESPONSE_ERROR }),
-        )
+        .mockRejectedValue({ message: Constants.REQUEST_RESPONSE_ERROR })
 
     const { queryByText, getAllByTestId, getByTestId } = render(
         <Provider store={store}>

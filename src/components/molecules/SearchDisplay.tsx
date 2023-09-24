@@ -29,7 +29,7 @@ const SearchDisplay = <R,>(props: SearchDisplayProps<R>) => {
                 placeholder={placeholder}
                 onChangeText={onSearch}
                 value={value}
-                width="100%"
+                width={100}
             />
             {loading && (
                 <ActivityIndicator

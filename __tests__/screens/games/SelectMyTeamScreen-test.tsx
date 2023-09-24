@@ -7,6 +7,7 @@ import React from 'react'
 import { SelectMyTeamProps } from '../../../src/types/navigation'
 import SelectMyTeamScreen from '../../../src/screens/games/SelectMyTeamScreen'
 import store from '../../../src/store/store'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     fireEvent,
     render,
@@ -16,6 +17,7 @@ import {
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
+const client = new QueryClient()
 const navigate = jest.fn()
 const addListener = jest.fn()
 
@@ -30,16 +32,30 @@ const props: SelectMyTeamProps = {
 describe('SelectMyTeamScreen', () => {
     afterEach(() => {
         jest.resetAllMocks()
+        client.clear()
+    })
+
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+    afterAll(() => {
+        jest.useRealTimers()
     })
 
     it('should match snapshot with unauthenticated user', async () => {
-        jest.spyOn(AuthData, 'isLoggedIn').mockReturnValue(
+        jest.spyOn(TeamData, 'getTeamsById').mockReturnValueOnce(
+            Promise.resolve([]),
+        )
+        jest.spyOn(AuthData, 'isLoggedIn').mockReturnValueOnce(
             Promise.resolve(false),
         )
+
         const snapshot = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <SelectMyTeamScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <SelectMyTeamScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -49,7 +65,7 @@ describe('SelectMyTeamScreen', () => {
         )
 
         expect(snapshot.toJSON()).toMatchSnapshot()
-        expect(snapshot.getByText(Constants.AUTH_TO_CREATE)).not.toBeNull()
+        expect(snapshot.getByText(Constants.AUTH_TO_CREATE)).toBeTruthy()
         fireEvent.press(snapshot.getByText('log in'))
         expect(navigate).toHaveBeenCalledWith('Tabs', {
             screen: 'Account',
@@ -58,16 +74,19 @@ describe('SelectMyTeamScreen', () => {
     })
 
     it('should match snapshot without manager teams', async () => {
-        jest.spyOn(AuthData, 'isLoggedIn').mockReturnValue(
+        jest.spyOn(AuthData, 'isLoggedIn').mockReturnValueOnce(
             Promise.resolve(true),
         )
-        jest.spyOn(TeamData, 'getManagingTeams').mockReturnValueOnce(
+        jest.spyOn(TeamData, 'getTeamsById').mockReturnValueOnce(
             Promise.resolve([]),
         )
+
         const snapshot = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <SelectMyTeamScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <SelectMyTeamScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -86,10 +105,10 @@ describe('SelectMyTeamScreen', () => {
     })
 
     it('should match snapshot with manager teams', async () => {
-        jest.spyOn(AuthData, 'isLoggedIn').mockReturnValue(
+        jest.spyOn(AuthData, 'isLoggedIn').mockReturnValueOnce(
             Promise.resolve(true),
         )
-        jest.spyOn(TeamData, 'getManagingTeams').mockReturnValueOnce(
+        jest.spyOn(TeamData, 'getTeamsById').mockReturnValueOnce(
             Promise.resolve([
                 {
                     _id: 'team1',
@@ -112,7 +131,9 @@ describe('SelectMyTeamScreen', () => {
         const snapshot = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <SelectMyTeamScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <SelectMyTeamScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
