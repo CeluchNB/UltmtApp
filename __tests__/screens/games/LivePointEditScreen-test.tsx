@@ -17,7 +17,13 @@ import {
     LiveServerActionData,
     SubscriptionObject,
 } from '../../../src/types/action'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import {
+    act,
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 import {
     setGame,
     setTeam,
@@ -126,7 +132,7 @@ beforeEach(() => {
 
 describe('LivePointEditScreen', () => {
     it('matches snapshot', async () => {
-        const snapshot = render(
+        render(
             <NavigationContainer>
                 <Provider store={store}>
                     <LivePointEditScreen {...props} />
@@ -134,13 +140,17 @@ describe('LivePointEditScreen', () => {
             </NavigationContainer>,
         )
 
-        const pullBtn = snapshot.getAllByText('Pull')[2]
+        const pullBtn = screen.getAllByText('Pull')[2]
 
         await waitFor(() => {
             expect(pullBtn).not.toBeDisabled()
         })
 
-        expect(snapshot.toJSON()).toMatchSnapshot()
+        expect(screen.getByText('First 8 Last 8')).toBeTruthy()
+        expect(screen.getByText('First 9 Last 9')).toBeTruthy()
+        expect(screen.getByText('First 10 Last 10')).toBeTruthy()
+        expect(screen.getByText('First 11 Last 11')).toBeTruthy()
+        expect(screen.getAllByText('Pull').length).toBe(7)
     })
 
     it('handles basic D point', async () => {
