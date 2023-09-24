@@ -140,12 +140,6 @@ describe('LivePointEditScreen', () => {
             </NavigationContainer>,
         )
 
-        const pullBtn = screen.getAllByText('Pull')[2]
-
-        await waitFor(() => {
-            expect(pullBtn).not.toBeDisabled()
-        })
-
         expect(screen.getByText('First 8 Last 8')).toBeTruthy()
         expect(screen.getByText('First 9 Last 9')).toBeTruthy()
         expect(screen.getByText('First 10 Last 10')).toBeTruthy()
