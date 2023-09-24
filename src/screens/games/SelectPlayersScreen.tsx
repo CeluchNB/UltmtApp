@@ -43,10 +43,19 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false)
 
     const playerList = React.useMemo(() => {
+        let players
         if (team === 'one') {
-            return game.teamOnePlayers
+            players = game.teamOnePlayers
+        } else {
+            players = game.teamTwoPlayers
         }
-        return game.teamTwoPlayers
+        return players
+            .slice()
+            .sort((a, b) =>
+                `${a.firstName} ${a.lastName}`.localeCompare(
+                    `${b.firstName} ${b.lastName}`,
+                ),
+            )
     }, [game, team])
 
     React.useEffect(() => {
