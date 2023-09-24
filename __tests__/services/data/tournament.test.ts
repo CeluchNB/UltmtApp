@@ -1,6 +1,7 @@
 import * as Constants from '../../../src/utils/constants'
 import * as TournamentLocal from '../../../src/services/local/tournament'
 import * as TournamentNetwork from '../../../src/services/network/tournament'
+import { AxiosResponse } from 'axios'
 import { LocalTournament } from '../../../src/types/tournament'
 import { tourney } from '../../../fixtures/data'
 import {
@@ -21,7 +22,7 @@ describe('tournament data calls', () => {
                     statusText: 'Good',
                     config: {},
                     headers: {},
-                }),
+                } as AxiosResponse),
             )
             jest.spyOn(TournamentLocal, 'createTournament').mockReturnValueOnce(
                 Promise.resolve(tourney._id),
@@ -78,7 +79,7 @@ describe('tournament data calls', () => {
                     statusText: 'Good',
                     headers: {},
                     config: {},
-                }),
+                } as AxiosResponse),
             )
             jest.spyOn(TournamentLocal, 'saveTournaments').mockReturnValueOnce(
                 Promise.resolve(),

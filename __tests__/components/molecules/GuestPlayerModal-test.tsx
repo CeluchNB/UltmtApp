@@ -1,5 +1,6 @@
 import * as GameServices from '../../../src/services/network/game'
 import * as LocalGameServices from '../../../src/services/local/game'
+import { AxiosResponse } from 'axios'
 import GuestPlayerModal from '../../../src/components/molecules/GuestPlayerModal'
 import { Provider } from 'react-redux'
 import React from 'react'
@@ -34,9 +35,7 @@ describe('GuestPlayerModal', () => {
                 },
                 status: 200,
                 statusText: 'Good',
-                config: {},
-                headers: {},
-            }),
+            } as AxiosResponse),
         )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
             Promise.resolve({
@@ -84,7 +83,7 @@ describe('GuestPlayerModal', () => {
                 statusText: 'Good',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
         spy.mockClear()
         let visible = true

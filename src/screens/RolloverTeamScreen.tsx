@@ -1,12 +1,13 @@
 import * as React from 'react'
 import * as TeamData from '../services/data/team'
+import BaseScreen from '../components/atoms/BaseScreen'
 import CheckBox from '@react-native-community/checkbox'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { RolloverTeamProps } from '../types/navigation'
 import { Team } from '../types/team'
 import { Controller, useForm } from 'react-hook-form'
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import {
     selectTeam,
     setTeam,
@@ -68,6 +69,9 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
             height: '100%',
             alignItems: 'center',
         },
+        scrollView: {
+            alignItems: 'center',
+        },
         explainText: {
             color: colors.textPrimary,
             fontSize: size.fontTwenty,
@@ -92,7 +96,6 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
             color: colors.textPrimary,
             fontSize: size.fontTwenty,
             fontWeight: weight.bold,
-            width: '75%',
             alignSelf: 'center',
             marginTop: 20,
         },
@@ -105,95 +108,95 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
         warning: {
             color: colors.textSecondary,
             alignSelf: 'center',
-            width: '75%',
             marginBottom: 10,
         },
         error: {
             color: colors.error,
             alignSelf: 'center',
-            width: '75%',
             marginBottom: 10,
         },
     })
 
     return (
-        <View style={styles.screen}>
-            <Text style={styles.explainText}>
-                Create a new team with the same name for a new year
-            </Text>
-            <View style={styles.checkboxContainer}>
-                <Text
-                    style={{
-                        ...styles.sectionTitle,
-                        ...styles.checkboxTitle,
-                    }}>
-                    Keep Current Players
+        <BaseScreen containerWidth={90}>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                <Text style={styles.explainText}>
+                    Create a new team with the same name for a new year
                 </Text>
+                <View style={styles.checkboxContainer}>
+                    <Text
+                        style={{
+                            ...styles.sectionTitle,
+                            ...styles.checkboxTitle,
+                        }}>
+                        Keep Current Players
+                    </Text>
+                    <Controller
+                        name="copyPlayers"
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <CheckBox
+                                value={value}
+                                onValueChange={onChange}
+                                tintColors={{
+                                    true: colors.textPrimary,
+                                    false: colors.gray,
+                                }}
+                                boxType="square"
+                                tintColor={colors.gray}
+                                onFillColor={colors.textPrimary}
+                                onCheckColor={colors.primary}
+                                onTintColor={colors.textPrimary}
+                                onAnimationType="bounce"
+                                offAnimationType="bounce"
+                                style={styles.checkbox}
+                            />
+                        )}
+                    />
+                </View>
+                <Text style={styles.warning}>
+                    You can always add and drop players later
+                </Text>
+                <Text style={styles.sectionTitle}>Season</Text>
                 <Controller
-                    name="copyPlayers"
+                    name="season"
                     control={control}
+                    rules={{ required: true }}
                     render={({ field: { onChange, value } }) => (
-                        <CheckBox
-                            value={value}
-                            onValueChange={onChange}
-                            tintColors={{
-                                true: colors.textPrimary,
-                                false: colors.gray,
-                            }}
-                            boxType="square"
-                            tintColor={colors.gray}
-                            onFillColor={colors.textPrimary}
-                            onCheckColor={colors.primary}
-                            onTintColor={colors.textPrimary}
-                            onAnimationType="bounce"
-                            offAnimationType="bounce"
-                            style={styles.checkbox}
-                        />
+                        <Picker
+                            style={styles.picker}
+                            selectedValue={value}
+                            itemStyle={{ color: colors.textPrimary }}
+                            dropdownIconColor={colors.textPrimary}
+                            prompt="Season"
+                            onValueChange={onChange}>
+                            {years.map(year => {
+                                return (
+                                    <Picker.Item
+                                        value={year}
+                                        label={year}
+                                        key={year}
+                                    />
+                                )
+                            })}
+                        </Picker>
                     )}
                 />
-            </View>
-            <Text style={styles.warning}>
-                You can always add and drop players later
-            </Text>
-            <Text style={styles.sectionTitle}>Season</Text>
-            <Controller
-                name="season"
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { onChange, value } }) => (
-                    <Picker
-                        style={styles.picker}
-                        selectedValue={value}
-                        itemStyle={{ color: colors.textPrimary }}
-                        dropdownIconColor={colors.textPrimary}
-                        prompt="Season"
-                        onValueChange={onChange}>
-                        {years.map(year => {
-                            return (
-                                <Picker.Item
-                                    value={year}
-                                    label={year}
-                                    key={year}
-                                />
-                            )
-                        })}
-                    </Picker>
-                )}
-            />
-            <Text style={styles.warning}>
-                Warning: You will not be able to edit the current season after
-                starting the new season.
-            </Text>
-            <Text style={styles.warning}>
-                Pending requests for this team will all be deleted.
-            </Text>
-            {error && <Text style={styles.error}>{error.message}</Text>}
-            <PrimaryButton
-                text="Submit"
-                loading={loading}
-                onPress={handleSubmit(rolloverTeam)}
-            />
-        </View>
+                <Text style={styles.warning}>
+                    Warning: You will not be able to edit the current season
+                    after starting the new season.
+                </Text>
+                <Text style={styles.warning}>
+                    Pending requests for this team will all be deleted.
+                </Text>
+                {error && <Text style={styles.error}>{error.message}</Text>}
+                <PrimaryButton
+                    text="Submit"
+                    loading={loading}
+                    onPress={handleSubmit(rolloverTeam)}
+                />
+            </ScrollView>
+        </BaseScreen>
     )
 }
 

@@ -30,7 +30,7 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
     })
 
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             <View style={styles.searchContainer}>
                 <SearchDisplay
                     placeholder="Search teams..."

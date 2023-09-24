@@ -54,6 +54,7 @@ exports[`should match snapshot while closed 1`] = `
           }
         >
           <TextInput
+            cursorColor="#ffd600"
             editable={true}
             focusable={false}
             maxFontSizeMultiplier={1.5}

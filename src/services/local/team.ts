@@ -12,12 +12,10 @@ export const saveTeams = async (teams: Team[]) => {
     })
 }
 
-export const getManagingTeams = async (id: string): Promise<Team[]> => {
+export const getTeamsById = async (ids: string[]): Promise<Team[]> => {
     const realm = await getRealm()
     const teams = await realm.objects<TeamSchema>('Team')
-    return teams
-        .filter(t => t.managers.map(m => m._id).includes(id))
-        .map(t => parseTeam(t))
+    return teams.filter(t => ids.includes(t._id)).map(t => parseTeam(t))
 }
 
 const parseTeam = (schema: TeamSchema): Team => {

@@ -12,17 +12,17 @@ describe('ActiveGameWarning', () => {
     })
 
     it('renders with no value', () => {
-        const { container: nullContainer } = render(
+        const { queryByTestId: queryFirst } = render(
             <ActiveGameWarning onPress={jest.fn()} />,
         )
 
-        expect(nullContainer.children[0]).toBeUndefined()
+        expect(queryFirst('active-warning-chip')).toBeNull()
 
-        const { container: zeroContainer } = render(
+        const { queryByTestId: querySecond } = render(
             <ActiveGameWarning count={0} onPress={jest.fn()} />,
         )
 
-        expect(zeroContainer.children[0]).toBeUndefined()
+        expect(querySecond('active-warning-chip')).toBeNull()
     })
 
     it('handles on press', () => {

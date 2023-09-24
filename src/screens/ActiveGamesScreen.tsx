@@ -85,7 +85,7 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     })
 
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             {!games ||
                 (games?.length === 0 && (
                     <Text style={styles.infoText}>No active games</Text>

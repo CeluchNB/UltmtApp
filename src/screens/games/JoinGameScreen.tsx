@@ -88,7 +88,7 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
     }
 
     return (
-        <BaseScreen containerWidth="80%">
+        <BaseScreen containerWidth={80}>
             <SearchDisplay
                 placeholder="Search Games..."
                 search={onSearch}
