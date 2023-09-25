@@ -6,6 +6,10 @@ import { getInitialPlayerData } from '../../../fixtures/utils'
 import { act, fireEvent, render, screen } from '@testing-library/react-native'
 import { game, teamOne } from '../../../fixtures/data'
 
+jest.mock('../../../src/components/atoms/UserStatsPieChart', () => () => {
+    return <div>Chart</div>
+})
+
 describe('PublicUserStatsScene', () => {
     beforeEach(() => {
         jest.clearAllMocks()
