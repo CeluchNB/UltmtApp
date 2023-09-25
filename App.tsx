@@ -3,7 +3,6 @@ import CreateTournamentScreen from './src/screens/games/CreateTournamentScreen'
 import InformationScreen from './src/screens/InformationScreen'
 import JoinGameScreen from './src/screens/games/JoinGameScreen'
 import LiveGameNavigator from './src/navigation/LiveGameNavigator'
-import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
 import SearchTournamentScreen from './src/screens/games/SearchTournamentScreen'
 import SecureEditScreen from './src/screens/SecureEditScreen'
@@ -15,6 +14,7 @@ import { TopLevelParamList } from './src/types/navigation'
 import { closeRealm } from './src/models/realm'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useTheme } from './src/hooks'
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 const Stack = createNativeStackNavigator<TopLevelParamList>()
@@ -30,8 +30,17 @@ const App: React.FC<{}> = () => {
             closeRealm()
         }
     }, [])
+
+    const MyTheme = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            background: colors.primary,
+        },
+    }
+
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={MyTheme}>
             <QueryClientProvider client={queryClient}>
                 {/* Settings Screen exists here for dark mode purposes */}
                 <Stack.Navigator
