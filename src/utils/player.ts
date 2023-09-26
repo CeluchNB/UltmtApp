@@ -31,3 +31,14 @@ export const getFilterButtonText = (
     }
     return `Filter by ${filterType} (${checkedItems})`
 }
+
+export const nameSort = (
+    player1: DisplayUser,
+    player2: DisplayUser,
+): number => {
+    return `${player1.firstName} ${player1.lastName}`
+        .toLowerCase()
+        .localeCompare(
+            `${player2.firstName} ${player2.lastName}`.toLocaleLowerCase(),
+        )
+}

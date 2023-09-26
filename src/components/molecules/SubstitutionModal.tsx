@@ -3,6 +3,7 @@ import { Chip } from 'react-native-paper'
 import { DisplayUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
+import { nameSort } from '../../utils/player'
 import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
 import { useSelector } from 'react-redux'
 import { useTheme } from '../../hooks'
@@ -55,15 +56,23 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
 
     const availablePlayers = React.useMemo(() => {
         if (team === 'one') {
-            return game.teamOnePlayers.filter(
-                player =>
-                    !point.teamOnePlayers.map(p => p._id).includes(player._id),
-            )
+            return game.teamOnePlayers
+                .filter(
+                    player =>
+                        !point.teamOnePlayers
+                            .map(p => p._id)
+                            .includes(player._id),
+                )
+                .sort(nameSort)
         } else {
-            return game.teamTwoPlayers.filter(
-                player =>
-                    !point.teamTwoPlayers.map(p => p._id).includes(player._id),
-            )
+            return game.teamTwoPlayers
+                .filter(
+                    player =>
+                        !point.teamTwoPlayers
+                            .map(p => p._id)
+                            .includes(player._id),
+                )
+                .sort(nameSort)
         }
     }, [team, game, point])
 

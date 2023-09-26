@@ -8,6 +8,7 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
 import { isPulling } from '../../utils/point'
+import { nameSort } from '../../utils/player'
 import { reactivatePoint } from '../../services/data/point'
 import { useTheme } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text, View } from 'react-native'
@@ -49,13 +50,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         } else {
             players = game.teamTwoPlayers
         }
-        return players
-            .slice()
-            .sort((a, b) =>
-                `${a.firstName} ${a.lastName}`.localeCompare(
-                    `${b.firstName} ${b.lastName}`,
-                ),
-            )
+        return players.slice().sort(nameSort)
     }, [game, team])
 
     React.useEffect(() => {
