@@ -1,6 +1,7 @@
-import CompletionsCountBarChart from '../atoms/CompletionsCountBarChart'
+import CompletionsCharts from '../molecules/CompletionsCharts'
 import { Game } from '../../types/game'
 import GameListItem from '../atoms/GameListItem'
+import PlayerConnectionsView from './PlayerConnectionsView'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
@@ -15,7 +16,6 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    View,
 } from 'react-native'
 import StatsFilterModal, { CheckBoxItem } from '../molecules/StatsFilterModal'
 import {
@@ -129,9 +129,6 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
             alignSelf: 'flex-end',
             margin: 5,
         },
-        chartStyle: {
-            marginTop: 5,
-        },
     })
 
     return (
@@ -186,36 +183,11 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                     )
                 }}
             />
-            <View>
-                {completionsToScores.length > 0 && (
-                    <View>
-                        <Text
-                            style={styles.title}
-                            numberOfLines={1}
-                            ellipsizeMode="tail">
-                            Completions to Score
-                        </Text>
-                        <CompletionsCountBarChart
-                            style={styles.chartStyle}
-                            data={completionsToScores}
-                        />
-                    </View>
-                )}
-                {completionsToTurnovers.length > 0 && (
-                    <View>
-                        <Text
-                            style={styles.title}
-                            numberOfLines={1}
-                            ellipsizeMode="tail">
-                            Completions to Turnover
-                        </Text>
-                        <CompletionsCountBarChart
-                            style={styles.chartStyle}
-                            data={completionsToTurnovers}
-                        />
-                    </View>
-                )}
-            </View>
+            <CompletionsCharts
+                completionsToScores={completionsToScores}
+                completionsToTurnovers={completionsToTurnovers}
+            />
+            <PlayerConnectionsView />
             <Text style={styles.title}>Players</Text>
             {data && <StatsTable players={data.players || []} />}
             <StatsFilterModal

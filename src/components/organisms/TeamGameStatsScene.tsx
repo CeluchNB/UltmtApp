@@ -1,4 +1,4 @@
-import CompletionsCountBarChart from '../atoms/CompletionsCountBarChart'
+import CompletionsCharts from '../molecules/CompletionsCharts'
 import React from 'react'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
 import StatsTable from '../molecules/StatsTable'
@@ -65,9 +65,6 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
             fontSize: size.fontThirty,
             color: colors.textSecondary,
         },
-        chartStyle: {
-            marginTop: 5,
-        },
         error: {
             color: colors.gray,
             fontSize: size.fontThirty,
@@ -122,36 +119,10 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
                     />
                 )}
             </View>
-            <View>
-                {completionsToScores.length > 0 && (
-                    <View>
-                        <Text
-                            style={styles.title}
-                            numberOfLines={1}
-                            ellipsizeMode="tail">
-                            Completions to Score
-                        </Text>
-                        <CompletionsCountBarChart
-                            style={styles.chartStyle}
-                            data={completionsToScores}
-                        />
-                    </View>
-                )}
-                {completionsToTurnovers.length > 0 && (
-                    <View>
-                        <Text
-                            style={styles.title}
-                            numberOfLines={1}
-                            ellipsizeMode="tail">
-                            Completions to Turnover
-                        </Text>
-                        <CompletionsCountBarChart
-                            style={styles.chartStyle}
-                            data={completionsToTurnovers}
-                        />
-                    </View>
-                )}
-            </View>
+            <CompletionsCharts
+                completionsToScores={completionsToScores}
+                completionsToTurnovers={completionsToTurnovers}
+            />
             <View>
                 <Text style={styles.title}>Stats</Text>
                 {gameStats && <StatsTable players={gameStats.players} />}

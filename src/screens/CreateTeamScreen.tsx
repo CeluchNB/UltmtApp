@@ -9,7 +9,7 @@ import { getFormFieldRules } from '../utils/form-utils'
 import { useTheme } from '../hooks'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 interface CreateTeamFormData {
     place: string
@@ -104,96 +104,103 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
 
     return (
         <View style={styles.screen}>
-            <Controller
-                name="place"
-                control={control}
-                rules={getFormFieldRules('Team location', true, undefined, 20)}
-                render={({ field: { onChange, value } }) => (
-                    <UserInput
-                        style={styles.input}
-                        placeholder="Team Location"
-                        onChangeText={onChange}
-                        value={value}
-                        testID="team-place-input"
-                    />
+            <ScrollView>
+                <Controller
+                    name="place"
+                    control={control}
+                    rules={getFormFieldRules(
+                        'Team location',
+                        true,
+                        undefined,
+                        20,
+                    )}
+                    render={({ field: { onChange, value } }) => (
+                        <UserInput
+                            style={styles.input}
+                            placeholder="Team Location"
+                            onChangeText={onChange}
+                            value={value}
+                            testID="team-place-input"
+                        />
+                    )}
+                />
+                {errors.place && (
+                    <Text style={styles.error}>{errors.place.message}</Text>
                 )}
-            />
-            {errors.place && (
-                <Text style={styles.error}>{errors.place.message}</Text>
-            )}
-            <Controller
-                name="name"
-                control={control}
-                rules={getFormFieldRules('Team name', true, undefined, 20)}
-                render={({ field: { onChange, value } }) => (
-                    <UserInput
-                        style={styles.input}
-                        placeholder="Team Name"
-                        onChangeText={onChange}
-                        value={value}
-                        testID="team-name-input"
-                    />
+                <Controller
+                    name="name"
+                    control={control}
+                    rules={getFormFieldRules('Team name', true, undefined, 20)}
+                    render={({ field: { onChange, value } }) => (
+                        <UserInput
+                            style={styles.input}
+                            placeholder="Team Name"
+                            onChangeText={onChange}
+                            value={value}
+                            testID="team-name-input"
+                        />
+                    )}
+                />
+                {errors.name && (
+                    <Text style={styles.error}>{errors.name.message}</Text>
                 )}
-            />
-            {errors.name && (
-                <Text style={styles.error}>{errors.name.message}</Text>
-            )}
-            <Controller
-                name="teamname"
-                control={control}
-                rules={getFormFieldRules('Team handle', true, 2, 20, [
-                    {
-                        test: (v: string) => {
-                            return validator.isAlphanumeric(v)
+                <Controller
+                    name="teamname"
+                    control={control}
+                    rules={getFormFieldRules('Team handle', true, 2, 20, [
+                        {
+                            test: (v: string) => {
+                                return validator.isAlphanumeric(v)
+                            },
+                            message:
+                                'Team handle can only contain letters and numbers',
                         },
-                        message:
-                            'Team handle can only contain letters and numbers',
-                    },
-                ])}
-                render={({ field: { onChange, value } }) => (
-                    <UserInput
-                        style={styles.input}
-                        placeholder="Team Handle"
-                        onChangeText={onChange}
-                        value={value}
-                        testID="team-handle-input"
-                    />
+                    ])}
+                    render={({ field: { onChange, value } }) => (
+                        <UserInput
+                            style={styles.input}
+                            placeholder="Team Handle"
+                            onChangeText={onChange}
+                            value={value}
+                            testID="team-handle-input"
+                        />
+                    )}
+                />
+                {errors.teamname && (
+                    <Text style={styles.error}>{errors.teamname.message}</Text>
                 )}
-            />
-            {errors.teamname && (
-                <Text style={styles.error}>{errors.teamname.message}</Text>
-            )}
-            <Text style={styles.pickerTitle}>Season</Text>
-            <Controller
-                name="season"
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { onChange, value } }) => (
-                    <Picker
-                        style={styles.picker}
-                        selectedValue={value}
-                        itemStyle={{ color: colors.textPrimary }}
-                        prompt="Season"
-                        onValueChange={onChange}>
-                        {years.map(year => {
-                            return (
-                                <Picker.Item
-                                    value={year}
-                                    label={year}
-                                    key={year}
-                                />
-                            )
-                        })}
-                    </Picker>
-                )}
-            />
-            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
-            <PrimaryButton
-                style={styles.button}
-                text="Create"
-                onPress={handleSubmit(createTeam)}
-                loading={loading}
-            />
+                <Text style={styles.pickerTitle}>Season</Text>
+                <Controller
+                    name="season"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, value } }) => (
+                        <Picker
+                            style={styles.picker}
+                            selectedValue={value}
+                            itemStyle={{ color: colors.textPrimary }}
+                            prompt="Season"
+                            onValueChange={onChange}>
+                            {years.map(year => {
+                                return (
+                                    <Picker.Item
+                                        value={year}
+                                        label={year}
+                                        key={year}
+                                    />
+                                )
+                            })}
+                        </Picker>
+                    )}
+                />
+                {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+                <PrimaryButton
+                    style={styles.button}
+                    text="Create"
+                    onPress={handleSubmit(createTeam)}
+                    loading={loading}
+                />
+            </ScrollView>
         </View>
     )
 }
