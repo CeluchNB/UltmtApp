@@ -5,6 +5,7 @@ import { DataTable } from 'react-native-paper'
 import { DisplayTeam } from '../../types/team'
 import { Game } from '../../types/game'
 import GameListItem from '../atoms/GameListItem'
+import PlayerConnectionsView from './PlayerConnectionsView'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import TeamListItem from '../atoms/TeamListItem'
@@ -245,6 +246,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                         blocks={filteredStats.blocks}
                         throwaways={filteredStats.throwaways}
                     />
+                    <PlayerConnectionsView games={[]} teams={[]} players={[]} />
                     <DataTable>
                         {stats &&
                             Object.entries(filteredStats)

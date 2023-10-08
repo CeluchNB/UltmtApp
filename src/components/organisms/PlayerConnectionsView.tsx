@@ -9,12 +9,16 @@ import { StyleSheet, Text, View } from 'react-native'
 
 interface PlayerConnectionsViewProps {
     players: FilteredGamePlayer[]
+    throwerId?: string
+    receiverId?: string
     games?: string[]
     teams?: string[]
 }
 
 const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
     players,
+    throwerId: propsThrowerId,
+    receiverId: propsReceiverId,
     games = [],
     teams = [],
 }) => {
@@ -22,8 +26,12 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
         theme: { colors, size },
     } = useTheme()
 
-    const [throwerId, setThrowerId] = React.useState<string | undefined>('')
-    const [receiverId, setReceiverId] = React.useState<string | undefined>('')
+    const [throwerId, setThrowerId] = React.useState<string | undefined>(
+        propsThrowerId,
+    )
+    const [receiverId, setReceiverId] = React.useState<string | undefined>(
+        propsReceiverId,
+    )
     const { data, isLoading } = useQuery(
         ['filterConnections', { throwerId, receiverId, games, teams }],
         () =>
