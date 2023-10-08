@@ -187,7 +187,11 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                 completionsToScores={completionsToScores}
                 completionsToTurnovers={completionsToTurnovers}
             />
-            <PlayerConnectionsView />
+            <PlayerConnectionsView
+                players={data?.players || []}
+                games={gameIds}
+                teams={[teamId]}
+            />
             <Text style={styles.title}>Players</Text>
             {data && <StatsTable players={data.players || []} />}
             <StatsFilterModal

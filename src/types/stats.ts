@@ -131,3 +131,11 @@ export interface FilteredTeamStats extends GameData, TeamData {
 
 export type Record = { _id: string; value: number | string }
 export type Columns = { [x: string]: Record[] }
+
+export interface Connection {
+    throwerId: string
+    receiverId: string
+    scores: number
+    catches: number
+    drops: number
+}

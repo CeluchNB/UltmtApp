@@ -64,3 +64,23 @@ export const getTeamStatsByGame = async (
     }
     return await axios.get(url, { headers: { 'X-API-Key': API_KEY } })
 }
+
+export const filterConnectionStats = async (
+    throwerId: string,
+    receiverId: string,
+    games: string[],
+    teams: string[],
+): Promise<AxiosResponse> => {
+    let url = `${API_URL_V1}/stats/filter/connection?thrower=${throwerId}&receiver=${receiverId}`
+    if (teams.length > 0) {
+        url += `&teams=${teams.join(',')}`
+    }
+    if (games.length > 0) {
+        url += `&games=${games.join(',')}`
+    }
+    return await axios.get(url, {
+        headers: {
+            'X-API-Key': API_KEY,
+        },
+    })
+}

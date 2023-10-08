@@ -1,22 +1,50 @@
+import ConnectionsStatView from '../atoms/ConnectionsStatView'
 import { Dropdown } from 'react-native-element-dropdown'
+import { FilteredGamePlayer } from '../../types/stats'
 import React from 'react'
+import { filterConnectionStats } from '../../services/data/stats'
+import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
-const PlayerConnectionsView: React.FC<{}> = () => {
+interface PlayerConnectionsViewProps {
+    players: FilteredGamePlayer[]
+    games?: string[]
+    teams?: string[]
+}
+
+const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
+    players,
+    games = [],
+    teams = [],
+}) => {
     const {
         theme: { colors, size },
     } = useTheme()
 
-    const playerData = [
-        { label: 'Player 1', value: '1' },
-        { label: 'Player 2', value: '2' },
-        { label: 'Player 3', value: '3' },
-        { label: 'Player 4', value: '4' },
-        { label: 'Player 5', value: '5' },
-    ]
-    const [playerOneValue, setPlayerOneValue] = React.useState('')
-    const [playerTwoValue, setPlayerTwoValue] = React.useState('')
+    const [throwerId, setThrowerId] = React.useState<string | undefined>('')
+    const [receiverId, setReceiverId] = React.useState<string | undefined>('')
+    const { data, isLoading, error } = useQuery(
+        ['filterConnections', { throwerId, receiverId, games, teams }],
+        () =>
+            filterConnectionStats(
+                throwerId || '',
+                receiverId || '',
+                games,
+                teams,
+            ),
+        {
+            enabled: throwerId?.length !== 0 && receiverId?.length !== 0,
+            retry: 0,
+        },
+    )
+
+    const playerData = React.useMemo(() => {
+        return players.map(player => ({
+            value: player.playerId,
+            label: `${player.firstName} ${player.lastName}`,
+        }))
+    }, [players])
 
     const styles = StyleSheet.create({
         title: {
@@ -69,8 +97,8 @@ const PlayerConnectionsView: React.FC<{}> = () => {
                     data={playerData}
                     labelField="label"
                     valueField="value"
-                    onChange={v => setPlayerOneValue(v.value)}
-                    value={playerOneValue}
+                    onChange={v => setThrowerId(v.value)}
+                    value={throwerId}
                     placeholder="Player One"
                 />
                 <Text style={styles.toText}>to</Text>
@@ -83,15 +111,28 @@ const PlayerConnectionsView: React.FC<{}> = () => {
                     data={playerData}
                     labelField="label"
                     valueField="value"
-                    onChange={v => setPlayerTwoValue(v.value)}
-                    value={playerTwoValue}
+                    onChange={v => setReceiverId(v.value)}
+                    value={receiverId}
                     placeholder="Player Two"
                 />
             </View>
             <View>
-                <Text style={styles.errorText}>
-                    No connections from Player One to Player Two
-                </Text>
+                {isLoading && (
+                    <ActivityIndicator
+                        size="small"
+                        color={colors.textPrimary}
+                    />
+                )}
+                {data && (
+                    <View style={{ margin: 10 }}>
+                        <ConnectionsStatView connection={data} />
+                    </View>
+                )}
+                {error ? (
+                    <Text style={styles.errorText}>
+                        No connections from Player One to Player Two
+                    </Text>
+                ) : null}
             </View>
         </View>
     )
