@@ -131,7 +131,6 @@ export const filterConnectionStats = async (
             },
         )
     } catch (e) {
-        console.log('error', e)
         return throwApiError(e, Constants.UNABLE_TO_GET_CONNECTION_STATS)
     }
 }

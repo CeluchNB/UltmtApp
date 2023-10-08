@@ -1,4 +1,5 @@
 import CompletionsCharts from '../molecules/CompletionsCharts'
+import PlayerConnectionsView from './PlayerConnectionsView'
 import React from 'react'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
 import StatsTable from '../molecules/StatsTable'
@@ -122,6 +123,11 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
             <CompletionsCharts
                 completionsToScores={completionsToScores}
                 completionsToTurnovers={completionsToTurnovers}
+            />
+            <PlayerConnectionsView
+                players={gameStats?.players || []}
+                games={[gameId]}
+                teams={[teamId]}
             />
             <View>
                 <Text style={styles.title}>Stats</Text>

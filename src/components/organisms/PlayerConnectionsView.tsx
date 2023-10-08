@@ -5,7 +5,7 @@ import React from 'react'
 import { filterConnectionStats } from '../../services/data/stats'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 interface PlayerConnectionsViewProps {
     players: FilteredGamePlayer[]
@@ -24,7 +24,7 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
 
     const [throwerId, setThrowerId] = React.useState<string | undefined>('')
     const [receiverId, setReceiverId] = React.useState<string | undefined>('')
-    const { data, isLoading, error } = useQuery(
+    const { data, isLoading } = useQuery(
         ['filterConnections', { throwerId, receiverId, games, teams }],
         () =>
             filterConnectionStats(
@@ -69,11 +69,7 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
             marginHorizontal: 5,
             alignSelf: 'center',
         },
-        errorText: {
-            color: colors.gray,
-            fontSize: size.fontTwenty,
-            textAlign: 'center',
-        },
+
         selectedTextStyle: {
             color: colors.textPrimary,
         },
@@ -82,6 +78,9 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
             borderColor: colors.darkPrimary,
         },
         itemTextStyle: { color: colors.darkGray },
+        connectionsContainer: {
+            margin: 10,
+        },
     })
 
     return (
@@ -93,6 +92,7 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
                     selectedTextStyle={styles.selectedTextStyle}
                     containerStyle={styles.containerStyle}
                     itemTextStyle={styles.itemTextStyle}
+                    placeholderStyle={styles.selectedTextStyle}
                     activeColor={colors.textSecondary}
                     data={playerData}
                     labelField="label"
@@ -107,6 +107,7 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
                     selectedTextStyle={styles.selectedTextStyle}
                     containerStyle={styles.containerStyle}
                     itemTextStyle={styles.itemTextStyle}
+                    placeholderStyle={styles.selectedTextStyle}
                     activeColor={colors.textSecondary}
                     data={playerData}
                     labelField="label"
@@ -117,22 +118,12 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
                 />
             </View>
             <View>
-                {isLoading && (
-                    <ActivityIndicator
-                        size="small"
-                        color={colors.textPrimary}
+                <View style={styles.connectionsContainer}>
+                    <ConnectionsStatView
+                        loading={isLoading}
+                        connection={data}
                     />
-                )}
-                {data && (
-                    <View style={{ margin: 10 }}>
-                        <ConnectionsStatView connection={data} />
-                    </View>
-                )}
-                {error ? (
-                    <Text style={styles.errorText}>
-                        No connections from Player One to Player Two
-                    </Text>
-                ) : null}
+                </View>
             </View>
         </View>
     )

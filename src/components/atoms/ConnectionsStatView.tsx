@@ -1,7 +1,7 @@
 import { Connection } from '../../types/stats'
 import React from 'react'
 import { useTheme } from '../../hooks'
-import { StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
 const SCORE_COLOR = '#2196f3'
 const CATCH_COLOR = '#1de9b6'
@@ -12,7 +12,8 @@ const MAX_RATIO = 0.75
 const MIN_RATIO = 0.35
 
 interface ConnectionsStatViewProps {
-    connection: Connection
+    loading: boolean
+    connection?: Connection
 }
 
 const calculateRatio = (value: number, connection: Connection): number => {
@@ -22,6 +23,7 @@ const calculateRatio = (value: number, connection: Connection): number => {
 }
 
 const ConnectionsStatView: React.FC<ConnectionsStatViewProps> = ({
+    loading,
     connection,
 }) => {
     const {
@@ -29,6 +31,8 @@ const ConnectionsStatView: React.FC<ConnectionsStatViewProps> = ({
     } = useTheme()
 
     const widths = React.useMemo(() => {
+        if (!connection) return { scores: 0, catches: 0, drops: 0 }
+
         const { scores, catches, drops } = connection
         const scoresRatio = calculateRatio(scores, connection)
         const catchesRatio = calculateRatio(catches, connection)
@@ -75,7 +79,24 @@ const ConnectionsStatView: React.FC<ConnectionsStatViewProps> = ({
             fontSize: size.fontFifteen,
             color: colors.primary,
         },
+        errorText: {
+            color: colors.gray,
+            fontSize: size.fontTwenty,
+            textAlign: 'center',
+        },
     })
+
+    if (loading) {
+        return <ActivityIndicator size="small" color={colors.textPrimary} />
+    }
+
+    if (!connection) {
+        return (
+            <Text style={styles.errorText}>
+                No connections from Player One to Player Two
+            </Text>
+        )
+    }
 
     return (
         <View style={styles.container}>
