@@ -1,24 +1,22 @@
 import ConnectionsStatView from '../atoms/ConnectionsStatView'
 import { Dropdown } from 'react-native-element-dropdown'
-import { FilteredGamePlayer } from '../../types/stats'
 import React from 'react'
-import { filterConnectionStats } from '../../services/data/stats'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
+import {
+    filterConnectionStats,
+    getConnectionStats,
+} from '../../services/data/stats'
 
 interface PlayerConnectionsViewProps {
-    players: FilteredGamePlayer[]
-    throwerId?: string
-    receiverId?: string
+    players: { playerId: string; firstName: string; lastName: string }[]
     games?: string[]
     teams?: string[]
 }
 
 const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
     players,
-    throwerId: propsThrowerId,
-    receiverId: propsReceiverId,
     games = [],
     teams = [],
 }) => {
@@ -26,26 +24,52 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
         theme: { colors, size },
     } = useTheme()
 
-    const [throwerId, setThrowerId] = React.useState<string | undefined>(
-        propsThrowerId,
-    )
-    const [receiverId, setReceiverId] = React.useState<string | undefined>(
-        propsReceiverId,
-    )
-    const { data, isLoading } = useQuery(
+    const [throwerId, setThrowerId] = React.useState<string | undefined>('')
+    const [receiverId, setReceiverId] = React.useState<string | undefined>('')
+
+    const filteredDataEnabled = React.useMemo(() => {
+        return (
+            throwerId?.length !== 0 &&
+            receiverId?.length !== 0 &&
+            (games.length > 0 || teams.length > 0)
+        )
+    }, [throwerId, receiverId, games, teams])
+
+    const totalDataEnabled = React.useMemo(() => {
+        return (
+            throwerId?.length !== 0 &&
+            receiverId?.length !== 0 &&
+            games.length === 0 &&
+            teams.length === 0
+        )
+    }, [throwerId, receiverId, games, teams])
+
+    const { data: filteredData, isLoading: filteredLoading } = useQuery(
         ['filterConnections', { throwerId, receiverId, games, teams }],
-        () =>
-            filterConnectionStats(
-                throwerId || '',
-                receiverId || '',
-                games,
-                teams,
-            ),
+        () => filterConnectionStats(throwerId, receiverId, games, teams),
         {
-            enabled: throwerId?.length !== 0 && receiverId?.length !== 0,
+            enabled: filteredDataEnabled,
             retry: 0,
         },
     )
+
+    const { data: totalData, isLoading: totalLoading } = useQuery(
+        ['connections', { throwerId, receiverId }],
+        () => getConnectionStats(throwerId, receiverId),
+        {
+            enabled: totalDataEnabled,
+            retry: 0,
+        },
+    )
+
+    const isLoading = React.useMemo(() => {
+        return filteredLoading || totalLoading
+    }, [filteredLoading, totalLoading])
+
+    const data = React.useMemo(() => {
+        if (filteredDataEnabled) return filteredData
+        if (totalDataEnabled) return totalData
+    }, [filteredData, totalData, filteredDataEnabled, totalDataEnabled])
 
     const playerData = React.useMemo(() => {
         return players.map(player => ({

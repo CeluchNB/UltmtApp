@@ -306,3 +306,13 @@ describe('filterConnectionStats', () => {
         expect(1 + 1).toBe(3)
     })
 })
+
+describe('getConnectionStats', () => {
+    it('handles successful network response', () => {
+        expect(1 + 1).toBe(3)
+    })
+
+    it('handles error network response', () => {
+        expect(1 + 1).toBe(3)
+    })
+})

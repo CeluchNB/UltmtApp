@@ -65,6 +65,18 @@ export const getTeamStatsByGame = async (
     return await axios.get(url, { headers: { 'X-API-Key': API_KEY } })
 }
 
+export const getConnectionStats = async (
+    throwerId: string,
+    receiverId: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(
+        `${API_URL_V1}/stats/connection?thrower=${throwerId}&receiver=${receiverId}`,
+        {
+            headers: { 'X-API-Key': API_KEY },
+        },
+    )
+}
+
 export const filterConnectionStats = async (
     throwerId: string,
     receiverId: string,

@@ -14,6 +14,7 @@ import { addPlayerStats, calculatePlayerStats } from '../../utils/stats'
 import {
     filterConnectionStats as networkFilterConnectionStats,
     filterPlayerStats as networkFilterPlayerStats,
+    getConnectionStats as networkGetConnectionStats,
     getGameStats as networkGetGameStats,
     getGameStatsByTeam as networkGetGameStatsByTeam,
     getPlayerStats as networkGetPlayerStats,
@@ -96,9 +97,22 @@ export const getTeamStats = async (
     }
 }
 
+export const getConnectionStats = async (
+    throwerId: string = '',
+    receiverId: string = '',
+): Promise<Connection> => {
+    try {
+        const response = await networkGetConnectionStats(throwerId, receiverId)
+        const { connection } = response.data
+        return connection
+    } catch (e) {
+        return throwApiError(e, Constants.UNABLE_TO_GET_CONNECTION_STATS)
+    }
+}
+
 export const filterConnectionStats = async (
-    throwerId: string,
-    receiverId: string,
+    throwerId: string = '',
+    receiverId: string = '',
     games: string[],
     teams: string[],
 ): Promise<Connection> => {

@@ -1,11 +1,12 @@
 import * as UserData from './../services/data/user'
 import { ApiError } from '../types/services'
+import { DisplayTeam } from '../types/team'
 import { Game } from '../types/game'
 import { PublicUserDetailsProps } from '../types/navigation'
 import React from 'react'
-import { User } from '../types/user'
 import { getGamesByTeam } from '../services/data/game'
 import { setError } from '../store/reducers/features/account/accountReducer'
+import { DisplayUser, User } from '../types/user'
 import PublicUserGamesScene, {
     PublicUserGamesSceneProps,
 } from '../components/organisms/PublicUserGamesScene'
@@ -138,7 +139,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     }, [user])
 
     const allTeams = React.useMemo(() => {
-        const map = new Map()
+        const map = new Map<string, DisplayTeam>()
         managerTeams.forEach(team => {
             map.set(team._id, team)
         })
@@ -158,6 +159,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
             data: Game[]
             index: number
         }[] = []
+
         games.forEach((g, i) => {
             if (g.length === 0) {
                 return
@@ -181,6 +183,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                 index: i,
             })
         })
+
         return tempGames
     }, [games, allTeams])
 
@@ -204,6 +207,28 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         }
         return tempGames
     }, [games, allTeams, playerTeams, archiveTeams])
+
+    const teammates = React.useMemo(() => {
+        const playerMap = new Map<string, DisplayUser>()
+        const allTeamIds = allTeams.map(team => team._id)
+        // TODO: Optimize
+        for (const teamGames of games) {
+            for (const game of teamGames) {
+                if (allTeamIds.includes(game.teamOne._id)) {
+                    for (const p of game.teamOnePlayers) {
+                        playerMap.set(p._id, p)
+                    }
+                }
+                if (allTeamIds.includes(game.teamTwo?._id || '')) {
+                    for (const p of game.teamTwoPlayers) {
+                        playerMap.set(p._id, p)
+                    }
+                }
+            }
+        }
+
+        return [...playerMap.values()]
+    }, [games, allTeams])
 
     const fetchGames = React.useCallback(() => {
         setError(undefined)
@@ -268,6 +293,7 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     },
                     {
                         userId,
+                        teammates,
                         teams: [
                             ...(user?.playerTeams || []),
                             ...(user?.archiveTeams || []),
