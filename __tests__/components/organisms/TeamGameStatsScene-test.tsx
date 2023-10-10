@@ -19,6 +19,12 @@ jest.mock('react-native-gifted-charts', () => {
     }
 })
 
+jest.mock('react-native-element-dropdown', () => {
+    return {
+        Dropdown: () => <span>dropdown</span>,
+    }
+})
+
 const playerOne = {
     _id: 'user1',
     firstName: 'First 1',

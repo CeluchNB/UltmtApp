@@ -1,5 +1,4 @@
 import { AllPlayerStats } from '../../types/stats'
-import { ApiError } from '../../types/services'
 import { DataTable } from 'react-native-paper'
 import { DisplayTeam } from '../../types/team'
 import { DisplayUser } from '../../types/user'
@@ -49,7 +48,6 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     const [teamFilterVisible, setTeamFilterVisible] = React.useState(false)
     const [gameFilterVisible, setGameFilterVisible] = React.useState(false)
     const [availableGames, setAvailableGames] = React.useState<string[]>([])
-    const [error, setError] = React.useState<ApiError | undefined>(undefined)
     const [teamFilterOptions, setTeamFilterOptions] = React.useState<
         CheckBoxItem[]
     >([])
@@ -132,14 +130,13 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     }, [games, availableGames])
 
     const setFilters = () => {
-        setError(undefined)
-
         const teamFilter = teamFilterOptions
             .filter(value => value.checked)
             .map(value => value.value)
         const gameFilter = gameFilterOptions
             .filter(value => value.checked)
             .map(value => value.value)
+
         setTeamFilterIds(teamFilter)
         setGameFilterIds(gameFilter)
 
@@ -148,6 +145,8 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     }
 
     const filteredStats = React.useMemo(() => {
+        if (!stats) return undefined
+
         const updatedStats: Partial<AllPlayerStats> = Object.assign({}, stats)
 
         // TODO: this is not ideal, at least move it to a separate function
@@ -259,8 +258,12 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             {loading && (
                 <ActivityIndicator color={colors.textPrimary} size="large" />
             )}
-            {error && <Text style={styles.error}>{error.message}</Text>}
-            {!loading && !error && (
+            {!loading && !filteredStats && (
+                <Text style={styles.error}>
+                    Could not get stats for this user
+                </Text>
+            )}
+            {!loading && filteredStats && (
                 <View style={styles.container}>
                     <UserStatsPieChart
                         goals={filteredStats.goals}
@@ -275,7 +278,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                         players={connectionOptions}
                     />
                     <DataTable>
-                        {stats &&
+                        {filteredStats &&
                             Object.entries(filteredStats)
                                 .sort((a, b) => sortAlphabetically(a[0], b[0]))
                                 .map(([key, value]) => {

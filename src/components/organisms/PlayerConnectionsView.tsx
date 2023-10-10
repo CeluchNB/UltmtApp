@@ -175,6 +175,14 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
                     <ConnectionsStatView
                         loading={isLoading}
                         connection={data}
+                        playerOne={
+                            playerData.find(value => value.value === throwerId)
+                                ?.label
+                        }
+                        playerTwo={
+                            playerData.find(value => value.value === receiverId)
+                                ?.label
+                        }
                     />
                 </View>
             </View>

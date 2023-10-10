@@ -14,6 +14,8 @@ const MIN_RATIO = 0.35
 interface ConnectionsStatViewProps {
     loading: boolean
     connection?: Connection
+    playerOne?: string
+    playerTwo?: string
 }
 
 const calculateRatio = (value: number, connection: Connection): number => {
@@ -25,6 +27,8 @@ const calculateRatio = (value: number, connection: Connection): number => {
 const ConnectionsStatView: React.FC<ConnectionsStatViewProps> = ({
     loading,
     connection,
+    playerOne,
+    playerTwo,
 }) => {
     const {
         theme: { weight, size, colors },
@@ -87,13 +91,20 @@ const ConnectionsStatView: React.FC<ConnectionsStatViewProps> = ({
     })
 
     if (loading) {
-        return <ActivityIndicator size="small" color={colors.textPrimary} />
+        return (
+            <ActivityIndicator
+                size="small"
+                color={colors.textPrimary}
+                testID="connections-activity-indicator"
+            />
+        )
     }
 
     if (!connection) {
         return (
             <Text style={styles.errorText}>
-                No connections from Player One to Player Two
+                No connections from {playerOne ? playerOne : 'Player One'} to{' '}
+                {playerTwo ? playerTwo : 'Player Two'}
             </Text>
         )
     }

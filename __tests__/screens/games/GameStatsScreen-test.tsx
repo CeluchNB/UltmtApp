@@ -15,6 +15,12 @@ jest.mock('react-native-gifted-charts', () => {
     }
 })
 
+jest.mock('react-native-element-dropdown', () => {
+    return {
+        Dropdown: () => <span>dropdown</span>,
+    }
+})
+
 const props: GameStatsProps = {
     navigation: {} as any,
     route: { params: { gameId: 'game1' } } as any,
