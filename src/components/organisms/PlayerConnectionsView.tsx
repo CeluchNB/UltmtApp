@@ -1,5 +1,6 @@
 import ConnectionsStatView from '../atoms/ConnectionsStatView'
 import { Dropdown } from 'react-native-element-dropdown'
+import { IconButton } from 'react-native-paper'
 import React from 'react'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
@@ -11,12 +12,14 @@ import {
 
 interface PlayerConnectionsViewProps {
     players: { playerId: string; firstName: string; lastName: string }[]
+    throwerId?: string
     games?: string[]
     teams?: string[]
 }
 
 const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
     players,
+    throwerId: propThrowerId = '',
     games = [],
     teams = [],
 }) => {
@@ -24,7 +27,9 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
         theme: { colors, size },
     } = useTheme()
 
-    const [throwerId, setThrowerId] = React.useState<string | undefined>('')
+    const [throwerId, setThrowerId] = React.useState<string | undefined>(
+        propThrowerId,
+    )
     const [receiverId, setReceiverId] = React.useState<string | undefined>('')
 
     const filteredDataEnabled = React.useMemo(() => {
@@ -101,7 +106,6 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
             marginHorizontal: 5,
             alignSelf: 'center',
         },
-
         selectedTextStyle: {
             color: colors.textPrimary,
         },
@@ -110,6 +114,11 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
             borderColor: colors.darkPrimary,
         },
         itemTextStyle: { color: colors.darkGray },
+        switchButton: {
+            padding: 0,
+            marginVertical: 0,
+            marginHorizontal: 5,
+        },
         connectionsContainer: {
             margin: 10,
         },
@@ -133,7 +142,19 @@ const PlayerConnectionsView: React.FC<PlayerConnectionsViewProps> = ({
                     value={throwerId}
                     placeholder="Player One"
                 />
-                <Text style={styles.toText}>to</Text>
+                <View>
+                    <Text style={styles.toText}>to</Text>
+                    <IconButton
+                        icon="sync"
+                        iconColor={colors.textPrimary}
+                        style={styles.switchButton}
+                        onPress={() => {
+                            const currentThrowerId = throwerId
+                            setThrowerId(receiverId)
+                            setReceiverId(currentThrowerId)
+                        }}
+                    />
+                </View>
                 <Dropdown
                     style={styles.dropdown}
                     selectedTextStyle={styles.selectedTextStyle}

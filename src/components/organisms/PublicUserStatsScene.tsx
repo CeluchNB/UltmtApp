@@ -67,22 +67,26 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         return teamFilterIds.length === 0 && gameFilterIds.length === 0
     }, [teamFilterIds, gameFilterIds])
 
-    const { data: filteredStatsData, isLoading: filterLoading } = useQuery(
+    const {
+        data: filteredStatsData,
+        isLoading: filterLoading,
+        refetch: filterRefetch,
+    } = useQuery(
         ['filterPlayerStats', { userId, teamFilterIds, gameFilterIds }],
         () => filterPlayerStats(userId, teamFilterIds, gameFilterIds),
         { enabled: filteredStatsEnabled },
     )
 
-    const { data: totalStatsData, isLoading: totalLoading } = useQuery(
-        ['getPlayerStats', { userId }],
-        () => getPlayerStats(userId),
-        {
-            enabled: totalStatsEnabled,
-            onSuccess(data) {
-                setAvailableGames(data.games)
-            },
+    const {
+        data: totalStatsData,
+        isLoading: totalLoading,
+        refetch: totalRefetch,
+    } = useQuery(['getPlayerStats', { userId }], () => getPlayerStats(userId), {
+        enabled: totalStatsEnabled,
+        onSuccess(data) {
+            setAvailableGames(data.games)
         },
-    )
+    })
 
     const stats = React.useMemo(() => {
         if (filteredStatsEnabled) return filteredStatsData
@@ -127,7 +131,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
         )
     }, [games, availableGames])
 
-    const getStats = () => {
+    const setFilters = () => {
         setError(undefined)
 
         const teamFilter = teamFilterOptions
@@ -210,6 +214,8 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
             display: 'flex',
             flexDirection: 'row',
             alignSelf: 'center',
+            width: '100%',
+            justifyContent: 'space-evenly',
         },
         error: {
             alignSelf: 'center',
@@ -226,7 +232,12 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                     colors={[colors.textSecondary]}
                     tintColor={colors.textSecondary}
                     onRefresh={() => {
-                        getStats()
+                        if (filteredStatsEnabled) {
+                            filterRefetch()
+                        }
+                        if (totalStatsEnabled) {
+                            totalRefetch()
+                        }
                     }}
                 />
             }
@@ -260,6 +271,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                     <PlayerConnectionsView
                         games={gameFilterIds}
                         teams={teamFilterIds}
+                        throwerId={userId}
                         players={connectionOptions}
                     />
                     <DataTable>
@@ -290,7 +302,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                 visible={teamFilterVisible}
                 onSelect={onTeamSelect}
                 onClear={onTeamClear}
-                onDone={getStats}
+                onDone={setFilters}
                 title="Teams"
                 data={teamFilterOptions}
             />
@@ -298,7 +310,7 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
                 visible={gameFilterVisible}
                 onSelect={onGameSelect}
                 onClear={onGameClear}
-                onDone={getStats}
+                onDone={setFilters}
                 title="Games"
                 data={gameFilterOptions}
             />
