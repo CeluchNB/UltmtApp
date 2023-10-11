@@ -112,6 +112,12 @@ const player: FilteredGamePlayer = {
     plusMinus: 2,
     winPercentage: 0.8,
     catchingPercentage: 1,
+    offensePoints: 5,
+    defensePoints: 1,
+    holds: 4,
+    breaks: 0,
+    offensiveEfficiency: 0.8,
+    defensiveEfficiency: 0,
 }
 
 const client = new QueryClient()
@@ -179,7 +185,7 @@ describe('TeamGameStatsScene', () => {
         expect(screen.getByText('Completions to Score')).toBeTruthy()
         expect(screen.getByText('Completions to Turnover')).toBeTruthy()
         expect(gameSpy).toHaveBeenCalledTimes(1)
-        expect(screen.getAllByText('1').length).toBe(14)
+        expect(screen.getAllByText('1').length).toBe(16)
         expect(screen.getAllByText('First 1 Last 1').length).toBe(7)
         expect(screen.getByText('Stats')).toBeTruthy()
         expect(screen.getByText('Game Overview')).toBeTruthy()

@@ -60,7 +60,7 @@ describe('PublicUserStatsScene', () => {
         expect(await screen.findByText('Assists')).toBeTruthy()
         expect(await screen.findByText('Blocks')).toBeTruthy()
         expect(await screen.findByText('Throwaways')).toBeTruthy()
-        expect(await screen.findByText('1')).toBeTruthy()
+        expect((await screen.findAllByText('1')).length).toBeGreaterThan(1)
         expect(await screen.findByText('2')).toBeTruthy()
     })
 

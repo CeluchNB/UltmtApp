@@ -56,6 +56,12 @@ const playerStatsOne: FilteredGamePlayer = {
     plusMinus: 2,
     winPercentage: 0.8,
     catchingPercentage: 1,
+    offensePoints: 5,
+    defensePoints: 1,
+    holds: 4,
+    breaks: 0,
+    offensiveEfficiency: 0.8,
+    defensiveEfficiency: 0,
 }
 
 const playerStatsTwo: FilteredGamePlayer = {
@@ -88,6 +94,12 @@ const playerStatsTwo: FilteredGamePlayer = {
     plusMinus: 2,
     winPercentage: 0.8,
     catchingPercentage: 1,
+    offensePoints: 5,
+    defensePoints: 1,
+    holds: 4,
+    breaks: 0,
+    offensiveEfficiency: 0.8,
+    defensiveEfficiency: 0,
 }
 
 const data: FilteredGameStats = {

@@ -74,6 +74,10 @@ describe('calculatePlayerStats', () => {
             pulls: 0,
             wins: 4,
             losses: 1,
+            offensePoints: 5,
+            defensePoints: 1,
+            holds: 4,
+            breaks: 0,
         }
 
         const result = calculatePlayerStats(stats)
@@ -111,6 +115,10 @@ describe('addPlayerStats', () => {
             pulls: 0,
             wins: 4,
             losses: 1,
+            offensePoints: 5,
+            defensePoints: 1,
+            holds: 4,
+            breaks: 0,
         }
         const result = addPlayerStats(stats, stats)
         const expected: any = {}

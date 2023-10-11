@@ -11,7 +11,7 @@ import {
 } from '../../services/data/stats'
 
 interface PlayerConnectionsViewProps {
-    players: { playerId: string; firstName: string; lastName: string }[]
+    players: { playerId?: string; firstName: string; lastName: string }[]
     throwerId?: string
     games?: string[]
     teams?: string[]

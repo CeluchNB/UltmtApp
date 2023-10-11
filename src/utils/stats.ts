@@ -144,6 +144,9 @@ export const formatNumber = (key: string, value: number | string): string => {
     if (statIsPercentage(key)) {
         return `${(Number(value) * 100).toFixed(0)}%`
     }
+    if (statIsEfficiency(key)) {
+        return Number(value).toPrecision(3)
+    }
     if (Number(value) % 1 === 0) {
         return value.toString()
     }
@@ -152,6 +155,10 @@ export const formatNumber = (key: string, value: number | string): string => {
 
 const statIsPercentage = (key: string): boolean => {
     return key.toLowerCase().includes('percentage')
+}
+
+const statIsEfficiency = (key: string): boolean => {
+    return key.toLowerCase().includes('efficiency')
 }
 
 export const mapStatDisplayName = (value: string): string => {
@@ -184,6 +191,14 @@ export const mapStatDisplayName = (value: string): string => {
             return 'Blocks per point'
         case 'winPercentage':
             return 'Win Percentage'
+        case 'offensePoints':
+            return 'Offense Points'
+        case 'defensePoints':
+            return 'Defense Points'
+        case 'offensiveEfficiency':
+            return 'Offensive Efficiency'
+        case 'defensiveEfficiency':
+            return 'Defensive Efficiency'
         default:
             return value.charAt(0).toUpperCase() + value.slice(1)
     }
@@ -208,6 +223,10 @@ export const addPlayerStats = (
         droppedPasses: data1.droppedPasses + data2.droppedPasses,
         pointsPlayed: data1.pointsPlayed + data2.pointsPlayed,
         pulls: data1.pulls + data2.pulls,
+        offensePoints: data1.offensePoints + data2.offensePoints,
+        defensePoints: data1.defensePoints + data2.defensePoints,
+        holds: data1.holds + data2.holds,
+        breaks: data1.breaks + data2.breaks,
         wins: data1.wins + data2.wins,
         losses: data1.losses + data2.losses,
     }
@@ -238,6 +257,14 @@ export const calculatePlayerStats = (stats: PlayerStats): AllPlayerStats => {
         ppThrowaways: createSafeFraction(stats.throwaways, stats.pointsPlayed),
         ppDrops: createSafeFraction(stats.drops, stats.pointsPlayed),
         ppBlocks: createSafeFraction(stats.blocks, stats.pointsPlayed),
+        offensiveEfficiency: createSafeFraction(
+            stats.holds,
+            stats.offensePoints,
+        ),
+        defensiveEfficiency: createSafeFraction(
+            stats.breaks,
+            stats.defensePoints,
+        ),
     }
 
     return { ...stats, ...calcStats }
@@ -268,6 +295,14 @@ const calculatePercentageTotals = (totals: { [x: string]: number }) => {
         throwingPercentage: createSafeFraction(
             totals.completedPasses,
             totals.completedPasses + totals.throwaways + totals.droppedPasses,
+        ),
+        offensiveEfficiency: createSafeFraction(
+            totals.holds,
+            totals.offensePoints,
+        ),
+        defensiveEfficiency: createSafeFraction(
+            totals.breaks,
+            totals.defensePoints,
         ),
     }
 }
@@ -358,6 +393,10 @@ export const OVERALL_COLUMNS = [
     'pointsPlayed',
     'catchingPercentage',
     'throwingPercentage',
+    'offensePoints',
+    'defensePoints',
+    'offensiveEfficiency',
+    'defensiveEfficiency',
 ]
 export const OFFENSE_COLUMNS = [
     'goals',

@@ -21,7 +21,14 @@ describe('PublicUserGamesScene', () => {
         render(
             <NavigationContainer>
                 <PublicUserGamesScene
-                    gameLists={[{ title: 'Team One', data: [game], index: 0 }]}
+                    gameLists={[
+                        {
+                            title: 'Team One',
+                            data: [game],
+                            index: 0,
+                            year: '2023',
+                        },
+                    ]}
                     teams={[teamOne]}
                     loading={false}
                     refetch={jest.fn()}
@@ -54,7 +61,14 @@ describe('PublicUserGamesScene', () => {
         render(
             <NavigationContainer>
                 <PublicUserGamesScene
-                    gameLists={[{ title: 'Team One', data: [game], index: 0 }]}
+                    gameLists={[
+                        {
+                            title: 'Team One',
+                            data: [game],
+                            index: 0,
+                            year: '2023',
+                        },
+                    ]}
                     teams={[teamOne]}
                     loading={false}
                     refetch={jest.fn()}
@@ -71,7 +85,14 @@ describe('PublicUserGamesScene', () => {
         render(
             <NavigationContainer>
                 <PublicUserGamesScene
-                    gameLists={[{ title: 'Team One', data: [game], index: 0 }]}
+                    gameLists={[
+                        {
+                            title: 'Team One',
+                            data: [game],
+                            index: 0,
+                            year: '2023',
+                        },
+                    ]}
                     teams={[teamOne]}
                     loading={false}
                     refetch={refetch}
@@ -90,7 +111,14 @@ describe('PublicUserGamesScene', () => {
         render(
             <NavigationContainer>
                 <PublicUserGamesScene
-                    gameLists={[{ title: 'Team One', data: [game], index: 0 }]}
+                    gameLists={[
+                        {
+                            title: 'Team One',
+                            data: [game],
+                            index: 0,
+                            year: '2023',
+                        },
+                    ]}
                     teams={[teamOne]}
                     loading={false}
                     refetch={jest.fn()}

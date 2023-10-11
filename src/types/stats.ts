@@ -21,6 +21,10 @@ export interface PlayerStats {
     callahans: number
     pointsPlayed: number
     pulls: number
+    offensePoints: number
+    defensePoints: number
+    breaks: number
+    holds: number
     wins: number
     losses: number
 }
@@ -35,6 +39,8 @@ export interface CalculatedPlayerStats {
     ppDrops: number
     ppBlocks: number
     winPercentage: number
+    offensiveEfficiency: number
+    defensiveEfficiency: number
 }
 
 export interface AllPlayerStats extends PlayerStats, CalculatedPlayerStats {}
