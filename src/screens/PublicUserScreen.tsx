@@ -1,5 +1,6 @@
 import * as UserData from './../services/data/user'
 import { ApiError } from '../types/services'
+import BaseScreen from '../components/atoms/BaseScreen'
 import { DisplayTeam } from '../types/team'
 import { Game } from '../types/game'
 import { PublicUserDetailsProps } from '../types/navigation'
@@ -16,13 +17,7 @@ import PublicUserStatsScene, {
 import PublicUserTeamScene, {
     PublicUserTeamSceneProps,
 } from '../components/organisms/PublicUserTeamScene'
-import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    View,
-    useWindowDimensions,
-} from 'react-native'
+import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
 import { useData, useTheme } from './../hooks'
 
@@ -254,7 +249,6 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     const styles = StyleSheet.create({
         screen: {
             height: '100%',
-            backgroundColor: colors.primary,
         },
         titleText: {
             color: colors.textPrimary,
@@ -273,51 +267,57 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     })
 
     return (
-        <SafeAreaView style={styles.screen}>
-            {user && <Text style={styles.titleText}>@{user?.username}</Text>}
-            <TabView
-                navigationState={{ index, routes }}
-                renderScene={renderScene(
-                    {
-                        loading,
-                        refetch,
-                        user,
-                        error,
-                    },
-                    {
-                        gameLists,
-                        teams: allTeams,
-                        loading: gameLoading,
-                        error: gameError,
-                        refetch: fetchGames,
-                    },
-                    {
-                        userId,
-                        teammates,
-                        teams: [
-                            ...(user?.playerTeams || []),
-                            ...(user?.archiveTeams || []),
-                        ],
-                        games: filterableGames,
-                    },
+        <BaseScreen containerWidth={100}>
+            <View style={styles.screen}>
+                {user && (
+                    <Text style={styles.titleText}>
+                        @{user?.username ?? 'user'}
+                    </Text>
                 )}
-                onIndexChange={setIndex}
-                initialLayout={{ width: layout.width }}
-                renderTabBar={props => {
-                    return (
-                        <TabBar
-                            {...props}
-                            style={{ backgroundColor: colors.primary }}
-                            indicatorStyle={{
-                                backgroundColor: colors.textPrimary,
-                            }}
-                            activeColor={colors.textPrimary}
-                            inactiveColor={colors.darkGray}
-                        />
-                    )
-                }}
-            />
-        </SafeAreaView>
+                <TabView
+                    navigationState={{ index, routes }}
+                    renderScene={renderScene(
+                        {
+                            loading,
+                            refetch,
+                            user,
+                            error,
+                        },
+                        {
+                            gameLists,
+                            teams: allTeams,
+                            loading: gameLoading,
+                            error: gameError,
+                            refetch: fetchGames,
+                        },
+                        {
+                            userId,
+                            teammates,
+                            teams: [
+                                ...(user?.playerTeams || []),
+                                ...(user?.archiveTeams || []),
+                            ],
+                            games: filterableGames,
+                        },
+                    )}
+                    onIndexChange={setIndex}
+                    initialLayout={{ width: layout.width }}
+                    renderTabBar={props => {
+                        return (
+                            <TabBar
+                                {...props}
+                                style={{ backgroundColor: colors.primary }}
+                                indicatorStyle={{
+                                    backgroundColor: colors.textPrimary,
+                                }}
+                                activeColor={colors.textPrimary}
+                                inactiveColor={colors.darkGray}
+                            />
+                        )
+                    }}
+                />
+            </View>
+        </BaseScreen>
     )
 }
 

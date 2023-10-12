@@ -8,7 +8,6 @@ import { ViewGameProps } from '../../types/navigation'
 import ViewPointsScene from '../../components/organisms/ViewPointsScene'
 import { deleteGame } from '../../services/data/game'
 import { setupMobileAds } from '../../utils/ads'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
     ActivityIndicator,
     StyleSheet,
@@ -54,7 +53,6 @@ const renderScene = (
 
 const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const layout = useWindowDimensions()
-    const { bottom } = useSafeAreaInsets()
 
     const {
         params: { gameId },
@@ -93,7 +91,6 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         { key: 'points', title: 'Points' },
         { key: 'stats', title: 'Overview' },
     ])
-    const [tabHeight, setTabHeight] = React.useState(0)
 
     React.useEffect(() => {
         setupMobileAds()
@@ -162,36 +159,26 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
 
     const styles = StyleSheet.create({
         tabContainer: {
-            height: tabHeight,
+            height: '100%',
         },
     })
 
     return (
         <BaseScreen containerWidth={90}>
-            {game && <GameHeader game={game} header />}
-            {game && (
-                <GameUtilityBar
-                    loading={reactivateLoading}
-                    onReactivateGame={
-                        managingTeamId ? handleReactivateGame : undefined
-                    }
-                    onDeleteGame={managingTeamId ? onDelete : undefined}
-                />
-            )}
-            {(allPointsLoading || gameLoading) && (
-                <ActivityIndicator color={colors.textPrimary} />
-            )}
-            <View
-                style={styles.tabContainer}
-                onLayout={event => {
-                    const adjustedHeight = layout.height / 4.75
-                    setTabHeight(
-                        layout.height -
-                            event.nativeEvent.layout.y -
-                            adjustedHeight -
-                            bottom,
-                    )
-                }}>
+            <View style={styles.tabContainer}>
+                {game && <GameHeader game={game} header />}
+                {game && (
+                    <GameUtilityBar
+                        loading={reactivateLoading}
+                        onReactivateGame={
+                            managingTeamId ? handleReactivateGame : undefined
+                        }
+                        onDeleteGame={managingTeamId ? onDelete : undefined}
+                    />
+                )}
+                {(allPointsLoading || gameLoading) && (
+                    <ActivityIndicator color={colors.textPrimary} />
+                )}
                 <TabView
                     navigationState={{ index, routes }}
                     renderScene={renderScene(
