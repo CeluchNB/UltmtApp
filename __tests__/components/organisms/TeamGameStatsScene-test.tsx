@@ -12,6 +12,18 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { render, screen, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+jest.mock('react-native-gifted-charts', () => {
+    return {
+        BarChart: () => {},
+        __esModule: true,
+    }
+})
+
+jest.mock('react-native-element-dropdown', () => {
+    return {
+        Dropdown: () => <span>dropdown</span>,
+    }
+})
 
 const playerOne = {
     _id: 'user1',
@@ -48,6 +60,7 @@ const gameStats: GameStats = {
         player: playerOne,
         total: 1,
     },
+    momentumData: [],
 }
 
 const teamStats: TeamStats = {
@@ -68,6 +81,8 @@ const teamStats: TeamStats = {
     defensePoints: 54,
     turnovers: 4,
     turnoversForced: 45,
+    completionsToScore: [5, 6],
+    completionsToTurnover: [11, 12],
 }
 
 const player: FilteredGamePlayer = {
@@ -97,6 +112,12 @@ const player: FilteredGamePlayer = {
     plusMinus: 2,
     winPercentage: 0.8,
     catchingPercentage: 1,
+    offensePoints: 5,
+    defensePoints: 1,
+    holds: 4,
+    breaks: 0,
+    offensiveEfficiency: 0.8,
+    defensiveEfficiency: 0,
 }
 
 const client = new QueryClient()
@@ -161,8 +182,10 @@ describe('TeamGameStatsScene', () => {
         await waitFor(() => {
             expect(screen.getByText('Leaderboard')).toBeTruthy()
         })
+        expect(screen.getByText('Completions to Score')).toBeTruthy()
+        expect(screen.getByText('Completions to Turnover')).toBeTruthy()
         expect(gameSpy).toHaveBeenCalledTimes(1)
-        expect(screen.getAllByText('1').length).toBe(10)
+        expect(screen.getAllByText('1').length).toBe(16)
         expect(screen.getAllByText('First 1 Last 1').length).toBe(7)
         expect(screen.getByText('Stats')).toBeTruthy()
         expect(screen.getByText('Game Overview')).toBeTruthy()

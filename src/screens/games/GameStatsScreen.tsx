@@ -69,7 +69,7 @@ const GameStatsScreen: React.FC<GameStatsProps> = ({ route }) => {
     })
 
     return (
-        <BaseScreen containerWidth={90}>
+        <BaseScreen containerWidth={95}>
             {isLoading && (
                 <ActivityIndicator size="large" color={colors.textPrimary} />
             )}

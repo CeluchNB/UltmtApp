@@ -6,10 +6,16 @@ import GameListItem from '../atoms/GameListItem'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
-import { RefreshControl, SectionList, StyleSheet, Text } from 'react-native'
+import {
+    RefreshControl,
+    SectionList,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 export interface PublicUserGamesSceneProps {
-    gameLists: { title: string; data: Game[]; index: number }[]
+    gameLists: { title: string; year: string; data: Game[]; index: number }[]
     teams: DisplayTeam[]
     loading: boolean
     error?: ApiError
@@ -32,6 +38,11 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
         teamTitle: {
             color: colors.textPrimary,
             fontSize: size.fontThirty,
+            fontWeight: weight.bold,
+        },
+        teamSeason: {
+            color: colors.textSecondary,
+            fontSize: size.fontTwenty,
             fontWeight: weight.bold,
         },
         error: {
@@ -63,8 +74,13 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
                         />
                     }
                     keyExtractor={item => item._id}
-                    renderSectionHeader={({ section: { title } }) => {
-                        return <Text style={styles.teamTitle}>{title}</Text>
+                    renderSectionHeader={({ section: { title, year } }) => {
+                        return (
+                            <View>
+                                <Text style={styles.teamTitle}>{title}</Text>
+                                <Text style={styles.teamSeason}>{year}</Text>
+                            </View>
+                        )
                     }}
                     renderItem={({ item, section }) => {
                         return (

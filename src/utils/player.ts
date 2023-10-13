@@ -1,3 +1,4 @@
+import { CheckBoxItem } from '../components/molecules/StatsFilterModal'
 import { DisplayUser } from '../types/user'
 
 export const getUserDisplayName = (player?: DisplayUser): string => {
@@ -18,4 +19,15 @@ export const getUniqueTeamIds = (player: {
         ...player.archiveTeams.map(team => team._id),
     ]
     return Array.from(new Set(teams))
+}
+
+export const getFilterButtonText = (
+    filterType: string,
+    filter: CheckBoxItem[],
+): string => {
+    const checkedItems = filter.filter(item => item.checked).length
+    if (checkedItems === 0) {
+        return `Filter by ${filterType}`
+    }
+    return `Filter by ${filterType} (${checkedItems})`
 }

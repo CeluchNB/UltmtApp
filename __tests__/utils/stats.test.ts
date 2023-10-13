@@ -2,6 +2,8 @@ import { PlayerStats } from '../../src/types/stats'
 import { getInitialPlayerData } from '../../fixtures/utils'
 import {
     addPlayerStats,
+    calculateColumnTotals,
+    calculateCompletionsValues,
     calculatePlayerStats,
     convertProfileScreenStatsToStatListItem,
     formatNumber,
@@ -72,6 +74,10 @@ describe('calculatePlayerStats', () => {
             pulls: 0,
             wins: 4,
             losses: 1,
+            offensePoints: 5,
+            defensePoints: 1,
+            holds: 4,
+            breaks: 0,
         }
 
         const result = calculatePlayerStats(stats)
@@ -109,6 +115,10 @@ describe('addPlayerStats', () => {
             pulls: 0,
             wins: 4,
             losses: 1,
+            offensePoints: 5,
+            defensePoints: 1,
+            holds: 4,
+            breaks: 0,
         }
         const result = addPlayerStats(stats, stats)
         const expected: any = {}
@@ -151,6 +161,11 @@ describe('mapStatDisplayName', () => {
     it('ppAssists', () => {
         expect(mapStatDisplayName('ppAssists')).toBe('Assists per point')
     })
+    it('ppHockeyAssists', () => {
+        expect(mapStatDisplayName('ppHockeyAssists')).toBe(
+            'Hockey Assists per point',
+        )
+    })
     it('ppDrops', () => {
         expect(mapStatDisplayName('ppDrops')).toBe('Drops per point')
     })
@@ -165,5 +180,88 @@ describe('mapStatDisplayName', () => {
     })
     it('single work', () => {
         expect(mapStatDisplayName('goals')).toBe('Goals')
+    })
+})
+
+describe('calculateColumnTotals', () => {
+    it('handles caclulation', () => {
+        const result = calculateColumnTotals({
+            assists: [
+                { _id: '1', value: 3 },
+                { _id: '2', value: 2 },
+            ],
+            blocks: [
+                { _id: '1', value: 1 },
+                { _id: '2', value: 1 },
+            ],
+            goals: [
+                { _id: '1', value: 2 },
+                { _id: '2', value: 1 },
+            ],
+            completedPasses: [
+                { _id: '1', value: 4 },
+                { _id: '2', value: 5 },
+            ],
+            throwaways: [
+                { _id: '1', value: 0 },
+                { _id: '2', value: 4 },
+            ],
+            droppedPasses: [
+                { _id: '1', value: 0 },
+                { _id: '2', value: 0 },
+            ],
+            plusMinus: [
+                { _id: '1', value: 2 },
+                { _id: '2', value: -1 },
+            ],
+            pointsPlayed: [
+                { _id: '1', value: 5 },
+                { _id: '2', value: 3 },
+            ],
+        })
+        expect(result).toMatchObject({
+            assists: 5,
+            blocks: 2,
+            goals: 3,
+            throwaways: 4,
+            plusMinus: 1,
+            completedPasses: 9,
+            pointsPlayed: 8,
+            ppAssists: 5 / 8,
+            ppBlocks: 0.25,
+            ppDrops: 0,
+            ppGoals: 3 / 8,
+            ppThrowaways: 0.5,
+            ppHockeyAssists: 0,
+            throwingPercentage: 9 / 13,
+        })
+    })
+})
+
+describe('calculateCompletionsValues', () => {
+    it('calculates correct values', () => {
+        const result = calculateCompletionsValues([
+            3, 4, 19, 26, 13, 18, 7, 20, 19, 22,
+        ])
+        expect(result).toEqual([
+            { value: 2 },
+            { value: 1 },
+            { value: 1 },
+            { value: 4 },
+            { value: 1 },
+            { value: 1 },
+        ])
+    })
+
+    it('calculates with no values', () => {
+        const result = calculateCompletionsValues([])
+        expect(result).toEqual([
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+        ])
     })
 })

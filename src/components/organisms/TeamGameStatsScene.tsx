@@ -1,3 +1,5 @@
+import CompletionsCharts from '../molecules/CompletionsCharts'
+import PlayerConnectionsView from './PlayerConnectionsView'
 import React from 'react'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
 import StatsTable from '../molecules/StatsTable'
@@ -12,6 +14,7 @@ import {
     View,
 } from 'react-native'
 import {
+    calculateCompletionsValues,
     convertGameStatsToLeaderItems,
     convertTeamStatsToGameOverviewItems,
 } from '../../utils/stats'
@@ -48,10 +51,20 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
         return convertTeamStatsToGameOverviewItems(teamStats)
     }, [teamStats])
 
+    const completionsToScores = React.useMemo(() => {
+        if (!teamStats) return []
+        return calculateCompletionsValues(teamStats.completionsToScore)
+    }, [teamStats])
+
+    const completionsToTurnovers = React.useMemo(() => {
+        if (!teamStats) return []
+        return calculateCompletionsValues(teamStats.completionsToTurnover)
+    }, [teamStats])
+
     const styles = StyleSheet.create({
         title: {
             fontSize: size.fontThirty,
-            color: colors.textPrimary,
+            color: colors.textSecondary,
         },
         error: {
             color: colors.gray,
@@ -107,6 +120,15 @@ const TeamGameStatsScene: React.FC<TeamGameStatsSceneProps> = ({
                     />
                 )}
             </View>
+            <CompletionsCharts
+                completionsToScores={completionsToScores}
+                completionsToTurnovers={completionsToTurnovers}
+            />
+            <PlayerConnectionsView
+                players={gameStats?.players || []}
+                games={[gameId]}
+                teams={[teamId]}
+            />
             <View>
                 <Text style={styles.title}>Stats</Text>
                 {gameStats && <StatsTable players={gameStats.players} />}
