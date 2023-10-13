@@ -296,10 +296,6 @@ const gameStats: GameStats = {
     momentumData: [],
 }
 
-beforeAll(() => {
-    userEvent.setup()
-})
-
 const client = new QueryClient()
 
 describe('ViewGameScreen', () => {
@@ -319,6 +315,7 @@ describe('ViewGameScreen', () => {
     jest.spyOn(ActionData, 'joinPoint').mockResolvedValue()
 
     beforeAll(() => {
+        userEvent.setup()
         jest.useFakeTimers({ legacyFakeTimers: true })
     })
 
