@@ -41,6 +41,7 @@ import {
     getLiveActionsByPoint as networkGetLiveActionsByPoint,
     reactivatePoint as networkReactivatePoint,
     setPlayers as networkSetPlayers,
+    setPullingTeam as networkSetPullingTeam,
 } from '../network/point'
 
 /**
@@ -381,4 +382,55 @@ export const reactivatePoint = async (
     } catch (e) {
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }
+}
+
+/**
+ * Update which team is pulling
+ * @param pointId
+ * @param team
+ * @returns updated point
+ */
+export const setPullingTeam = async (
+    pointId: string,
+    team: TeamNumber,
+): Promise<Point> => {
+    try {
+        const offline = await localGetActiveGameOffline()
+        if (offline) {
+            return await updateLocalPoint(pointId, team)
+        } else {
+            const response = await withGameToken(
+                networkSetPullingTeam,
+                pointId,
+                team,
+            )
+
+            const { point } = response.data
+            await localSavePoint(point)
+            return point
+        }
+    } catch (error) {
+        return throwApiError(error, Constants.GET_POINT_ERROR)
+    }
+}
+
+const updateLocalPoint = async (
+    pointId: string,
+    team: TeamNumber,
+): Promise<Point> => {
+    const activeGameId = await localGetActiveGameId()
+    const game = await localGetGameById(activeGameId)
+
+    const point = await localGetPointById(pointId)
+
+    if (team === 'one') {
+        point.pullingTeam = game.teamOne
+        point.receivingTeam = game.teamTwo
+    } else {
+        point.pullingTeam = game.teamTwo
+        point.receivingTeam = game.teamOne
+    }
+
+    await localSavePoint(point)
+    return point
 }

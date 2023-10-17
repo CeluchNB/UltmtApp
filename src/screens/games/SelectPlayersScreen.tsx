@@ -7,12 +7,13 @@ import LivePointUtilityBar from '../../components/molecules/LivePointUtilityBar'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
+import { TeamNumber } from '../../types/team'
 import { isPulling } from '../../utils/point'
-import { nameSort } from '../../utils/player'
-import { reactivatePoint } from '../../services/data/point'
+import { useMutation } from 'react-query'
 import { useTheme } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
+import { reactivatePoint, setPullingTeam } from '../../services/data/point'
 import {
     resetSetPlayersStatus,
     selectPoint,
@@ -43,6 +44,10 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     const [selectedPlayers, setSelectedPlayers] = useState<number[]>([])
     const [modalVisible, setModalVisible] = useState(false)
 
+    const { mutate } = useMutation((teamNumber: TeamNumber) =>
+        setPullingTeam(point._id, teamNumber),
+    )
+
     const playerList = React.useMemo(() => {
         let players
         if (team === 'one') {
@@ -50,7 +55,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         } else {
             players = game.teamTwoPlayers
         }
-        return players.slice().sort(nameSort)
+        return players
+            .slice()
+            .sort((a, b) =>
+                `${a.firstName} ${a.lastName}`.localeCompare(
+                    `${b.firstName} ${b.lastName}`,
+                ),
+            )
     }, [game, team])
 
     React.useEffect(() => {
@@ -99,6 +110,8 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         } catch (e) {}
     }
 
+    const onPressSetPulling = () => {}
+
     const styles = StyleSheet.create({
         description: {
             color: colors.gray,
@@ -129,6 +142,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         button: {
             marginTop: 10,
         },
+        setPullingChip: {
+            backgroundColor: colors.primary,
+            borderColor: colors.textPrimary,
+        },
+        setPullingText: {
+            color: colors.textPrimary,
+        },
     })
 
     return (
@@ -148,6 +168,17 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                 {isPulling(point, game, team) ? 'D ' : 'O '}
                                 point
                             </Text>
+                            <View style={styles.container}>
+                                <Chip
+                                    testID="active-warning-chip"
+                                    mode="outlined"
+                                    onPress={onPressSetPulling}
+                                    style={styles.setPullingChip}>
+                                    <Text style={styles.setPullingText}>
+                                        Switch Pulling Team
+                                    </Text>
+                                </Chip>
+                            </View>
                             <LivePointUtilityBar
                                 loading={false}
                                 undoDisabled={

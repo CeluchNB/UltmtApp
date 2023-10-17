@@ -108,3 +108,19 @@ export const deletePoint = async (
         },
     })
 }
+
+export const setPullingTeam = async (
+    token: string,
+    pointId: string,
+    team: TeamNumber,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/point/${pointId}/pulling?team=${team}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}
