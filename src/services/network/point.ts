@@ -116,6 +116,7 @@ export const setPullingTeam = async (
 ): Promise<AxiosResponse> => {
     return await axios.put(
         `${API_URL_V1}/point/${pointId}/pulling?team=${team}`,
+        {},
         {
             headers: {
                 Authorization: `Bearer ${token}`,

@@ -102,7 +102,8 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
                                         style={{
                                             ...styles.text,
                                             ...styles.radioLabel,
-                                        }}>
+                                        }}
+                                        onPress={() => onChange('undefined')}>
                                         All Games
                                     </Text>
                                     <RadioButton
@@ -116,7 +117,8 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
                                         style={{
                                             ...styles.text,
                                             ...styles.radioLabel,
-                                        }}>
+                                        }}
+                                        onPress={() => onChange('true')}>
                                         Live Games
                                     </Text>
                                     <RadioButton
@@ -130,7 +132,8 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
                                         style={{
                                             ...styles.text,
                                             ...styles.radioLabel,
-                                        }}>
+                                        }}
+                                        onPress={() => onChange('false')}>
                                         Completed Games
                                     </Text>
                                     <RadioButton

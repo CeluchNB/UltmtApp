@@ -1,5 +1,6 @@
 import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
+import ChangePullingTeamModal from '../../components/molecules/ChangePullingTeamModal'
 import { Chip } from 'react-native-paper'
 import GameHeader from '../../components/molecules/GameHeader'
 import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
@@ -7,13 +8,11 @@ import LivePointUtilityBar from '../../components/molecules/LivePointUtilityBar'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
-import { TeamNumber } from '../../types/team'
 import { isPulling } from '../../utils/point'
-import { useMutation } from 'react-query'
+import { reactivatePoint } from '../../services/data/point'
 import { useTheme } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { reactivatePoint, setPullingTeam } from '../../services/data/point'
 import {
     resetSetPlayersStatus,
     selectPoint,
@@ -42,11 +41,8 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     const error = useSelector(selectSetPlayersError)
     const dispatch = useDispatch<AppDispatch>()
     const [selectedPlayers, setSelectedPlayers] = useState<number[]>([])
-    const [modalVisible, setModalVisible] = useState(false)
-
-    const { mutate } = useMutation((teamNumber: TeamNumber) =>
-        setPullingTeam(point._id, teamNumber),
-    )
+    const [guestModalVisible, setGuestModalVisible] = useState(false)
+    const [pullingModalVisible, setPullingModalVisible] = useState(false)
 
     const playerList = React.useMemo(() => {
         let players
@@ -110,7 +106,9 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         } catch (e) {}
     }
 
-    const onPressSetPulling = () => {}
+    const onPressSetPulling = () => {
+        setPullingModalVisible(true)
+    }
 
     const styles = StyleSheet.create({
         description: {
@@ -175,7 +173,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                     onPress={onPressSetPulling}
                                     style={styles.setPullingChip}>
                                     <Text style={styles.setPullingText}>
-                                        Switch Pulling Team
+                                        Change Pulling Team
                                     </Text>
                                 </Chip>
                             </View>
@@ -218,7 +216,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                             <SecondaryButton
                                 style={styles.button}
                                 onPress={async () => {
-                                    setModalVisible(true)
+                                    setGuestModalVisible(true)
                                 }}
                                 text="add guest"
                             />
@@ -238,9 +236,18 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 />
             </View>
             <GuestPlayerModal
-                visible={modalVisible}
+                visible={guestModalVisible}
                 onClose={() => {
-                    setModalVisible(false)
+                    setGuestModalVisible(false)
+                }}
+            />
+            <ChangePullingTeamModal
+                game={game}
+                pointId={point._id}
+                team={team}
+                visible={pullingModalVisible}
+                onClose={() => {
+                    setPullingModalVisible(false)
                 }}
             />
         </BaseScreen>

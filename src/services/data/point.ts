@@ -407,7 +407,9 @@ export const setPullingTeam = async (
 
             const { point } = response.data
             await localSavePoint(point)
-            return point
+
+            const localPoint = await localGetPointById(point._id)
+            return localPoint
         }
     } catch (error) {
         return throwApiError(error, Constants.GET_POINT_ERROR)
