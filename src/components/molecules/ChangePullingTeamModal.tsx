@@ -87,8 +87,15 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                                         onPress={() => onChange('one')}>
                                         {game.teamOne.name}
                                     </Text>
-                                    <RadioButton
+                                    <RadioButton.Android
                                         value="one"
+                                        theme={{
+                                            colors: {
+                                                accent: colors.textSecondary,
+                                                primary: colors.textPrimary,
+                                                secondary: colors.textPrimary,
+                                            },
+                                        }}
                                         color={colors.textPrimary}
                                         uncheckedColor={colors.textSecondary}
                                     />
@@ -99,7 +106,7 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                                         onPress={() => onChange('two')}>
                                         {game.teamTwo.name}
                                     </Text>
-                                    <RadioButton
+                                    <RadioButton.Android
                                         value="two"
                                         color={colors.textPrimary}
                                         uncheckedColor={colors.textSecondary}

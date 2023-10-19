@@ -106,7 +106,7 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
                                         onPress={() => onChange('undefined')}>
                                         All Games
                                     </Text>
-                                    <RadioButton
+                                    <RadioButton.Android
                                         value="undefined"
                                         color={colors.textPrimary}
                                         uncheckedColor={colors.textSecondary}
@@ -121,7 +121,7 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
                                         onPress={() => onChange('true')}>
                                         Live Games
                                     </Text>
-                                    <RadioButton
+                                    <RadioButton.Android
                                         value="true"
                                         color={colors.textPrimary}
                                         uncheckedColor={colors.textSecondary}
@@ -136,7 +136,7 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
                                         onPress={() => onChange('false')}>
                                         Completed Games
                                     </Text>
-                                    <RadioButton
+                                    <RadioButton.Android
                                         value="false"
                                         color={colors.textPrimary}
                                         uncheckedColor={colors.textSecondary}

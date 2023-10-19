@@ -329,56 +329,24 @@ exports[`should match snapshot 1`] = `
                     },
                     {
                       "borderRadius": 18,
-                      "padding": 6,
                     },
                   ]
                 }
                 uncheckedColor="#7AC6FF"
               >
                 <View
+                  collapsable={false}
                   style={
                     {
-                      "opacity": 0,
+                      "borderColor": "#7AC6FF",
+                      "borderRadius": 10,
+                      "borderWidth": 2,
+                      "height": 20,
+                      "margin": 8,
+                      "width": 20,
                     }
                   }
-                >
-                  <Text
-                    accessibilityElementsHidden={true}
-                    allowFontScaling={false}
-                    importantForAccessibility="no-hide-descendants"
-                    pointerEvents="none"
-                    selectable={false}
-                    style={
-                      [
-                        {
-                          "color": "#ffd600",
-                          "fontSize": 24,
-                        },
-                        [
-                          {
-                            "lineHeight": 24,
-                            "transform": [
-                              {
-                                "scaleX": 1,
-                              },
-                            ],
-                          },
-                          {
-                            "backgroundColor": "transparent",
-                          },
-                        ],
-                        {
-                          "fontFamily": "Material Design Icons",
-                          "fontStyle": "normal",
-                          "fontWeight": "normal",
-                        },
-                        {},
-                      ]
-                    }
-                  >
-                    󰄬
-                  </Text>
-                </View>
+                />
               </View>
             </View>
             <View
@@ -443,55 +411,58 @@ exports[`should match snapshot 1`] = `
                     },
                     {
                       "borderRadius": 18,
-                      "padding": 6,
                     },
                   ]
                 }
                 uncheckedColor="#7AC6FF"
               >
                 <View
+                  collapsable={false}
                   style={
                     {
-                      "opacity": 1,
+                      "borderColor": "#ffd600",
+                      "borderRadius": 10,
+                      "borderWidth": 2,
+                      "height": 20,
+                      "margin": 8,
+                      "width": 20,
                     }
                   }
                 >
-                  <Text
-                    accessibilityElementsHidden={true}
-                    allowFontScaling={false}
-                    importantForAccessibility="no-hide-descendants"
-                    pointerEvents="none"
-                    selectable={false}
+                  <View
                     style={
                       [
                         {
-                          "color": "#ffd600",
-                          "fontSize": 24,
+                          "bottom": 0,
+                          "left": 0,
+                          "position": "absolute",
+                          "right": 0,
+                          "top": 0,
                         },
-                        [
-                          {
-                            "lineHeight": 24,
-                            "transform": [
-                              {
-                                "scaleX": 1,
-                              },
-                            ],
-                          },
-                          {
-                            "backgroundColor": "transparent",
-                          },
-                        ],
                         {
-                          "fontFamily": "Material Design Icons",
-                          "fontStyle": "normal",
-                          "fontWeight": "normal",
+                          "alignItems": "center",
+                          "justifyContent": "center",
                         },
-                        {},
                       ]
                     }
                   >
-                    󰄬
-                  </Text>
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "backgroundColor": "#ffd600",
+                          "borderRadius": 5,
+                          "height": 10,
+                          "transform": [
+                            {
+                              "scale": 1,
+                            },
+                          ],
+                          "width": 10,
+                        }
+                      }
+                    />
+                  </View>
                 </View>
               </View>
             </View>
@@ -557,56 +528,24 @@ exports[`should match snapshot 1`] = `
                     },
                     {
                       "borderRadius": 18,
-                      "padding": 6,
                     },
                   ]
                 }
                 uncheckedColor="#7AC6FF"
               >
                 <View
+                  collapsable={false}
                   style={
                     {
-                      "opacity": 0,
+                      "borderColor": "#7AC6FF",
+                      "borderRadius": 10,
+                      "borderWidth": 2,
+                      "height": 20,
+                      "margin": 8,
+                      "width": 20,
                     }
                   }
-                >
-                  <Text
-                    accessibilityElementsHidden={true}
-                    allowFontScaling={false}
-                    importantForAccessibility="no-hide-descendants"
-                    pointerEvents="none"
-                    selectable={false}
-                    style={
-                      [
-                        {
-                          "color": "#ffd600",
-                          "fontSize": 24,
-                        },
-                        [
-                          {
-                            "lineHeight": 24,
-                            "transform": [
-                              {
-                                "scaleX": 1,
-                              },
-                            ],
-                          },
-                          {
-                            "backgroundColor": "transparent",
-                          },
-                        ],
-                        {
-                          "fontFamily": "Material Design Icons",
-                          "fontStyle": "normal",
-                          "fontWeight": "normal",
-                        },
-                        {},
-                      ]
-                    }
-                  >
-                    󰄬
-                  </Text>
-                </View>
+                />
               </View>
             </View>
           </View>
