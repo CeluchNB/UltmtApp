@@ -386,8 +386,8 @@ export const reactivatePoint = async (
 
 /**
  * Update which team is pulling
- * @param pointId
- * @param team
+ * @param pointId id of point to update
+ * @param team team number of pulling team
  * @returns updated point
  */
 export const setPullingTeam = async (
@@ -412,7 +412,7 @@ export const setPullingTeam = async (
             return localPoint
         }
     } catch (error) {
-        return throwApiError(error, Constants.GET_POINT_ERROR)
+        return throwApiError(error, Constants.UPDATE_POINT_ERROR)
     }
 }
 
@@ -434,5 +434,6 @@ const updateLocalPoint = async (
     }
 
     await localSavePoint(point)
-    return point
+    const localPoint = await localGetPointById(point._id)
+    return localPoint
 }

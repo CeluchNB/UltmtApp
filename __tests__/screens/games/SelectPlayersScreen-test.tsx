@@ -9,7 +9,13 @@ import { createPoint } from '../../../src/store/reducers/features/point/livePoin
 import { game } from '../../../fixtures/data'
 import store from '../../../src/store/store'
 import { DisplayUser, GuestUser } from '../../../src/types/user'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 import {
     setGame,
     setTeam,
@@ -141,6 +147,8 @@ const point: Point = {
     teamTwoActions: [],
 }
 
+const client = new QueryClient()
+
 const getPlayerName = (player: GuestUser) => {
     return `${player.firstName} ${player.lastName}`
 }
@@ -159,69 +167,94 @@ beforeAll(() => {
     store.dispatch(createPoint({ pulling: true, pointNumber: 1 }))
 })
 
-it('should match snapshot', () => {
-    const snapshot = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <SelectPlayersScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    expect(snapshot.toJSON()).toMatchSnapshot()
-})
-
-it('should match snapshot for team two', () => {
-    store.dispatch(setTeam('two'))
-    const snapshot = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <SelectPlayersScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    expect(snapshot.toJSON()).toMatchSnapshot()
-})
-
-it('should select players', async () => {
-    store.dispatch(setTeam('one'))
-    const spy = jest
-        .spyOn(PointData, 'setPlayers')
-        .mockReturnValueOnce(
-            Promise.resolve({ ...point, teamOnePlayers: playerList1 }),
+describe('SelectPlayersScreen', () => {
+    it('should match snapshot', () => {
+        const snapshot = render(
+            <Provider store={store}>
+                <QueryClientProvider client={client}>
+                    <NavigationContainer>
+                        <SelectPlayersScreen {...props} />
+                    </NavigationContainer>
+                </QueryClientProvider>
+            </Provider>,
         )
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <SelectPlayersScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
 
-    const player1 = getByText(getPlayerName(playerList1[0]))
-    const player2 = getByText(getPlayerName(playerList1[1]))
-    const player3 = getByText(getPlayerName(playerList1[2]))
-    const player4 = getByText(getPlayerName(playerList1[3]))
-    const player5 = getByText(getPlayerName(playerList1[4]))
-    const player6 = getByText(getPlayerName(playerList1[5]))
-    const player7 = getByText(getPlayerName(playerList1[6]))
+        expect(snapshot.toJSON()).toMatchSnapshot()
+    })
 
-    fireEvent.press(player1)
-    fireEvent.press(player2)
-    fireEvent.press(player3)
-    fireEvent.press(player4)
-    fireEvent.press(player5)
-    fireEvent.press(player6)
-    fireEvent.press(player7)
-    // deselect and reselect player
-    fireEvent.press(player7)
-    fireEvent.press(player7)
+    it('should match snapshot for team two', () => {
+        store.dispatch(setTeam('two'))
+        const snapshot = render(
+            <Provider store={store}>
+                <QueryClientProvider client={client}>
+                    <NavigationContainer>
+                        <SelectPlayersScreen {...props} />
+                    </NavigationContainer>
+                </QueryClientProvider>
+            </Provider>,
+        )
 
-    const button = getByText('start')
-    fireEvent.press(button)
+        expect(snapshot.toJSON()).toMatchSnapshot()
+    })
 
-    await waitFor(() => {
-        expect(spy).toHaveBeenCalledWith('point1', playerList1)
+    it('should display set pulling team modal', () => {
+        render(
+            <Provider store={store}>
+                <QueryClientProvider client={client}>
+                    <NavigationContainer>
+                        <SelectPlayersScreen {...props} />
+                    </NavigationContainer>
+                </QueryClientProvider>
+            </Provider>,
+        )
+
+        const setPullingBtn = screen.getByText('CHANGE PULLING TEAM')
+        fireEvent.press(setPullingBtn)
+
+        expect(screen.getByText('Choose pulling team')).toBeTruthy()
+    })
+
+    it('should select players', async () => {
+        store.dispatch(setTeam('one'))
+        const spy = jest
+            .spyOn(PointData, 'setPlayers')
+            .mockReturnValueOnce(
+                Promise.resolve({ ...point, teamOnePlayers: playerList1 }),
+            )
+        render(
+            <Provider store={store}>
+                <QueryClientProvider client={client}>
+                    <NavigationContainer>
+                        <SelectPlayersScreen {...props} />
+                    </NavigationContainer>
+                </QueryClientProvider>
+            </Provider>,
+        )
+
+        const player1 = screen.getByText(getPlayerName(playerList1[0]))
+        const player2 = screen.getByText(getPlayerName(playerList1[1]))
+        const player3 = screen.getByText(getPlayerName(playerList1[2]))
+        const player4 = screen.getByText(getPlayerName(playerList1[3]))
+        const player5 = screen.getByText(getPlayerName(playerList1[4]))
+        const player6 = screen.getByText(getPlayerName(playerList1[5]))
+        const player7 = screen.getByText(getPlayerName(playerList1[6]))
+
+        fireEvent.press(player1)
+        fireEvent.press(player2)
+        fireEvent.press(player3)
+        fireEvent.press(player4)
+        fireEvent.press(player5)
+        fireEvent.press(player6)
+        fireEvent.press(player7)
+        // deselect and reselect player
+        fireEvent.press(player7)
+        fireEvent.press(player7)
+
+        const button = screen.getByText('start')
+        fireEvent.press(button)
+
+        await waitFor(() => {
+            expect(spy).toHaveBeenCalledWith('point1', playerList1)
+        })
     })
 })

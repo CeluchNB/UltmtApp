@@ -146,6 +146,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         },
         setPullingText: {
             color: colors.textPrimary,
+            fontSize: size.fontTen,
         },
     })
 
@@ -173,7 +174,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                     onPress={onPressSetPulling}
                                     style={styles.setPullingChip}>
                                     <Text style={styles.setPullingText}>
-                                        Change Pulling Team
+                                        CHANGE PULLING TEAM
                                     </Text>
                                 </Chip>
                             </View>
@@ -244,7 +245,9 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
             <ChangePullingTeamModal
                 game={game}
                 pointId={point._id}
-                team={team}
+                team={
+                    game.teamOne._id === point.pullingTeam._id ? 'one' : 'two'
+                }
                 visible={pullingModalVisible}
                 onClose={() => {
                     setPullingModalVisible(false)

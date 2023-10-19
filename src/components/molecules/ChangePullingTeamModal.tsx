@@ -71,7 +71,7 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
 
     return (
         <BaseModal visible={visible} onClose={onClose}>
-            <Text style={styles.title}>Choose pulling team:</Text>
+            <Text style={styles.title}>Choose pulling team</Text>
             <View>
                 <Controller
                     control={control}
