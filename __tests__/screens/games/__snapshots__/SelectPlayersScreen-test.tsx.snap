@@ -2553,6 +2553,14 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
       transparent={true}
       visible={false}
     />
+    <Modal
+      animationType="slide"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      testID="base-modal"
+      transparent={true}
+      visible={false}
+    />
   </View>
 </RCTSafeAreaView>
 `;
@@ -5094,6 +5102,14 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
         </View>
       </RCTScrollView>
     </View>
+    <Modal
+      animationType="slide"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      testID="base-modal"
+      transparent={true}
+      visible={false}
+    />
     <Modal
       animationType="slide"
       hardwareAccelerated={false}
