@@ -47,7 +47,7 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
         return []
     }
 
-    const onModalClose = async (data: { code: string }) => {
+    const onSubmit = async (data: { code: string }) => {
         const { code } = data
         if (!code) {
             return
@@ -87,6 +87,10 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
         }
     }
 
+    const onClose = () => {
+        setModalVisible(false)
+    }
+
     return (
         <BaseScreen containerWidth={80}>
             <SearchDisplay
@@ -108,7 +112,8 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
                 visible={modalVisible}
                 loading={joinLoading}
                 error={joinError}
-                onClose={onModalClose}
+                onClose={onClose}
+                onSubmit={onSubmit}
             />
         </BaseScreen>
     )

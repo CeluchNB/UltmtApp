@@ -37,13 +37,8 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
         defaultValues: { team },
     })
 
-    const { mutate, isLoading } = useMutation(
-        (teamNumber: TeamNumber) => setPullingTeam(pointId, teamNumber),
-        {
-            onSuccess(data) {
-                dispatch(setPoint(data))
-            },
-        },
+    const { mutate, isLoading } = useMutation((teamNumber: TeamNumber) =>
+        setPullingTeam(pointId, teamNumber),
     )
 
     const styles = StyleSheet.create({
@@ -123,7 +118,11 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                 loading={isLoading}
                 onPress={async () => {
                     handleSubmit(({ team: teamNumber }) => {
-                        mutate(teamNumber as TeamNumber)
+                        mutate(teamNumber as TeamNumber, {
+                            onSuccess(data) {
+                                dispatch(setPoint(data))
+                            },
+                        })
                     })()
                     onClose()
                 }}
