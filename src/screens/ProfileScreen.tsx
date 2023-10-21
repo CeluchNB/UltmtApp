@@ -60,6 +60,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     const { data: activeGames, refetch: activeGameRefetch } = useQuery<Game[]>(
         ['activeGames'],
         () => getActiveGames(),
+        { cacheTime: 0 },
     )
 
     const {

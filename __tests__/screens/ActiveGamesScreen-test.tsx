@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import store from '../../src/store/store'
 import { Game, LocalGame } from '../../src/types/game'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { fetchProfileData, game, point } from '../../fixtures/data'
 import {
     fireEvent,
@@ -49,6 +50,8 @@ const props: ActiveGamesProps = {
     route: {} as any,
 }
 
+const client = new QueryClient()
+
 beforeEach(() => {
     jest.resetAllMocks()
     jest.spyOn(GameData, 'getActiveGames').mockReturnValue(
@@ -77,11 +80,21 @@ beforeEach(() => {
 })
 
 describe('ActiveGamesScreen', () => {
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     it('renders', async () => {
         const snapshot = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ActiveGamesScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ActiveGamesScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -113,7 +126,9 @@ describe('ActiveGamesScreen', () => {
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ActiveGamesScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ActiveGamesScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -155,7 +170,9 @@ describe('ActiveGamesScreen', () => {
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ActiveGamesScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ActiveGamesScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -197,7 +214,9 @@ describe('ActiveGamesScreen', () => {
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ActiveGamesScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ActiveGamesScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -239,7 +258,9 @@ describe('ActiveGamesScreen', () => {
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ActiveGamesScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ActiveGamesScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -267,7 +288,9 @@ describe('ActiveGamesScreen', () => {
         const { getByText, getAllByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ActiveGamesScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ActiveGamesScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
