@@ -695,7 +695,7 @@ describe('test set pulling team', () => {
         )
 
         await expect(setPullingTeam('', 'one')).rejects.toMatchObject({
-            message: Constants.UPDATE_POINT_ERROR,
+            message: Constants.MODIFY_LIVE_POINT_ERROR,
         })
     })
 

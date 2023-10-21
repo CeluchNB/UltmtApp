@@ -257,4 +257,53 @@ describe('SelectPlayersScreen', () => {
             expect(spy).toHaveBeenCalledWith('point1', playerList1)
         })
     })
+
+    it('should display confirmation modal when point mismatches', async () => {
+        store.dispatch(setTeam('one'))
+        const spy = jest.spyOn(PointData, 'setPlayers').mockReturnValueOnce(
+            Promise.resolve({
+                ...point,
+                pullingTeam: { ...point.pullingTeam, _id: 'newid' },
+                teamOnePlayers: playerList1,
+            }),
+        )
+        render(
+            <Provider store={store}>
+                <QueryClientProvider client={client}>
+                    <NavigationContainer>
+                        <SelectPlayersScreen {...props} />
+                    </NavigationContainer>
+                </QueryClientProvider>
+            </Provider>,
+        )
+
+        const player1 = screen.getByText(getPlayerName(playerList1[0]))
+        const player2 = screen.getByText(getPlayerName(playerList1[1]))
+        const player3 = screen.getByText(getPlayerName(playerList1[2]))
+        const player4 = screen.getByText(getPlayerName(playerList1[3]))
+        const player5 = screen.getByText(getPlayerName(playerList1[4]))
+        const player6 = screen.getByText(getPlayerName(playerList1[5]))
+        const player7 = screen.getByText(getPlayerName(playerList1[6]))
+
+        fireEvent.press(player1)
+        fireEvent.press(player2)
+        fireEvent.press(player3)
+        fireEvent.press(player4)
+        fireEvent.press(player5)
+        fireEvent.press(player6)
+        fireEvent.press(player7)
+
+        const button = screen.getByText('start')
+        fireEvent.press(button)
+
+        await waitFor(() => {
+            expect(spy).toHaveBeenCalledWith('point1', playerList1)
+        })
+
+        expect(
+            screen.getByText(
+                'The stat keeper for the other team has switched the pulling and receiving teams. Do you wish to continue?',
+            ),
+        ).toBeTruthy()
+    })
 })

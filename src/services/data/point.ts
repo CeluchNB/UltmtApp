@@ -412,7 +412,7 @@ export const setPullingTeam = async (
             return localPoint
         }
     } catch (error) {
-        return throwApiError(error, Constants.UPDATE_POINT_ERROR)
+        return throwApiError(error, Constants.MODIFY_LIVE_POINT_ERROR)
     }
 }
 

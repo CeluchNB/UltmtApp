@@ -37,8 +37,8 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
         defaultValues: { team },
     })
 
-    const { mutate, isLoading } = useMutation((teamNumber: TeamNumber) =>
-        setPullingTeam(pointId, teamNumber),
+    const { mutate, isLoading, isError, error } = useMutation(
+        (teamNumber: TeamNumber) => setPullingTeam(pointId, teamNumber),
     )
 
     const styles = StyleSheet.create({
@@ -48,7 +48,6 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
             justifyContent: 'center',
             marginTop: 10,
         },
-        formContainer: {},
         title: {
             fontSize: size.fontTwenty,
             color: colors.textPrimary,
@@ -61,6 +60,10 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
         },
         button: {
             marginTop: 10,
+        },
+        errorText: {
+            fontSize: size.fontFifteen,
+            color: colors.error,
         },
     })
 
@@ -112,6 +115,9 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                     }}
                 />
             </View>
+            {isError && (
+                <Text style={styles.errorText}>{error?.toString()}</Text>
+            )}
             <PrimaryButton
                 style={styles.button}
                 text="submit"
@@ -121,10 +127,10 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                         mutate(teamNumber as TeamNumber, {
                             onSuccess(data) {
                                 dispatch(setPoint(data))
+                                onClose()
                             },
                         })
                     })()
-                    onClose()
                 }}
             />
         </BaseModal>
