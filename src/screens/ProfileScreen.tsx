@@ -17,6 +17,7 @@ import { fetchProfile } from '../services/data/user'
 import { getPlayerStats } from '../services/data/stats'
 import { getUniqueTeamIds } from '../utils/player'
 import { logout } from '../services/data/auth'
+import { useTheme } from '../hooks'
 import {
     FlatList,
     RefreshControl,
@@ -34,7 +35,6 @@ import {
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
 import { setLogger, useQuery } from 'react-query'
-import { useData, useTheme } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
 const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
@@ -57,9 +57,9 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         return games.flat()
     }, [allTeams])
 
-    const { data: activeGames, refetch: activeGameRefetch } = useData<Game[]>(
-        getActiveGames,
-        account._id,
+    const { data: activeGames, refetch: activeGameRefetch } = useQuery<Game[]>(
+        ['activeGames'],
+        () => getActiveGames(),
     )
 
     const {

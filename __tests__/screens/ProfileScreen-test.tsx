@@ -49,9 +49,11 @@ beforeAll(async () => {
     jest.spyOn(UserData, 'fetchProfile').mockImplementation(async () => {
         return { ...fetchProfileData, managerTeams: [game.teamOne] }
     })
-    jest.spyOn(GameData, 'getGamesByTeam').mockReturnValue(
-        Promise.resolve([game]),
-    )
+    let id = 0
+    jest.spyOn(GameData, 'getGamesByTeam').mockImplementation(() => {
+        id += 1
+        return Promise.resolve([{ ...game, _id: `game${id}` }])
+    })
     jest.spyOn(GameData, 'getActiveGames').mockReturnValue(
         Promise.resolve([{ ...game, offline: false }]),
     )

@@ -103,7 +103,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                   },
                 },
                 {
-                  "_id": "game1",
+                  "_id": "game2",
                   "creator": {
                     "_id": "user1",
                     "firstName": "First 1",
@@ -147,7 +147,7 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
                   },
                 },
                 {
-                  "_id": "game1",
+                  "_id": "game3",
                   "creator": {
                     "_id": "user1",
                     "firstName": "First 1",
