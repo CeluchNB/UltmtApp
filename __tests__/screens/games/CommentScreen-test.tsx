@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import store from '../../../src/store/store'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     SavedServerActionData,
     SubscriptionObject,
@@ -25,6 +26,7 @@ import {
     setSavedAction,
 } from '../../../src/store/reducers/features/action/viewAction'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
+jest.mock('react-native/Libraries/Animated/animations/TimingAnimation')
 
 const mockedNavigate = jest.fn()
 jest.mock('@react-navigation/native', () => {
@@ -54,6 +56,8 @@ const updatedSavedAction: SavedServerActionData = {
     ],
 }
 
+const client = new QueryClient()
+
 describe('Live CommentScreen', () => {
     const props: CommentProps = {
         navigation: {} as any,
@@ -62,6 +66,15 @@ describe('Live CommentScreen', () => {
         } as any,
     }
     let subscriptions: SubscriptionObject
+
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     beforeEach(() => {
         store.dispatch(setSavedAction(updatedSavedAction))
         store.dispatch(setLiveAction(liveAction))
@@ -91,7 +104,9 @@ describe('Live CommentScreen', () => {
         const snapshot = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -109,7 +124,9 @@ describe('Live CommentScreen', () => {
         const { getByPlaceholderText, getByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -157,7 +174,9 @@ describe('Live CommentScreen', () => {
         const { queryByText, getAllByRole } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -186,7 +205,9 @@ describe('Live CommentScreen', () => {
         const { queryByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -214,6 +235,15 @@ describe('Saved CommentScreen', () => {
             params: { live: false, gameId: 'game1', pointId: 'point1' },
         } as any,
     }
+
+    // beforeAll(() => {
+    //     jest.useFakeTimers({ legacyFakeTimers: true })
+    // })
+
+    // afterAll(() => {
+    //     jest.useRealTimers()
+    // })
+
     beforeEach(() => {
         store.dispatch(setSavedAction(updatedSavedAction))
         store.dispatch(setLiveAction(liveAction))
@@ -240,7 +270,9 @@ describe('Saved CommentScreen', () => {
         const snapshot = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -275,7 +307,9 @@ describe('Saved CommentScreen', () => {
         const { getByText, getByPlaceholderText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -309,7 +343,9 @@ describe('Saved CommentScreen', () => {
         const { queryByText, getAllByRole } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -332,7 +368,9 @@ describe('Saved CommentScreen', () => {
         render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -355,7 +393,9 @@ describe('Saved CommentScreen', () => {
         const { getByText, getByPlaceholderText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -384,7 +424,9 @@ describe('Saved CommentScreen', () => {
         const { queryByText, getAllByRole } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <CommentScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <CommentScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
