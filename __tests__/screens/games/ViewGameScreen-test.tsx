@@ -296,7 +296,13 @@ const gameStats: GameStats = {
     momentumData: [],
 }
 
-const client = new QueryClient()
+const client = new QueryClient({
+    defaultOptions: {
+        queries: {
+            cacheTime: 0,
+        },
+    },
+})
 
 describe('ViewGameScreen', () => {
     const gameSpy = jest.spyOn(GameData, 'getGameById').mockResolvedValue(game)
@@ -316,7 +322,7 @@ describe('ViewGameScreen', () => {
 
     beforeAll(() => {
         userEvent.setup()
-        jest.useFakeTimers({ legacyFakeTimers: true })
+        jest.useFakeTimers()
     })
 
     afterAll(() => {

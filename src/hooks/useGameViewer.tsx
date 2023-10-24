@@ -2,7 +2,7 @@ import { Game } from '../types/game'
 import Point from '../types/point'
 import React from 'react'
 import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
-import { useData } from './useData'
+import { useQuery } from 'react-query'
 import {
     Action,
     ActionFactory,
@@ -102,9 +102,10 @@ export const useGameViewer = (gameId: string): GameViewerData => {
         return undefined
     }, [game, managerTeams])
 
-    const { data: activeGames } = useData<Game[]>(
-        getActiveGames,
-        managingTeamId,
+    const { data: activeGames } = useQuery<Game[]>(
+        ['getActiveGames'],
+        () => getActiveGames(),
+        { cacheTime: 0 },
     )
 
     const myTeamActive = React.useMemo(() => {
