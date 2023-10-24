@@ -47,12 +47,15 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         refetch,
         error,
         isError,
-    } = useQuery<Team>(['getManagedTeam', { id }], () => getManagedTeam(id), {
-        retry: 0,
-        onSuccess(data) {
-            dispatch(setTeam(data))
+    } = useQuery<Team, ApiError>(
+        ['getManagedTeam', { id }],
+        () => getManagedTeam(id),
+        {
+            onSuccess(data) {
+                dispatch(setTeam(data))
+            },
         },
-    })
+    )
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {

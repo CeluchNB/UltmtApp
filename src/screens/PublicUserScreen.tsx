@@ -1,4 +1,3 @@
-import * as UserData from './../services/data/user'
 import { ApiError } from '../types/services'
 import BaseScreen from '../components/atoms/BaseScreen'
 import { DisplayTeam } from '../types/team'
@@ -6,7 +5,10 @@ import { Game } from '../types/game'
 import { PublicUserDetailsProps } from '../types/navigation'
 import React from 'react'
 import { getGamesByTeam } from '../services/data/game'
+import { getPublicUser } from '../services/data/user'
 import { setError } from '../store/reducers/features/account/accountReducer'
+import { useQuery } from 'react-query'
+import { useTheme } from './../hooks'
 import { DisplayUser, User } from '../types/user'
 import PublicUserGamesScene, {
     PublicUserGamesSceneProps,
@@ -19,7 +21,6 @@ import PublicUserTeamScene, {
 } from '../components/organisms/PublicUserTeamScene'
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
-import { useData, useTheme } from './../hooks'
 
 const renderScene = (
     teamProps: PublicUserTeamSceneProps,
@@ -84,25 +85,27 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 
     const {
         data: user,
-        loading,
+        isLoading,
         error,
         refetch,
-    } = useData<User>(UserData.getPublicUser, userId)
+    } = useQuery<User, ApiError>(['getPublicUser', { userId }], () =>
+        getPublicUser(userId),
+    )
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            if (!loading && !user) {
+            if (!isLoading && !user) {
                 refetch()
             }
         })
 
         return unsubscribe
-    }, [navigation, loading, user, refetch])
+    }, [navigation, isLoading, user, refetch])
 
     React.useEffect(() => {
         if (user) {
             navigation.setOptions({
-                title: `${user?.firstName} ${user?.lastName}`,
+                title: `${user.firstName} ${user.lastName}`,
             })
         } else {
             navigation.setOptions({
@@ -278,10 +281,10 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     navigationState={{ index, routes }}
                     renderScene={renderScene(
                         {
-                            loading,
                             refetch,
                             user,
                             error,
+                            loading: isLoading,
                         },
                         {
                             gameLists,

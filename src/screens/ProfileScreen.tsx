@@ -68,7 +68,6 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         error: profileError,
         refetch: profileRefetch,
     } = useQuery(['fetchProfile'], () => fetchProfile(), {
-        retry: 3,
         onSuccess: data => {
             dispatch(setProfile(data))
         },
