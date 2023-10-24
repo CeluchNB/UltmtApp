@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as TeamData from '../services/data/team'
+import { ApiError } from '../types/services'
 import { AppDispatch } from '../store/store'
 import { ManagedTeamDetailsProps } from '../types/navigation'
 import MapSection from '../components/molecules/MapSection'
@@ -8,6 +8,9 @@ import { RequestType } from '../types/request'
 import SecondaryButton from '../components/atoms/SecondaryButton'
 import { Team } from '../types/team'
 import UserListItem from '../components/atoms/UserListItem'
+import { getManagedTeam } from '../services/data/team'
+import { useQuery } from 'react-query'
+import { useTheme } from '../hooks'
 import {
     RefreshControl,
     SafeAreaView,
@@ -23,7 +26,7 @@ import {
     setTeam,
     toggleRosterStatus,
 } from '../store/reducers/features/team/managedTeamReducer'
-import { useData, useTheme } from '../hooks'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
@@ -40,10 +43,16 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 
     const {
         data: teamData,
-        loading: teamLoading,
+        isLoading: teamLoading,
         refetch,
         error,
-    } = useData<Team>(TeamData.getManagedTeam, id)
+        isError,
+    } = useQuery<Team>(['getManagedTeam', { id }], () => getManagedTeam(id), {
+        retry: 0,
+        onSuccess(data) {
+            dispatch(setTeam(data))
+        },
+    })
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -63,12 +72,6 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [teamData])
-
-    React.useEffect(() => {
-        if (teamData) {
-            dispatch(setTeam(teamData))
-        }
-    }, [dispatch, teamData])
 
     const rolloverSeason = async () => {
         // navigate to rollover screen
@@ -125,7 +128,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         },
     })
 
-    if (error) {
+    if (isError && error) {
         return (
             <SafeAreaView style={styles.screen}>
                 <ScrollView
@@ -141,7 +144,9 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     }
                     testID="mtd-flat-list">
                     <View style={styles.headerContainer}>
-                        <Text style={styles.error}>{error.message}</Text>
+                        <Text style={styles.error}>
+                            {(error as ApiError).message}
+                        </Text>
                     </View>
                 </ScrollView>
             </SafeAreaView>
