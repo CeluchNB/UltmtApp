@@ -1,8 +1,8 @@
-import * as React from 'react'
-import * as RequestData from '../services/data/request'
+import { ApiError } from '../types/services'
 import { AppDispatch } from '../store/store'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
+import React from 'react'
 import { TeamRequestProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
 import { useTheme } from '../hooks'
@@ -16,13 +16,18 @@ import {
     View,
 } from 'react-native'
 import {
+    deleteTeamRequest,
+    getRequestsByTeam,
+    respondToPlayerRequest,
+} from '../services/data/request'
+import {
     getManagedTeam,
     selectOpenLoading,
     selectTeam,
     toggleRosterStatus,
 } from '../store/reducers/features/team/managedTeamReducer'
-import { useData, useLazyData } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
+import { useMutation, useQuery } from 'react-query'
 
 const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
     const dispatch = useDispatch<AppDispatch>()
@@ -38,16 +43,25 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
 
     const {
         data: requests,
-        loading: requestsLoading,
+        isLoading: requestsLoading,
         refetch,
         error,
-    } = useData<DetailedRequest[]>(RequestData.getRequestsByTeam, team?._id)
+    } = useQuery<DetailedRequest[], ApiError>(
+        ['getRequestsByTeam', { teamId: team?._id }],
+        () => getRequestsByTeam(team?._id || ''),
+        {
+            enabled: !!team,
+        },
+    )
 
-    const { fetch: callDelete, error: deleteRequestError } =
-        useLazyData<DetailedRequest>(RequestData.deleteTeamRequest)
+    const { mutate: callDelete, error: deleteRequestError } = useMutation(
+        (requestId: string) => deleteTeamRequest(requestId),
+    )
 
-    const { fetch: callRespond, error: respondRequestError } =
-        useLazyData<DetailedRequest>(RequestData.respondToPlayerRequest)
+    const { mutate: callRespond, error: respondRequestError } = useMutation(
+        ({ requestId, accept }: { requestId: string; accept: boolean }) =>
+            respondToPlayerRequest(requestId, accept),
+    )
 
     React.useEffect(() => {
         navigation.setOptions({
@@ -66,17 +80,26 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
 
     const respondToRequest = async (requestId: string, accept: boolean) => {
         setResponseRequestId(requestId)
-        await callRespond(requestId, accept)
-        refetch()
-        if (accept) {
-            dispatch(getManagedTeam({ id: team?._id || '' }))
-        }
+        callRespond(
+            { requestId, accept },
+            {
+                onSettled() {
+                    refetch()
+                    if (accept) {
+                        dispatch(getManagedTeam({ id: team?._id || '' }))
+                    }
+                },
+            },
+        )
     }
 
     const deleteRequest = async (requestId: string) => {
         setDeleteRequestId(requestId)
-        await callDelete(requestId)
-        refetch()
+        callDelete(requestId, {
+            onSettled() {
+                refetch()
+            },
+        })
     }
 
     const styles = StyleSheet.create({
@@ -157,7 +180,8 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
                                     error={
                                         respondRequestError &&
                                         item._id === respondRequestId
-                                            ? respondRequestError.message
+                                            ? (respondRequestError as ApiError)
+                                                  .message
                                             : undefined
                                     }
                                 />
@@ -200,7 +224,8 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
                                     error={
                                         item._id === deleteRequestId &&
                                         deleteRequestError
-                                            ? deleteRequestError.message
+                                            ? (deleteRequestError as ApiError)
+                                                  .message
                                             : undefined
                                     }
                                 />
