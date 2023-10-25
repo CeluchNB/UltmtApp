@@ -327,6 +327,7 @@ describe('ViewGameScreen', () => {
 
     afterAll(() => {
         jest.useRealTimers()
+        jest.runAllTimers()
     })
 
     beforeEach(() => {
