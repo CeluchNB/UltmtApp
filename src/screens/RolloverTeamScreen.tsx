@@ -1,11 +1,13 @@
 import * as React from 'react'
-import * as TeamData from '../services/data/team'
+import { ApiError } from '../types/services'
 import BaseScreen from '../components/atoms/BaseScreen'
 import CheckBox from '@react-native-community/checkbox'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import { RolloverTeamProps } from '../types/navigation'
-import { Team } from '../types/team'
+import { rollover } from '../services/data/team'
+import { useMutation } from 'react-query'
+import { useTheme } from '../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import {
@@ -13,7 +15,6 @@ import {
     setTeam,
 } from '../store/reducers/features/team/managedTeamReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLazyData, useTheme } from '../hooks'
 
 interface RolloverTeamFormData {
     copyPlayers: boolean
@@ -39,29 +40,42 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
         },
     })
 
-    const {
-        data: teamData,
-        fetch,
-        loading,
-        error,
-    } = useLazyData<Team>(TeamData.rollover)
+    const { mutate, isLoading, error, isError } = useMutation(
+        ({
+            teamId,
+            copyPlayers,
+            seasonStart,
+            seasonEnd,
+        }: {
+            teamId: string
+            copyPlayers: boolean
+            seasonStart: string
+            seasonEnd: string
+        }) => rollover(teamId, copyPlayers, seasonStart, seasonEnd),
+    )
 
     const rolloverTeam = async (data: RolloverTeamFormData) => {
         const seasonArray = data.season.split(' - ')
         const seasonStart = seasonArray[0]
         const seasonEnd = seasonArray[seasonArray.length - 1]
 
-        await fetch(team?._id || '', data.copyPlayers, seasonStart, seasonEnd)
+        mutate(
+            {
+                teamId: team?._id || '',
+                copyPlayers: data.copyPlayers,
+                seasonStart,
+                seasonEnd,
+            },
+            {
+                onSuccess(teamData) {
+                    dispatch(setTeam(teamData))
+                    navigation.navigate('ManagedTeamDetails', {
+                        id: teamData._id,
+                    })
+                },
+            },
+        )
     }
-
-    React.useEffect(() => {
-        if (teamData) {
-            dispatch(setTeam(teamData))
-            navigation.navigate('ManagedTeamDetails', {
-                id: teamData._id,
-            })
-        }
-    })
 
     const styles = StyleSheet.create({
         screen: {
@@ -189,10 +203,14 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
                 <Text style={styles.warning}>
                     Pending requests for this team will all be deleted.
                 </Text>
-                {error && <Text style={styles.error}>{error.message}</Text>}
+                {isError && (
+                    <Text style={styles.error}>
+                        {(error as ApiError).message}
+                    </Text>
+                )}
                 <PrimaryButton
                     text="Submit"
-                    loading={loading}
+                    loading={isLoading}
                     onPress={handleSubmit(rolloverTeam)}
                 />
             </ScrollView>
