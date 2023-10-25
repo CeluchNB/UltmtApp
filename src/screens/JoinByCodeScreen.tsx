@@ -1,16 +1,17 @@
 import * as React from 'react'
-import * as UserData from '../services/data/user'
+import { ApiError } from '../types/services'
 import { JoinByCodeProps } from '../types/navigation'
 import PrimaryButton from '../components/atoms/PrimaryButton'
-import { User } from '../types/user'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
+import { joinTeamByCode } from '../services/data/user'
 import { setProfile } from '../store/reducers/features/account/accountReducer'
 import { useDispatch } from 'react-redux'
+import { useMutation } from 'react-query'
+import { useTheme } from '../hooks'
 import validator from 'validator'
 import { Controller, useForm } from 'react-hook-form'
 import { Modal, StyleSheet, Text, View } from 'react-native'
-import { useLazyData, useTheme } from '../hooks'
 
 const JoinByCodeScreen: React.FC<JoinByCodeProps> = ({ navigation }) => {
     const dispatch = useDispatch()
@@ -27,22 +28,20 @@ const JoinByCodeScreen: React.FC<JoinByCodeProps> = ({ navigation }) => {
 
     const [modalVisible, setModalVisible] = React.useState(false)
 
-    const { data, loading, error, fetch } = useLazyData<User>(
-        UserData.joinTeamByCode,
+    const { isLoading, error, isError, mutate } = useMutation((code: string) =>
+        joinTeamByCode(code),
     )
 
     const onSubmit = async (value: { code: string }) => {
         reset({ code: '' })
         const { code } = value
-        await fetch(code)
+        mutate(code, {
+            onSuccess(data) {
+                dispatch(setProfile(data))
+                setModalVisible(true)
+            },
+        })
     }
-
-    React.useEffect(() => {
-        if (data && !loading) {
-            dispatch(setProfile(data))
-            setModalVisible(true)
-        }
-    }, [data, loading, dispatch])
 
     const styles = StyleSheet.create({
         screen: {
@@ -147,11 +146,13 @@ const JoinByCodeScreen: React.FC<JoinByCodeProps> = ({ navigation }) => {
             {errors.code && (
                 <Text style={styles.error}>{errors.code.message}</Text>
             )}
-            {error && <Text style={styles.error}>{error.message}</Text>}
+            {isError && (
+                <Text style={styles.error}>{(error as ApiError).message}</Text>
+            )}
             <PrimaryButton
                 style={styles.joinButton}
                 text="join"
-                loading={loading}
+                loading={isLoading}
                 onPress={handleSubmit(onSubmit)}
             />
         </View>
