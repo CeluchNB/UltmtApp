@@ -323,11 +323,11 @@ describe('ViewGameScreen', () => {
     beforeAll(() => {
         userEvent.setup()
         jest.useFakeTimers()
+        jest.setTimeout(20000)
     })
 
     afterAll(() => {
         jest.useRealTimers()
-        jest.runAllTimers()
     })
 
     beforeEach(() => {
@@ -341,27 +341,27 @@ describe('ViewGameScreen', () => {
         )
     })
 
-    // it('should match snapshot after data loaded', async () => {
-    //     render(
-    //         <NavigationContainer>
-    //             <Provider store={store}>
-    //                 <QueryClientProvider client={client}>
-    //                     <ViewGameScreen {...props} />
-    //                 </QueryClientProvider>
-    //             </Provider>
-    //         </NavigationContainer>,
-    //     )
+    it('should match snapshot after data loaded', async () => {
+        render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
+                </Provider>
+            </NavigationContainer>,
+        )
 
-    //     await waitFor(() => {
-    //         expect(screen.queryAllByText('Temper').length).toBe(4)
-    //     })
+        await waitFor(() => {
+            expect(screen.queryAllByText('Temper').length).toBe(4)
+        })
 
-    //     expect(screen.getAllByText('Sockeye').length).toBe(4)
+        expect(screen.getAllByText('Sockeye').length).toBe(4)
 
-    //     expect(gameSpy).toHaveBeenCalled()
-    //     expect(pointsSpy).toHaveBeenCalled()
-    //     expect(gameStatsSpy).toHaveBeenCalled()
-    // })
+        expect(gameSpy).toHaveBeenCalled()
+        expect(pointsSpy).toHaveBeenCalled()
+        expect(gameStatsSpy).toHaveBeenCalled()
+    })
 
     it('should handle next point', async () => {
         const { getAllByText } = render(
