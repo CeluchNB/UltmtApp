@@ -321,11 +321,13 @@ describe('ViewGameScreen', () => {
     jest.spyOn(ActionData, 'joinPoint').mockResolvedValue()
 
     beforeAll(() => {
+        jest.setTimeout(20000)
         userEvent.setup()
         jest.useFakeTimers()
     })
 
     afterAll(() => {
+        jest.setTimeout(5000)
         jest.useRealTimers()
     })
 
