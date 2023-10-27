@@ -88,11 +88,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
 
         const data = await setPlayerMutation(players)
         if (data.pullingTeam._id === point.pullingTeam._id) {
-            dispatch(setPoint(data))
+            // very weird case: putting dispatch before reset prevents reset
+            // 'await'-ing dispatch also prevents this, but feels worse than dispatch after navigate
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'LivePointEdit' }],
             })
+            dispatch(setPoint(data))
         } else {
             dispatch(setPoint(data))
             setConfirmModalVisible(true)
