@@ -323,7 +323,6 @@ describe('ViewGameScreen', () => {
     beforeAll(() => {
         userEvent.setup()
         jest.useFakeTimers()
-        jest.setTimeout(20000)
     })
 
     afterAll(() => {
@@ -339,6 +338,9 @@ describe('ViewGameScreen', () => {
         jest.spyOn(PointData, 'getLiveActionsByPoint').mockResolvedValue(
             liveActions,
         )
+        jest.spyOn(GameData, 'getActiveGames').mockResolvedValue([
+            { ...game, offline: false },
+        ])
     })
 
     it('should match snapshot after data loaded', async () => {
@@ -596,7 +598,8 @@ describe('ViewGameScreen', () => {
     })
 
     it('reactivates game', async () => {
-        jest.spyOn(GameData, 'getGameById').mockResolvedValueOnce({
+        jest.spyOn(GameData, 'getActiveGames').mockResolvedValue([])
+        jest.spyOn(GameData, 'getGameById').mockResolvedValue({
             ...game,
             teamOneActive: false,
         })
@@ -662,9 +665,7 @@ describe('ViewGameScreen', () => {
                 ],
             }),
         )
-        jest.spyOn(GameData, 'getActiveGames').mockResolvedValue([
-            { ...game, offline: false },
-        ])
+
         const spy = jest
             .spyOn(GameData, 'resurrectActiveGame')
             .mockResolvedValueOnce({
