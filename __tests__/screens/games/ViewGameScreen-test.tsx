@@ -321,13 +321,11 @@ describe('ViewGameScreen', () => {
     jest.spyOn(ActionData, 'joinPoint').mockResolvedValue()
 
     beforeAll(() => {
-        jest.setTimeout(20000)
         userEvent.setup()
         jest.useFakeTimers()
     })
 
     afterAll(() => {
-        jest.setTimeout(5000)
         jest.useRealTimers()
     })
 
@@ -365,7 +363,7 @@ describe('ViewGameScreen', () => {
         expect(gameSpy).toHaveBeenCalled()
         expect(pointsSpy).toHaveBeenCalled()
         expect(gameStatsSpy).toHaveBeenCalled()
-    })
+    }, 20000)
 
     it('should handle next point', async () => {
         const { getAllByText } = render(
@@ -394,7 +392,7 @@ describe('ViewGameScreen', () => {
 
         expect(gameSpy).toHaveBeenCalled()
         expect(pointsSpy).toHaveBeenCalled()
-    })
+    }, 20000)
 
     it('handles live point functionality', async () => {
         const { getAllByText, queryByText } = render(
@@ -454,7 +452,7 @@ describe('ViewGameScreen', () => {
             expect(gameSpy).toHaveBeenCalledTimes(2)
         })
         expect(pointsSpy).toHaveBeenCalledTimes(2)
-    })
+    }, 20000)
 
     it('handles saved point functionality', async () => {
         const { getAllByText, queryAllByText } = render(
@@ -477,7 +475,7 @@ describe('ViewGameScreen', () => {
         await waitFor(async () => {
             expect(queryAllByText('pickup').length).toBe(2)
         })
-    })
+    }, 20000)
 
     it('handles live action select', async () => {
         const { getAllByText, getByText } = render(
@@ -536,7 +534,7 @@ describe('ViewGameScreen', () => {
         })
         expect(store.getState().viewAction.teamOne).toMatchObject(game.teamOne)
         expect(store.getState().viewAction.teamTwo).toMatchObject(game.teamTwo)
-    })
+    }, 20000)
 
     it('handles saved action select', async () => {
         const { getAllByText, queryAllByText } = render(
@@ -597,7 +595,7 @@ describe('ViewGameScreen', () => {
         })
         expect(store.getState().viewAction.teamOne).toMatchObject(game.teamOne)
         expect(store.getState().viewAction.teamTwo).toMatchObject(game.teamTwo)
-    })
+    }, 20000)
 
     it('reactivates game', async () => {
         jest.spyOn(GameData, 'getActiveGames').mockResolvedValue([])
@@ -649,7 +647,7 @@ describe('ViewGameScreen', () => {
         fireEvent.press(button)
 
         expect(spy).toHaveBeenCalled()
-    })
+    }, 20000)
 
     it('resurrects game', async () => {
         store.dispatch(
@@ -697,7 +695,7 @@ describe('ViewGameScreen', () => {
         fireEvent.press(button)
 
         expect(spy).toHaveBeenCalled()
-    })
+    }, 20000)
 
     it('deletes game', async () => {
         store.dispatch(
@@ -742,7 +740,7 @@ describe('ViewGameScreen', () => {
             expect(goBack).toHaveBeenCalled()
         })
         expect(spy).toHaveBeenCalled()
-    })
+    }, 20000)
 
     it('displays stats', async () => {
         render(
@@ -767,5 +765,5 @@ describe('ViewGameScreen', () => {
         expect(screen.getByText('+ / -', { hidden: true })).toBeTruthy()
         expect(screen.getByText('Turnovers', { hidden: true })).toBeTruthy()
         expect(screen.getByText('Blocks', { hidden: true })).toBeTruthy()
-    })
+    }, 20000)
 })
