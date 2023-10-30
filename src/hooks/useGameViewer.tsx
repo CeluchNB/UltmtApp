@@ -19,6 +19,7 @@ import {
     getActiveGames,
     getGameById,
     getPointsByGame,
+    logGameOpen,
     reactivateInactiveGame,
 } from '../services/data/game'
 import {
@@ -153,6 +154,11 @@ export const useGameViewer = (gameId: string): GameViewerData => {
 
             const pointsData = await getPointsByGame(gameId)
             setPoints(pointsData)
+
+            const openedGame = await logGameOpen(gameId)
+            if (openedGame) {
+                setGame(openedGame)
+            }
         } catch (e: any) {
             setError(e?.message)
         } finally {

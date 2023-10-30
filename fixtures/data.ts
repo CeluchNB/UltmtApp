@@ -131,6 +131,7 @@ export const game: Game = {
     teamOnePlayers: [],
     teamTwoPlayers: [],
     tournament: tourney,
+    totalViews: 0,
     points: [],
 }
 

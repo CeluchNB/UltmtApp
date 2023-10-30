@@ -61,6 +61,7 @@ export const getGame = (team: DisplayTeam): Game => {
         teamOnePlayers: [],
         teamTwoPlayers: [],
         tournament: undefined,
+        totalViews: 0,
         points: [],
     }
 }

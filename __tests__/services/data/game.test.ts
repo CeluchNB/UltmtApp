@@ -930,3 +930,11 @@ describe('test with token', () => {
         expect(result.data.point).toBe('point1')
     })
 })
+
+describe('test log game open', () => {
+    it('handles non-expired case', () => {})
+})
+
+describe('test delete expired game views', () => {
+    it('calls appropriate', () => {})
+})

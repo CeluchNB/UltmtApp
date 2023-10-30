@@ -5,10 +5,8 @@ import { GameHomeProps } from '../../types/navigation'
 import MapSection from '../../components/molecules/MapSection'
 import SearchBar from '../../components/atoms/SearchBar'
 import { fetchProfile } from '../../services/data/user'
-import { searchGames } from '../../services/data/game'
 import { setProfile } from '../../store/reducers/features/account/accountReducer'
 import { useDispatch } from 'react-redux'
-import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import React, { useMemo } from 'react'
 import {
@@ -18,6 +16,8 @@ import {
     StyleSheet,
     Text,
 } from 'react-native'
+import { deleteExpiredGameViews, searchGames } from '../../services/data/game'
+import { useMutation, useQuery } from 'react-query'
 
 const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     const {
@@ -30,6 +30,10 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
             dispatch(setProfile(data))
         },
     })
+
+    const { mutate: onDeletGameViews } = useMutation(() =>
+        deleteExpiredGameViews(),
+    )
 
     const { data, isLoading, refetch } = useQuery(['searchGames'], () =>
         searchGames(),
@@ -65,6 +69,11 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
             />
         )
     }
+
+    React.useEffect(() => {
+        onDeletGameViews()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const styles = StyleSheet.create({
         screen: {
