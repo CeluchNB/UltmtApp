@@ -26,7 +26,6 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     const dispatch = useDispatch()
 
     useQuery(['fetchProfile'], () => fetchProfile(), {
-        retry: 3,
         onSuccess: data => {
             dispatch(setProfile(data))
         },

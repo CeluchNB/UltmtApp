@@ -6,9 +6,10 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { useGameReactivation } from '../../hooks/useGameReactivation'
+import { useQuery } from 'react-query'
+import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 import { getOfflineGameById, pushOfflineGame } from '../../services/data/game'
-import { useData, useTheme } from '../../hooks'
 
 const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     navigation,
@@ -19,7 +20,9 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
         theme: { colors, size },
     } = useTheme()
     const { navigateToGame, onResurrect } = useGameReactivation()
-    const { data: game } = useData(getOfflineGameById, gameId)
+    const { data: game } = useQuery(['getOfflineGameById', { gameId }], () =>
+        getOfflineGameById(gameId),
+    )
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
 

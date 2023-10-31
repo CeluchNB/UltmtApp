@@ -11,6 +11,7 @@ import { Team } from '../../src/types/team'
 import { setTeam } from '../../src/store/reducers/features/team/managedTeamReducer'
 import store from '../../src/store/store'
 import { waitUntilRefreshComplete } from '../../fixtures/utils'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render, screen } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -38,6 +39,12 @@ const props: ManagedTeamDetailsProps = {
         },
     } as any,
 }
+
+const client = new QueryClient({
+    defaultOptions: {
+        queries: { retry: 0 },
+    },
+})
 
 beforeEach(() => {
     jest.clearAllMocks()
@@ -128,11 +135,21 @@ beforeEach(() => {
 })
 
 describe('ManageTeamDetailsScreen', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     it('should match snapshot', async () => {
         const snapshot = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -146,7 +163,9 @@ describe('ManageTeamDetailsScreen', () => {
         const { getByText, getByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -166,7 +185,9 @@ describe('ManageTeamDetailsScreen', () => {
         const { getByText, getByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -193,7 +214,9 @@ describe('ManageTeamDetailsScreen', () => {
         const { getByText, getByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -214,7 +237,9 @@ describe('ManageTeamDetailsScreen', () => {
         const { queryByText, getAllByTestId, getByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -249,15 +274,16 @@ describe('ManageTeamDetailsScreen', () => {
         jest.spyOn(TeamData, 'getManagedTeam').mockClear()
         const spy = jest
             .spyOn(TeamData, 'getManagedTeam')
-            .mockReturnValueOnce(
+            .mockReturnValue(
                 Promise.reject({ message: 'test error getting team' }),
             )
-            .mockReturnValue(Promise.resolve(getManagedTeamResponse))
 
         const { queryByText, getByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -279,7 +305,9 @@ describe('ManageTeamDetailsScreen', () => {
         const { getByText, getByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -296,7 +324,9 @@ describe('ManageTeamDetailsScreen', () => {
         const { getAllByTestId, getByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -313,7 +343,9 @@ describe('ManageTeamDetailsScreen', () => {
         const { getByText, getByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -330,7 +362,9 @@ describe('ManageTeamDetailsScreen', () => {
         const { getAllByTestId, getByTestId } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -357,7 +391,9 @@ describe('ManageTeamDetailsScreen', () => {
         render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <ManageTeamDetailsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <ManageTeamDetailsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )

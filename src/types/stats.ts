@@ -21,6 +21,10 @@ export interface PlayerStats {
     callahans: number
     pointsPlayed: number
     pulls: number
+    offensePoints: number
+    defensePoints: number
+    breaks: number
+    holds: number
     wins: number
     losses: number
 }
@@ -35,6 +39,8 @@ export interface CalculatedPlayerStats {
     ppDrops: number
     ppBlocks: number
     winPercentage: number
+    offensiveEfficiency: number
+    defensiveEfficiency: number
 }
 
 export interface AllPlayerStats extends PlayerStats, CalculatedPlayerStats {}
@@ -51,6 +57,8 @@ export interface TeamData {
     defensePoints: number
     turnovers: number
     turnoversForced: number
+    completionsToScore: number[]
+    completionsToTurnover: number[]
 }
 
 export interface IdentifiedTeamStats extends TeamData {
@@ -95,6 +103,10 @@ export interface GameData {
     pointsPlayedLeader: Leader
 }
 
+export interface MomentumPoint {
+    x: number
+    y: number
+}
 export interface GameStats extends GameData {
     _id: string
     startTime: string
@@ -102,6 +114,7 @@ export interface GameStats extends GameData {
     teamTwoId?: string
     winningTeam?: 'one' | 'two'
     points: PointStats[]
+    momentumData: MomentumPoint[]
 }
 
 export type PlayerIdUser = DisplayUser & { playerId?: string }
@@ -120,4 +133,15 @@ export interface FilteredTeamStats extends GameData, TeamData {
     winPercentage: number
     offensiveConversion: number
     defensiveConversion: number
+}
+
+export type Record = { _id: string; value: number | string }
+export type Columns = { [x: string]: Record[] }
+
+export interface Connection {
+    throwerId: string
+    receiverId: string
+    scores: number
+    catches: number
+    drops: number
 }

@@ -2,9 +2,9 @@ import React from 'react'
 import { getActivePointForGame } from '../services/data/point'
 import { getUserId } from '../services/data/user'
 import { resurrectActiveGame } from '../services/data/game'
-import { useData } from './useData'
 import { useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
+import { useQuery } from 'react-query'
 import { Game, LocalGame } from '../types/game'
 import {
     resetPoint,
@@ -18,7 +18,9 @@ import {
 export const useGameReactivation = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const { data: userId } = useData(getUserId)
+    const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
+        cacheTime: 0,
+    })
 
     const getMyTeamId = React.useCallback(
         (game: Game): string => {

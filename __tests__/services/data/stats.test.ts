@@ -7,7 +7,9 @@ import { getInitialPlayerData } from '../../../fixtures/utils'
 import { teamOne } from '../../../fixtures/data'
 import { GameStats, TeamStats } from '../../../src/types/stats'
 import {
+    filterConnectionStats,
     filterPlayerStats,
+    getConnectionStats,
     getGameStats,
     getGameStatsByTeam,
     getPlayerStats,
@@ -158,6 +160,7 @@ const game: GameStats = {
         total: 2,
     },
     points: [],
+    momentumData: [],
 }
 
 describe('getGameStats', () => {
@@ -238,6 +241,8 @@ const team: TeamStats = {
     defensePoints: 54,
     turnovers: 4,
     turnoversForced: 45,
+    completionsToScore: [],
+    completionsToTurnover: [],
 }
 
 describe('getTeamStats', () => {
@@ -248,7 +253,7 @@ describe('getTeamStats', () => {
                 Promise.resolve({
                     data: { team },
                     status: 200,
-                    statusText: '200',
+                    statusText: 'Good',
                     config: {},
                     headers: {},
                 } as AxiosResponse),
@@ -291,5 +296,112 @@ describe('getTeamStats', () => {
         await expect(getTeamStats('team1', [])).rejects.toMatchObject({
             message: 'test error',
         })
+    })
+})
+
+describe('filterConnectionStats', () => {
+    it('handles successful network response', async () => {
+        const throwerId = 'thrower'
+        const receiverId = 'receiver'
+        const spy = jest
+            .spyOn(StatsNetwork, 'filterConnectionStats')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    data: {
+                        connections: [
+                            {
+                                throwerId,
+                                receiverId,
+                                scores: 1,
+                                catches: 1,
+                                drops: 1,
+                            },
+                            {
+                                throwerId,
+                                receiverId,
+                                scores: 2,
+                                catches: 2,
+                                drops: 2,
+                            },
+                        ],
+                    },
+                    status: 200,
+                    statusText: 'Good',
+                    headers: {},
+                    config: {},
+                } as AxiosResponse),
+            )
+        const result = await filterConnectionStats(
+            throwerId,
+            receiverId,
+            [],
+            [],
+        )
+        expect(result).toMatchObject({ scores: 3, catches: 3, drops: 3 })
+        expect(spy).toHaveBeenCalledTimes(1)
+    })
+
+    it('handles error network response', async () => {
+        jest.spyOn(StatsNetwork, 'filterConnectionStats').mockReturnValueOnce(
+            Promise.reject({
+                data: { message: 'test error' },
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        await expect(
+            filterConnectionStats('thrower', 'receiver', [], []),
+        ).rejects.toMatchObject({
+            message: 'test error',
+        })
+    })
+})
+
+describe('getConnectionStats', () => {
+    it('handles successful network response', async () => {
+        const throwerId = 'thrower'
+        const receiverId = 'receiver'
+
+        const spy = jest
+            .spyOn(StatsNetwork, 'getConnectionStats')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    data: {
+                        connection: {
+                            throwerId,
+                            receiverId,
+                            scores: 2,
+                            catches: 3,
+                            drops: 1,
+                        },
+                    },
+                    status: 200,
+                    statusText: 'Good',
+                    config: {},
+                    headers: {},
+                } as AxiosResponse),
+            )
+        const result = await getConnectionStats(throwerId, receiverId)
+        expect(result).toMatchObject({ scores: 2, catches: 3, drops: 1 })
+        expect(spy).toHaveBeenCalledTimes(1)
+    })
+
+    it('handles error network response', async () => {
+        jest.spyOn(StatsNetwork, 'getConnectionStats').mockReturnValueOnce(
+            Promise.reject({
+                data: { message: 'test error' },
+                status: 400,
+                statusText: 'Bad',
+                config: {},
+                headers: {},
+            }),
+        )
+
+        await expect(
+            getConnectionStats('thrower', 'receiver'),
+        ).rejects.toMatchObject({ message: 'test error' })
     })
 })

@@ -1,11 +1,13 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
+import { ApiError } from '../types/services'
 import { AppDispatch } from '../store/store'
 import { DetailedRequest } from '../types/request'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import TeamListItem from '../components/atoms/TeamListItem'
 import { UserRequestProps } from '../types/navigation'
+import { useTheme } from '../hooks'
 import {
     RefreshControl,
     SafeAreaView,
@@ -21,8 +23,8 @@ import {
     selectToggleLoading,
     setOpenToRequests,
 } from '../store/reducers/features/account/accountReducer'
-import { useData, useLazyData, useTheme } from '../hooks'
 import { useDispatch, useSelector } from 'react-redux'
+import { useMutation, useQuery } from 'react-query'
 
 const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
     const {
@@ -38,42 +40,56 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
 
     const {
         data: requestData,
-        loading,
+        isLoading,
         error: fetchError,
         refetch,
-    } = useData<DetailedRequest[]>(RequestData.getRequestsByUser)
+    } = useQuery<DetailedRequest[], ApiError>(['getRequestsByUser'], () =>
+        RequestData.getRequestsByUser(),
+    )
 
-    const { error: deleteRequestError, fetch: callDelete } =
-        useLazyData<DetailedRequest>(RequestData.deleteUserRequest)
+    const { error: deleteRequestError, mutate: callDelete } = useMutation(
+        (requestId: string) => RequestData.deleteUserRequest(requestId),
+    )
 
-    const { error: respondRequestError, fetch: callRespond } =
-        useLazyData<DetailedRequest>(RequestData.respondToTeamRequest)
+    const { error: respondRequestError, mutate: callRespond } = useMutation(
+        ({ requestId, accept }: { requestId: string; accept: boolean }) =>
+            RequestData.respondToTeamRequest(requestId, accept),
+    )
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            if (!loading) {
+            if (!isLoading) {
                 refetch()
             }
         })
         return () => {
             unsubscribe()
         }
-    }, [navigation, loading, refetch])
+    }, [navigation, isLoading, refetch])
 
     // Strictly through redux?
     const respondToRequest = async (requestId: string, accept: boolean) => {
         setRespondRequestId(requestId)
-        await callRespond(requestId, accept)
-        dispatch(removeRequest(requestId))
-        refetch()
+        callRespond(
+            { requestId, accept },
+            {
+                onSettled() {
+                    dispatch(removeRequest(requestId))
+                    refetch()
+                },
+            },
+        )
     }
 
     // Strictly through redux?
     const deleteRequest = async (requestId: string) => {
         setDeleteRequestId(requestId)
-        await callDelete(requestId)
-        dispatch(removeRequest(requestId))
-        refetch()
+        callDelete(requestId, {
+            onSettled() {
+                dispatch(removeRequest(requestId))
+                refetch()
+            },
+        })
     }
 
     const toggleRosterOpen = () => {
@@ -113,7 +129,7 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
                         <RefreshControl
                             colors={[colors.textSecondary]}
                             tintColor={colors.textSecondary}
-                            refreshing={loading}
+                            refreshing={isLoading}
                             onRefresh={async () => {
                                 refetch()
                             }}
@@ -136,7 +152,7 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
                         onRefresh={async () => {
                             refetch()
                         }}
-                        refreshing={loading}
+                        refreshing={isLoading}
                     />
                 }
                 testID="mt-scroll-view">
@@ -192,7 +208,8 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
                                     error={
                                         respondRequestError &&
                                         respondRequestId === item._id
-                                            ? respondRequestError.message
+                                            ? (respondRequestError as ApiError)
+                                                  .message
                                             : undefined
                                     }
                                 />
@@ -238,7 +255,8 @@ const UserRequestsScreen: React.FC<UserRequestProps> = ({ navigation }) => {
                                     error={
                                         deleteRequestError &&
                                         deleteRequestId === item._id
-                                            ? deleteRequestError.message
+                                            ? (deleteRequestError as ApiError)
+                                                  .message
                                             : undefined
                                     }
                                 />

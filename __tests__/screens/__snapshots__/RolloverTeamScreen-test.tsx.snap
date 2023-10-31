@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match snapshot 1`] = `
+exports[`RolloverTeamScreen should match snapshot 1`] = `
 <RCTSafeAreaView
   style={
     {
@@ -363,7 +363,7 @@ exports[`should match snapshot 1`] = `
 </RCTSafeAreaView>
 `;
 
-exports[`should match snapshot with open requests 1`] = `
+exports[`RolloverTeamScreen should match snapshot with open requests 1`] = `
 <RCTSafeAreaView
   style={
     {

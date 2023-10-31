@@ -5,19 +5,25 @@ import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
 import { getUserId } from '../services/data/user'
 import { useGameReactivation } from '../hooks/useGameReactivation'
+import { useQuery } from 'react-query'
+import { useTheme } from '../hooks'
 import { FlatList, StyleSheet, Text } from 'react-native'
 import { Game, LocalGame } from '../types/game'
 import { deleteGame, getActiveGames } from '../services/data/game'
-import { useData, useTheme } from '../hooks'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
     const { navigateToGame, onResurrect } = useGameReactivation()
-    const { data: userId } = useData(getUserId)
-    const { data: games, refetch } =
-        useData<(Game & { offline: boolean })[]>(getActiveGames)
+    const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
+        cacheTime: 0,
+    })
+    const { data: games, refetch } = useQuery<(Game & { offline: boolean })[]>(
+        ['getActiveGames'],
+        () => getActiveGames(),
+        { cacheTime: 0 },
+    )
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deletingGame, setDeletingGame] = React.useState<Game>()
     const [deleteLoading, setDeleteLoading] = React.useState(false)

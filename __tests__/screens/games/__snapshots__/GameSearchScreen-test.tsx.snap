@@ -1164,6 +1164,7 @@ exports[`should match snapshot 1`] = `
           "teamTwoPlayers": [],
           "teamTwoScore": 0,
           "timeoutPerHalf": 1,
+          "totalViews": 0,
           "tournament": {
             "_id": "tourney1",
             "endDate": "2022-10-23",

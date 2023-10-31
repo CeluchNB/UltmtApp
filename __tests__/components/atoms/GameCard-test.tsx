@@ -41,6 +41,7 @@ beforeEach(() => {
             teamOnePlayers: [],
             teamTwoPlayers: [],
             resolveCode: '111111',
+            totalViews: 0,
             points: [],
         },
         onPress: fn,

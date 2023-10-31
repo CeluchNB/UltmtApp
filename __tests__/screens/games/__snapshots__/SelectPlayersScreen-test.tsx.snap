@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match snapshot 1`] = `
+exports[`SelectPlayersScreen should match snapshot 1`] = `
 <RCTSafeAreaView
   style={
     {
@@ -180,6 +180,7 @@ exports[`should match snapshot 1`] = `
                   ],
                   "teamTwoScore": 0,
                   "timeoutPerHalf": 1,
+                  "totalViews": 0,
                   "tournament": undefined,
                 }
               }
@@ -201,6 +202,36 @@ exports[`should match snapshot 1`] = `
               D 
               point
             </Text>
+            <View
+              style={
+                {
+                  "alignSelf": "center",
+                }
+              }
+            >
+              <Chip
+                mode="outlined"
+                onPress={[Function]}
+                style={
+                  {
+                    "backgroundColor": "#303030",
+                    "borderColor": "#ffd600",
+                  }
+                }
+                testID="active-warning-chip"
+              >
+                <Text
+                  style={
+                    {
+                      "color": "#ffd600",
+                      "fontSize": 20.54794520547945,
+                    }
+                  }
+                >
+                  CHANGE PULLING TEAM
+                </Text>
+              </Chip>
+            </View>
             <LivePointUtilityBar
               loading={false}
               onEdit={[Function]}
@@ -565,6 +596,174 @@ exports[`should match snapshot 1`] = `
                 D 
                 point
               </Text>
+              <View
+                style={
+                  {
+                    "alignSelf": "center",
+                  }
+                }
+              >
+                <View
+                  collapsable={false}
+                  style={
+                    {
+                      "backgroundColor": "#303030",
+                      "borderRadius": 8,
+                      "shadowColor": "#000",
+                      "shadowOffset": {
+                        "height": 0,
+                        "width": 0,
+                      },
+                      "shadowOpacity": 0,
+                      "shadowRadius": 0,
+                    }
+                  }
+                  testID="active-warning-chip-container-outer-layer"
+                >
+                  <View
+                    collapsable={false}
+                    style={
+                      {
+                        "backgroundColor": "#303030",
+                        "borderColor": "#ffd600",
+                        "borderRadius": 8,
+                        "borderStyle": "solid",
+                        "borderWidth": 1,
+                        "flex": undefined,
+                        "flexDirection": "column",
+                        "shadowColor": "#000",
+                        "shadowOffset": {
+                          "height": 0,
+                          "width": 0,
+                        },
+                        "shadowOpacity": 0,
+                        "shadowRadius": 0,
+                      }
+                    }
+                    testID="active-warning-chip-container"
+                  >
+                    <View
+                      accessibilityRole="button"
+                      accessibilityState={
+                        {
+                          "busy": undefined,
+                          "checked": undefined,
+                          "disabled": false,
+                          "expanded": undefined,
+                          "selected": false,
+                        }
+                      }
+                      accessibilityValue={
+                        {
+                          "max": undefined,
+                          "min": undefined,
+                          "now": undefined,
+                          "text": undefined,
+                        }
+                      }
+                      accessible={true}
+                      collapsable={false}
+                      focusable={true}
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onResponderGrant={[Function]}
+                      onResponderMove={[Function]}
+                      onResponderRelease={[Function]}
+                      onResponderTerminate={[Function]}
+                      onResponderTerminationRequest={[Function]}
+                      onStartShouldSetResponder={[Function]}
+                      style={
+                        [
+                          {
+                            "overflow": "hidden",
+                          },
+                          [
+                            {
+                              "borderRadius": 8,
+                            },
+                            {
+                              "width": "100%",
+                            },
+                          ],
+                        ]
+                      }
+                      testID="active-warning-chip"
+                    >
+                      <View
+                        style={
+                          [
+                            {
+                              "alignItems": "center",
+                              "flexDirection": "row",
+                              "paddingLeft": 4,
+                              "position": "relative",
+                            },
+                            {
+                              "paddingLeft": 0,
+                            },
+                            {
+                              "paddingRight": 0,
+                            },
+                          ]
+                        }
+                      >
+                        <Text
+                          numberOfLines={1}
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
+                              [
+                                [
+                                  {
+                                    "marginVertical": 6,
+                                    "textAlignVertical": "center",
+                                  },
+                                  {
+                                    "color": "rgba(73, 69, 79, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 14,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.1,
+                                    "lineHeight": 20,
+                                  },
+                                  {
+                                    "marginLeft": 16,
+                                    "marginRight": 16,
+                                  },
+                                  undefined,
+                                ],
+                                {
+                                  "color": "#ffd600",
+                                  "fontSize": 20.54794520547945,
+                                },
+                              ],
+                            ]
+                          }
+                        >
+                          <Text
+                            style={
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 20.54794520547945,
+                              }
+                            }
+                          >
+                            CHANGE PULLING TEAM
+                          </Text>
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
               <View
                 style={
                   {
@@ -2347,11 +2546,27 @@ exports[`should match snapshot 1`] = `
       transparent={true}
       visible={false}
     />
+    <Modal
+      animationType="slide"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      testID="base-modal"
+      transparent={true}
+      visible={false}
+    />
+    <Modal
+      animationType="slide"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      testID="base-modal"
+      transparent={true}
+      visible={false}
+    />
   </View>
 </RCTSafeAreaView>
 `;
 
-exports[`should match snapshot for team two 1`] = `
+exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
 <RCTSafeAreaView
   style={
     {
@@ -2531,6 +2746,7 @@ exports[`should match snapshot for team two 1`] = `
                   ],
                   "teamTwoScore": 0,
                   "timeoutPerHalf": 1,
+                  "totalViews": 0,
                   "tournament": undefined,
                 }
               }
@@ -2552,6 +2768,36 @@ exports[`should match snapshot for team two 1`] = `
               O 
               point
             </Text>
+            <View
+              style={
+                {
+                  "alignSelf": "center",
+                }
+              }
+            >
+              <Chip
+                mode="outlined"
+                onPress={[Function]}
+                style={
+                  {
+                    "backgroundColor": "#303030",
+                    "borderColor": "#ffd600",
+                  }
+                }
+                testID="active-warning-chip"
+              >
+                <Text
+                  style={
+                    {
+                      "color": "#ffd600",
+                      "fontSize": 20.54794520547945,
+                    }
+                  }
+                >
+                  CHANGE PULLING TEAM
+                </Text>
+              </Chip>
+            </View>
             <LivePointUtilityBar
               loading={false}
               onEdit={[Function]}
@@ -2916,6 +3162,174 @@ exports[`should match snapshot for team two 1`] = `
                 O 
                 point
               </Text>
+              <View
+                style={
+                  {
+                    "alignSelf": "center",
+                  }
+                }
+              >
+                <View
+                  collapsable={false}
+                  style={
+                    {
+                      "backgroundColor": "#303030",
+                      "borderRadius": 8,
+                      "shadowColor": "#000",
+                      "shadowOffset": {
+                        "height": 0,
+                        "width": 0,
+                      },
+                      "shadowOpacity": 0,
+                      "shadowRadius": 0,
+                    }
+                  }
+                  testID="active-warning-chip-container-outer-layer"
+                >
+                  <View
+                    collapsable={false}
+                    style={
+                      {
+                        "backgroundColor": "#303030",
+                        "borderColor": "#ffd600",
+                        "borderRadius": 8,
+                        "borderStyle": "solid",
+                        "borderWidth": 1,
+                        "flex": undefined,
+                        "flexDirection": "column",
+                        "shadowColor": "#000",
+                        "shadowOffset": {
+                          "height": 0,
+                          "width": 0,
+                        },
+                        "shadowOpacity": 0,
+                        "shadowRadius": 0,
+                      }
+                    }
+                    testID="active-warning-chip-container"
+                  >
+                    <View
+                      accessibilityRole="button"
+                      accessibilityState={
+                        {
+                          "busy": undefined,
+                          "checked": undefined,
+                          "disabled": false,
+                          "expanded": undefined,
+                          "selected": false,
+                        }
+                      }
+                      accessibilityValue={
+                        {
+                          "max": undefined,
+                          "min": undefined,
+                          "now": undefined,
+                          "text": undefined,
+                        }
+                      }
+                      accessible={true}
+                      collapsable={false}
+                      focusable={true}
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onResponderGrant={[Function]}
+                      onResponderMove={[Function]}
+                      onResponderRelease={[Function]}
+                      onResponderTerminate={[Function]}
+                      onResponderTerminationRequest={[Function]}
+                      onStartShouldSetResponder={[Function]}
+                      style={
+                        [
+                          {
+                            "overflow": "hidden",
+                          },
+                          [
+                            {
+                              "borderRadius": 8,
+                            },
+                            {
+                              "width": "100%",
+                            },
+                          ],
+                        ]
+                      }
+                      testID="active-warning-chip"
+                    >
+                      <View
+                        style={
+                          [
+                            {
+                              "alignItems": "center",
+                              "flexDirection": "row",
+                              "paddingLeft": 4,
+                              "position": "relative",
+                            },
+                            {
+                              "paddingLeft": 0,
+                            },
+                            {
+                              "paddingRight": 0,
+                            },
+                          ]
+                        }
+                      >
+                        <Text
+                          numberOfLines={1}
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
+                              },
+                              [
+                                [
+                                  {
+                                    "marginVertical": 6,
+                                    "textAlignVertical": "center",
+                                  },
+                                  {
+                                    "color": "rgba(73, 69, 79, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 14,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.1,
+                                    "lineHeight": 20,
+                                  },
+                                  {
+                                    "marginLeft": 16,
+                                    "marginRight": 16,
+                                  },
+                                  undefined,
+                                ],
+                                {
+                                  "color": "#ffd600",
+                                  "fontSize": 20.54794520547945,
+                                },
+                              ],
+                            ]
+                          }
+                        >
+                          <Text
+                            style={
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 20.54794520547945,
+                              }
+                            }
+                          >
+                            CHANGE PULLING TEAM
+                          </Text>
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
               <View
                 style={
                   {
@@ -4690,6 +5104,22 @@ exports[`should match snapshot for team two 1`] = `
         </View>
       </RCTScrollView>
     </View>
+    <Modal
+      animationType="slide"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      testID="base-modal"
+      transparent={true}
+      visible={false}
+    />
+    <Modal
+      animationType="slide"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      testID="base-modal"
+      transparent={true}
+      visible={false}
+    />
     <Modal
       animationType="slide"
       hardwareAccelerated={false}

@@ -3,6 +3,7 @@ import { getInitialPlayerData } from '../../../fixtures/utils'
 import { throwApiError } from '../../utils/service-utils'
 import {
     AllPlayerStats,
+    Connection,
     FilteredGameStats,
     FilteredTeamStats,
     GameStats,
@@ -11,7 +12,9 @@ import {
 } from '../../types/stats'
 import { addPlayerStats, calculatePlayerStats } from '../../utils/stats'
 import {
+    filterConnectionStats as networkFilterConnectionStats,
     filterPlayerStats as networkFilterPlayerStats,
+    getConnectionStats as networkGetConnectionStats,
     getGameStats as networkGetGameStats,
     getGameStatsByTeam as networkGetGameStatsByTeam,
     getPlayerStats as networkGetPlayerStats,
@@ -91,5 +94,57 @@ export const getTeamStats = async (
         return team
     } catch (e) {
         return throwApiError(e, Constants.UNABLE_TO_GET_TEAM_STATS)
+    }
+}
+
+export const getConnectionStats = async (
+    throwerId: string = '',
+    receiverId: string = '',
+): Promise<Connection> => {
+    try {
+        const response = await networkGetConnectionStats(throwerId, receiverId)
+        const { connection } = response.data
+        return connection
+    } catch (e) {
+        return throwApiError(e, Constants.UNABLE_TO_GET_CONNECTION_STATS)
+    }
+}
+
+export const filterConnectionStats = async (
+    throwerId: string = '',
+    receiverId: string = '',
+    games: string[],
+    teams: string[],
+): Promise<Connection> => {
+    try {
+        const response = await networkFilterConnectionStats(
+            throwerId,
+            receiverId,
+            games,
+            teams,
+        )
+        const { connections } = response.data
+
+        if (connections.length === 0) throw new Error()
+
+        return connections.reduce(
+            (prev: Connection, curr: Connection) => {
+                return {
+                    ...prev,
+                    scores: prev.scores + curr.scores,
+                    catches: prev.catches + curr.catches,
+                    drops: prev.drops + curr.drops,
+                }
+            },
+            {
+                throwerId: connections[0].throwerId,
+                receiverId: connections[0].receiverId,
+                scores: 0,
+                catches: 0,
+                drops: 0,
+            },
+        )
+    } catch (e) {
+        return throwApiError(e, Constants.UNABLE_TO_GET_CONNECTION_STATS)
     }
 }

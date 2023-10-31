@@ -1,9 +1,11 @@
 import * as Constants from '../../utils/constants'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { SavedServerActionData } from '../../types/action'
 import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
+import dayjs from 'dayjs'
 import { getUserId } from './user'
 import { parseClientAction } from '../../utils/action'
 import { parseClientPoint } from '../../utils/point'
@@ -42,6 +44,7 @@ import {
     getGamesByTeam as networkGetGameByTeams,
     getPointsByGame as networkGetPointsByGame,
     joinGame as networkJoinGame,
+    logGameOpen as networkLogGameOpen,
     pushOfflineGame as networkPushOfflineGame,
     reactivateGame as networkReactivateGame,
     searchGames as networkSearchGames,
@@ -463,6 +466,44 @@ export const editGame = async (
         return await localGetGameById(gameId)
     } catch (e) {
         return throwApiError(e, Constants.UPDATE_GAME_ERROR)
+    }
+}
+
+export const logGameOpen = async (
+    gameId: string,
+): Promise<Game | undefined> => {
+    try {
+        const lastViewedDate = await AsyncStorage.getItem(`game:view:${gameId}`)
+
+        await AsyncStorage.setItem(`game:view:${gameId}`, dayjs().toString())
+        if (
+            lastViewedDate &&
+            dayjs(lastViewedDate).isAfter(dayjs().subtract(1, 'day'))
+        ) {
+            return
+        }
+
+        const response = await networkLogGameOpen(gameId)
+        const { game } = response.data
+
+        return game
+    } catch (e) {
+        return throwApiError(e, Constants.GET_GAME_ERROR)
+    }
+}
+
+export const deleteExpiredGameViews = async () => {
+    const allKeys = await AsyncStorage.getAllKeys()
+    for (const key of allKeys) {
+        if (key.match(/game:view:/)) {
+            const expiryDate = await AsyncStorage.getItem(key)
+            if (
+                dayjs(expiryDate).isValid() &&
+                dayjs(expiryDate).isBefore(dayjs().subtract(1, 'day'))
+            ) {
+                await AsyncStorage.removeItem(key)
+            }
+        }
     }
 }
 

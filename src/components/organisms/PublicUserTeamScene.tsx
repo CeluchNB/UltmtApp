@@ -17,7 +17,7 @@ export interface PublicUserTeamSceneProps {
     loading: boolean
     refetch: () => void
     user?: User
-    error?: ApiError
+    error: ApiError | null
 }
 
 const PublicUserTeamScene: React.FC<PublicUserTeamSceneProps> = ({
