@@ -1,11 +1,15 @@
-import * as UserData from './../services/data/user'
 import { ApiError } from '../types/services'
+import BaseScreen from '../components/atoms/BaseScreen'
+import { DisplayTeam } from '../types/team'
 import { Game } from '../types/game'
 import { PublicUserDetailsProps } from '../types/navigation'
 import React from 'react'
-import { User } from '../types/user'
 import { getGamesByTeam } from '../services/data/game'
+import { getPublicUser } from '../services/data/user'
 import { setError } from '../store/reducers/features/account/accountReducer'
+import { useQuery } from 'react-query'
+import { useTheme } from './../hooks'
+import { DisplayUser, User } from '../types/user'
 import PublicUserGamesScene, {
     PublicUserGamesSceneProps,
 } from '../components/organisms/PublicUserGamesScene'
@@ -15,15 +19,8 @@ import PublicUserStatsScene, {
 import PublicUserTeamScene, {
     PublicUserTeamSceneProps,
 } from '../components/organisms/PublicUserTeamScene'
-import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    View,
-    useWindowDimensions,
-} from 'react-native'
+import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
-import { useData, useTheme } from './../hooks'
 
 const renderScene = (
     teamProps: PublicUserTeamSceneProps,
@@ -88,25 +85,27 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 
     const {
         data: user,
-        loading,
+        isLoading,
         error,
         refetch,
-    } = useData<User>(UserData.getPublicUser, userId)
+    } = useQuery<User, ApiError>(['getPublicUser', { userId }], () =>
+        getPublicUser(userId),
+    )
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            if (!loading && !user) {
+            if (!isLoading && !user) {
                 refetch()
             }
         })
 
         return unsubscribe
-    }, [navigation, loading, user, refetch])
+    }, [navigation, isLoading, user, refetch])
 
     React.useEffect(() => {
         if (user) {
             navigation.setOptions({
-                title: `${user?.firstName} ${user?.lastName}`,
+                title: `${user.firstName} ${user.lastName}`,
             })
         } else {
             navigation.setOptions({
@@ -132,19 +131,33 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         return []
     }, [user])
 
+    const archiveTeams = React.useMemo(() => {
+        if (user) return user.archiveTeams
+        return []
+    }, [user])
+
     const allTeams = React.useMemo(() => {
-        const map = new Map()
+        const map = new Map<string, DisplayTeam>()
         managerTeams.forEach(team => {
             map.set(team._id, team)
         })
         playerTeams.forEach(team => {
             map.set(team._id, team)
         })
+        archiveTeams.forEach(team => {
+            map.set(team._id, team)
+        })
         return [...map.values()]
-    }, [managerTeams, playerTeams])
+    }, [managerTeams, playerTeams, archiveTeams])
 
     const gameLists = React.useMemo(() => {
-        const tempGames: { title: string; data: Game[]; index: number }[] = []
+        const tempGames: {
+            title: string
+            year: string
+            data: Game[]
+            index: number
+        }[] = []
+
         games.forEach((g, i) => {
             if (g.length === 0) {
                 return
@@ -154,12 +167,21 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     new Date(b.startTime).getTime() -
                     new Date(a.startTime).getTime(),
             )
+            const seasonStart = new Date(
+                allTeams[i].seasonStart,
+            ).getUTCFullYear()
+            const seasonEnd = new Date(allTeams[i].seasonEnd).getUTCFullYear()
             tempGames.push({
                 title: `${allTeams[i].place} ${allTeams[i].name}`,
+                year:
+                    seasonStart === seasonEnd
+                        ? seasonStart?.toString()
+                        : `${seasonStart} - ${seasonEnd}`,
                 data: sortedGames,
                 index: i,
             })
         })
+
         return tempGames
     }, [games, allTeams])
 
@@ -168,7 +190,10 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
 
         for (let i = 0; i < games.length; i++) {
             // only include games player played in
-            if (!playerTeams.some(team => team._id === allTeams[i]._id)) {
+            if (
+                !playerTeams.some(team => team._id === allTeams[i]._id) &&
+                !archiveTeams.some(team => team._id === allTeams[i]._id)
+            ) {
                 continue
             }
             tempGames.push(
@@ -179,7 +204,29 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
             )
         }
         return tempGames
-    }, [games, allTeams, playerTeams])
+    }, [games, allTeams, playerTeams, archiveTeams])
+
+    const teammates = React.useMemo(() => {
+        const playerMap = new Map<string, DisplayUser>()
+        const allTeamIds = allTeams.map(team => team._id)
+        // TODO: Optimize
+        for (const teamGames of games) {
+            for (const game of teamGames) {
+                if (allTeamIds.includes(game.teamOne._id)) {
+                    for (const p of game.teamOnePlayers) {
+                        playerMap.set(p._id, p)
+                    }
+                }
+                if (allTeamIds.includes(game.teamTwo?._id || '')) {
+                    for (const p of game.teamTwoPlayers) {
+                        playerMap.set(p._id, p)
+                    }
+                }
+            }
+        }
+
+        return [...playerMap.values()]
+    }, [games, allTeams])
 
     const fetchGames = React.useCallback(() => {
         setError(undefined)
@@ -205,7 +252,6 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     const styles = StyleSheet.create({
         screen: {
             height: '100%',
-            backgroundColor: colors.primary,
         },
         titleText: {
             color: colors.textPrimary,
@@ -224,50 +270,57 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     })
 
     return (
-        <SafeAreaView style={styles.screen}>
-            {user && <Text style={styles.titleText}>@{user?.username}</Text>}
-            <TabView
-                navigationState={{ index, routes }}
-                renderScene={renderScene(
-                    {
-                        loading,
-                        refetch,
-                        user,
-                        error,
-                    },
-                    {
-                        gameLists,
-                        teams: allTeams,
-                        loading: gameLoading,
-                        error: gameError,
-                        refetch: fetchGames,
-                    },
-                    {
-                        userId,
-                        teams: [
-                            ...(user?.playerTeams || []),
-                            ...(user?.archiveTeams || []),
-                        ],
-                        games: filterableGames,
-                    },
+        <BaseScreen containerWidth={100}>
+            <View style={styles.screen}>
+                {user && (
+                    <Text style={styles.titleText}>
+                        @{user?.username ?? 'user'}
+                    </Text>
                 )}
-                onIndexChange={setIndex}
-                initialLayout={{ width: layout.width }}
-                renderTabBar={props => {
-                    return (
-                        <TabBar
-                            {...props}
-                            style={{ backgroundColor: colors.primary }}
-                            indicatorStyle={{
-                                backgroundColor: colors.textPrimary,
-                            }}
-                            activeColor={colors.textPrimary}
-                            inactiveColor={colors.darkGray}
-                        />
-                    )
-                }}
-            />
-        </SafeAreaView>
+                <TabView
+                    navigationState={{ index, routes }}
+                    renderScene={renderScene(
+                        {
+                            refetch,
+                            user,
+                            error,
+                            loading: isLoading,
+                        },
+                        {
+                            gameLists,
+                            teams: allTeams,
+                            loading: gameLoading,
+                            error: gameError,
+                            refetch: fetchGames,
+                        },
+                        {
+                            userId,
+                            teammates,
+                            teams: [
+                                ...(user?.playerTeams || []),
+                                ...(user?.archiveTeams || []),
+                            ],
+                            games: filterableGames,
+                        },
+                    )}
+                    onIndexChange={setIndex}
+                    initialLayout={{ width: layout.width }}
+                    renderTabBar={props => {
+                        return (
+                            <TabBar
+                                {...props}
+                                style={{ backgroundColor: colors.primary }}
+                                indicatorStyle={{
+                                    backgroundColor: colors.textPrimary,
+                                }}
+                                activeColor={colors.textPrimary}
+                                inactiveColor={colors.darkGray}
+                            />
+                        )
+                    }}
+                />
+            </View>
+        </BaseScreen>
     )
 }
 

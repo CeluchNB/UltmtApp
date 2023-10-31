@@ -11,6 +11,12 @@ import { act, fireEvent, render, screen } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
+jest.mock('react-native-element-dropdown', () => {
+    return {
+        Dropdown: () => <span>dropdown</span>,
+    }
+})
+
 const client = new QueryClient()
 
 const navigate = jest.fn()
@@ -24,6 +30,12 @@ jest.mock('@react-navigation/native', () => {
         useNavigation: () => ({
             navigate: mockedNavigate,
         }),
+    }
+})
+jest.mock('react-native-gifted-charts', () => {
+    return {
+        BarChart: () => {},
+        __esModule: true,
     }
 })
 
@@ -74,6 +86,7 @@ const gameStats: GameStats = {
         player: playerOne,
         total: 1,
     },
+    momentumData: [],
 }
 
 const team: Team = {
@@ -117,6 +130,8 @@ const teamStats: TeamStats = {
     defensePoints: 54,
     turnovers: 4,
     turnoversForced: 45,
+    completionsToScore: [],
+    completionsToTurnover: [],
 }
 
 beforeEach(() => {

@@ -8,6 +8,7 @@ import RolloverTeamScreen from '../../src/screens/RolloverTeamScreen'
 import { Team } from '../../src/types/team'
 import mockDate from 'mockdate'
 import store from '../../src/store/store'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -25,123 +26,137 @@ const props: RolloverTeamProps = {
     route: {} as any,
 }
 
-beforeAll(() => {
-    store.dispatch(ManagedTeamReducer.setTeam({ _id: 'team1' }))
-    mockDate.set('06/01/2022')
-})
+const client = new QueryClient()
 
-afterAll(() => {
-    mockDate.reset()
-})
+describe('RolloverTeamScreen', () => {
+    beforeAll(() => {
+        store.dispatch(ManagedTeamReducer.setTeam({ _id: 'team1' }))
+        mockDate.set('06/01/2022')
+    })
 
-it('should match snapshot', async () => {
-    const snapshot = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <RolloverTeamScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    ).toJSON()
+    afterAll(() => {
+        mockDate.reset()
+    })
 
-    expect(snapshot).toMatchSnapshot()
-})
+    it('should match snapshot', async () => {
+        const snapshot = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <RolloverTeamScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        ).toJSON()
 
-it('should match snapshot with open requests', async () => {
-    const pendingReqProps: RolloverTeamProps = {
-        navigation: {
-            goBack,
-            navigate,
-            setOptions,
-        } as any,
-        route: {} as any,
-    }
-    const snapshot = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <RolloverTeamScreen {...pendingReqProps} />
-            </NavigationContainer>
-        </Provider>,
-    ).toJSON()
+        expect(snapshot).toMatchSnapshot()
+    })
 
-    expect(snapshot).toMatchSnapshot()
-})
+    it('should match snapshot with open requests', async () => {
+        const pendingReqProps: RolloverTeamProps = {
+            navigation: {
+                goBack,
+                navigate,
+                setOptions,
+            } as any,
+            route: {} as any,
+        }
+        const snapshot = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <RolloverTeamScreen {...pendingReqProps} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        ).toJSON()
 
-it('should handle successful rollover', async () => {
-    const spy = jest.spyOn(TeamData, 'rollover').mockReturnValueOnce(
-        Promise.resolve({
-            _id: 'team1',
-        } as Team),
-    )
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <RolloverTeamScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        expect(snapshot).toMatchSnapshot()
+    })
 
-    const button = getByText('Submit')
-    fireEvent.press(button)
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    await act(async () => {})
-
-    const currentYear = new Date().getFullYear()
-    expect(spy).toHaveBeenCalledWith(
-        'team1',
-        false,
-        currentYear.toString(),
-        currentYear.toString(),
-    )
-    expect(navigate).toHaveBeenCalled()
-})
-
-it('should handle rollover error', async () => {
-    const spy = jest
-        .spyOn(TeamData, 'rollover')
-        .mockReturnValueOnce(
-            Promise.reject({ message: 'Unable to rollover team' }),
+    it('should handle successful rollover', async () => {
+        const spy = jest.spyOn(TeamData, 'rollover').mockReturnValueOnce(
+            Promise.resolve({
+                _id: 'team1',
+            } as Team),
+        )
+        const { getByText } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <RolloverTeamScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
         )
 
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <RolloverTeamScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        const button = getByText('Submit')
+        fireEvent.press(button)
+        // Not optimal solution, see
+        // ManageTeamDetailsScreen-test.tsx for further details
+        await act(async () => {})
 
-    const button = getByText('Submit')
-    fireEvent.press(button)
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    await act(async () => {})
+        const currentYear = new Date().getFullYear()
+        expect(spy).toHaveBeenCalledWith(
+            'team1',
+            false,
+            currentYear.toString(),
+            currentYear.toString(),
+        )
+        expect(navigate).toHaveBeenCalled()
+    })
 
-    expect(spy).toHaveBeenCalled()
-    expect(getByText('Unable to rollover team')).toBeTruthy()
-})
+    it('should handle rollover error', async () => {
+        const spy = jest
+            .spyOn(TeamData, 'rollover')
+            .mockReturnValueOnce(
+                Promise.reject({ message: 'Unable to rollover team' }),
+            )
 
-it('should display custom rollover error', async () => {
-    const spy = jest
-        .spyOn(TeamData, 'rollover')
-        .mockReturnValueOnce(
-            Promise.reject({ message: 'custom rollover error' }),
+        const { getByText } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <RolloverTeamScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
         )
 
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <RolloverTeamScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        const button = getByText('Submit')
+        fireEvent.press(button)
+        // Not optimal solution, see
+        // ManageTeamDetailsScreen-test.tsx for further details
+        await act(async () => {})
 
-    const button = getByText('Submit')
-    fireEvent.press(button)
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    await act(async () => {})
+        expect(spy).toHaveBeenCalled()
+        expect(getByText('Unable to rollover team')).toBeTruthy()
+    })
 
-    expect(spy).toHaveBeenCalled()
-    expect(getByText('custom rollover error')).toBeTruthy()
+    it('should display custom rollover error', async () => {
+        const spy = jest
+            .spyOn(TeamData, 'rollover')
+            .mockReturnValueOnce(
+                Promise.reject({ message: 'custom rollover error' }),
+            )
+
+        const { getByText } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <RolloverTeamScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        const button = getByText('Submit')
+        fireEvent.press(button)
+        // Not optimal solution, see
+        // ManageTeamDetailsScreen-test.tsx for further details
+        await act(async () => {})
+
+        expect(spy).toHaveBeenCalled()
+        expect(getByText('custom rollover error')).toBeTruthy()
+    })
 })

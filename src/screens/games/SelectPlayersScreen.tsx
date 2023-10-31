@@ -1,6 +1,9 @@
 import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
+import ChangePullingTeamModal from '../../components/molecules/ChangePullingTeamModal'
 import { Chip } from 'react-native-paper'
+import ConfirmModal from '../../components/molecules/ConfirmModal'
+import { DisplayUser } from '../../types/user'
 import GameHeader from '../../components/molecules/GameHeader'
 import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
 import LivePointUtilityBar from '../../components/molecules/LivePointUtilityBar'
@@ -9,22 +12,20 @@ import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
 import { isPulling } from '../../utils/point'
 import { reactivatePoint } from '../../services/data/point'
+import { setPlayers } from '../../services/data/point'
+import { useMutation } from 'react-query'
 import { useTheme } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import {
-    resetSetPlayersStatus,
-    selectPoint,
-    selectSetPlayersError,
-    selectSetPlayersStatus,
-    setPlayers,
-    setPoint,
-} from '../../store/reducers/features/point/livePointReducer'
 import {
     selectGame,
     selectTeam,
     updateScore,
 } from '../../store/reducers/features/game/liveGameReducer'
+import {
+    selectPoint,
+    setPoint,
+} from '../../store/reducers/features/point/livePointReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
@@ -36,11 +37,19 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
-    const status = useSelector(selectSetPlayersStatus)
-    const error = useSelector(selectSetPlayersError)
     const dispatch = useDispatch<AppDispatch>()
+
     const [selectedPlayers, setSelectedPlayers] = useState<number[]>([])
-    const [modalVisible, setModalVisible] = useState(false)
+    const [guestModalVisible, setGuestModalVisible] = useState(false)
+    const [pullingModalVisible, setPullingModalVisible] = useState(false)
+    const [confirmModalVisible, setConfirmModalVisible] = useState(false)
+
+    const {
+        mutateAsync: setPlayerMutation,
+        isLoading,
+        error,
+        isError,
+    } = useMutation((players: DisplayUser[]) => setPlayers(point._id, players))
 
     const playerList = React.useMemo(() => {
         let players
@@ -57,13 +66,6 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 ),
             )
     }, [game, team])
-
-    React.useEffect(() => {
-        if (status === 'success') {
-            dispatch(resetSetPlayersStatus())
-            navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
-        }
-    }, [status, navigation, dispatch])
 
     // no guaranteed unique attribute of GuestPlayer
     // must select by index
@@ -83,7 +85,20 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         const players = playerList.filter((_p, i) =>
             selectedPlayers.includes(i),
         )
-        dispatch(setPlayers({ players }))
+
+        const data = await setPlayerMutation(players)
+        if (data.pullingTeam._id === point.pullingTeam._id) {
+            // very weird case: putting dispatch before reset prevents reset
+            // 'await'-ing dispatch also prevents this, but feels worse than dispatch after navigate
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'LivePointEdit' }],
+            })
+            dispatch(setPoint(data))
+        } else {
+            dispatch(setPoint(data))
+            setConfirmModalVisible(true)
+        }
     }
 
     const onLastPoint = async () => {
@@ -102,6 +117,10 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
             )
             navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
         } catch (e) {}
+    }
+
+    const onPressSetPulling = () => {
+        setPullingModalVisible(true)
     }
 
     const styles = StyleSheet.create({
@@ -134,6 +153,14 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         button: {
             marginTop: 10,
         },
+        setPullingChip: {
+            backgroundColor: colors.primary,
+            borderColor: colors.textPrimary,
+        },
+        setPullingText: {
+            color: colors.textPrimary,
+            fontSize: size.fontTen,
+        },
     })
 
     return (
@@ -153,6 +180,17 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                 {isPulling(point, game, team) ? 'D ' : 'O '}
                                 point
                             </Text>
+                            <View style={styles.container}>
+                                <Chip
+                                    testID="active-warning-chip"
+                                    mode="outlined"
+                                    onPress={onPressSetPulling}
+                                    style={styles.setPullingChip}>
+                                    <Text style={styles.setPullingText}>
+                                        CHANGE PULLING TEAM
+                                    </Text>
+                                </Chip>
+                            </View>
                             <LivePointUtilityBar
                                 loading={false}
                                 undoDisabled={
@@ -186,13 +224,15 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                     }}
                     ListFooterComponent={
                         <View>
-                            {status === 'failed' && (
-                                <Text style={styles.errorText}>{error}</Text>
+                            {isError && (
+                                <Text style={styles.errorText}>
+                                    {error?.toString()}
+                                </Text>
                             )}
                             <SecondaryButton
                                 style={styles.button}
                                 onPress={async () => {
-                                    setModalVisible(true)
+                                    setGuestModalVisible(true)
                                 }}
                                 text="add guest"
                             />
@@ -201,20 +241,47 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                 text="start"
                                 disabled={
                                     selectedPlayers.length !==
-                                        game.playersPerPoint ||
-                                    status === 'loading'
+                                        game.playersPerPoint || isLoading
                                 }
                                 onPress={onSetPlayers}
-                                loading={status === 'loading'}
+                                loading={isLoading}
                             />
                         </View>
                     }
                 />
             </View>
             <GuestPlayerModal
-                visible={modalVisible}
+                visible={guestModalVisible}
                 onClose={() => {
-                    setModalVisible(false)
+                    setGuestModalVisible(false)
+                }}
+            />
+            <ConfirmModal
+                visible={confirmModalVisible}
+                loading={false}
+                displayText="The stat keeper for the other team has switched the pulling and receiving teams. Do you wish to continue?"
+                onCancel={async () => setConfirmModalVisible(false)}
+                onClose={async () => setConfirmModalVisible(false)}
+                onConfirm={async () => {
+                    setConfirmModalVisible(false)
+                    // set timeout needed to prevent known issue: https://github.com/react-navigation/react-navigation/issues/11201
+                    setTimeout(() => {
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'LivePointEdit' }],
+                        })
+                    }, 50)
+                }}
+            />
+            <ChangePullingTeamModal
+                game={game}
+                pointId={point._id}
+                team={
+                    game.teamOne._id === point.pullingTeam._id ? 'one' : 'two'
+                }
+                visible={pullingModalVisible}
+                onClose={() => {
+                    setPullingModalVisible(false)
                 }}
             />
         </BaseScreen>

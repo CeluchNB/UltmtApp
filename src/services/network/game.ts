@@ -164,3 +164,15 @@ export const editGame = async (
         },
     )
 }
+
+export const logGameOpen = async (gameId: string): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/game/${gameId}/open`,
+        {},
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}

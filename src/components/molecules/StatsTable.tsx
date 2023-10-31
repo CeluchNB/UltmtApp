@@ -1,3 +1,4 @@
+import { Columns } from '../../types/stats'
 import HeaderCell from '../atoms/HeaderCell'
 import React from 'react'
 import StatFilterChip from '../atoms/StatFilterChip'
@@ -10,13 +11,11 @@ import {
     OFFENSE_COLUMNS,
     OVERALL_COLUMNS,
     PER_POINT_COLUMNS,
+    calculateColumnTotals,
     formatNumber,
 } from '../../utils/stats'
 import { FilteredGamePlayer, PlayerStats } from '../../types/stats'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-
-type Record = { _id: string; value: number | string }
-type Columns = { [x: string]: Record[] }
 
 interface StatsTableProps {
     players: FilteredGamePlayer[]
@@ -81,7 +80,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
         [sortByChosenColumn, sortColumn, sortColumnsToMatchChosenColumn],
     )
 
-    const populateDisplayColumn = React.useCallback(
+    const populateUserDisplayColumn = React.useCallback(
         (columns: Columns) => {
             columns.display = []
             for (const player of players) {
@@ -112,33 +111,6 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
         [players],
     )
 
-    const data = React.useMemo(() => {
-        const columns: Columns = {}
-
-        if (!players || players.length < 1) return []
-
-        populateDisplayColumn(columns)
-        populateAllColumns(columns)
-
-        return sortColumns(columns)
-    }, [players, populateDisplayColumn, populateAllColumns, sortColumns])
-
-    const getBackgroundColor = (idx: number): string => {
-        return idx % 2 === 0 ? colors.primary : colors.darkPrimary
-    }
-
-    const toggleSort = (column: string) => {
-        if (sortColumn !== column) {
-            setSortColumn(column)
-            setSortDirection('desc')
-        } else if (sortColumn === column && sortDirection === 'desc') {
-            setSortDirection('asc')
-        } else {
-            setSortColumn('')
-            setSortDirection('desc')
-        }
-    }
-
     const invalidColumn = (columnName: string): boolean => {
         if (INVALID_COLUMNS.includes(columnName)) {
             return true
@@ -156,6 +128,38 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                 return false
             }
             return true
+        }
+    }
+
+    const data = React.useMemo(() => {
+        const columns: Columns = {}
+
+        if (!players || players.length < 1) return {}
+
+        populateUserDisplayColumn(columns)
+        populateAllColumns(columns)
+
+        return sortColumns(columns)
+    }, [players, populateUserDisplayColumn, populateAllColumns, sortColumns])
+
+    const totals = React.useMemo(() => {
+        if (!data) return {}
+        return calculateColumnTotals(data)
+    }, [data])
+
+    const getBackgroundColor = (idx: number): string => {
+        return idx % 2 === 0 ? colors.primary : colors.darkPrimary
+    }
+
+    const toggleSort = (column: string) => {
+        if (sortColumn !== column) {
+            setSortColumn(column)
+            setSortDirection('desc')
+        } else if (sortColumn === column && sortDirection === 'desc') {
+            setSortDirection('asc')
+        } else {
+            setSortColumn('')
+            setSortDirection('desc')
         }
     }
 
@@ -180,16 +184,22 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
             textAlignVertical: 'center',
         },
         valueCell: {
+            height: 55,
+            padding: 5,
+            justifyContent: 'center',
+        },
+        valueText: {
             color: colors.textSecondary,
             textAlign: 'center',
-            textAlignVertical: 'center',
-            height: 50,
-            padding: 5,
             fontSize: size.fontTwenty,
         },
         playerCell: {
             textDecorationLine: 'underline',
             fontSize: size.fontFifteen,
+        },
+        totalCell: {
+            borderTopColor: colors.textPrimary,
+            borderTopWidth: 1,
         },
     })
 
@@ -261,6 +271,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                                     numberOfLines={2}
                                     style={[
                                         styles.valueCell,
+                                        styles.valueText,
                                         styles.playerCell,
                                         {
                                             backgroundColor:
@@ -272,6 +283,19 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                             </Pressable>
                         )
                     })}
+                    <Text
+                        testID="total-record"
+                        numberOfLines={2}
+                        style={[
+                            styles.valueCell,
+                            styles.valueText,
+                            {
+                                backgroundColor: getBackgroundColor(0),
+                            },
+                            styles.totalCell,
+                        ]}>
+                        Totals
+                    </Text>
                 </View>
                 {/* Other columns */}
                 <ScrollView horizontal ref={scrollRef}>
@@ -288,9 +312,8 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                                     />
                                     {value[1].map((record, idx) => {
                                         return (
-                                            <Text
+                                            <View
                                                 key={`${value[0]}_${record._id}`}
-                                                numberOfLines={2}
                                                 style={[
                                                     styles.valueCell,
                                                     {
@@ -300,13 +323,36 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                                                             ),
                                                     },
                                                 ]}>
-                                                {formatNumber(
-                                                    value[0],
-                                                    record.value,
-                                                )}
-                                            </Text>
+                                                <Text
+                                                    numberOfLines={2}
+                                                    style={styles.valueText}>
+                                                    {formatNumber(
+                                                        value[0],
+                                                        record.value,
+                                                    )}
+                                                </Text>
+                                            </View>
                                         )
                                     })}
+                                    <Text
+                                        key={`${value[0]}_total`}
+                                        numberOfLines={2}
+                                        style={[
+                                            styles.valueText,
+                                            styles.valueCell,
+                                            {
+                                                backgroundColor:
+                                                    getBackgroundColor(
+                                                        value[1].length,
+                                                    ),
+                                            },
+                                            styles.totalCell,
+                                        ]}>
+                                        {formatNumber(
+                                            value[0],
+                                            totals[value[0]],
+                                        )}
+                                    </Text>
                                 </View>
                             )
                         })}

@@ -1,6 +1,12 @@
 import React from 'react'
 import { useTheme } from '../../hooks'
-import { Modal, StyleSheet, View } from 'react-native'
+import {
+    Modal,
+    StyleSheet,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native'
 
 interface BaseModalProps {
     visible: boolean
@@ -43,9 +49,14 @@ const BaseModal: React.FC<BaseModalProps> = props => {
             onRequestClose={onClose}
             transparent={true}
             testID="base-modal">
-            <View style={styles.modalContainer}>
-                <View style={styles.modalView}>{children}</View>
-            </View>
+            <TouchableOpacity
+                style={styles.modalContainer}
+                onPressOut={onClose}
+                activeOpacity={1}>
+                <TouchableWithoutFeedback>
+                    <View style={styles.modalView}>{children}</View>
+                </TouchableWithoutFeedback>
+            </TouchableOpacity>
         </Modal>
     )
 }

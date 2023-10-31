@@ -1,7 +1,8 @@
 import React from 'react'
 import SearchBar from '../atoms/SearchBar'
+import { useQuery } from 'react-query'
+import { useTheme } from '../../hooks'
 import { ActivityIndicator, FlatList, ListRenderItem, View } from 'react-native'
-import { useLazyData, useTheme } from '../../hooks'
 
 interface SearchDisplayProps<T> {
     placeholder: string
@@ -12,15 +13,21 @@ interface SearchDisplayProps<T> {
 }
 
 const SearchDisplay = <R,>(props: SearchDisplayProps<R>) => {
-    const { placeholder, value, search, renderItem, onChangeText } = props
+    const { placeholder, value = '', search, renderItem, onChangeText } = props
     const {
         theme: { colors },
     } = useTheme()
-    const { data, loading, fetch } = useLazyData(search)
+
+    const [query, setQuery] = React.useState(value)
+    const { data, isLoading } = useQuery(
+        ['search', query],
+        () => search(query),
+        { retry: 0, cacheTime: 0 },
+    )
 
     const onSearch = (q: string) => {
         if (onChangeText) onChangeText(q)
-        fetch(q)
+        setQuery(q)
     }
 
     return (
@@ -31,7 +38,7 @@ const SearchDisplay = <R,>(props: SearchDisplayProps<R>) => {
                 value={value}
                 width={100}
             />
-            {loading && (
+            {isLoading && (
                 <ActivityIndicator
                     color={colors.textPrimary}
                     testID="search-indicator"

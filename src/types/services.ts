@@ -8,4 +8,8 @@ export class ApiError {
     constructor(message: string) {
         this.message = message
     }
+
+    toString() {
+        return this.message
+    }
 }

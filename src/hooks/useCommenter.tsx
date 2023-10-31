@@ -2,7 +2,7 @@ import * as Constants from '../utils/constants'
 import React from 'react'
 import { getUserId } from '../services/data/user'
 import { isLoggedIn } from '../services/data/auth'
-import { useData } from './'
+import { useQuery } from 'react-query'
 import {
     ActionFactory,
     LiveServerActionData,
@@ -45,8 +45,12 @@ export const useCommenter = (
         )
     }, [live, liveAction, savedAction])
 
-    const { data: isAuth } = useData(isLoggedIn)
-    const { data: userId } = useData(getUserId)
+    const { data: isAuth } = useQuery(['isLoggedIn'], () => isLoggedIn(), {
+        cacheTime: 0,
+    })
+    const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
+        cacheTime: 0,
+    })
 
     const subscriptions: SubscriptionObject = {
         client: (data: LiveServerActionData) => {

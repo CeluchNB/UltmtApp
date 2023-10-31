@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as RequestData from '../services/data/request'
-import * as TeamData from '../services/data/team'
+import { ApiError } from '../types/services'
 import BulkCodeModal from '../components/molecules/BulkCodeModal'
 import { DisplayUser } from '../types/user'
 import { IconButton } from 'react-native-paper'
@@ -11,9 +11,11 @@ import SecondaryButton from '../components/atoms/SecondaryButton'
 import UserSearchResultItem from '../components/atoms/UserSearchResultItem'
 import { searchUsers } from '../services/data/user'
 import { selectTeam } from '../store/reducers/features/team/managedTeamReducer'
+import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
+import { useTheme } from '../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import { useLazyData, useTheme } from '../hooks'
+import { addManager, createBulkJoinCode } from '../services/data/team'
 
 const RequestUserScreen: React.FC<RequestUserProps> = ({
     navigation,
@@ -35,11 +37,11 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
     const [displayCodeModal, setDisplayCodeModal] = React.useState(false)
 
     const {
-        loading: bulkCodeLoading,
+        isLoading: bulkCodeLoading,
         data: bulkJoinCode,
         error: bulkJoinError,
-        fetch: fetchCode,
-    } = useLazyData<string>(TeamData.createBulkJoinCode)
+        mutate: fetchCode,
+    } = useMutation((teamId: string) => createBulkJoinCode(teamId))
 
     React.useEffect(() => {
         navigation.setOptions({
@@ -80,7 +82,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
                     await RequestData.requestUser(user._id, team?._id || '')
                     break
                 case RequestType.MANAGER:
-                    await TeamData.addManager(team?._id || '', user._id)
+                    await addManager(team?._id || '', user._id)
                     break
             }
             setSelectedPlayers([user, ...selectedPlayers])
@@ -91,9 +93,12 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
         }
     }
 
-    const requestBulkCode = async () => {
-        await fetchCode(team?._id || '')
-        setDisplayCodeModal(true)
+    const requestBulkCode = () => {
+        fetchCode(team?._id || '', {
+            onSettled() {
+                setDisplayCodeModal(true)
+            },
+        })
     }
 
     const styles = StyleSheet.create({
@@ -156,7 +161,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
                 text="create bulk join code"
                 loading={bulkCodeLoading}
                 onPress={async () => {
-                    await requestBulkCode()
+                    requestBulkCode()
                 }}
             />
             {searchError.length > 0 && (
@@ -164,7 +169,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
             )}
             <BulkCodeModal
                 code={bulkJoinCode || ''}
-                error={bulkJoinError?.message || ''}
+                error={(bulkJoinError as ApiError)?.message || ''}
                 visible={displayCodeModal}
                 onClose={() => {
                     setDisplayCodeModal(false)

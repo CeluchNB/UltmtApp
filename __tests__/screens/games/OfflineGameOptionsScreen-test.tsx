@@ -8,6 +8,7 @@ import React from 'react'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
 import { Game, LocalGame } from '../../../src/types/game'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { fetchProfileData, game } from '../../../fixtures/data'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
@@ -39,6 +40,8 @@ const props: OfflineGameOptionsProps = {
     route: { params: { gameId: 'game1' } } as any,
 }
 
+const client = new QueryClient()
+
 beforeEach(async () => {
     jest.resetAllMocks()
     store.dispatch(setProfile(fetchProfileData))
@@ -57,11 +60,21 @@ beforeEach(async () => {
 })
 
 describe('OfflineGameOptionsScreen', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     it('renders', async () => {
         const snapshot = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <OfflineGameOptionsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <OfflineGameOptionsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -82,7 +95,9 @@ describe('OfflineGameOptionsScreen', () => {
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <OfflineGameOptionsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <OfflineGameOptionsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -116,7 +131,9 @@ describe('OfflineGameOptionsScreen', () => {
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <OfflineGameOptionsScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <OfflineGameOptionsScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )

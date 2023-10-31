@@ -24,6 +24,7 @@ describe('PublicUserTeamScene', () => {
                     loading={false}
                     refetch={jest.fn()}
                     user={fetchProfileData}
+                    error={null}
                 />
             </NavigationContainer>,
         )
@@ -53,6 +54,7 @@ describe('PublicUserTeamScene', () => {
                         playerTeams: [],
                         managerTeams: [],
                     }}
+                    error={null}
                 />
             </NavigationContainer>,
         )
@@ -83,6 +85,7 @@ describe('PublicUserTeamScene', () => {
                     loading={false}
                     refetch={jest.fn()}
                     user={fetchProfileData}
+                    error={null}
                 />
             </NavigationContainer>,
         )
@@ -109,6 +112,7 @@ describe('PublicUserTeamScene', () => {
                     loading={false}
                     refetch={refetch}
                     user={fetchProfileData}
+                    error={null}
                 />
             </NavigationContainer>,
         )

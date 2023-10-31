@@ -5,9 +5,11 @@ import * as LocalGameServices from '../../../src/services/local/game'
 import * as LocalPointServices from '../../../src/services/local/point'
 import * as PointServices from '../../../src/services/network/point'
 import * as UserServices from '../../../src/services/data/user'
+import AsyncStorage from '../../../__mocks__/@react-native-async-storage/async-storage'
 import { AxiosResponse } from 'axios'
 import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
+import dayjs from 'dayjs'
 import { game } from '../../../fixtures/data'
 import jwt from 'jsonwebtoken'
 import {
@@ -19,6 +21,7 @@ import {
     activeGameOffline,
     addGuestPlayer,
     createGame,
+    deleteExpiredGameViews,
     deleteGame,
     editGame,
     finishGame,
@@ -28,6 +31,7 @@ import {
     getOfflineGameById,
     getPointsByGame,
     joinGame,
+    logGameOpen,
     pushOfflineGame,
     reactivateInactiveGame,
     resurrectActiveGame,
@@ -928,5 +932,95 @@ describe('test with token', () => {
         expect(networkCall).toBeCalledWith(validToken, 'test')
         expect(result.status).toBe(200)
         expect(result.data.point).toBe('point1')
+    })
+})
+
+describe('test log game open', () => {
+    it('handles expired case', async () => {
+        const gameId = 'gameId'
+        AsyncStorage.getItem = jest
+            .fn()
+            .mockResolvedValueOnce(dayjs().subtract(2, 'days').toString())
+
+        const spy = jest.spyOn(GameServices, 'logGameOpen').mockReturnValue(
+            Promise.resolve({
+                data: { game: { ...game, totalViews: 5 } },
+                config: { headers: {} },
+                headers: {},
+                status: 200,
+                statusText: 'Good',
+            } as AxiosResponse),
+        )
+
+        const result = await logGameOpen(gameId)
+
+        expect(result?.totalViews).toBe(5)
+        expect(spy).toHaveBeenCalled()
+    })
+
+    it('handles non-expired case', async () => {
+        const gameId = 'gameId'
+        AsyncStorage.getItem = jest
+            .fn()
+            .mockResolvedValueOnce(dayjs().toString())
+
+        const spy = jest.spyOn(GameServices, 'logGameOpen').mockReturnValue(
+            Promise.resolve({
+                data: { game: { ...game, totalViews: 5 } },
+                config: { headers: {} },
+                headers: {},
+                status: 200,
+                statusText: 'Good',
+            } as AxiosResponse),
+        )
+
+        const result = await logGameOpen(gameId)
+
+        expect(result).toBeUndefined()
+        expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('handles undefined case', async () => {
+        const gameId = 'gameId'
+        AsyncStorage.getItem = jest.fn().mockResolvedValueOnce(undefined)
+
+        const spy = jest.spyOn(GameServices, 'logGameOpen').mockReturnValue(
+            Promise.resolve({
+                data: { game: { ...game, totalViews: 5 } },
+                config: { headers: {} },
+                headers: {},
+                status: 200,
+                statusText: 'Good',
+            } as AxiosResponse),
+        )
+
+        const result = await logGameOpen(gameId)
+
+        expect(result?.totalViews).toBe(5)
+        expect(spy).toHaveBeenCalled()
+    })
+})
+
+describe('test delete expired game views', () => {
+    it('deletes items appropriately', async () => {
+        const gameIds = ['game1', 'game2', 'game3', 'game4']
+        const keys = gameIds.map(id => `game:view:${id}`)
+        AsyncStorage.getAllKeys = jest
+            .fn()
+            .mockResolvedValueOnce([...keys, 'other key'])
+        AsyncStorage.getItem = jest.fn().mockImplementation(key => {
+            if (key.includes('game1') || key.includes('game3')) {
+                return dayjs().subtract(2, 'days')
+            } else if (key.includes('game2')) {
+                return dayjs().toString()
+            } else {
+                return 'baddate'
+            }
+        })
+        AsyncStorage.removeItem = jest.fn()
+
+        await deleteExpiredGameViews()
+
+        expect(AsyncStorage.removeItem).toHaveBeenCalledTimes(2)
     })
 })

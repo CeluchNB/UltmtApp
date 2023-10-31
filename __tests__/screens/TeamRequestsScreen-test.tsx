@@ -11,6 +11,7 @@ import { TeamRequestProps } from '../../src/types/navigation'
 import TeamRequestsScreen from '../../src/screens/TeamRequestsScreen'
 import store from '../../src/store/store'
 import { waitUntilRefreshComplete } from '../../fixtures/utils'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -115,286 +116,326 @@ beforeEach(() => {
     store.dispatch(ManagedTeamReducer.setTeam(getManagedTeamResponse))
 })
 
-it('should match snapshot', async () => {
-    const snapshot = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    await waitUntilRefreshComplete(snapshot.getByTestId('mtd-flat-list'))
-
-    expect(snapshot.toJSON()).toMatchSnapshot()
+const client = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: 0,
+        },
+    },
 })
 
-it('should handle get request error', async () => {
-    const spy = jest
-        .spyOn(RequestData, 'getRequestsByTeam')
-        .mockRejectedValueOnce({ message: 'test error' })
-
-    const { queryByText, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
-
-    expect(spy).toHaveBeenCalled()
-    expect(queryByText('test error')).not.toBeNull()
-})
-
-it('should toggle roster status', async () => {
-    const dataFn = jest
-        .fn()
-        .mockImplementationOnce(async (_token, id, open) => {
-            return { rosterOpen: open } as Team
-        })
-    const spy = jest.spyOn(ManagedTeamReducer, 'toggleRosterStatus')
-
-    jest.spyOn(TeamData, 'toggleRosterStatus').mockImplementationOnce(dataFn)
-
-    const { getByText, queryByText, getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
-
-    const button = getByText('Open Roster')
-    fireEvent.press(button)
-
-    waitFor(() => queryByText('Close Roster'))
-    expect(spy).toHaveBeenCalledTimes(1)
-    expect(dataFn).toHaveBeenCalledTimes(1)
-})
-
-it('should respond to request correctly', async () => {
-    const responseSpy = jest
-        .spyOn(RequestData, 'respondToPlayerRequest')
-        .mockReturnValueOnce(
-            Promise.resolve({
-                ...requestObject,
-                requestSource: 'player',
-                userDetails: {
-                    _id: 'playerid3',
-                    firstName: 'first3',
-                    lastName: 'last3',
-                    username: 'first3last3',
-                },
-            }),
-        )
-
-    const { getByTestId, getAllByTestId, queryByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
-
-    jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
-        Promise.resolve([
-            {
-                ...requestObject,
-                _id: 'request1',
-                requestSource: 'team',
-                userDetails: {
-                    _id: 'playerid2',
-                    firstName: 'first2',
-                    lastName: 'last2',
-                    username: 'first2last2',
-                },
-            },
-        ]),
-    )
-
-    const acceptButtons = getAllByTestId('accept-button')
-    expect(queryByText('@first3last3')).not.toBeNull()
-
-    fireEvent.press(acceptButtons[0])
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    await act(async () => {})
-
-    expect(queryByText('@first3last3')).toBeNull()
-    expect(responseSpy).toHaveBeenCalledWith('request2', true)
-})
-
-it('should handle respond to request error', async () => {
-    jest.spyOn(RequestData, 'respondToPlayerRequest').mockRejectedValueOnce({
-        message: 'respond test error',
+describe('TeamRequestsScreen', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
     })
 
-    const { queryByText, getByTestId, getAllByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
-
-    const acceptButtons = getAllByTestId('accept-button')
-    fireEvent.press(acceptButtons[0])
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    await act(async () => {})
-
-    const errorText = queryByText('respond test error')
-    expect(errorText).not.toBeNull()
-})
-
-it('should handle deny request', async () => {
-    const responseSpy = jest
-        .spyOn(RequestData, 'respondToPlayerRequest')
-        .mockReturnValueOnce(
-            Promise.resolve({
-                ...requestObject,
-                requestSource: 'player',
-                userDetails: {
-                    _id: 'playerid3',
-                    firstName: 'first3',
-                    lastName: 'last3',
-                    username: 'first3last3',
-                },
-            }),
-        )
-
-    const { queryByText, getByTestId, getAllByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
-
-    jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
-        Promise.resolve([
-            {
-                ...requestObject,
-                _id: 'request1',
-                requestSource: 'team',
-                userDetails: {
-                    _id: 'playerid2',
-                    firstName: 'first2',
-                    lastName: 'last2',
-                    username: 'first2last2',
-                },
-            },
-        ]),
-    )
-
-    const deleteButtons = getAllByTestId('delete-button')
-    fireEvent.press(deleteButtons[0])
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    await act(async () => {})
-
-    expect(queryByText('@first3last3')).toBeNull()
-
-    expect(responseSpy).toHaveBeenCalledWith('request2', false)
-})
-
-it('should handle delete request correctly', async () => {
-    const deleteSpy = jest
-        .spyOn(RequestData, 'deleteTeamRequest')
-        .mockImplementationOnce(async () => {
-            return requestObject
-        })
-
-    const { queryByText, getByTestId, getAllByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
-
-    jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
-        Promise.resolve([
-            {
-                ...requestObject,
-                _id: 'request2',
-                requestSource: 'player',
-                userDetails: {
-                    _id: 'playerid3',
-                    firstName: 'first3',
-                    lastName: 'last3',
-                    username: 'first3last3',
-                },
-            },
-        ]),
-    )
-
-    const username = '@first2last2'
-    expect(queryByText(username)).not.toBeNull()
-    const deleteButtons = getAllByTestId('delete-button')
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    fireEvent.press(deleteButtons[1])
-    await act(async () => {})
-
-    expect(deleteSpy).toHaveBeenCalled()
-    expect(queryByText(username)).toBeNull()
-})
-
-it('should handle delete request error correctly', async () => {
-    jest.spyOn(RequestData, 'deleteTeamRequest').mockRejectedValueOnce({
-        message: 'delete error message',
+    afterAll(() => {
+        jest.useRealTimers()
     })
 
-    const { queryByText, getByTestId, getAllByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+    it('should match snapshot', async () => {
+        const snapshot = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamRequestsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+        await waitUntilRefreshComplete(snapshot.getByTestId('mtd-flat-list'))
 
-    const username = '@first2last2'
-    expect(queryByText(username)).not.toBeNull()
-    const deleteButtons = getAllByTestId('delete-button')
-    // Not optimal solution, see
-    // ManageTeamDetailsScreen-test.tsx for further details
-    fireEvent.press(deleteButtons[1])
-    await act(async () => {})
+        expect(snapshot.toJSON()).toMatchSnapshot()
+    })
 
-    expect(queryByText(username)).not.toBeNull()
-    expect(queryByText('delete error message')).not.toBeNull()
-})
+    it('should handle get request error', async () => {
+        const spy = jest
+            .spyOn(RequestData, 'getRequestsByTeam')
+            .mockRejectedValueOnce({ message: 'test error' })
 
-it('should handle navigate to request player', async () => {
-    const { getByTestId } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <TeamRequestsScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        const { queryByText, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamRequestsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
 
-    const button = getByTestId('create-button')
-    fireEvent.press(button)
+        expect(spy).toHaveBeenCalled()
+        expect(queryByText('test error')).not.toBeNull()
+    })
 
-    expect(navigate).toHaveBeenCalledWith('RequestUser', {
-        type: RequestType.PLAYER,
+    it('should toggle roster status', async () => {
+        const dataFn = jest
+            .fn()
+            .mockImplementationOnce(async (_token, id, open) => {
+                return { rosterOpen: open } as Team
+            })
+        const spy = jest.spyOn(ManagedTeamReducer, 'toggleRosterStatus')
+
+        jest.spyOn(TeamData, 'toggleRosterStatus').mockImplementationOnce(
+            dataFn,
+        )
+
+        const { getByText, queryByText, getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamRequestsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+        const button = getByText('Open Roster')
+        fireEvent.press(button)
+
+        waitFor(() => queryByText('Close Roster'))
+        expect(spy).toHaveBeenCalledTimes(1)
+        expect(dataFn).toHaveBeenCalledTimes(1)
+    })
+
+    it('should respond to request correctly', async () => {
+        const responseSpy = jest
+            .spyOn(RequestData, 'respondToPlayerRequest')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    ...requestObject,
+                    requestSource: 'player',
+                    userDetails: {
+                        _id: 'playerid3',
+                        firstName: 'first3',
+                        lastName: 'last3',
+                        username: 'first3last3',
+                    },
+                }),
+            )
+
+        const { getByTestId, getAllByTestId, queryByText } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamRequestsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+        jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
+            Promise.resolve([
+                {
+                    ...requestObject,
+                    _id: 'request1',
+                    requestSource: 'team',
+                    userDetails: {
+                        _id: 'playerid2',
+                        firstName: 'first2',
+                        lastName: 'last2',
+                        username: 'first2last2',
+                    },
+                },
+            ]),
+        )
+
+        const acceptButtons = getAllByTestId('accept-button')
+        expect(queryByText('@first3last3')).not.toBeNull()
+
+        fireEvent.press(acceptButtons[0])
+        // Not optimal solution, see
+        // ManageTeamDetailsScreen-test.tsx for further details
+        await act(async () => {})
+
+        expect(queryByText('@first3last3')).toBeNull()
+        expect(responseSpy).toHaveBeenCalledWith('request2', true)
+    })
+
+    it('should handle respond to request error', async () => {
+        jest.spyOn(RequestData, 'respondToPlayerRequest').mockRejectedValueOnce(
+            {
+                message: 'respond test error',
+            },
+        )
+
+        const { queryByText, getByTestId, getAllByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamRequestsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+        const acceptButtons = getAllByTestId('accept-button')
+        fireEvent.press(acceptButtons[0])
+        // Not optimal solution, see
+        // ManageTeamDetailsScreen-test.tsx for further details
+        await act(async () => {})
+
+        const errorText = queryByText('respond test error')
+        expect(errorText).not.toBeNull()
+    })
+
+    it('should handle deny request', async () => {
+        const responseSpy = jest
+            .spyOn(RequestData, 'respondToPlayerRequest')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    ...requestObject,
+                    requestSource: 'player',
+                    userDetails: {
+                        _id: 'playerid3',
+                        firstName: 'first3',
+                        lastName: 'last3',
+                        username: 'first3last3',
+                    },
+                }),
+            )
+
+        const { queryByText, getByTestId, getAllByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamRequestsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+        jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
+            Promise.resolve([
+                {
+                    ...requestObject,
+                    _id: 'request1',
+                    requestSource: 'team',
+                    userDetails: {
+                        _id: 'playerid2',
+                        firstName: 'first2',
+                        lastName: 'last2',
+                        username: 'first2last2',
+                    },
+                },
+            ]),
+        )
+
+        const deleteButtons = getAllByTestId('delete-button')
+        fireEvent.press(deleteButtons[0])
+        // Not optimal solution, see
+        // ManageTeamDetailsScreen-test.tsx for further details
+        await act(async () => {})
+
+        expect(queryByText('@first3last3')).toBeNull()
+
+        expect(responseSpy).toHaveBeenCalledWith('request2', false)
+    })
+
+    it('should handle delete request correctly', async () => {
+        const deleteSpy = jest
+            .spyOn(RequestData, 'deleteTeamRequest')
+            .mockImplementationOnce(async () => {
+                return requestObject
+            })
+
+        const { queryByText, getByTestId, getAllByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamRequestsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+        jest.spyOn(RequestData, 'getRequestsByTeam').mockReturnValue(
+            Promise.resolve([
+                {
+                    ...requestObject,
+                    _id: 'request2',
+                    requestSource: 'player',
+                    userDetails: {
+                        _id: 'playerid3',
+                        firstName: 'first3',
+                        lastName: 'last3',
+                        username: 'first3last3',
+                    },
+                },
+            ]),
+        )
+
+        const username = '@first2last2'
+        expect(queryByText(username)).not.toBeNull()
+        const deleteButtons = getAllByTestId('delete-button')
+        // Not optimal solution, see
+        // ManageTeamDetailsScreen-test.tsx for further details
+        fireEvent.press(deleteButtons[1])
+        await act(async () => {})
+
+        expect(deleteSpy).toHaveBeenCalled()
+        expect(queryByText(username)).toBeNull()
+    })
+
+    it('should handle delete request error correctly', async () => {
+        jest.spyOn(RequestData, 'deleteTeamRequest').mockRejectedValueOnce({
+            message: 'delete error message',
+        })
+
+        const { queryByText, getByTestId, getAllByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamRequestsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+        const username = '@first2last2'
+        expect(queryByText(username)).not.toBeNull()
+        const deleteButtons = getAllByTestId('delete-button')
+        // Not optimal solution, see
+        // ManageTeamDetailsScreen-test.tsx for further details
+        fireEvent.press(deleteButtons[1])
+        await act(async () => {})
+
+        expect(queryByText(username)).not.toBeNull()
+        expect(queryByText('delete error message')).not.toBeNull()
+    })
+
+    it('should handle navigate to request player', async () => {
+        const { getByTestId } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamRequestsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
+
+        const button = getByTestId('create-button')
+        fireEvent.press(button)
+
+        expect(navigate).toHaveBeenCalledWith('RequestUser', {
+            type: RequestType.PLAYER,
+        })
     })
 })

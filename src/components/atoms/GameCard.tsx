@@ -1,4 +1,5 @@
 import { Game } from '../../types/game'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { IconButton } from 'react-native-paper'
 import { useTheme } from '../../hooks'
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
@@ -24,6 +25,7 @@ const GameCard: React.FC<GameCardProps> = props => {
         teamTwoScore,
         scoreLimit,
         teamOneActive,
+        totalViews,
     } = game
 
     useEffect(() => {
@@ -75,16 +77,29 @@ const GameCard: React.FC<GameCardProps> = props => {
             fontWeight: 'bold',
             fontSize: 20,
         },
-        scoreLimit: {
+        footer: {
+            display: 'flex',
+            flexDirection: 'row',
+        },
+        footerText: {
             alignSelf: 'center',
             fontSize: 16,
             fontWeight: '600',
             color: colors.textPrimary,
         },
-        footer: {
+        scoreLimitContainer: {
             display: 'flex',
             flexDirection: 'row',
             alignSelf: 'flex-end',
+        },
+        viewsContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            flex: 1,
+        },
+        viewsMargin: {
+            margin: 5,
         },
         circle: {
             width: 10,
@@ -134,16 +149,38 @@ const GameCard: React.FC<GameCardProps> = props => {
                     <Text style={styles.teamText}>{teamTwoScore}</Text>
                 </View>
                 <View style={styles.footer}>
-                    {teamOneActive && (
-                        <Text style={styles.scoreLimit}>
-                            Game to {scoreLimit}
-                        </Text>
-                    )}
-                    <IconButton
-                        iconColor={colors.textPrimary}
-                        icon="chevron-right"
-                        testID="go-button"
-                    />
+                    <View style={styles.viewsContainer}>
+                        {totalViews > 0 && (
+                            <View
+                                style={[
+                                    styles.viewsContainer,
+                                    styles.viewsMargin,
+                                ]}>
+                                <Text style={styles.footerText}>
+                                    {totalViews}
+                                </Text>
+                                <Icon
+                                    style={styles.viewsMargin}
+                                    size={20}
+                                    name="eye-outline"
+                                    color={colors.textPrimary}
+                                />
+                            </View>
+                        )}
+                    </View>
+
+                    <View style={styles.scoreLimitContainer}>
+                        {teamOneActive && (
+                            <Text style={styles.footerText}>
+                                Game to {scoreLimit}
+                            </Text>
+                        )}
+                        <IconButton
+                            iconColor={colors.textPrimary}
+                            icon="chevron-right"
+                            testID="go-button"
+                        />
+                    </View>
                 </View>
             </Pressable>
         </View>

@@ -60,7 +60,7 @@ export const savePoint = async (point: Point) => {
     const realm = await getRealm()
 
     realm.write(() => {
-        realm.create('Point', point, Realm.UpdateMode.Modified)
+        realm.create('Point', point, Realm.UpdateMode.All)
     })
 }
 

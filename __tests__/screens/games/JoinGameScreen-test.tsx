@@ -7,7 +7,13 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import { setTeamOne } from '../../../src/store/reducers/features/game/liveGameReducer'
 import store from '../../../src/store/store'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import {
+    fireEvent,
+    render,
+    waitFor,
+    waitForElementToBeRemoved,
+} from '@testing-library/react-native'
 import { game, point } from '../../../fixtures/data'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -19,8 +25,11 @@ const props: JoinGameProps = {
     route: {} as any,
 }
 
+const client = new QueryClient()
+
 describe('JoinGameScreen', () => {
     beforeAll(() => {
+        jest.useFakeTimers()
         store.dispatch(
             setTeamOne({
                 place: 'Pittsburgh',
@@ -31,6 +40,11 @@ describe('JoinGameScreen', () => {
             }),
         )
     })
+
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     beforeEach(() => {
         jest.spyOn(GameData, 'searchGames').mockReturnValueOnce(
             Promise.resolve([game]),
@@ -43,13 +57,19 @@ describe('JoinGameScreen', () => {
         )
     })
 
-    it('should match snapshot', () => {
+    it('should match snapshot', async () => {
         const snapshot = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <JoinGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <JoinGameScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
+        )
+
+        await waitForElementToBeRemoved(() =>
+            snapshot.getByTestId('search-indicator'),
         )
 
         expect(snapshot).toMatchSnapshot()
@@ -59,7 +79,9 @@ describe('JoinGameScreen', () => {
         const { getByPlaceholderText, getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <JoinGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <JoinGameScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -76,7 +98,9 @@ describe('JoinGameScreen', () => {
         const { getByPlaceholderText, getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <JoinGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <JoinGameScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )
@@ -118,7 +142,9 @@ describe('JoinGameScreen', () => {
         const { getByPlaceholderText, getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
-                    <JoinGameScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <JoinGameScreen {...props} />
+                    </QueryClientProvider>
                 </NavigationContainer>
             </Provider>,
         )

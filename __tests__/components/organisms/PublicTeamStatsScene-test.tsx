@@ -24,6 +24,18 @@ jest.mock('@react-navigation/native', () => {
         }),
     }
 })
+jest.mock('react-native-gifted-charts', () => {
+    return {
+        BarChart: () => {},
+        __esModule: true,
+    }
+})
+
+jest.mock('react-native-element-dropdown', () => {
+    return {
+        Dropdown: () => <span>dropdown</span>,
+    }
+})
 
 const client = new QueryClient()
 
@@ -62,6 +74,7 @@ const gameStats: GameStats = {
         player: playerOne,
         total: 1,
     },
+    momentumData: [],
 }
 
 const team: Team = {
@@ -105,6 +118,8 @@ const teamStats: TeamStats = {
     defensePoints: 54,
     turnovers: 4,
     turnoversForced: 45,
+    completionsToScore: [1, 2],
+    completionsToTurnover: [3, 4],
 }
 
 beforeAll(() => {
@@ -142,6 +157,9 @@ describe('PublicTeamStatsScene', () => {
 
         expect(screen.getByText('Offensive Points')).toBeTruthy()
         expect(screen.getByText('Defensive Points')).toBeTruthy()
+
+        expect(screen.getByText('Completions to Score')).toBeTruthy()
+        expect(screen.getByText('Completions to Turnover')).toBeTruthy()
 
         expect(screen.getByText('Goals')).toBeTruthy()
     })

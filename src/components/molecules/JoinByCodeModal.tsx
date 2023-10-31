@@ -12,13 +12,15 @@ interface JoinByCodeModalProps {
     visible: boolean
     loading: boolean
     error: string
-    onClose: (data: { code: string }) => void
+    onSubmit: (data: { code: string }) => void
+    onClose: () => void
 }
 
 const JoinByCodeModal: React.FC<JoinByCodeModalProps> = ({
     visible,
     loading,
     error,
+    onSubmit,
     onClose,
 }) => {
     const {
@@ -84,7 +86,7 @@ const JoinByCodeModal: React.FC<JoinByCodeModalProps> = ({
                 style={styles.button}
                 text="join"
                 onPress={() => {
-                    handleSubmit(onClose)()
+                    handleSubmit(onSubmit)()
                     reset()
                 }}
                 loading={loading}

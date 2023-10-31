@@ -21,6 +21,7 @@ import {
     getViewableActionsByPoint,
     reactivatePoint,
     setPlayers,
+    setPullingTeam,
 } from '../../../src/services/data/point'
 
 const point: Point = {
@@ -647,5 +648,102 @@ describe('test reactivate point', () => {
         await expect(reactivatePoint('point1', 1, 'one')).rejects.toMatchObject(
             { message: Constants.GET_POINT_ERROR },
         )
+    })
+})
+
+describe('test set pulling team', () => {
+    beforeEach(() => {
+        jest.spyOn(LocalPointServices, 'savePoint').mockReturnValue(
+            Promise.resolve(),
+        )
+
+        jest.spyOn(LocalPointServices, 'getPointById').mockReturnValue(
+            Promise.resolve(point),
+        )
+    })
+
+    it('with successful network call', async () => {
+        jest.spyOn(LocalGameServices, 'isActiveGameOffline').mockReturnValue(
+            Promise.resolve(false),
+        )
+        jest.spyOn(PointServices, 'setPullingTeam').mockReturnValue(
+            Promise.resolve({
+                data: { point },
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        const result = await setPullingTeam('', 'one')
+        expect(result).toMatchObject(point)
+    })
+
+    it('with unsuccessful network call', async () => {
+        jest.spyOn(LocalGameServices, 'isActiveGameOffline').mockReturnValue(
+            Promise.resolve(false),
+        )
+        jest.spyOn(PointServices, 'setPullingTeam').mockReturnValue(
+            Promise.resolve({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        await expect(setPullingTeam('', 'one')).rejects.toMatchObject({
+            message: Constants.MODIFY_LIVE_POINT_ERROR,
+        })
+    })
+
+    it('with offline change and team one pulling', async () => {
+        jest.spyOn(LocalGameServices, 'isActiveGameOffline').mockReturnValue(
+            Promise.resolve(true),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: true }),
+        )
+        jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
+            Promise.resolve('id'),
+        )
+
+        const updatedPoint = {
+            ...point,
+            pullingTeam: game.teamOne,
+            receivingTeam: game.teamTwo,
+        }
+        jest.spyOn(LocalPointServices, 'getPointById')
+            .mockReturnValueOnce(Promise.resolve(point))
+            .mockReturnValueOnce(Promise.resolve(updatedPoint))
+
+        const result = await setPullingTeam('', 'one')
+        expect(result).toMatchObject(updatedPoint)
+    })
+
+    it('with offline change and team two pulling', async () => {
+        jest.spyOn(LocalGameServices, 'isActiveGameOffline').mockReturnValue(
+            Promise.resolve(true),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: true }),
+        )
+        jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
+            Promise.resolve('id'),
+        )
+
+        const updatedPoint = {
+            ...point,
+            pullingTeam: game.teamTwo,
+            receivingTeam: game.teamOne,
+        }
+        jest.spyOn(LocalPointServices, 'getPointById')
+            .mockReturnValueOnce(Promise.resolve(point))
+            .mockReturnValueOnce(Promise.resolve(updatedPoint))
+
+        const result = await setPullingTeam('', 'two')
+        expect(result).toMatchObject(updatedPoint)
     })
 })

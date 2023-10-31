@@ -41,6 +41,7 @@ export interface Game {
     teamOnePlayers: DisplayUser[]
     teamTwoPlayers: DisplayUser[]
     resolveCode: string
+    totalViews: number
     points: string[]
 }
 

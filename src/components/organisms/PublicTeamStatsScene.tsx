@@ -1,5 +1,7 @@
+import CompletionsCharts from '../molecules/CompletionsCharts'
 import { Game } from '../../types/game'
 import GameListItem from '../atoms/GameListItem'
+import PlayerConnectionsView from './PlayerConnectionsView'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
@@ -17,6 +19,7 @@ import {
 } from 'react-native'
 import StatsFilterModal, { CheckBoxItem } from '../molecules/StatsFilterModal'
 import {
+    calculateCompletionsValues,
     convertGameStatsToLeaderItems,
     convertTeamStatsToTeamOverviewItems,
 } from '../../utils/stats'
@@ -85,6 +88,16 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
         return convertGameStatsToLeaderItems(data)
     }, [data])
 
+    const completionsToScores = React.useMemo(() => {
+        if (!data) return []
+        return calculateCompletionsValues(data.completionsToScore)
+    }, [data])
+
+    const completionsToTurnovers = React.useMemo(() => {
+        if (!data) return []
+        return calculateCompletionsValues(data.completionsToTurnover)
+    }, [data])
+
     const onGameSelect = (gameId: string) => {
         setGameFilterOptions(curr => {
             return curr.map(value => {
@@ -110,7 +123,7 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
     const styles = StyleSheet.create({
         title: {
             fontSize: size.fontThirty,
-            color: colors.textPrimary,
+            color: colors.textSecondary,
         },
         button: {
             alignSelf: 'flex-end',
@@ -169,6 +182,15 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                         />
                     )
                 }}
+            />
+            <CompletionsCharts
+                completionsToScores={completionsToScores}
+                completionsToTurnovers={completionsToTurnovers}
+            />
+            <PlayerConnectionsView
+                players={data?.players || []}
+                games={gameIds}
+                teams={[teamId]}
             />
             <Text style={styles.title}>Players</Text>
             {data && <StatsTable players={data.players || []} />}

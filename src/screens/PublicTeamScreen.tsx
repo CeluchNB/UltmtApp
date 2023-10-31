@@ -9,13 +9,7 @@ import { Team } from '../types/team'
 import TeamGameScene from '../components/organisms/TeamGameScene'
 import { getGamesByTeam } from '../services/data/game'
 import { useTheme } from '../hooks'
-import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    View,
-    useWindowDimensions,
-} from 'react-native'
+import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
 import { UseQueryResult, useQuery } from 'react-query'
 
@@ -122,15 +116,15 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     }, [initializeScreen, navigation])
 
     React.useEffect(() => {
-        navigation.setOptions({ title: `${team.place} ${team.name}` })
+        navigation.setOptions({
+            title: team.name ? `${team.place} ${team.name}` : 'Team',
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [team])
 
     const styles = StyleSheet.create({
         screen: {
             height: '100%',
-            backgroundColor: colors.primary,
-            flex: 1,
         },
         headerContainer: {
             display: 'flex',
@@ -160,26 +154,30 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
     })
 
     return (
-        <BaseScreen containerWidth={90}>
-            <View style={styles.headerContainer}>
-                <Text style={styles.teamname}>@{team?.teamname}</Text>
-                {team?.seasonStart === team?.seasonEnd ? (
-                    <Text style={styles.date}>
-                        {new Date(team?.seasonStart || '').getUTCFullYear()}
+        <BaseScreen containerWidth={95}>
+            <View style={styles.screen}>
+                <View style={styles.headerContainer}>
+                    <Text style={styles.teamname}>
+                        @{team?.teamname ?? 'team'}
                     </Text>
-                ) : (
-                    <Text style={styles.date}>
-                        {new Date(team?.seasonStart || '').getUTCFullYear() +
-                            ' - ' +
-                            new Date(team?.seasonEnd || '').getUTCFullYear()}
-                    </Text>
-                )}
-            </View>
-            <SafeAreaView
-                style={{
-                    // TODO: check this height on multiple devices
-                    height: layout.height - 225,
-                }}>
+                    {team?.seasonStart === team?.seasonEnd ? (
+                        <Text style={styles.date}>
+                            {new Date(
+                                team?.seasonStart || new Date(),
+                            ).getUTCFullYear()}
+                        </Text>
+                    ) : (
+                        <Text style={styles.date}>
+                            {new Date(
+                                team?.seasonStart || '',
+                            ).getUTCFullYear() +
+                                ' - ' +
+                                new Date(
+                                    team?.seasonEnd || '',
+                                ).getUTCFullYear()}
+                        </Text>
+                    )}
+                </View>
                 <TabView
                     navigationState={{ index, routes }}
                     renderScene={renderScene(
@@ -207,7 +205,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                         )
                     }}
                 />
-            </SafeAreaView>
+            </View>
         </BaseScreen>
     )
 }

@@ -11,6 +11,7 @@ describe('JoinByCodeModal', () => {
             <JoinByCodeModal
                 visible={true}
                 onClose={jest.fn()}
+                onSubmit={jest.fn()}
                 error={''}
                 loading={false}
             />,
@@ -22,11 +23,13 @@ describe('JoinByCodeModal', () => {
     })
 
     it('should call on close', async () => {
+        const onSubmit = jest.fn()
         const onClose = jest.fn()
         const { getByText, getByPlaceholderText } = render(
             <JoinByCodeModal
                 visible={true}
                 onClose={onClose}
+                onSubmit={onSubmit}
                 error={''}
                 loading={false}
             />,
@@ -39,16 +42,18 @@ describe('JoinByCodeModal', () => {
         fireEvent.press(button)
 
         await waitFor(() => {
-            expect(onClose).toBeCalledWith({ code: '123456' }, undefined)
+            expect(onSubmit).toBeCalledWith({ code: '123456' }, undefined)
         })
     })
 
     it('should handle error', async () => {
+        const onSubmit = jest.fn()
         const onClose = jest.fn()
         const { getByText } = render(
             <JoinByCodeModal
                 visible={true}
                 onClose={onClose}
+                onSubmit={onSubmit}
                 error={''}
                 loading={false}
             />,
@@ -61,5 +66,6 @@ describe('JoinByCodeModal', () => {
             expect(getByText('Code is required.')).toBeTruthy()
         })
         expect(onClose).not.toHaveBeenCalled()
+        expect(onSubmit).not.toHaveBeenCalled()
     })
 })

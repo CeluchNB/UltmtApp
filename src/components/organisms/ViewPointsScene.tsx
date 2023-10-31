@@ -49,7 +49,7 @@ const ViewPointsScene: React.FC<ViewPointsScene> = ({
     const styles = StyleSheet.create({
         pointsContainer: {
             marginTop: 10,
-            height: '70%',
+            height: '95%',
             backgroundColor: colors.primary,
         },
         container: { height: '100%' },

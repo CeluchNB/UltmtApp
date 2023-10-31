@@ -22,7 +22,12 @@ import {
 } from '../../hooks'
 import { TabBar, TabView } from 'react-native-tab-view'
 
-const renderScene = (gameId: string, gameViewerData: GameViewerData) => {
+const renderScene = (
+    gameId: string,
+    gameViewerData: GameViewerData,
+    teamOneName?: string,
+    teamTwoName?: string,
+) => {
     return ({ route }: { route: { key: string } }) => {
         switch (route.key) {
             case 'points':
@@ -33,7 +38,13 @@ const renderScene = (gameId: string, gameViewerData: GameViewerData) => {
                     />
                 )
             case 'stats':
-                return <GameLeadersScene gameId={gameId} />
+                return (
+                    <GameLeadersScene
+                        gameId={gameId}
+                        teamOneName={teamOneName}
+                        teamTwoName={teamTwoName}
+                    />
+                )
             default:
                 return null
         }
@@ -42,6 +53,7 @@ const renderScene = (gameId: string, gameViewerData: GameViewerData) => {
 
 const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const layout = useWindowDimensions()
+
     const {
         params: { gameId },
     } = route
@@ -77,9 +89,8 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
     const [index, setIndex] = React.useState(mapTabNameToIndex('points'))
     const [routes] = React.useState([
         { key: 'points', title: 'Points' },
-        { key: 'stats', title: 'Leaderboard' },
+        { key: 'stats', title: 'Overview' },
     ])
-    const [tabHeight, setTabHeight] = React.useState(0)
 
     React.useEffect(() => {
         setupMobileAds()
@@ -148,34 +159,35 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
 
     const styles = StyleSheet.create({
         tabContainer: {
-            height: tabHeight,
+            height: '100%',
         },
     })
 
     return (
         <BaseScreen containerWidth={90}>
-            {game && <GameHeader game={game} header />}
-            {game && (
-                <GameUtilityBar
-                    loading={reactivateLoading}
-                    onReactivateGame={
-                        managingTeamId ? handleReactivateGame : undefined
-                    }
-                    onDeleteGame={managingTeamId ? onDelete : undefined}
-                />
-            )}
-            {(allPointsLoading || gameLoading) && (
-                <ActivityIndicator color={colors.textPrimary} />
-            )}
-            <View
-                style={styles.tabContainer}
-                onLayout={event => {
-                    // TODO: this is not good enough, need to calculate height better
-                    setTabHeight(layout.height - event.nativeEvent.layout.y)
-                }}>
+            <View style={styles.tabContainer}>
+                {game && <GameHeader game={game} header />}
+                {game && (
+                    <GameUtilityBar
+                        loading={reactivateLoading}
+                        totalViews={game.totalViews}
+                        onReactivateGame={
+                            managingTeamId ? handleReactivateGame : undefined
+                        }
+                        onDeleteGame={managingTeamId ? onDelete : undefined}
+                    />
+                )}
+                {(allPointsLoading || gameLoading) && (
+                    <ActivityIndicator color={colors.textPrimary} />
+                )}
                 <TabView
                     navigationState={{ index, routes }}
-                    renderScene={renderScene(gameId, gameViewerData)}
+                    renderScene={renderScene(
+                        gameId,
+                        gameViewerData,
+                        game?.teamOne?.name,
+                        game?.teamTwo?.name,
+                    )}
                     onIndexChange={setIndex}
                     initialLayout={{ width: layout.width }}
                     renderTabBar={props => {

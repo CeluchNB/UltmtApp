@@ -4,6 +4,7 @@ import ForgotPasswordScreen from '../../src/screens/ForgotPasswordScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
 import renderer from 'react-test-renderer'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -19,6 +20,8 @@ const props: ForgotPasswordProps = {
     route: {} as any,
 }
 
+const client = new QueryClient()
+
 beforeEach(() => {
     reset.mockReset()
     navigate.mockReset()
@@ -28,7 +31,9 @@ describe('test forgot password screen', () => {
     it('should match snapshot', () => {
         const snapshot = renderer.create(
             <NavigationContainer>
-                <ForgotPasswordScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <ForgotPasswordScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>,
         )
 
@@ -47,7 +52,9 @@ describe('test forgot password screen', () => {
 
         const { getByPlaceholderText, getByText, queryByText } = render(
             <NavigationContainer>
-                <ForgotPasswordScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <ForgotPasswordScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>,
         )
 
@@ -67,7 +74,9 @@ describe('test forgot password screen', () => {
 
         const { getByPlaceholderText, getByText, queryByText } = render(
             <NavigationContainer>
-                <ForgotPasswordScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <ForgotPasswordScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>,
         )
 
@@ -89,7 +98,9 @@ describe('test forgot password screen', () => {
 
         const { getByPlaceholderText, getByText } = render(
             <NavigationContainer>
-                <ForgotPasswordScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <ForgotPasswordScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>,
         )
 
@@ -103,7 +114,9 @@ describe('test forgot password screen', () => {
     it('should navigate to reset password screen', async () => {
         const { getByText } = render(
             <NavigationContainer>
-                <ForgotPasswordScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <ForgotPasswordScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>,
         )
 

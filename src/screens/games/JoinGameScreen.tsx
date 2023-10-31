@@ -33,21 +33,12 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
 
     const onSearch = async (q: string) => {
         if (q.length > 3) {
-            const after = new Date()
-            after.setDate(after.getDate() - 2)
-            return await searchGames(
-                q,
-                true,
-                after.toDateString(),
-                undefined,
-                20,
-                0,
-            )
+            return await searchGames(q, true, undefined, undefined, 20, 0)
         }
         return []
     }
 
-    const onModalClose = async (data: { code: string }) => {
+    const onSubmit = async (data: { code: string }) => {
         const { code } = data
         if (!code) {
             return
@@ -87,6 +78,10 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
         }
     }
 
+    const onClose = () => {
+        setModalVisible(false)
+    }
+
     return (
         <BaseScreen containerWidth={80}>
             <SearchDisplay
@@ -108,7 +103,8 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
                 visible={modalVisible}
                 loading={joinLoading}
                 error={joinError}
-                onClose={onModalClose}
+                onClose={onClose}
+                onSubmit={onSubmit}
             />
         </BaseScreen>
     )

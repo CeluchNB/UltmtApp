@@ -10,6 +10,7 @@ import RequestUserScreen from '../../src/screens/RequestUserScreen'
 import { Team } from '../../src/types/team'
 import store from '../../src/store/store'
 import { DetailedRequest, RequestType } from '../../src/types/request'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -26,6 +27,8 @@ const props: RequestUserProps = {
         params: { type: RequestType.PLAYER },
     } as any,
 }
+
+const client = new QueryClient()
 
 beforeAll(() => {
     store.dispatch(
@@ -56,7 +59,9 @@ it('should match snapshot', async () => {
     const snapshot = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     ).toJSON()
@@ -68,7 +73,9 @@ it('should display search results', async () => {
     const { getByPlaceholderText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -84,7 +91,9 @@ it('should not search with less than 3 characters', async () => {
     const { getByPlaceholderText, findByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -103,7 +112,9 @@ it('should display search error', async () => {
     const { getByPlaceholderText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -122,7 +133,9 @@ it('should display error with no search results', async () => {
     const { getByPlaceholderText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -144,7 +157,9 @@ it('should correctly request user join', async () => {
     const { getByPlaceholderText, findByText, getAllByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -168,7 +183,9 @@ it('should handle request error', async () => {
     const { getByPlaceholderText, findByText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -204,7 +221,9 @@ it('should correctly add manager', async () => {
     const { getByPlaceholderText, findByText, getAllByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...managerProps} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...managerProps} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -239,7 +258,9 @@ it('should handle add manager failure', async () => {
     const { getByPlaceholderText, findByText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...managerProps} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...managerProps} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -263,7 +284,9 @@ it('should get bulk code', async () => {
     const { getByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -271,7 +294,9 @@ it('should get bulk code', async () => {
     const button = getByText('create bulk join code')
     fireEvent.press(button)
 
-    expect(spy).toHaveBeenCalled()
+    await waitFor(() => {
+        expect(spy).toHaveBeenCalled()
+    })
 
     const modal = getByTestId('base-modal')
     await act(async () => {})
@@ -286,7 +311,9 @@ it('should handle get bulk code error', async () => {
     const { getByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -312,7 +339,9 @@ it('should close bulk code modal', async () => {
     const { getByText, getByTestId } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <RequestUserScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <RequestUserScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )

@@ -10,6 +10,33 @@ exports[`should match snapshot 1`] = `
   visible={true}
 >
   <View
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={false}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
     style={
       {
         "alignItems": "center",
@@ -18,10 +45,29 @@ exports[`should match snapshot 1`] = `
         "flex": 1,
         "flexDirection": "row",
         "justifyContent": "center",
+        "opacity": 1,
       }
     }
   >
     <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         {
           "alignItems": "center",
@@ -231,6 +277,7 @@ exports[`should match snapshot 1`] = `
               }
             >
               <Text
+                onPress={[Function]}
                 style={
                   {
                     "color": "#ffd600",
@@ -282,56 +329,24 @@ exports[`should match snapshot 1`] = `
                     },
                     {
                       "borderRadius": 18,
-                      "padding": 6,
                     },
                   ]
                 }
                 uncheckedColor="#7AC6FF"
               >
                 <View
+                  collapsable={false}
                   style={
                     {
-                      "opacity": 0,
+                      "borderColor": "#7AC6FF",
+                      "borderRadius": 10,
+                      "borderWidth": 2,
+                      "height": 20,
+                      "margin": 8,
+                      "width": 20,
                     }
                   }
-                >
-                  <Text
-                    accessibilityElementsHidden={true}
-                    allowFontScaling={false}
-                    importantForAccessibility="no-hide-descendants"
-                    pointerEvents="none"
-                    selectable={false}
-                    style={
-                      [
-                        {
-                          "color": "#ffd600",
-                          "fontSize": 24,
-                        },
-                        [
-                          {
-                            "lineHeight": 24,
-                            "transform": [
-                              {
-                                "scaleX": 1,
-                              },
-                            ],
-                          },
-                          {
-                            "backgroundColor": "transparent",
-                          },
-                        ],
-                        {
-                          "fontFamily": "Material Design Icons",
-                          "fontStyle": "normal",
-                          "fontWeight": "normal",
-                        },
-                        {},
-                      ]
-                    }
-                  >
-                    󰄬
-                  </Text>
-                </View>
+                />
               </View>
             </View>
             <View
@@ -344,6 +359,7 @@ exports[`should match snapshot 1`] = `
               }
             >
               <Text
+                onPress={[Function]}
                 style={
                   {
                     "color": "#ffd600",
@@ -395,55 +411,58 @@ exports[`should match snapshot 1`] = `
                     },
                     {
                       "borderRadius": 18,
-                      "padding": 6,
                     },
                   ]
                 }
                 uncheckedColor="#7AC6FF"
               >
                 <View
+                  collapsable={false}
                   style={
                     {
-                      "opacity": 1,
+                      "borderColor": "#ffd600",
+                      "borderRadius": 10,
+                      "borderWidth": 2,
+                      "height": 20,
+                      "margin": 8,
+                      "width": 20,
                     }
                   }
                 >
-                  <Text
-                    accessibilityElementsHidden={true}
-                    allowFontScaling={false}
-                    importantForAccessibility="no-hide-descendants"
-                    pointerEvents="none"
-                    selectable={false}
+                  <View
                     style={
                       [
                         {
-                          "color": "#ffd600",
-                          "fontSize": 24,
+                          "bottom": 0,
+                          "left": 0,
+                          "position": "absolute",
+                          "right": 0,
+                          "top": 0,
                         },
-                        [
-                          {
-                            "lineHeight": 24,
-                            "transform": [
-                              {
-                                "scaleX": 1,
-                              },
-                            ],
-                          },
-                          {
-                            "backgroundColor": "transparent",
-                          },
-                        ],
                         {
-                          "fontFamily": "Material Design Icons",
-                          "fontStyle": "normal",
-                          "fontWeight": "normal",
+                          "alignItems": "center",
+                          "justifyContent": "center",
                         },
-                        {},
                       ]
                     }
                   >
-                    󰄬
-                  </Text>
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "backgroundColor": "#ffd600",
+                          "borderRadius": 5,
+                          "height": 10,
+                          "transform": [
+                            {
+                              "scale": 1,
+                            },
+                          ],
+                          "width": 10,
+                        }
+                      }
+                    />
+                  </View>
                 </View>
               </View>
             </View>
@@ -457,6 +476,7 @@ exports[`should match snapshot 1`] = `
               }
             >
               <Text
+                onPress={[Function]}
                 style={
                   {
                     "color": "#ffd600",
@@ -508,56 +528,24 @@ exports[`should match snapshot 1`] = `
                     },
                     {
                       "borderRadius": 18,
-                      "padding": 6,
                     },
                   ]
                 }
                 uncheckedColor="#7AC6FF"
               >
                 <View
+                  collapsable={false}
                   style={
                     {
-                      "opacity": 0,
+                      "borderColor": "#7AC6FF",
+                      "borderRadius": 10,
+                      "borderWidth": 2,
+                      "height": 20,
+                      "margin": 8,
+                      "width": 20,
                     }
                   }
-                >
-                  <Text
-                    accessibilityElementsHidden={true}
-                    allowFontScaling={false}
-                    importantForAccessibility="no-hide-descendants"
-                    pointerEvents="none"
-                    selectable={false}
-                    style={
-                      [
-                        {
-                          "color": "#ffd600",
-                          "fontSize": 24,
-                        },
-                        [
-                          {
-                            "lineHeight": 24,
-                            "transform": [
-                              {
-                                "scaleX": 1,
-                              },
-                            ],
-                          },
-                          {
-                            "backgroundColor": "transparent",
-                          },
-                        ],
-                        {
-                          "fontFamily": "Material Design Icons",
-                          "fontStyle": "normal",
-                          "fontWeight": "normal",
-                        },
-                        {},
-                      ]
-                    }
-                  >
-                    󰄬
-                  </Text>
-                </View>
+                />
               </View>
             </View>
           </View>

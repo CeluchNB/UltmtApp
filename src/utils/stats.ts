@@ -1,6 +1,7 @@
 import {
     AllPlayerStats,
     CalculatedPlayerStats,
+    Columns,
     DisplayStat,
     FilteredTeamStats,
     GameData,
@@ -143,6 +144,9 @@ export const formatNumber = (key: string, value: number | string): string => {
     if (statIsPercentage(key)) {
         return `${(Number(value) * 100).toFixed(0)}%`
     }
+    if (statIsEfficiency(key)) {
+        return Number(value).toPrecision(3)
+    }
     if (Number(value) % 1 === 0) {
         return value.toString()
     }
@@ -151,6 +155,10 @@ export const formatNumber = (key: string, value: number | string): string => {
 
 const statIsPercentage = (key: string): boolean => {
     return key.toLowerCase().includes('percentage')
+}
+
+const statIsEfficiency = (key: string): boolean => {
+    return key.toLowerCase().includes('efficiency')
 }
 
 export const mapStatDisplayName = (value: string): string => {
@@ -183,6 +191,14 @@ export const mapStatDisplayName = (value: string): string => {
             return 'Blocks per point'
         case 'winPercentage':
             return 'Win Percentage'
+        case 'offensePoints':
+            return 'Offense Points'
+        case 'defensePoints':
+            return 'Defense Points'
+        case 'offensiveEfficiency':
+            return 'Offensive Efficiency'
+        case 'defensiveEfficiency':
+            return 'Defensive Efficiency'
         default:
             return value.charAt(0).toUpperCase() + value.slice(1)
     }
@@ -207,6 +223,10 @@ export const addPlayerStats = (
         droppedPasses: data1.droppedPasses + data2.droppedPasses,
         pointsPlayed: data1.pointsPlayed + data2.pointsPlayed,
         pulls: data1.pulls + data2.pulls,
+        offensePoints: data1.offensePoints + data2.offensePoints,
+        defensePoints: data1.defensePoints + data2.defensePoints,
+        holds: data1.holds + data2.holds,
+        breaks: data1.breaks + data2.breaks,
         wins: data1.wins + data2.wins,
         losses: data1.losses + data2.losses,
     }
@@ -237,13 +257,21 @@ export const calculatePlayerStats = (stats: PlayerStats): AllPlayerStats => {
         ppThrowaways: createSafeFraction(stats.throwaways, stats.pointsPlayed),
         ppDrops: createSafeFraction(stats.drops, stats.pointsPlayed),
         ppBlocks: createSafeFraction(stats.blocks, stats.pointsPlayed),
+        offensiveEfficiency: createSafeFraction(
+            stats.holds,
+            stats.offensePoints,
+        ),
+        defensiveEfficiency: createSafeFraction(
+            stats.breaks,
+            stats.defensePoints,
+        ),
     }
 
     return { ...stats, ...calcStats }
 }
 
 const createSafeFraction = (numerator: number, denominator: number): number => {
-    if (denominator === 0) {
+    if (denominator === 0 || !numerator || !denominator) {
         return 0
     }
     return numerator / denominator
@@ -256,6 +284,99 @@ export const sortAlphabetically = (str1: string, str2: string): number => {
         return 1
     }
     return 0
+}
+
+const calculatePercentageTotals = (totals: { [x: string]: number }) => {
+    return {
+        catchingPercentage: createSafeFraction(
+            totals.catches,
+            totals.catches + totals.drops,
+        ),
+        throwingPercentage: createSafeFraction(
+            totals.completedPasses,
+            totals.completedPasses + totals.throwaways + totals.droppedPasses,
+        ),
+        offensiveEfficiency: createSafeFraction(
+            totals.holds,
+            totals.offensePoints,
+        ),
+        defensiveEfficiency: createSafeFraction(
+            totals.breaks,
+            totals.defensePoints,
+        ),
+    }
+}
+
+const calculatePerPointTotals = (totals: { [x: string]: number }) => {
+    return {
+        ppAssists: createSafeFraction(totals.assists, totals.pointsPlayed),
+        ppBlocks: createSafeFraction(totals.blocks, totals.pointsPlayed),
+        ppDrops: createSafeFraction(totals.drops, totals.pointsPlayed),
+        ppGoals: createSafeFraction(totals.goals, totals.pointsPlayed),
+        ppHockeyAssists: createSafeFraction(
+            totals.hockeyAssists,
+            totals.pointsPlayed,
+        ),
+        ppThrowaways: createSafeFraction(
+            totals.throwaways,
+            totals.pointsPlayed,
+        ),
+    }
+}
+
+export const calculateColumnTotals = (
+    columns: Columns,
+): { [x: string]: number } => {
+    const totals: { [x: string]: number } = {}
+    for (const col of Object.keys(columns)) {
+        if (INVALID_COLUMNS.includes(col)) continue
+        totals[col] = 0
+        for (const record of columns[col]) {
+            totals[col] += Number(record.value)
+        }
+    }
+
+    return {
+        ...totals,
+        ...calculatePercentageTotals(totals),
+        ...calculatePerPointTotals(totals),
+    }
+}
+
+export const calculateCompletionsValues = (
+    completions: number[],
+): { value: number }[] => {
+    const data = [
+        { value: 0 },
+        { value: 0 },
+        { value: 0 },
+        { value: 0 },
+        { value: 0 },
+        { value: 0 },
+    ]
+    for (const throws of completions) {
+        if (throws <= 5) {
+            data[0].value += 1
+        } else if (throws > 5 && throws <= 10) {
+            data[1].value += 1
+        } else if (throws > 10 && throws <= 15) {
+            data[2].value += 1
+        } else if (throws > 15 && throws <= 20) {
+            data[3].value += 1
+        } else if (throws > 20 && throws <= 25) {
+            data[4].value += 1
+        } else {
+            data[5].value += 1
+        }
+    }
+    return data
+}
+
+export const pluralize = (text: string, amount?: number): string => {
+    if (amount === 1) {
+        return text
+    }
+    return `${text}s`
 }
 
 export const INVALID_COLUMNS = [
@@ -279,6 +400,10 @@ export const OVERALL_COLUMNS = [
     'pointsPlayed',
     'catchingPercentage',
     'throwingPercentage',
+    'offensePoints',
+    'defensePoints',
+    'offensiveEfficiency',
+    'defensiveEfficiency',
 ]
 export const OFFENSE_COLUMNS = [
     'goals',

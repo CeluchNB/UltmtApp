@@ -44,6 +44,12 @@ export const getInitialPlayerData = (
         winPercentage: 0,
         games: [],
         teams: [],
+        offensePoints: 5,
+        defensePoints: 1,
+        holds: 4,
+        breaks: 0,
+        offensiveEfficiency: 0.8,
+        defensiveEfficiency: 0,
         ...overrides,
     }
 }
