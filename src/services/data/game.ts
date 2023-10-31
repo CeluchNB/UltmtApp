@@ -480,10 +480,6 @@ export const logGameOpen = async (
             lastViewedDate &&
             dayjs(lastViewedDate).isAfter(dayjs().subtract(1, 'day'))
         ) {
-            await AsyncStorage.setItem(
-                `game:view:${gameId}`,
-                dayjs().toString(),
-            )
             return
         }
 
@@ -501,7 +497,10 @@ export const deleteExpiredGameViews = async () => {
     for (const key of allKeys) {
         if (key.match(/game:view:/)) {
             const expiryDate = await AsyncStorage.getItem(key)
-            if (dayjs(expiryDate).isBefore(dayjs().subtract(1, 'day'))) {
+            if (
+                dayjs(expiryDate).isValid() &&
+                dayjs(expiryDate).isBefore(dayjs().subtract(1, 'day'))
+            ) {
                 await AsyncStorage.removeItem(key)
             }
         }
