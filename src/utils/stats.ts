@@ -372,6 +372,13 @@ export const calculateCompletionsValues = (
     return data
 }
 
+export const pluralize = (text: string, amount?: number): string => {
+    if (amount === 1) {
+        return text
+    }
+    return `${text}s`
+}
+
 export const INVALID_COLUMNS = [
     'display',
     'firstName',

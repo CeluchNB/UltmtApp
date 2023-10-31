@@ -8,6 +8,7 @@ describe('GameUtilityBar', () => {
             <GameUtilityBar
                 onReactivateGame={() => {}}
                 onDeleteGame={() => {}}
+                totalViews={5}
                 loading={false}
             />,
         )

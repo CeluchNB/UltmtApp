@@ -170,6 +170,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                 {game && (
                     <GameUtilityBar
                         loading={reactivateLoading}
+                        totalViews={game.totalViews}
                         onReactivateGame={
                             managingTeamId ? handleReactivateGame : undefined
                         }

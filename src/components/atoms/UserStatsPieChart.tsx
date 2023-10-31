@@ -1,5 +1,6 @@
 import { PieChart } from 'react-native-gifted-charts'
 import React from 'react'
+import { pluralize } from '../../utils/stats'
 import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 
@@ -14,13 +15,6 @@ const GOAL_COLOR = '#2196f3'
 const ASSIST_COLOR = '#ffc107'
 const BLOCK_COLOR = '#1de9b6'
 const THROWAWAY_COLOR = '#f50057'
-
-const pluralize = (text: string, amount?: number): string => {
-    if (amount === 1) {
-        return text
-    }
-    return `${text}s`
-}
 
 const CenterLabelComponent: React.FC<UserStatsPieChartProps> = props => {
     const {
