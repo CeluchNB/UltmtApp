@@ -379,6 +379,43 @@ export const pluralize = (text: string, amount?: number): string => {
     return `${text}s`
 }
 
+export const whiteListPlayerStats = (stats: AllPlayerStats): AllPlayerStats => {
+    return {
+        assists: stats.assists,
+        goals: stats.goals,
+        catches: stats.catches,
+        touches: stats.touches,
+        blocks: stats.blocks,
+        breaks: stats.breaks,
+        callahans: stats.callahans,
+        catchingPercentage: stats.catchingPercentage,
+        completedPasses: stats.completedPasses,
+        defensiveEfficiency: stats.defensiveEfficiency,
+        defensePoints: stats.defensePoints,
+        droppedPasses: stats.droppedPasses,
+        drops: stats.drops,
+        hockeyAssists: stats.hockeyAssists,
+        holds: stats.holds,
+        losses: stats.losses,
+        offensiveEfficiency: stats.offensiveEfficiency,
+        offensePoints: stats.offensePoints,
+        plusMinus: stats.plusMinus,
+        pointsPlayed: stats.pointsPlayed,
+        ppAssists: stats.ppAssists,
+        ppBlocks: stats.ppBlocks,
+        ppDrops: stats.ppDrops,
+        ppGoals: stats.ppGoals,
+        ppThrowaways: stats.ppThrowaways,
+        pulls: stats.pulls,
+        stalls: stats.stalls,
+        throwaways: stats.throwaways,
+        throwingPercentage: stats.throwingPercentage,
+
+        winPercentage: stats.winPercentage,
+        wins: stats.wins,
+    }
+}
+
 export const INVALID_COLUMNS = [
     'display',
     'firstName',
