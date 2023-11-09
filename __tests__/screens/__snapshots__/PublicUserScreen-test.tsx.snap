@@ -651,6 +651,11 @@ exports[`PublicUserScreen should match snapshot 1`] = `
                       tintColor="#7AC6FF"
                     />
                   }
+                  style={
+                    {
+                      "height": "100%",
+                    }
+                  }
                   testID="public-user-team-scroll-view"
                 >
                   <RCTRefreshControl />
