@@ -1,5 +1,6 @@
 import { Action } from '../../types/action'
 import { Button } from 'react-native-paper'
+import { DebouncedFunc } from 'lodash'
 import { DisplayUser } from '../../types/user'
 import PlayerActionTagModal from './PlayerActionTagModal'
 import React from 'react'
@@ -10,7 +11,7 @@ interface PlayerActionItemProps {
     player: DisplayUser
     actions: Action[]
     loading: boolean
-    onAction: (action: Action) => Promise<void>
+    onAction: DebouncedFunc<(action: Action) => Promise<void>>
 }
 
 const PlayerActionItem: React.FC<PlayerActionItemProps> = ({

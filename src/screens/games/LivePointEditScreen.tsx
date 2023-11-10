@@ -126,7 +126,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                         <LivePointUtilityBar
                             error={error}
                             loading={waiting}
-                            undoDisabled={false}
+                            undoDisabled={waiting}
                             onUndo={onUndoPress}
                             onEdit={() => {
                                 navigation.navigate('EditGame')

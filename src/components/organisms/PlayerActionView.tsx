@@ -1,3 +1,4 @@
+import { DebouncedFunc } from 'lodash'
 import { DisplayUser } from '../../types/user'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
@@ -11,7 +12,7 @@ interface PlayerActionViewProps {
     actionStack: Action[]
     loading: boolean
     team: TeamNumber
-    onAction: (action: Action) => Promise<void>
+    onAction: DebouncedFunc<(action: Action) => Promise<void>>
 }
 
 type PlayerAction = {

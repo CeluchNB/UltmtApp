@@ -1,6 +1,7 @@
 import * as Constants from '../utils/constants'
 import React from 'react'
 import { UpdateGame } from '../types/game'
+import { debounce } from 'lodash'
 import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import {
@@ -201,7 +202,7 @@ export const useGameEditor = () => {
         )
     }, [actions, team])
 
-    const onAction = async (action: Action) => {
+    const handleAction = async (action: Action) => {
         setWaiting(true)
         if (offline) {
             const newAction = await createOfflineAction(action, point._id)
@@ -213,7 +214,10 @@ export const useGameEditor = () => {
         }
     }
 
-    const onUndo = async () => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const onAction = React.useCallback(debounce(handleAction, 150), [])
+
+    const handleUndo = async () => {
         setWaiting(true)
         if (offline) {
             const result = await undoOfflineAction(point._id)
@@ -224,6 +228,9 @@ export const useGameEditor = () => {
             undoAction(point._id)
         }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const onUndo = React.useCallback(debounce(handleUndo, 150), [])
 
     const onFinishPoint = async () => {
         const prevPoint = await finishPoint(point._id)
