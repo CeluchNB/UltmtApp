@@ -50,7 +50,9 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
         try {
             dispatch(setTeamOne(teamOne))
             navigation.navigate('SelectOpponent', {})
-        } catch (e) {}
+        } catch (e) {
+            // TODO: error display?
+        }
     }
 
     const onCreateTeam = async () => {

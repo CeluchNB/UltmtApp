@@ -257,7 +257,9 @@ export const useGameEditor = () => {
             await finishGame()
             dispatch(resetGame())
             dispatch(resetPoint())
-        } catch (e) {}
+        } catch (e) {
+            // TODO: error display?
+        }
     }
 
     const onEditGame = async (gameData: UpdateGame) => {
@@ -266,7 +268,7 @@ export const useGameEditor = () => {
             const result = await editGame(game._id, data)
             dispatch(setGame(result))
         } catch (e) {
-            throw e
+            throw e // TODO: error display?
         }
     }
 

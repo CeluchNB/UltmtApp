@@ -19,7 +19,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const { navigateToGame, onResurrect } = useGameReactivation()
+    const { onReactivateGame } = useGameReactivation()
     const { data: game } = useQuery(['getOfflineGameById', { gameId }], () =>
         getOfflineGameById(gameId),
     )
@@ -40,8 +40,8 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
 
     const reactivateGame = async () => {
         if (game) {
-            const resurrectedGame = await onResurrect(game)
-            navigateToGame(resurrectedGame)
+            // TODO: reactivate refactor
+            await onReactivateGame(game._id, game.teamOne._id)
         }
     }
 

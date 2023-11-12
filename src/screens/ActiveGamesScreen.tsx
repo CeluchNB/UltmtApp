@@ -4,18 +4,18 @@ import ConfirmModal from '../components/molecules/ConfirmModal'
 import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
 import { getUserId } from '../services/data/user'
-import { useGameReactivation } from '../hooks/useGameReactivation'
 import { useQuery } from 'react-query'
-import { useTheme } from '../hooks'
 import { FlatList, StyleSheet, Text } from 'react-native'
 import { Game, LocalGame } from '../types/game'
 import { deleteGame, getActiveGames } from '../services/data/game'
+import { useGameReactivation, useTheme } from '../hooks'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
-    const { navigateToGame, onResurrect } = useGameReactivation()
+
+    const { onReactivateGame } = useGameReactivation()
     const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
         cacheTime: 0,
     })
@@ -58,9 +58,11 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 return
             }
 
-            const game = await onResurrect(activeGame)
-            navigateToGame(game)
-        } catch (e) {}
+            // TODO: reactivate refactor
+            await onReactivateGame(activeGame._id, getMyTeamId(activeGame))
+        } catch (e) {
+            // TODO: error display?
+        }
     }
 
     const onDelete = async () => {
@@ -69,7 +71,7 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
             try {
                 await deleteGame(deletingGame._id, getMyTeamId(deletingGame))
             } catch (e) {
-                // do nothing
+                // TODO: error display do nothing
             } finally {
                 refetch()
                 setDeleteLoading(false)
