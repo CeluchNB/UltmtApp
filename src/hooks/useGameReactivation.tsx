@@ -18,19 +18,23 @@ export const useGameReactivation = () => {
         const { game, team, activePoint, hasActiveActions } =
             await reactivateGame(gameId, managingTeamId)
 
+        console.log('got data', game, team, activePoint, hasActiveActions)
+        // set necessary data in redux
         dispatch(setGame(game))
         dispatch(setTeam(team))
         if (!activePoint) {
+            console.log('navigating to first point')
             dispatch(resetPoint())
             navigation.navigate('LiveGame', { screen: 'FirstPoint' })
-            return
-        }
-
-        dispatch(setPoint(activePoint))
-        if (hasActiveActions) {
-            navigation.navigate('LiveGame', { screen: 'LivePointEdit' })
         } else {
-            navigation.navigate('LiveGame', { screen: 'SelectPlayers' })
+            dispatch(setPoint(activePoint))
+            if (hasActiveActions) {
+                console.log('navigating to live point')
+                navigation.navigate('LiveGame', { screen: 'LivePointEdit' })
+            } else {
+                console.log('navigating to select players')
+                navigation.navigate('LiveGame', { screen: 'SelectPlayers' })
+            }
         }
     }
 

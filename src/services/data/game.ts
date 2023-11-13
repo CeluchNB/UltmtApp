@@ -2,6 +2,7 @@ import * as Constants from '../../utils/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { LocalError } from '../../types/services'
 import { TeamNumber } from '../../types/team'
 import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
@@ -33,6 +34,7 @@ import {
 } from '../local/action'
 import {
     getPointById as localGetPointById,
+    getPointByPointNumber as localGetPointByPointNumber,
     savePoint as localSavePoint,
 } from '../local/point'
 import {
@@ -297,13 +299,34 @@ export const reactivateGame = async (gameId: string, teamId: string) => {
     if (localGame?.offline) {
         // update local game data
         localGame.teamOneActive = true
+        console.log('activating offline game', localGame)
         await activateGameLocally(localGame)
 
+        // get the active point
+        console.log('getting active point')
+        let activePoint
+        try {
+            activePoint = await localGetPointByPointNumber(
+                localGame.points.length,
+                localGame.points,
+            )
+        } catch (e) {
+            activePoint = undefined
+        }
+        console.log('active point', activePoint)
+
+        // get actions on active point
+        const actions = []
+        if (activePoint) {
+            actions.push(...(await localGetActionsByPoint(activePoint._id)))
+        }
+        console.log('actions', actions.length)
+
         return {
+            activePoint,
             game: localGame,
             team: 'one',
-            activePoint: {},
-            hasActiveActions: false,
+            hasActiveActions: actions.length > 0,
         }
     } else {
         // reactivate backend game
@@ -328,7 +351,8 @@ export const reactivateGame = async (gameId: string, teamId: string) => {
         )
 
         await withGameToken(networkReactivatePoint, point?._id)
-        return { game, team, activePoint: point, hasActiveActions }
+        const gameResult = await localGetGameById(gameId)
+        return { game: gameResult, team, activePoint: point, hasActiveActions }
     }
 }
 
@@ -352,7 +376,7 @@ const savePointsLocally = async (
     points: Point[],
     team: TeamNumber,
     gameId: string,
-): Promise<{ point: any; hasActiveActions: boolean }> => {
+): Promise<{ point: Point; hasActiveActions: boolean }> => {
     await Promise.all(points.map((point: Point) => localSavePoint(point)))
 
     // get actions
@@ -371,7 +395,13 @@ const savePointsLocally = async (
             await saveInactivePointActions(team, point._id)
         }
     }
-    return { point: activePoint, hasActiveActions }
+
+    if (!activePoint) {
+        throw new LocalError(Constants.GET_POINT_ERROR)
+    }
+
+    const point = await localGetPointById(activePoint?._id)
+    return { point: point, hasActiveActions }
 }
 
 const teamIsActiveOnPoint = (point: Point, team: TeamNumber): boolean => {
