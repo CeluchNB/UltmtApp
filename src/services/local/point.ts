@@ -82,12 +82,11 @@ export const getPointByPointNumber = async (
     const gameString = gamePoints.map(id => {
         return `"${id}"`
     })
-    console.log('data', pointNumber, gamePoints)
+
     const points = await realm
         .objects<PointSchema>('Point')
         .filtered(`pointNumber == ${pointNumber} && _id IN { ${gameString} }`)
 
-    console.log('points', points.length)
     if (points.length === 0 || points.length > 1) {
         return throwLocalError(Constants.GET_POINT_ERROR)
     }
