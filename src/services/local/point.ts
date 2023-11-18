@@ -4,7 +4,7 @@ import Point from '../../types/point'
 import { PointSchema } from '../../models'
 import { Realm } from '@realm/react'
 import { getRealm } from '../../models/realm'
-import { throwApiError } from '../../utils/service-utils'
+import { throwLocalError } from '../../utils/service-utils'
 
 const parsePoint = (schema: PointSchema): Point => {
     return JSON.parse(
@@ -68,7 +68,7 @@ export const getPointById = async (pointId: string): Promise<Point> => {
     const realm = await getRealm()
     const point = await realm.objectForPrimaryKey<PointSchema>('Point', pointId)
     if (!point) {
-        return throwApiError({}, Constants.GET_POINT_ERROR)
+        return throwLocalError(Constants.GET_POINT_ERROR)
     }
     const result = parsePoint(point)
     return result
@@ -82,13 +82,36 @@ export const getPointByPointNumber = async (
     const gameString = gamePoints.map(id => {
         return `"${id}"`
     })
-    const point = await realm
+
+    const points = await realm
         .objects<PointSchema>('Point')
         .filtered(`pointNumber == ${pointNumber} && _id IN { ${gameString} }`)
 
-    if (point.length === 1) {
-        return parsePoint(point[0])
+    if (points.length === 0 || points.length > 1) {
+        return throwLocalError(Constants.GET_POINT_ERROR)
     }
+
+    return parsePoint(points[0])
+}
+
+export const getActivePointByGame = async (
+    game: Game,
+): Promise<Point | undefined> => {
+    const realm = await getRealm()
+
+    const gameString = game.points.map(id => {
+        return `"${id}"`
+    })
+
+    const points = await realm
+        .objects<PointSchema>('Point')
+        .filtered(`teamOneActive == $0 && _id IN { $1 }`, true, gameString)
+
+    if (points.length === 0 || points.length > 1) {
+        return undefined
+    }
+
+    return parsePoint(points[0])
 }
 
 export const deletePoint = async (pointId: string) => {

@@ -130,6 +130,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
             dispatch(resetState())
             setLoading(false)
         } catch (e: any) {
+            // TODO: error display?
         } finally {
             navigation.navigate('Login')
         }

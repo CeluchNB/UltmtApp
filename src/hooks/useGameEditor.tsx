@@ -135,6 +135,7 @@ export const useGameEditor = () => {
                 }
             },
             error: data => {
+                setWaiting(false)
                 setError(data?.message)
             },
             point: () => {},
@@ -215,7 +216,10 @@ export const useGameEditor = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const onAction = React.useCallback(debounce(handleAction, 150), [])
+    const onAction = React.useCallback(debounce(handleAction, 150), [
+        offline,
+        point,
+    ])
 
     const handleUndo = async () => {
         setWaiting(true)
@@ -230,7 +234,10 @@ export const useGameEditor = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const onUndo = React.useCallback(debounce(handleUndo, 150), [])
+    const onUndo = React.useCallback(debounce(handleUndo, 150), [
+        offline,
+        point,
+    ])
 
     const onFinishPoint = async () => {
         const prevPoint = await finishPoint(point._id)
@@ -257,7 +264,9 @@ export const useGameEditor = () => {
             await finishGame()
             dispatch(resetGame())
             dispatch(resetPoint())
-        } catch (e) {}
+        } catch (e) {
+            // TODO: error display?
+        }
     }
 
     const onEditGame = async (gameData: UpdateGame) => {
@@ -266,7 +275,7 @@ export const useGameEditor = () => {
             const result = await editGame(game._id, data)
             dispatch(setGame(result))
         } catch (e) {
-            throw e
+            throw e // TODO: error display?
         }
     }
 

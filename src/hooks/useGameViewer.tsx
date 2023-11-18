@@ -20,7 +20,6 @@ import {
     getGameById,
     getPointsByGame,
     logGameOpen,
-    reactivateInactiveGame,
 } from '../services/data/game'
 import {
     isLivePoint,
@@ -58,12 +57,12 @@ export interface GameViewerData {
         live: boolean
     }
     onSelectPoint: (id: string) => Promise<void>
-    onReactivateGame: () => Promise<
-        | (Game & {
-              offline: boolean
-          })
-        | undefined
-    >
+    // onReactivateGame: () => Promise<
+    //     | (Game & {
+    //           offline: boolean
+    //       })
+    //     | undefined
+    // >
     onRefresh: () => Promise<void>
 }
 /**
@@ -113,17 +112,17 @@ export const useGameViewer = (gameId: string): GameViewerData => {
         return activeGames?.find(g => g._id === game?._id) !== undefined
     }, [game, activeGames])
 
-    const onReactivateGame = React.useCallback(async () => {
-        if (!managingTeamId) {
-            return
-        }
+    // const onReactivateGame = React.useCallback(async () => {
+    //     if (!managingTeamId) {
+    //         return
+    //     }
 
-        const reactivatedGame = await reactivateInactiveGame(
-            gameId,
-            managingTeamId,
-        )
-        return reactivatedGame
-    }, [gameId, managingTeamId])
+    //     const reactivatedGame = await reactivateInactiveGame(
+    //         gameId,
+    //         managingTeamId,
+    //     )
+    //     return reactivatedGame
+    // }, [gameId, managingTeamId])
 
     const displayedActions = React.useMemo(() => {
         if (!activePoint) return []
@@ -296,7 +295,7 @@ export const useGameViewer = (gameId: string): GameViewerData => {
         myTeamActive,
         onSelectAction,
         onSelectPoint,
-        onReactivateGame,
+        // onReactivateGame,
         onRefresh: initializeGame,
     }
 }
