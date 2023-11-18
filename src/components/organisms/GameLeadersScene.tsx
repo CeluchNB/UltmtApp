@@ -51,9 +51,17 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({
         return data?.momentumData
     }, [data])
 
-    const chartHeight = React.useMemo(() => {
-        return Math.max(100, ...chartData.map(value => value.y * 2))
+    const chartYMax = React.useMemo(() => {
+        return Math.max(100, ...chartData.map(value => value.y)) + 10
     }, [chartData])
+
+    const chartYMin = React.useMemo(() => {
+        return Math.min(-100, ...chartData.map(value => value.y)) - 10
+    }, [chartData])
+
+    const chartHeight = React.useMemo(() => {
+        return Math.max(Math.abs(chartYMax), Math.abs(chartYMin))
+    }, [chartYMax, chartYMin])
 
     const styles = StyleSheet.create({
         button: {
@@ -120,8 +128,8 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({
                                     style={styles.chartStyle}
                                     data={chartData}
                                     yDomain={{
-                                        min: -(chartHeight / 2),
-                                        max: chartHeight / 2,
+                                        min: -chartHeight,
+                                        max: chartHeight,
                                     }}
                                     xDomain={{
                                         min: 0,
