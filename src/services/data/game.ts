@@ -349,11 +349,21 @@ const reactivateOnlineGame = async (gameId: string, teamId: string) => {
     await activateGameLocally({ ...game, offline: false })
     await EncryptedStorage.setItem('game_token', token)
 
-    await localSavePoint(activePoint)
-    await localDeleteActions(team, activePoint._id)
-    await localSaveMultipleServerActions(actions, activePoint._id)
-
     const gameResult = await localGetGameById(gameId)
+
+    if (activePoint) {
+        await localSavePoint(activePoint)
+        await localDeleteActions(team, activePoint._id)
+        await localSaveMultipleServerActions(actions, activePoint._id)
+    } else {
+        return {
+            game: gameResult,
+            team,
+            activePoint: undefined,
+            hasActiveActions: false,
+        }
+    }
+
     const point = await localGetPointById(activePoint._id)
 
     return {
