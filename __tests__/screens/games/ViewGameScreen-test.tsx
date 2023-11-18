@@ -619,60 +619,12 @@ describe('ViewGameScreen', () => {
             }),
         )
         const spy = jest
-            .spyOn(GameData, 'reactivateInactiveGame')
+            .spyOn(GameData, 'reactivateGame')
             .mockResolvedValueOnce({
-                ...game,
-                startTime: '2022' as unknown as Date,
-                tournament: undefined,
-                offline: false,
-            })
-
-        jest.spyOn(PointData, 'getActivePointForGame').mockResolvedValueOnce(
-            points[0],
-        )
-        const { getByTestId, getAllByText } = render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
-        )
-        await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(4)
-        })
-
-        const button = getByTestId('reactivate-button')
-        fireEvent.press(button)
-
-        expect(spy).toHaveBeenCalled()
-    }, 20000)
-
-    it('resurrects game', async () => {
-        store.dispatch(
-            setProfile({
-                ...fetchProfileData,
-                managerTeams: [
-                    {
-                        _id: game.teamOne._id,
-                        place: game.teamOne.place,
-                        name: game.teamOne.name,
-                        teamname: game.teamOne.teamname,
-                        seasonStart: game.teamOne.seasonStart,
-                        seasonEnd: game.teamOne.seasonEnd,
-                    },
-                ],
-            }),
-        )
-
-        const spy = jest
-            .spyOn(GameData, 'resurrectActiveGame')
-            .mockResolvedValueOnce({
-                ...game,
-                startTime: '2022' as unknown as Date,
-                tournament: undefined,
-                offline: false,
+                game: { ...game, offline: false },
+                team: 'one',
+                activePoint: undefined,
+                hasActiveActions: false,
             })
 
         jest.spyOn(PointData, 'getActivePointForGame').mockResolvedValueOnce(

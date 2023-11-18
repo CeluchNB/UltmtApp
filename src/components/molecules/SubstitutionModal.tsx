@@ -48,39 +48,33 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
 
     const currentPlayers = React.useMemo(() => {
         if (team === 'one') {
-            return point.teamOnePlayers
+            return point.teamOnePlayers.slice(0, game.playersPerPoint)
         } else {
-            return point.teamTwoPlayers
+            return point.teamTwoPlayers.slice(0, game.playersPerPoint)
         }
-    }, [team, point])
+    }, [team, point, game])
 
     const availablePlayers = React.useMemo(() => {
         if (team === 'one') {
             return game.teamOnePlayers
                 .filter(
                     player =>
-                        !point.teamOnePlayers
-                            .map(p => p._id)
-                            .includes(player._id),
+                        !currentPlayers.map(p => p._id).includes(player._id),
                 )
                 .sort(nameSort)
         } else {
             return game.teamTwoPlayers
                 .filter(
                     player =>
-                        !point.teamTwoPlayers
-                            .map(p => p._id)
-                            .includes(player._id),
+                        !currentPlayers.map(p => p._id).includes(player._id),
                 )
                 .sort(nameSort)
         }
-    }, [team, game, point])
+    }, [team, game, currentPlayers])
 
     const handleSubstitution = async () => {
         if (playerOne && playerTwo && playerOneIndex !== undefined) {
             // create new array with new player
-            const newPlayers = currentPlayers.slice()
-            newPlayers.splice(playerOneIndex, 1, playerTwo)
             onSubmit(playerOne, playerTwo)
             reset()
         }

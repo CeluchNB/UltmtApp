@@ -58,7 +58,6 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 return
             }
 
-            // TODO: reactivate refactor
             await onReactivateGame(activeGame._id, getMyTeamId(activeGame))
         } catch (e) {
             // TODO: error display?

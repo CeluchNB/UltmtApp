@@ -25,6 +25,7 @@ const SCHEMAS = [
 
 const config = {
     schema: SCHEMAS,
+    deleteRealmIfMigrationNeeded: true,
     shouldCompactOnLaunch: function (_totalSize: number, _usedSpace: number) {
         // TODO: should implement this, but never seems to be called?
         return false
