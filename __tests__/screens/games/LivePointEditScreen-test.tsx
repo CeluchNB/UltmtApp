@@ -90,6 +90,8 @@ const point: Point = {
     pointNumber: 1,
     teamOnePlayers: playerList1,
     teamTwoPlayers: playerList1,
+    teamOneActivePlayers: playerList1,
+    teamTwoActivePlayers: playerList1,
     teamOneScore: 0,
     teamTwoScore: 0,
     pullingTeam: game.teamOne,

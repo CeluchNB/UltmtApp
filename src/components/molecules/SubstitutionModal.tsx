@@ -4,7 +4,6 @@ import { DisplayUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import { nameSort } from '../../utils/player'
-import { selectPoint } from '../../store/reducers/features/point/livePointReducer'
 import { useSelector } from 'react-redux'
 import { useTheme } from '../../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
@@ -15,6 +14,7 @@ import {
 
 interface SubstitutionModalProps {
     visible: boolean
+    activePlayers: DisplayUser[]
     onClose: () => void
     onSubmit: (playerOne: DisplayUser, playerTwo: DisplayUser) => void
 }
@@ -24,6 +24,7 @@ interface SubstitutionModalProps {
 */
 const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     visible,
+    activePlayers,
     onClose,
     onSubmit,
 }) => {
@@ -32,7 +33,6 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     } = useTheme()
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
-    const point = useSelector(selectPoint)
     const [playerOne, setPlayerOne] = React.useState<DisplayUser | undefined>(
         undefined,
     )
@@ -46,31 +46,23 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
         number | undefined
     >(undefined)
 
-    const currentPlayers = React.useMemo(() => {
-        if (team === 'one') {
-            return point.teamOnePlayers.slice(0, game.playersPerPoint)
-        } else {
-            return point.teamTwoPlayers.slice(0, game.playersPerPoint)
-        }
-    }, [team, point, game])
-
     const availablePlayers = React.useMemo(() => {
         if (team === 'one') {
             return game.teamOnePlayers
                 .filter(
                     player =>
-                        !currentPlayers.map(p => p._id).includes(player._id),
+                        !activePlayers.map(p => p._id).includes(player._id),
                 )
                 .sort(nameSort)
         } else {
             return game.teamTwoPlayers
                 .filter(
                     player =>
-                        !currentPlayers.map(p => p._id).includes(player._id),
+                        !activePlayers.map(p => p._id).includes(player._id),
                 )
                 .sort(nameSort)
         }
-    }, [team, game, currentPlayers])
+    }, [team, game, activePlayers])
 
     const handleSubstitution = async () => {
         if (playerOne && playerTwo && playerOneIndex !== undefined) {
@@ -118,7 +110,7 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
                 <Text style={styles.text}>Player to Remove</Text>
                 <FlatList
                     contentContainerStyle={styles.flatListContainer}
-                    data={currentPlayers}
+                    data={activePlayers}
                     renderItem={({ item, index }) => {
                         return (
                             <Chip

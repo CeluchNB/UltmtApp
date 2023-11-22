@@ -37,6 +37,7 @@ import {
     selectPoint,
     setPoint,
     substitute,
+    undoSubstitute,
 } from '../store/reducers/features/point/livePointReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -90,7 +91,7 @@ export const useGameEditor = () => {
                 data.teamNumber === team
             ) {
                 dispatch(
-                    substitute({
+                    undoSubstitute({
                         playerOne: data.playerTwo,
                         playerTwo: data.playerOne,
                         team: data.teamNumber,
@@ -179,11 +180,11 @@ export const useGameEditor = () => {
 
     const activePlayers = React.useMemo(() => {
         if (team === 'one') {
-            return point.teamOnePlayers.slice(0, game.playersPerPoint)
+            return point.teamOneActivePlayers
         } else {
-            return point.teamTwoPlayers.slice(0, game.playersPerPoint)
+            return point.teamTwoActivePlayers
         }
-    }, [point, team, game])
+    }, [point, team])
 
     const lastAction = React.useMemo(() => {
         for (let i = actions.length - 1; i >= 0; i--) {

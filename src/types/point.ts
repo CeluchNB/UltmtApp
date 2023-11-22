@@ -7,6 +7,8 @@ interface Point {
     pointNumber: number
     teamOnePlayers: DisplayUser[]
     teamTwoPlayers: DisplayUser[]
+    teamOneActivePlayers: DisplayUser[]
+    teamTwoActivePlayers: DisplayUser[]
     teamOneScore: number
     teamTwoScore: number
     pullingTeam: GuestTeam
@@ -21,6 +23,7 @@ interface Point {
 export interface ClientPoint {
     pointNumber: number
     teamOnePlayers: DisplayUser[]
+    teamOneActivePlayers: DisplayUser[]
     teamOneScore: number
     teamTwoScore: number
     pullingTeam: GuestTeam

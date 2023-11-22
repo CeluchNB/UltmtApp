@@ -3,6 +3,7 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 import { TeamNumber } from '../../types/team'
 import { parseClientAction } from '../../utils/action'
 import { refreshTokenIfNecessary } from './auth'
+import { substituteActivePlayer } from '../../utils/point'
 import { throwApiError } from '../../utils/service-utils'
 import {
     Action,
@@ -156,11 +157,21 @@ export const saveLocalAction = async (
     try {
         const point = await localGetPointById(pointId)
         if (action.actionType === ActionType.SUBSTITUTION) {
-            if (action.playerTwo) {
+            if (action.playerOne && action.playerTwo) {
                 if (action.teamNumber === 'one') {
                     point.teamOnePlayers.push(action.playerTwo)
+                    substituteActivePlayer(
+                        point.teamOneActivePlayers,
+                        action.playerOne,
+                        action.playerTwo,
+                    )
                 } else {
                     point.teamTwoPlayers.push(action.playerTwo)
+                    substituteActivePlayer(
+                        point.teamTwoActivePlayers,
+                        action.playerOne,
+                        action.playerTwo,
+                    )
                 }
             }
         }

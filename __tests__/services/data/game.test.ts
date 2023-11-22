@@ -41,6 +41,8 @@ const point: Point = {
     teamTwoActive: true,
     teamOneActions: [],
     teamTwoActions: [],
+    teamOneActivePlayers: [],
+    teamTwoActivePlayers: [],
     teamOneScore: 0,
     teamTwoScore: 0,
     teamOnePlayers: [],

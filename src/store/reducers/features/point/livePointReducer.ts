@@ -5,6 +5,10 @@ import Point from '../../../../types/point'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {
+    removePlayerFromArray,
+    substituteActivePlayer,
+} from '../../../../utils/point'
 
 export interface LivePointSlice {
     point: Point
@@ -24,6 +28,8 @@ const initialState: LivePointSlice = {
         teamTwoScore: 0,
         teamOnePlayers: [],
         teamTwoPlayers: [],
+        teamOneActivePlayers: [],
+        teamTwoActivePlayers: [],
         pullingTeam: {} as GuestTeam,
         receivingTeam: {} as GuestTeam,
     },
@@ -37,21 +43,41 @@ const livePointSlice = createSlice({
     reducers: {
         substitute(state, action) {
             if (action.payload.team === 'one') {
-                const index = state.point.teamOnePlayers
-                    .map(p => p._id)
-                    .indexOf(action.payload.playerOne._id)
-                state.point.teamOnePlayers.splice(
-                    index,
-                    1,
+                substituteActivePlayer(
+                    state.point.teamOneActivePlayers,
+                    action.payload.playerOne,
+                    action.payload.playerTwo,
+                )
+                state.point.teamOnePlayers.push(action.payload.playerTwo)
+            } else {
+                substituteActivePlayer(
+                    state.point.teamTwoActivePlayers,
+                    action.payload.playerOne,
+                    action.payload.playerTwo,
+                )
+                state.point.teamTwoPlayers.push(action.payload.playerTwo)
+            }
+        },
+        undoSubstitute(state, action) {
+            if (action.payload.team === 'one') {
+                substituteActivePlayer(
+                    state.point.teamOneActivePlayers,
+                    action.payload.playerTwo,
+                    action.payload.playerOne,
+                )
+
+                removePlayerFromArray(
+                    state.point.teamOnePlayers,
                     action.payload.playerTwo,
                 )
             } else {
-                const index = state.point.teamTwoPlayers
-                    .map(p => p._id)
-                    .indexOf(action.payload.playerOne._id)
-                state.point.teamTwoPlayers.splice(
-                    index,
-                    1,
+                substituteActivePlayer(
+                    state.point.teamTwoActivePlayers,
+                    action.payload.playerTwo,
+                    action.payload.playerOne,
+                )
+                removePlayerFromArray(
+                    state.point.teamTwoPlayers,
                     action.payload.playerTwo,
                 )
             }
@@ -108,5 +134,6 @@ export const selectCreateStatus = (state: RootState) =>
 export const selectCreateError = (state: RootState) =>
     state.livePoint.createError
 export const selectPoint = (state: RootState) => state.livePoint.point
-export const { substitute, setPoint, resetPoint } = livePointSlice.actions
+export const { substitute, undoSubstitute, setPoint, resetPoint } =
+    livePointSlice.actions
 export default livePointSlice.reducer

@@ -108,7 +108,10 @@ export const setPlayers = async (
     try {
         const offline = await localGetActiveGameOffline()
         if (offline) {
-            await updateOfflinePoint(pointId, { teamOnePlayers: players })
+            await updateOfflinePoint(pointId, {
+                teamOnePlayers: players,
+                teamOneActivePlayers: players,
+            })
         } else {
             const response = await withGameToken(
                 networkSetPlayers,

@@ -142,6 +142,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
                         />
                         <TeamActionView
                             actions={teamActions}
+                            activePlayers={activePlayers}
                             onAction={onAction}
                         />
                         <PrimaryButton

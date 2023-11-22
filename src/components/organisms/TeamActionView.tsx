@@ -10,11 +10,13 @@ import { FlatList, StyleSheet, View } from 'react-native'
 
 interface TeamActionViewProps {
     actions: Action[]
+    activePlayers: DisplayUser[]
     onAction: DebouncedFunc<(action: Action) => Promise<void>>
 }
 
 const TeamActionView: React.FC<TeamActionViewProps> = ({
     actions,
+    activePlayers,
     onAction,
 }) => {
     const {
@@ -119,6 +121,7 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
                 }}
             />
             <SubstitutionModal
+                activePlayers={activePlayers}
                 visible={subModalVisible}
                 onClose={onSubModalClose}
                 onSubmit={handleSubstitution}

@@ -39,6 +39,8 @@ export const createOfflinePoint = async (
         pointNumber,
         teamOnePlayers: [],
         teamTwoPlayers: [],
+        teamOneActivePlayers: [],
+        teamTwoActivePlayers: [],
         teamOneScore: game.teamOneScore,
         teamTwoScore: game.teamTwoScore,
         teamOneActions: [],

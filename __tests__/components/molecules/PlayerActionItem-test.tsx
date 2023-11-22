@@ -2,6 +2,7 @@ import { DisplayUser } from '../../../src/types/user'
 import PlayerActionItem from '../../../src/components/molecules/PlayerActionItem'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { debounce } from 'lodash'
 import store from '../../../src/store/store'
 import { Action, ActionType } from '../../../src/types/action'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
@@ -71,7 +72,7 @@ describe('PlayerActionItem', () => {
                 <PlayerActionItem
                     player={player}
                     actions={actions}
-                    onAction={jest.fn()}
+                    onAction={debounce(jest.fn())}
                     loading={false}
                 />
             </Provider>,
@@ -79,14 +80,14 @@ describe('PlayerActionItem', () => {
         expect(snapshot.toJSON()).toMatchSnapshot()
     })
 
-    it('should call action appropriately', () => {
+    it('should call action appropriately', async () => {
         const spy = jest.fn()
         const { getByText } = render(
             <Provider store={store}>
                 <PlayerActionItem
                     player={player}
                     actions={actions}
-                    onAction={spy}
+                    onAction={debounce(spy)}
                     loading={false}
                 />
             </Provider>,
@@ -94,7 +95,9 @@ describe('PlayerActionItem', () => {
 
         const scoreBtn = getByText('score')
         fireEvent.press(scoreBtn)
-        expect(spy).toHaveBeenCalledWith(actions[2])
+        await waitFor(() => {
+            expect(spy).toHaveBeenCalledWith(actions[2])
+        })
     })
 
     it('should handle tag call', async () => {
@@ -104,7 +107,7 @@ describe('PlayerActionItem', () => {
                 <PlayerActionItem
                     player={player}
                     actions={actions}
-                    onAction={spy}
+                    onAction={debounce(spy)}
                     loading={false}
                 />
             </Provider>,
