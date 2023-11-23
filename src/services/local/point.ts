@@ -13,6 +13,8 @@ const parsePoint = (schema: PointSchema): Point => {
             pointNumber: schema.pointNumber,
             teamOnePlayers: schema.teamOnePlayers,
             teamTwoPlayers: schema.teamTwoPlayers,
+            teamOneActivePlayers: schema.teamOneActivePlayers,
+            teamTwoActivePlayers: schema.teamTwoActivePlayers,
             teamOneScore: schema.teamOneScore,
             teamTwoScore: schema.teamTwoScore,
             pullingTeam: schema.pullingTeam,

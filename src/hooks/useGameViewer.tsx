@@ -2,7 +2,6 @@ import { Game } from '../types/game'
 import Point from '../types/point'
 import React from 'react'
 import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
-import { useQuery } from 'react-query'
 import {
     Action,
     ActionFactory,
@@ -16,7 +15,6 @@ import {
     getViewableActionsByPoint,
 } from '../services/data/point'
 import {
-    getActiveGames,
     getGameById,
     getPointsByGame,
     logGameOpen,
@@ -50,19 +48,12 @@ export interface GameViewerData {
     loading: boolean
     points: Point[]
     managingTeamId: string | undefined
-    myTeamActive?: boolean
     onSelectAction: (action: ServerActionData) => {
         gameId: string
         pointId: string
         live: boolean
     }
     onSelectPoint: (id: string) => Promise<void>
-    // onReactivateGame: () => Promise<
-    //     | (Game & {
-    //           offline: boolean
-    //       })
-    //     | undefined
-    // >
     onRefresh: () => Promise<void>
 }
 /**
@@ -101,28 +92,6 @@ export const useGameViewer = (gameId: string): GameViewerData => {
         }
         return undefined
     }, [game, managerTeams])
-
-    const { data: activeGames } = useQuery<Game[]>(
-        ['getActiveGames'],
-        () => getActiveGames(),
-        { cacheTime: 0 },
-    )
-
-    const myTeamActive = React.useMemo(() => {
-        return activeGames?.find(g => g._id === game?._id) !== undefined
-    }, [game, activeGames])
-
-    // const onReactivateGame = React.useCallback(async () => {
-    //     if (!managingTeamId) {
-    //         return
-    //     }
-
-    //     const reactivatedGame = await reactivateInactiveGame(
-    //         gameId,
-    //         managingTeamId,
-    //     )
-    //     return reactivatedGame
-    // }, [gameId, managingTeamId])
 
     const displayedActions = React.useMemo(() => {
         if (!activePoint) return []
@@ -292,10 +261,8 @@ export const useGameViewer = (gameId: string): GameViewerData => {
         loading,
         points,
         managingTeamId,
-        myTeamActive,
         onSelectAction,
         onSelectPoint,
-        // onReactivateGame,
         onRefresh: initializeGame,
     }
 }

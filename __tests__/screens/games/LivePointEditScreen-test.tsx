@@ -119,15 +119,21 @@ beforeEach(() => {
     jest.spyOn(ActionData, 'addAction').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'undoAction').mockReturnValue(Promise.resolve())
     jest.spyOn(ActionData, 'saveLocalAction').mockImplementation(data =>
-        Promise.resolve(ActionFactory.createFromAction(data)),
+        Promise.resolve({
+            action: ActionFactory.createFromAction(data),
+            point: point,
+        }),
     )
     jest.spyOn(ActionData, 'deleteLocalAction').mockResolvedValue(
         Promise.resolve({
-            actionNumber: 1,
-            actionType: ActionType.PULL,
-            teamNumber: 'one',
-            comments: [],
-            tags: [],
+            action: {
+                actionNumber: 1,
+                actionType: ActionType.PULL,
+                teamNumber: 'one',
+                comments: [],
+                tags: [],
+            },
+            point,
         }),
     )
 })
@@ -424,22 +430,28 @@ describe('LivePointEditScreen', () => {
         )
         jest.spyOn(ActionData, 'createOfflineAction').mockImplementation(
             async action => {
-                return ActionFactory.createFromAction({
-                    ...action.action,
-                    teamNumber: 'two',
-                    actionNumber: 1,
-                    comments: [],
-                } as LiveServerActionData)
+                return {
+                    action: ActionFactory.createFromAction({
+                        ...action.action,
+                        teamNumber: 'two',
+                        actionNumber: 1,
+                        comments: [],
+                    } as LiveServerActionData),
+                    point,
+                }
             },
         )
         jest.spyOn(ActionData, 'undoOfflineAction').mockImplementation(
             async _pointId => {
                 return {
-                    teamNumber: 'two',
-                    comments: [],
-                    tags: [],
-                    actionNumber: 1,
-                    actionType: ActionType.PULL,
+                    action: {
+                        teamNumber: 'two',
+                        comments: [],
+                        tags: [],
+                        actionNumber: 1,
+                        actionType: ActionType.PULL,
+                    },
+                    point,
                 }
             },
         )

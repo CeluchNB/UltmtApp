@@ -1,4 +1,5 @@
 import * as Constants from '../utils/constants'
+import Point from '../types/point'
 import React from 'react'
 import { UpdateGame } from '../types/game'
 import { debounce } from 'lodash'
@@ -6,7 +7,6 @@ import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import {
     Action,
-    ActionType,
     LiveServerActionData,
     SubscriptionObject,
 } from '../types/action'
@@ -36,8 +36,6 @@ import {
     resetPoint,
     selectPoint,
     setPoint,
-    substitute,
-    undoSubstitute,
 } from '../store/reducers/features/point/livePointReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -65,55 +63,23 @@ export const useGameEditor = () => {
     const [actions, setActions] = React.useState<Action[]>([])
     const [offline, setOffline] = React.useState(false)
 
-    const actionSideEffects = React.useCallback(
-        (data: Action) => {
-            const action = data.action as LiveServerActionData
-            if (
-                action.actionType === ActionType.SUBSTITUTION &&
-                action.teamNumber === team
-            ) {
-                dispatch(
-                    substitute({
-                        playerOne: data.action.playerOne,
-                        playerTwo: data.action.playerTwo,
-                        team: action.teamNumber,
-                    }),
-                )
-            }
+    const successfulResponse = React.useCallback(
+        (updatedPoint: Point) => {
+            dispatch(setPoint(updatedPoint))
+            setWaiting(false)
+            setError('')
         },
-        [team, dispatch],
+        [dispatch, setWaiting, setError],
     )
-
-    const undoSideEffects = React.useCallback(
-        (data: LiveServerActionData) => {
-            if (
-                data.actionType === ActionType.SUBSTITUTION &&
-                data.teamNumber === team
-            ) {
-                dispatch(
-                    undoSubstitute({
-                        playerOne: data.playerTwo,
-                        playerTwo: data.playerOne,
-                        team: data.teamNumber,
-                    }),
-                )
-            }
-        },
-        [team, dispatch],
-    )
-
-    const successfulResponse = () => {
-        setWaiting(false)
-        setError('')
-    }
 
     const subscriptions: SubscriptionObject = React.useMemo(() => {
         return {
             client: async (data: LiveServerActionData) => {
                 try {
-                    const action = await saveLocalAction(data, point._id)
-                    actionSideEffects(action)
-                    successfulResponse()
+                    const { action, point: updatedPoint } =
+                        await saveLocalAction(data, point._id)
+
+                    successfulResponse(updatedPoint)
                     setActions(immutablePush(action))
                 } catch (e: any) {
                     setError(e?.message ?? Constants.GET_ACTION_ERROR)
@@ -122,14 +88,14 @@ export const useGameEditor = () => {
             undo: async ({ team: undoTeamNumber, actionNumber }) => {
                 try {
                     if (undoTeamNumber === team) {
-                        const result = await deleteLocalAction(
-                            undoTeamNumber,
-                            actionNumber,
-                            point._id,
-                        )
-                        undoSideEffects(result)
-                        successfulResponse()
-                        setActions(immutableFilter(actionNumber))
+                        const { action, point: updatedPoint } =
+                            await deleteLocalAction(
+                                undoTeamNumber,
+                                actionNumber,
+                                point._id,
+                            )
+                        successfulResponse(updatedPoint)
+                        setActions(immutableFilter(action.actionNumber))
                     }
                 } catch (e: any) {
                     setError(e?.message ?? Constants.GET_ACTION_ERROR)
@@ -141,26 +107,23 @@ export const useGameEditor = () => {
             },
             point: () => {},
         }
-    }, [point._id, team, actionSideEffects, undoSideEffects])
+    }, [point._id, team, successfulResponse])
 
     React.useEffect(() => {
         setWaiting(true)
         activeGameOffline().then(isOffline => {
             setOffline(isOffline)
         })
+        // TODO: is this needed?
         getLocalActionsByPoint(point._id)
             .then(pointActions => {
-                for (const action of pointActions) {
-                    actionSideEffects(action)
-                }
                 setActions(curr => [...curr, ...pointActions])
             })
             .catch(_e => {})
             .finally(() => {
                 setWaiting(false)
             })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [point])
 
     React.useEffect(() => {
         setWaiting(true)
@@ -180,9 +143,9 @@ export const useGameEditor = () => {
 
     const activePlayers = React.useMemo(() => {
         if (team === 'one') {
-            return point.teamOneActivePlayers
+            return point.teamOneActivePlayers ?? []
         } else {
-            return point.teamTwoActivePlayers
+            return point.teamTwoActivePlayers ?? []
         }
     }, [point, team])
 
@@ -207,9 +170,9 @@ export const useGameEditor = () => {
     const handleAction = async (action: Action) => {
         setWaiting(true)
         if (offline) {
-            const newAction = await createOfflineAction(action, point._id)
-            actionSideEffects(newAction)
-            successfulResponse()
+            const { action: newAction, point: updatedPoint } =
+                await createOfflineAction(action, point._id)
+            successfulResponse(updatedPoint)
             setActions(immutablePush(newAction))
         } else {
             addAction(action, point._id)
@@ -225,10 +188,11 @@ export const useGameEditor = () => {
     const handleUndo = async () => {
         setWaiting(true)
         if (offline) {
-            const result = await undoOfflineAction(point._id)
-            undoSideEffects(result)
-            successfulResponse()
-            setActions(immutableFilter(result.actionNumber))
+            const { action, point: updatedPoint } = await undoOfflineAction(
+                point._id,
+            )
+            successfulResponse(updatedPoint)
+            setActions(immutableFilter(action.actionNumber))
         } else {
             undoAction(point._id)
         }

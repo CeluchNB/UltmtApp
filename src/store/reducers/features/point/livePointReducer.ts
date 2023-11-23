@@ -5,10 +5,6 @@ import Point from '../../../../types/point'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import {
-    removePlayerFromArray,
-    substituteActivePlayer,
-} from '../../../../utils/point'
 
 export interface LivePointSlice {
     point: Point
@@ -41,47 +37,6 @@ const livePointSlice = createSlice({
     name: 'livePoint',
     initialState,
     reducers: {
-        substitute(state, action) {
-            if (action.payload.team === 'one') {
-                substituteActivePlayer(
-                    state.point.teamOneActivePlayers,
-                    action.payload.playerOne,
-                    action.payload.playerTwo,
-                )
-                state.point.teamOnePlayers.push(action.payload.playerTwo)
-            } else {
-                substituteActivePlayer(
-                    state.point.teamTwoActivePlayers,
-                    action.payload.playerOne,
-                    action.payload.playerTwo,
-                )
-                state.point.teamTwoPlayers.push(action.payload.playerTwo)
-            }
-        },
-        undoSubstitute(state, action) {
-            if (action.payload.team === 'one') {
-                substituteActivePlayer(
-                    state.point.teamOneActivePlayers,
-                    action.payload.playerTwo,
-                    action.payload.playerOne,
-                )
-
-                removePlayerFromArray(
-                    state.point.teamOnePlayers,
-                    action.payload.playerTwo,
-                )
-            } else {
-                substituteActivePlayer(
-                    state.point.teamTwoActivePlayers,
-                    action.payload.playerTwo,
-                    action.payload.playerOne,
-                )
-                removePlayerFromArray(
-                    state.point.teamTwoPlayers,
-                    action.payload.playerTwo,
-                )
-            }
-        },
         setPoint(state, action) {
             state.point = action.payload
         },
@@ -134,6 +89,5 @@ export const selectCreateStatus = (state: RootState) =>
 export const selectCreateError = (state: RootState) =>
     state.livePoint.createError
 export const selectPoint = (state: RootState) => state.livePoint.point
-export const { substitute, undoSubstitute, setPoint, resetPoint } =
-    livePointSlice.actions
+export const { setPoint, resetPoint } = livePointSlice.actions
 export default livePointSlice.reducer
