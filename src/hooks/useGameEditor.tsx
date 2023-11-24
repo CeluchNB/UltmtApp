@@ -114,7 +114,7 @@ export const useGameEditor = () => {
         activeGameOffline().then(isOffline => {
             setOffline(isOffline)
         })
-        // TODO: is this needed?
+
         getLocalActionsByPoint(point._id)
             .then(pointActions => {
                 setActions(curr => [...curr, ...pointActions])

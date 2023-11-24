@@ -7,6 +7,7 @@ interface SearchBarProps {
     placeholder: string
     style?: StyleProp<TextStyle>
     focusable?: boolean
+    autoFocus?: boolean
     filter?: boolean
     value?: string
     width?: number
@@ -22,6 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
     const {
         placeholder,
         style,
+        autoFocus = false,
         focusable = true,
         filter = false,
         value,
@@ -77,6 +79,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
                 }}
                 value={searchText}
                 focusable={focusable}
+                autoFocus={autoFocus}
                 testID="search-input"
             />
             {filter && (

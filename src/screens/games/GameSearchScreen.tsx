@@ -134,6 +134,8 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
                     placeholder="Search games..."
                     onChangeText={search}
                     filter={true}
+                    autoFocus={true}
+                    focusable={true}
                     onFilterPress={() => {
                         setModalVisible(true)
                     }}
