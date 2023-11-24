@@ -62,6 +62,7 @@ exports[`should match snapshot 1`] = `
       }
     >
       <TextInput
+        autoFocus={false}
         cursorColor="#ffd600"
         editable={true}
         focusable={false}
@@ -326,6 +327,7 @@ exports[`should match snapshot with minimal props 1`] = `
       }
     >
       <TextInput
+        autoFocus={false}
         cursorColor="#ffd600"
         editable={true}
         focusable={true}

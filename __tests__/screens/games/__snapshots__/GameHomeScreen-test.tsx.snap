@@ -70,6 +70,7 @@ exports[`GameHomeScreen should match snapshot with live and recent data 1`] = `
         }
       >
         <TextInput
+          autoFocus={false}
           cursorColor="#ffd600"
           editable={true}
           focusable={true}
@@ -589,6 +590,7 @@ exports[`GameHomeScreen should match snapshot with no data 1`] = `
         }
       >
         <TextInput
+          autoFocus={false}
           cursorColor="#ffd600"
           editable={true}
           focusable={true}

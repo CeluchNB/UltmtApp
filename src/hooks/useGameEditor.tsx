@@ -5,6 +5,7 @@ import { UpdateGame } from '../types/game'
 import { debounce } from 'lodash'
 import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
+import { parseUpdateGame } from '../utils/game'
 import {
     Action,
     LiveServerActionData,
@@ -25,6 +26,7 @@ import {
     unsubscribe,
 } from '../services/data/live-action'
 import { createPoint, finishPoint } from '../services/data/point'
+import { immutableFilter, immutablePush } from '../utils/action'
 import {
     resetGame,
     selectGame,
@@ -38,20 +40,6 @@ import {
     setPoint,
 } from '../store/reducers/features/point/livePointReducer'
 import { useDispatch, useSelector } from 'react-redux'
-
-function immutablePush<T>(newValue: T): (current: T[]) => T[] {
-    return (current: T[]): T[] => {
-        return [...current, newValue]
-    }
-}
-
-function immutableFilter<T extends { action: { actionNumber: number } }>(
-    actionNumber: number,
-): (current: T[]) => T[] {
-    return (current: T[]): T[] => {
-        return current.filter(item => item.action.actionNumber !== actionNumber)
-    }
-}
 
 export const useGameEditor = () => {
     const dispatch = useDispatch()
@@ -221,40 +209,19 @@ export const useGameEditor = () => {
     }
 
     const onFinishGame = async () => {
-        try {
-            await finishPoint(point._id)
-            if (!offline) {
-                await nextPoint(point._id)
-            }
-            await finishGame()
-            dispatch(resetGame())
-            dispatch(resetPoint())
-        } catch (e) {
-            // TODO: error display?
+        await finishPoint(point._id)
+        if (!offline) {
+            await nextPoint(point._id)
         }
+        await finishGame()
+        dispatch(resetGame())
+        dispatch(resetPoint())
     }
 
     const onEditGame = async (gameData: UpdateGame) => {
-        try {
-            const data = parseUpdateGame(gameData)
-            const result = await editGame(game._id, data)
-            dispatch(setGame(result))
-        } catch (e) {
-            throw e // TODO: error display?
-        }
-    }
-
-    const parseUpdateGame = (data: UpdateGame): UpdateGame => {
-        return {
-            scoreLimit: Number(data.scoreLimit),
-            halfScore: Number(data.halfScore),
-            startTime: data.startTime,
-            softcapMins: Number(data.softcapMins),
-            hardcapMins: Number(data.hardcapMins),
-            playersPerPoint: Number(data.playersPerPoint),
-            timeoutPerHalf: Number(data.timeoutPerHalf),
-            floaterTimeout: data.floaterTimeout,
-        }
+        const data = parseUpdateGame(gameData)
+        const result = await editGame(game._id, data)
+        dispatch(setGame(result))
     }
 
     return {

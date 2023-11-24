@@ -71,6 +71,7 @@ exports[`should match snapshot 1`] = `
         }
       >
         <TextInput
+          autoFocus={false}
           cursorColor="#ffd600"
           editable={true}
           focusable={true}
