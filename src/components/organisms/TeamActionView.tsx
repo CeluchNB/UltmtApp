@@ -1,4 +1,5 @@
 import { Button } from 'react-native-paper'
+import { DebouncedFunc } from 'lodash'
 import { DisplayUser } from '../../types/user'
 import PlayerActionTagModal from '../molecules/PlayerActionTagModal'
 import React from 'react'
@@ -9,11 +10,13 @@ import { FlatList, StyleSheet, View } from 'react-native'
 
 interface TeamActionViewProps {
     actions: Action[]
-    onAction: (action: Action) => Promise<void>
+    activePlayers: DisplayUser[]
+    onAction: DebouncedFunc<(action: Action) => Promise<void>>
 }
 
 const TeamActionView: React.FC<TeamActionViewProps> = ({
     actions,
+    activePlayers,
     onAction,
 }) => {
     const {
@@ -118,6 +121,7 @@ const TeamActionView: React.FC<TeamActionViewProps> = ({
                 }}
             />
             <SubstitutionModal
+                activePlayers={activePlayers}
                 visible={subModalVisible}
                 onClose={onSubModalClose}
                 onSubmit={handleSubstitution}

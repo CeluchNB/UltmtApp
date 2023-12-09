@@ -50,6 +50,9 @@ const PublicUserTeamScene: React.FC<PublicUserTeamSceneProps> = ({
     }, [user])
 
     const styles = StyleSheet.create({
+        scrollView: {
+            height: '100%',
+        },
         sectionContainer: {
             width: '75%',
             alignSelf: 'center',
@@ -64,6 +67,7 @@ const PublicUserTeamScene: React.FC<PublicUserTeamSceneProps> = ({
 
     return (
         <ScrollView
+            style={styles.scrollView}
             refreshControl={
                 <RefreshControl
                     colors={[colors.textSecondary]}

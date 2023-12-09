@@ -25,18 +25,38 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     } = useTheme()
     const dispatch = useDispatch()
 
-    useQuery(['fetchProfile'], () => fetchProfile(), {
-        onSuccess: data => {
-            dispatch(setProfile(data))
+    const { refetch: refetchProfile } = useQuery(
+        ['fetchProfile'],
+        () => fetchProfile(),
+        {
+            onSuccess: data => {
+                dispatch(setProfile(data))
+            },
         },
-    })
-
-    const { data, isLoading, refetch } = useQuery(['searchGames'], () =>
-        searchGames(),
     )
+
+    const {
+        data,
+        isLoading,
+        refetch: refetchGames,
+    } = useQuery(['searchGames'], () => searchGames())
     const liveGames = useMemo(() => {
         return data?.filter(g => g.teamOneActive)
     }, [data])
+
+    const refetch = React.useCallback(() => {
+        refetchProfile()
+        refetchGames()
+    }, [refetchProfile, refetchGames])
+
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            refetch()
+        })
+        return () => {
+            unsubscribe()
+        }
+    }, [navigation, refetch])
 
     const recentGames = useMemo(() => {
         return data?.filter(g => !g.teamOneActive)

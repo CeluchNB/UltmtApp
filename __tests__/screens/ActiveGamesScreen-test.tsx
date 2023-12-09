@@ -9,7 +9,7 @@ import React from 'react'
 import store from '../../src/store/store'
 import { Game, LocalGame } from '../../src/types/game'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { fetchProfileData, game, point } from '../../fixtures/data'
+import { fetchProfileData, game } from '../../fixtures/data'
 import {
     fireEvent,
     render,
@@ -112,13 +112,13 @@ describe('ActiveGamesScreen', () => {
     })
 
     it('navigates without a point', async () => {
-        jest.spyOn(GameData, 'resurrectActiveGame').mockReturnValueOnce(
+        jest.spyOn(GameData, 'reactivateGame').mockReturnValueOnce(
             Promise.resolve({
-                ...game,
-                tournament: undefined,
-                startTime: '2022',
-                offline: false,
-            } as unknown as Game & { offline: boolean }),
+                game: { ...game, offline: false },
+                team: 'one',
+                activePoint: undefined,
+                hasActiveActions: false,
+            }),
         )
         jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
             Promise.resolve(undefined),
@@ -145,138 +145,6 @@ describe('ActiveGamesScreen', () => {
         await waitFor(async () => {
             expect(mockedNavigate).toHaveBeenCalledWith('LiveGame', {
                 screen: 'FirstPoint',
-            })
-        })
-    })
-
-    it('navigating with team one and no actions', async () => {
-        jest.spyOn(GameData, 'resurrectActiveGame').mockReturnValueOnce(
-            Promise.resolve({
-                ...game,
-                creator: {
-                    _id: fetchProfileData._id,
-                    firstName: fetchProfileData.firstName,
-                    lastName: fetchProfileData.lastName,
-                    username: fetchProfileData.username,
-                },
-                tournament: undefined,
-                startTime: '2022',
-                offline: false,
-            } as unknown as LocalGame),
-        )
-        jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
-            Promise.resolve(point),
-        )
-        const { getByText } = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <QueryClientProvider client={client}>
-                        <ActiveGamesScreen {...props} />
-                    </QueryClientProvider>
-                </NavigationContainer>
-            </Provider>,
-        )
-        await waitFor(async () => {
-            expect(
-                getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
-            ).toBeTruthy()
-        })
-
-        fireEvent.press(
-            getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
-        )
-
-        await waitFor(async () => {
-            expect(mockedNavigate).toHaveBeenCalledWith('LiveGame', {
-                screen: 'SelectPlayers',
-            })
-        })
-    })
-
-    it('navigating with team two and no actions', async () => {
-        jest.spyOn(GameData, 'resurrectActiveGame').mockReturnValueOnce(
-            Promise.resolve({
-                ...game,
-                creator: {
-                    _id: 'nonuserid',
-                    firstName: fetchProfileData.firstName,
-                    lastName: fetchProfileData.lastName,
-                    username: fetchProfileData.username,
-                },
-                tournament: undefined,
-                startTime: '2022',
-                offline: false,
-            } as unknown as LocalGame),
-        )
-        jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
-            Promise.resolve(point),
-        )
-        const { getByText } = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <QueryClientProvider client={client}>
-                        <ActiveGamesScreen {...props} />
-                    </QueryClientProvider>
-                </NavigationContainer>
-            </Provider>,
-        )
-        await waitFor(async () => {
-            expect(
-                getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
-            ).toBeTruthy()
-        })
-
-        fireEvent.press(
-            getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
-        )
-
-        await waitFor(async () => {
-            expect(mockedNavigate).toHaveBeenCalledWith('LiveGame', {
-                screen: 'SelectPlayers',
-            })
-        })
-    })
-
-    it('with actions', async () => {
-        jest.spyOn(GameData, 'resurrectActiveGame').mockReturnValueOnce(
-            Promise.resolve({
-                ...game,
-                creator: {
-                    _id: fetchProfileData._id,
-                    firstName: fetchProfileData.firstName,
-                    lastName: fetchProfileData.lastName,
-                    username: fetchProfileData.username,
-                },
-                tournament: undefined,
-                startTime: '2022',
-                offline: false,
-            } as unknown as LocalGame),
-        )
-        jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
-            Promise.resolve({ ...point, teamOneActions: ['an action'] }),
-        )
-        const { getByText } = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <QueryClientProvider client={client}>
-                        <ActiveGamesScreen {...props} />
-                    </QueryClientProvider>
-                </NavigationContainer>
-            </Provider>,
-        )
-        await waitFor(async () => {
-            expect(
-                getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
-            ).toBeTruthy()
-        })
-
-        fireEvent.press(
-            getByText(`${game.teamOne.name} vs. ${game.teamTwo.name}`),
-        )
-
-        await waitFor(async () => {
-            expect(mockedNavigate).toHaveBeenCalledWith('LiveGame', {
-                screen: 'LivePointEdit',
             })
         })
     })

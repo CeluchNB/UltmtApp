@@ -18,6 +18,7 @@ jest.mock('../../../src/components/atoms/GameCard', () => () => {
 const props = {
     navigation: {
         navigate: jest.fn(),
+        addListener: jest.fn(),
     } as any,
     route: {} as any,
 }

@@ -24,6 +24,8 @@ const initialState: LivePointSlice = {
         teamTwoScore: 0,
         teamOnePlayers: [],
         teamTwoPlayers: [],
+        teamOneActivePlayers: [],
+        teamTwoActivePlayers: [],
         pullingTeam: {} as GuestTeam,
         receivingTeam: {} as GuestTeam,
     },
@@ -35,27 +37,6 @@ const livePointSlice = createSlice({
     name: 'livePoint',
     initialState,
     reducers: {
-        substitute(state, action) {
-            if (action.payload.team === 'one') {
-                const index = state.point.teamOnePlayers
-                    .map(p => p._id)
-                    .indexOf(action.payload.playerOne._id)
-                state.point.teamOnePlayers.splice(
-                    index,
-                    1,
-                    action.payload.playerTwo,
-                )
-            } else {
-                const index = state.point.teamTwoPlayers
-                    .map(p => p._id)
-                    .indexOf(action.payload.playerOne._id)
-                state.point.teamTwoPlayers.splice(
-                    index,
-                    1,
-                    action.payload.playerTwo,
-                )
-            }
-        },
         setPoint(state, action) {
             state.point = action.payload
         },
@@ -108,5 +89,5 @@ export const selectCreateStatus = (state: RootState) =>
 export const selectCreateError = (state: RootState) =>
     state.livePoint.createError
 export const selectPoint = (state: RootState) => state.livePoint.point
-export const { substitute, setPoint, resetPoint } = livePointSlice.actions
+export const { setPoint, resetPoint } = livePointSlice.actions
 export default livePointSlice.reducer

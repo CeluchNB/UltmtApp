@@ -1,3 +1,4 @@
+import { DisplayUser } from '../types/user'
 import { TeamNumber } from '../types/team'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
 import Point, { ClientPoint } from '../types/point'
@@ -193,6 +194,7 @@ export const parseClientPoint = (point: Point): ClientPoint => {
     return {
         pointNumber: point.pointNumber,
         teamOnePlayers: point.teamOnePlayers,
+        teamOneActivePlayers: point.teamOneActivePlayers,
         teamOneScore: point.teamOneScore,
         teamTwoScore: point.teamTwoScore,
         pullingTeam: point.pullingTeam,
@@ -200,4 +202,27 @@ export const parseClientPoint = (point: Point): ClientPoint => {
         scoringTeam: point.scoringTeam,
         actions: [],
     }
+}
+
+export const substituteActivePlayer = (
+    playerArray: DisplayUser[],
+    playerToRemove: DisplayUser,
+    playerToAdd: DisplayUser,
+) => {
+    const index = playerArray.findIndex(p => p._id === playerToRemove._id)
+    if (index === -1) {
+        return
+    }
+    playerArray.splice(index, 1, playerToAdd)
+}
+
+export const removePlayerFromArray = (
+    playerArray: DisplayUser[],
+    playerToRemove: DisplayUser,
+) => {
+    const index = playerArray.findIndex(p => p._id === playerToRemove._id)
+    if (index === -1) {
+        return
+    }
+    playerArray.splice(index, 1)
 }

@@ -23,6 +23,8 @@ const point: Point = {
     receivingTeam: { name: 'Truck' },
     teamOnePlayers: [],
     teamTwoPlayers: [],
+    teamOneActivePlayers: [],
+    teamTwoActivePlayers: [],
     teamOneScore: 2,
     teamTwoScore: 1,
     teamOneActive: true,

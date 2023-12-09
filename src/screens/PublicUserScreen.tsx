@@ -6,7 +6,6 @@ import { PublicUserDetailsProps } from '../types/navigation'
 import React from 'react'
 import { getGamesByTeam } from '../services/data/game'
 import { getPublicUser } from '../services/data/user'
-import { setError } from '../store/reducers/features/account/accountReducer'
 import { useQuery } from 'react-query'
 import { useTheme } from './../hooks'
 import { DisplayUser, User } from '../types/user'
@@ -115,12 +114,6 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user])
 
-    const [games, setGames] = React.useState<Game[][]>([])
-    const [gameLoading, setGameLoading] = React.useState(false)
-    const [gameError, setGameError] = React.useState<ApiError | undefined>(
-        undefined,
-    )
-
     const managerTeams = React.useMemo(() => {
         if (user) return user.managerTeams
         return []
@@ -149,6 +142,21 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         })
         return [...map.values()]
     }, [managerTeams, playerTeams, archiveTeams])
+
+    const fetchGames = async () => {
+        const promises = allTeams.map(team => getGamesByTeam(team._id))
+
+        return await Promise.all(promises)
+    }
+
+    const {
+        data: games = [],
+        isLoading: gameLoading,
+        error: gameError,
+        refetch: refetchGames,
+    } = useQuery(['getAllGames', { allTeams, userId }], () => fetchGames(), {
+        enabled: allTeams.length > 0,
+    })
 
     const gameLists = React.useMemo(() => {
         const tempGames: {
@@ -228,27 +236,6 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         return [...playerMap.values()]
     }, [games, allTeams])
 
-    const fetchGames = React.useCallback(() => {
-        setError(undefined)
-        setGameLoading(true)
-        const promises = allTeams.map(team => getGamesByTeam(team._id))
-
-        Promise.all(promises)
-            .then(g => {
-                setGames(g)
-            })
-            .catch(e => {
-                setGameError(e)
-            })
-            .finally(() => {
-                setGameLoading(false)
-            })
-    }, [allTeams])
-
-    React.useEffect(() => {
-        fetchGames()
-    }, [fetchGames])
-
     const styles = StyleSheet.create({
         screen: {
             height: '100%',
@@ -290,8 +277,8 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                             gameLists,
                             teams: allTeams,
                             loading: gameLoading,
-                            error: gameError,
-                            refetch: fetchGames,
+                            error: gameError as ApiError | undefined,
+                            refetch: refetchGames,
                         },
                         {
                             userId,
