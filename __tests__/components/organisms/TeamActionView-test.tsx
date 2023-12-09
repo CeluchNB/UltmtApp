@@ -132,8 +132,11 @@ const actions: Action[] = [
     },
 ]
 
+const teamOneActivePlayers = playerList1.slice(0, 7)
+
 const props = {
     actions,
+    activePlayers: teamOneActivePlayers,
     onAction: jest.fn(),
 }
 
@@ -141,7 +144,9 @@ const point: Point = {
     _id: 'point1',
     pointNumber: 1,
     teamOnePlayers: playerList1.slice(0, 7),
+    teamOneActivePlayers,
     teamTwoPlayers: [],
+    teamTwoActivePlayers: [],
     teamOneScore: 0,
     teamTwoScore: 0,
     pullingTeam: game.teamOne,

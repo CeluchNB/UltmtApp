@@ -137,6 +137,8 @@ const point: Point = {
     pointNumber: 1,
     teamOnePlayers: [],
     teamTwoPlayers: [],
+    teamOneActivePlayers: [],
+    teamTwoActivePlayers: [],
     teamOneScore: 0,
     teamTwoScore: 0,
     pullingTeam: game.teamOne,

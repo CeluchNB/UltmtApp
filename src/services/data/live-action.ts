@@ -1,5 +1,6 @@
 import * as Constants from '../../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import Point from '../../types/point'
 import { TeamNumber } from '../../types/team'
 import { parseClientAction } from '../../utils/action'
 import { refreshTokenIfNecessary } from './auth'
@@ -30,6 +31,10 @@ import {
     undoAction as networkUndoAction,
     unsubscribe as networkUnsubscribe,
 } from '../network/live-action'
+import {
+    removePlayerFromArray,
+    substituteActivePlayer,
+} from '../../utils/point'
 
 /**
  * Method to join a point
@@ -152,31 +157,12 @@ export const unsubscribe = () => {
 export const saveLocalAction = async (
     action: LiveServerActionData,
     pointId: string,
-): Promise<Action> => {
+): Promise<{ action: Action; point: Point }> => {
     try {
-        const point = await localGetPointById(pointId)
-        if (action.actionType === ActionType.SUBSTITUTION) {
-            if (action.playerTwo) {
-                if (action.teamNumber === 'one') {
-                    point.teamOnePlayers.push(action.playerTwo)
-                } else {
-                    point.teamTwoPlayers.push(action.playerTwo)
-                }
-            }
-        }
-        const actionData = await localSaveAction(action, pointId)
-        if (actionData.teamNumber === 'one') {
-            point.teamOneActions = [
-                ...new Set([...point.teamOneActions, actionData._id]),
-            ]
-        } else {
-            point.teamTwoActions = [
-                ...new Set([...point.teamTwoActions, actionData._id]),
-            ]
-        }
+        const savedAction = await localSaveAction(action, pointId)
 
-        await localSavePoint(point)
-        return ActionFactory.createFromAction(actionData)
+        const point = await handleCreateActionSideEffects(savedAction)
+        return { action: ActionFactory.createFromAction(savedAction), point }
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
@@ -191,7 +177,7 @@ export const saveLocalAction = async (
 export const createOfflineAction = async (
     action: Action,
     pointId: string,
-): Promise<Action> => {
+): Promise<{ action: Action; point: Point }> => {
     try {
         const point = await localGetPointById(pointId)
         const liveAction: LiveServerActionData = {
@@ -201,8 +187,7 @@ export const createOfflineAction = async (
             actionNumber: point.teamOneActions.length + 1,
         }
 
-        const newAction = await saveLocalAction(liveAction, pointId)
-        return newAction
+        return await saveLocalAction(liveAction, pointId)
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
@@ -218,7 +203,7 @@ export const deleteLocalAction = async (
     teamNumber: TeamNumber,
     actionNumber: number,
     pointId: string,
-): Promise<LiveServerActionData> => {
+): Promise<{ action: LiveServerActionData; point: Point }> => {
     try {
         const action = await localDeleteAction(
             teamNumber,
@@ -226,31 +211,17 @@ export const deleteLocalAction = async (
             pointId,
         )
 
-        await removeActionFromPoint(teamNumber, actionNumber, pointId)
+        const point = await handleUndoActionSideEffects(action, pointId)
 
-        return action
+        return { action, point }
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }
 
-const removeActionFromPoint = async (
-    teamNumber: TeamNumber,
-    actionNumber: number,
-    pointId: string,
-) => {
-    const point = await localGetPointById(pointId)
-    if (teamNumber === 'one') {
-        point.teamOneActions.splice(actionNumber - 1)
-    } else {
-        point.teamTwoActions.splice(actionNumber - 1)
-    }
-    await localSavePoint(point)
-}
-
 export const undoOfflineAction = async (
     pointId: string,
-): Promise<LiveServerActionData> => {
+): Promise<{ action: LiveServerActionData; point: Point }> => {
     try {
         const point = await localGetPointById(pointId)
         const actionNumber = point.teamOneActions.length
@@ -275,4 +246,78 @@ export const getLocalActionsByPoint = async (
     } catch (e) {
         return throwApiError(e, Constants.GET_ACTION_ERROR)
     }
+}
+
+const handleCreateActionSideEffects = async (
+    action: LiveServerActionData & { _id: string; pointId: string },
+): Promise<Point> => {
+    const { pointId } = action
+    const point = await localGetPointById(pointId)
+    if (action.teamNumber === 'one') {
+        if (action.actionType === ActionType.SUBSTITUTION) {
+            if (action.playerOne && action.playerTwo) {
+                substituteActivePlayer(
+                    point.teamOneActivePlayers,
+                    action.playerOne,
+                    action.playerTwo,
+                )
+                point.teamOnePlayers.push(action.playerTwo)
+            }
+        }
+        point.teamOneActions = [
+            ...new Set([...point.teamOneActions, action._id]),
+        ]
+    } else {
+        if (action.actionType === ActionType.SUBSTITUTION) {
+            if (action.playerOne && action.playerTwo) {
+                substituteActivePlayer(
+                    point.teamTwoActivePlayers,
+                    action.playerOne,
+                    action.playerTwo,
+                )
+                point.teamTwoPlayers.push(action.playerTwo)
+            }
+        }
+    }
+
+    await localSavePoint(point)
+    return await localGetPointById(pointId)
+}
+
+const handleUndoActionSideEffects = async (
+    action: LiveServerActionData,
+    pointId: string,
+): Promise<Point> => {
+    const { teamNumber, actionNumber } = action
+    const point = await localGetPointById(pointId)
+    if (teamNumber === 'one') {
+        point.teamOneActions.splice(actionNumber - 1)
+
+        if (action.actionType === ActionType.SUBSTITUTION) {
+            if (action.playerOne && action.playerTwo) {
+                substituteActivePlayer(
+                    point.teamOneActivePlayers,
+                    action.playerTwo,
+                    action.playerOne,
+                )
+                removePlayerFromArray(point.teamOnePlayers, action.playerTwo)
+            }
+        }
+    } else {
+        point.teamTwoActions.splice(actionNumber - 1)
+
+        if (action.actionType === ActionType.SUBSTITUTION) {
+            if (action.playerOne && action.playerTwo) {
+                substituteActivePlayer(
+                    point.teamTwoActivePlayers,
+                    action.playerTwo,
+                    action.playerOne,
+                )
+                removePlayerFromArray(point.teamTwoPlayers, action.playerTwo)
+            }
+        }
+    }
+
+    await localSavePoint(point)
+    return await localGetPointById(pointId)
 }

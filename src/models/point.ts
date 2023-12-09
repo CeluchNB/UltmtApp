@@ -12,6 +12,8 @@ export class PointSchema {
             pointNumber: 'int',
             teamOnePlayers: 'DisplayUser[]',
             teamTwoPlayers: 'DisplayUser[]',
+            teamOneActivePlayers: 'DisplayUser[]',
+            teamTwoActivePlayers: 'DisplayUser[]',
             teamOneScore: 'int',
             teamTwoScore: 'int',
             pullingTeam: 'GuestTeam',
@@ -28,6 +30,8 @@ export class PointSchema {
     pointNumber: number
     teamOnePlayers: DisplayUser[]
     teamTwoPlayers: DisplayUser[]
+    teamOneActivePlayers: DisplayUser[]
+    teamTwoActivePlayers: DisplayUser[]
     teamOneScore: number
     teamTwoScore: number
     pullingTeam: GuestTeam
@@ -43,6 +47,8 @@ export class PointSchema {
         this.pointNumber = point.pointNumber
         this.teamOnePlayers = point.teamOnePlayers
         this.teamTwoPlayers = point.teamTwoPlayers
+        this.teamOneActivePlayers = point.teamOneActivePlayers
+        this.teamTwoActivePlayers = point.teamTwoActivePlayers
         this.teamOneScore = point.teamTwoScore
         this.teamTwoScore = point.teamTwoScore
         this.pullingTeam = point.pullingTeam

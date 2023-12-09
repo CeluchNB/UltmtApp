@@ -2,6 +2,7 @@ import { DisplayUser } from '../../../src/types/user'
 import PlayerActionView from '../../../src/components/organisms/PlayerActionView'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { debounce } from 'lodash'
 import store from '../../../src/store/store'
 import {
     Action,
@@ -9,7 +10,7 @@ import {
     ActionType,
     LiveServerActionData,
 } from '../../../src/types/action'
-import { fireEvent, render } from '@testing-library/react-native'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 const playerList1: DisplayUser[] = [
     {
@@ -76,7 +77,7 @@ describe('PlayerActionView', () => {
                     players={playerList1}
                     pulling={false}
                     loading={true}
-                    onAction={jest.fn()}
+                    onAction={debounce(jest.fn())}
                     actionStack={actionStack}
                     team={'one'}
                 />
@@ -86,7 +87,7 @@ describe('PlayerActionView', () => {
         expect(snapshot.toJSON()).toMatchSnapshot()
     })
 
-    it('should call action', () => {
+    it('should call action', async () => {
         const actionFn = jest.fn()
         const { getAllByText } = render(
             <Provider store={store}>
@@ -94,7 +95,7 @@ describe('PlayerActionView', () => {
                     players={playerList1}
                     pulling={false}
                     loading={false}
-                    onAction={actionFn}
+                    onAction={debounce(actionFn)}
                     actionStack={actionStack}
                     team={'one'}
                 />
@@ -117,6 +118,8 @@ describe('PlayerActionView', () => {
             viewerDisplay:
                 'First 1 Last 1 catches the disc from First 3 Last 3',
         }
-        expect(actionFn).toHaveBeenCalledWith(action)
+        await waitFor(() => {
+            expect(actionFn).toHaveBeenCalledWith(action)
+        })
     })
 })

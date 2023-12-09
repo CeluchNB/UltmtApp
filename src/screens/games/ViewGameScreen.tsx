@@ -78,11 +78,9 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         game,
         gameLoading,
         managingTeamId,
-        myTeamActive,
         onSelectPoint,
-        onReactivateGame,
     } = gameViewerData
-    const { navigateToGame, onResurrect } = useGameReactivation()
+    const { onReactivateGame } = useGameReactivation()
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deleteLoading, setDeleteLoading] = React.useState(false)
     const [reactivateLoading, setReactivateLoading] = React.useState(false)
@@ -109,29 +107,18 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
 
     const handleReactivateGame = React.useCallback(async () => {
         try {
-            if (!onReactivateGame) {
+            if (!onReactivateGame || !game || !managingTeamId) {
                 return undefined
             }
             setReactivateLoading(true)
 
-            let reactivatedGame
-            if (game && myTeamActive) {
-                // resurrect game if live
-                reactivatedGame = await onResurrect(game)
-            } else {
-                // reactivate game if finished
-                reactivatedGame = await onReactivateGame()
-            }
-            setReactivateLoading(false)
-            if (reactivatedGame) {
-                navigateToGame(reactivatedGame)
-            }
+            await onReactivateGame(game._id, managingTeamId)
         } catch (e) {
             // TODO: error display?
         } finally {
             setReactivateLoading(false)
         }
-    }, [navigateToGame, onReactivateGame, game, onResurrect, myTeamActive])
+    }, [onReactivateGame, game, managingTeamId])
 
     const onDelete = () => {
         setModalVisible(true)
@@ -145,7 +132,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
             }
             await deleteGame(gameId, managingTeamId)
         } catch (e) {
-            // do nothing
+            // TODO: error display? do nothing
         } finally {
             setDeleteLoading(false)
             setModalVisible(false)

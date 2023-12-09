@@ -142,3 +142,17 @@ export const getTeamActionList = (
 const getOppositeTeam = (team: TeamNumber): TeamNumber => {
     return team === 'one' ? 'two' : 'one'
 }
+
+export const immutablePush = <T>(newValue: T): ((current: T[]) => T[]) => {
+    return (current: T[]): T[] => {
+        return [...current, newValue]
+    }
+}
+
+export const immutableFilter = <T extends { action: { actionNumber: number } }>(
+    actionNumber: number,
+): ((current: T[]) => T[]) => {
+    return (current: T[]): T[] => {
+        return current.filter(item => item.action.actionNumber !== actionNumber)
+    }
+}

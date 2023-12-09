@@ -1,4 +1,4 @@
-import { ApiError } from '../types/services'
+import { ApiError, LocalError } from '../types/services'
 
 // TODO: investigate correct type for error. Should be error.response?.data?.message ??
 export const throwApiError = (error: any, message: string) => {
@@ -9,6 +9,10 @@ export const throwApiError = (error: any, message: string) => {
     } else {
         throw new ApiError(message)
     }
+}
+
+export const throwLocalError = (message: string) => {
+    throw new LocalError(message)
 }
 
 export const isTokenExpired = (exp?: number): boolean => {

@@ -26,6 +26,7 @@ import {
     formatNumber,
     mapStatDisplayName,
     sortAlphabetically,
+    whiteListPlayerStats,
 } from '../../utils/stats'
 
 export interface PublicUserStatsSceneProps {
@@ -147,20 +148,8 @@ const PublicUserStatsScene: React.FC<PublicUserStatsSceneProps> = ({
     const filteredStats = React.useMemo(() => {
         if (!stats) return undefined
 
-        const updatedStats: Partial<AllPlayerStats> = Object.assign({}, stats)
-
-        // TODO: this is not ideal, at least move it to a separate function
-        delete (updatedStats as any)._id
-        delete (updatedStats as any).games
-        delete (updatedStats as any).teams
-        delete (updatedStats as any).firstName
-        delete (updatedStats as any).lastName
-        delete (updatedStats as any).username
-        delete (updatedStats as any).__v
-        delete (updatedStats as any).id
-        delete (updatedStats as any).playerId
-        delete (updatedStats as any).gameId
-        delete (updatedStats as any).teamId
+        const updatedStats: Partial<AllPlayerStats> =
+            whiteListPlayerStats(stats)
 
         return updatedStats
     }, [stats])

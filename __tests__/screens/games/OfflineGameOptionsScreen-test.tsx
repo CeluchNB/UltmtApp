@@ -1,5 +1,6 @@
 import * as GameData from '../../../src/services/data/game'
 import * as PointData from '../../../src/services/data/point'
+import { Game } from '../../../src/types/game'
 import { NavigationContainer } from '@react-navigation/native'
 import { OfflineGameOptionsProps } from '../../../src/types/navigation'
 import OfflineGameOptionsScreen from '../../../src/screens/games/OfflineGameOptionsScreen'
@@ -7,7 +8,6 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
-import { Game, LocalGame } from '../../../src/types/game'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { fetchProfileData, game } from '../../../fixtures/data'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
@@ -117,13 +117,13 @@ describe('OfflineGameOptionsScreen', () => {
     })
 
     it('handles reactivate', async () => {
-        jest.spyOn(GameData, 'resurrectActiveGame').mockReturnValueOnce(
+        jest.spyOn(GameData, 'reactivateGame').mockReturnValueOnce(
             Promise.resolve({
-                ...game,
-                tournament: undefined,
-                startTime: '2022',
-                offline: false,
-            } as unknown as LocalGame),
+                game: { ...game, offline: true },
+                team: 'one',
+                activePoint: undefined,
+                hasActiveActions: false,
+            }),
         )
         jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
             Promise.resolve(undefined),

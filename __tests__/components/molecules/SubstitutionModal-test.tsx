@@ -92,11 +92,15 @@ const playerList1 = [
     },
 ]
 
+const teamOneActivePlayers = playerList1.slice(0, 7)
+
 const point: Point = {
     _id: 'point1',
     pointNumber: 1,
     teamOnePlayers: playerList1.slice(0, 7),
+    teamOneActivePlayers,
     teamTwoPlayers: [],
+    teamTwoActivePlayers: [],
     teamOneScore: 0,
     teamTwoScore: 0,
     pullingTeam: game.teamOne,
@@ -129,6 +133,7 @@ it('should match snapshot with team one', () => {
         <Provider store={store}>
             <SubstitutionModal
                 visible={true}
+                activePlayers={teamOneActivePlayers}
                 onClose={jest.fn()}
                 onSubmit={jest.fn()}
             />
@@ -156,6 +161,7 @@ it('should match snapshot with team two', () => {
         <Provider store={store}>
             <SubstitutionModal
                 visible={true}
+                activePlayers={teamOneActivePlayers}
                 onClose={jest.fn()}
                 onSubmit={jest.fn()}
             />
@@ -172,6 +178,7 @@ it('should correctly make subsitution', async () => {
         <Provider store={store}>
             <SubstitutionModal
                 visible={true}
+                activePlayers={teamOneActivePlayers}
                 onClose={jest.fn()}
                 onSubmit={onSubmit}
             />

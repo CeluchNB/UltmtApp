@@ -1,6 +1,6 @@
 import { GuestUser } from '../../types/user'
 import { addQueryParam } from '../../utils/service-utils'
-import { API_KEY, API_URL_V1 } from '@env'
+import { API_KEY, API_URL_V1, API_URL_V2 } from '@env'
 import { CreateFullGame, CreateGame, UpdateGame } from '../../types/game'
 import axios, { AxiosResponse } from 'axios'
 
@@ -104,16 +104,14 @@ export const reactivateGame = async (
     gameId: string,
     teamId: string,
 ) => {
-    return await axios.put(
-        `${API_URL_V1}/game/${gameId}/reactivate?team=${teamId}`,
-        {},
-        {
-            headers: {
-                'X-API-Key': API_KEY,
-                Authorization: `Bearer ${userJwt}`,
-            },
+    return await axios({
+        url: `${API_URL_V2}/game/${gameId}/reactivate?team=${teamId}`,
+        method: 'PUT',
+        headers: {
+            'X-API-Key': API_KEY,
+            Authorization: `Bearer ${userJwt}`,
         },
-    )
+    })
 }
 
 export const pushOfflineGame = async (

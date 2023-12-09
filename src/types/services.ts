@@ -3,7 +3,7 @@ export type ApiResponse = {
     error?: any
 }
 
-export class ApiError {
+class Error {
     message: string
     constructor(message: string) {
         this.message = message
@@ -13,3 +13,5 @@ export class ApiError {
         return this.message
     }
 }
+export class ApiError extends Error {}
+export class LocalError extends Error {}

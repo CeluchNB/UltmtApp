@@ -116,7 +116,9 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 }),
             )
             navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
-        } catch (e) {}
+        } catch (e) {
+            // TODO: error display?
+        }
     }
 
     const onPressSetPulling = () => {

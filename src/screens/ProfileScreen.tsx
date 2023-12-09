@@ -17,6 +17,7 @@ import { fetchProfile } from '../services/data/user'
 import { getPlayerStats } from '../services/data/stats'
 import { getUniqueTeamIds } from '../utils/player'
 import { logout } from '../services/data/auth'
+import { useQuery } from 'react-query'
 import { useTheme } from '../hooks'
 import {
     FlatList,
@@ -34,7 +35,6 @@ import {
     selectPlayerTeams,
     setProfile,
 } from '../store/reducers/features/account/accountReducer'
-import { setLogger, useQuery } from 'react-query'
 import { useDispatch, useSelector } from 'react-redux'
 
 const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
@@ -94,6 +94,13 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         },
     )
 
+    const refetch = React.useCallback(() => {
+        activeGameRefetch()
+        profileRefetch()
+        gameRefetch()
+        statsRefetch()
+    }, [activeGameRefetch, profileRefetch, gameRefetch, statsRefetch])
+
     const sortedGames = React.useMemo(() => {
         return games
             ?.sort(
@@ -117,11 +124,14 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
 
     React.useEffect(() => {
         // Disable react-query warning logs b/c players stats result is often an error
-        setLogger({ warn: () => {}, error: () => {}, log: console.log })
+        const unsubscribe = navigation.addListener('focus', () => {
+            refetch()
+        })
+
         return () => {
-            setLogger(console)
+            unsubscribe()
         }
-    }, [])
+    }, [refetch, navigation])
 
     const onLogout = async () => {
         try {
@@ -130,6 +140,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
             dispatch(resetState())
             setLoading(false)
         } catch (e: any) {
+            // TODO: error display?
         } finally {
             navigation.navigate('Login')
         }
@@ -213,10 +224,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
                         tintColor={colors.textSecondary}
                         refreshing={profileLoading}
                         onRefresh={async () => {
-                            profileRefetch()
-                            gameRefetch()
-                            activeGameRefetch()
-                            statsRefetch()
+                            refetch()
                         }}
                     />
                 }
