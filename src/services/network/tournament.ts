@@ -3,6 +3,7 @@ import { API_KEY, API_URL_V1 } from '@env'
 import axios, { AxiosResponse } from 'axios'
 
 export const createTournament = async (
+    token: string,
     createTournamentData: LocalTournament,
 ): Promise<AxiosResponse> => {
     return axios.post(
@@ -13,6 +14,7 @@ export const createTournament = async (
         {
             headers: {
                 'X-API-Key': API_KEY,
+                Authorization: `Bearer ${token}`,
             },
         },
     )
