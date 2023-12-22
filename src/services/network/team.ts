@@ -149,3 +149,15 @@ export const createBulkJoinCode = async (
         },
     )
 }
+
+export const deleteTeam = async (
+    token: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.delete(`${API_URL_V1}/team/${teamId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
+        },
+    })
+}

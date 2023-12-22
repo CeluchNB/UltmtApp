@@ -18,6 +18,15 @@ export const getTeamsById = async (ids: string[]): Promise<Team[]> => {
     return teams.filter(t => ids.includes(t._id)).map(t => parseTeam(t))
 }
 
+export const deleteTeamById = async (teamId: string) => {
+    const realm = await getRealm()
+    const team = await realm.objectForPrimaryKey('Team', teamId)
+
+    realm.write(() => {
+        realm.delete(team)
+    })
+}
+
 const parseTeam = (schema: TeamSchema): Team => {
     return JSON.parse(
         JSON.stringify({

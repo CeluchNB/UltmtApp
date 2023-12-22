@@ -6,6 +6,7 @@ import {
     addManager,
     createBulkJoinCode,
     createTeam,
+    deleteTeam,
     getArchivedTeam,
     getManagedTeam,
     getTeam,
@@ -234,5 +235,36 @@ describe('test team services', () => {
         )
 
         await expect(createBulkJoinCode('')).rejects.toBeDefined()
+    })
+
+    it('should handle delete team success', async () => {
+        jest.spyOn(TeamServices, 'deleteTeam').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            } as AxiosResponse),
+        )
+        jest.spyOn(LocalTeamServices, 'deleteTeamById').mockReturnValueOnce(
+            Promise.resolve(),
+        )
+
+        await expect(deleteTeam('')).resolves.toBeUndefined()
+    })
+
+    it('should handle delete team failure', async () => {
+        jest.spyOn(TeamServices, 'deleteTeam').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        await expect(deleteTeam('')).rejects.toBeDefined()
     })
 })

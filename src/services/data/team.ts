@@ -4,6 +4,7 @@ import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
 import {
+    deleteTeamById as localDeleteTeamById,
     getTeamsById as localGetTeamsById,
     saveTeams as localSaveTeams,
 } from '../local/team'
@@ -11,6 +12,7 @@ import {
     addManager as networkAddManager,
     createBulkJoinCode as networkCreateBulkJoinCode,
     createTeam as networkCreateTeam,
+    deleteTeam as networkDeleteTeam,
     getArchivedTeam as networkGetArchivedTeam,
     getManagedTeam as networkGetManagedTeam,
     getTeam as networkGetTeam,
@@ -222,5 +224,18 @@ export const getTeamsById = async (ids: string[]): Promise<Team[]> => {
         return await localGetTeamsById(ids)
     } catch (error) {
         return throwApiError(error, Constants.GET_TEAM_ERROR)
+    }
+}
+
+/**
+ * Delete a team
+ * @param teamId
+ */
+export const deleteTeam = async (teamId: string): Promise<void> => {
+    try {
+        await withToken(networkDeleteTeam, teamId)
+        await localDeleteTeamById(teamId)
+    } catch (error) {
+        return throwApiError(error, Constants.UNABLE_TO_DELETE_TEAM)
     }
 }
