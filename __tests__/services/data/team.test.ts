@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios'
 import { CreateTeam, Team } from '../../../src/types/team'
 import {
     addManager,
+    archiveTeam,
     createBulkJoinCode,
     createTeam,
     deleteTeam,
@@ -266,5 +267,33 @@ describe('test team services', () => {
         )
 
         await expect(deleteTeam('')).rejects.toBeDefined()
+    })
+
+    it('handles archive team success', async () => {
+        jest.spyOn(TeamServices, 'archiveTeam').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        await expect(archiveTeam('')).resolves.toBeUndefined()
+    })
+
+    it('handles archive team failure', async () => {
+        jest.spyOn(TeamServices, 'archiveTeam').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        await expect(archiveTeam('')).rejects.toBeDefined()
     })
 })

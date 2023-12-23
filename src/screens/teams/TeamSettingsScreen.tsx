@@ -3,13 +3,13 @@ import { Button } from 'react-native-paper'
 import ConfirmModal from '../../components/molecules/ConfirmModal'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import { TeamSettingsProps } from '../../types/navigation'
-import { deleteTeam } from '../../services/data/team'
 import { selectTeam } from '../../store/reducers/features/team/managedTeamReducer'
 import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
 import { useTheme } from '../../hooks'
 import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { archiveTeam, deleteTeam } from '../../services/data/team'
 
 const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
     const {
@@ -32,8 +32,19 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
         },
     })
 
-    const isError = isDeleteError
-    const error = deleteError
+    const {
+        mutate: archiveTeamMutation,
+        isLoading: archiveLoading,
+        isError: isArchiveError,
+        error: archiveError,
+    } = useMutation(() => archiveTeam(team?._id ?? ''), {
+        onSuccess: () => {
+            navigation.navigate('ManageTeams')
+        },
+    })
+
+    const isError = isDeleteError || isArchiveError
+    const error = deleteError || archiveError
 
     const rolloverSeason = async () => {
         // navigate to rollover screen
@@ -119,7 +130,7 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                         setTeamAction('archive')
                         setModalVisible(true)
                     }}
-                    loading={false}>
+                    loading={archiveLoading}>
                     Archive
                 </Button>
             </View>
@@ -138,6 +149,7 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                     if (teamAction === 'delete') {
                         deleteTeamMutation()
                     } else if (teamAction === 'archive') {
+                        archiveTeamMutation()
                     }
                 }}
                 onClose={async () => setModalVisible(false)}

@@ -161,3 +161,19 @@ export const deleteTeam = async (
         },
     })
 }
+
+export const archiveTeam = async (
+    token: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/team/${teamId}/archive`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}

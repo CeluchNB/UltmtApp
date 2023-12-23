@@ -10,6 +10,7 @@ import {
 } from '../local/team'
 import {
     addManager as networkAddManager,
+    archiveTeam as networkArchiveTeam,
     createBulkJoinCode as networkCreateBulkJoinCode,
     createTeam as networkCreateTeam,
     deleteTeam as networkDeleteTeam,
@@ -228,7 +229,7 @@ export const getTeamsById = async (ids: string[]): Promise<Team[]> => {
 }
 
 /**
- * Delete a team
+ * Delete a team. Must be done by a manager when it they are the last manager on the team.
  * @param teamId
  */
 export const deleteTeam = async (teamId: string): Promise<void> => {
@@ -237,5 +238,19 @@ export const deleteTeam = async (teamId: string): Promise<void> => {
         await localDeleteTeamById(teamId)
     } catch (error) {
         return throwApiError(error, Constants.UNABLE_TO_DELETE_TEAM)
+    }
+}
+
+/**
+ * Archive a team. Must be done by a manager. Managers and players will
+ * have this team moved to their archive team's list.
+ * @param teamId id of team
+ * @returns
+ */
+export const archiveTeam = async (teamId: string): Promise<void> => {
+    try {
+        await withToken(networkArchiveTeam, teamId)
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_TEAM_ERROR)
     }
 }

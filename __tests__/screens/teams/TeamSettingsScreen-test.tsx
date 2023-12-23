@@ -82,4 +82,31 @@ describe('TeamSettingsScreen', () => {
             expect(navigate).toHaveBeenCalledWith('ManageTeams')
         })
     })
+
+    it('calls archive team', async () => {
+        const archiveSpy = jest
+            .spyOn(TeamServices, 'archiveTeam')
+            .mockReturnValue(Promise.resolve())
+
+        render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamSettingsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        const archiveBtn = screen.getByText('Archive')
+        fireEvent.press(archiveBtn)
+
+        const confirmBtn = screen.getByText('confirm')
+        fireEvent.press(confirmBtn)
+
+        await waitFor(async () => {
+            expect(archiveSpy).toHaveBeenCalled()
+            expect(navigate).toHaveBeenCalledWith('ManageTeams')
+        })
+    })
 })
