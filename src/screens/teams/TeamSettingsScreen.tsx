@@ -1,15 +1,40 @@
+import BaseModal from '../../components/atoms/BaseModal'
 import BaseScreen from '../../components/atoms/BaseScreen'
-import { Button } from 'react-native-paper'
 import ConfirmModal from '../../components/molecules/ConfirmModal'
+import PrimaryButton from '../../components/atoms/PrimaryButton'
 import { TeamSettingsProps } from '../../types/navigation'
 import { leaveManagerRole } from '../../services/data/user'
 import { selectTeam } from '../../store/reducers/features/team/managedTeamReducer'
 import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
 import { useTheme } from '../../hooks'
+import { Button, IconButton } from 'react-native-paper'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
 import { archiveTeam, deleteTeam } from '../../services/data/team'
+
+const ACTION_DESCRIPTIONS = [
+    {
+        action: 'Rollover',
+        description:
+            'Create a new season of this team. Further options will be available.',
+    },
+    {
+        action: 'Leave',
+        description:
+            'Remove yourself from this team as a manager. You can only do this if there are other managers associated with the team.',
+    },
+    {
+        action: 'Delete',
+        description:
+            'Remove this team from the database. This will not delete games associated with the team. No one will be able to access this team.',
+    },
+    {
+        action: 'Archive',
+        description:
+            'This team will still exist, but cannot be edited or used for games anymore.',
+    },
+]
 
 const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
     const {
@@ -18,7 +43,8 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
 
     const team = useSelector(selectTeam)
 
-    const [modalVisible, setModalVisible] = useState(false)
+    const [confirmModalVisible, setConfirmModalVisible] = useState(false)
+    const [explainModalVisible, setExplainModalVisible] = useState(false)
     const [teamAction, setTeamAction] = useState<
         'delete' | 'archive' | 'leave'
     >()
@@ -104,8 +130,16 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
         button: {
             flex: 1,
         },
+        helpButton: {
+            alignSelf: 'flex-end',
+        },
         error: {
             color: colors.error,
+        },
+        modalAction: {
+            color: colors.textPrimary,
+            marginBottom: 10,
+            fontSize: size.fontFifteen,
         },
     })
 
@@ -126,6 +160,15 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                         new Date(team?.seasonEnd || '').getUTCFullYear()}
                 </Text>
             )}
+            <IconButton
+                style={styles.helpButton}
+                iconColor={colors.textPrimary}
+                icon="help-circle"
+                size={20}
+                onPress={() => {
+                    setExplainModalVisible(true)
+                }}
+            />
             <View style={styles.buttonContainer}>
                 <Button
                     style={styles.button}
@@ -144,7 +187,7 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                     uppercase={true}
                     onPress={async () => {
                         setTeamAction('leave')
-                        setModalVisible(true)
+                        setConfirmModalVisible(true)
                     }}
                     loading={leaveLoading}>
                     Leave
@@ -159,7 +202,7 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                     uppercase={true}
                     onPress={async () => {
                         setTeamAction('delete')
-                        setModalVisible(true)
+                        setConfirmModalVisible(true)
                     }}
                     loading={deleteLoading}>
                     Delete
@@ -172,7 +215,7 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                     uppercase={true}
                     onPress={async () => {
                         setTeamAction('archive')
-                        setModalVisible(true)
+                        setConfirmModalVisible(true)
                     }}
                     loading={archiveLoading}>
                     Archive
@@ -182,11 +225,11 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                 <Text style={styles.error}>Error: {error?.toString()}</Text>
             )}
             <ConfirmModal
-                visible={modalVisible}
+                visible={confirmModalVisible}
                 displayText={`Are you sure you want to ${teamAction} this team? You cannot undo this action.`}
                 loading={false}
                 confirmColor={confirmColor}
-                onCancel={async () => setModalVisible(false)}
+                onCancel={async () => setConfirmModalVisible(false)}
                 onConfirm={async () => {
                     switch (teamAction) {
                         case 'delete':
@@ -199,8 +242,33 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                             return
                     }
                 }}
-                onClose={async () => setModalVisible(false)}
+                onClose={async () => setConfirmModalVisible(false)}
             />
+            <BaseModal
+                visible={explainModalVisible}
+                onClose={() => {
+                    setExplainModalVisible(false)
+                }}>
+                <View>
+                    <Text style={styles.teamname}>Actions Explanation:</Text>
+                    <FlatList
+                        data={ACTION_DESCRIPTIONS}
+                        renderItem={({ item: { action, description } }) => {
+                            return (
+                                <Text
+                                    style={
+                                        styles.modalAction
+                                    }>{`${action} - ${description}`}</Text>
+                            )
+                        }}
+                    />
+                    <PrimaryButton
+                        text="close"
+                        onPress={() => setExplainModalVisible(false)}
+                        loading={false}
+                    />
+                </View>
+            </BaseModal>
         </BaseScreen>
     )
 }
