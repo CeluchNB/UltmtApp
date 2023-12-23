@@ -1,8 +1,10 @@
 import * as TeamServices from '../../../src/services/data/team'
+import * as UserServices from '../../../src/services/data/user'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
 import TeamSettingsScreen from '../../../src/screens/teams/TeamSettingsScreen'
+import { User } from '../../../src/types/user'
 import store from '../../../src/store/store'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
@@ -106,6 +108,33 @@ describe('TeamSettingsScreen', () => {
 
         await waitFor(async () => {
             expect(archiveSpy).toHaveBeenCalled()
+            expect(navigate).toHaveBeenCalledWith('ManageTeams')
+        })
+    })
+
+    it('calls leave team', async () => {
+        const leaveSpy = jest
+            .spyOn(UserServices, 'leaveManagerRole')
+            .mockReturnValue(Promise.resolve({} as User))
+
+        render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <TeamSettingsScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        const archiveBtn = screen.getByText('Leave')
+        fireEvent.press(archiveBtn)
+
+        const confirmBtn = screen.getByText('confirm')
+        fireEvent.press(confirmBtn)
+
+        await waitFor(async () => {
+            expect(leaveSpy).toHaveBeenCalled()
             expect(navigate).toHaveBeenCalledWith('ManageTeams')
         })
     })

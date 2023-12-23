@@ -15,10 +15,10 @@ import {
 } from 'react-native'
 import {
     fetchProfile,
-    leaveManagerRole,
+    // leaveManagerRole,
     leaveTeam,
     selectArchiveTeams,
-    selectLeaveManagerError,
+    // selectLeaveManagerError,
     selectManagerTeams,
     selectPlayerTeams,
 } from '../store/reducers/features/account/accountReducer'
@@ -45,9 +45,9 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
     const playerTeams = useSelector(selectPlayerTeams)
     const managerTeams = useSelector(selectManagerTeams)
     const archiveTeams = useSelector(selectArchiveTeams)
-    const leaveManagerError = useSelector(selectLeaveManagerError)
+    // const leaveManagerError = useSelector(selectLeaveManagerError)
 
-    const [leaveManagerTeamId, setLeaveManagerTeamId] = React.useState('')
+    // const [leaveManagerTeamId, setLeaveManagerTeamId] = React.useState('')
     const [refreshing, setRefreshing] = React.useState(false)
 
     React.useEffect(() => {
@@ -75,10 +75,10 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
         dispatch(leaveTeam({ teamId }))
     }
 
-    const onLeaveManagerRole = (teamId: string) => {
-        setLeaveManagerTeamId(teamId)
-        dispatch(leaveManagerRole({ teamId }))
-    }
+    // const onLeaveManagerRole = (teamId: string) => {
+    //     setLeaveManagerTeamId(teamId)
+    //     dispatch(leaveManagerRole({ teamId }))
+    // }
 
     const styles = StyleSheet.create({
         screen: {
@@ -176,16 +176,6 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
                                     key={team._id}
                                     team={team}
                                     onPress={() => openTeamDetails(team)}
-                                    showDelete={true}
-                                    onDelete={async () => {
-                                        onLeaveManagerRole(team._id)
-                                    }}
-                                    error={
-                                        leaveManagerError &&
-                                        team._id === leaveManagerTeamId
-                                            ? leaveManagerError
-                                            : undefined
-                                    }
                                 />
                             )
                         }}

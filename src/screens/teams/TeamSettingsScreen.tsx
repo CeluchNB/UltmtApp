@@ -1,8 +1,8 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
 import { Button } from 'react-native-paper'
 import ConfirmModal from '../../components/molecules/ConfirmModal'
-import PrimaryButton from '../../components/atoms/PrimaryButton'
 import { TeamSettingsProps } from '../../types/navigation'
+import { leaveManagerRole } from '../../services/data/user'
 import { selectTeam } from '../../store/reducers/features/team/managedTeamReducer'
 import { useMutation } from 'react-query'
 import { useSelector } from 'react-redux'
@@ -19,7 +19,9 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
     const team = useSelector(selectTeam)
 
     const [modalVisible, setModalVisible] = useState(false)
-    const [teamAction, setTeamAction] = useState<'delete' | 'archive'>()
+    const [teamAction, setTeamAction] = useState<
+        'delete' | 'archive' | 'leave'
+    >()
 
     const {
         mutate: deleteTeamMutation,
@@ -43,8 +45,31 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
         },
     })
 
-    const isError = isDeleteError || isArchiveError
-    const error = deleteError || archiveError
+    const {
+        mutate: leaveTeamMutation,
+        isLoading: leaveLoading,
+        isError: isLeaveLoading,
+        error: leaveError,
+    } = useMutation(() => leaveManagerRole(team?._id ?? ''), {
+        onSuccess: () => {
+            navigation.navigate('ManageTeams')
+        },
+    })
+
+    const isError = isDeleteError || isArchiveError || isLeaveLoading
+    const error = deleteError || archiveError || leaveError
+
+    const confirmColor = React.useMemo(() => {
+        switch (teamAction) {
+            case 'delete':
+            case 'leave':
+                return colors.error
+            case 'archive':
+                return colors.success
+            default:
+                return colors.textPrimary
+        }
+    }, [teamAction, colors])
 
     const rolloverSeason = async () => {
         // navigate to rollover screen
@@ -101,11 +126,30 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                         new Date(team?.seasonEnd || '').getUTCFullYear()}
                 </Text>
             )}
-            <PrimaryButton
-                text="Rollover"
-                onPress={rolloverSeason}
-                loading={false}
-            />
+            <View style={styles.buttonContainer}>
+                <Button
+                    style={styles.button}
+                    mode="contained"
+                    buttonColor={colors.textPrimary}
+                    textColor={colors.primary}
+                    uppercase={true}
+                    onPress={rolloverSeason}>
+                    Rollover
+                </Button>
+                <Button
+                    style={styles.button}
+                    mode="contained"
+                    buttonColor={colors.error}
+                    textColor={colors.primary}
+                    uppercase={true}
+                    onPress={async () => {
+                        setTeamAction('leave')
+                        setModalVisible(true)
+                    }}
+                    loading={leaveLoading}>
+                    Leave
+                </Button>
+            </View>
             <View style={styles.buttonContainer}>
                 <Button
                     style={styles.button}
@@ -141,15 +185,18 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
                 visible={modalVisible}
                 displayText={`Are you sure you want to ${teamAction} this team? You cannot undo this action.`}
                 loading={false}
-                confirmColor={
-                    teamAction === 'delete' ? colors.error : colors.success
-                }
+                confirmColor={confirmColor}
                 onCancel={async () => setModalVisible(false)}
                 onConfirm={async () => {
-                    if (teamAction === 'delete') {
-                        deleteTeamMutation()
-                    } else if (teamAction === 'archive') {
-                        archiveTeamMutation()
+                    switch (teamAction) {
+                        case 'delete':
+                            return deleteTeamMutation()
+                        case 'archive':
+                            return archiveTeamMutation()
+                        case 'leave':
+                            return leaveTeamMutation()
+                        default:
+                            return
                     }
                 }}
                 onClose={async () => setModalVisible(false)}
