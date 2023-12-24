@@ -22,6 +22,7 @@ import {
     searchUsers as networkSearchUsers,
     setOpenToRequests as networkSetOpenToRequests,
     setPrivate as networkSetPrivate,
+    usernameIsTaken as networkUsernameIsTaken,
 } from '../network/user'
 
 /**
@@ -303,4 +304,23 @@ export const getUserId = async (): Promise<string> => {
     }
     const decoded = jwt_decode(token) as any
     return decoded.sub
+}
+
+/**
+ * Determine if a username has been used already.
+ * @param username username to check
+ * @returns boolean if taken or not
+ */
+export const usernameIsTaken = async (username: string): Promise<boolean> => {
+    try {
+        if (username.length < 2) {
+            return false
+        }
+
+        const response = await networkUsernameIsTaken(username)
+        const { taken } = response.data
+        return taken
+    } catch (error) {
+        return throwApiError(error, Constants.USERNAME_IS_INVALID)
+    }
 }
