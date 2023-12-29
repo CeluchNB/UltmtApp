@@ -7,6 +7,7 @@ import React from 'react'
 import { User } from '../../src/types/user'
 import renderer from 'react-test-renderer'
 import store from '../../src/store/store'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -40,16 +41,30 @@ const user: User = {
     private: false,
 }
 
+const client = new QueryClient()
+
 beforeEach(() => {
     navigate.mockReset()
     reset.mockReset()
     goBack.mockReset()
 })
 
+beforeAll(() => {
+    jest.useFakeTimers({ legacyFakeTimers: true })
+})
+afterAll(() => {
+    jest.useRealTimers()
+})
+
 it('should match snapshot', () => {
+    jest.spyOn(UserData, 'usernameIsTaken').mockReturnValue(
+        Promise.resolve(true),
+    )
     const snapshot = renderer.create(
         <Provider store={store}>
-            <CreateAccountScreen {...props} />
+            <QueryClientProvider client={client}>
+                <CreateAccountScreen {...props} />
+            </QueryClientProvider>
         </Provider>,
     )
 
@@ -62,10 +77,17 @@ it('should handle successful create account', async () => {
         .mockReturnValueOnce(
             Promise.resolve({ user, token: '1234.234.fsg234' }),
         )
+
+    jest.spyOn(UserData, 'usernameIsTaken').mockReturnValue(
+        Promise.resolve(true),
+    )
+
     const { getByPlaceholderText, getAllByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <CreateAccountScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <CreateAccountScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -87,10 +109,16 @@ it('should handle unsuccessful create account', async () => {
     const spy = jest
         .spyOn(UserData, 'createAccount')
         .mockReturnValueOnce(Promise.reject({ message: 'there was an error' }))
+    jest.spyOn(UserData, 'usernameIsTaken').mockReturnValue(
+        Promise.resolve(true),
+    )
+
     const { getByPlaceholderText, getAllByText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <CreateAccountScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <CreateAccountScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -108,10 +136,15 @@ it('should handle unsuccessful create account', async () => {
 })
 
 it('should handle back button', async () => {
+    jest.spyOn(UserData, 'usernameIsTaken').mockReturnValue(
+        Promise.resolve(true),
+    )
     const { getByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <CreateAccountScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <CreateAccountScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
