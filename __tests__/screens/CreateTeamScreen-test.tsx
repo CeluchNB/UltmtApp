@@ -7,6 +7,7 @@ import React from 'react'
 import mockDate from 'mockdate'
 import renderer from 'react-test-renderer'
 import store from '../../src/store/store'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -22,12 +23,16 @@ const props: CreateTeamProps = {
     route: {} as any,
 }
 
+const client = new QueryClient()
+
 beforeAll(() => {
     mockDate.set('06/01/2022')
+    jest.useFakeTimers({ legacyFakeTimers: true })
 })
 
 afterAll(() => {
     mockDate.reset()
+    jest.useRealTimers()
 })
 
 beforeEach(async () => {
@@ -39,7 +44,9 @@ it('should match snapshot', async () => {
     const snapshot = renderer.create(
         <Provider store={store}>
             <NavigationContainer>
-                <CreateTeamScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <CreateTeamScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -52,11 +59,16 @@ it('should handle create team correctly', async () => {
     const spy = jest
         .spyOn(TeamData, 'createTeam')
         .mockImplementationOnce(mockFn)
+    jest.spyOn(TeamData, 'teamnameIsTaken').mockReturnValue(
+        Promise.resolve(true),
+    )
 
     const { getByPlaceholderText, getByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <CreateTeamScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <CreateTeamScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -83,11 +95,16 @@ it('should not call create team without input values', async () => {
     const spy = jest
         .spyOn(TeamData, 'createTeam')
         .mockImplementationOnce(mockFn)
+    jest.spyOn(TeamData, 'teamnameIsTaken').mockReturnValue(
+        Promise.resolve(true),
+    )
 
     const { getByText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <CreateTeamScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <CreateTeamScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )
@@ -109,11 +126,16 @@ it('should handle create team error correctly', async () => {
     const spy = jest
         .spyOn(TeamData, 'createTeam')
         .mockImplementationOnce(mockFn)
+    jest.spyOn(TeamData, 'teamnameIsTaken').mockReturnValue(
+        Promise.resolve(true),
+    )
 
     const { getByPlaceholderText, getByText, queryByText } = render(
         <Provider store={store}>
             <NavigationContainer>
-                <CreateTeamScreen {...props} />
+                <QueryClientProvider client={client}>
+                    <CreateTeamScreen {...props} />
+                </QueryClientProvider>
             </NavigationContainer>
         </Provider>,
     )

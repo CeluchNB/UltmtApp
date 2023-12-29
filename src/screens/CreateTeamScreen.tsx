@@ -5,8 +5,10 @@ import { CreateTeamProps } from '../types/navigation'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import TeamListItem from '../components/atoms/TeamListItem'
+import UniqueUserInput from '../components/atoms/UniqueUserInput'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
+import { useQuery } from 'react-query'
 import { useTheme } from '../hooks'
 import validator from 'validator'
 import { Control, Controller, useForm, useWatch } from 'react-hook-form'
@@ -61,7 +63,6 @@ const TeamDisplayPreview = ({
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Display preview</Text>
-
             <TeamListItem
                 team={{
                     _id: 'test',
@@ -101,6 +102,14 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
             season: currentYear.toString(),
         },
     })
+
+    const teamname = useWatch({ control, name: 'teamname' })
+
+    const { data: teamnameIsTaken, isLoading: teamnameLoading } = useQuery(
+        [{ teamnameIsTaken: teamname }],
+        () => TeamData.teamnameIsTaken(teamname),
+        { staleTime: 10000, enabled: teamname.length > 1 },
+    )
 
     const createTeam = async (data: CreateTeamFormData) => {
         setLoading(true)
@@ -215,12 +224,15 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
                         },
                     ])}
                     render={({ field: { onChange, value } }) => (
-                        <UserInput
+                        <UniqueUserInput
                             style={styles.input}
                             placeholder="Team Handle"
-                            onChangeText={onChange}
+                            fieldName="team handle"
                             value={value}
-                            testID="team-handle-input"
+                            valid={teamname.length > 1}
+                            taken={teamnameIsTaken}
+                            loading={teamnameLoading}
+                            onChange={onChange}
                         />
                     )}
                 />

@@ -177,3 +177,16 @@ export const archiveTeam = async (
         },
     )
 }
+
+export const teamnameIsTaken = async (
+    teamname: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(
+        `${API_URL_V1}/team/teamname-taken?teamname=${teamname}`,
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}

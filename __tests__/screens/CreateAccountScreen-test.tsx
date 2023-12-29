@@ -79,7 +79,7 @@ it('should handle successful create account', async () => {
         )
 
     jest.spyOn(UserData, 'usernameIsTaken').mockReturnValue(
-        Promise.resolve(true),
+        Promise.resolve(false),
     )
 
     const { getByPlaceholderText, getAllByText } = render(
@@ -110,7 +110,7 @@ it('should handle unsuccessful create account', async () => {
         .spyOn(UserData, 'createAccount')
         .mockReturnValueOnce(Promise.reject({ message: 'there was an error' }))
     jest.spyOn(UserData, 'usernameIsTaken').mockReturnValue(
-        Promise.resolve(true),
+        Promise.resolve(false),
     )
 
     const { getByPlaceholderText, getAllByText, queryByText } = render(
@@ -137,7 +137,7 @@ it('should handle unsuccessful create account', async () => {
 
 it('should handle back button', async () => {
     jest.spyOn(UserData, 'usernameIsTaken').mockReturnValue(
-        Promise.resolve(true),
+        Promise.resolve(false),
     )
     const { getByText } = render(
         <Provider store={store}>

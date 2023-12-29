@@ -14,6 +14,7 @@ import {
     removePlayer,
     rollover,
     searchTeam,
+    teamnameIsTaken,
     toggleRosterStatus,
 } from '../../../src/services/data/team'
 
@@ -295,5 +296,34 @@ describe('test team services', () => {
         )
 
         await expect(archiveTeam('')).rejects.toBeDefined()
+    })
+
+    it('handles teamname is taken success', async () => {
+        jest.spyOn(TeamServices, 'teamnameIsTaken').mockReturnValueOnce(
+            Promise.resolve({
+                data: { taken: true },
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        const result = await teamnameIsTaken('test')
+        expect(result).toBe(true)
+    })
+
+    it('handles teamname is taken failure', async () => {
+        jest.spyOn(TeamServices, 'teamnameIsTaken').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        await expect(teamnameIsTaken('test')).rejects.toBeDefined()
     })
 })

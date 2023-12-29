@@ -12,7 +12,7 @@ import { useQuery } from 'react-query'
 import { useTheme } from '../hooks'
 import { usernameIsTaken } from '../services/data/user'
 import validator from 'validator'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
 const CreateAccountScreen: React.FC<CreateAccountProps> = ({
@@ -24,14 +24,6 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState(undefined)
     const [passwordHidden, setPasswordHidden] = React.useState(true)
-    const [username, setUsername] = React.useState('')
-
-    const { data: usernameAlreadyTaken, isLoading: usernameTakenLoading } =
-        useQuery(
-            [{ usernameTaken: username }],
-            () => usernameIsTaken(username),
-            { staleTime: 10000, enabled: username.length > 1 },
-        )
 
     const {
         control,
@@ -46,6 +38,15 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
             password: '',
         } as CreateUserData,
     })
+
+    const username = useWatch({ control, name: 'username' })
+
+    const { data: usernameAlreadyTaken, isLoading: usernameTakenLoading } =
+        useQuery(
+            [{ usernameTaken: username }],
+            () => usernameIsTaken(username),
+            { staleTime: 10000, enabled: username.length > 1 },
+        )
 
     const styles = StyleSheet.create({
         container: {
@@ -142,10 +143,7 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
                     <UniqueUserInput
                         fieldName="username"
                         placeholder="Username"
-                        onChange={text => {
-                            onChange(text)
-                            setUsername(text)
-                        }}
+                        onChange={onChange}
                         loading={usernameTakenLoading}
                         taken={usernameAlreadyTaken}
                         value={value}

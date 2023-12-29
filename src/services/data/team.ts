@@ -20,6 +20,7 @@ import {
     removePlayer as networkRemovePlayer,
     rollover as networkRollover,
     searchTeam as networkSearchTeam,
+    teamnameIsTaken as networkTeamnameIsTaken,
     toggleRosterStatus as networkToggleRosterStatus,
 } from '../network/team'
 
@@ -252,5 +253,20 @@ export const archiveTeam = async (teamId: string): Promise<void> => {
         await withToken(networkArchiveTeam, teamId)
     } catch (error) {
         return throwApiError(error, Constants.EDIT_TEAM_ERROR)
+    }
+}
+
+/**
+ * Determine if a teamname can be used.
+ * @param teamname handle of new team
+ * @returns boolean
+ */
+export const teamnameIsTaken = async (teamname: string): Promise<boolean> => {
+    try {
+        const response = await networkTeamnameIsTaken(teamname)
+        const { taken } = response.data
+        return taken
+    } catch (error) {
+        return throwApiError(error, Constants.TEAMNAME_IS_INVALID)
     }
 }
