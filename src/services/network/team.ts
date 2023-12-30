@@ -149,3 +149,44 @@ export const createBulkJoinCode = async (
         },
     )
 }
+
+export const deleteTeam = async (
+    token: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.delete(`${API_URL_V1}/team/${teamId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
+        },
+    })
+}
+
+export const archiveTeam = async (
+    token: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.put(
+        `${API_URL_V1}/team/${teamId}/archive`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}
+
+export const teamnameIsTaken = async (
+    teamname: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(
+        `${API_URL_V1}/team/teamname-taken?teamname=${teamname}`,
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}

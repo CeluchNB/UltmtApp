@@ -18,6 +18,7 @@ import RequestUserScreen from './../screens/RequestUserScreen'
 import ResetPasswordScreen from '../screens/ResetPasswordScreen'
 import RolloverTeamScreen from './../screens/RolloverTeamScreen'
 import TeamRequestsScreen from '../screens/TeamRequestsScreen'
+import TeamSettingsScreen from '../screens/teams/TeamSettingsScreen'
 import UserRequestsScreen from '../screens/UserRequestsScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useTheme } from '../hooks'
@@ -62,6 +63,7 @@ const AccountNavigator: React.FC<{}> = () => {
                 component={ManageTeamDetailsScreen}
                 initialParams={{ id: '' }}
             />
+            <Stack.Screen name="TeamSettings" component={TeamSettingsScreen} />
             <Stack.Screen
                 name="PublicTeamDetails"
                 component={PublicTeamScreen}

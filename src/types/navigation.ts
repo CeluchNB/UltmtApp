@@ -20,6 +20,7 @@ export type AccountStackParamList = {
     ManageTeams: undefined
     RequestTeam: undefined
     ManagedTeamDetails: { id: string }
+    TeamSettings: undefined
     PublicTeamDetails: {
         id: string
         archive?: boolean
@@ -118,6 +119,10 @@ export type ManageTeamsProps = NativeStackScreenProps<
 export type ManagedTeamDetailsProps = NativeStackScreenProps<
     AccountStackParamList,
     'ManagedTeamDetails'
+>
+export type TeamSettingsProps = NativeStackScreenProps<
+    AccountStackParamList,
+    'TeamSettings'
 >
 export type PublicTeamDetailsProps = NativeStackScreenProps<
     AccountStackParamList,

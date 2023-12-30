@@ -357,7 +357,7 @@ exports[`ManageTeamDetailsScreen should match snapshot 1`] = `
                   }
                   testID="button-text"
                 >
-                  Rollover Team
+                  Settings
                 </Text>
               </View>
             </View>

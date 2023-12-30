@@ -4,14 +4,17 @@ import { AxiosResponse } from 'axios'
 import { CreateTeam, Team } from '../../../src/types/team'
 import {
     addManager,
+    archiveTeam,
     createBulkJoinCode,
     createTeam,
+    deleteTeam,
     getArchivedTeam,
     getManagedTeam,
     getTeam,
     removePlayer,
     rollover,
     searchTeam,
+    teamnameIsTaken,
     toggleRosterStatus,
 } from '../../../src/services/data/team'
 
@@ -234,5 +237,93 @@ describe('test team services', () => {
         )
 
         await expect(createBulkJoinCode('')).rejects.toBeDefined()
+    })
+
+    it('should handle delete team success', async () => {
+        jest.spyOn(TeamServices, 'deleteTeam').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            } as AxiosResponse),
+        )
+        jest.spyOn(LocalTeamServices, 'deleteTeamById').mockReturnValueOnce(
+            Promise.resolve(),
+        )
+
+        await expect(deleteTeam('')).resolves.toBeUndefined()
+    })
+
+    it('should handle delete team failure', async () => {
+        jest.spyOn(TeamServices, 'deleteTeam').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        await expect(deleteTeam('')).rejects.toBeDefined()
+    })
+
+    it('handles archive team success', async () => {
+        jest.spyOn(TeamServices, 'archiveTeam').mockReturnValueOnce(
+            Promise.resolve({
+                data: {},
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        await expect(archiveTeam('')).resolves.toBeUndefined()
+    })
+
+    it('handles archive team failure', async () => {
+        jest.spyOn(TeamServices, 'archiveTeam').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        await expect(archiveTeam('')).rejects.toBeDefined()
+    })
+
+    it('handles teamname is taken success', async () => {
+        jest.spyOn(TeamServices, 'teamnameIsTaken').mockReturnValueOnce(
+            Promise.resolve({
+                data: { taken: true },
+                status: 200,
+                statusText: 'Good',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        const result = await teamnameIsTaken('test')
+        expect(result).toBe(true)
+    })
+
+    it('handles teamname is taken failure', async () => {
+        jest.spyOn(TeamServices, 'teamnameIsTaken').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                config: {},
+                headers: {},
+            } as AxiosResponse),
+        )
+
+        await expect(teamnameIsTaken('test')).rejects.toBeDefined()
     })
 })

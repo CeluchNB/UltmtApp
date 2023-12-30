@@ -76,9 +76,8 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [teamData])
 
-    const rolloverSeason = async () => {
-        // navigate to rollover screen
-        navigation.navigate('RolloverTeam')
+    const teamSettings = async () => {
+        navigation.navigate('TeamSettings')
     }
 
     const onRemovePlayer = async (userId: string) => {
@@ -196,8 +195,8 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
                     />
                     <SecondaryButton
                         style={styles.newSeasonButton}
-                        text="Rollover Team"
-                        onPress={rolloverSeason}
+                        text="Settings"
+                        onPress={teamSettings}
                     />
                 </View>
                 <View style={styles.listContainer}>

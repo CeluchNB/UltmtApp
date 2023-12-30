@@ -205,102 +205,105 @@ exports[`should match snapshot 1`] = `
           </View>
         </View>
       </View>
-      <View
-        style={
-          {
-            "alignSelf": "center",
-            "marginTop": 20,
-            "width": "75%",
-          }
-        }
-      >
+      <View>
         <View
-          pointerEvents="none"
           style={
-            [
-              {
-                "bottom": 0,
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 6,
-              },
-              {
-                "backgroundColor": "#303030",
-                "borderColor": "#7AC6FF",
-                "borderRadius": 4,
-                "borderWidth": 1,
-              },
-              undefined,
-            ]
+            {
+              "alignSelf": "center",
+              "marginTop": 20,
+              "width": "75%",
+            }
           }
-          testID="text-input-outline"
-        />
-        <View>
+        >
           <View
+            pointerEvents="none"
             style={
               [
                 {
-                  "paddingBottom": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 6,
                 },
                 {
-                  "minHeight": 56,
-                  "paddingTop": 8,
+                  "backgroundColor": "#303030",
+                  "borderColor": "#7AC6FF",
+                  "borderRadius": 4,
+                  "borderWidth": 1,
                 },
+                undefined,
               ]
             }
-          >
-            <TextInput
-              accessibilityLabel="Team Handle"
-              autoCapitalize="none"
-              cursorColor="#ffd600"
-              editable={true}
-              keyboardType="default"
-              maxFontSizeMultiplier={1.5}
-              multiline={false}
-              onBlur={[Function]}
-              onChangeText={[Function]}
-              onFocus={[Function]}
-              placeholder="Team Handle"
-              placeholderTextColor="#ffffff"
-              selectionColor="#ffd600"
+            testID="text-input-outline"
+          />
+          <View>
+            <View
               style={
                 [
                   {
-                    "margin": 0,
-                    "zIndex": 1,
-                  },
-                  {
-                    "height": 48,
-                  },
-                  {
                     "paddingBottom": 0,
-                    "paddingTop": 0,
                   },
                   {
-                    "color": "#ffd600",
-                    "fontFamily": "System",
-                    "fontSize": 16,
-                    "fontWeight": undefined,
-                    "letterSpacing": 0.15,
-                    "lineHeight": undefined,
-                    "paddingHorizontal": 16,
-                    "textAlign": "left",
-                    "textAlignVertical": "center",
+                    "minHeight": 56,
+                    "paddingTop": 8,
                   },
-                  false,
-                  [
-                    {},
-                  ],
-                  undefined,
                 ]
               }
-              testID="team-handle-input"
-              underlineColorAndroid="transparent"
-              value=""
-            />
+            >
+              <TextInput
+                accessibilityLabel="Team Handle"
+                autoCapitalize="none"
+                cursorColor="#ffd600"
+                editable={true}
+                keyboardType="default"
+                maxFontSizeMultiplier={1.5}
+                multiline={false}
+                onBlur={[Function]}
+                onChangeText={[Function]}
+                onFocus={[Function]}
+                placeholder="Team Handle"
+                placeholderTextColor="#ffffff"
+                selectionColor="#ffd600"
+                style={
+                  [
+                    {
+                      "margin": 0,
+                      "zIndex": 1,
+                    },
+                    {
+                      "height": 48,
+                    },
+                    {
+                      "paddingBottom": 0,
+                      "paddingTop": 0,
+                    },
+                    {
+                      "color": "#ffd600",
+                      "fontFamily": "System",
+                      "fontSize": 16,
+                      "fontWeight": undefined,
+                      "letterSpacing": 0.15,
+                      "lineHeight": undefined,
+                      "paddingHorizontal": 16,
+                      "textAlign": "left",
+                      "textAlignVertical": "center",
+                    },
+                    false,
+                    [
+                      {},
+                    ],
+                    undefined,
+                  ]
+                }
+                testID="text-input-outlined"
+                underlineColorAndroid="transparent"
+                value=""
+              />
+            </View>
           </View>
         </View>
+        <View />
       </View>
       <Text
         style={

@@ -217,3 +217,16 @@ export const joinTeamByCode = async (
         },
     )
 }
+
+export const usernameIsTaken = async (
+    username: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(
+        `${API_URL_V1}/user/username-taken?username=${username}`,
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}

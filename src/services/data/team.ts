@@ -4,19 +4,23 @@ import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
 import {
+    deleteTeamById as localDeleteTeamById,
     getTeamsById as localGetTeamsById,
     saveTeams as localSaveTeams,
 } from '../local/team'
 import {
     addManager as networkAddManager,
+    archiveTeam as networkArchiveTeam,
     createBulkJoinCode as networkCreateBulkJoinCode,
     createTeam as networkCreateTeam,
+    deleteTeam as networkDeleteTeam,
     getArchivedTeam as networkGetArchivedTeam,
     getManagedTeam as networkGetManagedTeam,
     getTeam as networkGetTeam,
     removePlayer as networkRemovePlayer,
     rollover as networkRollover,
     searchTeam as networkSearchTeam,
+    teamnameIsTaken as networkTeamnameIsTaken,
     toggleRosterStatus as networkToggleRosterStatus,
 } from '../network/team'
 
@@ -222,5 +226,47 @@ export const getTeamsById = async (ids: string[]): Promise<Team[]> => {
         return await localGetTeamsById(ids)
     } catch (error) {
         return throwApiError(error, Constants.GET_TEAM_ERROR)
+    }
+}
+
+/**
+ * Delete a team. Must be done by a manager when it they are the last manager on the team.
+ * @param teamId
+ */
+export const deleteTeam = async (teamId: string): Promise<void> => {
+    try {
+        await withToken(networkDeleteTeam, teamId)
+        await localDeleteTeamById(teamId)
+    } catch (error) {
+        return throwApiError(error, Constants.UNABLE_TO_DELETE_TEAM)
+    }
+}
+
+/**
+ * Archive a team. Must be done by a manager. Managers and players will
+ * have this team moved to their archive team's list.
+ * @param teamId id of team
+ * @returns
+ */
+export const archiveTeam = async (teamId: string): Promise<void> => {
+    try {
+        await withToken(networkArchiveTeam, teamId)
+    } catch (error) {
+        return throwApiError(error, Constants.EDIT_TEAM_ERROR)
+    }
+}
+
+/**
+ * Determine if a teamname can be used.
+ * @param teamname handle of new team
+ * @returns boolean
+ */
+export const teamnameIsTaken = async (teamname: string): Promise<boolean> => {
+    try {
+        const response = await networkTeamnameIsTaken(teamname)
+        const { taken } = response.data
+        return taken
+    } catch (error) {
+        return throwApiError(error, Constants.TEAMNAME_IS_INVALID)
     }
 }

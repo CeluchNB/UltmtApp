@@ -159,26 +159,6 @@ describe('ManageTeamDetailsScreen', () => {
         expect(snapshot.toJSON()).toMatchSnapshot()
     })
 
-    it('should navigate to rollover a team with pending requests', async () => {
-        const { getByText, getByTestId } = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <QueryClientProvider client={client}>
-                        <ManageTeamDetailsScreen {...props} />
-                    </QueryClientProvider>
-                </NavigationContainer>
-            </Provider>,
-        )
-
-        await waitUntilRefreshComplete(getByTestId('mtd-flat-list'))
-
-        const button = getByText('Rollover Team')
-
-        fireEvent.press(button)
-
-        expect(navigate).toHaveBeenCalledWith('RolloverTeam')
-    })
-
     it('should handle swipe to refresh', async () => {
         const teamSpy = jest.spyOn(TeamData, 'getManagedTeam')
 
