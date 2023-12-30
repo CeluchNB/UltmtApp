@@ -9,17 +9,25 @@ interface ConfirmModalProps {
     visible: boolean
     displayText: string
     loading: boolean
+    confirmColor?: string
     onConfirm: () => {}
     onCancel: () => {}
     onClose: () => {}
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = props => {
-    const { visible, displayText, loading, onConfirm, onCancel, onClose } =
-        props
     const {
         theme: { colors, size },
     } = useTheme()
+    const {
+        visible,
+        displayText,
+        loading,
+        confirmColor = colors.primary,
+        onConfirm,
+        onCancel,
+        onClose,
+    } = props
 
     const styles = StyleSheet.create({
         text: {
@@ -32,6 +40,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = props => {
             marginTop: 10,
         },
         button: { margin: 5 },
+        confirmButton: {
+            backgroundColor: confirmColor,
+        },
     })
 
     return (
@@ -44,7 +55,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = props => {
                     onPress={onCancel}
                 />
                 <PrimaryButton
-                    style={styles.button}
+                    style={[styles.button, styles.confirmButton]}
                     text="confirm"
                     onPress={onConfirm}
                     loading={loading}

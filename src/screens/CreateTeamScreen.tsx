@@ -4,11 +4,14 @@ import { CreateTeam } from '../types/team'
 import { CreateTeamProps } from '../types/navigation'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
+import TeamListItem from '../components/atoms/TeamListItem'
+import UniqueUserInput from '../components/atoms/UniqueUserInput'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
+import { useQuery } from 'react-query'
 import { useTheme } from '../hooks'
 import validator from 'validator'
-import { Controller, useForm } from 'react-hook-form'
+import { Control, Controller, useForm, useWatch } from 'react-hook-form'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 interface CreateTeamFormData {
@@ -16,6 +19,62 @@ interface CreateTeamFormData {
     name: string
     teamname: string
     season: string
+}
+
+const TeamDisplayPreview = ({
+    control,
+}: {
+    control: Control<CreateTeamFormData>
+}) => {
+    const {
+        theme: { colors, size, weight },
+    } = useTheme()
+
+    const place = useWatch({
+        control,
+        name: 'place',
+    })
+    const name = useWatch({ control, name: 'name' })
+    const teamname = useWatch({ control, name: 'teamname' })
+    const season = useWatch({ control, name: 'season' })
+
+    const seasonSplit = season.split(' - ')
+
+    const styles = StyleSheet.create({
+        title: {
+            color: colors.textPrimary,
+            fontSize: size.fontTwenty,
+            fontWeight: weight.bold,
+            marginBottom: 10,
+        },
+        container: {
+            width: '75%',
+            alignSelf: 'center',
+            marginTop: 20,
+        },
+    })
+
+    const totalLength = place.length + name.length + teamname.length
+
+    if (totalLength === 0) {
+        return null
+    }
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Display preview</Text>
+            <TeamListItem
+                team={{
+                    _id: 'test',
+                    place,
+                    name,
+                    teamname,
+                    seasonStart: seasonSplit[0],
+                    seasonEnd: seasonSplit[seasonSplit.length - 1],
+                }}
+            />
+        </View>
+    )
 }
 
 const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
@@ -43,6 +102,14 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
             season: currentYear.toString(),
         },
     })
+
+    const teamname = useWatch({ control, name: 'teamname' })
+
+    const { data: teamnameIsTaken, isLoading: teamnameLoading } = useQuery(
+        [{ teamnameIsTaken: teamname }],
+        () => TeamData.teamnameIsTaken(teamname),
+        { staleTime: 10000, enabled: teamname.length > 1 },
+    )
 
     const createTeam = async (data: CreateTeamFormData) => {
         setLoading(true)
@@ -76,7 +143,7 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
             alignSelf: 'center',
             marginTop: 20,
         },
-        pickerTitle: {
+        itemTitle: {
             color: colors.textPrimary,
             fontSize: size.fontTwenty,
             fontWeight: weight.bold,
@@ -157,19 +224,22 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
                         },
                     ])}
                     render={({ field: { onChange, value } }) => (
-                        <UserInput
+                        <UniqueUserInput
                             style={styles.input}
                             placeholder="Team Handle"
-                            onChangeText={onChange}
+                            fieldName="team handle"
                             value={value}
-                            testID="team-handle-input"
+                            valid={teamname.length > 1}
+                            taken={teamnameIsTaken}
+                            loading={teamnameLoading}
+                            onChange={onChange}
                         />
                     )}
                 />
                 {errors.teamname && (
                     <Text style={styles.error}>{errors.teamname.message}</Text>
                 )}
-                <Text style={styles.pickerTitle}>Season</Text>
+                <Text style={styles.itemTitle}>Season</Text>
                 <Controller
                     name="season"
                     control={control}
@@ -194,6 +264,7 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
                     )}
                 />
                 {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+                <TeamDisplayPreview control={control} />
                 <PrimaryButton
                     style={styles.button}
                     text="Create"

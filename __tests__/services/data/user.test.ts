@@ -21,6 +21,7 @@ import {
     searchUsers,
     setOpenToRequests,
     setPrivate,
+    usernameIsTaken,
 } from '../../../src/services/data/user'
 
 const validToken = 'token1'
@@ -497,7 +498,7 @@ describe('test user data calls', () => {
         expect(result).toEqual(user)
     })
 
-    it('should hanlde join team by code network failure', async () => {
+    it('should handle join team by code network failure', async () => {
         jest.spyOn(UserServices, 'joinTeamByCode').mockReturnValueOnce(
             Promise.reject({
                 data: { message: 'error' },
@@ -509,6 +510,35 @@ describe('test user data calls', () => {
         )
 
         await expect(joinTeamByCode('')).rejects.toBeDefined()
+    })
+
+    it('should handle username is taken success', async () => {
+        jest.spyOn(UserServices, 'usernameIsTaken').mockReturnValueOnce(
+            Promise.resolve({
+                data: { taken: true },
+                status: 200,
+                statusText: 'Good',
+                headers: {},
+                config: {},
+            } as AxiosResponse),
+        )
+
+        const result = await usernameIsTaken('test')
+        expect(result).toBe(true)
+    })
+
+    it('should handle username is taken failure', async () => {
+        jest.spyOn(UserServices, 'usernameIsTaken').mockReturnValueOnce(
+            Promise.reject({
+                data: {},
+                status: 400,
+                statusText: 'Bad',
+                headers: {},
+                config: {},
+            }),
+        )
+
+        await expect(usernameIsTaken('test')).rejects.toBeDefined()
     })
 
     it('get current user id success', async () => {

@@ -5,11 +5,14 @@ import { CreateUserData } from '../types/user'
 import PasswordValidator from 'password-validator'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import SecondaryButton from '../components/atoms/SecondaryButton'
+import UniqueUserInput from '../components/atoms/UniqueUserInput'
 import UserInput from '../components/atoms/UserInput'
 import { getFormFieldRules } from '../utils/form-utils'
+import { useQuery } from 'react-query'
 import { useTheme } from '../hooks'
+import { usernameIsTaken } from '../services/data/user'
 import validator from 'validator'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
 const CreateAccountScreen: React.FC<CreateAccountProps> = ({
@@ -35,6 +38,15 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
             password: '',
         } as CreateUserData,
     })
+
+    const username = useWatch({ control, name: 'username' })
+
+    const { data: usernameAlreadyTaken, isLoading: usernameTakenLoading } =
+        useQuery(
+            [{ usernameTaken: username }],
+            () => usernameIsTaken(username),
+            { staleTime: 10000, enabled: username.length > 1 },
+        )
 
     const styles = StyleSheet.create({
         container: {
@@ -62,6 +74,9 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
             color: colors.error,
             width: '75%',
             alignSelf: 'center',
+        },
+        usernameContainer: {
+            flexDirection: 'row',
         },
     })
 
@@ -125,10 +140,14 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
                 ])}
                 name="username"
                 render={({ field: { onChange, value } }) => (
-                    <UserInput
+                    <UniqueUserInput
+                        fieldName="username"
                         placeholder="Username"
-                        onChangeText={onChange}
+                        onChange={onChange}
+                        loading={usernameTakenLoading}
+                        taken={usernameAlreadyTaken}
                         value={value}
+                        valid={username.length > 1}
                         style={styles.input}
                     />
                 )}
@@ -136,7 +155,6 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
             {errors.username && (
                 <Text style={styles.error}>{errors.username.message}</Text>
             )}
-
             <Controller
                 control={control}
                 rules={getFormFieldRules('Email', true, undefined, undefined, [
