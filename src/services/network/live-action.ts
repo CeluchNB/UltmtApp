@@ -10,9 +10,7 @@ const getSocket = async (forceNew = false): Promise<Socket> => {
         const token = (await EncryptedStorage.getItem('game_token')) || ''
         socket = io(WEBSOCKET_URL, {
             extraHeaders: { Authorization: `Bearer ${token}` },
-        })
-        socket.on('disconnect', reason => {
-            console.log('disconnected', reason)
+            forceNew,
         })
     } else if (socket.disconnected) {
         socket.connect()
@@ -20,23 +18,13 @@ const getSocket = async (forceNew = false): Promise<Socket> => {
     return socket
 }
 
-const performOnceConnected = (
-    actionSocket: Socket,
-    method: (...args: any[]) => void,
-) => {
-    if (actionSocket.connected) {
-        method()
-    } else {
-        actionSocket.on('connect', () => {
-            method()
-        })
-        actionSocket.connect()
-    }
-}
-
 export const joinPoint = async (gameId: string, pointId: string) => {
-    const pointSocket = await getSocket(true)
-    performOnceConnected(pointSocket, () => {
+    const pointSocket = await getSocket()
+
+    pointSocket.emit('join:point', gameId, pointId)
+
+    pointSocket.io.on('reconnect', () => {
+        console.log('emit join point')
         pointSocket.emit('join:point', gameId, pointId)
     })
 }
@@ -105,21 +93,21 @@ export const nextPoint = async (pointId: string) => {
 
 export const subscribe = async (subscriptions: SubscriptionObject) => {
     const actionSocket = await getSocket()
-    performOnceConnected(actionSocket, () => {
-        actionSocket.removeAllListeners()
-        if (!actionSocket.hasListeners('action:client')) {
-            actionSocket.on('action:client', subscriptions.client)
-        }
-        if (!actionSocket.hasListeners('action:undo:client')) {
-            actionSocket.on('action:undo:client', subscriptions.undo)
-        }
-        if (!actionSocket.hasListeners('action:error')) {
-            actionSocket.on('action:error', subscriptions.error)
-        }
-        if (!actionSocket.hasListeners('point:next:client')) {
-            actionSocket.on('point:next:client', subscriptions.point)
-        }
-    })
+
+    actionSocket.removeAllListeners()
+    if (!actionSocket.hasListeners('action:client')) {
+        console.log('adding client listener')
+        actionSocket.on('action:client', subscriptions.client)
+    }
+    if (!actionSocket.hasListeners('action:undo:client')) {
+        actionSocket.on('action:undo:client', subscriptions.undo)
+    }
+    if (!actionSocket.hasListeners('action:error')) {
+        actionSocket.on('action:error', subscriptions.error)
+    }
+    if (!actionSocket.hasListeners('point:next:client')) {
+        actionSocket.on('point:next:client', subscriptions.point)
+    }
 }
 
 export const unsubscribe = () => {
