@@ -66,18 +66,8 @@ export const useGameEditor = (socket?: Socket) => {
                     data,
                     point._id,
                 )
-
                 successfulResponse(updatedPoint)
-                if (
-                    actions.findIndex(
-                        a =>
-                            a.action.actionNumber ===
-                            action.action.actionNumber,
-                    ) === -1
-                ) {
-                    setActions(immutableActionAddition(action))
-                }
-                // setActions(immutablePush(action))
+                setActions(immutableActionAddition(action))
             } catch (e: any) {
                 setError(e?.message ?? Constants.GET_ACTION_ERROR)
             }

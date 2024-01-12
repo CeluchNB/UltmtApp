@@ -223,6 +223,13 @@ export const useGameViewer = (
         return { gameId, pointId: activePoint?._id || '', live }
     }
 
+    const onRefresh = async () => {
+        await initializeGame()
+        if (activePoint) {
+            await onSelectPoint(activePoint?._id)
+        }
+    }
+
     // private
     const initializeLivePoint = async (pointId: string) => {
         setLiveActions([])
@@ -244,7 +251,9 @@ export const useGameViewer = (
         socket.on('action:error', subscriptions.error)
         socket.on('point:next:client', subscriptions.point)
         // })
-        socket.on('open', () => {
+        socket.io.on('open', () => {
+            // TODO: new socket implementation - reconnect not working
+            console.log('rejoining point')
             socket.emit('join:point', gameId, pointId)
         })
 
@@ -289,6 +298,6 @@ export const useGameViewer = (
         managingTeamId,
         onSelectAction,
         onSelectPoint,
-        onRefresh: initializeGame,
+        onRefresh,
     }
 }
