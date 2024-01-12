@@ -1,6 +1,7 @@
 import * as Constants from '../utils/constants'
 import Point from '../types/point'
 import React from 'react'
+import { Socket } from 'socket.io-client'
 import { UpdateGame } from '../types/game'
 import { debounce } from 'lodash'
 import { finishGame } from '../services/data/game'
@@ -13,20 +14,18 @@ import {
 } from '../types/action'
 import { activeGameOffline, editGame } from '../services/data/game'
 import {
-    addAction,
     createOfflineAction,
     deleteLocalAction,
     getLocalActionsByPoint,
-    joinPoint,
-    nextPoint,
     saveLocalAction,
-    subscribe,
-    undoAction,
     undoOfflineAction,
-    unsubscribe,
 } from '../services/data/live-action'
 import { createPoint, finishPoint } from '../services/data/point'
-import { immutableFilter, immutablePush } from '../utils/action'
+import {
+    immutableActionAddition,
+    immutableFilter,
+    parseClientAction,
+} from '../utils/action'
 import {
     resetGame,
     selectGame,
@@ -41,7 +40,7 @@ import {
 } from '../store/reducers/features/point/livePointReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-export const useGameEditor = () => {
+export const useGameEditor = (socket?: Socket) => {
     const dispatch = useDispatch()
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
@@ -60,42 +59,51 @@ export const useGameEditor = () => {
         [dispatch, setWaiting, setError],
     )
 
-    const subscriptions: SubscriptionObject = React.useMemo(() => {
-        return {
-            client: async (data: LiveServerActionData) => {
-                try {
-                    const { action, point: updatedPoint } =
-                        await saveLocalAction(data, point._id)
+    const subscriptions: SubscriptionObject = {
+        client: async (data: LiveServerActionData) => {
+            try {
+                const { action, point: updatedPoint } = await saveLocalAction(
+                    data,
+                    point._id,
+                )
 
+                successfulResponse(updatedPoint)
+                if (
+                    actions.findIndex(
+                        a =>
+                            a.action.actionNumber ===
+                            action.action.actionNumber,
+                    ) === -1
+                ) {
+                    setActions(immutableActionAddition(action))
+                }
+                // setActions(immutablePush(action))
+            } catch (e: any) {
+                setError(e?.message ?? Constants.GET_ACTION_ERROR)
+            }
+        },
+        undo: async ({ team: undoTeamNumber, actionNumber }) => {
+            try {
+                if (undoTeamNumber === team) {
+                    const { action, point: updatedPoint } =
+                        await deleteLocalAction(
+                            undoTeamNumber,
+                            actionNumber,
+                            point._id,
+                        )
                     successfulResponse(updatedPoint)
-                    setActions(immutablePush(action))
-                } catch (e: any) {
-                    setError(e?.message ?? Constants.GET_ACTION_ERROR)
+                    setActions(immutableFilter(action.actionNumber))
                 }
-            },
-            undo: async ({ team: undoTeamNumber, actionNumber }) => {
-                try {
-                    if (undoTeamNumber === team) {
-                        const { action, point: updatedPoint } =
-                            await deleteLocalAction(
-                                undoTeamNumber,
-                                actionNumber,
-                                point._id,
-                            )
-                        successfulResponse(updatedPoint)
-                        setActions(immutableFilter(action.actionNumber))
-                    }
-                } catch (e: any) {
-                    setError(e?.message ?? Constants.GET_ACTION_ERROR)
-                }
-            },
-            error: data => {
-                setWaiting(false)
-                setError(data?.message)
-            },
-            point: () => {},
-        }
-    }, [point._id, team, successfulResponse])
+            } catch (e: any) {
+                setError(e?.message ?? Constants.GET_ACTION_ERROR)
+            }
+        },
+        error: data => {
+            setWaiting(false)
+            setError(data?.message)
+        },
+        point: () => {},
+    }
 
     React.useEffect(() => {
         setWaiting(true)
@@ -105,29 +113,41 @@ export const useGameEditor = () => {
 
         getLocalActionsByPoint(point._id)
             .then(pointActions => {
-                setActions(curr => [...curr, ...pointActions])
+                setActions(pointActions)
             })
             .catch(_e => {})
             .finally(() => {
                 setWaiting(false)
             })
-    }, [point])
+    }, [point._id])
 
     React.useEffect(() => {
         setWaiting(true)
-        joinPoint(game._id, point._id)
-            .then(() => {
-                return subscribe(subscriptions)
-            })
-            .finally(() => {
-                setWaiting(false)
-                setError('')
-            })
+        if (!socket) {
+            setWaiting(false)
+            setError('')
+            return
+        }
+
+        // TODO: new socket implementation
+        socket.io.on('open', () => {
+            socket.removeAllListeners()
+            socket.emit('join:point', game._id, point._id)
+            socket.on('action:client', subscriptions.client)
+            socket.on('action:undo:client', subscriptions.undo)
+            socket.on('action:error', subscriptions.error)
+            socket.on('point:next:client', subscriptions.point)
+        })
+
+        setWaiting(false)
+        setError('')
         return () => {
-            unsubscribe()
+            // TODO: new socket implementation
+            socket.removeAllListeners()
+            socket.disconnect()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [socket, game._id, point._id])
 
     const activePlayers = React.useMemo(() => {
         if (team === 'one') {
@@ -137,23 +157,18 @@ export const useGameEditor = () => {
         }
     }, [point, team])
 
-    const lastAction = React.useMemo(() => {
-        for (let i = actions.length - 1; i >= 0; i--) {
-            // don't worry about other team's actions
-            if (
-                (actions[i].action as LiveServerActionData).teamNumber === team
-            ) {
-                return actions[i]
-            }
-        }
-        return undefined
-    }, [actions, team])
-
     const myTeamActions = React.useMemo(() => {
         return actions.filter(
             a => (a.action as LiveServerActionData).teamNumber === team,
         )
     }, [actions, team])
+
+    const lastAction = React.useMemo(() => {
+        if (myTeamActions.length > 0) {
+            return myTeamActions[myTeamActions.length - 1]
+        }
+        return undefined
+    }, [myTeamActions])
 
     const handleAction = async (action: Action) => {
         setWaiting(true)
@@ -161,9 +176,14 @@ export const useGameEditor = () => {
             const { action: newAction, point: updatedPoint } =
                 await createOfflineAction(action, point._id)
             successfulResponse(updatedPoint)
-            setActions(immutablePush(newAction))
+            setActions(immutableActionAddition(newAction))
         } else {
-            addAction(action, point._id)
+            // TODO: new socket implementation
+            const clientAction = parseClientAction({ ...action.action })
+            socket?.emit(
+                'action',
+                JSON.stringify({ action: clientAction, pointId: point._id }),
+            )
         }
     }
 
@@ -171,6 +191,7 @@ export const useGameEditor = () => {
     const onAction = React.useCallback(debounce(handleAction, 150), [
         offline,
         point,
+        socket,
     ])
 
     const handleUndo = async () => {
@@ -182,7 +203,8 @@ export const useGameEditor = () => {
             successfulResponse(updatedPoint)
             setActions(immutableFilter(action.actionNumber))
         } else {
-            undoAction(point._id)
+            // TODO: new socket implementation
+            socket?.emit('action:undo', JSON.stringify({ pointId: point._id }))
         }
     }
 
@@ -190,6 +212,7 @@ export const useGameEditor = () => {
     const onUndo = React.useCallback(debounce(handleUndo, 150), [
         offline,
         point,
+        socket,
     ])
 
     const onFinishPoint = async () => {
@@ -204,14 +227,18 @@ export const useGameEditor = () => {
         dispatch(updateScore({ teamOneScore, teamTwoScore }))
         dispatch(setPoint(newPoint))
         if (!offline) {
-            await nextPoint(point._id)
+            // TODO: new socket implementation
+            // await nextPoint(point._id)
+            socket?.emit('point:next', JSON.stringify({ pointId: point._id }))
         }
     }
 
     const onFinishGame = async () => {
         await finishPoint(point._id)
         if (!offline) {
-            await nextPoint(point._id)
+            // TODO: new socket implementation
+            // await nextPoint(point._id)
+            socket?.emit('point:next', JSON.stringify({ pointId: point._id }))
         }
         await finishGame()
         dispatch(resetGame())

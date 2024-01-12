@@ -10,6 +10,7 @@ import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import TeamActionView from '../../components/organisms/TeamActionView'
 import { isPulling } from '../../utils/point'
+import useSocket from '../../hooks/useSocket'
 import { ActionType, TeamActionList } from '../../types/action'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { useGameEditor, useTheme } from '../../hooks'
@@ -24,6 +25,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         undefined,
     )
     const [finishGameLoading, setFinishGameLoading] = React.useState(false)
+    const socket = useSocket()
     const {
         actions,
         activePlayers,
@@ -38,7 +40,7 @@ const LivePointEditScreen: React.FC<LivePointEditProps> = ({ navigation }) => {
         onUndo,
         onFinishPoint: finishPoint,
         onFinishGame: finishGame,
-    } = useGameEditor()
+    } = useGameEditor(socket)
 
     const finishDisable = React.useMemo(() => {
         return (

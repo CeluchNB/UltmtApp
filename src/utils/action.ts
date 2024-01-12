@@ -143,9 +143,18 @@ const getOppositeTeam = (team: TeamNumber): TeamNumber => {
     return team === 'one' ? 'two' : 'one'
 }
 
-export const immutablePush = <T>(newValue: T): ((current: T[]) => T[]) => {
+export const immutableActionAddition = <T extends Action>(
+    newValue: T,
+): ((current: T[]) => T[]) => {
     return (current: T[]): T[] => {
-        return [...current, newValue]
+        if (
+            current.findIndex(
+                a => a.action.actionNumber === newValue.action.actionNumber,
+            ) === -1
+        ) {
+            return [...current, newValue]
+        }
+        return current
     }
 }
 

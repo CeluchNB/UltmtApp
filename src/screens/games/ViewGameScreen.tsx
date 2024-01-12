@@ -8,6 +8,7 @@ import { ViewGameProps } from '../../types/navigation'
 import ViewPointsScene from '../../components/organisms/ViewPointsScene'
 import { deleteGame } from '../../services/data/game'
 import { setupMobileAds } from '../../utils/ads'
+import useSocket from '../../hooks/useSocket'
 import {
     ActivityIndicator,
     StyleSheet,
@@ -71,7 +72,8 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         }
     }
 
-    const gameViewerData = useGameViewer(gameId)
+    const socket = useSocket()
+    const gameViewerData = useGameViewer(gameId, socket)
     const {
         activePoint,
         allPointsLoading,
@@ -193,6 +195,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
                 />
             </View>
             <ConfirmModal
+                confirmColor={colors.textPrimary}
                 displayText="Are you sure you want to delete the game? This cannot be undone."
                 visible={modalVisible}
                 onClose={onClose}

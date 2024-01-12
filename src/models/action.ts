@@ -40,8 +40,12 @@ export class ActionSchema {
     teamNumber: TeamNumber
     comments: Comment[]
 
-    constructor(action: LiveServerActionData, pointId: string) {
-        this._id = new Realm.BSON.ObjectID()
+    constructor(
+        action: LiveServerActionData,
+        pointId: string,
+        _id?: Realm.BSON.ObjectId,
+    ) {
+        this._id = _id ?? new Realm.BSON.ObjectID()
         this.pointId = pointId
         this.actionType = action.actionType
         this.playerOne = action.playerOne

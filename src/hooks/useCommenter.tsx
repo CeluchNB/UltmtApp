@@ -1,5 +1,7 @@
 import * as Constants from '../utils/constants'
+import EncryptedStorage from 'react-native-encrypted-storage'
 import React from 'react'
+import { Socket } from 'socket.io-client/build/esm/socket'
 import { getUserId } from '../services/data/user'
 import { isLoggedIn } from '../services/data/auth'
 import { useQuery } from 'react-query'
@@ -11,13 +13,7 @@ import {
     SubscriptionObject,
 } from '../types/action'
 import { addComment, deleteComment } from '../services/data/saved-action'
-import {
-    addLiveComment,
-    deleteLiveComment,
-    joinPoint,
-    subscribe,
-    unsubscribe,
-} from '../services/data/live-action'
+// import { deleteLiveComment } from '../services/data/live-action'
 import {
     selectLiveAction,
     selectSavedAction,
@@ -31,6 +27,7 @@ export const useCommenter = (
     gameId: string,
     pointId: string,
     live: boolean,
+    socket?: Socket,
 ) => {
     const dispatch = useDispatch()
     const liveAction = useSelector(selectLiveAction)
@@ -72,14 +69,30 @@ export const useCommenter = (
 
     React.useEffect(() => {
         if (live) {
-            joinPoint(gameId, pointId)
-            subscribe(subscriptions)
+            // TODO: new socket implementation
+            // joinPoint(gameId, pointId)
+            // TODO: new socket implementation
+            // subscribe(subscriptions)
+            if (!socket) return
+
+            socket.io.on('open', () => {
+                socket.removeAllListeners()
+                socket.emit('join:point', gameId, pointId)
+                socket.on('action:client', subscriptions.client)
+                socket.on('action:undo:client', subscriptions.undo)
+                socket.on('action:error', subscriptions.error)
+                socket.on('point:next:client', subscriptions.point)
+            })
+
             return () => {
-                unsubscribe()
+                // TODO: new socket implementation
+                // unsubscribe()
+                socket?.removeAllListeners()
+                socket?.disconnect()
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [socket])
 
     // public
     const handleSubmitComment = async (comment: string) => {
@@ -94,12 +107,20 @@ export const useCommenter = (
                 )
                 dispatch(setSavedAction(updatedAction))
             } else {
-                await addLiveComment(
-                    gameId,
-                    pointId,
-                    action.action.actionNumber,
-                    (action.action as LiveServerActionData).teamNumber,
-                    comment,
+                // TODO: new socket implementation
+                const jwt =
+                    (await EncryptedStorage.getItem('access_token')) || ''
+                socket?.emit(
+                    'action:comment',
+                    JSON.stringify({
+                        jwt,
+                        gameId,
+                        pointId,
+                        actionNumber: action.action.actionNumber,
+                        teamNumber: (action.action as LiveServerActionData)
+                            .teamNumber,
+                        comment,
+                    }),
                 )
             }
         } catch (e: any) {
@@ -121,13 +142,28 @@ export const useCommenter = (
                 )
                 dispatch(setSavedAction(updatedAction))
             } else {
-                await deleteLiveComment(
-                    gameId,
-                    pointId,
-                    action.action.actionNumber,
-                    (action.action as LiveServerActionData).teamNumber,
-                    commentNumber.toString(),
+                // TODO: new socket implementation
+                const jwt =
+                    (await EncryptedStorage.getItem('access_token')) || ''
+                socket?.emit(
+                    'action:comment:delete',
+                    JSON.stringify({
+                        jwt,
+                        gameId,
+                        pointId,
+                        actionNumber: action.action.actionNumber,
+                        teamNumber: (action.action as LiveServerActionData)
+                            .teamNumber,
+                        commentNumber: commentNumber,
+                    }),
                 )
+                // await deleteLiveComment(
+                //     gameId,
+                //     pointId,
+                //     action.action.actionNumber,
+                //     (action.action as LiveServerActionData).teamNumber,
+                //     commentNumber.toString(),
+                // )
             }
         } catch (e: any) {
             setError(e?.message ?? Constants.COMMENT_ERROR)
