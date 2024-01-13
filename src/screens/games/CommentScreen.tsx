@@ -5,7 +5,6 @@ import CommentItem from '../../components/atoms/CommentItem'
 import { CommentProps } from '../../types/navigation'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-import useSocket from '../../hooks/useSocket'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { useCommenter, useTheme } from '../../hooks'
 
@@ -15,7 +14,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
     const {
         theme: { colors },
     } = useTheme()
-    const socket = useSocket()
+
     const {
         action,
         teamOne,
@@ -26,7 +25,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
         userId,
         handleSubmitComment,
         handleDeleteComment,
-    } = useCommenter(gameId, pointId, live, socket)
+    } = useCommenter(gameId, pointId, live)
 
     const styles = StyleSheet.create({
         container: {

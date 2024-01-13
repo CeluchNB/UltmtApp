@@ -511,3 +511,9 @@ export const withGameToken = async (
     const token = (await EncryptedStorage.getItem('game_token')) || ''
     return await networkCall(token, ...args)
 }
+
+// TODO: Store multiple game tokens? By Id?
+export const getGameToken = async (): Promise<string | null> => {
+    const token = await EncryptedStorage.getItem('game_token')
+    return token
+}

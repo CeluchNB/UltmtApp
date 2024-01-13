@@ -89,6 +89,7 @@ export const useGameEditor = (socket?: Socket) => {
             }
         },
         error: data => {
+            // TODO: SOCKET - this probably displays other users' errors
             setWaiting(false)
             setError(data?.message)
         },
@@ -114,19 +115,22 @@ export const useGameEditor = (socket?: Socket) => {
     React.useEffect(() => {
         setWaiting(true)
         if (!socket) {
-            setWaiting(false)
+            console.log('hit guard')
             setError('')
             return
         }
 
+        socket.removeAllListeners()
+        socket.emit('join:point', game._id, point._id)
+        socket.on('action:client', subscriptions.client)
+        socket.on('action:undo:client', subscriptions.undo)
+        socket.on('action:error', subscriptions.error)
+        socket.on('point:next:client', subscriptions.point)
+
         // TODO: new socket implementation
-        socket.io.on('open', () => {
-            socket.removeAllListeners()
+        socket.io.on('reconnect', () => {
+            console.log('calling on open')
             socket.emit('join:point', game._id, point._id)
-            socket.on('action:client', subscriptions.client)
-            socket.on('action:undo:client', subscriptions.undo)
-            socket.on('action:error', subscriptions.error)
-            socket.on('point:next:client', subscriptions.point)
         })
 
         setWaiting(false)

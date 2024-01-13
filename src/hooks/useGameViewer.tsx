@@ -1,8 +1,8 @@
 import { Game } from '../types/game'
 import Point from '../types/point'
 import React from 'react'
-import { Socket } from 'socket.io-client'
 import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
+import useGameSocket from './useGameSocket'
 import {
     Action,
     ActionFactory,
@@ -60,10 +60,7 @@ export interface GameViewerData {
  * This hook enables easy use of common game viewing functions. Many methods perform mediation
  * between live and saved points.
  */
-export const useGameViewer = (
-    gameId: string,
-    socket?: Socket,
-): GameViewerData => {
+export const useGameViewer = (gameId: string): GameViewerData => {
     const dispatch = useDispatch()
     const managerTeams = useSelector(selectManagerTeams)
     const [liveActions, setLiveActions] = React.useState<Action[]>([])
@@ -78,6 +75,8 @@ export const useGameViewer = (
     const [allPointsLoading, setAllPointsLoading] = React.useState(false)
     const [pointLoading, setPointLoading] = React.useState(false)
     const [error, setError] = React.useState('')
+
+    // const gameSocket = useGameSocket()
 
     const loading = React.useMemo(() => {
         return gameLoading || allPointsLoading || pointLoading
@@ -107,16 +106,20 @@ export const useGameViewer = (
         initializeGame()
 
         return () => {
-            // TODO: new socket implementation
-            // unsubscribe()
-            socket?.removeAllListeners()
-            socket?.disconnect()
             for (const point of points) {
                 deleteLocalActionsByPoint(point._id)
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gameId])
+
+    // initialize socket room connection when we have all data
+    // React.useEffect(() => {
+    //     if (!activePoint || !isLivePoint(activePoint)) return
+
+    //     // TODO: new socket implementation
+    //     // gameSocket.subscribe(subscriptions, gameId, activePoint._id)
+    // }, [gameId, activePoint, gameSocket])
 
     const initializeGame = async () => {
         try {
@@ -188,9 +191,8 @@ export const useGameViewer = (
     // public
     const onSelectPoint = async (id: string) => {
         const point = getPointById(id)
-        if (!point) {
-            return
-        }
+        if (!point) return
+
         setActivePoint(point)
         setPointLoading(true)
         setError('')
@@ -226,36 +228,13 @@ export const useGameViewer = (
     const onRefresh = async () => {
         await initializeGame()
         if (activePoint) {
-            await onSelectPoint(activePoint?._id)
+            // await onSelectPoint(activePoint?._id)
         }
     }
 
     // private
     const initializeLivePoint = async (pointId: string) => {
         setLiveActions([])
-
-        console.log('in get live actions')
-        if (!socket) return
-        console.log('past guard')
-
-        // TODO: new socket implementation
-        // await joinPoint(gameId, pointId)
-        // TODO: new socket implementation
-        // await subscribe(subscriptions)
-        // socket.io.on('open', () => {
-        console.log('in game view open')
-        socket.removeAllListeners()
-        socket.emit('join:point', gameId, pointId)
-        socket.on('action:client', subscriptions.client)
-        socket.on('action:undo:client', subscriptions.undo)
-        socket.on('action:error', subscriptions.error)
-        socket.on('point:next:client', subscriptions.point)
-        // })
-        socket.io.on('open', () => {
-            // TODO: new socket implementation - reconnect not working
-            console.log('rejoining point')
-            socket.emit('join:point', gameId, pointId)
-        })
 
         const data = await getLiveActionsByPoint(gameId, pointId)
         // TODO: if user closes and opens accordion a bunch, liveActions could grow A LOT

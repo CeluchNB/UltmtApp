@@ -8,7 +8,6 @@ import { ViewGameProps } from '../../types/navigation'
 import ViewPointsScene from '../../components/organisms/ViewPointsScene'
 import { deleteGame } from '../../services/data/game'
 import { setupMobileAds } from '../../utils/ads'
-import useSocket from '../../hooks/useSocket'
 import {
     ActivityIndicator,
     StyleSheet,
@@ -72,8 +71,7 @@ const ViewGameScreen: React.FC<ViewGameProps> = ({ navigation, route }) => {
         }
     }
 
-    const socket = useSocket()
-    const gameViewerData = useGameViewer(gameId, socket)
+    const gameViewerData = useGameViewer(gameId)
     const {
         activePoint,
         allPointsLoading,
