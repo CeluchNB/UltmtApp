@@ -3,13 +3,18 @@ import { DisplayUser } from '../../types/user'
 import PlayerActionItem from '../molecules/PlayerActionItem'
 import React from 'react'
 import { TeamNumber } from '../../types/team'
-import { Action, ActionList, PlayerActionList } from '../../types/action'
+import {
+    Action,
+    ActionList,
+    LiveServerActionData,
+    PlayerActionList,
+} from '../../types/action'
 import { FlatList, View } from 'react-native'
 
 interface PlayerActionViewProps {
     players: DisplayUser[]
     pulling: boolean
-    actionStack: Action[]
+    actionStack: LiveServerActionData[]
     loading: boolean
     team: TeamNumber
     onAction: DebouncedFunc<(action: Action) => Promise<void>>

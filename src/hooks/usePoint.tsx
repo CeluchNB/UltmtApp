@@ -1,32 +1,29 @@
 import ActionStack from '../utils/action-stack'
-import EventEmitter from 'eventemitter3'
+import { LocalPointEvents } from '../types/point'
 import { TeamNumber } from '../types/team'
-import usePointSocket from './usePointSocket'
+import usePointLocal from './usePointLocal'
 import { ClientActionData, LiveServerActionData } from '../types/action'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // Handles common functionality for all live game use cases
 const usePoint = (gameId: string, pointId: string) => {
-    usePointSocket(gameId, pointId)
+    const emitter = usePointLocal(gameId, pointId)
 
-    const [emitter] = useState(new EventEmitter())
     const [actionMap, setActionMap] = useState(new ActionStack())
     const [error, setError] = useState<string>()
+    const [waitingForActionResponse, setWaitingForActionResponse] =
+        useState(false)
 
-    const teamOneActions = useMemo(() => {
-        return actionMap.getTeamOneActions()
-    }, [actionMap])
-
-    const teamTwoActions = useMemo(() => {
-        return actionMap.getTeamTwoActions()
-    }, [actionMap])
+    const teamOneActions = actionMap.getTeamOneActions()
+    const teamTwoActions = actionMap.getTeamTwoActions()
 
     useEffect(() => {
-        emitter.addListener('action:client:local', onActionReceived)
-        emitter.addListener('action:undo:client:local', onUndoReceived)
-        emitter.addListener('action:error:local', onActionError)
+        emitter.addListener(LocalPointEvents.ACTION_LISTEN, onActionReceived)
+        emitter.addListener(LocalPointEvents.UNDO_LISTEN, onUndoReceived)
+        emitter.addListener(LocalPointEvents.ERROR_LISTEN, onActionError)
         // TODO: this needs to be use case specific, probably don't need this here
         // emitter.addListener('point:next:client:local', onNextPoint)
+        // TODO: handle comments
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -34,6 +31,7 @@ const usePoint = (gameId: string, pointId: string) => {
     // Listeners
     const onActionReceived = (data: LiveServerActionData) => {
         setActionMap(actionMap.reconcileAction(data))
+        setWaitingForActionResponse(false)
     }
 
     const onUndoReceived = (data: {
@@ -41,6 +39,7 @@ const usePoint = (gameId: string, pointId: string) => {
         actionNumber: number
     }) => {
         setActionMap(actionMap.undoAction(data))
+        setWaitingForActionResponse(false)
     }
 
     const onActionError = (data: any) => {
@@ -52,15 +51,17 @@ const usePoint = (gameId: string, pointId: string) => {
 
     // Emits
     const onAction = (action: ClientActionData) => {
-        emitter.emit('action', action)
+        setWaitingForActionResponse(true)
+        emitter.emit(LocalPointEvents.ACTION_EMIT, action)
     }
 
     const onUndo = () => {
-        emitter.emit('action:undo')
+        setWaitingForActionResponse(true)
+        emitter.emit(LocalPointEvents.UNDO_EMIT)
     }
 
     const onNextPoint = () => {
-        emitter.emit('point:next')
+        emitter.emit(LocalPointEvents.NEXT_POINT_EMIT)
     }
 
     const onComment = (
@@ -69,7 +70,13 @@ const usePoint = (gameId: string, pointId: string) => {
         teamNumber: string,
         comment: string,
     ) => {
-        emitter.emit('action:comment', jwt, actionNumber, teamNumber, comment)
+        emitter.emit(
+            LocalPointEvents.COMMENT_EMIT,
+            jwt,
+            actionNumber,
+            teamNumber,
+            comment,
+        )
     }
 
     const onDeleteComment = (
@@ -79,7 +86,7 @@ const usePoint = (gameId: string, pointId: string) => {
         commentNumber: number,
     ) => {
         emitter.emit(
-            'action:comment:delete',
+            LocalPointEvents.DELETE_COMMENT_EMIT,
             jwt,
             actionNumber,
             teamNumber,
@@ -91,6 +98,7 @@ const usePoint = (gameId: string, pointId: string) => {
         teamOneActions,
         teamTwoActions,
         error,
+        waitingForActionResponse,
         onAction,
         onUndo,
         onNextPoint,

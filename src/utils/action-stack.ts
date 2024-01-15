@@ -34,12 +34,15 @@ class ActionStack {
     }
 
     /**
-     * Method to get all actions in the stack associated with a team
+     * Method to get all actions in the stack associated with team one
      */
     getTeamOneActions = () => {
         return this.getListOfActions(this.teamOneMap)
     }
 
+    /**
+     * Method to get all actions in the stack associated with team two
+     */
     getTeamTwoActions = () => {
         return this.getListOfActions(this.teamTwoMap)
     }
@@ -48,7 +51,7 @@ class ActionStack {
         map: Map<string, LiveServerActionData>,
     ): LiveServerActionData[] => {
         return Array.from(map.values()).sort(
-            (a, b) => b.actionNumber - a.actionNumber,
+            (a, b) => a.actionNumber - b.actionNumber,
         )
     }
 

@@ -33,11 +33,15 @@ export const saveLocalAction = async (
     pointId: string,
 ): Promise<{ action: Action; point: Point }> => {
     try {
+        console.log('saving action', action, pointId)
         const savedAction = await localSaveAction(action, pointId)
 
+        console.log('saved action', savedAction)
         const point = await handleCreateActionSideEffects(savedAction)
+        console.log('updated point', point)
         return { action: ActionFactory.createFromAction(savedAction), point }
     } catch (e) {
+        console.log('e', e)
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }

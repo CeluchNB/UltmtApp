@@ -1,5 +1,5 @@
 import usePoint from '../hooks/usePoint'
-import React, { createContext } from 'react'
+import React, { createContext, useEffect } from 'react'
 
 export const GameViewerContext = createContext({})
 
