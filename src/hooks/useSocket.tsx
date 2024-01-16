@@ -22,14 +22,8 @@ const useSocket = (): Socket | undefined => {
             effectSocket.io.on('ping', () => {
                 console.log('ping')
             })
-            effectSocket.io.on('packet', () => {
-                console.log('packet', Platform.OS)
-            })
             effectSocket.io.on('reconnect_attempt', () => {
                 console.log('reconnect_attempt', Platform.OS)
-            })
-            effectSocket.io.on('open', () => {
-                console.log('open', Platform.OS)
             })
             setSocket(effectSocket)
         })

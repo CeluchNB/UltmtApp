@@ -4,7 +4,7 @@ import useSocket from './useSocket'
 import { LocalPointEvents, NetworkPointEvents } from '../types/point'
 import { useEffect, useState } from 'react'
 
-// Interface between event emitter, websocket, and local data actions
+// Interface between event emitter and websocket data actions
 const usePointSocket = (gameId: string, pointId: string) => {
     const socket = useSocket()
 
@@ -27,6 +27,7 @@ const usePointSocket = (gameId: string, pointId: string) => {
         })
         socket.emit(NetworkPointEvents.JOIN_POINT_EMIT, gameId, pointId)
         socket.io.on('reconnect', () => {
+            console.log('reconnecting to point')
             socket.emit(NetworkPointEvents.JOIN_POINT_EMIT, gameId, pointId)
         })
 

@@ -22,20 +22,17 @@ const useGameSocket = (): GameSocket => {
 
     useEffect(() => {
         if (socket) {
-            console.log('listeners', listeners.current.length)
             socket.removeAllListeners()
             for (const listener of listeners.current) {
                 socket.on(listener.event, listener.method)
             }
 
-            console.log('connections', connections.current.length)
             while (connections.current.length > 0) {
                 const connection = connections.current.pop()
                 if (!connection) continue
 
                 socket.emit(connection.room, ...connection.data)
                 socket.io.on('reconnect', () => {
-                    console.log('reconnecting', connection.room)
                     socket.emit(connection.room, ...connection.data)
                 })
             }

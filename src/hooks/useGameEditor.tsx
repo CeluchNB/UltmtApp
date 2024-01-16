@@ -115,7 +115,6 @@ export const useGameEditor = (socket?: Socket) => {
     React.useEffect(() => {
         setWaiting(true)
         if (!socket) {
-            console.log('hit guard')
             setError('')
             return
         }
@@ -129,7 +128,6 @@ export const useGameEditor = (socket?: Socket) => {
 
         // TODO: new socket implementation
         socket.io.on('reconnect', () => {
-            console.log('calling on open')
             socket.emit('join:point', game._id, point._id)
         })
 

@@ -6,6 +6,7 @@ import {
     Action,
     ActionFactory,
     ActionType,
+    ClientActionData,
     LiveServerActionData,
 } from '../../types/action'
 import {
@@ -33,15 +34,11 @@ export const saveLocalAction = async (
     pointId: string,
 ): Promise<{ action: Action; point: Point }> => {
     try {
-        console.log('saving action', action, pointId)
         const savedAction = await localSaveAction(action, pointId)
-
-        console.log('saved action', savedAction)
         const point = await handleCreateActionSideEffects(savedAction)
-        console.log('updated point', point)
+
         return { action: ActionFactory.createFromAction(savedAction), point }
     } catch (e) {
-        console.log('e', e)
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
 }
@@ -53,13 +50,13 @@ export const saveLocalAction = async (
  * @returns live server action
  */
 export const createOfflineAction = async (
-    action: Action,
+    action: ClientActionData,
     pointId: string,
 ): Promise<{ action: Action; point: Point }> => {
     try {
         const point = await localGetPointById(pointId)
         const liveAction: LiveServerActionData = {
-            ...action.action,
+            ...action,
             teamNumber: 'one',
             comments: [],
             actionNumber: point.teamOneActions.length + 1,
