@@ -1,23 +1,20 @@
-import { DebouncedFunc } from 'lodash'
 import { DisplayUser } from '../../types/user'
 import PlayerActionItem from '../molecules/PlayerActionItem'
-import React from 'react'
+import { PointEditContext } from '../../context/point-edit-context'
 import { TeamNumber } from '../../types/team'
 import {
-    Action,
     ActionList,
     LiveServerActionData,
     PlayerActionList,
 } from '../../types/action'
 import { FlatList, View } from 'react-native'
+import React, { useContext } from 'react'
 
 interface PlayerActionViewProps {
-    players: DisplayUser[]
     pulling: boolean
     actionStack: LiveServerActionData[]
     loading: boolean
     team: TeamNumber
-    onAction: DebouncedFunc<(action: Action) => Promise<void>>
 }
 
 type PlayerAction = {
@@ -26,16 +23,16 @@ type PlayerAction = {
 }
 
 const PlayerActionView: React.FC<PlayerActionViewProps> = ({
-    players,
     pulling,
     actionStack,
     loading,
     team,
-    onAction,
 }) => {
+    const { activePlayers, onAction } = useContext(PointEditContext)
+
     const playerActions: PlayerAction[] = React.useMemo(() => {
         const actions: ActionList[] = []
-        for (const player of players) {
+        for (const player of activePlayers) {
             let action = new PlayerActionList(
                 player,
                 actionStack,
@@ -46,9 +43,9 @@ const PlayerActionView: React.FC<PlayerActionViewProps> = ({
         }
 
         return actions.map((action, index) => {
-            return { player: players[index], actions: action }
+            return { player: activePlayers[index], actions: action }
         })
-    }, [players, actionStack, pulling, team])
+    }, [activePlayers, actionStack, pulling, team])
 
     return (
         <View>

@@ -1,27 +1,22 @@
 import { Button } from 'react-native-paper'
-import { DebouncedFunc } from 'lodash'
 import { DisplayUser } from '../../types/user'
 import PlayerActionTagModal from '../molecules/PlayerActionTagModal'
-import React from 'react'
+import { PointEditContext } from '../../context/point-edit-context'
 import SubstitutionModal from '../molecules/SubstitutionModal'
 import { useTheme } from '../../hooks'
 import { Action, ActionType } from '../../types/action'
 import { FlatList, StyleSheet, View } from 'react-native'
+import React, { useContext } from 'react'
 
 interface TeamActionViewProps {
     actions: Action[]
-    activePlayers: DisplayUser[]
-    onAction: DebouncedFunc<(action: Action) => Promise<void>>
 }
 
-const TeamActionView: React.FC<TeamActionViewProps> = ({
-    actions,
-    activePlayers,
-    onAction,
-}) => {
+const TeamActionView: React.FC<TeamActionViewProps> = ({ actions }) => {
     const {
         theme: { colors },
     } = useTheme()
+    const { activePlayers, onAction } = useContext(PointEditContext)
     const [subModalVisible, setSubModalVisible] = React.useState(false)
     const [tagModalVisible, setTagModalVisible] = React.useState(false)
     const [selectedAction, setSelectedAction] = React.useState<

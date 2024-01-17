@@ -5,10 +5,11 @@ import { Socket, io } from 'socket.io-client'
 import { useEffect, useState } from 'react'
 
 // Base implementation to set up a socket
-const useSocket = (): Socket | undefined => {
+const useSocket = (connect = true): Socket | undefined => {
     const [socket, setSocket] = useState<Socket>()
 
     useEffect(() => {
+        if (!connect) return
         let effectSocket: Socket
         getGameToken().then(token => {
             if (token) {
@@ -27,7 +28,7 @@ const useSocket = (): Socket | undefined => {
             })
             setSocket(effectSocket)
         })
-    }, [])
+    }, [connect])
 
     useEffect(() => {
         return () => {

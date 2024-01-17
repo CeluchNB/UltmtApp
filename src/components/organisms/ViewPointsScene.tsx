@@ -1,38 +1,47 @@
+import { GameViewContext } from '../../context/game-view-context'
 import PointAccordionGroup from './PointAccordionGroup'
-import React from 'react'
 import { ServerActionData } from '../../types/action'
 import { useNavigation } from '@react-navigation/native'
-import { GameViewerData, useTheme } from '../../hooks'
+import { useTheme } from '../../hooks'
+import React, { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 interface ViewPointsScene {
     gameId: string
-    gameViewerData: GameViewerData
+    // gameViewerData: GameViewerData
 }
 
 const ViewPointsScene: React.FC<ViewPointsScene> = ({
     gameId,
-    gameViewerData,
+    // gameViewerData,
 }) => {
     const navigation = useNavigation()
 
     const {
         theme: { colors },
     } = useTheme()
-    const {
-        activePoint,
-        game,
-        loading,
-        displayedActions,
-        error,
-        points,
-        onSelectAction,
-        onSelectPoint,
-        onRefresh,
-    } = gameViewerData
+
+    const loading = false
+
+    const { activePoint, game, displayActions, points, error, onSelectPoint } =
+        useContext(GameViewContext)
+
+    // const {
+    //     // activePoint,
+    //     // game,
+    //     // loading,
+    //     // displayedActions,
+    //     // error,
+    //     // points,
+    //     onSelectAction,
+    //     // onSelectPoint,
+    //     onRefresh,
+    // } = gameViewerData
 
     const handleSelectAction = (action: ServerActionData) => {
-        const { pointId, live } = onSelectAction(action)
+        // const { pointId, live } = onSelectAction(action)
+        const live = false,
+            pointId = ''
         navigation.navigate('Tabs', {
             screen: 'Games',
             params: {
@@ -67,11 +76,11 @@ const ViewPointsScene: React.FC<ViewPointsScene> = ({
                         teamOne={game?.teamOne || { name: '' }}
                         teamTwo={game?.teamTwo || { name: '' }}
                         loading={loading}
-                        displayedActions={displayedActions}
+                        displayedActions={displayActions}
                         error={error}
                         onSelectPoint={onSelectPoint}
                         onSelectAction={handleSelectAction}
-                        onRefresh={onRefresh}
+                        onRefresh={async () => {}} // TODO: set this up
                     />
                 </View>
             )}

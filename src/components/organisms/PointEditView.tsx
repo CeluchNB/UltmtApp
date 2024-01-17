@@ -25,13 +25,11 @@ const PointEditView: React.FC<{ navigation: any }> = ({ navigation }) => {
     const [finishGameLoading, setFinishGameLoading] = React.useState(false)
     const {
         myTeamActions,
-        activePlayers,
         team,
         waiting,
         game,
         point,
         error,
-        onAction,
         onUndo,
         onFinishPoint: finishPoint,
         onFinishGame: finishGame,
@@ -135,18 +133,12 @@ const PointEditView: React.FC<{ navigation: any }> = ({ navigation }) => {
                             }}
                         />
                         <PlayerActionView
-                            players={activePlayers}
                             pulling={isPulling(point, game, team)}
                             actionStack={myTeamActions}
                             loading={waiting}
                             team={team}
-                            onAction={onAction}
                         />
-                        <TeamActionView
-                            actions={teamActions}
-                            activePlayers={activePlayers}
-                            onAction={onAction}
-                        />
+                        <TeamActionView actions={teamActions} />
                         <PrimaryButton
                             style={styles.button}
                             onPress={onFinishPoint}

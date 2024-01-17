@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 // Interface between event emitter and websocket data actions
 const usePointSocket = (gameId: string, pointId: string) => {
-    const socket = useSocket()
+    const socket = useSocket(pointId.length !== 0)
 
     const [emitter] = useState(new EventEmitter())
 
@@ -14,6 +14,7 @@ const usePointSocket = (gameId: string, pointId: string) => {
         if (!socket) return
 
         socket.on(NetworkPointEvents.ACTION_LISTEN, data => {
+            console.log('received action', data)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, data)
         })
         socket.on(NetworkPointEvents.UNDO_LISTEN, data => {

@@ -2,7 +2,6 @@ import { Game } from '../types/game'
 import Point from '../types/point'
 import React from 'react'
 import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
-import useGameSocket from './useGameSocket'
 import {
     Action,
     ActionFactory,
@@ -66,8 +65,6 @@ export const useGameViewer = (gameId: string): GameViewerData => {
     const [liveActions, setLiveActions] = React.useState<Action[]>([])
     const [game, setGame] = React.useState<Game>()
     const [points, setPoints] = React.useState<Point[]>([])
-    const [teamOneActions, setTeamOneActions] = React.useState<Action[]>([])
-    const [teamTwoActions, setTeamTwoActions] = React.useState<Action[]>([])
     const [activePoint, setActivePoint] = React.useState<Point | undefined>(
         undefined,
     )
@@ -95,12 +92,7 @@ export const useGameViewer = (gameId: string): GameViewerData => {
         return undefined
     }, [game, managerTeams])
 
-    const displayedActions = React.useMemo(() => {
-        if (!activePoint) return []
-        return isLivePoint(activePoint)
-            ? normalizeLiveActions(liveActions)
-            : normalizeActions(teamOneActions, teamTwoActions)
-    }, [liveActions, teamOneActions, teamTwoActions, activePoint])
+    const displayedActions: Action[] = []
 
     React.useEffect(() => {
         initializeGame()
@@ -112,14 +104,6 @@ export const useGameViewer = (gameId: string): GameViewerData => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gameId])
-
-    // initialize socket room connection when we have all data
-    // React.useEffect(() => {
-    //     if (!activePoint || !isLivePoint(activePoint)) return
-
-    //     // TODO: new socket implementation
-    //     // gameSocket.subscribe(subscriptions, gameId, activePoint._id)
-    // }, [gameId, activePoint, gameSocket])
 
     const initializeGame = async () => {
         try {
@@ -250,13 +234,13 @@ export const useGameViewer = (gameId: string): GameViewerData => {
             point._id,
             point.teamOneActions,
         )
-        setTeamOneActions(oneActions)
+        // setTeamOneActions(oneActions)
         const twoActions = await getViewableActionsByPoint(
             'two',
             point._id,
             point.teamTwoActions,
         )
-        setTeamTwoActions(twoActions)
+        // setTeamTwoActions(twoActions)
     }
 
     // private

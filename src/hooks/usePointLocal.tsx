@@ -78,6 +78,7 @@ const usePointLocal = (gameId: string, pointId: string) => {
     const handleOnlineEvent = async (event: string, data: any) => {
         switch (event) {
             case LocalPointEvents.ACTION_LISTEN:
+                console.log('saving local action', data)
                 const { action: newAction, point: actionUpdatePoint } =
                     await saveLocalAction(data as LiveServerActionData, pointId)
 

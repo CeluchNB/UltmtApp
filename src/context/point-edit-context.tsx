@@ -111,21 +111,14 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
 
         dispatch(updateScore({ teamOneScore, teamTwoScore }))
         dispatch(setPoint(newPoint))
-        // if (!offline) {
-        // TODO: new socket implementation
-        // await nextPoint(point._id)
-        // socket?.emit('point:next', JSON.stringify({ pointId: point._id }))
+
         onNextPoint()
-        // }
     }
 
     const onFinishGame = async () => {
         await finishPoint(point._id)
-        // if (!offline) {
-        // TODO: new socket implementation
-        // await nextPoint(point._id)
         onNextPoint()
-        // }
+
         await finishGame()
         dispatch(resetGame())
         dispatch(resetPoint())
