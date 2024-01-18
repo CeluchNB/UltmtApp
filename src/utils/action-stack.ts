@@ -47,7 +47,21 @@ class ActionStack {
         return this.getListOfActions(this.teamTwoMap)
     }
 
-    private getListOfActions = (
+    addTeamOneActions = (actions: LiveServerActionData[]) => {
+        for (const action of actions) {
+            this.teamOneMap.set(this.getKey(action), action)
+        }
+        return this
+    }
+
+    addTeamTwoActions = (actions: LiveServerActionData[]) => {
+        for (const action of actions) {
+            this.teamTwoMap.set(this.getKey(action), action)
+        }
+        return this
+    }
+
+    getListOfActions = (
         map: Map<string, LiveServerActionData>,
     ): LiveServerActionData[] => {
         return Array.from(map.values()).sort(
@@ -55,7 +69,7 @@ class ActionStack {
         )
     }
 
-    private getKey = (action: { actionNumber: number }) => {
+    getKey = (action: { actionNumber: number }) => {
         const { actionNumber } = action
         return `action${actionNumber}`
     }

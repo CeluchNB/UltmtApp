@@ -1,17 +1,23 @@
 import { Game } from '../types/game'
 import Point from '../types/point'
-import { deleteLocalActionsByPoint } from '../services/data/point'
-import { normalizeActions } from '../utils/point'
+
 import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
 import usePoint from '../hooks/usePoint'
+import usePointSocket from '../hooks/usePointSocket'
 import { useSelector } from 'react-redux'
 import { Action, ActionFactory } from '../types/action'
 import React, { createContext, useEffect, useState } from 'react'
+import {
+    deleteLocalActionsByPoint,
+    getLiveActionsByPoint,
+    getViewableActionsByPoint,
+} from '../services/data/point'
 import {
     getGameById,
     getPointsByGame,
     logGameOpen,
 } from '../services/data/game'
+import { isLivePoint, normalizeActions } from '../utils/point'
 
 interface GameViewContextData {
     displayActions: (Action | { ad: boolean })[]
@@ -48,10 +54,8 @@ const GameViewProvider = ({
 }) => {
     const managerTeams = useSelector(selectManagerTeams)
     const [activePoint, setActivePoint] = useState<Point>()
-    const { teamOneActions, teamTwoActions } = usePoint(
-        gameId,
-        activePoint?._id ?? '',
-    )
+    const emitter = usePointSocket(gameId, activePoint?._id ?? '')
+    const { actionStack, setActionStack } = usePoint(emitter)
 
     const [game, setGame] = React.useState<Game>()
     const [points, setPoints] = React.useState<Point[]>([])
@@ -90,14 +94,19 @@ const GameViewProvider = ({
 
     const displayActions = React.useMemo(() => {
         if (!activePoint) return []
+
+        const teamOneActions = actionStack.getTeamOneActions()
+        const teamTwoActions = actionStack.getTeamTwoActions()
+
         const teamOneDisplayActions = teamOneActions.map(a =>
             ActionFactory.createFromAction(a),
         )
         const teamTwoDisplayActions = teamTwoActions.map(a =>
             ActionFactory.createFromAction(a),
         )
+
         return normalizeActions(teamOneDisplayActions, teamTwoDisplayActions)
-    }, [teamOneActions, teamTwoActions, activePoint])
+    }, [actionStack, activePoint])
 
     const initializeGame = async () => {
         try {
@@ -122,10 +131,36 @@ const GameViewProvider = ({
         }
     }
 
-    const onSelectPoint = (pointId: string) => {
+    const onSelectPoint = async (pointId: string) => {
         const point = getPointById(pointId)
+        if (!point) return
 
+        if (isLivePoint(point)) {
+            const data = await getLiveActionsByPoint(gameId, pointId)
+            const teamOneActions = data.filter(a => a.teamNumber === 'one')
+            const teamTwoActions = data.filter(a => a.teamNumber === 'two')
+            setActionStack({ ...actionStack.addTeamOneActions(teamOneActions) })
+            setActionStack({ ...actionStack.addTeamTwoActions(teamTwoActions) })
+        } else {
+            await getSavedActions(point)
+        }
         setActivePoint(point)
+    }
+
+    const getSavedActions = async (point: Point) => {
+        const oneActions = await getViewableActionsByPoint(
+            'one',
+            point._id,
+            point.teamOneActions,
+        )
+        // setTeamOneActions(oneActions)
+        const twoActions = await getViewableActionsByPoint(
+            'two',
+            point._id,
+            point.teamTwoActions,
+        )
+        // setTeamTwoActions(twoActions)
+        return { teamOneActions: oneActions, teamTwoActions: twoActions }
     }
 
     // private

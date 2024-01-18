@@ -1,21 +1,19 @@
 import ActionStack from '../utils/action-stack'
+import EventEmitter from 'eventemitter3'
 import { LocalPointEvents } from '../types/point'
 import { TeamNumber } from '../types/team'
-import usePointLocal from './usePointLocal'
 import { ClientActionData, LiveServerActionData } from '../types/action'
 import { useEffect, useState } from 'react'
 
 // Handles common functionality for all live game use cases
-const usePoint = (gameId: string, pointId: string) => {
-    const emitter = usePointLocal(gameId, pointId)
-
-    const [actionMap, setActionMap] = useState(new ActionStack())
+const usePoint = (emitter: EventEmitter) => {
+    const [actionStack, setActionStack] = useState(new ActionStack())
     const [error, setError] = useState<string>()
     const [waitingForActionResponse, setWaitingForActionResponse] =
         useState(false)
 
-    const teamOneActions = actionMap.getTeamOneActions()
-    const teamTwoActions = actionMap.getTeamTwoActions()
+    const teamOneActions = actionStack.getTeamOneActions()
+    const teamTwoActions = actionStack.getTeamTwoActions()
 
     useEffect(() => {
         emitter.addListener(LocalPointEvents.ACTION_LISTEN, onActionReceived)
@@ -30,7 +28,7 @@ const usePoint = (gameId: string, pointId: string) => {
 
     // Listeners
     const onActionReceived = (data: LiveServerActionData) => {
-        setActionMap(actionMap.reconcileAction(data))
+        setActionStack({ ...actionStack.reconcileAction(data) })
         setWaitingForActionResponse(false)
     }
 
@@ -38,7 +36,7 @@ const usePoint = (gameId: string, pointId: string) => {
         team: TeamNumber
         actionNumber: number
     }) => {
-        setActionMap(actionMap.undoAction(data))
+        setActionStack({ ...actionStack.undoAction(data) })
         setWaitingForActionResponse(false)
     }
 
@@ -95,10 +93,10 @@ const usePoint = (gameId: string, pointId: string) => {
     }
 
     return {
-        teamOneActions,
-        teamTwoActions,
+        actionStack,
         error,
         waitingForActionResponse,
+        setActionStack,
         onAction,
         onUndo,
         onNextPoint,

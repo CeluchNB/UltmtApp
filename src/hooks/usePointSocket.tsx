@@ -1,5 +1,6 @@
 import { ClientActionData } from '../types/action'
 import EventEmitter from 'eventemitter3'
+import { Platform } from 'react-native'
 import useSocket from './useSocket'
 import { LocalPointEvents, NetworkPointEvents } from '../types/point'
 import { useEffect, useState } from 'react'
@@ -14,7 +15,6 @@ const usePointSocket = (gameId: string, pointId: string) => {
         if (!socket) return
 
         socket.on(NetworkPointEvents.ACTION_LISTEN, data => {
-            console.log('received action', data)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, data)
         })
         socket.on(NetworkPointEvents.UNDO_LISTEN, data => {

@@ -5,6 +5,7 @@ import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import { parseClientAction } from '../utils/action'
 import usePoint from '../hooks/usePoint'
+import usePointLocal from '../hooks/usePointLocal'
 import { Action, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
 import React, { createContext, useMemo } from 'react'
@@ -59,14 +60,17 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
+    const emitter = usePointLocal(game._id, point._id)
     const {
-        teamOneActions,
-        teamTwoActions,
+        actionStack,
         waitingForActionResponse,
         onAction,
         onNextPoint,
         onUndo,
-    } = usePoint(game._id, point._id)
+    } = usePoint(emitter)
+
+    const teamOneActions = actionStack.getTeamOneActions()
+    const teamTwoActions = actionStack.getTeamTwoActions()
 
     const myTeamActions = useMemo(() => {
         if (team === 'one') {

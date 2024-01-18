@@ -9,6 +9,7 @@ import {
     Action,
     ActionFactory,
     ActionType,
+    LiveServerActionData,
     SavedServerActionData,
     ServerActionData,
 } from '../../types/action'
@@ -249,14 +250,12 @@ export const deleteLocalActionsByPoint = async (pointId: string) => {
 export const getLiveActionsByPoint = async (
     gameId: string,
     pointId: string,
-): Promise<Action[]> => {
+): Promise<LiveServerActionData[]> => {
     try {
         const response = await networkGetLiveActionsByPoint(gameId, pointId)
         const { actions } = response.data
 
-        return actions.map((action: ServerActionData) =>
-            ActionFactory.createFromAction(action),
-        )
+        return actions
     } catch (e) {
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }
