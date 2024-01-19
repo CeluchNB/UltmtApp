@@ -6,14 +6,11 @@ import { ClientActionData, LiveServerActionData } from '../types/action'
 import { useEffect, useState } from 'react'
 
 // Handles common functionality for all live game use cases
-const usePoint = (emitter: EventEmitter) => {
+const useLivePoint = (emitter: EventEmitter) => {
     const [actionStack, setActionStack] = useState(new ActionStack())
     const [error, setError] = useState<string>()
     const [waitingForActionResponse, setWaitingForActionResponse] =
         useState(false)
-
-    const teamOneActions = actionStack.getTeamOneActions()
-    const teamTwoActions = actionStack.getTeamTwoActions()
 
     useEffect(() => {
         emitter.addListener(LocalPointEvents.ACTION_LISTEN, onActionReceived)
@@ -105,4 +102,4 @@ const usePoint = (emitter: EventEmitter) => {
     }
 }
 
-export default usePoint
+export default useLivePoint

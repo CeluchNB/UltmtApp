@@ -1,6 +1,5 @@
 import { ClientActionData } from '../types/action'
 import EventEmitter from 'eventemitter3'
-import { Platform } from 'react-native'
 import useSocket from './useSocket'
 import { LocalPointEvents, NetworkPointEvents } from '../types/point'
 import { useEffect, useState } from 'react'

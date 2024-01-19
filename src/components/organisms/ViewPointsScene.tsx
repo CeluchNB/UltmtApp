@@ -8,40 +8,29 @@ import { StyleSheet, View } from 'react-native'
 
 interface ViewPointsScene {
     gameId: string
-    // gameViewerData: GameViewerData
 }
 
-const ViewPointsScene: React.FC<ViewPointsScene> = ({
-    gameId,
-    // gameViewerData,
-}) => {
+const ViewPointsScene: React.FC<ViewPointsScene> = ({ gameId }) => {
     const navigation = useNavigation()
 
     const {
         theme: { colors },
     } = useTheme()
 
-    const loading = false
-
-    const { activePoint, game, displayActions, points, error, onSelectPoint } =
-        useContext(GameViewContext)
-
-    // const {
-    //     // activePoint,
-    //     // game,
-    //     // loading,
-    //     // displayedActions,
-    //     // error,
-    //     // points,
-    //     onSelectAction,
-    //     // onSelectPoint,
-    //     onRefresh,
-    // } = gameViewerData
+    const {
+        activePoint,
+        game,
+        displayActions,
+        activePointLoading: loading,
+        points,
+        pointError,
+        onSelectPoint,
+        onSelectAction,
+        onRefresh,
+    } = useContext(GameViewContext)
 
     const handleSelectAction = (action: ServerActionData) => {
-        // const { pointId, live } = onSelectAction(action)
-        const live = false,
-            pointId = ''
+        const { pointId, live } = onSelectAction(action)
         navigation.navigate('Tabs', {
             screen: 'Games',
             params: {
@@ -77,10 +66,10 @@ const ViewPointsScene: React.FC<ViewPointsScene> = ({
                         teamTwo={game?.teamTwo || { name: '' }}
                         loading={loading}
                         displayedActions={displayActions}
-                        error={error}
+                        error={pointError}
                         onSelectPoint={onSelectPoint}
                         onSelectAction={handleSelectAction}
-                        onRefresh={async () => {}} // TODO: set this up
+                        onRefresh={onRefresh} // TODO: set this up
                     />
                 </View>
             )}

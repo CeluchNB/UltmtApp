@@ -170,7 +170,7 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                         color={colors.textPrimary}
                     />
                 )}
-                {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+                {error?.length > 0 && <Text style={styles.error}>{error}</Text>}
                 {!loading && (
                     <FlatList
                         data={actions}

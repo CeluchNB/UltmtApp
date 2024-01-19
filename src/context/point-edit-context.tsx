@@ -4,7 +4,7 @@ import { TeamNumber } from '../types/team'
 import { finishGame } from '../services/data/game'
 import { isPullingNext } from '../utils/point'
 import { parseClientAction } from '../utils/action'
-import usePoint from '../hooks/usePoint'
+import useLivePoint from '../hooks/useLivePoint'
 import usePointLocal from '../hooks/usePointLocal'
 import { Action, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
@@ -67,7 +67,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         onAction,
         onNextPoint,
         onUndo,
-    } = usePoint(emitter)
+    } = useLivePoint(emitter)
 
     const teamOneActions = actionStack.getTeamOneActions()
     const teamTwoActions = actionStack.getTeamTwoActions()

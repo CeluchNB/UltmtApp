@@ -117,9 +117,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
     const handleDeleteGame = React.useCallback(async () => {
         setDeleteLoading(true)
         try {
-            if (!managingTeamId) {
-                throw new Error()
-            }
+            if (!managingTeamId) return
             await deleteGame(gameId, managingTeamId)
         } catch (e) {
             // TODO: error display? do nothing

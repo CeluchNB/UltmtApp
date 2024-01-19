@@ -11,7 +11,6 @@ import {
     ActionType,
     LiveServerActionData,
     SavedServerActionData,
-    ServerActionData,
 } from '../../types/action'
 import {
     createOfflinePoint as localCreateOfflinePoint,
