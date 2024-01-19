@@ -61,6 +61,17 @@ class ActionStack {
         return this
     }
 
+    getAction = (
+        team: TeamNumber,
+        actionNumber: number,
+    ): LiveServerActionData | undefined => {
+        if (team === 'one') {
+            return this.teamOneMap.get(this.getKey({ actionNumber }))
+        } else {
+            return this.teamTwoMap.get(this.getKey({ actionNumber }))
+        }
+    }
+
     getListOfActions = (
         map: Map<string, LiveServerActionData>,
     ): LiveServerActionData[] => {

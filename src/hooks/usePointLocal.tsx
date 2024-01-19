@@ -51,12 +51,10 @@ const usePointLocal = (gameId: string, pointId: string) => {
         })
         localEmitter.off(LocalPointEvents.COMMENT_EMIT)
         localEmitter.on(LocalPointEvents.COMMENT_EMIT, data => {
-            // TODO: this data may be transmitted or read incorrectly
             networkEmitter.emit(LocalPointEvents.COMMENT_EMIT, data)
         })
         localEmitter.off(LocalPointEvents.DELETE_COMMENT_EMIT)
         localEmitter.on(LocalPointEvents.DELETE_COMMENT_EMIT, data => {
-            // TODO: this data may be transmitted or read incorrectly
             networkEmitter.emit(LocalPointEvents.DELETE_COMMENT_EMIT, data)
         })
 
@@ -99,7 +97,6 @@ const usePointLocal = (gameId: string, pointId: string) => {
                 })
                 break
             case LocalPointEvents.NEXT_POINT_LISTEN:
-                // TODO: implement handle
                 localEmitter.emit(LocalPointEvents.NEXT_POINT_LISTEN)
                 break
         }

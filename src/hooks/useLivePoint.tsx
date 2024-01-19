@@ -18,7 +18,6 @@ const useLivePoint = (emitter: EventEmitter) => {
         emitter.addListener(LocalPointEvents.ERROR_LISTEN, onActionError)
         // TODO: this needs to be use case specific, probably don't need this here
         // emitter.addListener('point:next:client:local', onNextPoint)
-        // TODO: handle comments
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

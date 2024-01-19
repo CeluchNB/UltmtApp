@@ -1,17 +1,16 @@
 import * as Constants from '../utils/constants'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import React from 'react'
 import { getUserId } from '../services/data/user'
 import { isLoggedIn } from '../services/data/auth'
-import useGameSocket from './useGameSocket'
+import useLivePoint from './useLivePoint'
+import usePointSocket from './usePointSocket'
 import { useQuery } from 'react-query'
 import {
     ActionFactory,
-    LiveServerActionData,
     SavedServerActionData,
     ServerActionData,
-    SubscriptionObject,
 } from '../types/action'
+import React, { useEffect } from 'react'
 import { addComment, deleteComment } from '../services/data/saved-action'
 import {
     selectLiveAction,
@@ -31,7 +30,8 @@ export const useCommenter = (
     const liveAction = useSelector(selectLiveAction)
     const savedAction = useSelector(selectSavedAction)
     const { teamOne, teamTwo } = useSelector(selectTeams)
-    const gameSocket = useGameSocket()
+    const emitter = usePointSocket(gameId, pointId)
+    const { actionStack, onComment, onDeleteComment } = useLivePoint(emitter)
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
 
@@ -41,39 +41,23 @@ export const useCommenter = (
         )
     }, [live, liveAction, savedAction])
 
+    useEffect(() => {
+        const newAction = actionStack.getAction(
+            liveAction?.teamNumber ?? 'one',
+            liveAction?.actionNumber ?? 0,
+        )
+        if (newAction) {
+            dispatch(setLiveAction(newAction))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [actionStack])
+
     const { data: isAuth } = useQuery(['isLoggedIn'], () => isLoggedIn(), {
         cacheTime: 0,
     })
     const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
         cacheTime: 0,
     })
-
-    const subscriptions: SubscriptionObject = {
-        client: (data: LiveServerActionData) => {
-            // could get any action of this point here,
-            // only update action if we received an update for this action
-            if (
-                data.actionNumber === liveAction?.actionNumber &&
-                data.teamNumber === liveAction.teamNumber
-            ) {
-                dispatch(setLiveAction(data))
-            }
-        },
-        undo: () => {},
-        error: (data: any) => {
-            // TODO: SOCKET - this probably displays other users errors
-            setError(data.message)
-        },
-        point: () => {},
-    }
-
-    React.useEffect(() => {
-        if (!live) return
-
-        // TODO: new socket implementation
-        gameSocket.subscribe(subscriptions, gameId, pointId)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [gameId, pointId])
 
     // public
     const handleSubmitComment = async (comment: string) => {
@@ -88,20 +72,14 @@ export const useCommenter = (
                 )
                 dispatch(setSavedAction(updatedAction))
             } else {
-                // TODO: new socket implementation
                 const jwt =
                     (await EncryptedStorage.getItem('access_token')) || ''
-                gameSocket.emit(
-                    'action:comment',
-                    JSON.stringify({
-                        jwt,
-                        gameId,
-                        pointId,
-                        actionNumber: action.action.actionNumber,
-                        teamNumber: (action.action as LiveServerActionData)
-                            .teamNumber,
-                        comment,
-                    }),
+
+                onComment(
+                    jwt,
+                    liveAction?.actionNumber ?? 0,
+                    liveAction?.teamNumber ?? 'one',
+                    comment,
                 )
             }
         } catch (e: any) {
@@ -123,21 +101,14 @@ export const useCommenter = (
                 )
                 dispatch(setSavedAction(updatedAction))
             } else {
-                // TODO: new socket implementation
                 const jwt =
                     (await EncryptedStorage.getItem('access_token')) || ''
 
-                gameSocket.emit(
-                    'action:comment:delete',
-                    JSON.stringify({
-                        jwt,
-                        gameId,
-                        pointId,
-                        actionNumber: action.action.actionNumber,
-                        teamNumber: (action.action as LiveServerActionData)
-                            .teamNumber,
-                        commentNumber: commentNumber,
-                    }),
+                onDeleteComment(
+                    jwt,
+                    liveAction?.actionNumber ?? 0,
+                    liveAction?.teamNumber ?? 'one',
+                    commentNumber,
                 )
             }
         } catch (e: any) {

@@ -69,7 +69,7 @@ const ViewPointsScene: React.FC<ViewPointsScene> = ({ gameId }) => {
                         error={pointError}
                         onSelectPoint={onSelectPoint}
                         onSelectAction={handleSelectAction}
-                        onRefresh={onRefresh} // TODO: set this up
+                        onRefresh={onRefresh}
                     />
                 </View>
             )}
