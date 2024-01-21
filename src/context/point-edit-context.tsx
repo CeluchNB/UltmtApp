@@ -2,10 +2,12 @@ import { DisplayUser } from '../types/user'
 import Point from '../types/point'
 import { TeamNumber } from '../types/team'
 import { finishGame } from '../services/data/game'
+import { getLocalActionsByPoint } from '../services/data/live-action'
 import { isPullingNext } from '../utils/point'
 import { parseClientAction } from '../utils/action'
 import useLivePoint from '../hooks/useLivePoint'
 import usePointLocal from '../hooks/usePointLocal'
+import { useQuery } from 'react-query'
 import { Action, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
 import React, { createContext, useMemo } from 'react'
@@ -64,10 +66,25 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const {
         actionStack,
         waitingForActionResponse,
+        setActionStack,
         onAction,
         onNextPoint,
         onUndo,
     } = useLivePoint(emitter)
+
+    const { isLoading: livePointLoading } = useQuery(
+        [{ liveActionByPoint: { gameId: game._id, pointId: point._id } }],
+        () => getLocalActionsByPoint(point._id),
+        {
+            onSuccess(data) {
+                setActionStack({
+                    ...actionStack.addTeamOneActions(
+                        data.map(a => ({ ...a.action, teamNumber: 'one' })),
+                    ),
+                })
+            },
+        },
+    )
 
     const teamOneActions = actionStack.getTeamOneActions()
     const teamTwoActions = actionStack.getTeamTwoActions()
@@ -136,7 +153,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                 team,
                 game,
                 point,
-                waiting: waitingForActionResponse,
+                waiting: waitingForActionResponse || livePointLoading,
                 error: '',
                 onFinishPoint,
                 onFinishGame,
