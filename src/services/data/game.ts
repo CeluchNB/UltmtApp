@@ -156,7 +156,9 @@ export const getPointsByGame = async (gameId: string): Promise<Point[]> => {
     try {
         const response = await networkGetPointsByGame(gameId)
         const { points } = response.data
-        return points
+        return points.sort(
+            (a: Point, b: Point) => b.pointNumber - a.pointNumber,
+        )
     } catch (e) {
         return throwApiError(e, Constants.GET_GAME_ERROR)
     }

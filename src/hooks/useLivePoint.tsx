@@ -5,26 +5,38 @@ import { TeamNumber } from '../types/team'
 import { ClientActionData, LiveServerActionData } from '../types/action'
 import { useEffect, useState } from 'react'
 
+interface LivePointOptions {
+    onNextPoint: () => void
+}
 // Handles common functionality for all live game use cases
-const useLivePoint = (emitter: EventEmitter) => {
+const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
     const [actionStack, setActionStack] = useState(new ActionStack())
     const [error, setError] = useState<string>()
     const [waitingForActionResponse, setWaitingForActionResponse] =
         useState(false)
 
     useEffect(() => {
+        emitter.removeListener(LocalPointEvents.ACTION_LISTEN)
         emitter.addListener(LocalPointEvents.ACTION_LISTEN, onActionReceived)
+
+        emitter.removeListener(LocalPointEvents.UNDO_LISTEN)
         emitter.addListener(LocalPointEvents.UNDO_LISTEN, onUndoReceived)
+
+        emitter.removeListener(LocalPointEvents.ERROR_LISTEN)
         emitter.addListener(LocalPointEvents.ERROR_LISTEN, onActionError)
-        // TODO: this needs to be use case specific, probably don't need this here
-        // emitter.addListener('point:next:client:local', onNextPoint)
+
+        emitter.removeListener(LocalPointEvents.NEXT_POINT_LISTEN)
+        emitter.addListener(
+            LocalPointEvents.NEXT_POINT_LISTEN,
+            onNextPointReceived,
+        )
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // Listeners
     const onActionReceived = (data: LiveServerActionData) => {
-        setActionStack({ ...actionStack.reconcileAction(data) })
+        setActionStack(curr => ({ ...curr.reconcileAction(data) }))
         setWaitingForActionResponse(false)
     }
 
@@ -32,7 +44,7 @@ const useLivePoint = (emitter: EventEmitter) => {
         team: TeamNumber
         actionNumber: number
     }) => {
-        setActionStack({ ...actionStack.undoAction(data) })
+        setActionStack(curr => ({ ...curr.undoAction(data) }))
         setWaitingForActionResponse(false)
     }
 
@@ -40,8 +52,9 @@ const useLivePoint = (emitter: EventEmitter) => {
         setError(data?.message ?? data?.toString())
     }
 
-    // TODO: this needs to be use case specific, probably don't even need this here
-    // const onNextPoint = () => {}
+    const onNextPointReceived = () => {
+        options?.onNextPoint()
+    }
 
     // Emits
     const onAction = (action: ClientActionData) => {

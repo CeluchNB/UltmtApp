@@ -1,4 +1,4 @@
-import * as Constants from '../utils/constants'
+import ActionStack from '../utils/action-stack'
 import { Game } from '../types/game'
 import Point from '../types/point'
 import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
@@ -41,7 +41,7 @@ interface GameViewContextData {
         pointId: string
         live: boolean
     }
-    onSelectPoint: (pointId: string) => Promise<void>
+    onSelectPoint: (pointId: string) => void
     onRefresh: () => Promise<void>
 }
 
@@ -58,7 +58,7 @@ export const GameViewContext = createContext<GameViewContextData>({
     pointError: '',
     managingTeamId: undefined,
     onSelectAction: () => ({ gameId: '', pointId: '', live: false }),
-    onSelectPoint: async () => {},
+    onSelectPoint: () => {},
     onRefresh: async () => {},
 })
 
@@ -73,7 +73,13 @@ const GameViewProvider = ({
     const managerTeams = useSelector(selectManagerTeams)
     const [activePoint, setActivePoint] = useState<Point>()
     const emitter = usePointSocket(gameId, activePoint?._id ?? '')
-    const { actionStack, setActionStack } = useLivePoint(emitter)
+    const { actionStack, setActionStack } = useLivePoint(emitter, {
+        onNextPoint: () => {
+            setActivePoint(undefined)
+            refetchGame()
+            refetchPoints()
+        },
+    })
     const {
         teamOneActions: teamOneSavedActions,
         teamTwoActions: teamTwoSavedActions,
@@ -81,19 +87,36 @@ const GameViewProvider = ({
         error: savedPointError,
     } = useSavedPoint(activePoint)
 
-    const [game, setGame] = React.useState<Game>()
-    const [points, setPoints] = React.useState<Point[]>([])
+    const {
+        data: game,
+        isLoading: gameLoading,
+        error: gameError,
+        refetch: refetchGame,
+    } = useQuery([{ getGameById: gameId }], () => getGameById(gameId))
 
-    const [gameLoading, setGameLoading] = React.useState(false)
-    const [allPointsLoading, setAllPointsLoading] = React.useState(false)
-    const [gameError, setGameError] = React.useState('')
+    const {
+        data: points,
+        isLoading: allPointsLoading,
+        refetch: refetchPoints,
+    } = useQuery([{ getPointsByGame: gameId }], () => getPointsByGame(gameId), {
+        onSuccess(newPoints) {
+            newPoints.sort((a, b) => b.pointNumber - a.pointNumber)
+            if (
+                !activePoint &&
+                newPoints.length > 0 &&
+                isLivePoint(newPoints[0])
+            ) {
+                setActionStack(new ActionStack())
+                setActivePoint(newPoints[0])
+            }
+        },
+    })
 
-    const enabled = activePoint && isLivePoint(activePoint)
     const { isLoading: livePointLoading, error: livePointError } = useQuery(
         [{ liveActionByPoint: { gameId, pointId: activePoint?._id } }],
         () => getLiveActionsByPoint(gameId, activePoint?._id ?? ''),
         {
-            enabled: enabled !== undefined,
+            enabled: isLivePoint(activePoint),
             onSuccess(data) {
                 const teamOneActions = data.filter(a => a.teamNumber === 'one')
                 const teamTwoActions = data.filter(a => a.teamNumber === 'two')
@@ -128,12 +151,14 @@ const GameViewProvider = ({
     }, [game, managerTeams])
 
     useEffect(() => {
-        initializeGame()
+        logGameOpen(gameId)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         return () => {
+            if (!points) return
+
             for (const point of points) {
                 deleteLocalActionsByPoint(point._id)
             }
@@ -166,29 +191,7 @@ const GameViewProvider = ({
         }
     }, [actionStack, activePoint, teamOneSavedActions, teamTwoSavedActions])
 
-    const initializeGame = async () => {
-        try {
-            setGameError('')
-            setGameLoading(true)
-            setAllPointsLoading(true)
-
-            const gameData = await getGameById(gameId)
-            setGame(gameData)
-
-            const pointsData = await getPointsByGame(gameId)
-            setPoints(pointsData)
-
-            // fire and forget this log
-            logGameOpen(gameId)
-        } catch (e: any) {
-            setGameError(e?.message ?? Constants.GET_GAME_ERROR)
-        } finally {
-            setAllPointsLoading(false)
-            setGameLoading(false)
-        }
-    }
-
-    const onSelectPoint = async (pointId: string) => {
+    const onSelectPoint = (pointId: string) => {
         const point = getPointById(pointId)
         if (!point) return
 
@@ -211,15 +214,16 @@ const GameViewProvider = ({
     }
 
     const onRefresh = async () => {
-        await initializeGame()
+        refetchGame()
+        refetchPoints()
         if (activePoint) {
-            await onSelectPoint(activePoint?._id)
+            onSelectPoint(activePoint?._id)
         }
     }
 
     // private
     const getPointById = (id: string): Point | undefined => {
-        return points.find(p => p._id === id)
+        return points?.find(p => p._id === id)
     }
 
     return (
@@ -227,11 +231,12 @@ const GameViewProvider = ({
             value={{
                 displayActions,
                 game,
-                points,
+                points: points ?? [],
                 gameLoading,
                 activePointLoading: livePointLoading || savedPointLoading,
                 allPointsLoading,
-                gameError,
+                gameError:
+                    (gameError as any)?.message ?? gameError?.toString() ?? '',
                 activePoint,
                 managingTeamId,
                 pointError,
