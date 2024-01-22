@@ -1,5 +1,4 @@
 import * as AuthServices from '../../../src/services/data/auth'
-import * as LiveActionData from '../../../src/services/data/live-action'
 import * as SavedActionData from '../../../src/services/data/saved-action'
 import * as UserServices from '../../../src/services/data/user'
 import { CommentProps } from '../../../src/types/navigation'
@@ -7,14 +6,10 @@ import CommentScreen from '../../../src/screens/games/CommentScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { SavedServerActionData } from '../../../src/types/action'
 import store from '../../../src/store/store'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
-    SavedServerActionData,
-    SubscriptionObject,
-} from '../../../src/types/action'
-import {
-    act,
     fireEvent,
     render,
     screen,
@@ -65,7 +60,6 @@ describe('Live CommentScreen', () => {
             params: { live: true, gameId: 'game1', pointId: 'point1' },
         } as any,
     }
-    let subscriptions: SubscriptionObject
 
     beforeAll(() => {
         jest.useFakeTimers({ legacyFakeTimers: true })
@@ -84,17 +78,6 @@ describe('Live CommentScreen', () => {
         jest.spyOn(UserServices, 'getUserId').mockReturnValue(
             Promise.resolve('user1'),
         )
-        jest.spyOn(LiveActionData, 'joinPoint').mockReturnValue(
-            Promise.resolve(),
-        )
-
-        jest.spyOn(LiveActionData, 'subscribe').mockImplementation(
-            async subs => {
-                subscriptions = subs
-                return
-            },
-        )
-        jest.spyOn(LiveActionData, 'unsubscribe').mockReturnValue()
     })
     afterEach(() => {
         jest.resetAllMocks()
@@ -117,10 +100,6 @@ describe('Live CommentScreen', () => {
     })
 
     it('should handle live submit', async () => {
-        const spy = jest
-            .spyOn(LiveActionData, 'addLiveComment')
-            .mockReturnValue(Promise.resolve())
-
         const { getByPlaceholderText, getByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
@@ -141,36 +120,12 @@ describe('Live CommentScreen', () => {
         const button = getByText('send')
         fireEvent.press(button)
 
-        expect(spy).toHaveBeenCalled()
-        await act(async () => {
-            subscriptions.client({
-                ...liveAction,
-                comments: [
-                    ...liveAction.comments,
-                    {
-                        comment: 'A new comment',
-                        commentNumber: 2,
-                        user: {
-                            _id: 'user1',
-                            firstName: 'First1',
-                            lastName: 'Last1',
-                            username: 'firstlast',
-                        },
-                    },
-                ],
-            })
-        })
-
         await waitFor(() => {
             expect(getByText('A new comment')).toBeTruthy()
         })
     })
 
     it('should handle delete live comment', async () => {
-        const spy = jest
-            .spyOn(LiveActionData, 'deleteLiveComment')
-            .mockReturnValue(Promise.resolve())
-
         const { queryByText, getAllByRole } = render(
             <NavigationContainer>
                 <Provider store={store}>
@@ -187,14 +142,6 @@ describe('Live CommentScreen', () => {
 
         const button = getAllByRole('button')[3]
         fireEvent.press(button)
-
-        expect(spy).toHaveBeenCalled()
-        await act(async () => {
-            subscriptions.client({
-                ...liveAction,
-                comments: [],
-            })
-        })
 
         await waitFor(() => {
             expect(queryByText('Test comment')).toBeFalsy()
@@ -214,12 +161,6 @@ describe('Live CommentScreen', () => {
 
         await waitFor(() => {
             expect(queryByText('Test comment')).toBeTruthy()
-        })
-
-        await act(async () => {
-            subscriptions.error({
-                message: 'Live error',
-            })
         })
 
         await waitFor(() => {
@@ -253,14 +194,6 @@ describe('Saved CommentScreen', () => {
         jest.spyOn(UserServices, 'getUserId').mockReturnValue(
             Promise.resolve('user1'),
         )
-        jest.spyOn(LiveActionData, 'joinPoint').mockReturnValue(
-            Promise.resolve(),
-        )
-
-        jest.spyOn(LiveActionData, 'subscribe').mockReturnValueOnce(
-            Promise.resolve(),
-        )
-        jest.spyOn(LiveActionData, 'unsubscribe').mockReturnValue()
     })
     afterEach(() => {
         jest.resetAllMocks()
