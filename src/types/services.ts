@@ -15,3 +15,7 @@ class Error {
 }
 export class ApiError extends Error {}
 export class LocalError extends Error {}
+export interface SocketAck {
+    status: string
+    message?: string
+}

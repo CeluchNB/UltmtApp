@@ -19,9 +19,6 @@ const useSavedPoint = (point?: Point) => {
             ),
         {
             enabled: point && !isLivePoint(point),
-            onError(saveError) {
-                console.log('team one saved error', saveError)
-            },
         },
     )
     const {
@@ -38,9 +35,6 @@ const useSavedPoint = (point?: Point) => {
             ),
         {
             enabled: point && !isLivePoint(point),
-            onError(saveError) {
-                console.log('team two save error', saveError)
-            },
         },
     )
 

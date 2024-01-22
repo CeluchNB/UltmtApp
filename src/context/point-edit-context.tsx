@@ -66,6 +66,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const {
         actionStack,
         waitingForActionResponse,
+        error,
         setActionStack,
         onAction,
         onNextPoint,
@@ -106,7 +107,9 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     }, [point, team])
 
     const handleAction = async (action: Action) => {
-        const clientAction = parseClientAction({ ...action.action })
+        const clientAction = parseClientAction({
+            ...action.action,
+        })
         onAction(clientAction)
     }
 
@@ -154,7 +157,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                 game,
                 point,
                 waiting: waitingForActionResponse || livePointLoading,
-                error: '',
+                error: error ?? '',
                 onFinishPoint,
                 onFinishGame,
                 onAction: onActionDebounced,

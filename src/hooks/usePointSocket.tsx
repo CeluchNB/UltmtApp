@@ -1,5 +1,6 @@
 import { ClientActionData } from '../types/action'
 import EventEmitter from 'eventemitter3'
+import { SocketAck } from '../types/services'
 import useSocket from './useSocket'
 import { LocalPointEvents, NetworkPointEvents } from '../types/point'
 import { useEffect, useState } from 'react'
@@ -47,17 +48,44 @@ const usePointSocket = (gameId: string, pointId: string) => {
         socket?.emit(
             NetworkPointEvents.ACTION_EMIT,
             JSON.stringify({ action, pointId }),
+            (response: SocketAck) => {
+                if (response.status === 'error') {
+                    emitter.emit(
+                        LocalPointEvents.ERROR_LISTEN,
+                        response.message,
+                    )
+                }
+            },
         )
     }
 
     const onUndo = () => {
-        socket?.emit(NetworkPointEvents.UNDO_EMIT, JSON.stringify({ pointId }))
+        socket?.emit(
+            NetworkPointEvents.UNDO_EMIT,
+            JSON.stringify({ pointId }),
+            (response: SocketAck) => {
+                if (response.status === 'error') {
+                    emitter.emit(
+                        LocalPointEvents.ERROR_LISTEN,
+                        response.message,
+                    )
+                }
+            },
+        )
     }
 
     const onNextPoint = () => {
         socket?.emit(
             NetworkPointEvents.NEXT_POINT_EMIT,
             JSON.stringify({ pointId }),
+            (response: SocketAck) => {
+                if (response.status === 'error') {
+                    emitter.emit(
+                        LocalPointEvents.ERROR_LISTEN,
+                        response.message,
+                    )
+                }
+            },
         )
     }
 
@@ -77,6 +105,14 @@ const usePointSocket = (gameId: string, pointId: string) => {
                 teamNumber,
                 comment,
             }),
+            (response: SocketAck) => {
+                if (response.status === 'error') {
+                    emitter.emit(
+                        LocalPointEvents.ERROR_LISTEN,
+                        response.message,
+                    )
+                }
+            },
         )
     }
 
@@ -96,6 +132,14 @@ const usePointSocket = (gameId: string, pointId: string) => {
                 teamNumber,
                 commentNumber,
             }),
+            (response: SocketAck) => {
+                if (response.status === 'error') {
+                    emitter.emit(
+                        LocalPointEvents.ERROR_LISTEN,
+                        response.message,
+                    )
+                }
+            },
         )
     }
 

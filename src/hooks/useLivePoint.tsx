@@ -48,8 +48,9 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
         setWaitingForActionResponse(false)
     }
 
-    const onActionError = (data: any) => {
-        setError(data?.message ?? data?.toString())
+    const onActionError = (message?: string) => {
+        setWaitingForActionResponse(false)
+        setError(message)
     }
 
     const onNextPointReceived = () => {
@@ -58,16 +59,19 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
 
     // Emits
     const onAction = (action: ClientActionData) => {
+        setError('')
         setWaitingForActionResponse(true)
         emitter.emit(LocalPointEvents.ACTION_EMIT, action)
     }
 
     const onUndo = () => {
+        setError('')
         setWaitingForActionResponse(true)
         emitter.emit(LocalPointEvents.UNDO_EMIT)
     }
 
     const onNextPoint = () => {
+        setError('')
         emitter.emit(LocalPointEvents.NEXT_POINT_EMIT)
     }
 
@@ -77,6 +81,7 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
         teamNumber: string,
         comment: string,
     ) => {
+        setError('')
         emitter.emit(
             LocalPointEvents.COMMENT_EMIT,
             jwt,
@@ -92,6 +97,7 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
         teamNumber: string,
         commentNumber: number,
     ) => {
+        setError('')
         emitter.emit(
             LocalPointEvents.DELETE_COMMENT_EMIT,
             jwt,

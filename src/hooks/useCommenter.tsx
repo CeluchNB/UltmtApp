@@ -31,7 +31,12 @@ export const useCommenter = (
     const savedAction = useSelector(selectSavedAction)
     const { teamOne, teamTwo } = useSelector(selectTeams)
     const emitter = usePointSocket(gameId, pointId)
-    const { actionStack, onComment, onDeleteComment } = useLivePoint(emitter)
+    const {
+        actionStack,
+        error: liveError,
+        onComment,
+        onDeleteComment,
+    } = useLivePoint(emitter)
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
 
@@ -49,6 +54,7 @@ export const useCommenter = (
         if (newAction) {
             dispatch(setLiveAction(newAction))
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [actionStack])
 
@@ -121,7 +127,7 @@ export const useCommenter = (
         teamOne,
         teamTwo,
         loading,
-        error,
+        error: liveError ?? error,
         isAuth,
         userId,
         handleSubmitComment,
