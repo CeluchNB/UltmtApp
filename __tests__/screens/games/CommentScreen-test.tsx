@@ -1,6 +1,8 @@
 import * as AuthServices from '../../../src/services/data/auth'
 import * as SavedActionData from '../../../src/services/data/saved-action'
 import * as UserServices from '../../../src/services/data/user'
+import * as useLivePoint from '../../../src/hooks/useLivePoint'
+import ActionStack from '../../../src/utils/action-stack'
 import { CommentProps } from '../../../src/types/navigation'
 import CommentScreen from '../../../src/screens/games/CommentScreen'
 import { NavigationContainer } from '@react-navigation/native'
@@ -20,6 +22,7 @@ import {
     setLiveAction,
     setSavedAction,
 } from '../../../src/store/reducers/features/action/viewAction'
+
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/Animated/animations/TimingAnimation')
 
@@ -54,6 +57,10 @@ const updatedSavedAction: SavedServerActionData = {
 const client = new QueryClient()
 
 describe('Live CommentScreen', () => {
+    const mockActionStack = new ActionStack()
+    const mockOnComment = jest.fn()
+    const mockOnDeleteComment = jest.fn()
+
     const props: CommentProps = {
         navigation: {} as any,
         route: {
@@ -78,6 +85,17 @@ describe('Live CommentScreen', () => {
         jest.spyOn(UserServices, 'getUserId').mockReturnValue(
             Promise.resolve('user1'),
         )
+        jest.spyOn(useLivePoint, 'default').mockReturnValue({
+            actionStack: mockActionStack,
+            error: 'Live error',
+            onComment: mockOnComment,
+            onDeleteComment: mockOnDeleteComment,
+            setActionStack: jest.fn(),
+            onAction: jest.fn(),
+            onNextPoint: jest.fn(),
+            onUndo: jest.fn(),
+            waitingForActionResponse: false,
+        })
     })
     afterEach(() => {
         jest.resetAllMocks()
@@ -100,6 +118,26 @@ describe('Live CommentScreen', () => {
     })
 
     it('should handle live submit', async () => {
+        mockOnComment.mockImplementationOnce((_arg1, _arg2, _arg3, arg4) => {
+            store.dispatch(
+                setLiveAction({
+                    ...liveAction,
+                    comments: [
+                        ...liveAction.comments,
+                        {
+                            user: {
+                                _id: 'id',
+                                firstName: 'first',
+                                lastName: 'last',
+                                username: 'username',
+                            },
+                            comment: arg4,
+                            commentNumber: 2,
+                        },
+                    ],
+                }),
+            )
+        })
         const { getByPlaceholderText, getByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
@@ -126,6 +164,9 @@ describe('Live CommentScreen', () => {
     })
 
     it('should handle delete live comment', async () => {
+        mockOnDeleteComment.mockImplementationOnce(() => {
+            store.dispatch(setLiveAction({ ...liveAction, comments: [] }))
+        })
         const { queryByText, getAllByRole } = render(
             <NavigationContainer>
                 <Provider store={store}>
@@ -194,6 +235,17 @@ describe('Saved CommentScreen', () => {
         jest.spyOn(UserServices, 'getUserId').mockReturnValue(
             Promise.resolve('user1'),
         )
+        jest.spyOn(useLivePoint, 'default').mockReturnValue({
+            actionStack: new ActionStack(),
+            error: undefined,
+            onComment: jest.fn(),
+            onDeleteComment: jest.fn(),
+            setActionStack: jest.fn(),
+            onAction: jest.fn(),
+            onNextPoint: jest.fn(),
+            onUndo: jest.fn(),
+            waitingForActionResponse: false,
+        })
     })
     afterEach(() => {
         jest.resetAllMocks()
