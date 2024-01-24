@@ -87,7 +87,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
     React.useEffect(() => {
         const removeListener = navigation.addListener('focus', async () => {
             if (activePoint) {
-                await onSelectPoint(activePoint._id)
+                onSelectPoint(activePoint._id)
             }
         })
         return () => {

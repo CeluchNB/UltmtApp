@@ -202,10 +202,8 @@ const GameViewProvider = ({
         action: ServerActionData,
     ): { gameId: string; pointId: string; live: boolean } => {
         const live = isLivePoint(activePoint)
+        dispatch(setTeams({ teamOne: game?.teamOne, teamTwo: game?.teamTwo }))
         if (live) {
-            dispatch(
-                setTeams({ teamOne: game?.teamOne, teamTwo: game?.teamTwo }),
-            )
             dispatch(setLiveAction(action))
         } else {
             dispatch(setSavedAction(action))
