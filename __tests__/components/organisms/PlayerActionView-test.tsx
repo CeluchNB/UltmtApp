@@ -1,5 +1,6 @@
 import { DisplayUser } from '../../../src/types/user'
 import PlayerActionView from '../../../src/components/organisms/PlayerActionView'
+import { PointEditContext } from '../../../src/context/point-edit-context'
 import { Provider } from 'react-redux'
 import React from 'react'
 import store from '../../../src/store/store'
@@ -67,12 +68,20 @@ describe('PlayerActionView', () => {
     it('should match snapshot', () => {
         const snapshot = render(
             <Provider store={store}>
-                <PlayerActionView
-                    pulling={false}
-                    loading={true}
-                    actionStack={actionStack}
-                    team={'one'}
-                />
+                <PointEditContext.Provider
+                    value={
+                        {
+                            activePlayers: playerList1,
+                            onAction: jest.fn(),
+                        } as any
+                    }>
+                    <PlayerActionView
+                        pulling={false}
+                        loading={true}
+                        actionStack={actionStack}
+                        team={'one'}
+                    />
+                </PointEditContext.Provider>
             </Provider>,
         )
 
@@ -83,12 +92,20 @@ describe('PlayerActionView', () => {
         const actionFn = jest.fn()
         const { getAllByText } = render(
             <Provider store={store}>
-                <PlayerActionView
-                    pulling={false}
-                    loading={false}
-                    actionStack={actionStack}
-                    team={'one'}
-                />
+                <PointEditContext.Provider
+                    value={
+                        {
+                            activePlayers: playerList1,
+                            onAction: actionFn,
+                        } as any
+                    }>
+                    <PlayerActionView
+                        pulling={false}
+                        loading={false}
+                        actionStack={actionStack}
+                        team={'one'}
+                    />
+                </PointEditContext.Provider>
             </Provider>,
         )
 
