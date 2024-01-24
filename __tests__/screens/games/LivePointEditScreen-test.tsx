@@ -2,10 +2,11 @@ import '@testing-library/jest-native/extend-expect'
 import * as ActionData from '../../../src/services/data/live-action'
 import * as GameServices from '../../../src/services/data/game'
 import * as PointServices from '../../../src/services/data/point'
+import * as usePointLocal from '../../../src/hooks/usePointLocal'
+import EventEmitter from 'eventemitter3'
 import { LivePointEditProps } from '../../../src/types/navigation'
 import LivePointEditScreen from '../../../src/screens/games/LivePointEditScreen'
 import { NavigationContainer } from '@react-navigation/native'
-import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { game } from '../../../fixtures/data'
@@ -15,8 +16,9 @@ import {
     ActionFactory,
     ActionType,
     LiveServerActionData,
-    SubscriptionObject,
 } from '../../../src/types/action'
+import Point, { LocalPointEvents } from '../../../src/types/point'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     act,
     fireEvent,
@@ -115,9 +117,7 @@ beforeEach(() => {
     store.dispatch(setPoint(point))
     store.dispatch(setTeam('one'))
     jest.resetAllMocks()
-    jest.spyOn(ActionData, 'joinPoint').mockReturnValue(Promise.resolve())
-    jest.spyOn(ActionData, 'addAction').mockReturnValue(Promise.resolve())
-    jest.spyOn(ActionData, 'undoAction').mockReturnValue(Promise.resolve())
+
     jest.spyOn(ActionData, 'saveLocalAction').mockImplementation(data =>
         Promise.resolve({
             action: ActionFactory.createFromAction(data),
@@ -138,12 +138,26 @@ beforeEach(() => {
     )
 })
 
+const client = new QueryClient()
+
 describe('LivePointEditScreen', () => {
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
+    jest.spyOn(ActionData, 'getLocalActionsByPoint').mockResolvedValue([])
+
     it('matches snapshot', async () => {
         render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <LivePointEditScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <LivePointEditScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -170,17 +184,16 @@ describe('LivePointEditScreen', () => {
                     pointNumber: 2,
                 }),
             )
-        let subscriptions: SubscriptionObject
-        jest.spyOn(ActionData, 'subscribe').mockImplementationOnce(
-            async subs => {
-                subscriptions = subs
-            },
-        )
+
+        const emitter = new EventEmitter()
+        jest.spyOn(usePointLocal, 'default').mockReturnValue(emitter)
 
         const { getAllByText, getByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <LivePointEditScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <LivePointEditScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -200,7 +213,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(pull)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, pull)
         })
         fireEvent.press(getByText('they score'))
         await act(async () => {
@@ -211,7 +224,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(theyScore)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, theyScore)
         })
         fireEvent.press(getByText('next point'))
 
@@ -244,17 +257,15 @@ describe('LivePointEditScreen', () => {
                 }),
             )
 
-        let subscriptions: SubscriptionObject
-        jest.spyOn(ActionData, 'subscribe').mockImplementationOnce(
-            async subs => {
-                subscriptions = subs
-            },
-        )
+        const emitter = new EventEmitter()
+        jest.spyOn(usePointLocal, 'default').mockReturnValue(emitter)
 
         const { getAllByText, getByText, getByTestId } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <LivePointEditScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <LivePointEditScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -273,7 +284,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(catchAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[2])
         await act(async () => {
@@ -284,7 +295,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(catchAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[3])
         await act(async () => {
@@ -295,7 +306,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(catchAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[4])
         await act(async () => {
@@ -306,11 +317,14 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(catchAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getByTestId('undo-button'))
         await act(async () => {
-            subscriptions.undo({})
+            emitter.emit(LocalPointEvents.UNDO_LISTEN, {
+                team: 'one',
+                actionNumber: 4,
+            })
         })
         fireEvent.press(getAllByText('score')[4])
         await act(async () => {
@@ -321,7 +335,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(scoreAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, scoreAction)
         })
         fireEvent.press(getByText('next point'))
 
@@ -344,17 +358,16 @@ describe('LivePointEditScreen', () => {
         const finishGameSpy = jest
             .spyOn(GameServices, 'finishGame')
             .mockReturnValueOnce(Promise.resolve(game))
-        let subscriptions: SubscriptionObject
-        jest.spyOn(ActionData, 'subscribe').mockImplementationOnce(
-            async subs => {
-                subscriptions = subs
-            },
-        )
+
+        const emitter = new EventEmitter()
+        jest.spyOn(usePointLocal, 'default').mockReturnValue(emitter)
 
         const { getAllByText, getByText } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <LivePointEditScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <LivePointEditScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -374,7 +387,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(pull)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, pull)
         })
         fireEvent.press(getByText('they score'))
         await act(async () => {
@@ -385,7 +398,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(theyScore)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, theyScore)
         })
         fireEvent.press(getByText('finish game'))
 
@@ -432,7 +445,7 @@ describe('LivePointEditScreen', () => {
             async action => {
                 return {
                     action: ActionFactory.createFromAction({
-                        ...action.action,
+                        ...action,
                         teamNumber: 'two',
                         actionNumber: 1,
                         comments: [],
@@ -456,17 +469,15 @@ describe('LivePointEditScreen', () => {
             },
         )
 
-        let subscriptions: SubscriptionObject
-        jest.spyOn(ActionData, 'subscribe').mockImplementationOnce(
-            async subs => {
-                subscriptions = subs
-            },
-        )
+        const emitter = new EventEmitter()
+        jest.spyOn(usePointLocal, 'default').mockReturnValue(emitter)
 
         const { getAllByText, getByText, getByTestId } = render(
             <NavigationContainer>
                 <Provider store={store}>
-                    <LivePointEditScreen {...props} />
+                    <QueryClientProvider client={client}>
+                        <LivePointEditScreen {...props} />
+                    </QueryClientProvider>
                 </Provider>
             </NavigationContainer>,
         )
@@ -485,7 +496,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(catchAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[2])
         await act(async () => {
@@ -496,7 +507,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(catchAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[3])
         await act(async () => {
@@ -507,7 +518,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(catchAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[4])
         await act(async () => {
@@ -518,11 +529,14 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(catchAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getByTestId('undo-button'))
         await act(async () => {
-            subscriptions.undo({})
+            emitter.emit(LocalPointEvents.UNDO_LISTEN, {
+                team: 'two',
+                actionNumber: 4,
+            })
         })
         fireEvent.press(getAllByText('score')[4])
         await act(async () => {
@@ -533,7 +547,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
-            subscriptions.client(scoreAction)
+            emitter.emit(LocalPointEvents.ACTION_LISTEN, scoreAction)
         })
         fireEvent.press(getByText('next point'))
 
