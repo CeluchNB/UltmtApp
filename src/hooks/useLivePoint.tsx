@@ -16,20 +16,17 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
         useState(false)
 
     useEffect(() => {
-        emitter.removeListener(LocalPointEvents.ACTION_LISTEN)
-        emitter.addListener(LocalPointEvents.ACTION_LISTEN, onActionReceived)
+        emitter.off(LocalPointEvents.ACTION_LISTEN)
+        emitter.on(LocalPointEvents.ACTION_LISTEN, onActionReceived)
 
-        emitter.removeListener(LocalPointEvents.UNDO_LISTEN)
-        emitter.addListener(LocalPointEvents.UNDO_LISTEN, onUndoReceived)
+        emitter.off(LocalPointEvents.UNDO_LISTEN)
+        emitter.on(LocalPointEvents.UNDO_LISTEN, onUndoReceived)
 
-        emitter.removeListener(LocalPointEvents.ERROR_LISTEN)
-        emitter.addListener(LocalPointEvents.ERROR_LISTEN, onActionError)
+        emitter.off(LocalPointEvents.ERROR_LISTEN)
+        emitter.on(LocalPointEvents.ERROR_LISTEN, onActionError)
 
-        emitter.removeListener(LocalPointEvents.NEXT_POINT_LISTEN)
-        emitter.addListener(
-            LocalPointEvents.NEXT_POINT_LISTEN,
-            onNextPointReceived,
-        )
+        emitter.off(LocalPointEvents.NEXT_POINT_LISTEN)
+        emitter.on(LocalPointEvents.NEXT_POINT_LISTEN, onNextPointReceived)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
