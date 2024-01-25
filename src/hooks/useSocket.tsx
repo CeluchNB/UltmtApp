@@ -1,4 +1,3 @@
-import { Platform } from 'react-native'
 import { WEBSOCKET_URL } from '@env'
 import { getGameToken } from '../services/data/game'
 import { Socket, io } from 'socket.io-client'
@@ -19,13 +18,6 @@ const useSocket = (connect = true): Socket | undefined => {
             } else {
                 effectSocket = io(WEBSOCKET_URL)
             }
-
-            effectSocket.io.on('ping', () => {
-                console.log('ping')
-            })
-            effectSocket.io.on('reconnect_attempt', () => {
-                console.log('reconnect_attempt', Platform.OS)
-            })
             setSocket(effectSocket)
         })
     }, [connect])

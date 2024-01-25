@@ -28,7 +28,6 @@ const usePointSocket = (gameId: string, pointId: string) => {
         })
         socket.emit(NetworkPointEvents.JOIN_POINT_EMIT, gameId, pointId)
         socket.io.on('reconnect', () => {
-            console.log('reconnecting to point')
             socket.emit(NetworkPointEvents.JOIN_POINT_EMIT, gameId, pointId)
         })
 
