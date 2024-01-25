@@ -69,19 +69,24 @@ export class PlayerActionList implements ActionList {
     actionList: Action[]
     constructor(
         playerOne: DisplayUser,
-        actionStack: Action[],
+        actionStack: LiveServerActionData[],
         team: TeamNumber,
         pulling: boolean,
     ) {
-        const actions = actionStack.map(action => action.action)
-        this.actionList = getPlayerActionList(playerOne, actions, team, pulling)
+        // const actions = actionStack.map(action => action.action)
+        this.actionList = getPlayerActionList(
+            playerOne,
+            actionStack,
+            team,
+            pulling,
+        )
     }
 }
 
 export class TeamActionList implements ActionList {
     actionList: Action[]
-    constructor(actionStack: Action[], team: TeamNumber) {
-        const actions = actionStack.map(action => action.action)
+    constructor(actions: LiveServerActionData[], team: TeamNumber) {
+        // const actions = actionStack.map(action => action.action)
         this.actionList = getTeamActionList(actions, team)
     }
 }

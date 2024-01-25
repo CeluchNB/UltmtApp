@@ -262,6 +262,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 visible={confirmModalVisible}
                 loading={false}
                 displayText="The stat keeper for the other team has switched the pulling and receiving teams. Do you wish to continue?"
+                confirmColor={colors.textPrimary}
                 onCancel={async () => setConfirmModalVisible(false)}
                 onClose={async () => setConfirmModalVisible(false)}
                 onConfirm={async () => {

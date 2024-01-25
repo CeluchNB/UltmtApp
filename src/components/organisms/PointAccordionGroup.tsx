@@ -53,7 +53,7 @@ const PointAccordionGroup: React.FC<PointAccordionGroupProps> = ({
         }
 
         setExpandedId(id.toString())
-        await onSelectPoint(id.toString())
+        onSelectPoint(id.toString())
     }
 
     return (

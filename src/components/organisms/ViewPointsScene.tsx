@@ -1,35 +1,33 @@
+import { GameViewContext } from '../../context/game-view-context'
 import PointAccordionGroup from './PointAccordionGroup'
-import React from 'react'
 import { ServerActionData } from '../../types/action'
 import { useNavigation } from '@react-navigation/native'
-import { GameViewerData, useTheme } from '../../hooks'
+import { useTheme } from '../../hooks'
+import React, { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 interface ViewPointsScene {
     gameId: string
-    gameViewerData: GameViewerData
 }
 
-const ViewPointsScene: React.FC<ViewPointsScene> = ({
-    gameId,
-    gameViewerData,
-}) => {
+const ViewPointsScene: React.FC<ViewPointsScene> = ({ gameId }) => {
     const navigation = useNavigation()
 
     const {
         theme: { colors },
     } = useTheme()
+
     const {
         activePoint,
         game,
-        loading,
-        displayedActions,
-        error,
+        displayActions,
+        activePointLoading: loading,
         points,
-        onSelectAction,
+        pointError,
         onSelectPoint,
+        onSelectAction,
         onRefresh,
-    } = gameViewerData
+    } = useContext(GameViewContext)
 
     const handleSelectAction = (action: ServerActionData) => {
         const { pointId, live } = onSelectAction(action)
@@ -67,8 +65,8 @@ const ViewPointsScene: React.FC<ViewPointsScene> = ({
                         teamOne={game?.teamOne || { name: '' }}
                         teamTwo={game?.teamTwo || { name: '' }}
                         loading={loading}
-                        displayedActions={displayedActions}
-                        error={error}
+                        displayedActions={displayActions}
+                        error={pointError}
                         onSelectPoint={onSelectPoint}
                         onSelectAction={handleSelectAction}
                         onRefresh={onRefresh}

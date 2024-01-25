@@ -124,6 +124,7 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 onClose={onClose}
                 onCancel={onClose}
                 onConfirm={onDelete}
+                confirmColor={colors.textPrimary}
             />
         </BaseScreen>
     )

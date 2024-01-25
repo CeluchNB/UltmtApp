@@ -1,23 +1,17 @@
 import * as Constants from '../utils/constants'
-import React from 'react'
+import EncryptedStorage from 'react-native-encrypted-storage'
 import { getUserId } from '../services/data/user'
 import { isLoggedIn } from '../services/data/auth'
+import useLivePoint from './useLivePoint'
+import usePointSocket from './usePointSocket'
 import { useQuery } from 'react-query'
 import {
     ActionFactory,
-    LiveServerActionData,
     SavedServerActionData,
     ServerActionData,
-    SubscriptionObject,
 } from '../types/action'
+import React, { useEffect } from 'react'
 import { addComment, deleteComment } from '../services/data/saved-action'
-import {
-    addLiveComment,
-    deleteLiveComment,
-    joinPoint,
-    subscribe,
-    unsubscribe,
-} from '../services/data/live-action'
 import {
     selectLiveAction,
     selectSavedAction,
@@ -36,6 +30,13 @@ export const useCommenter = (
     const liveAction = useSelector(selectLiveAction)
     const savedAction = useSelector(selectSavedAction)
     const { teamOne, teamTwo } = useSelector(selectTeams)
+    const emitter = usePointSocket(gameId, pointId)
+    const {
+        actionStack,
+        error: liveError,
+        onComment,
+        onDeleteComment,
+    } = useLivePoint(emitter)
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState('')
 
@@ -45,41 +46,24 @@ export const useCommenter = (
         )
     }, [live, liveAction, savedAction])
 
+    useEffect(() => {
+        const newAction = actionStack.getAction(
+            liveAction?.teamNumber ?? 'one',
+            liveAction?.actionNumber ?? 0,
+        )
+        if (newAction) {
+            dispatch(setLiveAction(newAction))
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [actionStack])
+
     const { data: isAuth } = useQuery(['isLoggedIn'], () => isLoggedIn(), {
         cacheTime: 0,
     })
     const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
         cacheTime: 0,
     })
-
-    const subscriptions: SubscriptionObject = {
-        client: (data: LiveServerActionData) => {
-            // could get any action of this point here,
-            // only update action if we received an update for this action
-            if (
-                data.actionNumber === liveAction?.actionNumber &&
-                data.teamNumber === liveAction.teamNumber
-            ) {
-                dispatch(setLiveAction(data))
-            }
-        },
-        undo: () => {},
-        error: (data: any) => {
-            setError(data.message)
-        },
-        point: () => {},
-    }
-
-    React.useEffect(() => {
-        if (live) {
-            joinPoint(gameId, pointId)
-            subscribe(subscriptions)
-            return () => {
-                unsubscribe()
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     // public
     const handleSubmitComment = async (comment: string) => {
@@ -94,11 +78,13 @@ export const useCommenter = (
                 )
                 dispatch(setSavedAction(updatedAction))
             } else {
-                await addLiveComment(
-                    gameId,
-                    pointId,
-                    action.action.actionNumber,
-                    (action.action as LiveServerActionData).teamNumber,
+                const jwt =
+                    (await EncryptedStorage.getItem('access_token')) || ''
+
+                onComment(
+                    jwt,
+                    liveAction?.actionNumber ?? 0,
+                    liveAction?.teamNumber ?? 'one',
                     comment,
                 )
             }
@@ -121,12 +107,14 @@ export const useCommenter = (
                 )
                 dispatch(setSavedAction(updatedAction))
             } else {
-                await deleteLiveComment(
-                    gameId,
-                    pointId,
-                    action.action.actionNumber,
-                    (action.action as LiveServerActionData).teamNumber,
-                    commentNumber.toString(),
+                const jwt =
+                    (await EncryptedStorage.getItem('access_token')) || ''
+
+                onDeleteComment(
+                    jwt,
+                    liveAction?.actionNumber ?? 0,
+                    liveAction?.teamNumber ?? 'one',
+                    commentNumber,
                 )
             }
         } catch (e: any) {
@@ -139,7 +127,7 @@ export const useCommenter = (
         teamOne,
         teamTwo,
         loading,
-        error,
+        error: liveError ?? error,
         isAuth,
         userId,
         handleSubmitComment,

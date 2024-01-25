@@ -1,4 +1,3 @@
-import * as ActionData from '../../../src/services/data/live-action'
 import * as GameData from '../../../src/services/data/game'
 import * as PointData from '../../../src/services/data/point'
 import * as StatsData from '../../../src/services/data/stats'
@@ -16,18 +15,16 @@ import {
     ActionFactory,
     ActionType,
     LiveServerActionData,
-    SubscriptionObject,
 } from '../../../src/types/action'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { fetchProfileData, game } from '../../../fixtures/data'
 import {
-    act,
     fireEvent,
     render,
     screen,
     userEvent,
     waitFor,
 } from '@testing-library/react-native'
-import { fetchProfileData, game } from '../../../fixtures/data'
 
 jest.mock('react-native-safe-area-context', () => {
     return {
@@ -74,22 +71,23 @@ jest.mock('react-native-google-mobile-ads', () => {
 })
 
 const mockedNavigate = jest.fn()
+const mockedGoBack = jest.fn()
 jest.mock('@react-navigation/native', () => {
     const actualNav = jest.requireActual('@react-navigation/native')
     return {
         ...actualNav,
         useNavigation: () => ({
             navigate: mockedNavigate,
+            addListener: jest.fn().mockReturnValue(() => {}),
+            goBack: mockedGoBack,
         }),
     }
 })
 
-const goBack = jest.fn()
 const props: ViewGameProps = {
     navigation: {
         addListener: jest.fn().mockReturnValue(() => {}),
         navigate: jest.fn(),
-        goBack,
     } as any,
     route: { params: { gameId: 'game1' } } as any,
 }
@@ -222,7 +220,7 @@ const savedActions: Action[] = [
     },
 ].map(a => ActionFactory.createFromAction(a))
 
-const liveActions: Action[] = [
+const liveActions: LiveServerActionData[] = [
     {
         comments: [],
         tags: ['huck'],
@@ -262,7 +260,7 @@ const liveActions: Action[] = [
             username: 'firstlast2',
         },
     },
-].map(a => ActionFactory.createFromAction(a))
+]
 
 const playerOne = {
     _id: 'user1',
@@ -311,20 +309,15 @@ const client = new QueryClient({
 })
 
 describe('ViewGameScreen', () => {
-    const gameSpy = jest.spyOn(GameData, 'getGameById').mockResolvedValue(game)
+    const gameSpy = jest
+        .spyOn(GameData, 'getGameById')
+        .mockResolvedValue({ ...game, startTime: '2023' } as any)
     const pointsSpy = jest
         .spyOn(GameData, 'getPointsByGame')
         .mockResolvedValue(points)
     const gameStatsSpy = jest
         .spyOn(StatsData, 'getGameStats')
         .mockResolvedValue(gameStats)
-    let subs: SubscriptionObject
-    jest.spyOn(ActionData, 'subscribe').mockImplementation(
-        async subscriptions => {
-            subs = subscriptions
-        },
-    )
-    jest.spyOn(ActionData, 'joinPoint').mockResolvedValue()
 
     beforeAll(() => {
         userEvent.setup()
@@ -347,6 +340,7 @@ describe('ViewGameScreen', () => {
         jest.spyOn(GameData, 'getActiveGames').mockResolvedValue([
             { ...game, offline: false },
         ])
+        jest.spyOn(GameData, 'logGameOpen').mockResolvedValue(game)
     })
 
     it('should match snapshot after data loaded', async () => {
@@ -361,7 +355,7 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(() => {
-            expect(screen.queryAllByText('Temper').length).toBe(4)
+            expect(screen.queryAllByText('Temper').length).toBe(6)
         })
 
         expect(screen.getAllByText('Sockeye').length).toBe(4)
@@ -388,76 +382,8 @@ describe('ViewGameScreen', () => {
 
         fireEvent.press(getAllByText('Temper')[1])
 
-        await waitFor(() => {
-            expect(subs).toBeDefined()
-        })
-
-        await act(async () => {
-            subs.point({})
-        })
-
         expect(gameSpy).toHaveBeenCalled()
         expect(pointsSpy).toHaveBeenCalled()
-    }, 20000)
-
-    it('handles live point functionality', async () => {
-        const { getAllByText, queryByText } = render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
-        )
-
-        await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(4)
-        })
-
-        const livePoint = getAllByText('Temper')[1]
-        fireEvent.press(livePoint)
-
-        await waitFor(async () => {
-            expect(queryByText('huck')).toBeTruthy()
-        })
-
-        act(() => {
-            subs.client({
-                actionNumber: 4,
-                actionType: ActionType.CATCH,
-                tags: ['newaction'],
-                comments: [],
-                playerOne: {
-                    _id: 'player1',
-                    firstName: 'First1',
-                    lastName: 'Last1',
-                    username: 'firstlast1',
-                },
-                teamNumber: 'one',
-            } as LiveServerActionData)
-        })
-
-        await waitFor(async () => {
-            expect(queryByText('newaction')).toBeTruthy()
-        })
-
-        act(() => {
-            subs.undo({ actionNumber: 4, team: 'one' })
-        })
-
-        await waitFor(async () => {
-            expect(queryByText('newaction')).toBeFalsy()
-        })
-
-        act(() => {
-            subs.point({})
-        })
-
-        await waitFor(async () => {
-            expect(gameSpy).toHaveBeenCalledTimes(2)
-        })
-        expect(pointsSpy).toHaveBeenCalledTimes(2)
     }, 20000)
 
     it('handles saved point functionality', async () => {
@@ -472,10 +398,10 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(4)
+            expect(getAllByText('Temper').length).toBe(6)
         })
 
-        const savedPoint = getAllByText('Temper')[2]
+        const savedPoint = getAllByText('Temper')[4]
         fireEvent.press(savedPoint)
 
         await waitFor(async () => {
@@ -495,10 +421,10 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(4)
+            expect(getAllByText('Temper').length).toBe(6)
         })
 
-        const livePoint = getAllByText('Temper')[1]
+        const livePoint = getAllByText('Temper')[2]
         fireEvent.press(livePoint)
 
         await waitFor(async () => {
@@ -554,11 +480,11 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(4)
+            expect(getAllByText('Temper').length).toBe(6)
         })
 
-        const livePoint = getAllByText('Temper')[2]
-        fireEvent.press(livePoint)
+        const savedPoint = getAllByText('Temper')[4]
+        fireEvent.press(savedPoint)
 
         await waitFor(async () => {
             expect(queryAllByText('pickup')).toBeTruthy()
@@ -607,8 +533,9 @@ describe('ViewGameScreen', () => {
         jest.spyOn(GameData, 'getActiveGames').mockResolvedValue([])
         jest.spyOn(GameData, 'getGameById').mockResolvedValue({
             ...game,
+            startTime: '2023',
             teamOneActive: false,
-        })
+        } as any)
         store.dispatch(
             setProfile({
                 ...fetchProfileData,
@@ -627,7 +554,7 @@ describe('ViewGameScreen', () => {
         const spy = jest
             .spyOn(GameData, 'reactivateGame')
             .mockResolvedValueOnce({
-                game: { ...game, offline: false },
+                game: { ...game, startTime: '2023', offline: false } as any,
                 team: 'one',
                 activePoint: undefined,
                 hasActiveActions: false,
@@ -646,7 +573,7 @@ describe('ViewGameScreen', () => {
             </NavigationContainer>,
         )
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(4)
+            expect(getAllByText('Temper').length).toBe(6)
         })
 
         const button = getByTestId('reactivate-button')
@@ -685,7 +612,7 @@ describe('ViewGameScreen', () => {
             </NavigationContainer>,
         )
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(4)
+            expect(getAllByText('Temper').length).toBe(6)
         })
 
         const button = getByTestId('delete-button')
@@ -695,7 +622,7 @@ describe('ViewGameScreen', () => {
         fireEvent.press(confirmBtn)
 
         await waitFor(async () => {
-            expect(goBack).toHaveBeenCalled()
+            expect(mockedGoBack).toHaveBeenCalled()
         })
         expect(spy).toHaveBeenCalled()
     }, 20000)
@@ -712,7 +639,7 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(() => {
-            expect(screen.queryAllByText('Temper').length).toBe(4)
+            expect(screen.queryAllByText('Temper').length).toBe(6)
             expect(screen.queryAllByText('Overview').length).toBe(2)
         })
 

@@ -776,7 +776,7 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                   style={
                     {
                       "color": "#FFB4AB",
-                      "width": "80%",
+                      "width": "75%",
                     }
                   }
                 />
@@ -3342,7 +3342,7 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                   style={
                     {
                       "color": "#FFB4AB",
-                      "width": "80%",
+                      "width": "75%",
                     }
                   }
                 />

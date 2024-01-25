@@ -484,6 +484,16 @@ exports[`Live CommentScreen should match snapshot 1`] = `
               testID="comment-input"
               value=""
             />
+            <Text
+              style={
+                {
+                  "color": "#FFB4AB",
+                  "fontSize": 20.54794520547945,
+                }
+              }
+            >
+              Live error
+            </Text>
           </View>
           <View>
             <Text

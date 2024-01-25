@@ -1,4 +1,5 @@
 import Point from '../../../src/types/point'
+import { PointEditContext } from '../../../src/context/point-edit-context'
 import { Provider } from 'react-redux'
 import React from 'react'
 import TeamActionView from '../../../src/components/organisms/TeamActionView'
@@ -136,8 +137,6 @@ const teamOneActivePlayers = playerList1.slice(0, 7)
 
 const props = {
     actions,
-    activePlayers: teamOneActivePlayers,
-    onAction: jest.fn(),
 }
 
 const point: Point = {
@@ -168,7 +167,14 @@ beforeEach(() => {
     )
     store.dispatch(setTeam('one'))
     store.dispatch(setPoint(point))
-    props.onAction.mockClear()
+})
+
+beforeAll(() => {
+    jest.useFakeTimers({ legacyFakeTimers: true })
+})
+
+afterAll(() => {
+    jest.useRealTimers()
 })
 
 it('should match snapshot', () => {
@@ -181,20 +187,38 @@ it('should match snapshot', () => {
 })
 
 it('should handle non-substitution press', () => {
+    const onAction = jest.fn()
     const { getByText } = render(
         <Provider store={store}>
-            <TeamActionView {...props} />
+            <PointEditContext.Provider
+                value={
+                    {
+                        onAction,
+                        activePlayers: teamOneActivePlayers,
+                    } as any
+                }>
+                <TeamActionView {...props} />
+            </PointEditContext.Provider>
         </Provider>,
     )
     fireEvent.press(getByText(ActionType.TIMEOUT.toString()))
 
-    expect(props.onAction).toHaveBeenCalledWith(actions[0])
+    expect(onAction).toHaveBeenCalledWith(actions[0])
 })
 
 it('should handle non-substitution long press', async () => {
+    const onAction = jest.fn()
     const { getByText, queryByText } = render(
         <Provider store={store}>
-            <TeamActionView {...props} />
+            <PointEditContext.Provider
+                value={
+                    {
+                        onAction,
+                        activePlayers: teamOneActivePlayers,
+                    } as any
+                }>
+                <TeamActionView {...props} />
+            </PointEditContext.Provider>
         </Provider>,
     )
 
@@ -208,13 +232,22 @@ it('should handle non-substitution long press', async () => {
         expect(queryByText('Tags')).not.toBeTruthy()
     })
     expect(actions[0].setTags).toHaveBeenCalledWith(['huck'])
-    expect(props.onAction).toHaveBeenCalledWith(actions[0])
+    expect(onAction).toHaveBeenCalledWith(actions[0])
 })
 
 it('should handle tag modal non submit', async () => {
+    const onAction = jest.fn()
     const { getByText, queryByText, getAllByTestId } = render(
         <Provider store={store}>
-            <TeamActionView {...props} />
+            <PointEditContext.Provider
+                value={
+                    {
+                        onAction: onAction,
+                        activePlayers: teamOneActivePlayers,
+                    } as any
+                }>
+                <TeamActionView {...props} />
+            </PointEditContext.Provider>
         </Provider>,
     )
 
@@ -226,13 +259,22 @@ it('should handle tag modal non submit', async () => {
     await waitFor(() => {
         expect(queryByText('Tags')).not.toBeTruthy()
     })
-    expect(props.onAction).not.toHaveBeenCalledWith(actions[0])
+    expect(onAction).not.toHaveBeenCalledWith(actions[0])
 })
 
 it('should handle substitution press', async () => {
+    const onAction = jest.fn()
     const { getByText, queryByText } = render(
         <Provider store={store}>
-            <TeamActionView {...props} />
+            <PointEditContext.Provider
+                value={
+                    {
+                        onAction: onAction,
+                        activePlayers: teamOneActivePlayers,
+                    } as any
+                }>
+                <TeamActionView {...props} />
+            </PointEditContext.Provider>
         </Provider>,
     )
 
@@ -251,13 +293,20 @@ it('should handle substitution press', async () => {
         playerList1[0],
         playerList1[9],
     )
-    expect(props.onAction).toHaveBeenCalledWith(actions[2])
+    expect(onAction).toHaveBeenCalledWith(actions[2])
 })
 
 it('should handle subsitution long press', async () => {
     const { getByText, queryByText } = render(
         <Provider store={store}>
-            <TeamActionView {...props} />
+            <PointEditContext.Provider
+                value={
+                    {
+                        activePlayers: teamOneActivePlayers,
+                    } as any
+                }>
+                <TeamActionView {...props} />
+            </PointEditContext.Provider>
         </Provider>,
     )
 
