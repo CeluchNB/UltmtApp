@@ -56,18 +56,173 @@ exports[`should match snapshot with data 1`] = `
       >
         Join Passcode:
       </Text>
-      <Text
+      <View
         style={
           {
-            "color": "#ffd600",
-            "fontSize": 61.64383561643835,
-            "fontWeight": "900",
-            "textAlign": "center",
+            "display": "flex",
+            "flexDirection": "row",
+            "width": "100%",
           }
         }
       >
-        111111
-      </Text>
+        <Text
+          style={
+            {
+              "alignSelf": "center",
+              "color": "#ffd600",
+              "flex": 1,
+              "fontSize": 61.64383561643835,
+              "fontWeight": "900",
+              "textAlign": "center",
+            }
+          }
+        >
+          111111
+        </Text>
+        <View
+          collapsable={false}
+          style={
+            {
+              "backgroundColor": "transparent",
+              "borderRadius": 18,
+              "height": 36,
+              "margin": 6,
+              "marginTop": 10,
+              "shadowColor": "#000",
+              "shadowOffset": {
+                "height": 0,
+                "width": 0,
+              },
+              "shadowOpacity": 0,
+              "shadowRadius": 0,
+              "width": 36,
+            }
+          }
+          testID="icon-button-container-outer-layer"
+        >
+          <View
+            collapsable={false}
+            style={
+              {
+                "backgroundColor": "transparent",
+                "borderColor": "rgba(121, 116, 126, 1)",
+                "borderRadius": 18,
+                "borderWidth": 0,
+                "elevation": 0,
+                "flex": 1,
+                "overflow": "hidden",
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 0,
+                "shadowRadius": 0,
+              }
+            }
+            testID="icon-button-container"
+          >
+            <View
+              accessibilityComponentType="button"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": false,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityTraits="button"
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              centered={true}
+              collapsable={false}
+              focusable={true}
+              hitSlop={
+                {
+                  "bottom": 6,
+                  "left": 6,
+                  "right": 6,
+                  "top": 6,
+                }
+              }
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                [
+                  {
+                    "overflow": "hidden",
+                  },
+                  [
+                    {
+                      "alignItems": "center",
+                      "flexGrow": 1,
+                      "justifyContent": "center",
+                    },
+                    {
+                      "borderRadius": 18,
+                    },
+                  ],
+                ]
+              }
+              testID="icon-button"
+            >
+              <Text
+                accessibilityElementsHidden={true}
+                allowFontScaling={false}
+                importantForAccessibility="no-hide-descendants"
+                pointerEvents="none"
+                selectable={false}
+                style={
+                  [
+                    {
+                      "color": "#ffd600",
+                      "fontSize": 20,
+                    },
+                    [
+                      {
+                        "lineHeight": 20,
+                        "transform": [
+                          {
+                            "scaleX": 1,
+                          },
+                        ],
+                      },
+                      {
+                        "backgroundColor": "transparent",
+                      },
+                    ],
+                    {
+                      "fontFamily": "Material Design Icons",
+                      "fontStyle": "normal",
+                      "fontWeight": "normal",
+                    },
+                    {},
+                  ]
+                }
+              >
+                󰋗
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
     </View>
     <View
       style={
@@ -397,6 +552,14 @@ exports[`should match snapshot with data 1`] = `
         </View>
       </View>
     </View>
+    <Modal
+      animationType="slide"
+      hardwareAccelerated={false}
+      onRequestClose={[Function]}
+      testID="base-modal"
+      transparent={true}
+      visible={false}
+    />
   </View>
 </RCTSafeAreaView>
 `;

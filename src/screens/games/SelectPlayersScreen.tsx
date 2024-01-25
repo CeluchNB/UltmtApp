@@ -158,6 +158,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         setPullingChip: {
             backgroundColor: colors.primary,
             borderColor: colors.textPrimary,
+            margin: 5,
         },
         setPullingText: {
             color: colors.textPrimary,
@@ -176,7 +177,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                     testID="players-flat-list"
                     ListHeaderComponent={
                         <View>
-                            <GameHeader header game={game} />
+                            <GameHeader header editing game={game} />
                             <Text style={styles.description}>
                                 {game.playersPerPoint} players on next{' '}
                                 {isPulling(point, game, team) ? 'D ' : 'O '}

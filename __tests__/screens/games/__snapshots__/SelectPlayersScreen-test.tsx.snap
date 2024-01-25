@@ -57,6 +57,7 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
         ListHeaderComponent={
           <View>
             <GameHeader
+              editing={true}
               game={
                 {
                   "_id": "game1",
@@ -216,6 +217,7 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                   {
                     "backgroundColor": "#303030",
                     "borderColor": "#ffd600",
+                    "margin": 5,
                   }
                 }
                 testID="active-warning-chip"
@@ -609,6 +611,7 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                     {
                       "backgroundColor": "#303030",
                       "borderRadius": 8,
+                      "margin": 5,
                       "shadowColor": "#000",
                       "shadowOffset": {
                         "height": 0,
@@ -2623,6 +2626,7 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
         ListHeaderComponent={
           <View>
             <GameHeader
+              editing={true}
               game={
                 {
                   "_id": "game1",
@@ -2782,6 +2786,7 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                   {
                     "backgroundColor": "#303030",
                     "borderColor": "#ffd600",
+                    "margin": 5,
                   }
                 }
                 testID="active-warning-chip"
@@ -3175,6 +3180,7 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                     {
                       "backgroundColor": "#303030",
                       "borderRadius": 8,
+                      "margin": 5,
                       "shadowColor": "#000",
                       "shadowOffset": {
                         "height": 0,

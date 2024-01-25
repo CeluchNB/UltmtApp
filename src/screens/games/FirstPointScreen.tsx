@@ -1,12 +1,14 @@
 import { AppDispatch } from '../../store/store'
+import BaseModal from '../../components/atoms/BaseModal'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import { FirstPointProps } from '../../types/navigation'
+import { IconButton } from 'react-native-paper'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
 import { createPoint } from '../../store/reducers/features/point/livePointReducer'
 import { selectGame } from '../../store/reducers/features/game/liveGameReducer'
 import { useTheme } from '../../hooks'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import {
     selectCreateError,
@@ -24,6 +26,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
     const createStatus = useSelector(selectCreateStatus)
     const createError = useSelector(selectCreateError)
     const point = useSelector(selectPoint)
+    const [showJoinModal, setShowJoinModal] = useState(false)
 
     const onCreate = async (isPulling: boolean) => {
         dispatch(
@@ -32,6 +35,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
     }
 
     useEffect(() => {
+        // TODO: refactor away from this pattern
         if (createStatus === 'success') {
             navigation.navigate('SelectPlayers')
         }
@@ -58,6 +62,13 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
             fontSize: size.fontThirty,
             fontWeight: weight.full,
             textAlign: 'center',
+            alignSelf: 'center',
+            flex: 1,
+        },
+        joinCodeContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            width: '100%',
         },
         button: {
             marginTop: 10,
@@ -67,6 +78,13 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
             fontSize: size.fontFifteen,
             marginTop: 10,
         },
+        modalButton: {
+            margin: 5,
+        },
+        text: {
+            fontSize: size.fontTwenty,
+            color: colors.textPrimary,
+        },
     })
 
     return (
@@ -74,7 +92,18 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
             <ScreenTitle style={styles.title} title="First Point" />
             <View style={styles.container}>
                 <Text style={styles.description}>Join Passcode:</Text>
-                <Text style={styles.passcode}>{game.resolveCode}</Text>
+                <View style={styles.joinCodeContainer}>
+                    <Text style={styles.passcode}>{game.resolveCode}</Text>
+                    <IconButton
+                        style={styles.button}
+                        iconColor={colors.textPrimary}
+                        icon="help-circle"
+                        size={20}
+                        onPress={() => {
+                            setShowJoinModal(true)
+                        }}
+                    />
+                </View>
             </View>
             <View style={styles.container}>
                 <Text style={styles.description}>My team is</Text>
@@ -100,6 +129,26 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
                     <Text style={styles.errorText}>{createError}</Text>
                 )}
             </View>
+            <BaseModal
+                visible={showJoinModal}
+                onClose={() => {
+                    setShowJoinModal(false)
+                }}>
+                <Text style={styles.text}>
+                    You can give this code to the other team's stat keeper. The
+                    other stat keeper can join this game by selecting "Join
+                    Existing Game" on the "Select Opponent" page, searching for
+                    this game, then entering in this code when prompted.
+                </Text>
+                <PrimaryButton
+                    style={[styles.button]}
+                    text="confirm"
+                    onPress={() => {
+                        setShowJoinModal(false)
+                    }}
+                    loading={false}
+                />
+            </BaseModal>
         </BaseScreen>
     )
 }

@@ -122,7 +122,7 @@ const PointEditView: React.FC<{ navigation: any }> = ({ navigation }) => {
                 renderItem={() => <View />}
                 ListHeaderComponent={
                     <View style={styles.container}>
-                        <GameHeader header game={game} />
+                        <GameHeader header editing game={game} />
                         <LivePointUtilityBar
                             error={error}
                             loading={waiting}
