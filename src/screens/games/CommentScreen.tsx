@@ -14,6 +14,7 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
     const {
         theme: { colors },
     } = useTheme()
+
     const {
         action,
         teamOne,

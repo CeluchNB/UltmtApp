@@ -66,6 +66,13 @@ describe('PlayerActionItem', () => {
             setTags: jest.fn(),
         },
     ]
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     it('should match snapshot', () => {
         const snapshot = render(
             <Provider store={store}>

@@ -29,7 +29,7 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
         },
         error: {
             color: colors.error,
-            width: '80%',
+            width: '75%',
         },
     })
 

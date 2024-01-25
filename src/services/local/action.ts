@@ -59,15 +59,22 @@ export const upsertAction = async (
 ): Promise<LiveServerActionData & { _id: string; pointId: string }> => {
     const realm = await getRealm()
 
+    const currentActionQuery = await realm.objects<ActionSchema>('Action')
+    const currentAction = currentActionQuery.filtered(
+        `teamNumber == "${action.teamNumber}" && actionNumber == ${action.actionNumber} && pointId == "${pointId}"`,
+    )[0]
+
+    const currentId = currentAction?._id
+    const newAction = new ActionSchema(action, pointId, currentId)
     realm.write(() => {
         realm.create<ActionSchema>(
             'Action',
-            new ActionSchema(action, pointId),
+            { ...newAction },
             Realm.UpdateMode.Modified,
         )
     })
-    const actions = await realm.objects<ActionSchema>('Action')
-    const result = actions.filtered(
+    const allActions = await realm.objects<ActionSchema>('Action')
+    const result = allActions.filtered(
         `teamNumber == "${action.teamNumber}" && actionNumber == ${action.actionNumber} && pointId == "${pointId}"`,
     )[0]
 

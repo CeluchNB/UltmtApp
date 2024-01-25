@@ -13,7 +13,7 @@ exports[`LivePointStatus matches base snapshot 1`] = `
     style={
       {
         "color": "#FFB4AB",
-        "width": "80%",
+        "width": "75%",
       }
     }
   />
@@ -317,7 +317,7 @@ exports[`LivePointStatus matches snapshot while loading 1`] = `
     style={
       {
         "color": "#FFB4AB",
-        "width": "80%",
+        "width": "75%",
       }
     }
   />

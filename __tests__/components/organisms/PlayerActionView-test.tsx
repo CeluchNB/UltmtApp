@@ -1,15 +1,10 @@
 import { DisplayUser } from '../../../src/types/user'
 import PlayerActionView from '../../../src/components/organisms/PlayerActionView'
+import { PointEditContext } from '../../../src/context/point-edit-context'
 import { Provider } from 'react-redux'
 import React from 'react'
-import { debounce } from 'lodash'
 import store from '../../../src/store/store'
-import {
-    Action,
-    ActionFactory,
-    ActionType,
-    LiveServerActionData,
-} from '../../../src/types/action'
+import { ActionType, LiveServerActionData } from '../../../src/types/action'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 const playerList1: DisplayUser[] = [
@@ -57,8 +52,8 @@ const playerList1: DisplayUser[] = [
     },
 ]
 
-const actionStack: Action[] = [
-    ActionFactory.createFromAction({
+const actionStack: LiveServerActionData[] = [
+    {
         actionType: ActionType.CATCH,
         actionNumber: 1,
         playerOne: playerList1[2],
@@ -66,21 +61,27 @@ const actionStack: Action[] = [
         tags: [],
         teamNumber: 'one',
         comments: [],
-    } as LiveServerActionData),
+    },
 ]
 
 describe('PlayerActionView', () => {
     it('should match snapshot', () => {
         const snapshot = render(
             <Provider store={store}>
-                <PlayerActionView
-                    players={playerList1}
-                    pulling={false}
-                    loading={true}
-                    onAction={debounce(jest.fn())}
-                    actionStack={actionStack}
-                    team={'one'}
-                />
+                <PointEditContext.Provider
+                    value={
+                        {
+                            activePlayers: playerList1,
+                            onAction: jest.fn(),
+                        } as any
+                    }>
+                    <PlayerActionView
+                        pulling={false}
+                        loading={true}
+                        actionStack={actionStack}
+                        team={'one'}
+                    />
+                </PointEditContext.Provider>
             </Provider>,
         )
 
@@ -91,14 +92,20 @@ describe('PlayerActionView', () => {
         const actionFn = jest.fn()
         const { getAllByText } = render(
             <Provider store={store}>
-                <PlayerActionView
-                    players={playerList1}
-                    pulling={false}
-                    loading={false}
-                    onAction={debounce(actionFn)}
-                    actionStack={actionStack}
-                    team={'one'}
-                />
+                <PointEditContext.Provider
+                    value={
+                        {
+                            activePlayers: playerList1,
+                            onAction: actionFn,
+                        } as any
+                    }>
+                    <PlayerActionView
+                        pulling={false}
+                        loading={false}
+                        actionStack={actionStack}
+                        team={'one'}
+                    />
+                </PointEditContext.Provider>
             </Provider>,
         )
 

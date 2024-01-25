@@ -39,7 +39,7 @@ const GameStatsScreen: React.FC<GameStatsProps> = ({ route }) => {
         data: game,
         isLoading,
         error,
-    } = useQuery(['gameById', { gameId }], () => getGameById(gameId))
+    } = useQuery([{ getGameById: gameId }], () => getGameById(gameId))
 
     const mapTabNameToIndex = (name: 'teamOne' | 'teamTwo'): number => {
         switch (name) {

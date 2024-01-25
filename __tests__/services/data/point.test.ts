@@ -478,7 +478,7 @@ describe('test get live actions by point', () => {
             } as AxiosResponse),
         )
         const result = await getLiveActionsByPoint('one', 'point1')
-        expect(result).toEqual([ActionFactory.createFromAction(liveAction)])
+        expect(result).toEqual([liveAction])
     })
 
     it('should handle network failure', async () => {

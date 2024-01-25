@@ -1,190 +1,26 @@
-import * as AuthServices from '../../../src/services/data/auth'
 import * as Constants from '../../../src/utils/constants'
-import * as LiveActionNetwork from '../../../src/services/network/live-action'
 import * as LocalActionServices from '../../../src/services/local/action'
 import * as LocalPointServices from '../../../src/services/local/point'
 import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { point } from '../../../fixtures/data'
 import {
-    Action,
     ActionFactory,
     ActionType,
+    ClientActionData,
     LiveServerActionData,
-    SubscriptionObject,
 } from '../../../src/types/action'
 import {
-    addAction,
-    addLiveComment,
     createOfflineAction,
-    deleteLiveComment,
     deleteLocalAction,
-    joinPoint,
-    nextPoint,
     saveLocalAction,
-    subscribe,
-    undoAction,
     undoOfflineAction,
-    unsubscribe,
 } from '../../../src/services/data/live-action'
 
 afterEach(() => {
     RNEncryptedStorage.getItem.mockReset()
     RNEncryptedStorage.setItem.mockReset()
     jest.resetAllMocks()
-})
-
-describe('basic actions', () => {
-    it('add action', async () => {
-        const spy = jest
-            .spyOn(LiveActionNetwork, 'createAction')
-            .mockReturnValue(Promise.resolve())
-
-        const action = { actionType: ActionType.PULL, tags: [] }
-        await addAction({ action } as unknown as Action, 'point1')
-        expect(spy).toHaveBeenCalledWith(action, 'point1')
-    })
-
-    it('join point', async () => {
-        const spy = jest
-            .spyOn(LiveActionNetwork, 'joinPoint')
-            .mockReturnValue(Promise.resolve())
-
-        await joinPoint('game1', 'point1')
-        expect(spy).toHaveBeenCalledWith('game1', 'point1')
-    })
-
-    it('next point', async () => {
-        const spy = jest
-            .spyOn(LiveActionNetwork, 'nextPoint')
-            .mockReturnValue(Promise.resolve())
-
-        await nextPoint('point2')
-        expect(spy).toHaveBeenCalledWith('point2')
-    })
-
-    it('subscribe', async () => {
-        const spy = jest
-            .spyOn(LiveActionNetwork, 'subscribe')
-            .mockReturnValue(Promise.resolve())
-
-        const subs: SubscriptionObject = {
-            client: () => {},
-            undo: () => {},
-            error: () => {},
-            point: () => {},
-        }
-        await subscribe(subs)
-        expect(spy).toHaveBeenCalledWith(subs)
-    })
-
-    it('undo action', async () => {
-        const spy = jest
-            .spyOn(LiveActionNetwork, 'undoAction')
-            .mockReturnValue(Promise.resolve())
-
-        await undoAction('point1')
-        expect(spy).toHaveBeenCalledWith('point1')
-    })
-
-    it('unsubscribe', () => {
-        const spy = jest
-            .spyOn(LiveActionNetwork, 'unsubscribe')
-            .mockReturnValue()
-
-        unsubscribe()
-        expect(spy).toHaveBeenCalledWith()
-    })
-})
-
-describe('comment actions', () => {
-    describe('add comment', () => {
-        it('with successful refresh', async () => {
-            jest.spyOn(
-                AuthServices,
-                'refreshTokenIfNecessary',
-            ).mockReturnValueOnce(Promise.resolve())
-            const spy = jest
-                .spyOn(LiveActionNetwork, 'addComment')
-                .mockReturnValue(Promise.resolve())
-            spy.mockReset()
-
-            await addLiveComment('game1', 'point1', 1, 'one', 'test')
-            expect(spy).toHaveBeenCalledWith(
-                '',
-                'game1',
-                'point1',
-                1,
-                'one',
-                'test',
-            )
-        })
-
-        it('with unsuccessful refresh', async () => {
-            jest.spyOn(
-                AuthServices,
-                'refreshTokenIfNecessary',
-            ).mockReturnValueOnce(Promise.reject())
-            const spy = jest
-                .spyOn(LiveActionNetwork, 'addComment')
-                .mockReturnValue(Promise.resolve())
-            spy.mockReset()
-
-            await addLiveComment('game1', 'point1', 1, 'one', 'test')
-            expect(spy).toHaveBeenCalledWith(
-                '',
-                'game1',
-                'point1',
-                1,
-                'one',
-                'test',
-            )
-        })
-    })
-
-    describe('delete live comment', () => {
-        it('with successful network call', async () => {
-            jest.spyOn(
-                AuthServices,
-                'refreshTokenIfNecessary',
-            ).mockReturnValueOnce(Promise.resolve())
-            const spy = jest
-                .spyOn(LiveActionNetwork, 'deleteComment')
-                .mockReturnValue(Promise.resolve())
-            spy.mockReset()
-
-            await deleteLiveComment('game1', 'point1', 1, 'one', '1')
-            expect(spy).toHaveBeenCalledWith(
-                '',
-                'game1',
-                'point1',
-                1,
-                'one',
-                '1',
-            )
-        })
-
-        it('with unsuccessful network call', async () => {
-            jest.spyOn(
-                AuthServices,
-                'refreshTokenIfNecessary',
-            ).mockReturnValueOnce(Promise.reject())
-            const spy = jest
-                .spyOn(LiveActionNetwork, 'deleteComment')
-                .mockReturnValue(Promise.resolve())
-            spy.mockReset()
-
-            await deleteLiveComment('game1', 'point1', 1, 'one', '1')
-            expect(spy).toHaveBeenCalledWith(
-                '',
-                'game1',
-                'point1',
-                1,
-                'one',
-                '1',
-            )
-        })
-    })
 })
 
 describe('save local action', () => {
@@ -354,36 +190,6 @@ describe('save local action', () => {
         expect(mockGetPoint).toHaveBeenCalled()
         expect(mockSavePoint).toHaveBeenCalled()
     })
-
-    // TODO: this test causes issues - I think we are missing a mock for most of these tests
-    // causing flakiness
-    // it('handles local error', async () => {
-    //     const action: LiveServerActionData = {
-    //         actionNumber: 1,
-    //         actionType: ActionType.SUBSTITUTION,
-    //         teamNumber: 'two',
-    //         playerOne: {
-    //             _id: 'user1',
-    //             firstName: 'First 1',
-    //             lastName: 'Last 1',
-    //             username: 'user1',
-    //         },
-    //         playerTwo: {
-    //             _id: 'user2',
-    //             firstName: 'First 2',
-    //             lastName: 'Last 2',
-    //             username: 'user2',
-    //         },
-    //         tags: [],
-    //         comments: [],
-    //     }
-    //     jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
-    //         Promise.reject({ message: 'test error' }),
-    //     )
-    //     await expect(saveLocalAction(action, 'point1')).rejects.toMatchObject({
-    //         message: Constants.GET_ACTION_ERROR,
-    //     })
-    // })
 })
 
 describe('delete local action', () => {
@@ -473,18 +279,18 @@ describe('create offline action', () => {
 
         const { action: resultAction } = await createOfflineAction(
             {
-                action: {
-                    tags: [],
-                    actionType: action.actionType,
-                    playerOne: action.playerOne,
-                    playerTwo: action.playerTwo,
-                    comments: [],
-                    actionNumber: 1,
-                },
-                reporterDisplay: action.actionType,
-                viewerDisplay: action.actionType,
-                setPlayersAndUpdateViewerDisplay: jest.fn(),
-                setTags: jest.fn(),
+                // action: {
+                tags: [],
+                actionType: action.actionType,
+                playerOne: action.playerOne,
+                playerTwo: action.playerTwo,
+                // comments: [],
+                // actionNumber: 1,
+                // },
+                // reporterDisplay: action.actionType,
+                // viewerDisplay: action.actionType,
+                // setPlayersAndUpdateViewerDisplay: jest.fn(),
+                // setTags: jest.fn(),
             },
             'point1',
         )
@@ -500,7 +306,7 @@ describe('create offline action', () => {
         )
 
         await expect(
-            createOfflineAction({} as Action, 'point1'),
+            createOfflineAction({} as ClientActionData, 'point1'),
         ).rejects.toMatchObject({ message: Constants.GET_ACTION_ERROR })
     })
 })
