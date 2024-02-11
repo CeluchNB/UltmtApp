@@ -60,7 +60,7 @@ exports[`should match snapshot with team one 1`] = `
         }
       }
       accessible={true}
-      focusable={false}
+      focusable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
@@ -2266,7 +2266,7 @@ exports[`should match snapshot with team two 1`] = `
         }
       }
       accessible={true}
-      focusable={false}
+      focusable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}

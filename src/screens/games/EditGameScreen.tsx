@@ -5,7 +5,7 @@ import GameForm from '../../components/organisms/GameForm'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { StyleSheet, Text } from 'react-native'
+import { ScrollView, StyleSheet, Text } from 'react-native'
 import { useGameEditor, useTheme } from '../../hooks'
 
 const EditGameScreen: React.FC<EditGameProps> = ({ navigation }) => {
@@ -52,15 +52,19 @@ const EditGameScreen: React.FC<EditGameProps> = ({ navigation }) => {
         },
     })
     return (
-        <BaseScreen containerWidth={80}>
-            <GameForm control={control} errors={errors} />
-            {error.length > 0 && <Text style={styles.errorText}>{error}</Text>}
-            <PrimaryButton
-                text="make updates"
-                loading={loading}
-                onPress={onSubmit}
-            />
-        </BaseScreen>
+        <ScrollView>
+            <BaseScreen containerWidth={80}>
+                <GameForm control={control} errors={errors} />
+                {error.length > 0 && (
+                    <Text style={styles.errorText}>{error}</Text>
+                )}
+                <PrimaryButton
+                    text="make updates"
+                    loading={loading}
+                    onPress={onSubmit}
+                />
+            </BaseScreen>
+        </ScrollView>
     )
 }
 

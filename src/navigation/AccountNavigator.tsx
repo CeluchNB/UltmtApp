@@ -74,7 +74,11 @@ const AccountNavigator: React.FC<{}> = () => {
                 component={RequestUserScreen}
                 initialParams={{ type: RequestType.PLAYER }}
             />
-            <Stack.Screen name="RolloverTeam" component={RolloverTeamScreen} />
+            <Stack.Screen
+                name="RolloverTeam"
+                component={RolloverTeamScreen}
+                options={{ headerBackTitle: 'Settings' }}
+            />
             <Stack.Screen
                 name="PublicUserDetails"
                 component={PublicUserScreen}

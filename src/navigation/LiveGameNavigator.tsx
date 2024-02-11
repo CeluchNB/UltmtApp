@@ -35,6 +35,7 @@ const LiveGameNavigator: React.FC<{}> = () => {
                     },
                     headerTintColor: colors.textPrimary,
                     title: 'Edit Game',
+                    headerBackTitle: 'Back',
                 }}
             />
         </Stack.Navigator>

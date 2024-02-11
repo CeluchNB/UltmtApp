@@ -325,6 +325,8 @@ exports[`should match snapshot 1`] = `
             "alignSelf": "center",
             "backgroundColor": "#303030",
             "color": "#ffd600",
+            "margin": 0,
+            "pickerStyleType": "dropdown",
             "width": "75%",
           }
         }
