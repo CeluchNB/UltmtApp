@@ -15,10 +15,8 @@ import {
 } from 'react-native'
 import {
     fetchProfile,
-    // leaveManagerRole,
     leaveTeam,
     selectArchiveTeams,
-    // selectLeaveManagerError,
     selectManagerTeams,
     selectPlayerTeams,
 } from '../store/reducers/features/account/accountReducer'
@@ -45,9 +43,6 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
     const playerTeams = useSelector(selectPlayerTeams)
     const managerTeams = useSelector(selectManagerTeams)
     const archiveTeams = useSelector(selectArchiveTeams)
-    // const leaveManagerError = useSelector(selectLeaveManagerError)
-
-    // const [leaveManagerTeamId, setLeaveManagerTeamId] = React.useState('')
     const [refreshing, setRefreshing] = React.useState(false)
 
     React.useEffect(() => {

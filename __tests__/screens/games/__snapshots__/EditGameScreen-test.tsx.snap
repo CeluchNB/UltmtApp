@@ -379,6 +379,7 @@ exports[`EditGameScreen matches snapshot 1`] = `
                         placeholder="12:00am"
                         placeholderTextColor="#ffd600"
                         selectionColor="#ffd600"
+                        showSoftInputOnFocus={false}
                         style={
                           [
                             {

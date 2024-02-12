@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as TeamData from '../services/data/team'
+import { Button } from 'react-native-paper'
 import { CreateTeam } from '../types/team'
 import { CreateTeamProps } from '../types/navigation'
 import { Picker } from '@react-native-picker/picker'
@@ -11,8 +12,15 @@ import { getFormFieldRules } from '../utils/form-utils'
 import { useQuery } from 'react-query'
 import { useTheme } from '../hooks'
 import validator from 'validator'
+import {
+    ActionSheetIOS,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import { Control, Controller, useForm, useWatch } from 'react-hook-form'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 interface CreateTeamFormData {
     place: string
@@ -169,6 +177,9 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
             width: '75%',
             alignSelf: 'center',
         },
+        datePickerButton: {
+            flexDirection: 'row-reverse',
+        },
     })
 
     return (
@@ -246,24 +257,52 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
                     name="season"
                     control={control}
                     rules={{ required: true }}
-                    render={({ field: { onChange, value } }) => (
-                        <Picker
-                            style={styles.picker}
-                            selectedValue={value}
-                            itemStyle={{ color: colors.textPrimary }}
-                            prompt="Season"
-                            onValueChange={onChange}>
-                            {years.map(year => {
-                                return (
-                                    <Picker.Item
-                                        value={year}
-                                        label={year}
-                                        key={year}
-                                    />
-                                )
-                            })}
-                        </Picker>
-                    )}
+                    render={({ field: { onChange, value } }) => {
+                        if (Platform.OS === 'android') {
+                            return (
+                                <Picker
+                                    style={styles.picker}
+                                    selectedValue={value}
+                                    itemStyle={{ color: colors.textPrimary }}
+                                    dropdownIconColor={colors.textPrimary}
+                                    prompt="Season"
+                                    onValueChange={onChange}>
+                                    {years.map(year => {
+                                        return (
+                                            <Picker.Item
+                                                value={year}
+                                                label={year}
+                                                key={year}
+                                            />
+                                        )
+                                    })}
+                                </Picker>
+                            )
+                        } else {
+                            return (
+                                <Button
+                                    textColor={colors.textPrimary}
+                                    contentStyle={styles.datePickerButton}
+                                    icon="chevron-down"
+                                    onPress={() => {
+                                        ActionSheetIOS.showActionSheetWithOptions(
+                                            {
+                                                options: [...years, 'Cancel'],
+                                                cancelButtonIndex: years.length,
+                                                userInterfaceStyle: 'dark',
+                                            },
+                                            (buttonIndex: number) => {
+                                                if (buttonIndex === 3) return
+
+                                                onChange(years[buttonIndex])
+                                            },
+                                        )
+                                    }}>
+                                    {value}
+                                </Button>
+                            )
+                        }
+                    }}
                 />
                 {error.length > 0 && <Text style={styles.error}>{error}</Text>}
                 <TeamDisplayPreview control={control} />
