@@ -32,7 +32,7 @@ const GameNavigator: React.FC<{}> = () => {
             <Stack.Screen
                 name="GameSearch"
                 component={GameSearchScreen}
-                options={{ title: '' }}
+                options={{ title: '', headerBackTitle: 'Home' }}
             />
             <Stack.Screen
                 name="ViewGame"
