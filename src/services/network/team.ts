@@ -190,3 +190,24 @@ export const teamnameIsTaken = async (
         },
     )
 }
+
+export const createGuest = async (
+    token: string,
+    teamId: string,
+    firstName: string,
+    lastName: string,
+) => {
+    return await axios.post(
+        `${API_URL_V1}/team/${teamId}/guest`,
+        {
+            firstName,
+            lastName,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}

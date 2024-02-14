@@ -31,6 +31,7 @@ exports[`PlayerActionItem should match snapshot 1`] = `
       Last
     </Text>
     <Text
+      numberOfLines={1}
       style={
         {
           "color": "#ffd600",

@@ -12,6 +12,7 @@ import {
     addManager as networkAddManager,
     archiveTeam as networkArchiveTeam,
     createBulkJoinCode as networkCreateBulkJoinCode,
+    createGuest as networkCreateGuest,
     createTeam as networkCreateTeam,
     deleteTeam as networkDeleteTeam,
     getArchivedTeam as networkGetArchivedTeam,
@@ -268,5 +269,24 @@ export const teamnameIsTaken = async (teamname: string): Promise<boolean> => {
         return taken
     } catch (error) {
         return throwApiError(error, Constants.TEAMNAME_IS_INVALID)
+    }
+}
+
+export const createGuest = async (
+    teamId: string,
+    firstName: string,
+    lastName: string,
+): Promise<Team> => {
+    try {
+        const response = await withToken(
+            networkCreateGuest,
+            teamId,
+            firstName,
+            lastName,
+        )
+        const { team } = response.data
+        return team
+    } catch (error) {
+        return throwApiError(error, Constants.ADD_GUEST_ERROR)
     }
 }

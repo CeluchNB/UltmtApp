@@ -571,6 +571,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               Last 1
             </Text>
             <Text
+              numberOfLines={1}
               style={
                 {
                   "color": "#ffd600",
@@ -1125,6 +1126,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               Last 2
             </Text>
             <Text
+              numberOfLines={1}
               style={
                 {
                   "color": "#ffd600",
@@ -1679,6 +1681,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               Last 3
             </Text>
             <Text
+              numberOfLines={1}
               style={
                 {
                   "color": "#ffd600",
@@ -2067,6 +2070,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               Last 4
             </Text>
             <Text
+              numberOfLines={1}
               style={
                 {
                   "color": "#ffd600",
@@ -2621,6 +2625,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               Last 5
             </Text>
             <Text
+              numberOfLines={1}
               style={
                 {
                   "color": "#ffd600",
@@ -3175,6 +3180,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               Last 6
             </Text>
             <Text
+              numberOfLines={1}
               style={
                 {
                   "color": "#ffd600",
@@ -3729,6 +3735,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               Last 7
             </Text>
             <Text
+              numberOfLines={1}
               style={
                 {
                   "color": "#ffd600",

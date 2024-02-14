@@ -5,15 +5,15 @@ import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import UserInput from '../atoms/UserInput'
-import { addGuestPlayer } from '../../store/reducers/features/game/liveGameReducer'
+import { createGuest } from '../../services/data/team'
 import { getFormFieldRules } from '../../utils/form-utils'
+import { useMutation } from 'react-query'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 import {
-    resetGuestPlayerStatus,
-    selectGuestPlayerError,
-    selectGuestPlayerStatus,
+    selectTeamOne,
+    updatePlayers,
 } from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -29,9 +29,13 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const status = useSelector(selectGuestPlayerStatus)
-    const error = useSelector(selectGuestPlayerError)
     const dispatch = useDispatch<AppDispatch>()
+    const teamOne = useSelector(selectTeamOne)
+
+    const { mutate, isLoading, isError, error } = useMutation(
+        (player: { firstName: string; lastName: string }) =>
+            createGuest(teamOne._id, player.firstName, player.lastName),
+    )
 
     const {
         control,
@@ -43,16 +47,13 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
     })
 
     const onSubmitPlayer = async (player: GuestUser) => {
-        dispatch(addGuestPlayer(player))
+        mutate(player, {
+            onSuccess(team) {
+                dispatch(updatePlayers(team.players))
+                reset()
+            },
+        })
     }
-
-    React.useEffect(() => {
-        if (status === 'success') {
-            reset()
-            dispatch(resetGuestPlayerStatus())
-            onClose()
-        }
-    }, [status, onClose, reset, dispatch])
 
     const styles = StyleSheet.create({
         modalContainer: {
@@ -147,7 +148,9 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
             {errors.lastName && (
                 <Text style={styles.errorText}>{errors.lastName.message}</Text>
             )}
-            {error && <Text style={styles.errorText}>{error}</Text>}
+            {isError && (
+                <Text style={styles.errorText}>{(error as any)?.message}</Text>
+            )}
             <View style={styles.buttonContainer}>
                 <SecondaryButton
                     style={styles.button}
@@ -163,7 +166,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
                     onPress={async () => {
                         handleSubmit(onSubmitPlayer)()
                     }}
-                    loading={status === 'loading'}
+                    loading={isLoading}
                 />
             </View>
         </BaseModal>

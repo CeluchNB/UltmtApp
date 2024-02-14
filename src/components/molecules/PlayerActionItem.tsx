@@ -77,7 +77,9 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                     {player.firstName} {player.lastName}
                 </Text>
                 {player.username && (
-                    <Text style={styles.username}>@{player.username}</Text>
+                    <Text style={styles.username} numberOfLines={1}>
+                        @{player.username}
+                    </Text>
                 )}
             </View>
             {actions.map(action => (

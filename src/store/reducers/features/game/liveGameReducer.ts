@@ -42,8 +42,6 @@ export interface LiveGameSlice {
     team: TeamNumber
     createStatus: Status
     createError: string | undefined
-    guestPlayerStatus: Status
-    guestPlayerError: string | undefined
 }
 
 const initialState: LiveGameSlice = {
@@ -76,8 +74,6 @@ const initialState: LiveGameSlice = {
     team: 'one',
     createStatus: 'idle',
     createError: undefined,
-    guestPlayerStatus: 'idle',
-    guestPlayerError: undefined,
 }
 
 const liveGameSlice = createSlice({
@@ -100,10 +96,6 @@ const liveGameSlice = createSlice({
         setTournament(state, action) {
             state.game.tournament = action.payload
         },
-        resetGuestPlayerStatus(state) {
-            state.guestPlayerStatus = 'idle'
-            state.guestPlayerError = undefined
-        },
         addTag(state, action) {
             state.activeTags.push(action.payload)
         },
@@ -118,9 +110,14 @@ const liveGameSlice = createSlice({
             state.team = initialState.team
             state.createStatus = initialState.createStatus
             state.createError = initialState.createError
-            state.guestPlayerStatus = initialState.guestPlayerStatus
-            state.guestPlayerError = initialState.guestPlayerError
             state.teamOne = initialState.teamOne
+        },
+        updatePlayers(state, action) {
+            if (state.team === 'one') {
+                state.game.teamOnePlayers = action.payload
+            } else {
+                state.game.teamTwoPlayers = action.payload
+            }
         },
     },
     extraReducers: builder => {
@@ -140,22 +137,6 @@ const liveGameSlice = createSlice({
             state.createStatus = 'failed'
             state.createError = action.error.message
         })
-
-        builder.addCase(addGuestPlayer.pending, state => {
-            state.guestPlayerStatus = 'loading'
-        })
-        builder.addCase(addGuestPlayer.fulfilled, (state, action) => {
-            state.game = {
-                ...action.payload,
-                startTime: action.payload.startTime.toString(),
-                tournament: undefined,
-            }
-            state.guestPlayerStatus = 'success'
-        })
-        builder.addCase(addGuestPlayer.rejected, (state, action) => {
-            state.guestPlayerStatus = 'failed'
-            state.guestPlayerError = action.error.message
-        })
     },
 })
 
@@ -169,21 +150,10 @@ export const createGame = createAsyncThunk(
     },
 )
 
-export const addGuestPlayer = createAsyncThunk(
-    'liveGame/addGuest',
-    async (data: { firstName: string; lastName: string }) => {
-        return await GameData.addGuestPlayer(data)
-    },
-)
-
 export const selectCreateStatus = (state: RootState) =>
     state.liveGame.createStatus
 export const selectGame = (state: RootState) => state.liveGame.game
 export const selectTeam = (state: RootState) => state.liveGame.team
-export const selectGuestPlayerStatus = (state: RootState) =>
-    state.liveGame.guestPlayerStatus
-export const selectGuestPlayerError = (state: RootState) =>
-    state.liveGame.guestPlayerError
 export const selectTags = (state: RootState) => state.liveGame.activeTags
 export const selectTeamOne = (state: RootState) => state.liveGame.teamOne
 export const selectTournament = (state: RootState) =>
@@ -194,9 +164,9 @@ export const {
     setTeam,
     setTeamOne,
     setTournament,
-    resetGuestPlayerStatus,
     addTag,
     updateScore,
     resetGame,
+    updatePlayers,
 } = liveGameSlice.actions
 export default liveGameSlice.reducer
