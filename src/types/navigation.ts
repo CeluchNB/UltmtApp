@@ -30,6 +30,7 @@ export type AccountStackParamList = {
         tab?: 'games' | 'stats'
     }
     RequestUser: { type: RequestType }
+    AddGuest: { teamId: string }
     ResetPassword: undefined
     RolloverTeam: undefined
     UserRequests: undefined
@@ -135,6 +136,10 @@ export type PublicUserDetailsProps = NativeStackScreenProps<
 export type RequestUserProps = NativeStackScreenProps<
     AccountStackParamList,
     'RequestUser'
+>
+export type AddGuestProps = NativeStackScreenProps<
+    AccountStackParamList,
+    'AddGuest'
 >
 export type RequestTeamProps = NativeStackScreenProps<
     AccountStackParamList,

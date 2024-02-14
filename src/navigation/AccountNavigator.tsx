@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { AccountStackParamList } from './../types/navigation'
 import ActiveGamesScreen from '../screens/ActiveGamesScreen'
+import AddGuestScreen from '../screens/teams/AddGuestScreen'
 import CreateAccountScreen from './../screens/CreateAccountScreen'
 import CreateTeamScreen from './../screens/CreateTeamScreen'
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen'
@@ -73,6 +74,11 @@ const AccountNavigator: React.FC<{}> = () => {
                 name="RequestUser"
                 component={RequestUserScreen}
                 initialParams={{ type: RequestType.PLAYER }}
+            />
+            <Stack.Screen
+                name="AddGuest"
+                component={AddGuestScreen}
+                initialParams={{ teamId: '' }}
             />
             <Stack.Screen
                 name="RolloverTeam"

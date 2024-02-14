@@ -156,14 +156,26 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
                 style={styles.input}
                 onChangeText={search}
             />
-            <SecondaryButton
-                style={styles.bulkCodeButton}
-                text="create bulk join code"
-                loading={bulkCodeLoading}
-                onPress={async () => {
-                    requestBulkCode()
-                }}
-            />
+            <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                <SecondaryButton
+                    style={styles.bulkCodeButton}
+                    text="create join code"
+                    loading={bulkCodeLoading}
+                    onPress={async () => {
+                        requestBulkCode()
+                    }}
+                />
+                <SecondaryButton
+                    style={styles.bulkCodeButton}
+                    text="add guest"
+                    loading={false}
+                    onPress={async () => {
+                        navigation.navigate('AddGuest', {
+                            teamId: team?._id || '',
+                        })
+                    }}
+                />
+            </View>
             {searchError.length > 0 && (
                 <Text style={styles.error}>{searchError}</Text>
             )}
