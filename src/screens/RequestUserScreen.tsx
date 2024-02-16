@@ -3,7 +3,7 @@ import * as RequestData from '../services/data/request'
 import { ApiError } from '../types/services'
 import BulkCodeModal from '../components/molecules/BulkCodeModal'
 import { DisplayUser } from '../types/user'
-import { IconButton } from 'react-native-paper'
+import PlayerSuccessItem from '../components/atoms/PlayerSuccessItem'
 import { RequestType } from '../types/request'
 import { RequestUserProps } from '../types/navigation'
 import SearchBar from '../components/atoms/SearchBar'
@@ -142,8 +142,9 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
             flex: 1,
             alignSelf: 'center',
         },
-        bulkCodeButton: {
+        buttonContainer: {
             alignSelf: 'center',
+            flexDirection: 'row',
         },
     })
 
@@ -156,9 +157,8 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
                 style={styles.input}
                 onChangeText={search}
             />
-            <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+            <View style={styles.buttonContainer}>
                 <SecondaryButton
-                    style={styles.bulkCodeButton}
                     text="create join code"
                     loading={bulkCodeLoading}
                     onPress={async () => {
@@ -166,7 +166,6 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
                     }}
                 />
                 <SecondaryButton
-                    style={styles.bulkCodeButton}
                     text="add guest"
                     loading={false}
                     onPress={async () => {
@@ -211,19 +210,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
                 data={selectedPlayers}
                 keyExtractor={item => item._id}
                 renderItem={({ item }: { item: DisplayUser }) => {
-                    return (
-                        <View style={styles.playerContainer}>
-                            <Text
-                                style={
-                                    styles.playerItem
-                                }>{`${item.firstName} ${item.lastName}`}</Text>
-                            <IconButton
-                                icon="check"
-                                iconColor={colors.success}
-                                disabled
-                            />
-                        </View>
-                    )
+                    return <PlayerSuccessItem user={item} />
                 }}
             />
         </View>

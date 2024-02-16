@@ -24,7 +24,6 @@ export interface Team extends DisplayTeam {
     continuationId: string
     rosterOpen: boolean
     requests: string[]
-    games: string[]
 }
 
 export interface TeamRequestData {

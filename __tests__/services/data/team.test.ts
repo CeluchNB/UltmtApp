@@ -6,6 +6,7 @@ import {
     addManager,
     archiveTeam,
     createBulkJoinCode,
+    createGuest,
     createTeam,
     deleteTeam,
     getArchivedTeam,
@@ -31,7 +32,6 @@ const team: Team = {
     continuationId: '1234',
     rosterOpen: true,
     requests: [],
-    games: [],
 }
 
 const createData: CreateTeam = {
@@ -325,5 +325,18 @@ describe('test team services', () => {
         )
 
         await expect(teamnameIsTaken('test')).rejects.toBeDefined()
+    })
+
+    it('handles create guest success', async () => {
+        jest.spyOn(TeamServices, 'createGuest').mockReturnValue(
+            Promise.resolve(teamSuccess),
+        )
+        const result = await createGuest('', '', '')
+        expect(result).toMatchObject(team)
+    })
+
+    it('handles create guest failure', async () => {
+        jest.spyOn(TeamServices, 'createGuest').mockReturnValueOnce(teamError)
+        await expect(createGuest('', '', '')).rejects.toBeDefined()
     })
 })
