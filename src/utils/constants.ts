@@ -48,3 +48,4 @@ export const UNABLE_TO_DELETE_TEAM = 'Cannot delete this team. Please ensure you
 export const USERNAME_IS_INVALID = 'This is not a valid username.'
 export const TEAMNAME_IS_INVALID = 'This is not a valid team handle.'
 export const UNABLE_TO_CLAIM_GUEST = 'Unable to claim this guest.'
+export const UNABLE_TO_GET_CLAIM_GUEST_REQUESTS = 'Unable to get claim guest requests for this team.'

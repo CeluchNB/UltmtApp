@@ -20,3 +20,12 @@ export const createClaimGuestRequest = async (
         },
     )
 }
+
+export const getClaimGuestRequests = async (token: string, teamId: string) => {
+    return await axios.get(`${API_URL_V1}/claim-guest-request/team/${teamId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'X-API-Key': API_KEY,
+        },
+    })
+}

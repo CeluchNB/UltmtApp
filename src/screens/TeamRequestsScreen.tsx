@@ -1,10 +1,13 @@
 import { ApiError } from '../types/services'
 import { AppDispatch } from '../store/store'
+import { ClaimGuestRequest } from '../types/claim-guest-request'
+import ClaimGuestRequestItem from '../components/atoms/ClaimGuestRequestItem'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import React from 'react'
 import { TeamRequestProps } from '../types/navigation'
 import UserListItem from '../components/atoms/UserListItem'
+import { getClaimGuestRequests } from '../services/data/claim-guest-request'
 import { useTheme } from '../hooks'
 import { DetailedRequest, RequestType } from '../types/request'
 import {
@@ -52,6 +55,15 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
         {
             enabled: !!team,
         },
+    )
+
+    const { data: claimGuestRequests } = useQuery<
+        ClaimGuestRequest[],
+        ApiError
+    >(
+        ['getClaimGuestRequests', { teamId: team?._id }],
+        () => getClaimGuestRequests(team?._id || ''),
+        { enabled: !!team },
     )
 
     const { mutate: callDelete, error: deleteRequestError } = useMutation(
@@ -154,7 +166,7 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
                 />
                 <View style={styles.container}>
                     <MapSection
-                        title="Request From Players"
+                        title="Requests From Players"
                         listData={requests?.filter(
                             item => item.requestSource !== 'team',
                         )}
@@ -247,6 +259,16 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
                                 ? 'No open requests to players'
                                 : undefined
                         }
+                    />
+                    <MapSection
+                        title="Guest Requests"
+                        listData={claimGuestRequests}
+                        renderItem={request => (
+                            <ClaimGuestRequestItem request={request} />
+                        )}
+                        loading={false}
+                        showButton={false}
+                        showCreateButton={false}
                     />
                 </View>
             </ScrollView>

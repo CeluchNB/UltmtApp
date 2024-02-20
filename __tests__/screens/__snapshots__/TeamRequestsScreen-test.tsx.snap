@@ -215,7 +215,7 @@ exports[`TeamRequestsScreen should match snapshot 1`] = `
                 }
               }
             >
-              Request From Players
+              Requests From Players
             </Text>
           </View>
           <View>
@@ -993,6 +993,37 @@ exports[`TeamRequestsScreen should match snapshot 1`] = `
                 </View>
               </View>
             </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "display": "flex",
+                "flex": 1,
+                "flexDirection": "row",
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "flex": 1,
+                  "fontSize": 61.64383561643835,
+                  "fontWeight": "bold",
+                  "marginBottom": 10,
+                }
+              }
+            >
+              Guest Requests
+            </Text>
           </View>
         </View>
       </View>
