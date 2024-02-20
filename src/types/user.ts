@@ -23,6 +23,7 @@ export interface User extends DisplayUser {
     archiveTeams: DisplayTeam[]
     openToRequests: boolean
     private: boolean
+    guest: boolean
 }
 
 export interface GuestUser {

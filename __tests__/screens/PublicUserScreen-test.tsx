@@ -1,3 +1,4 @@
+import * as ClaimGuestRequestData from '../../src/services/data/claim-guest-request'
 import * as GameData from '../../src/services/data/game'
 import * as StatsData from '../../src/services/data/stats'
 import * as UserData from '../../src/services/data/user'
@@ -13,7 +14,13 @@ import { fetchProfileData } from '../../fixtures/data'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { act, render, waitFor } from '@testing-library/react-native'
+import {
+    act,
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 import {
     getInitialPlayerData,
     waitUntilRefreshComplete,
@@ -137,6 +144,7 @@ describe('PublicUserScreen', () => {
                 stats: [],
                 archiveTeams: [],
                 private: false,
+                guest: true,
             } as User),
         )
         jest.spyOn(GameData, 'getGamesByTeam').mockImplementation(
@@ -221,31 +229,35 @@ describe('PublicUserScreen', () => {
         expect(queryByText('@place2name2')).not.toBeNull()
     })
 
-    // it('should navigate to a public team', async () => {
-    //     const { getByText, getByTestId } = render(
-    //         <Provider store={store}>
-    //             <QueryClientProvider client={client}>
-    //                 <NavigationContainer>
-    //                     <PublicUserScreen {...props} />
-    //                 </NavigationContainer>
-    //             </QueryClientProvider>
-    //         </Provider>,
-    //     )
+    it('calls claim guest request correctly', async () => {
+        jest.spyOn(
+            ClaimGuestRequestData,
+            'createClaimGuestRequest',
+        ).mockReturnValue(Promise.resolve(undefined))
 
-    //     await waitUntilRefreshComplete(
-    //         getByTestId('public-user-team-scroll-view'),
-    //     )
+        render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <QueryClientProvider client={client}>
+                        <PublicUserScreen {...props} />
+                    </QueryClientProvider>
+                </Provider>
+            </NavigationContainer>,
+        )
 
-    //     const teamView = getByText('@place1name1')
-    //     fireEvent.press(teamView)
+        const guestBtn = screen.getByText('Is this you?')
+        fireEvent.press(guestBtn)
 
-    //     expect(navigate).toHaveBeenCalledWith('PublicTeamDetails', {
-    //         id: 'team1',
-    //     })
-    // })
+        const requestBtn = screen.getByText('request')
+        fireEvent.press(requestBtn)
+
+        await waitFor(async () => {
+            expect(screen.getByText('Success!')).toBeTruthy()
+        })
+    })
 
     it('should handle get user error', async () => {
-        jest.spyOn(UserData, 'getPublicUser').mockReturnValue(
+        jest.spyOn(UserData, 'getPublicUser').mockReturnValueOnce(
             Promise.reject({
                 message: 'Error getting user',
             }),

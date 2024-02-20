@@ -47,3 +47,4 @@ export const MODIFY_LIVE_POINT_ERROR = 'Cannot update this point. Try again or e
 export const UNABLE_TO_DELETE_TEAM = 'Cannot delete this team. Please ensure you are the last manager associated with this team.'
 export const USERNAME_IS_INVALID = 'This is not a valid username.'
 export const TEAMNAME_IS_INVALID = 'This is not a valid team handle.'
+export const UNABLE_TO_CLAIM_GUEST = 'Unable to claim this guest.'

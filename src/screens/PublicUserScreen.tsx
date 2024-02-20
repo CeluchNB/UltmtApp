@@ -1,12 +1,14 @@
 import { ApiError } from '../types/services'
 import BaseScreen from '../components/atoms/BaseScreen'
+import { Button } from 'react-native-paper'
+import ClaimGuestRequestModal from '../components/molecules/ClaimGuestRequestModal'
 import { DisplayTeam } from '../types/team'
 import { Game } from '../types/game'
 import { PublicUserDetailsProps } from '../types/navigation'
 import React from 'react'
+import { createClaimGuestRequest } from '../services/data/claim-guest-request'
 import { getGamesByTeam } from '../services/data/game'
 import { getPublicUser } from '../services/data/user'
-import { useQuery } from 'react-query'
 import { useTheme } from './../hooks'
 import { DisplayUser, User } from '../types/user'
 import PublicUserGamesScene, {
@@ -20,6 +22,7 @@ import PublicUserTeamScene, {
 } from '../components/organisms/PublicUserTeamScene'
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
+import { useMutation, useQuery } from 'react-query'
 
 const renderScene = (
     teamProps: PublicUserTeamSceneProps,
@@ -90,6 +93,18 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
     } = useQuery<User, ApiError>(['getPublicUser', { userId }], () =>
         getPublicUser(userId),
     )
+
+    const {
+        mutate,
+        isLoading: guestLoading,
+        error: guestError,
+    } = useMutation((guestUser: User) =>
+        createClaimGuestRequest(guestUser?._id, guestUser?.playerTeams[0]._id),
+    )
+    const [guestModalVisible, setGuestModalVisible] = React.useState(false)
+    const [claimGuestSuccess, setClaimGuestSuccess] = React.useState<
+        string | undefined
+    >(undefined)
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -240,6 +255,9 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         screen: {
             height: '100%',
         },
+        guestButton: {
+            alignSelf: 'center',
+        },
         titleText: {
             color: colors.textPrimary,
             fontSize: size.fontTwenty,
@@ -260,9 +278,22 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
         <BaseScreen containerWidth={100}>
             <View style={styles.screen}>
                 {user && (
-                    <Text style={styles.titleText}>
-                        @{user?.username ?? 'user'}
-                    </Text>
+                    <View>
+                        <Text style={styles.titleText}>
+                            @{user?.username ?? 'user'}
+                        </Text>
+                        {user.guest && (
+                            <Button
+                                style={styles.guestButton}
+                                textColor={colors.textPrimary}
+                                mode="text"
+                                onPress={async () => {
+                                    setGuestModalVisible(true)
+                                }}>
+                                Is this you?
+                            </Button>
+                        )}
+                    </View>
                 )}
                 <TabView
                     navigationState={{ index, routes }}
@@ -307,6 +338,24 @@ const PublicUserScreen: React.FC<PublicUserDetailsProps> = ({
                     }}
                 />
             </View>
+            <ClaimGuestRequestModal
+                visible={guestModalVisible}
+                loading={guestLoading}
+                successMessage={claimGuestSuccess}
+                errorMessage={(guestError as any)?.message}
+                onClose={async () => {
+                    setClaimGuestSuccess(undefined)
+                    setGuestModalVisible(false)
+                }}
+                onRequest={async () => {
+                    if (user)
+                        mutate(user, {
+                            onSuccess: () => {
+                                setClaimGuestSuccess('Success!')
+                            },
+                        })
+                }}
+            />
         </BaseScreen>
     )
 }
