@@ -67,14 +67,13 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                 currentChecked.set(item.value, item.checked)
             }
 
-            return data?.games
-                .filter(gameId => gamesMap.has(gameId))
-                .map(gameId => {
-                    const game = gamesMap.get(gameId)
+            return games
+                .filter(game => gamesMap.has(game._id))
+                .map(game => {
                     return {
-                        display: <GameListItem game={game!} teamId={teamId} />,
+                        display: <GameListItem game={game} teamId={teamId} />,
                         value: game!._id,
-                        checked: currentChecked.get(gameId) || false,
+                        checked: currentChecked.get(game._id) || false,
                     }
                 })
         })

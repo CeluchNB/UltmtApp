@@ -2,16 +2,22 @@ import BaseListItem from './BaseListItem'
 import { ClaimGuestRequest } from '../../types/claim-guest-request'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface ClaimGuestRequestProps {
     request: ClaimGuestRequest
+    onAccept: (requestId: string) => Promise<void>
+    onDeny: (requestId: string) => Promise<void>
 }
 
 const ClaimGuestRequestItem: React.FC<ClaimGuestRequestProps> = ({
     request,
+    onAccept,
+    onDeny,
 }) => {
+    const navigation = useNavigation()
     const {
         theme: { colors },
     } = useTheme()
@@ -32,8 +38,28 @@ const ClaimGuestRequestItem: React.FC<ClaimGuestRequestProps> = ({
         },
     })
 
+    if (!request.guest) return null
+
     return (
-        <BaseListItem showDelete showAccept requestStatus={request.status}>
+        <BaseListItem
+            showDelete={request.status === 'pending'}
+            showAccept={request.status === 'pending'}
+            onAccept={async () => {
+                onAccept(request._id)
+            }}
+            onDelete={async () => {
+                onDeny(request._id)
+            }}
+            onPress={async () => {
+                navigation.navigate('Tabs', {
+                    screen: 'Account',
+                    params: {
+                        screen: 'PublicUserDetails',
+                        params: { userId: request.userId },
+                    },
+                })
+            }}
+            requestStatus={request.status}>
             <View style={styles.container}>
                 <View>
                     <Text style={styles.text}>
