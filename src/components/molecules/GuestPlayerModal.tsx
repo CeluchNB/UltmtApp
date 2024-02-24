@@ -7,34 +7,32 @@ import SecondaryButton from '../atoms/SecondaryButton'
 import UserInput from '../atoms/UserInput'
 import { createGuest } from '../../services/data/team'
 import { getFormFieldRules } from '../../utils/form-utils'
+import { updatePlayers } from '../../store/reducers/features/game/liveGameReducer'
+import { useDispatch } from 'react-redux'
 import { useMutation } from 'react-query'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
-import {
-    selectTeamOne,
-    updatePlayers,
-} from '../../store/reducers/features/game/liveGameReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
 interface GuestPlayerModalProps {
     visible: boolean
+    teamId: string
     onClose: () => void
 }
 
 const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
     visible,
+    teamId,
     onClose,
 }) => {
     const {
         theme: { colors, size },
     } = useTheme()
     const dispatch = useDispatch<AppDispatch>()
-    const teamOne = useSelector(selectTeamOne)
 
     const { mutate, isLoading, isError, error } = useMutation(
         (player: { firstName: string; lastName: string }) =>
-            createGuest(teamOne._id, player.firstName, player.lastName),
+            createGuest(teamId, player.firstName, player.lastName),
     )
 
     const {

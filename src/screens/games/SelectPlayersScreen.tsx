@@ -10,16 +10,17 @@ import LivePointUtilityBar from '../../components/molecules/LivePointUtilityBar'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
+import { getTeamById } from '../../services/data/team'
 import { isPulling } from '../../utils/point'
 import { reactivatePoint } from '../../services/data/point'
 import { setPlayers } from '../../services/data/point'
-import { useMutation } from 'react-query'
 import { useTheme } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import {
     selectGame,
     selectTeam,
+    updatePlayers,
     updateScore,
 } from '../../store/reducers/features/game/liveGameReducer'
 import {
@@ -27,6 +28,7 @@ import {
     setPoint,
 } from '../../store/reducers/features/point/livePointReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import { useMutation, useQuery } from 'react-query'
 
 const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     // ignore flatlist flex wrap warning
@@ -43,6 +45,17 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     const [guestModalVisible, setGuestModalVisible] = useState(false)
     const [pullingModalVisible, setPullingModalVisible] = useState(false)
     const [confirmModalVisible, setConfirmModalVisible] = useState(false)
+
+    const teamId = useMemo(() => {
+        return team === 'one' ? game.teamOne._id : game.teamTwo._id ?? ''
+    }, [team, game])
+
+    // keep players up to date with any team edits
+    useQuery(['getLocalTeam', { teamId }], () => getTeamById(teamId), {
+        onSuccess(localTeam) {
+            dispatch(updatePlayers(localTeam.players))
+        },
+    })
 
     const {
         mutateAsync: setPlayerMutation,
@@ -255,6 +268,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
             </View>
             <GuestPlayerModal
                 visible={guestModalVisible}
+                teamId={teamId}
                 onClose={() => {
                     setGuestModalVisible(false)
                 }}

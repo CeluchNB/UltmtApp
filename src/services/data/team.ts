@@ -1,11 +1,14 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
-import { throwApiError } from '../../utils/service-utils'
+import EncryptedStorage from 'react-native-encrypted-storage'
+import jwt_decode from 'jwt-decode'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
+import { isTokenExpired, throwApiError } from '../../utils/service-utils'
 import {
     deleteTeamById as localDeleteTeamById,
-    getTeamsById as localGetTeamsById,
+    getTeamById as localGetTeamById,
+    getTeamsByManager as localGetTeamsByManager,
     saveTeams as localSaveTeams,
 } from '../local/team'
 import {
@@ -74,6 +77,7 @@ export const getManagedTeam = async (id: string): Promise<Team> => {
     try {
         const response = await withToken(networkGetManagedTeam, id)
         const { team } = response.data
+        await localSaveTeams([team])
         return team
     } catch (error) {
         return throwApiError(error, Constants.GET_TEAM_ERROR)
@@ -130,6 +134,7 @@ export const removePlayer = async (
     try {
         const response = await withToken(networkRemovePlayer, teamId, userId)
         const { team } = response.data
+        await localSaveTeams([team])
         return team
     } catch (error) {
         return throwApiError(error, Constants.EDIT_TEAM_ERROR)
@@ -161,6 +166,7 @@ export const rollover = async (
             seasonEnd,
         )
         const { team } = response.data
+        await localSaveTeams([team])
         return team
     } catch (error) {
         return throwApiError(error, Constants.EDIT_TEAM_ERROR)
@@ -222,9 +228,31 @@ export const createBulkJoinCode = async (teamId: string): Promise<string> => {
  * @param userId
  * @returns list of teams
  */
-export const getTeamsById = async (ids: string[]): Promise<Team[]> => {
+export const getManagingTeams = async (): Promise<Team[]> => {
     try {
-        return await localGetTeamsById(ids)
+        const refreshToken = await EncryptedStorage.getItem('refresh_token')
+        if (!refreshToken) return []
+
+        // refresh token is most persistent method of determining the current user's ID
+        // teams are not available if token is not valid
+        const { exp: rExp, sub: managerId } = jwt_decode(refreshToken) as any
+        if (isTokenExpired(rExp)) return []
+
+        return await localGetTeamsByManager(managerId)
+    } catch (error) {
+        return throwApiError(error, Constants.GET_TEAM_ERROR)
+    }
+}
+
+/**
+ * Get single local team by id
+ * @param id team id
+ * @returns team
+ */
+export const getTeamById = async (id: string): Promise<Team> => {
+    try {
+        const team = await localGetTeamById(id)
+        return team
     } catch (error) {
         return throwApiError(error, Constants.GET_TEAM_ERROR)
     }
@@ -285,6 +313,7 @@ export const createGuest = async (
             lastName,
         )
         const { team } = response.data
+        await localSaveTeams([team])
         return team
     } catch (error) {
         return throwApiError(error, Constants.ADD_GUEST_ERROR)
