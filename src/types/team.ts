@@ -48,3 +48,5 @@ export interface GuestTeam {
 }
 
 export type TeamNumber = 'one' | 'two'
+
+export type LocalUser = DisplayUser & { localGuest?: boolean }

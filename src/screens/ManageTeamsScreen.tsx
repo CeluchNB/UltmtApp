@@ -70,11 +70,6 @@ const ManageTeams: React.FC<ManageTeamsProps> = props => {
         dispatch(leaveTeam({ teamId }))
     }
 
-    // const onLeaveManagerRole = (teamId: string) => {
-    //     setLeaveManagerTeamId(teamId)
-    //     dispatch(leaveManagerRole({ teamId }))
-    // }
-
     const styles = StyleSheet.create({
         screen: {
             height: '100%',

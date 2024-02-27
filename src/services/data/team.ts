@@ -1,6 +1,8 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { generateGuestData } from '../../utils/player'
+import { isActiveGameOffline } from '../local/game'
 import jwt_decode from 'jwt-decode'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
@@ -38,7 +40,7 @@ export const createTeam = async (data: CreateTeam): Promise<Team> => {
     try {
         const response = await withToken(networkCreateTeam, data)
         const { team } = response.data
-        await localSaveTeams([team])
+        await localSaveTeams([team], true)
         return team
     } catch (error) {
         return throwApiError(error, Constants.CREATE_TEAM_ERROR)
@@ -134,7 +136,7 @@ export const removePlayer = async (
     try {
         const response = await withToken(networkRemovePlayer, teamId, userId)
         const { team } = response.data
-        await localSaveTeams([team])
+        await localSaveTeams([team], true)
         return team
     } catch (error) {
         return throwApiError(error, Constants.EDIT_TEAM_ERROR)
@@ -166,7 +168,7 @@ export const rollover = async (
             seasonEnd,
         )
         const { team } = response.data
-        await localSaveTeams([team])
+        await localSaveTeams([team], true)
         return team
     } catch (error) {
         return throwApiError(error, Constants.EDIT_TEAM_ERROR)
@@ -304,16 +306,24 @@ export const createGuest = async (
     teamId: string,
     firstName: string,
     lastName: string,
+    inGame = false,
 ): Promise<Team> => {
     try {
-        const response = await withToken(
-            networkCreateGuest,
-            teamId,
-            firstName,
-            lastName,
-        )
-        const { team } = response.data
-        await localSaveTeams([team])
+        const offline = await isActiveGameOffline()
+        if (inGame && offline) {
+            const team = await localGetTeamById(teamId)
+            const guest = generateGuestData(firstName, lastName)
+            team.players.push(guest)
+            await localSaveTeams([team])
+        } else {
+            const response = await withToken(networkCreateGuest, teamId, {
+                firstName,
+                lastName,
+            })
+            const { team } = response.data
+            await localSaveTeams([team])
+        }
+        const team = await localGetTeamById(teamId)
         return team
     } catch (error) {
         return throwApiError(error, Constants.ADD_GUEST_ERROR)

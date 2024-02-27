@@ -1,6 +1,6 @@
 import { DisplayUser } from '../types/user'
 import { Realm } from '@realm/react'
-import { Team } from '../types/team'
+import { LocalUser, Team } from '../types/team'
 
 export const DisplayTeamSchema: Realm.ObjectSchema = {
     name: 'DisplayTeam',
@@ -52,7 +52,7 @@ export class TeamSchema {
     name: string
     teamname: string
     managers: DisplayUser[]
-    players: DisplayUser[]
+    players: LocalUser[]
     seasonStart: string
     seasonEnd: string
     seasonNumber: number

@@ -5,13 +5,34 @@ import { Team } from '../../types/team'
 import { TeamSchema } from '../../models'
 import { getRealm } from '../../models/realm'
 
-export const saveTeams = async (teams: Team[]) => {
+export const saveTeams = async (teams: Team[], overwritePlayers = false) => {
     const realm = await getRealm()
-    realm.write(() => {
-        for (const team of teams) {
-            realm.create('Team', team, Realm.UpdateMode.Modified)
+    for (const team of teams) {
+        const teamObject = await realm.objectForPrimaryKey<TeamSchema>(
+            'Team',
+            team._id,
+        )
+
+        if (teamObject && !overwritePlayers) {
+            const players = [...teamObject.players]
+            team.players.forEach(p1 =>
+                players.findIndex(p2 => p1._id === p2._id) === -1
+                    ? players.push(p1)
+                    : null,
+            )
+            team.players = players.map(p => ({
+                _id: p._id,
+                firstName: p.firstName,
+                lastName: p.lastName,
+                username: p.username,
+                localGuest: p.localGuest,
+            }))
         }
-    })
+
+        realm.write(() => {
+            realm.create('Team', team, Realm.UpdateMode.Modified)
+        })
+    }
 }
 
 export const getTeamsByManager = async (managerId: string): Promise<Team[]> => {

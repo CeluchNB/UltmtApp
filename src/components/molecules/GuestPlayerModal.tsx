@@ -32,7 +32,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
 
     const { mutate, isLoading, isError, error } = useMutation(
         (player: { firstName: string; lastName: string }) =>
-            createGuest(teamId, player.firstName, player.lastName),
+            createGuest(teamId, player.firstName, player.lastName, true),
     )
 
     const {

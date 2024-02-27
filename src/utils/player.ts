@@ -1,5 +1,6 @@
 import { CheckBoxItem } from '../components/molecules/StatsFilterModal'
 import { DisplayUser } from '../types/user'
+import { Realm } from '@realm/react'
 
 export const getUserDisplayName = (player?: DisplayUser): string => {
     if (!player) {
@@ -41,4 +42,14 @@ export const nameSort = (
         .localeCompare(
             `${player2.firstName} ${player2.lastName}`.toLocaleLowerCase(),
         )
+}
+
+export const generateGuestData = (firstName: string, lastName: string) => {
+    return {
+        _id: new Realm.BSON.ObjectID().toHexString(),
+        firstName,
+        lastName,
+        username: `guest${Date.now()}`,
+        localGuest: true,
+    }
 }

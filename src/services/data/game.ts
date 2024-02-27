@@ -2,10 +2,13 @@ import * as Constants from '../../utils/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
+import { LocalUser } from '../../types/team'
 import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
 import dayjs from 'dayjs'
 import { getUserId } from './user'
+import { getTeamById as localGetTeamById } from '../local/team'
+import { createGuest as networkCreateGuest } from '../network/team'
 import { parseClientAction } from '../../utils/action'
 import { parseClientPoint } from '../../utils/point'
 import { parseFullGame } from '../../utils/game'
@@ -390,6 +393,20 @@ export const pushOfflineGame = async (gameId: string): Promise<void> => {
     try {
         // create game data
         const game = await localGetGameById(gameId)
+
+        // create guests
+        const team = await localGetTeamById(game.teamOne._id)
+        for (const player of team.players) {
+            if ((player as LocalUser).localGuest) {
+                await withToken(networkCreateGuest, team._id, {
+                    _id: player._id,
+                    firstName: player.firstName,
+                    lastName: player.lastName,
+                    username: player.username,
+                })
+            }
+        }
+
         const localPoints = await Promise.all(
             game.points.map(id => {
                 return localGetPointById(id)
