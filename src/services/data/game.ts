@@ -5,9 +5,9 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 import { LocalUser } from '../../types/team'
 import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
+import { createPlayerSet } from '../../utils/player'
 import dayjs from 'dayjs'
 import { getUserId } from './user'
-import { getTeamById as localGetTeamById } from '../local/team'
 import { createGuest as networkCreateGuest } from '../network/team'
 import { parseClientAction } from '../../utils/action'
 import { parseClientPoint } from '../../utils/point'
@@ -38,6 +38,10 @@ import {
     getPointByPointNumber as localGetPointByPointNumber,
     savePoint as localSavePoint,
 } from '../local/point'
+import {
+    getTeamById as localGetTeamById,
+    saveTeams as localSaveTeams,
+} from '../local/team'
 import {
     addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
@@ -395,15 +399,43 @@ export const pushOfflineGame = async (gameId: string): Promise<void> => {
         const game = await localGetGameById(gameId)
 
         // create guests
+        // guest map is used to reconcile guest players who are created in the backend
+        // with different IDs than how they are stored locally
+        const guestMap = new Map<string, DisplayUser>()
         const team = await localGetTeamById(game.teamOne._id)
         for (const player of team.players) {
             if ((player as LocalUser).localGuest) {
-                await withToken(networkCreateGuest, team._id, {
+                const response = await withToken(networkCreateGuest, team._id, {
                     _id: player._id,
                     firstName: player.firstName,
                     lastName: player.lastName,
                     username: player.username,
                 })
+                const { team: updatedTeam } = response.data
+                const newPlayers = createPlayerSet(
+                    updatedTeam.players.map((p: DisplayUser) => ({
+                        ...p,
+                        localGuest: false,
+                    })),
+                    team.players,
+                )
+                await localSaveTeams(
+                    [{ ...updatedTeam, players: newPlayers }],
+                    true,
+                )
+
+                if (
+                    !updatedTeam.players
+                        .map((p: DisplayUser) => p._id)
+                        .includes(player._id) &&
+                    updatedTeam.players[updatedTeam.players.length - 1]._id !==
+                        player._id
+                ) {
+                    guestMap.set(
+                        player._id,
+                        updatedTeam[updatedTeam.players.length - 1],
+                    )
+                }
             }
         }
 
@@ -413,13 +445,26 @@ export const pushOfflineGame = async (gameId: string): Promise<void> => {
             }),
         )
 
+        const guestIds = Array.from(guestMap.keys())
         const points: ClientPoint[] = []
         localPoints.forEach(async point => {
             const actions = await localGetActionsByPoint(point._id)
             const clientPoint = parseClientPoint(point)
-            clientPoint.actions = actions.map(action =>
-                parseClientAction(action),
-            )
+            clientPoint.actions = actions.map(action => {
+                if (
+                    action.playerOne &&
+                    guestIds.includes(action.playerOne._id)
+                ) {
+                    action.playerOne = guestMap.get(action.playerOne._id)
+                } else if (
+                    action.playerTwo &&
+                    guestIds.includes(action.playerTwo._id)
+                ) {
+                    action.playerTwo = guestMap.get(action.playerTwo._id)
+                }
+
+                return parseClientAction(action)
+            })
             points.push(clientPoint)
         })
 

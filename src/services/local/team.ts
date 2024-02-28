@@ -13,20 +13,12 @@ export const saveTeams = async (teams: Team[], overwritePlayers = false) => {
             team._id,
         )
 
+        // default behavior is to only keep players from network responses and local guests
         if (teamObject && !overwritePlayers) {
-            const players = [...teamObject.players]
-            team.players.forEach(p1 =>
-                players.findIndex(p2 => p1._id === p2._id) === -1
-                    ? players.push(p1)
-                    : null,
-            )
-            team.players = players.map(p => ({
-                _id: p._id,
-                firstName: p.firstName,
-                lastName: p.lastName,
-                username: p.username,
-                localGuest: p.localGuest,
-            }))
+            team.players = [
+                ...team.players,
+                ...teamObject.players.filter(p => p.localGuest),
+            ]
         }
 
         realm.write(() => {

@@ -1,5 +1,6 @@
 import { CheckBoxItem } from '../components/molecules/StatsFilterModal'
 import { DisplayUser } from '../types/user'
+import { LocalUser } from '../types/team'
 import { Realm } from '@realm/react'
 
 export const getUserDisplayName = (player?: DisplayUser): string => {
@@ -52,4 +53,23 @@ export const generateGuestData = (firstName: string, lastName: string) => {
         username: `guest${Date.now()}`,
         localGuest: true,
     }
+}
+
+export const createPlayerSet = (
+    players1: LocalUser[],
+    players2: LocalUser[],
+): LocalUser[] => {
+    const players = [...players1]
+    players2.forEach(p1 =>
+        players.findIndex(p2 => p1._id === p2._id) === -1
+            ? players.push(p1)
+            : null,
+    )
+    return players.map(p => ({
+        _id: p._id,
+        firstName: p.firstName,
+        lastName: p.lastName,
+        username: p.username,
+        localGuest: p.localGuest,
+    }))
 }
