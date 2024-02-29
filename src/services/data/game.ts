@@ -468,6 +468,8 @@ export const pushOfflineGame = async (gameId: string): Promise<void> => {
             points.push(clientPoint)
         })
 
+        const updatedTeam = await localGetTeamById(game.teamOne._id)
+        game.teamOnePlayers = updatedTeam.players
         const fullGame = parseFullGame(game)
         fullGame.points = points
 
