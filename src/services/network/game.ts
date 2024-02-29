@@ -46,6 +46,19 @@ export const addGuestPlayer = async (
     )
 }
 
+export const updateGamePlayers = async (
+    token: string,
+): Promise<AxiosResponse> => {
+    console.log('token', token)
+    return await axios.put(
+        `${API_URL_V1}/game/update-players`,
+        {},
+        {
+            headers: { 'X-API-Key': API_KEY, Authorization: `Bearer ${token}` },
+        },
+    )
+}
+
 export const getPointsByGame = async (
     gameId: string,
 ): Promise<AxiosResponse> => {

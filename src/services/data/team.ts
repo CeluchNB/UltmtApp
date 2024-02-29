@@ -4,6 +4,8 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 import { generateGuestData } from '../../utils/player'
 import { isActiveGameOffline } from '../local/game'
 import jwt_decode from 'jwt-decode'
+import { updateGamePlayers as networkUpdateGamePlayers } from '../network/game'
+import { withGameToken } from './game'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
 import { isTokenExpired, throwApiError } from '../../utils/service-utils'
@@ -322,10 +324,12 @@ export const createGuest = async (
             })
             const { team } = response.data
             await localSaveTeams([team])
+            await withGameToken(networkUpdateGamePlayers)
         }
         const team = await localGetTeamById(teamId)
         return team
     } catch (error) {
+        console.log('error', error)
         return throwApiError(error, Constants.ADD_GUEST_ERROR)
     }
 }
