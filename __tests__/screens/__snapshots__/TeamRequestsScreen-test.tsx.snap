@@ -1022,7 +1022,7 @@ exports[`TeamRequestsScreen should match snapshot 1`] = `
                 }
               }
             >
-              Guest Requests
+              Guest Claim Requests
             </Text>
           </View>
         </View>

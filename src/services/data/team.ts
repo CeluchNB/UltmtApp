@@ -312,6 +312,7 @@ export const createGuest = async (
 ): Promise<Team> => {
     try {
         const offline = await isActiveGameOffline()
+        console.log('offline', offline)
         if (inGame && offline) {
             const team = await localGetTeamById(teamId)
             const guest = generateGuestData(firstName, lastName)
@@ -329,7 +330,6 @@ export const createGuest = async (
         const team = await localGetTeamById(teamId)
         return team
     } catch (error) {
-        console.log('error', error)
         return throwApiError(error, Constants.ADD_GUEST_ERROR)
     }
 }

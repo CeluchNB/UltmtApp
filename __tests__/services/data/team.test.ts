@@ -1,3 +1,5 @@
+import * as GameServices from '../../../src/services/network/game'
+import * as LocalGameServices from '../../../src/services/local/game'
 import * as LocalTeamServices from '../../../src/services/local/team'
 import * as TeamServices from '../../../src/services/network/team'
 import { AxiosResponse } from 'axios'
@@ -81,6 +83,9 @@ describe('test team services', () => {
         jest.spyOn(TeamServices, 'getManagedTeam').mockReturnValueOnce(
             teamSuccess,
         )
+        jest.spyOn(LocalTeamServices, 'saveTeams').mockReturnValueOnce(
+            Promise.resolve(),
+        )
 
         const result = await getManagedTeam('')
         expect(result).toEqual(team)
@@ -111,6 +116,9 @@ describe('test team services', () => {
         jest.spyOn(TeamServices, 'removePlayer').mockReturnValueOnce(
             teamSuccess,
         )
+        jest.spyOn(LocalTeamServices, 'saveTeams').mockReturnValueOnce(
+            Promise.resolve(),
+        )
 
         const result = await removePlayer('', '')
         expect(result).toEqual(team)
@@ -124,6 +132,9 @@ describe('test team services', () => {
 
     it('should handle network rollover success', async () => {
         jest.spyOn(TeamServices, 'rollover').mockReturnValueOnce(teamSuccess)
+        jest.spyOn(LocalTeamServices, 'saveTeams').mockReturnValueOnce(
+            Promise.resolve(),
+        )
 
         const result = await rollover('', true, '', '')
         expect(result).toEqual(team)
@@ -327,16 +338,54 @@ describe('test team services', () => {
         await expect(teamnameIsTaken('test')).rejects.toBeDefined()
     })
 
-    it('handles create guest success', async () => {
-        jest.spyOn(TeamServices, 'createGuest').mockReturnValue(
-            Promise.resolve(teamSuccess),
-        )
-        const result = await createGuest('', '', '')
-        expect(result).toMatchObject(team)
-    })
+    describe('creates guest', () => {
+        it('handles network create guest scenario', async () => {
+            jest.spyOn(
+                LocalGameServices,
+                'isActiveGameOffline',
+            ).mockReturnValue(Promise.resolve(false))
+            jest.spyOn(TeamServices, 'createGuest').mockReturnValue(
+                Promise.resolve(teamSuccess),
+            )
+            jest.spyOn(LocalTeamServices, 'saveTeams').mockReturnValue(
+                Promise.resolve(),
+            )
+            jest.spyOn(GameServices, 'updateGamePlayers').mockReturnValue(
+                Promise.resolve({
+                    data: {},
+                } as AxiosResponse),
+            )
+            jest.spyOn(LocalTeamServices, 'getTeamById').mockReturnValue(
+                Promise.resolve(team),
+            )
+            const result = await createGuest('', '', '')
+            expect(result).toMatchObject(team)
+        })
 
-    it('handles create guest failure', async () => {
-        jest.spyOn(TeamServices, 'createGuest').mockReturnValueOnce(teamError)
-        await expect(createGuest('', '', '')).rejects.toBeDefined()
+        it('handles offline create guest scenario', async () => {
+            jest.spyOn(
+                LocalGameServices,
+                'isActiveGameOffline',
+            ).mockReturnValue(Promise.resolve(true))
+            jest.spyOn(LocalTeamServices, 'saveTeams').mockReturnValue(
+                Promise.resolve(),
+            )
+            jest.spyOn(LocalTeamServices, 'getTeamById').mockReturnValue(
+                Promise.resolve(team),
+            )
+            const result = await createGuest('', '', '', true)
+            expect(result).toMatchObject(team)
+        })
+
+        it('handles create guest failure', async () => {
+            jest.spyOn(
+                LocalGameServices,
+                'isActiveGameOffline',
+            ).mockReturnValue(Promise.resolve(false))
+            jest.spyOn(TeamServices, 'createGuest').mockReturnValueOnce(
+                teamError,
+            )
+            await expect(createGuest('', '', '')).rejects.toBeDefined()
+        })
     })
 })

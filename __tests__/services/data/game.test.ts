@@ -3,11 +3,14 @@ import * as GameServices from '../../../src/services/network/game'
 import * as LocalActionServices from '../../../src/services/local/action'
 import * as LocalGameServices from '../../../src/services/local/game'
 import * as LocalPointServices from '../../../src/services/local/point'
+import * as LocalTeamServices from '../../../src/services/local/team'
+import * as TeamServices from '../../../src/services/network/team'
 import * as UserServices from '../../../src/services/data/user'
 import AsyncStorage from '../../../__mocks__/@react-native-async-storage/async-storage'
 import { AxiosResponse } from 'axios'
 import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
+import { Team } from '../../../src/types/team'
 import dayjs from 'dayjs'
 import { game } from '../../../fixtures/data'
 import jwt from 'jsonwebtoken'
@@ -547,10 +550,52 @@ describe('test push offline game', () => {
                     { ...action, _id: 'action1', pointId: 'point1' },
                 ]),
             )
-
         const deleteGameSpy = jest
             .spyOn(LocalGameServices, 'deleteFullGame')
             .mockReturnValueOnce(Promise.resolve())
+        const getTeamSpy = jest
+            .spyOn(LocalTeamServices, 'getTeamById')
+            .mockReturnValue(
+                Promise.resolve({
+                    _id: 'teamid',
+                    players: [
+                        {
+                            _id: 'playerone',
+                            firstName: 'First',
+                            lastName: 'Last',
+                            username: 'guest1234',
+                            localGuest: true,
+                        },
+                    ],
+                } as unknown as Team),
+            )
+        const saveTeamSpy = jest
+            .spyOn(LocalTeamServices, 'saveTeams')
+            .mockReturnValue(Promise.resolve())
+        const createGuestSpy = jest
+            .spyOn(TeamServices, 'createGuest')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    data: {
+                        team: {
+                            _id: 'teamid',
+                            players: [
+                                {
+                                    _id: 'playerone',
+                                    firstName: 'First',
+                                    lastName: 'Last',
+                                    username: 'guest1234',
+                                    localGuest: true,
+                                },
+                            ],
+                        },
+                    },
+                    status: 200,
+                    statusText: 'Good',
+                    headers: {},
+                    config: {},
+                } as AxiosResponse),
+            )
 
         await pushOfflineGame('game1')
         expect(pushSpy).toHaveBeenCalled()
@@ -558,6 +603,9 @@ describe('test push offline game', () => {
         expect(getPointSpy).toHaveBeenCalled()
         expect(getActionsSpy).toHaveBeenCalled()
         expect(deleteGameSpy).toHaveBeenCalled()
+        expect(getTeamSpy).toHaveBeenCalled()
+        expect(saveTeamSpy).toHaveBeenCalled()
+        expect(createGuestSpy).toHaveBeenCalled()
     })
 
     it('with error', async () => {

@@ -43,7 +43,7 @@ describe('SelectMyTeamScreen', () => {
     })
 
     it('should match snapshot with unauthenticated user', async () => {
-        jest.spyOn(TeamData, 'getTeamsById').mockReturnValueOnce(
+        jest.spyOn(TeamData, 'getManagingTeams').mockReturnValueOnce(
             Promise.resolve([]),
         )
         jest.spyOn(AuthData, 'isLoggedIn').mockReturnValueOnce(
@@ -77,7 +77,7 @@ describe('SelectMyTeamScreen', () => {
         jest.spyOn(AuthData, 'isLoggedIn').mockReturnValueOnce(
             Promise.resolve(true),
         )
-        jest.spyOn(TeamData, 'getTeamsById').mockReturnValueOnce(
+        jest.spyOn(TeamData, 'getManagingTeams').mockReturnValueOnce(
             Promise.resolve([]),
         )
 
@@ -108,7 +108,7 @@ describe('SelectMyTeamScreen', () => {
         jest.spyOn(AuthData, 'isLoggedIn').mockReturnValueOnce(
             Promise.resolve(true),
         )
-        jest.spyOn(TeamData, 'getTeamsById').mockReturnValueOnce(
+        jest.spyOn(TeamData, 'getManagingTeams').mockReturnValueOnce(
             Promise.resolve([
                 {
                     _id: 'team1',
