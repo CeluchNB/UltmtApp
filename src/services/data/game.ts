@@ -403,18 +403,14 @@ export const pushOfflineGame = async (gameId: string): Promise<void> => {
         // with different IDs than how they are stored locally
         const guestMap = new Map<string, DisplayUser>()
         const team = await localGetTeamById(game.teamOne._id)
-        console.log('after local get team')
         for (const player of team.players) {
-            console.log('in loop')
             if ((player as LocalUser).localGuest) {
-                console.timeLog('got local guest')
                 const response = await withToken(networkCreateGuest, team._id, {
                     _id: player._id,
                     firstName: player.firstName,
                     lastName: player.lastName,
                     username: player.username,
                 })
-                console.log('after create guest')
                 const { team: updatedTeam } = response.data
                 const newPlayers = createPlayerSet(
                     updatedTeam.players.map((p: DisplayUser) => ({
@@ -427,7 +423,6 @@ export const pushOfflineGame = async (gameId: string): Promise<void> => {
                     [{ ...updatedTeam, players: newPlayers }],
                     true,
                 )
-                console.log('after save')
 
                 if (
                     !updatedTeam.players
@@ -485,7 +480,6 @@ export const pushOfflineGame = async (gameId: string): Promise<void> => {
 
         return
     } catch (e) {
-        console.log('got e', e)
         return throwApiError(e, Constants.FINISH_GAME_ERROR)
     }
 }

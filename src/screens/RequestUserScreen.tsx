@@ -54,6 +54,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
 
     const search = async (term: string) => {
         setError('')
+        setSearchError('')
         if (term.length < 3) {
             setSearchError('')
             setPlayers([])
