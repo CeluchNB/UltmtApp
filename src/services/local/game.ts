@@ -79,6 +79,7 @@ export const createOfflineGame = async (
         const game = realm.create<GameSchema>(
             'Game',
             GameSchema.createOfflineGame(data, teamOnePlayers),
+            Realm.UpdateMode.All,
         )
         id = game._id
     })
