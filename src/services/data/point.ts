@@ -371,6 +371,7 @@ export const reactivatePoint = async (
                 )
             }
 
+            await localDeletePoint(previousId)
             await localSavePoint(responsePoint)
             await updateGameScore(
                 responsePoint.teamOneScore,

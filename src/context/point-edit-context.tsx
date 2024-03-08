@@ -2,6 +2,7 @@ import { DisplayUser } from '../types/user'
 import Point from '../types/point'
 import { TeamNumber } from '../types/team'
 import { finishGame } from '../services/data/game'
+import { generatePlayerStatsForPoint } from '../utils/in-game-stats'
 import { getLocalActionsByPoint } from '../services/data/live-action'
 import { isPullingNext } from '../utils/point'
 import { parseClientAction } from '../utils/action'
@@ -11,13 +12,14 @@ import { useQuery } from 'react-query'
 import { Action, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
 import React, { createContext, useMemo } from 'react'
-import { createPoint, finishPoint } from '../services/data/point'
 import {
+    addPlayerStats,
     resetGame,
     selectGame,
     selectTeam,
     updateScore,
 } from '../store/reducers/features/game/liveGameReducer'
+import { createPoint, finishPoint } from '../services/data/point'
 import {
     resetPoint,
     selectPoint,
@@ -78,10 +80,12 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         () => getLocalActionsByPoint(point._id),
         {
             onSuccess(data) {
+                const actions = data.map(a => ({
+                    ...a.action,
+                    teamNumber: 'one' as TeamNumber,
+                }))
                 setActionStack({
-                    ...actionStack.addTeamOneActions(
-                        data.map(a => ({ ...a.action, teamNumber: 'one' })),
-                    ),
+                    ...actionStack.addTeamOneActions(actions),
                 })
             },
         },
@@ -103,6 +107,14 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
             return point.teamOneActivePlayers ?? []
         } else {
             return point.teamTwoActivePlayers ?? []
+        }
+    }, [point, team])
+
+    const allPointPlayers = React.useMemo(() => {
+        if (team === 'one') {
+            return point.teamOnePlayers ?? []
+        } else {
+            return point.teamTwoPlayers ?? []
         }
     }, [point, team])
 
@@ -132,6 +144,12 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
             ),
             point.pointNumber + 1,
         )
+
+        const stats = generatePlayerStatsForPoint(
+            allPointPlayers,
+            myTeamActions,
+        )
+        dispatch(addPlayerStats(stats))
 
         dispatch(updateScore({ teamOneScore, teamTwoScore }))
         dispatch(setPoint(newPoint))

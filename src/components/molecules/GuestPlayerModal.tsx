@@ -5,9 +5,9 @@ import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import UserInput from '../atoms/UserInput'
+import { addPlayers } from '../../store/reducers/features/game/liveGameReducer'
 import { createGuest } from '../../services/data/team'
 import { getFormFieldRules } from '../../utils/form-utils'
-import { updatePlayers } from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch } from 'react-redux'
 import { useMutation } from 'react-query'
 import { useTheme } from '../../hooks'
@@ -47,7 +47,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
     const onSubmitPlayer = async (player: GuestUser) => {
         mutate(player, {
             onSuccess(team) {
-                dispatch(updatePlayers(team.players))
+                dispatch(addPlayers(team.players))
                 reset()
             },
         })

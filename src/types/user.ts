@@ -32,3 +32,11 @@ export interface GuestUser {
     lastName: string
     username?: string
 }
+
+export interface InGameStatsUser extends DisplayUser {
+    pointsPlayed: number
+    goals: number
+    assists: number
+    turnovers: number
+    blocks: number
+}

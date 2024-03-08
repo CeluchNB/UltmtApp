@@ -6,6 +6,7 @@ import {
     setPoint,
 } from '../store/reducers/features/point/livePointReducer'
 import {
+    setActiveTeamId,
     setGame,
     setTeam,
 } from '../store/reducers/features/game/liveGameReducer'
@@ -21,6 +22,12 @@ export const useGameReactivation = () => {
         // set necessary data in redux
         dispatch(setGame(game))
         dispatch(setTeam(team))
+        // TODO: this is not a great implementation
+        dispatch(
+            setActiveTeamId(
+                team === 'one' ? game.teamOne._id : game.teamTwo._id,
+            ),
+        )
         if (!activePoint) {
             dispatch(resetPoint())
             navigation.navigate('LiveGame', { screen: 'FirstPoint' })
