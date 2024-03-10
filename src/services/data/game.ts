@@ -14,7 +14,7 @@ import { parseClientPoint } from '../../utils/point'
 import { parseFullGame } from '../../utils/game'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
-import { CreateGame, Game, UpdateGame } from '../../types/game'
+import { CreateGame, Game, PointStats, UpdateGame } from '../../types/game'
 import { DisplayUser, GuestUser } from '../../types/user'
 import Point, { ClientPoint } from '../../types/point'
 import {
@@ -313,7 +313,9 @@ export const reactivateGame = async (gameId: string, teamId: string) => {
 
 const getLocalGameIfExists = async (
     gameId: string,
-): Promise<(Game & { offline: boolean }) | undefined> => {
+): Promise<
+    (Game & { offline: boolean; statsPoints: PointStats[] }) | undefined
+> => {
     try {
         return await localGetGameById(gameId)
     } catch (e) {
@@ -321,7 +323,9 @@ const getLocalGameIfExists = async (
     }
 }
 
-const reactivateOfflineGame = async (game: Game & { offline: boolean }) => {
+const reactivateOfflineGame = async (
+    game: Game & { offline: boolean; statsPoints: PointStats[] },
+) => {
     game.teamOneActive = true
     await activateGameLocally(game)
 

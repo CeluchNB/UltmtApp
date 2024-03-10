@@ -51,7 +51,7 @@ export interface LiveGameSlice {
     activeTeam: {
         _id: string
         players: InGameStatsUser[]
-        points: InGameStatsUser[][]
+        points: { [_id: string]: InGameStatsUser[] }
     }
 }
 
@@ -88,7 +88,7 @@ const initialState: LiveGameSlice = {
     activeTeam: {
         _id: '',
         players: [],
-        points: [],
+        points: {},
     },
 }
 
@@ -132,26 +132,28 @@ const liveGameSlice = createSlice({
             state.activeTeam._id = action.payload
         },
         addPlayers(state, action) {
-            state.activeTeam.points
             state.activeTeam.players = updateInGameStatsPlayers(
                 state.activeTeam.players,
                 action.payload,
             )
         },
         addPlayerStats(state, action) {
+            const { pointId, players } = action.payload
             state.activeTeam.players = addInGameStatsPlayers(
                 state.activeTeam.players,
-                action.payload,
+                players,
             )
-            state.activeTeam.points.push(action.payload)
+            state.activeTeam.points[pointId] = players
         },
-        subtractPlayerStats(state) {
-            const lastPoint = state.activeTeam.points.pop()
-            if (lastPoint) {
+        subtractPlayerStats(state, action) {
+            const { pointId } = action.payload
+            const point = state.activeTeam.points[pointId]
+            if (point) {
                 state.activeTeam.players = subtractInGameStatsPlayers(
                     state.activeTeam.players,
-                    lastPoint,
+                    point,
                 )
+                delete state.activeTeam.points[pointId]
             }
         },
     },

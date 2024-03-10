@@ -4,9 +4,11 @@ import { DisplayUser } from '../../types/user'
 import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
 import { ActionSchema, GameSchema, PointSchema } from '../../models'
-import { CreateGame, Game } from '../../types/game'
+import { CreateGame, Game, PointStats } from '../../types/game'
 
-const parseGame = (schema: GameSchema): Game & { offline: boolean } => {
+const parseGame = (
+    schema: GameSchema,
+): Game & { offline: boolean; statsPoints: PointStats[] } => {
     return JSON.parse(
         JSON.stringify({
             _id: schema._id,
@@ -30,6 +32,7 @@ const parseGame = (schema: GameSchema): Game & { offline: boolean } => {
             teamOnePlayers: schema.teamOnePlayers,
             teamTwoPlayers: schema.teamTwoPlayers,
             resolveCode: schema.resolveCode,
+            statsPoints: schema.statsPoints,
             points: schema.points,
             offline: schema.offline,
         }),
@@ -87,7 +90,7 @@ export const createOfflineGame = async (
     return id
 }
 
-export const saveGame = async (game: Game) => {
+export const saveGame = async (game: Game, stats: PointStats[] = []) => {
     const realm = await getRealm()
     const gameRecord = await realm.objectForPrimaryKey<GameSchema>(
         'Game',
@@ -97,7 +100,7 @@ export const saveGame = async (game: Game) => {
     if (gameRecord) {
         offline = gameRecord.offline
     }
-    const schema = new GameSchema(game, offline)
+    const schema = new GameSchema(game, offline, stats)
     realm.write(() => {
         realm.create('Game', schema, Realm.UpdateMode.Modified)
     })
@@ -105,7 +108,7 @@ export const saveGame = async (game: Game) => {
 
 export const getGameById = async (
     gameId: string,
-): Promise<Game & { offline: boolean }> => {
+): Promise<Game & { offline: boolean; statsPoints: PointStats[] }> => {
     const realm = await getRealm()
     const game = await realm.objectForPrimaryKey<GameSchema>('Game', gameId)
     if (!game) {

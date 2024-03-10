@@ -134,7 +134,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const onUndoDebounced = React.useCallback(debounce(onUndo, 150), [])
 
     const onFinishPoint = async () => {
-        const prevPoint = await finishPoint(point._id)
+        const prevPoint = await finishPoint(point, myTeamActions, team)
         const { teamOneScore, teamTwoScore } = prevPoint
 
         const newPoint = await createPoint(
@@ -149,8 +149,8 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
             allPointPlayers,
             myTeamActions,
         )
-        dispatch(addPlayerStats(stats))
 
+        dispatch(addPlayerStats({ pointId: prevPoint._id, players: stats }))
         dispatch(updateScore({ teamOneScore, teamTwoScore }))
         dispatch(setPoint(newPoint))
 
@@ -158,7 +158,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     }
 
     const onFinishGame = async () => {
-        await finishPoint(point._id)
+        await finishPoint(point, myTeamActions, team)
         onNextPoint()
 
         await finishGame()

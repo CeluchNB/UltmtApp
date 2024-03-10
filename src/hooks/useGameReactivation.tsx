@@ -2,14 +2,16 @@ import { reactivateGame } from '../services/data/game'
 import { useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import {
-    resetPoint,
-    setPoint,
-} from '../store/reducers/features/point/livePointReducer'
-import {
+    addPlayerStats,
+    addPlayers,
     setActiveTeamId,
     setGame,
     setTeam,
 } from '../store/reducers/features/game/liveGameReducer'
+import {
+    resetPoint,
+    setPoint,
+} from '../store/reducers/features/point/livePointReducer'
 
 export const useGameReactivation = () => {
     const navigation = useNavigation()
@@ -19,9 +21,21 @@ export const useGameReactivation = () => {
         const { game, team, activePoint, hasActiveActions } =
             await reactivateGame(gameId, managingTeamId)
 
+        console.log('game', game.statsPoints)
         // set necessary data in redux
         dispatch(setGame(game))
         dispatch(setTeam(team))
+        dispatch(
+            addPlayers(
+                team === 'one' ? game.teamOnePlayers : game.teamTwoPlayers,
+            ),
+        )
+        for (const stats of game.statsPoints) {
+            console.log('adding')
+            dispatch(
+                addPlayerStats({ pointId: stats._id, players: stats.stats }),
+            )
+        }
         // TODO: this is not a great implementation
         dispatch(
             setActiveTeamId(

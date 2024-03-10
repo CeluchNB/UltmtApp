@@ -116,6 +116,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 point.pointNumber - 1,
                 team,
             )
+            dispatch(subtractPlayerStats({ pointId: point._id }))
 
             dispatch(setPoint(reactivatedPoint))
             dispatch(
@@ -124,7 +125,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                     teamTwoScore: reactivatedPoint.teamTwoScore,
                 }),
             )
-            dispatch(subtractPlayerStats())
+
             navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
         } catch (e) {
             // TODO: error display?

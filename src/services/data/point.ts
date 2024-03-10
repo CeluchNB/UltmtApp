@@ -3,6 +3,7 @@ import { DisplayUser } from '../../types/user'
 import { Game } from '../../types/game'
 import Point from '../../types/point'
 import { TeamNumber } from '../../types/team'
+import { generatePlayerStatsForPoint } from '../../utils/in-game-stats'
 import { throwApiError } from '../../utils/service-utils'
 import { withGameToken } from './game'
 import {
@@ -139,19 +140,25 @@ const updateOfflinePoint = async (pointId: string, data: Partial<Point>) => {
  * @param pointId id of point to finish
  * @returns updated point
  */
-export const finishPoint = async (pointId: string): Promise<Point> => {
+export const finishPoint = async (
+    point: Point,
+    actions: LiveServerActionData[],
+    team: TeamNumber,
+): Promise<Point> => {
     try {
+        const pointId = point._id
         const offline = await localGetActiveGameOffline()
         if (offline) {
             await finishOfflinePoint(pointId)
         } else {
             const response = await withGameToken(networkFinishPoint, pointId)
-            const { point } = response.data
-            await localSavePoint(point)
+            const { point: responsePoint } = response.data
+            await localSavePoint(responsePoint)
         }
 
         const result = await localGetPointById(pointId)
         await updateGameScore(result.teamOneScore, result.teamTwoScore)
+        await addInGamePlayerStats(point, actions, team)
         return result
     } catch (e: any) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)
@@ -162,6 +169,30 @@ const updateGameScore = async (teamOneScore: number, teamTwoScore: number) => {
     const gameId = await localGetActiveGameId()
     const game = await localGetGameById(gameId)
     await localSaveGame({ ...game, teamOneScore, teamTwoScore })
+}
+
+const addInGamePlayerStats = async (
+    point: Point,
+    actions: LiveServerActionData[],
+    team: TeamNumber,
+) => {
+    const gameId = await localGetActiveGameId()
+    const game = await localGetGameById(gameId)
+
+    const players = team === 'one' ? point.teamOnePlayers : point.teamTwoPlayers
+    const pointStats = generatePlayerStatsForPoint(players, actions)
+
+    const stats = [...game.statsPoints, { _id: point._id, stats: pointStats }]
+    await localSaveGame({ ...game }, stats)
+}
+
+const removeInGamePlayerStats = async (pointId: string) => {
+    const gameId = await localGetActiveGameId()
+    const game = await localGetGameById(gameId)
+
+    game.statsPoints = game.statsPoints.filter(point => point._id !== pointId)
+
+    await localSaveGame({ ...game }, game.statsPoints)
 }
 
 const finishOfflinePoint = async (pointId: string) => {
@@ -378,6 +409,7 @@ export const reactivatePoint = async (
                 responsePoint.teamTwoScore,
             )
         }
+        await removeInGamePlayerStats(previousId)
 
         const response = await localGetPointById(point._id)
         return response
