@@ -1,4 +1,6 @@
-import { CreateFullGame, Game, UpdateGame } from '../types/game'
+import { DisplayUser } from '../types/user'
+import { GameStats } from '../types/stats'
+import { CreateFullGame, Game, PointStats, UpdateGame } from '../types/game'
 
 export const parseFullGame = (game: Game): CreateFullGame => {
     return {
@@ -33,4 +35,35 @@ export const parseUpdateGame = (data: UpdateGame): UpdateGame => {
         timeoutPerHalf: Number(data.timeoutPerHalf),
         floaterTimeout: data.floaterTimeout,
     }
+}
+
+export const populateInGameStats = (
+    game: GameStats,
+    players: DisplayUser[],
+): PointStats[] => {
+    const playerMap = new Map<string, DisplayUser>()
+    for (const player of players) {
+        playerMap.set(player._id, player)
+    }
+
+    const pointStats = game.points.map(point => {
+        return {
+            _id: point._id,
+            pointStats: point.players.map(player => {
+                const playerData = playerMap.get(player._id)
+                return {
+                    _id: player._id,
+                    firstName: playerData?.firstName ?? '',
+                    lastName: playerData?.lastName ?? '',
+                    username: playerData?.username ?? '',
+                    pointsPlayed: player.pointsPlayed,
+                    turnovers: player.drops + player.throwaways,
+                    goals: player.goals,
+                    assists: player.assists,
+                    blocks: player.blocks,
+                }
+            }),
+        }
+    })
+    return pointStats
 }

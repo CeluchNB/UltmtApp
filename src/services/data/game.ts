@@ -7,11 +7,11 @@ import { closeRealm } from '../../models/realm'
 import { createGuestPlayer } from '../../utils/realm'
 import { createPlayerSet } from '../../utils/player'
 import dayjs from 'dayjs'
+import { getGameStats } from '../network/stats'
 import { getUserId } from './user'
 import { createGuest as networkCreateGuest } from '../network/team'
 import { parseClientAction } from '../../utils/action'
 import { parseClientPoint } from '../../utils/point'
-import { parseFullGame } from '../../utils/game'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
 import { CreateGame, Game, PointStats, UpdateGame } from '../../types/game'
@@ -57,6 +57,7 @@ import {
     reactivateGame as networkReactivateGame,
     searchGames as networkSearchGames,
 } from '../network/game'
+import { parseFullGame, populateInGameStats } from '../../utils/game'
 
 /**
  * Method to search games with available search and query parameters.
@@ -359,7 +360,14 @@ const reactivateOnlineGame = async (gameId: string, teamId: string) => {
     const gameResponse = await withToken(networkReactivateGame, gameId, teamId)
     const { game, team, token, activePoint, actions } = gameResponse.data
 
-    await activateGameLocally({ ...game, offline: false })
+    const statsResponse = await getGameStats(gameId)
+    const gameStats = statsResponse.data
+    const statsPoints = populateInGameStats(
+        gameStats.game,
+        game.teamOne._id === teamId ? game.teamOnePlayers : game.teamTwoPlayers,
+    )
+
+    await activateGameLocally({ ...game, offline: false }, statsPoints)
     await EncryptedStorage.setItem('game_token', token)
 
     const gameResult = await localGetGameById(gameId)
@@ -387,8 +395,11 @@ const reactivateOnlineGame = async (gameId: string, teamId: string) => {
     }
 }
 
-const activateGameLocally = async (game: Game & { offline: boolean }) => {
-    await localSaveGame(game)
+const activateGameLocally = async (
+    game: Game & { offline: boolean },
+    statsPoints?: PointStats[],
+) => {
+    await localSaveGame(game, statsPoints)
     await localSetActiveGameId(game._id)
     await localSetActiveGameOffline(game.offline)
 }

@@ -7,15 +7,17 @@ import React from 'react'
 import SearchDisplay from '../../components/molecules/SearchDisplay'
 import { setPoint } from '../../store/reducers/features/point/livePointReducer'
 import {
+    addPlayers,
+    selectTeamOne,
+    setActiveTeamId,
+    setGame,
+    setTeam,
+} from '../../store/reducers/features/game/liveGameReducer'
+import {
     getPointsByGame,
     joinGame,
     searchGames,
 } from '../../services/data/game'
-import {
-    selectTeamOne,
-    setGame,
-    setTeam,
-} from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
@@ -55,6 +57,8 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
                     tournament: undefined,
                 }),
             )
+            dispatch(addPlayers(game.teamTwoPlayers))
+            dispatch(setActiveTeamId(game.teamTwo._id))
             dispatch(setTeam('two'))
 
             // get current points, if any exist, set most recent one as current point
@@ -88,6 +92,7 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
                 placeholder="Search Games..."
                 search={onSearch}
                 renderItem={({ item }) => {
+                    if (!item) return null
                     return (
                         <GameCard
                             game={item}

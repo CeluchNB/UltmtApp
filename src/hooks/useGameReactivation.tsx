@@ -21,7 +21,6 @@ export const useGameReactivation = () => {
         const { game, team, activePoint, hasActiveActions } =
             await reactivateGame(gameId, managingTeamId)
 
-        console.log('game', game.statsPoints)
         // set necessary data in redux
         dispatch(setGame(game))
         dispatch(setTeam(team))
@@ -31,9 +30,11 @@ export const useGameReactivation = () => {
             ),
         )
         for (const stats of game.statsPoints) {
-            console.log('adding')
             dispatch(
-                addPlayerStats({ pointId: stats._id, players: stats.stats }),
+                addPlayerStats({
+                    pointId: stats._id,
+                    players: stats.pointStats,
+                }),
             )
         }
         // TODO: this is not a great implementation

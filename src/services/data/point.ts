@@ -182,7 +182,10 @@ const addInGamePlayerStats = async (
     const players = team === 'one' ? point.teamOnePlayers : point.teamTwoPlayers
     const pointStats = generatePlayerStatsForPoint(players, actions)
 
-    const stats = [...game.statsPoints, { _id: point._id, stats: pointStats }]
+    const stats = [
+        ...game.statsPoints,
+        { _id: point._id, pointStats: pointStats },
+    ]
     await localSaveGame({ ...game }, stats)
 }
 
@@ -190,7 +193,9 @@ const removeInGamePlayerStats = async (pointId: string) => {
     const gameId = await localGetActiveGameId()
     const game = await localGetGameById(gameId)
 
-    game.statsPoints = game.statsPoints.filter(point => point._id !== pointId)
+    game.statsPoints = game.statsPoints.filter(point => {
+        return point._id !== pointId
+    })
 
     await localSaveGame({ ...game }, game.statsPoints)
 }
@@ -329,11 +334,12 @@ export const getActivePointForGame = async (
  * @returns updated point
  */
 export const reactivatePoint = async (
-    previousId: string,
+    deleteId: string,
     pointNumber: number,
     team: TeamNumber,
 ): Promise<Point> => {
     try {
+        let currentPointId
         const gameId = await localGetActiveGameId()
         const game = await localGetGameById(gameId)
         // find point by point number
@@ -342,7 +348,7 @@ export const reactivatePoint = async (
             throw new Error()
         }
         if (game.offline) {
-            game.points = game.points.filter(id => id !== previousId)
+            game.points = game.points.filter(id => id !== deleteId)
             if (pointNumber === 1) {
                 point.teamOneScore = 0
                 point.teamTwoScore = 0
@@ -353,6 +359,7 @@ export const reactivatePoint = async (
                     pointNumber - 1,
                     game.points,
                 )
+                currentPointId = prevPoint?._id ?? ''
                 if (!prevPoint) {
                     throw new Error()
                 }
@@ -365,17 +372,18 @@ export const reactivatePoint = async (
             // currently, games can only be offline on creation
             // therefore only team one will be active
             point.teamOneActive = true
-            await localDeletePoint(previousId)
+            await localDeletePoint(deleteId)
             await localSavePoint(point)
             await localSaveGame(game)
         } else {
             // reactivate point on backend
-            await withGameToken(networkDeletePoint, previousId)
+            await withGameToken(networkDeletePoint, deleteId)
             const pointResponse = await withGameToken(
                 networkReactivatePoint,
                 point._id,
             )
             const { point: responsePoint } = pointResponse.data
+            currentPointId = responsePoint._id
 
             // load actions from backend
             const actionsResponse = await networkGetLiveActionsByPoint(
@@ -402,14 +410,14 @@ export const reactivatePoint = async (
                 )
             }
 
-            await localDeletePoint(previousId)
+            await localDeletePoint(deleteId)
             await localSavePoint(responsePoint)
             await updateGameScore(
                 responsePoint.teamOneScore,
                 responsePoint.teamTwoScore,
             )
         }
-        await removeInGamePlayerStats(previousId)
+        await removeInGamePlayerStats(currentPointId)
 
         const response = await localGetPointById(point._id)
         return response
