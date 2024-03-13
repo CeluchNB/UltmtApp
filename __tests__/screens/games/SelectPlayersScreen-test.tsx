@@ -165,7 +165,7 @@ const team: Team = {
 const client = new QueryClient()
 
 const getPlayerName = (player: GuestUser) => {
-    return `${player.firstName} ${player.lastName} (0/0/0/0/0)`
+    return `${player.firstName} ${player.lastName} (0 - 0 - 0 - 0 - 0)`
 }
 
 beforeAll(() => {

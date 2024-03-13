@@ -259,11 +259,11 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                   }
                 }
               >
-                (PP/A/G/B/T)
+                (PP - A - G - B - T)
               </Text>
               <Tooltip
                 enterTouchDelay={150}
-                title="Points Played/Assists/Goals/Blocks/Turnovers"
+                title="Points Played - Assists - Goals - Blocks - Turnovers"
               >
                 <ForwardRef
                   icon="help-circle"
@@ -1153,7 +1153,7 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                     }
                   }
                 >
-                  (PP/A/G/B/T)
+                  (PP - A - G - B - T)
                 </Text>
                 <View
                   accessibilityState={
@@ -1492,15 +1492,25 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                        
                       Last 1
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -1667,15 +1677,25 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                        
                       Last 2
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -1842,15 +1862,25 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                        
                       Last 3
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -2017,15 +2047,25 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                        
                       Last 4
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -2192,15 +2232,25 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                        
                       Last 5
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -2367,15 +2417,25 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                        
                       Last 6
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -2542,15 +2602,25 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                        
                       Last 7
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -3163,11 +3233,11 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                   }
                 }
               >
-                (PP/A/G/B/T)
+                (PP - A - G - B - T)
               </Text>
               <Tooltip
                 enterTouchDelay={150}
-                title="Points Played/Assists/Goals/Blocks/Turnovers"
+                title="Points Played - Assists - Goals - Blocks - Turnovers"
               >
                 <ForwardRef
                   icon="help-circle"
@@ -4057,7 +4127,7 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                     }
                   }
                 >
-                  (PP/A/G/B/T)
+                  (PP - A - G - B - T)
                 </Text>
                 <View
                   accessibilityState={
@@ -4396,15 +4466,25 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                        
                       Last 10
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -4571,15 +4651,25 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                        
                       Last 11
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -4746,15 +4836,25 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                        
                       Last 12
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -4921,15 +5021,25 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                        
                       Last 13
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -5096,15 +5206,25 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                        
                       Last 14
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -5271,15 +5391,25 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                        
                       Last 8
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>
@@ -5446,15 +5576,25 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                        
                       Last 9
                        (
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
-                      /
-                      0
+                      <Text
+                        style={
+                          {
+                            "color": "#ffd600",
+                          }
+                        }
+                      >
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                         - 
+                        0
+                         -
+                         
+                        0
+                      </Text>
                       )
                     </Text>
                   </View>

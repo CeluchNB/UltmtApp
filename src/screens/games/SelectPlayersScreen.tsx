@@ -223,10 +223,10 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                             />
                             <View style={styles.statsKeyContainer}>
                                 <Text style={styles.statsKey}>
-                                    (PP/A/G/B/T)
+                                    (PP - A - G - B - T)
                                 </Text>
                                 <Tooltip
-                                    title="Points Played/Assists/Goals/Blocks/Turnovers"
+                                    title="Points Played - Assists - Goals - Blocks - Turnovers"
                                     enterTouchDelay={150}>
                                     <IconButton
                                         iconColor={colors.textPrimary}
@@ -253,8 +253,12 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                 }
                                 ellipsizeMode="tail">
                                 {item.firstName} {item.lastName} (
-                                {item.pointsPlayed}/{item.assists}/{item.goals}/
-                                {item.blocks}/{item.turnovers})
+                                <Text style={{ color: colors.textPrimary }}>
+                                    {item.pointsPlayed} - {item.assists} -{' '}
+                                    {item.goals} - {item.blocks} -{' '}
+                                    {item.turnovers}
+                                </Text>
+                                )
                             </Chip>
                         )
                     }}
