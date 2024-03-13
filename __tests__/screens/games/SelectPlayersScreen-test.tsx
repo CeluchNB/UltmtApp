@@ -1,36 +1,34 @@
 import * as PointData from '../../../src/services/data/point'
+import * as TeamData from '../../../src/services/data/team'
 import { NavigationContainer } from '@react-navigation/native'
 import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { SelectPlayersProps } from '../../../src/types/navigation'
 import SelectPlayersScreen from '../../../src/screens/games/SelectPlayersScreen'
-import { createPoint } from '../../../src/store/reducers/features/point/livePointReducer'
+import { Team } from '../../../src/types/team'
 import { game } from '../../../fixtures/data'
 import store from '../../../src/store/store'
 import { DisplayUser, GuestUser } from '../../../src/types/user'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import {
+    addPlayers,
+    resetGame,
+    setGame,
+    setTeam,
+} from '../../../src/store/reducers/features/game/liveGameReducer'
+import {
+    createPoint,
+    resetPoint,
+} from '../../../src/store/reducers/features/point/livePointReducer'
 import {
     fireEvent,
     render,
     screen,
     waitFor,
 } from '@testing-library/react-native'
-import {
-    setGame,
-    setTeam,
-} from '../../../src/store/reducers/features/game/liveGameReducer'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
-const originalWarn = console.warn.bind(console.warn)
-beforeAll(() => {
-    console.warn = msg =>
-        !msg.toString().includes('flexWrap: `wrap`') && originalWarn(msg)
-})
-afterAll(() => {
-    console.warn = originalWarn
-})
 
 const navigate = jest.fn()
 const reset = jest.fn()
@@ -149,13 +147,39 @@ const point: Point = {
     teamTwoActions: [],
 }
 
+const team: Team = {
+    _id: 'id1',
+    place: 'Place',
+    name: 'Name',
+    teamname: 'placename',
+    managers: [],
+    players: [],
+    seasonNumber: 1,
+    seasonStart: '2022',
+    seasonEnd: '2022',
+    continuationId: 'id123',
+    rosterOpen: true,
+    requests: [],
+}
+
 const client = new QueryClient()
 
 const getPlayerName = (player: GuestUser) => {
-    return `${player.firstName} ${player.lastName}`
+    return `${player.firstName} ${player.lastName} (0/0/0/0/0)`
 }
 
 beforeAll(() => {
+    jest.useFakeTimers({ legacyFakeTimers: true })
+})
+
+afterAll(() => {
+    jest.useRealTimers()
+})
+
+beforeEach(() => {
+    jest.resetAllMocks()
+    store.dispatch(resetGame())
+    store.dispatch(resetPoint())
     store.dispatch(
         setGame({
             ...game,
@@ -165,12 +189,15 @@ beforeAll(() => {
             startTime: '2022',
         }),
     )
+
     jest.spyOn(PointData, 'createPoint').mockReturnValue(Promise.resolve(point))
+    jest.spyOn(TeamData, 'getTeamById').mockReturnValue(Promise.resolve(team))
     store.dispatch(createPoint({ pulling: true, pointNumber: 1 }))
 })
 
 describe('SelectPlayersScreen', () => {
     it('should match snapshot', () => {
+        store.dispatch(addPlayers(playerList1))
         const snapshot = render(
             <Provider store={store}>
                 <QueryClientProvider client={client}>
@@ -186,6 +213,7 @@ describe('SelectPlayersScreen', () => {
 
     it('should match snapshot for team two', () => {
         store.dispatch(setTeam('two'))
+        store.dispatch(addPlayers(playerList2))
         const snapshot = render(
             <Provider store={store}>
                 <QueryClientProvider client={client}>
@@ -217,6 +245,7 @@ describe('SelectPlayersScreen', () => {
     })
 
     it('should select players', async () => {
+        store.dispatch(addPlayers(playerList1))
         store.dispatch(setTeam('one'))
         const spy = jest
             .spyOn(PointData, 'setPlayers')
@@ -256,11 +285,23 @@ describe('SelectPlayersScreen', () => {
         fireEvent.press(button)
 
         await waitFor(() => {
-            expect(spy).toHaveBeenCalledWith('point1', playerList1)
+            expect(spy).toHaveBeenCalledWith(
+                'point1',
+                expect.arrayContaining([
+                    expect.objectContaining(playerList1[0]),
+                    expect.objectContaining(playerList1[1]),
+                    expect.objectContaining(playerList1[2]),
+                    expect.objectContaining(playerList1[3]),
+                    expect.objectContaining(playerList1[4]),
+                    expect.objectContaining(playerList1[5]),
+                    expect.objectContaining(playerList1[6]),
+                ]),
+            )
         })
     })
 
     it('should display confirmation modal when point mismatches', async () => {
+        store.dispatch(addPlayers(playerList1))
         store.dispatch(setTeam('one'))
         const spy = jest.spyOn(PointData, 'setPlayers').mockReturnValueOnce(
             Promise.resolve({
@@ -299,7 +340,18 @@ describe('SelectPlayersScreen', () => {
         fireEvent.press(button)
 
         await waitFor(() => {
-            expect(spy).toHaveBeenCalledWith('point1', playerList1)
+            expect(spy).toHaveBeenCalledWith(
+                'point1',
+                expect.arrayContaining([
+                    expect.objectContaining(playerList1[0]),
+                    expect.objectContaining(playerList1[1]),
+                    expect.objectContaining(playerList1[2]),
+                    expect.objectContaining(playerList1[3]),
+                    expect.objectContaining(playerList1[4]),
+                    expect.objectContaining(playerList1[5]),
+                    expect.objectContaining(playerList1[6]),
+                ]),
+            )
         })
 
         expect(

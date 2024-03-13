@@ -127,6 +127,7 @@ const liveGameSlice = createSlice({
             state.createStatus = initialState.createStatus
             state.createError = initialState.createError
             state.teamOne = initialState.teamOne
+            state.activeTeam = initialState.activeTeam
         },
         setActiveTeamId(state, action) {
             state.activeTeam._id = action.payload

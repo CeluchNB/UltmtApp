@@ -7,11 +7,12 @@ import { game } from '../../../fixtures/data'
 import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
 import { Action, ActionType } from '../../../src/types/action'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import {
+    addPlayers,
     setGame,
     setTeam,
 } from '../../../src/store/reducers/features/game/liveGameReducer'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -165,11 +166,13 @@ beforeEach(() => {
             startTime: '2022',
         }),
     )
+
     store.dispatch(setTeam('one'))
     store.dispatch(setPoint(point))
 })
 
 beforeAll(() => {
+    store.dispatch(addPlayers(playerList1))
     jest.useFakeTimers({ legacyFakeTimers: true })
 })
 
@@ -290,8 +293,8 @@ it('should handle substitution press', async () => {
         expect(queryByText('Player to Remove')).not.toBeTruthy()
     })
     expect(actions[2].setPlayersAndUpdateViewerDisplay).toHaveBeenCalledWith(
-        playerList1[0],
-        playerList1[9],
+        expect.objectContaining(playerList1[0]),
+        expect.objectContaining(playerList1[9]),
     )
     expect(onAction).toHaveBeenCalledWith(actions[2])
 })

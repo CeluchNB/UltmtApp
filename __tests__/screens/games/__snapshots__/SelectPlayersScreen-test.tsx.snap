@@ -240,6 +240,39 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
               onUndo={[Function]}
               undoDisabled={true}
             />
+            <View
+              style={
+                {
+                  "alignContent": "center",
+                  "alignSelf": "flex-end",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                  "textAlignVertical": "center",
+                }
+              }
+            >
+              <Text
+                style={
+                  {
+                    "alignSelf": "center",
+                    "color": "#ffd600",
+                  }
+                }
+              >
+                (PP/A/G/B/T)
+              </Text>
+              <Tooltip
+                enterTouchDelay={150}
+                title="Points Played/Assists/Goals/Blocks/Turnovers"
+              >
+                <ForwardRef
+                  icon="help-circle"
+                  iconColor="#ffd600"
+                  onPress={[Function]}
+                  size={20}
+                />
+              </Tooltip>
+            </View>
           </View>
         }
         ListHeaderComponentStyle={
@@ -247,55 +280,83 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
             "width": "100%",
           }
         }
-        contentContainerStyle={
-          {
-            "alignSelf": "center",
-            "flexDirection": "row",
-            "flexWrap": "wrap",
-          }
-        }
         data={
           [
             {
               "_id": "user1",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 1",
+              "goals": 0,
               "lastName": "Last 1",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast1",
             },
             {
               "_id": "user2",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 2",
+              "goals": 0,
               "lastName": "Last 2",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast2",
             },
             {
               "_id": "user3",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 3",
+              "goals": 0,
               "lastName": "Last 3",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast3",
             },
             {
               "_id": "user4",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 4",
+              "goals": 0,
               "lastName": "Last 4",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast4",
             },
             {
               "_id": "user5",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 5",
+              "goals": 0,
               "lastName": "Last 5",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast5",
             },
             {
               "_id": "user6",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 6",
+              "goals": 0,
               "lastName": "Last 6",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast6",
             },
             {
               "_id": "user7",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 7",
+              "goals": 0,
               "lastName": "Last 7",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast7",
             },
           ]
@@ -1073,6 +1134,203 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                   </View>
                 </View>
               </View>
+              <View
+                style={
+                  {
+                    "alignContent": "center",
+                    "alignSelf": "flex-end",
+                    "flexDirection": "row",
+                    "justifyContent": "center",
+                    "textAlignVertical": "center",
+                  }
+                }
+              >
+                <Text
+                  style={
+                    {
+                      "alignSelf": "center",
+                      "color": "#ffd600",
+                    }
+                  }
+                >
+                  (PP/A/G/B/T)
+                </Text>
+                <View
+                  accessibilityState={
+                    {
+                      "busy": undefined,
+                      "checked": undefined,
+                      "disabled": undefined,
+                      "expanded": undefined,
+                      "selected": undefined,
+                    }
+                  }
+                  accessibilityValue={
+                    {
+                      "max": undefined,
+                      "min": undefined,
+                      "now": undefined,
+                      "text": undefined,
+                    }
+                  }
+                  accessible={true}
+                  collapsable={false}
+                  focusable={true}
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onFocus={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={{}}
+                >
+                  <View
+                    collapsable={false}
+                    style={
+                      {
+                        "backgroundColor": "transparent",
+                        "borderRadius": 18,
+                        "height": 36,
+                        "margin": 6,
+                        "shadowColor": "#000",
+                        "shadowOffset": {
+                          "height": 0,
+                          "width": 0,
+                        },
+                        "shadowOpacity": 0,
+                        "shadowRadius": 0,
+                        "width": 36,
+                      }
+                    }
+                    testID="icon-button-container-outer-layer"
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "backgroundColor": "transparent",
+                          "borderColor": "rgba(121, 116, 126, 1)",
+                          "borderRadius": 18,
+                          "borderWidth": 0,
+                          "elevation": 0,
+                          "flex": 1,
+                          "overflow": "hidden",
+                          "shadowColor": "#000",
+                          "shadowOffset": {
+                            "height": 0,
+                            "width": 0,
+                          },
+                          "shadowOpacity": 0,
+                          "shadowRadius": 0,
+                        }
+                      }
+                      testID="icon-button-container"
+                    >
+                      <View
+                        accessibilityComponentType="button"
+                        accessibilityRole="button"
+                        accessibilityState={
+                          {
+                            "busy": undefined,
+                            "checked": undefined,
+                            "disabled": false,
+                            "expanded": undefined,
+                            "selected": undefined,
+                          }
+                        }
+                        accessibilityTraits="button"
+                        accessibilityValue={
+                          {
+                            "max": undefined,
+                            "min": undefined,
+                            "now": undefined,
+                            "text": undefined,
+                          }
+                        }
+                        accessible={true}
+                        centered={true}
+                        collapsable={false}
+                        focusable={true}
+                        hitSlop={
+                          {
+                            "bottom": 6,
+                            "left": 6,
+                            "right": 6,
+                            "top": 6,
+                          }
+                        }
+                        onBlur={[Function]}
+                        onClick={[Function]}
+                        onFocus={[Function]}
+                        onResponderGrant={[Function]}
+                        onResponderMove={[Function]}
+                        onResponderRelease={[Function]}
+                        onResponderTerminate={[Function]}
+                        onResponderTerminationRequest={[Function]}
+                        onStartShouldSetResponder={[Function]}
+                        style={
+                          [
+                            {
+                              "overflow": "hidden",
+                            },
+                            [
+                              {
+                                "alignItems": "center",
+                                "flexGrow": 1,
+                                "justifyContent": "center",
+                              },
+                              {
+                                "borderRadius": 18,
+                              },
+                            ],
+                          ]
+                        }
+                        testID="icon-button"
+                      >
+                        <Text
+                          accessibilityElementsHidden={true}
+                          allowFontScaling={false}
+                          importantForAccessibility="no-hide-descendants"
+                          pointerEvents="none"
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 20,
+                              },
+                              [
+                                {
+                                  "lineHeight": 20,
+                                  "transform": [
+                                    {
+                                      "scaleX": 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  "backgroundColor": "transparent",
+                                },
+                              ],
+                              {
+                                "fontFamily": "Material Design Icons",
+                                "fontStyle": "normal",
+                                "fontWeight": "normal",
+                              },
+                              {},
+                            ]
+                          }
+                        >
+                          󰋗
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
             </View>
           </View>
           <View
@@ -1233,6 +1491,17 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                       First 1
                        
                       Last 1
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -1397,6 +1666,17 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                       First 2
                        
                       Last 2
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -1561,6 +1841,17 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                       First 3
                        
                       Last 3
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -1725,6 +2016,17 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                       First 4
                        
                       Last 4
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -1889,6 +2191,17 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                       First 5
                        
                       Last 5
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -2053,6 +2366,17 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                       First 6
                        
                       Last 6
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -2217,6 +2541,17 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                       First 7
                        
                       Last 7
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -2809,6 +3144,39 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
               onUndo={[Function]}
               undoDisabled={true}
             />
+            <View
+              style={
+                {
+                  "alignContent": "center",
+                  "alignSelf": "flex-end",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                  "textAlignVertical": "center",
+                }
+              }
+            >
+              <Text
+                style={
+                  {
+                    "alignSelf": "center",
+                    "color": "#ffd600",
+                  }
+                }
+              >
+                (PP/A/G/B/T)
+              </Text>
+              <Tooltip
+                enterTouchDelay={150}
+                title="Points Played/Assists/Goals/Blocks/Turnovers"
+              >
+                <ForwardRef
+                  icon="help-circle"
+                  iconColor="#ffd600"
+                  onPress={[Function]}
+                  size={20}
+                />
+              </Tooltip>
+            </View>
           </View>
         }
         ListHeaderComponentStyle={
@@ -2816,55 +3184,83 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
             "width": "100%",
           }
         }
-        contentContainerStyle={
-          {
-            "alignSelf": "center",
-            "flexDirection": "row",
-            "flexWrap": "wrap",
-          }
-        }
         data={
           [
             {
               "_id": "user10",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 10",
+              "goals": 0,
               "lastName": "Last 10",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast10",
             },
             {
               "_id": "user11",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 11",
+              "goals": 0,
               "lastName": "Last 11",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast11",
             },
             {
               "_id": "user12",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 12",
+              "goals": 0,
               "lastName": "Last 12",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast12",
             },
             {
               "_id": "user13",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 13",
+              "goals": 0,
               "lastName": "Last 13",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast13",
             },
             {
               "_id": "user14",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 14",
+              "goals": 0,
               "lastName": "Last 14",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast14",
             },
             {
               "_id": "user8",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 8",
+              "goals": 0,
               "lastName": "Last 8",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast8",
             },
             {
               "_id": "user9",
+              "assists": 0,
+              "blocks": 0,
               "firstName": "First 9",
+              "goals": 0,
               "lastName": "Last 9",
+              "pointsPlayed": 0,
+              "turnovers": 0,
               "username": "firstlast9",
             },
           ]
@@ -3642,6 +4038,203 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                   </View>
                 </View>
               </View>
+              <View
+                style={
+                  {
+                    "alignContent": "center",
+                    "alignSelf": "flex-end",
+                    "flexDirection": "row",
+                    "justifyContent": "center",
+                    "textAlignVertical": "center",
+                  }
+                }
+              >
+                <Text
+                  style={
+                    {
+                      "alignSelf": "center",
+                      "color": "#ffd600",
+                    }
+                  }
+                >
+                  (PP/A/G/B/T)
+                </Text>
+                <View
+                  accessibilityState={
+                    {
+                      "busy": undefined,
+                      "checked": undefined,
+                      "disabled": undefined,
+                      "expanded": undefined,
+                      "selected": undefined,
+                    }
+                  }
+                  accessibilityValue={
+                    {
+                      "max": undefined,
+                      "min": undefined,
+                      "now": undefined,
+                      "text": undefined,
+                    }
+                  }
+                  accessible={true}
+                  collapsable={false}
+                  focusable={true}
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onFocus={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={{}}
+                >
+                  <View
+                    collapsable={false}
+                    style={
+                      {
+                        "backgroundColor": "transparent",
+                        "borderRadius": 18,
+                        "height": 36,
+                        "margin": 6,
+                        "shadowColor": "#000",
+                        "shadowOffset": {
+                          "height": 0,
+                          "width": 0,
+                        },
+                        "shadowOpacity": 0,
+                        "shadowRadius": 0,
+                        "width": 36,
+                      }
+                    }
+                    testID="icon-button-container-outer-layer"
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "backgroundColor": "transparent",
+                          "borderColor": "rgba(121, 116, 126, 1)",
+                          "borderRadius": 18,
+                          "borderWidth": 0,
+                          "elevation": 0,
+                          "flex": 1,
+                          "overflow": "hidden",
+                          "shadowColor": "#000",
+                          "shadowOffset": {
+                            "height": 0,
+                            "width": 0,
+                          },
+                          "shadowOpacity": 0,
+                          "shadowRadius": 0,
+                        }
+                      }
+                      testID="icon-button-container"
+                    >
+                      <View
+                        accessibilityComponentType="button"
+                        accessibilityRole="button"
+                        accessibilityState={
+                          {
+                            "busy": undefined,
+                            "checked": undefined,
+                            "disabled": false,
+                            "expanded": undefined,
+                            "selected": undefined,
+                          }
+                        }
+                        accessibilityTraits="button"
+                        accessibilityValue={
+                          {
+                            "max": undefined,
+                            "min": undefined,
+                            "now": undefined,
+                            "text": undefined,
+                          }
+                        }
+                        accessible={true}
+                        centered={true}
+                        collapsable={false}
+                        focusable={true}
+                        hitSlop={
+                          {
+                            "bottom": 6,
+                            "left": 6,
+                            "right": 6,
+                            "top": 6,
+                          }
+                        }
+                        onBlur={[Function]}
+                        onClick={[Function]}
+                        onFocus={[Function]}
+                        onResponderGrant={[Function]}
+                        onResponderMove={[Function]}
+                        onResponderRelease={[Function]}
+                        onResponderTerminate={[Function]}
+                        onResponderTerminationRequest={[Function]}
+                        onStartShouldSetResponder={[Function]}
+                        style={
+                          [
+                            {
+                              "overflow": "hidden",
+                            },
+                            [
+                              {
+                                "alignItems": "center",
+                                "flexGrow": 1,
+                                "justifyContent": "center",
+                              },
+                              {
+                                "borderRadius": 18,
+                              },
+                            ],
+                          ]
+                        }
+                        testID="icon-button"
+                      >
+                        <Text
+                          accessibilityElementsHidden={true}
+                          allowFontScaling={false}
+                          importantForAccessibility="no-hide-descendants"
+                          pointerEvents="none"
+                          selectable={false}
+                          style={
+                            [
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 20,
+                              },
+                              [
+                                {
+                                  "lineHeight": 20,
+                                  "transform": [
+                                    {
+                                      "scaleX": 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  "backgroundColor": "transparent",
+                                },
+                              ],
+                              {
+                                "fontFamily": "Material Design Icons",
+                                "fontStyle": "normal",
+                                "fontWeight": "normal",
+                              },
+                              {},
+                            ]
+                          }
+                        >
+                          󰋗
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
             </View>
           </View>
           <View
@@ -3802,6 +4395,17 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                       First 10
                        
                       Last 10
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -3966,6 +4570,17 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                       First 11
                        
                       Last 11
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -4130,6 +4745,17 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                       First 12
                        
                       Last 12
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -4294,6 +4920,17 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                       First 13
                        
                       Last 13
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -4458,6 +5095,17 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                       First 14
                        
                       Last 14
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -4622,6 +5270,17 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                       First 8
                        
                       Last 8
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>
@@ -4786,6 +5445,17 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                       First 9
                        
                       Last 9
+                       (
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      /
+                      0
+                      )
                     </Text>
                   </View>
                 </View>

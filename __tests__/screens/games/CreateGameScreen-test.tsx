@@ -91,10 +91,12 @@ describe('CreateGameScreen', () => {
                 games: [],
             }),
         )
+        jest.useFakeTimers({ legacyFakeTimers: true })
     })
 
     afterAll(() => {
         MockDate.reset()
+        jest.useRealTimers()
     })
 
     it('should match snapshot', () => {
@@ -110,9 +112,11 @@ describe('CreateGameScreen', () => {
     })
 
     it('should create game', async () => {
-        const spy = jest
-            .spyOn(GameData, 'createGame')
-            .mockResolvedValue({ startTime: new Date('01-01-2022') } as any)
+        const spy = jest.spyOn(GameData, 'createGame').mockResolvedValue({
+            startTime: '01-01-2022',
+            teamOne: { _id: 'teamone' },
+            teamOnePlayers: [],
+        } as any)
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
