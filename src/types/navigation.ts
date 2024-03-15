@@ -176,9 +176,9 @@ export type GameHomeProps = CompositeScreenProps<
     NativeStackScreenProps<TopLevelParamList>
 >
 
-export type GameSearchProps = NativeStackScreenProps<
-    GameStackParamList,
-    'GameSearch'
+export type GameSearchProps = CompositeScreenProps<
+    NativeStackScreenProps<GameStackParamList, 'GameSearch'>,
+    NativeStackScreenProps<TopLevelParamList>
 >
 export type ViewGameProps = NativeStackScreenProps<
     GameStackParamList,
