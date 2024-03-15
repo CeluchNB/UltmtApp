@@ -62,7 +62,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
         }
 
         try {
-            const users = await searchUsers(term)
+            const users = await searchUsers(term, true)
             if (users.length <= 0) {
                 throw new Error()
             }

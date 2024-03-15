@@ -76,12 +76,15 @@ export const createAccount = async (
  * @returns list of users
  * @throws error if backend returns an error
  */
-export const searchUsers = async (term: string): Promise<DisplayUser[]> => {
+export const searchUsers = async (
+    term: string,
+    open?: boolean,
+): Promise<DisplayUser[]> => {
     try {
         if (term.length < 3) {
             throw new ApiError('Not enough characters to search')
         }
-        const response = await networkSearchUsers(term)
+        const response = await networkSearchUsers(term, open)
         return response.data.users
     } catch (error) {
         throw throwApiError(error, Constants.SEARCH_ERROR)
