@@ -69,7 +69,7 @@ it('should search', async () => {
         </NavigationContainer>,
     )
 
-    const searchBar = getByPlaceholderText('Search games...')
+    const searchBar = getByPlaceholderText('Search...')
     fireEvent.changeText(searchBar, 'text')
     await act(async () => {})
 

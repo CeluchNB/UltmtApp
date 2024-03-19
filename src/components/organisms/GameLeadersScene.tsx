@@ -101,10 +101,7 @@ const GameLeadersScene: React.FC<GameLeadersSceneProps> = ({
                 style={styles.button}
                 text="more stats"
                 onPress={async () => {
-                    navigation.navigate('Tabs', {
-                        screen: 'Games',
-                        params: { screen: 'GameStats', params: { gameId } },
-                    })
+                    navigation.navigate('GameStats', { gameId })
                 }}
             />
             {isLoading && (

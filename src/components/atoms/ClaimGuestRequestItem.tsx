@@ -51,12 +51,8 @@ const ClaimGuestRequestItem: React.FC<ClaimGuestRequestProps> = ({
                 onDeny(request._id)
             }}
             onPress={async () => {
-                navigation.navigate('Tabs', {
-                    screen: 'Account',
-                    params: {
-                        screen: 'PublicUserDetails',
-                        params: { userId: request.userId },
-                    },
+                navigation.navigate('PublicUserDetails', {
+                    userId: request.userId,
                 })
             }}
             requestStatus={request.status}>

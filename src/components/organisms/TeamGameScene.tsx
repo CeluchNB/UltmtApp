@@ -39,15 +39,8 @@ const TeamGamesScene: React.FC<TeamGamesSceneProps> = ({
                         game={item}
                         teamId={teamId}
                         onPress={() => {
-                            navigation.navigate('Tabs', {
-                                screen: 'Games',
-                                params: {
-                                    screen: 'ViewGame',
-                                    params: {
-                                        gameId: item._id,
-                                    },
-                                    initial: false,
-                                },
+                            navigation.navigate('ViewGame', {
+                                gameId: item._id,
                             })
                         }}
                     />

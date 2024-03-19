@@ -255,15 +255,8 @@ const StatsTable: React.FC<StatsTableProps> = ({ players }) => {
                             <Pressable
                                 key={`display_${record._id}`}
                                 onPress={() => {
-                                    navigation.navigate('Tabs', {
-                                        screen: 'Account',
-                                        params: {
-                                            screen: 'PublicUserDetails',
-                                            params: {
-                                                userId: record._id,
-                                            },
-                                            initial: false,
-                                        },
+                                    navigation.navigate('PublicUserDetails', {
+                                        userId: record._id,
                                     })
                                 }}>
                                 <Text

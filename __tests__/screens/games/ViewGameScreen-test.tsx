@@ -433,16 +433,10 @@ describe('ViewGameScreen', () => {
 
         fireEvent.press(getByText('huck'))
 
-        expect(mockedNavigate).toHaveBeenCalledWith('Tabs', {
-            screen: 'Games',
-            params: {
-                screen: 'Comment',
-                params: {
-                    gameId: 'game1',
-                    live: true,
-                    pointId: 'point3',
-                },
-            },
+        expect(mockedNavigate).toHaveBeenCalledWith('Comment', {
+            gameId: 'game1',
+            live: true,
+            pointId: 'point3',
         })
 
         expect(store.getState().viewAction.liveAction).toMatchObject({
@@ -492,16 +486,10 @@ describe('ViewGameScreen', () => {
 
         fireEvent.press(queryAllByText('pickup')[0])
 
-        expect(mockedNavigate).toHaveBeenCalledWith('Tabs', {
-            screen: 'Games',
-            params: {
-                screen: 'Comment',
-                params: {
-                    gameId: 'game1',
-                    live: false,
-                    pointId: 'point2',
-                },
-            },
+        expect(mockedNavigate).toHaveBeenCalledWith('Comment', {
+            gameId: 'game1',
+            live: false,
+            pointId: 'point2',
         })
 
         expect(store.getState().viewAction.savedAction).toMatchObject({

@@ -165,16 +165,8 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                             leader={item}
                             onPress={player => {
                                 if (player?.playerId || player?._id) {
-                                    navigation.navigate('Tabs', {
-                                        screen: 'Account',
-                                        params: {
-                                            screen: 'PublicUserDetails',
-                                            params: {
-                                                userId:
-                                                    player?.playerId ??
-                                                    player?._id,
-                                            },
-                                        },
+                                    navigation.navigate('PublicUserDetails', {
+                                        userId: player?.playerId ?? player?._id,
                                     })
                                 }
                             }}

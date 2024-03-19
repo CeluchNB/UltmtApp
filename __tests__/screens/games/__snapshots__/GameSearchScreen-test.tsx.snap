@@ -81,7 +81,7 @@ exports[`should match snapshot 1`] = `
             onChangeText={[Function]}
             onFocus={[Function]}
             onPressOut={[Function]}
-            placeholder="Search games..."
+            placeholder="Search..."
             placeholderTextColor="#CEC6B4"
             selectionColor="#ffd600"
             style={
@@ -451,7 +451,7 @@ exports[`should match snapshot 1`] = `
                       }
                     >
                       1
-                       results
+                       games
                     </Text>
                   </Text>
                 </View>
@@ -617,7 +617,7 @@ exports[`should match snapshot 1`] = `
                     >
                       1
                        
-                      live results
+                      live games
                     </Text>
                   </Text>
                 </View>
@@ -1201,9 +1201,18 @@ exports[`should match snapshot 1`] = `
         onLayout={[Function]}
         style={null}
       >
-        <div>
-          Game
-        </div>
+        <View
+          style={
+            {
+              "alignSelf": "center",
+              "width": "90%",
+            }
+          }
+        >
+          <div>
+            Game
+          </div>
+        </View>
       </View>
       <View
         onLayout={[Function]}

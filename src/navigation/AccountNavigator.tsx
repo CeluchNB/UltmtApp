@@ -11,18 +11,19 @@ import ManageTeamDetailsScreen from './../screens/ManageTeamDetailsScreen'
 import ManageTeamsScreen from './../screens/ManageTeamsScreen'
 import OfflineGameOptionsScreen from '../screens/games/OfflineGameOptionsScreen'
 import ProfileScreen from './../screens/ProfileScreen'
-import PublicTeamScreen from './../screens/PublicTeamScreen'
-import PublicUserScreen from './../screens/PublicUserScreen'
 import RequestTeamScreen from './../screens/RequestTeamScreen'
 import { RequestType } from './../types/request'
 import RequestUserScreen from './../screens/RequestUserScreen'
 import ResetPasswordScreen from '../screens/ResetPasswordScreen'
 import RolloverTeamScreen from './../screens/RolloverTeamScreen'
+
 import TeamRequestsScreen from '../screens/TeamRequestsScreen'
 import TeamSettingsScreen from '../screens/teams/TeamSettingsScreen'
 import UserRequestsScreen from '../screens/UserRequestsScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useTheme } from '../hooks'
+
+import { getStack } from './SharedNavigator'
 
 const Stack = createNativeStackNavigator<AccountStackParamList>()
 
@@ -30,6 +31,9 @@ const AccountNavigator: React.FC<{}> = () => {
     const {
         theme: { colors },
     } = useTheme()
+
+    const common = getStack(Stack)
+
     return (
         <Stack.Navigator
             initialRouteName={'Login'}
@@ -66,11 +70,6 @@ const AccountNavigator: React.FC<{}> = () => {
             />
             <Stack.Screen name="TeamSettings" component={TeamSettingsScreen} />
             <Stack.Screen
-                name="PublicTeamDetails"
-                component={PublicTeamScreen}
-                initialParams={{ id: '' }}
-            />
-            <Stack.Screen
                 name="RequestUser"
                 component={RequestUserScreen}
                 initialParams={{ type: RequestType.PLAYER }}
@@ -84,13 +83,6 @@ const AccountNavigator: React.FC<{}> = () => {
                 name="RolloverTeam"
                 component={RolloverTeamScreen}
                 options={{ headerBackTitle: 'Settings' }}
-            />
-            <Stack.Screen
-                name="PublicUserDetails"
-                component={PublicUserScreen}
-                initialParams={{
-                    userId: '',
-                }}
             />
             <Stack.Screen
                 name="ForgotPassword"
@@ -113,6 +105,7 @@ const AccountNavigator: React.FC<{}> = () => {
                 component={OfflineGameOptionsScreen}
                 options={{ title: '' }}
             />
+            {common}
         </Stack.Navigator>
     )
 }

@@ -11,6 +11,24 @@ export enum SecureEditField {
     PASSWORD,
 }
 
+export type SharedStackParamList = {
+    PublicTeamDetails: {
+        id: string
+        archive?: boolean
+    }
+    PublicUserDetails: {
+        userId: string
+        tab?: 'games' | 'stats'
+    }
+    ViewGame: { gameId: string }
+    Comment: {
+        gameId: string
+        pointId: string
+        live: boolean
+    }
+    GameStats: { gameId: string }
+}
+
 export type AccountStackParamList = {
     Login: undefined
     Profile: undefined
@@ -39,19 +57,12 @@ export type AccountStackParamList = {
     TeamGames: undefined
     ActiveGames: undefined
     OfflineGameOptions: { gameId: string }
-}
+} & SharedStackParamList
 
 export type GameStackParamList = {
     GameHome: undefined
     GameSearch: { live: string }
-    ViewGame: { gameId: string }
-    Comment: {
-        gameId: string
-        pointId: string
-        live: boolean
-    }
-    GameStats: { gameId: string }
-}
+} & SharedStackParamList
 
 export type TabParamList = {
     Account: NavigatorScreenParams<AccountStackParamList>
@@ -255,6 +266,8 @@ export type OfflineGameOptionsProps = NativeStackScreenProps<
 
 declare global {
     namespace ReactNavigation {
-        interface RootParamList extends TopLevelParamList {}
+        interface RootParamList
+            extends TopLevelParamList,
+                SharedStackParamList {}
     }
 }

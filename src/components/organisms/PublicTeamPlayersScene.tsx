@@ -92,13 +92,10 @@ const PublicTeamPlayersScene: React.FC<PublicTeamPlayersSceneProps> = ({
                                     showDelete={false}
                                     showAccept={false}
                                     onPress={async () => {
-                                        navigation.navigate('Tabs', {
-                                            screen: 'Account',
-                                            params: {
-                                                screen: 'PublicUserDetails',
-                                                params: { userId: user._id },
-                                            },
-                                        })
+                                        navigation.navigate(
+                                            'PublicUserDetails',
+                                            { userId: user._id },
+                                        )
                                     }}
                                 />
                             )
