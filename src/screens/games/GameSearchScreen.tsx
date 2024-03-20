@@ -267,9 +267,10 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
                                 </Text>
                                 {users.map(user => {
                                     return (
-                                        <View style={styles.listContainer}>
+                                        <View
+                                            style={styles.listContainer}
+                                            key={user._id}>
                                             <UserListItem
-                                                key={user._id}
                                                 user={user}
                                                 onPress={async () => {
                                                     navigation.navigate(
@@ -294,9 +295,10 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
                                 </Text>
                                 {teams.map(team => {
                                     return (
-                                        <View style={styles.listContainer}>
+                                        <View
+                                            style={styles.listContainer}
+                                            key={team._id}>
                                             <TeamListItem
-                                                key={team._id}
                                                 team={team}
                                                 onPress={async () => {
                                                     navigation.navigate(
@@ -320,7 +322,6 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
                 renderItem={({ item: game }) => (
                     <View style={styles.listContainer}>
                         <GameCard
-                            key={game._id}
                             game={game}
                             onPress={() => {
                                 navigation.navigate('ViewGame', {
