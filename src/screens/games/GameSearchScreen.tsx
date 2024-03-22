@@ -4,9 +4,12 @@ import GameCard from '../../components/atoms/GameCard'
 import GameFilterModal from '../../components/molecules/GameFilterModal'
 import { GameSearchProps } from '../../types/navigation'
 import SearchBar from '../../components/atoms/SearchBar'
+import TeamListItem from '../../components/atoms/TeamListItem'
+import UserListItem from '../../components/atoms/UserListItem'
 import { parseLiveValue } from '../../utils/form-utils'
 import { searchGames } from '../../services/data/game'
-import { useInfiniteQuery } from 'react-query'
+import { searchTeam } from '../../services/data/team'
+import { searchUsers } from '../../services/data/user'
 import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
@@ -18,12 +21,13 @@ import {
     View,
 } from 'react-native'
 import React, { useState } from 'react'
+import { useInfiniteQuery, useQuery } from 'react-query'
 
 const PAGE_SIZE = 10
 
 const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
     const {
-        theme: { colors, weight },
+        theme: { colors, weight, size },
     } = useTheme()
     const { live: defaultLive } = route.params
 
@@ -34,6 +38,8 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
     const [before, setBefore] = useState(
         new Date(new Date().setDate(new Date().getDate() + 7)),
     )
+    const [showUsers, setShowUsers] = useState(true)
+    const [showTeams, setShowTeams] = useState(true)
 
     const { data, isLoading, isFetchingNextPage, fetchNextPage } =
         useInfiniteQuery(
@@ -58,6 +64,22 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
             },
         )
 
+    const { data: users } = useQuery(
+        ['searchUsers', q, showUsers],
+        () => {
+            return searchUsers(q)
+        },
+        { enabled: showUsers },
+    )
+
+    const { data: teams } = useQuery(
+        ['searchTeam', q, showTeams],
+        () => {
+            return searchTeam(q)
+        },
+        { enabled: showTeams },
+    )
+
     const search = (query: string = '') => {
         setQ(query)
     }
@@ -72,15 +94,21 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
         live: string
         after: Date
         before: Date
+        showUsers: boolean
+        showTeams: boolean
     }) => {
         const {
             live: filterLive,
             after: filterAfter,
             before: filterBefore,
+            showUsers: filterShowUsers,
+            showTeams: filterShowTeams,
         } = formData
         setLive(filterLive)
         setAfter(filterAfter)
         setBefore(filterBefore)
+        setShowUsers(filterShowUsers ?? false)
+        setShowTeams(filterShowTeams ?? false)
         setModalVisible(false)
     }
 
@@ -115,6 +143,15 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
             color: colors.textPrimary,
             fontWeight: weight.bold,
         },
+        listContainer: {
+            width: '90%',
+            alignSelf: 'center',
+        },
+        header: {
+            color: colors.textPrimary,
+            fontSize: size.fontThirty,
+            fontWeight: weight.bold,
+        },
     })
 
     const footer = () => {
@@ -131,7 +168,7 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
         <SafeAreaView style={styles.screen}>
             <View>
                 <SearchBar
-                    placeholder="Search games..."
+                    placeholder="Search..."
                     onChangeText={search}
                     filter={true}
                     autoFocus={true}
@@ -143,7 +180,7 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
             </View>
             <GameFilterModal
                 visible={modalVisible}
-                defaultValues={{ live, after, before }}
+                defaultValues={{ live, after, before, showUsers, showTeams }}
                 onClose={closeFilters}
             />
             <View>
@@ -154,7 +191,7 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
                     <View>
                         <Chip mode="outlined" style={styles.resultChip}>
                             <Text style={styles.resultChipText}>
-                                {data?.pages.flat().length} results
+                                {data?.pages.flat().length} games
                             </Text>
                         </Chip>
                     </View>
@@ -166,10 +203,28 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
                                         .flat()
                                         .filter(g => g.teamOneActive).length
                                 }{' '}
-                                live results
+                                live games
                             </Text>
                         </Chip>
                     </View>
+                    {showUsers && (
+                        <View>
+                            <Chip mode="outlined" style={styles.resultChip}>
+                                <Text style={styles.resultChipText}>
+                                    {users?.length ?? 0} users
+                                </Text>
+                            </Chip>
+                        </View>
+                    )}
+                    {showTeams && (
+                        <View>
+                            <Chip mode="outlined" style={styles.resultChip}>
+                                <Text style={styles.resultChipText}>
+                                    {teams?.length ?? 0} teams
+                                </Text>
+                            </Chip>
+                        </View>
+                    )}
                     <View>
                         <Chip mode="flat" style={styles.chip}>
                             {live === 'true' && (
@@ -199,16 +254,82 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
             </View>
             <FlatList
                 data={data?.pages.flat()}
+                ListHeaderComponent={
+                    <ScrollView>
+                        {users && users.length > 0 && (
+                            <View>
+                                <Text
+                                    style={[
+                                        styles.header,
+                                        styles.listContainer,
+                                    ]}>
+                                    Users
+                                </Text>
+                                {users.map(user => {
+                                    return (
+                                        <View
+                                            style={styles.listContainer}
+                                            key={user._id}>
+                                            <UserListItem
+                                                user={user}
+                                                onPress={async () => {
+                                                    navigation.navigate(
+                                                        'PublicUserDetails',
+                                                        { userId: user._id },
+                                                    )
+                                                }}
+                                            />
+                                        </View>
+                                    )
+                                })}
+                            </View>
+                        )}
+                        {teams && teams.length > 0 && (
+                            <View>
+                                <Text
+                                    style={[
+                                        styles.header,
+                                        styles.listContainer,
+                                    ]}>
+                                    Teams
+                                </Text>
+                                {teams.map(team => {
+                                    return (
+                                        <View
+                                            style={styles.listContainer}
+                                            key={team._id}>
+                                            <TeamListItem
+                                                team={team}
+                                                onPress={async () => {
+                                                    navigation.navigate(
+                                                        'PublicTeamDetails',
+                                                        { id: team._id },
+                                                    )
+                                                }}
+                                            />
+                                        </View>
+                                    )
+                                })}
+                            </View>
+                        )}
+                        {data && data?.pages.flat().length > 0 && (
+                            <Text style={[styles.header, styles.listContainer]}>
+                                Games
+                            </Text>
+                        )}
+                    </ScrollView>
+                }
                 renderItem={({ item: game }) => (
-                    <GameCard
-                        key={game._id}
-                        game={game}
-                        onPress={() => {
-                            navigation.navigate('ViewGame', {
-                                gameId: game._id,
-                            })
-                        }}
-                    />
+                    <View style={styles.listContainer}>
+                        <GameCard
+                            game={game}
+                            onPress={() => {
+                                navigation.navigate('ViewGame', {
+                                    gameId: game._id,
+                                })
+                            }}
+                        />
+                    </View>
                 )}
                 keyExtractor={(item, i) => {
                     return `${item._id}${i}`

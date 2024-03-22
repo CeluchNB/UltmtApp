@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { IconButton, Tooltip } from 'react-native-paper'
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 const CreateTournamentScreen: React.FC<CreateTournamentProps> = ({
     navigation,
@@ -110,115 +110,127 @@ const CreateTournamentScreen: React.FC<CreateTournamentProps> = ({
     })
 
     return (
-        <BaseScreen containerWidth={80}>
-            <Controller
-                control={control}
-                name="name"
-                rules={getFormFieldRules('Tournament Name', true)}
-                render={({ field: { onChange, value } }) => {
-                    return (
-                        <View style={[styles.fieldContainer]}>
-                            <Text style={[styles.label]}>Tournament Name</Text>
-                            <UserInput
-                                placeholder="Name"
-                                onChangeText={onChange}
-                                value={value}
-                                style={styles.input}
-                            />
-                        </View>
-                    )
-                }}
-            />
-            <FormError error={errors.name} />
-            <Controller
-                control={control}
-                name="eventId"
-                rules={getFormFieldRules('Tournament ID', true)}
-                render={({ field: { onChange, value } }) => {
-                    return (
-                        <View style={[styles.fieldContainer]}>
-                            <View style={styles.idTitleContainer}>
+        <ScrollView>
+            <BaseScreen containerWidth={80}>
+                <Controller
+                    control={control}
+                    name="name"
+                    rules={getFormFieldRules('Tournament Name', true)}
+                    render={({ field: { onChange, value } }) => {
+                        return (
+                            <View style={[styles.fieldContainer]}>
                                 <Text style={[styles.label]}>
-                                    Tournament ID
+                                    Tournament Name
                                 </Text>
-                                <Tooltip
-                                    title={'i.e. "nationals00"'}
-                                    enterTouchDelay={200}>
-                                    <IconButton
-                                        iconColor={colors.textPrimary}
-                                        icon="help-circle"
-                                        size={20}
-                                        onPress={() => {}}
-                                        style={styles.helpIcon}
+                                <UserInput
+                                    placeholder="Name"
+                                    onChangeText={onChange}
+                                    value={value}
+                                    style={styles.input}
+                                />
+                            </View>
+                        )
+                    }}
+                />
+                <FormError error={errors.name} />
+                <Controller
+                    control={control}
+                    name="eventId"
+                    rules={getFormFieldRules('Tournament ID', true)}
+                    render={({ field: { onChange, value } }) => {
+                        return (
+                            <View style={[styles.fieldContainer]}>
+                                <View style={styles.idTitleContainer}>
+                                    <Text style={[styles.label]}>
+                                        Tournament ID
+                                    </Text>
+                                    <Tooltip
+                                        title={'i.e. "nationals00"'}
+                                        enterTouchDelay={200}>
+                                        <IconButton
+                                            iconColor={colors.textPrimary}
+                                            icon="help-circle"
+                                            size={20}
+                                            onPress={() => {}}
+                                            style={styles.helpIcon}
+                                        />
+                                    </Tooltip>
+                                </View>
+                                <UserInput
+                                    placeholder="Unique Identifier"
+                                    onChangeText={onChange}
+                                    value={value}
+                                />
+                            </View>
+                        )
+                    }}
+                />
+                <FormError error={errors.eventId} />
+                <View style={styles.dateGroup}>
+                    <Controller
+                        control={control}
+                        name="startDate"
+                        render={({ field: { onChange, value } }) => {
+                            return (
+                                <View
+                                    style={[
+                                        styles.fieldContainer,
+                                        styles.dateContainer,
+                                    ]}>
+                                    <Text
+                                        style={[
+                                            styles.label,
+                                            styles.dateLabel,
+                                        ]}>
+                                        Start
+                                    </Text>
+                                    <TextDateInput
+                                        value={value}
+                                        style={styles.datePicker}
+                                        onChange={onChange}
                                     />
-                                </Tooltip>
-                            </View>
-                            <UserInput
-                                placeholder="Unique Identifier"
-                                onChangeText={onChange}
-                                value={value}
-                            />
-                        </View>
-                    )
-                }}
-            />
-            <FormError error={errors.eventId} />
-            <View style={styles.dateGroup}>
-                <Controller
-                    control={control}
-                    name="startDate"
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <View
-                                style={[
-                                    styles.fieldContainer,
-                                    styles.dateContainer,
-                                ]}>
-                                <Text style={[styles.label, styles.dateLabel]}>
-                                    Start
-                                </Text>
-                                <TextDateInput
-                                    value={value}
-                                    style={styles.datePicker}
-                                    onChange={onChange}
-                                />
-                            </View>
-                        )
-                    }}
+                                </View>
+                            )
+                        }}
+                    />
+                    <FormError error={errors.startDate} />
+                    <Controller
+                        control={control}
+                        name="endDate"
+                        render={({ field: { onChange, value } }) => {
+                            return (
+                                <View
+                                    style={[
+                                        styles.fieldContainer,
+                                        styles.dateContainer,
+                                    ]}>
+                                    <Text
+                                        style={[
+                                            styles.label,
+                                            styles.dateLabel,
+                                        ]}>
+                                        End
+                                    </Text>
+                                    <TextDateInput
+                                        value={value}
+                                        style={styles.datePicker}
+                                        onChange={onChange}
+                                    />
+                                </View>
+                            )
+                        }}
+                    />
+                    <FormError error={errors.endDate} />
+                </View>
+                {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+                <PrimaryButton
+                    style={[styles.fieldContainer]}
+                    text="create"
+                    onPress={handleSubmit(onCreate)}
+                    loading={loading}
                 />
-                <FormError error={errors.startDate} />
-                <Controller
-                    control={control}
-                    name="endDate"
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <View
-                                style={[
-                                    styles.fieldContainer,
-                                    styles.dateContainer,
-                                ]}>
-                                <Text style={[styles.label, styles.dateLabel]}>
-                                    End
-                                </Text>
-                                <TextDateInput
-                                    value={value}
-                                    style={styles.datePicker}
-                                    onChange={onChange}
-                                />
-                            </View>
-                        )
-                    }}
-                />
-                <FormError error={errors.endDate} />
-            </View>
-            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
-            <PrimaryButton
-                style={[styles.fieldContainer]}
-                text="create"
-                onPress={handleSubmit(onCreate)}
-                loading={loading}
-            />
-        </BaseScreen>
+            </BaseScreen>
+        </ScrollView>
     )
 }
 

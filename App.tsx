@@ -101,6 +101,9 @@ const App: React.FC<{}> = () => {
                     <Stack.Screen
                         name="SelectOpponent"
                         component={SelectOpponentScreen}
+                        options={{
+                            headerBackTitle: 'My Team',
+                        }}
                     />
                     <Stack.Screen
                         name="SearchTournaments"
@@ -110,12 +113,15 @@ const App: React.FC<{}> = () => {
                         name="CreateTournament"
                         component={CreateTournamentScreen}
                         initialParams={{ name: '' }}
+                        options={{
+                            headerBackTitle: 'Search',
+                        }}
                     />
                     <Stack.Screen name="JoinGame" component={JoinGameScreen} />
                     <Stack.Screen
                         name="CreateGame"
                         component={CreateGameScreen}
-                        options={{ title: '' }}
+                        options={{ title: '', headerBackTitle: 'Opponent' }}
                     />
                 </Stack.Group>
                 <Stack.Screen name="LiveGame" component={LiveGameNavigator} />

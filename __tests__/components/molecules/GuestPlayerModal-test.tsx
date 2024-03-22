@@ -1,26 +1,42 @@
-import * as GameServices from '../../../src/services/network/game'
+import * as Constants from '../../../src/utils/constants'
 import * as LocalGameServices from '../../../src/services/local/game'
+import * as TeamServices from '../../../src/services/network/team'
 import { AxiosResponse } from 'axios'
 import GuestPlayerModal from '../../../src/components/molecules/GuestPlayerModal'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { game } from '../../../fixtures/data'
 import store from '../../../src/store/store'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
+const client = new QueryClient()
+
 describe('GuestPlayerModal', () => {
     beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
         jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(
             Promise.resolve(undefined),
         )
     })
 
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     it('should match snapshot', () => {
         const snapshot = render(
             <Provider store={store}>
-                <GuestPlayerModal visible={true} onClose={jest.fn()} />
+                <QueryClientProvider client={client}>
+                    <GuestPlayerModal visible={true} onClose={jest.fn()} />
+                </QueryClientProvider>
             </Provider>,
         )
 
@@ -28,10 +44,20 @@ describe('GuestPlayerModal', () => {
     })
 
     it('should call add player correctly', async () => {
-        const spy = jest.spyOn(GameServices, 'addGuestPlayer').mockReturnValue(
+        const spy = jest.spyOn(TeamServices, 'createGuest').mockReturnValue(
             Promise.resolve({
                 data: {
-                    game: { ...game, startTime: '2022', tournament: undefined },
+                    team: {
+                        players: [
+                            ...game.teamOnePlayers,
+                            {
+                                _id: 'id',
+                                firstName: 'First',
+                                lastName: 'Last',
+                                username: 'guest1234',
+                            },
+                        ],
+                    },
                 },
                 status: 200,
                 statusText: 'Good',
@@ -47,42 +73,54 @@ describe('GuestPlayerModal', () => {
         )
         let visible = true
 
-        const { getByPlaceholderText, getByText } = render(
+        render(
             <Provider store={store}>
-                <GuestPlayerModal
-                    visible={true}
-                    onClose={() => {
-                        visible = false
-                    }}
-                />
+                <QueryClientProvider client={client}>
+                    <GuestPlayerModal
+                        visible={true}
+                        onClose={() => {
+                            visible = false
+                        }}
+                    />
+                </QueryClientProvider>
             </Provider>,
         )
 
-        const firstInput = getByPlaceholderText('First Name')
-        const lastInput = getByPlaceholderText('Last Name')
+        const firstInput = screen.getByPlaceholderText('First Name')
+        const lastInput = screen.getByPlaceholderText('Last Name')
 
         fireEvent.changeText(firstInput, 'First')
         fireEvent.changeText(lastInput, 'Last')
 
-        const button = getByText('add')
+        const button = screen.getByText('add')
         fireEvent.press(button)
 
         await waitFor(() => {
             expect(spy).toHaveBeenCalled()
         })
-        expect(visible).toBe(false)
+        expect(screen.queryByText('First')).toBeNull()
+        expect(screen.queryByText('Last')).toBeNull()
+        expect(visible).toBe(true)
     })
 
     it('with form errors', async () => {
-        const spy = jest.spyOn(GameServices, 'addGuestPlayer').mockReturnValue(
+        const spy = jest.spyOn(TeamServices, 'createGuest').mockReturnValue(
             Promise.resolve({
                 data: {
-                    game: { ...game, startTime: '2022', tournament: undefined },
+                    team: {
+                        players: [
+                            ...game.teamOnePlayers,
+                            {
+                                _id: 'id',
+                                firstName: 'First',
+                                lastName: 'Last',
+                                username: 'guest1234',
+                            },
+                        ],
+                    },
                 },
                 status: 200,
                 statusText: 'Good',
-                config: {},
-                headers: {},
             } as AxiosResponse),
         )
         spy.mockClear()
@@ -90,12 +128,14 @@ describe('GuestPlayerModal', () => {
 
         const { getByText, findByText } = render(
             <Provider store={store}>
-                <GuestPlayerModal
-                    visible={true}
-                    onClose={() => {
-                        visible = false
-                    }}
-                />
+                <QueryClientProvider client={client}>
+                    <GuestPlayerModal
+                        visible={true}
+                        onClose={() => {
+                            visible = false
+                        }}
+                    />
+                </QueryClientProvider>
             </Provider>,
         )
 
@@ -108,7 +148,7 @@ describe('GuestPlayerModal', () => {
     })
 
     it('with network error', async () => {
-        const spy = jest.spyOn(GameServices, 'addGuestPlayer').mockReturnValue(
+        const spy = jest.spyOn(TeamServices, 'createGuest').mockReturnValue(
             Promise.reject({
                 data: { message: 'Bad guest' },
                 status: 400,
@@ -122,12 +162,14 @@ describe('GuestPlayerModal', () => {
 
         const { getByPlaceholderText, getByText } = render(
             <Provider store={store}>
-                <GuestPlayerModal
-                    visible={true}
-                    onClose={() => {
-                        visible = false
-                    }}
-                />
+                <QueryClientProvider client={client}>
+                    <GuestPlayerModal
+                        visible={true}
+                        onClose={() => {
+                            visible = false
+                        }}
+                    />
+                </QueryClientProvider>
             </Provider>,
         )
 
@@ -143,7 +185,7 @@ describe('GuestPlayerModal', () => {
         await waitFor(() => {
             expect(spy).toHaveBeenCalled()
         })
-        expect(getByText('Bad guest')).not.toBeNull()
+        expect(getByText(Constants.ADD_GUEST_ERROR)).not.toBeNull()
         expect(visible).toBe(true)
     })
 })

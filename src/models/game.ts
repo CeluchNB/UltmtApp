@@ -1,7 +1,7 @@
 import { DisplayUser } from '../types/user'
 import { Realm } from '@realm/react'
 import { Tournament } from '../types/tournament'
-import { CreateGame, Game } from '../types/game'
+import { CreateGame, Game, PointStats } from '../types/game'
 import { DisplayTeam, GuestTeam } from '../types/team'
 
 export class GameSchema {
@@ -31,6 +31,7 @@ export class GameSchema {
             teamTwoPlayers: 'DisplayUser[]',
             resolveCode: 'string',
             points: 'string[]',
+            statsPoints: 'PointStats[]',
             offline: 'bool',
         },
     }
@@ -57,9 +58,14 @@ export class GameSchema {
     teamTwoPlayers: DisplayUser[]
     resolveCode: string
     points: string[]
+    statsPoints: PointStats[]
     offline: boolean
 
-    constructor(game: Game, offline: boolean = false) {
+    constructor(
+        game: Game,
+        offline: boolean = false,
+        statsPoints: PointStats[] = [],
+    ) {
         this._id = game._id
         this.creator = game.creator
         this.teamOne = game.teamOne
@@ -82,6 +88,7 @@ export class GameSchema {
         this.teamTwoPlayers = game.teamTwoPlayers
         this.resolveCode = game.resolveCode || ''
         this.points = game.points
+        this.statsPoints = statsPoints
         this.offline = offline
     }
 
@@ -109,7 +116,32 @@ export class GameSchema {
             teamTwoPlayers: [],
             resolveCode: '',
             points: [],
+            statsPoints: [],
             offline: true,
         }
     }
+}
+export const PointStatsSchema: Realm.ObjectSchema = {
+    name: 'PointStats',
+    embedded: true,
+    properties: {
+        _id: 'string',
+        pointStats: 'PlayerPointStats[]',
+    },
+}
+
+export const PlayerPointStatsSchema: Realm.ObjectSchema = {
+    name: 'PlayerPointStats',
+    embedded: true,
+    properties: {
+        _id: 'string',
+        firstName: 'string',
+        lastName: 'string',
+        username: 'string?',
+        pointsPlayed: 'int',
+        goals: 'int',
+        assists: 'int',
+        turnovers: 'int',
+        blocks: 'int',
+    },
 }

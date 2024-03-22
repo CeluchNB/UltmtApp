@@ -240,6 +240,7 @@ const GameForm: React.FC<GameFormProps> = props => {
                         <LabeledFormInput
                             label="Floater timeout"
                             onChange={onChange}
+                            onLabelPress={() => onChange(!value)}
                             value={value}
                             error={errors.floaterTimeout?.message}>
                             <Switch

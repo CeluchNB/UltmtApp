@@ -60,7 +60,7 @@ exports[`should match snapshot when visible 1`] = `
         }
       }
       accessible={true}
-      focusable={false}
+      focusable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
@@ -491,7 +491,7 @@ exports[`should match snapshot with error 1`] = `
         }
       }
       accessible={true}
-      focusable={false}
+      focusable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}

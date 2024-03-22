@@ -3,7 +3,7 @@ import * as RequestData from '../services/data/request'
 import { ApiError } from '../types/services'
 import BulkCodeModal from '../components/molecules/BulkCodeModal'
 import { DisplayUser } from '../types/user'
-import { IconButton } from 'react-native-paper'
+import PlayerSuccessItem from '../components/atoms/PlayerSuccessItem'
 import { RequestType } from '../types/request'
 import { RequestUserProps } from '../types/navigation'
 import SearchBar from '../components/atoms/SearchBar'
@@ -54,6 +54,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
 
     const search = async (term: string) => {
         setError('')
+        setSearchError('')
         if (term.length < 3) {
             setSearchError('')
             setPlayers([])
@@ -61,7 +62,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
         }
 
         try {
-            const users = await searchUsers(term)
+            const users = await searchUsers(term, true)
             if (users.length <= 0) {
                 throw new Error()
             }
@@ -142,8 +143,9 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
             flex: 1,
             alignSelf: 'center',
         },
-        bulkCodeButton: {
+        buttonContainer: {
             alignSelf: 'center',
+            flexDirection: 'row',
         },
     })
 
@@ -156,14 +158,24 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
                 style={styles.input}
                 onChangeText={search}
             />
-            <SecondaryButton
-                style={styles.bulkCodeButton}
-                text="create bulk join code"
-                loading={bulkCodeLoading}
-                onPress={async () => {
-                    requestBulkCode()
-                }}
-            />
+            <View style={styles.buttonContainer}>
+                <SecondaryButton
+                    text="create join code"
+                    loading={bulkCodeLoading}
+                    onPress={async () => {
+                        requestBulkCode()
+                    }}
+                />
+                <SecondaryButton
+                    text="add guest"
+                    loading={false}
+                    onPress={async () => {
+                        navigation.navigate('AddGuest', {
+                            teamId: team?._id || '',
+                        })
+                    }}
+                />
+            </View>
             {searchError.length > 0 && (
                 <Text style={styles.error}>{searchError}</Text>
             )}
@@ -199,19 +211,7 @@ const RequestUserScreen: React.FC<RequestUserProps> = ({
                 data={selectedPlayers}
                 keyExtractor={item => item._id}
                 renderItem={({ item }: { item: DisplayUser }) => {
-                    return (
-                        <View style={styles.playerContainer}>
-                            <Text
-                                style={
-                                    styles.playerItem
-                                }>{`${item.firstName} ${item.lastName}`}</Text>
-                            <IconButton
-                                icon="check"
-                                iconColor={colors.success}
-                                disabled
-                            />
-                        </View>
-                    )
+                    return <PlayerSuccessItem user={item} />
                 }}
             />
         </View>

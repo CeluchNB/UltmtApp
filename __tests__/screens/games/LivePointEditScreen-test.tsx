@@ -143,13 +143,12 @@ const client = new QueryClient()
 describe('LivePointEditScreen', () => {
     beforeAll(() => {
         jest.useFakeTimers({ legacyFakeTimers: true })
+        jest.spyOn(ActionData, 'getLocalActionsByPoint').mockResolvedValue([])
     })
 
     afterAll(() => {
         jest.useRealTimers()
     })
-
-    jest.spyOn(ActionData, 'getLocalActionsByPoint').mockResolvedValue([])
 
     it('matches snapshot', async () => {
         render(
@@ -204,6 +203,7 @@ describe('LivePointEditScreen', () => {
             expect(pullBtn).not.toBeDisabled()
         })
 
+        const actions: LiveServerActionData[] = []
         fireEvent.press(pullBtn)
         await act(async () => {
             const pull: LiveServerActionData = {
@@ -213,6 +213,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(pull)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, pull)
         })
         fireEvent.press(getByText('they score'))
@@ -224,6 +225,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(theyScore)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, theyScore)
         })
         fireEvent.press(getByText('next point'))
@@ -234,7 +236,7 @@ describe('LivePointEditScreen', () => {
                 routes: [{ name: 'SelectPlayers' }],
             })
         })
-        expect(finishPointSpy).toHaveBeenCalledWith(point._id)
+        expect(finishPointSpy).toHaveBeenCalledWith(point, actions, 'one')
         expect(store.getState().liveGame.game.teamTwoScore).toBe(1)
         expect(store.getState().liveGame.game.teamOneScore).toBe(0)
         expect(createPointSpy).toHaveBeenCalledWith(false, 2)
@@ -275,6 +277,7 @@ describe('LivePointEditScreen', () => {
             expect(catchBtn).not.toBeDisabled()
         })
 
+        const actions: LiveServerActionData[] = []
         fireEvent.press(catchBtn)
         await act(async () => {
             const catchAction: LiveServerActionData = {
@@ -284,6 +287,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(catchAction)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[2])
@@ -295,6 +299,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(catchAction)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[3])
@@ -306,6 +311,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(catchAction)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[4])
@@ -322,7 +328,7 @@ describe('LivePointEditScreen', () => {
         fireEvent.press(getByTestId('undo-button'))
         await act(async () => {
             emitter.emit(LocalPointEvents.UNDO_LISTEN, {
-                team: 'one',
+                team: 'two',
                 actionNumber: 4,
             })
         })
@@ -335,6 +341,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(scoreAction)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, scoreAction)
         })
         fireEvent.press(getByText('next point'))
@@ -345,7 +352,7 @@ describe('LivePointEditScreen', () => {
                 routes: [{ name: 'SelectPlayers' }],
             })
         })
-        expect(finishPointSpy).toHaveBeenCalledWith(point._id)
+        expect(finishPointSpy).toHaveBeenCalledWith(point, actions, 'two')
         expect(store.getState().liveGame.game.teamTwoScore).toBe(0)
         expect(store.getState().liveGame.game.teamOneScore).toBe(1)
         expect(createPointSpy).toHaveBeenCalledWith(false, 2)
@@ -378,6 +385,7 @@ describe('LivePointEditScreen', () => {
             expect(pullBtn).not.toBeDisabled()
         })
 
+        const actions: LiveServerActionData[] = []
         fireEvent.press(pullBtn)
         await act(async () => {
             const pull: LiveServerActionData = {
@@ -387,6 +395,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(pull)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, pull)
         })
         fireEvent.press(getByText('they score'))
@@ -398,6 +407,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(theyScore)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, theyScore)
         })
         fireEvent.press(getByText('finish game'))
@@ -408,7 +418,7 @@ describe('LivePointEditScreen', () => {
                 params: { screen: 'Profile', initial: false },
             })
         })
-        expect(finishPointSpy).toHaveBeenCalledWith(point._id)
+        expect(finishPointSpy).toHaveBeenCalledWith(point, actions, 'one')
         expect(finishGameSpy).toHaveBeenCalled()
     })
 
@@ -487,6 +497,7 @@ describe('LivePointEditScreen', () => {
             expect(catchBtn).not.toBeDisabled()
         })
 
+        const actions: LiveServerActionData[] = []
         fireEvent.press(catchBtn)
         await act(async () => {
             const catchAction: LiveServerActionData = {
@@ -496,6 +507,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(catchAction)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[2])
@@ -507,6 +519,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(catchAction)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[3])
@@ -518,6 +531,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(catchAction)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, catchAction)
         })
         fireEvent.press(getAllByText('Catch')[4])
@@ -547,6 +561,7 @@ describe('LivePointEditScreen', () => {
                 comments: [],
                 tags: [],
             }
+            actions.push(scoreAction)
             emitter.emit(LocalPointEvents.ACTION_LISTEN, scoreAction)
         })
         fireEvent.press(getByText('next point'))
@@ -557,7 +572,7 @@ describe('LivePointEditScreen', () => {
                 routes: [{ name: 'SelectPlayers' }],
             })
         })
-        expect(finishPointSpy).toHaveBeenCalledWith(point._id)
+        expect(finishPointSpy).toHaveBeenCalledWith(point, actions, 'two')
         expect(store.getState().liveGame.game.teamTwoScore).toBe(0)
         expect(store.getState().liveGame.game.teamOneScore).toBe(1)
         expect(createPointSpy).toHaveBeenCalledWith(false, 2)

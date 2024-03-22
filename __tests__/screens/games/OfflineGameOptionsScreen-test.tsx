@@ -119,7 +119,7 @@ describe('OfflineGameOptionsScreen', () => {
     it('handles reactivate', async () => {
         jest.spyOn(GameData, 'reactivateGame').mockReturnValueOnce(
             Promise.resolve({
-                game: { ...game, offline: true },
+                game: { ...game, offline: true, statsPoints: [] },
                 team: 'one',
                 activePoint: undefined,
                 hasActiveActions: false,

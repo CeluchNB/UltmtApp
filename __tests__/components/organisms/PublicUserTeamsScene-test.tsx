@@ -93,14 +93,8 @@ describe('PublicUserTeamScene', () => {
         fireEvent.press(
             screen.getByText(`@${fetchProfileData.playerTeams[0].teamname}`),
         )
-        expect(mockedNavigate).toHaveBeenCalledWith('Tabs', {
-            screen: 'Account',
-            params: {
-                screen: 'PublicTeamDetails',
-                params: {
-                    id: fetchProfileData.playerTeams[0]._id,
-                },
-            },
+        expect(mockedNavigate).toHaveBeenCalledWith('PublicTeamDetails', {
+            id: fetchProfileData.playerTeams[0]._id,
         })
     })
 

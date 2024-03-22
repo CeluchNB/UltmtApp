@@ -1,4 +1,5 @@
 import { CreateTeam } from '../../types/team'
+import { GuestUser } from '../../types/user'
 import { API_KEY, API_URL_V1 } from '@env'
 import axios, { AxiosResponse } from 'axios'
 
@@ -185,6 +186,25 @@ export const teamnameIsTaken = async (
         `${API_URL_V1}/team/teamname-taken?teamname=${teamname}`,
         {
             headers: {
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}
+
+export const createGuest = async (
+    token: string,
+    teamId: string,
+    guest: GuestUser,
+) => {
+    return await axios.post(
+        `${API_URL_V1}/team/${teamId}/guest`,
+        {
+            guest,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
                 'X-API-Key': API_KEY,
             },
         },

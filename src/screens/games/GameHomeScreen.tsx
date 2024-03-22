@@ -114,7 +114,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.screen}>
             <SearchBar
-                placeholder="Search games..."
+                placeholder="Search..."
                 onPress={() => navigateToSearch('undefined')}
             />
             <ScrollView

@@ -155,16 +155,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
     }
 
     const onViewGame = (gameId: string) => {
-        navigation.navigate('Tabs', {
-            screen: 'Games',
-            params: {
-                screen: 'ViewGame',
-                params: {
-                    gameId,
-                },
-                initial: false,
-            },
-        })
+        navigation.navigate('ViewGame', { gameId })
     }
 
     const styles = StyleSheet.create({

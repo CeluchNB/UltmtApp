@@ -194,6 +194,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
           }
         >
           <Text
+            onPress={[Function]}
             style={
               {
                 "color": "#ffd600",
@@ -590,6 +591,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                         placeholder="12:00am"
                         placeholderTextColor="#ffd600"
                         selectionColor="#ffd600"
+                        showSoftInputOnFocus={false}
                         style={
                           [
                             {
@@ -1182,6 +1184,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
             }
           >
             <Text
+              onPress={[Function]}
               style={
                 {
                   "color": "#ffd600",

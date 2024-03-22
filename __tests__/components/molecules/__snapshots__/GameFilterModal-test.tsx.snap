@@ -60,7 +60,7 @@ exports[`should match snapshot 1`] = `
         }
       }
       accessible={true}
-      focusable={false}
+      focusable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
@@ -559,6 +559,158 @@ exports[`should match snapshot 1`] = `
             }
           }
         >
+          <View
+            style={
+              {
+                "display": "flex",
+                "flexDirection": "row",
+                "marginTop": 10,
+              }
+            }
+          >
+            <View
+              accessibilityRole="checkbox"
+              accessibilityState={
+                {
+                  "checked": false,
+                  "disabled": false,
+                }
+              }
+              accessibilityValue={
+                {
+                  "text": "off",
+                }
+              }
+              accessible={true}
+              pointerEvents="auto"
+            >
+              <RNCCheckbox
+                boxType="square"
+                forwardedRef={null}
+                offAnimationType="bounce"
+                onAnimationType="bounce"
+                onCheckColor="#303030"
+                onFillColor="#ffd600"
+                onTintColor="#ffd600"
+                onValueChange={[Function]}
+                style={
+                  [
+                    {
+                      "backgroundColor": "transparent",
+                      "height": 32,
+                      "width": 32,
+                    },
+                    undefined,
+                  ]
+                }
+                tintColor="#CEC6B4"
+                tintColors={
+                  {
+                    "false": "#CEC6B4",
+                    "true": "#ffd600",
+                  }
+                }
+              />
+            </View>
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "fontSize": 41.0958904109589,
+                  "fontWeight": "bold",
+                  "marginLeft": 20,
+                }
+              }
+            >
+              Include Users
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "display": "flex",
+              "flexDirection": "row",
+              "marginTop": 10,
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "display": "flex",
+                "flexDirection": "row",
+                "marginTop": 10,
+              }
+            }
+          >
+            <View
+              accessibilityRole="checkbox"
+              accessibilityState={
+                {
+                  "checked": false,
+                  "disabled": false,
+                }
+              }
+              accessibilityValue={
+                {
+                  "text": "off",
+                }
+              }
+              accessible={true}
+              pointerEvents="auto"
+            >
+              <RNCCheckbox
+                boxType="square"
+                forwardedRef={null}
+                offAnimationType="bounce"
+                onAnimationType="bounce"
+                onCheckColor="#303030"
+                onFillColor="#ffd600"
+                onTintColor="#ffd600"
+                onValueChange={[Function]}
+                style={
+                  [
+                    {
+                      "backgroundColor": "transparent",
+                      "height": 32,
+                      "width": 32,
+                    },
+                    undefined,
+                  ]
+                }
+                tintColor="#CEC6B4"
+                tintColors={
+                  {
+                    "false": "#CEC6B4",
+                    "true": "#ffd600",
+                  }
+                }
+              />
+            </View>
+            <Text
+              style={
+                {
+                  "color": "#ffd600",
+                  "fontSize": 41.0958904109589,
+                  "fontWeight": "bold",
+                  "marginLeft": 20,
+                }
+              }
+            >
+              Include Teams
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "display": "flex",
+              "flexDirection": "row",
+              "marginTop": 10,
+            }
+          }
+        >
           <View>
             <View
               style={
@@ -624,6 +776,7 @@ exports[`should match snapshot 1`] = `
                       placeholder="10/01/22"
                       placeholderTextColor="#ffd600"
                       selectionColor="#ffd600"
+                      showSoftInputOnFocus={false}
                       style={
                         [
                           {
@@ -744,6 +897,7 @@ exports[`should match snapshot 1`] = `
                       placeholder="10/01/22"
                       placeholderTextColor="#ffd600"
                       selectionColor="#ffd600"
+                      showSoftInputOnFocus={false}
                       style={
                         [
                           {

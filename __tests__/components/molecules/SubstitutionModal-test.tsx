@@ -6,11 +6,12 @@ import SubstitutionModal from '../../../src/components/molecules/SubstitutionMod
 import { game } from '../../../fixtures/data'
 import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import {
+    addPlayers,
     setGame,
     setTeam,
 } from '../../../src/store/reducers/features/game/liveGameReducer'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -124,6 +125,7 @@ beforeEach(() => {
             startTime: '2022',
         }),
     )
+    store.dispatch(addPlayers(playerList1))
     store.dispatch(setTeam('one'))
     store.dispatch(setPoint(point))
 })
@@ -195,6 +197,9 @@ it('should correctly make subsitution', async () => {
     fireEvent.press(submitBtn)
 
     await waitFor(() => {
-        expect(onSubmit).toHaveBeenCalledWith(playerList1[0], playerList1[8])
+        expect(onSubmit).toHaveBeenCalledWith(
+            expect.objectContaining(playerList1[0]),
+            expect.objectContaining(playerList1[8]),
+        )
     })
 })

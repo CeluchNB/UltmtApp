@@ -1,7 +1,6 @@
 import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import ChangePullingTeamModal from '../../components/molecules/ChangePullingTeamModal'
-import { Chip } from 'react-native-paper'
 import ConfirmModal from '../../components/molecules/ConfirmModal'
 import { DisplayUser } from '../../types/user'
 import GameHeader from '../../components/molecules/GameHeader'
@@ -10,16 +9,20 @@ import LivePointUtilityBar from '../../components/molecules/LivePointUtilityBar'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectPlayersProps } from '../../types/navigation'
+import { getTeamById } from '../../services/data/team'
 import { isPulling } from '../../utils/point'
 import { reactivatePoint } from '../../services/data/point'
 import { setPlayers } from '../../services/data/point'
-import { useMutation } from 'react-query'
 import { useTheme } from '../../hooks'
-import { FlatList, LogBox, StyleSheet, Text, View } from 'react-native'
+import { Chip, IconButton, Tooltip } from 'react-native-paper'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import {
+    addPlayers,
+    selectActiveTeam,
     selectGame,
     selectTeam,
+    subtractPlayerStats,
     updateScore,
 } from '../../store/reducers/features/game/liveGameReducer'
 import {
@@ -27,22 +30,33 @@ import {
     setPoint,
 } from '../../store/reducers/features/point/livePointReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import { useMutation, useQuery } from 'react-query'
 
 const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
-    // ignore flatlist flex wrap warning
-    LogBox.ignoreLogs(['`flexWrap: `wrap`` is'])
     const {
         theme: { colors, size },
     } = useTheme()
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
+    const activeTeam = useSelector(selectActiveTeam)
     const dispatch = useDispatch<AppDispatch>()
 
     const [selectedPlayers, setSelectedPlayers] = useState<number[]>([])
     const [guestModalVisible, setGuestModalVisible] = useState(false)
     const [pullingModalVisible, setPullingModalVisible] = useState(false)
     const [confirmModalVisible, setConfirmModalVisible] = useState(false)
+
+    // keep players up to date with any team edits
+    useQuery(
+        ['getLocalTeam', { teamId: activeTeam._id }],
+        () => getTeamById(activeTeam._id),
+        {
+            onSuccess(localTeam) {
+                dispatch(addPlayers(localTeam.players))
+            },
+        },
+    )
 
     const {
         mutateAsync: setPlayerMutation,
@@ -52,20 +66,14 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     } = useMutation((players: DisplayUser[]) => setPlayers(point._id, players))
 
     const playerList = React.useMemo(() => {
-        let players
-        if (team === 'one') {
-            players = game.teamOnePlayers
-        } else {
-            players = game.teamTwoPlayers
-        }
-        return players
+        return activeTeam.players
             .slice()
             .sort((a, b) =>
                 `${a.firstName} ${a.lastName}`.localeCompare(
                     `${b.firstName} ${b.lastName}`,
                 ),
             )
-    }, [game, team])
+    }, [activeTeam.players])
 
     // no guaranteed unique attribute of GuestPlayer
     // must select by index
@@ -108,6 +116,8 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                 point.pointNumber - 1,
                 team,
             )
+            dispatch(subtractPlayerStats({ pointId: reactivatedPoint._id }))
+
             dispatch(setPoint(reactivatedPoint))
             dispatch(
                 updateScore({
@@ -115,6 +125,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                     teamTwoScore: reactivatedPoint.teamTwoScore,
                 }),
             )
+
             navigation.reset({ index: 0, routes: [{ name: 'LivePointEdit' }] })
         } catch (e) {
             // TODO: error display?
@@ -136,9 +147,15 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
             alignSelf: 'center',
         },
         headerFooterContainer: { width: '100%' },
-        flatListContainer: {
+        statsKeyContainer: {
             flexDirection: 'row',
-            flexWrap: 'wrap',
+            alignSelf: 'flex-end',
+            justifyContent: 'center',
+            alignContent: 'center',
+            textAlignVertical: 'center',
+        },
+        statsKey: {
+            color: colors.textPrimary,
             alignSelf: 'center',
         },
         chip: {
@@ -158,6 +175,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         setPullingChip: {
             backgroundColor: colors.primary,
             borderColor: colors.textPrimary,
+            margin: 5,
         },
         setPullingText: {
             color: colors.textPrimary,
@@ -169,14 +187,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         <BaseScreen containerWidth={90}>
             <View style={styles.container}>
                 <FlatList
-                    contentContainerStyle={styles.flatListContainer}
                     ListHeaderComponentStyle={styles.headerFooterContainer}
                     ListFooterComponentStyle={styles.headerFooterContainer}
                     data={playerList}
                     testID="players-flat-list"
                     ListHeaderComponent={
                         <View>
-                            <GameHeader header game={game} />
+                            <GameHeader header editing game={game} />
                             <Text style={styles.description}>
                                 {game.playersPerPoint} players on next{' '}
                                 {isPulling(point, game, team) ? 'D ' : 'O '}
@@ -204,6 +221,21 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                     navigation.navigate('EditGame')
                                 }}
                             />
+                            <View style={styles.statsKeyContainer}>
+                                <Text style={styles.statsKey}>
+                                    (PP - A - G - B - T)
+                                </Text>
+                                <Tooltip
+                                    title="Points Played - Assists - Goals - Blocks - Turnovers"
+                                    enterTouchDelay={150}>
+                                    <IconButton
+                                        iconColor={colors.textPrimary}
+                                        icon="help-circle"
+                                        size={20}
+                                        onPress={() => {}}
+                                    />
+                                </Tooltip>
+                            </View>
                         </View>
                     }
                     renderItem={({ item, index }) => {
@@ -220,7 +252,13 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                         : colors.gray
                                 }
                                 ellipsizeMode="tail">
-                                {item.firstName} {item.lastName}
+                                {item.firstName} {item.lastName} (
+                                <Text style={{ color: colors.textPrimary }}>
+                                    {item.pointsPlayed} - {item.assists} -{' '}
+                                    {item.goals} - {item.blocks} -{' '}
+                                    {item.turnovers}
+                                </Text>
+                                )
                             </Chip>
                         )
                     }}
@@ -254,6 +292,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
             </View>
             <GuestPlayerModal
                 visible={guestModalVisible}
+                teamId={activeTeam._id}
                 onClose={() => {
                     setGuestModalVisible(false)
                 }}

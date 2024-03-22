@@ -6,7 +6,7 @@ import React from 'react'
 import { SelectMyTeamProps } from '../../types/navigation'
 import { Team } from '../../types/team'
 import TeamListItem from '../../components/atoms/TeamListItem'
-import { getTeamsById } from '../../services/data/team'
+import { getManagingTeams } from '../../services/data/team'
 import { isLoggedIn } from '../../services/data/auth'
 import { selectManagerTeams } from '../../store/reducers/features/account/accountReducer'
 import { setTeamOne } from '../../store/reducers/features/game/liveGameReducer'
@@ -30,7 +30,7 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
 
     const { data: managerTeams, isLoading: teamsLoading } = useQuery(
         ['getManagingTeams', ...profileTeams.map(team => team._id)],
-        () => getTeamsById(profileTeams.map(team => team._id)),
+        () => getManagingTeams(),
     )
     const {
         data: isAuth,

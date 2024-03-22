@@ -81,7 +81,7 @@ exports[`should match snapshot 1`] = `
             onChangeText={[Function]}
             onFocus={[Function]}
             onPressOut={[Function]}
-            placeholder="Search games..."
+            placeholder="Search..."
             placeholderTextColor="#CEC6B4"
             selectionColor="#ffd600"
             style={
@@ -451,7 +451,7 @@ exports[`should match snapshot 1`] = `
                       }
                     >
                       1
-                       results
+                       games
                     </Text>
                   </Text>
                 </View>
@@ -617,7 +617,337 @@ exports[`should match snapshot 1`] = `
                     >
                       1
                        
-                      live results
+                      live games
+                    </Text>
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View>
+          <View
+            collapsable={false}
+            style={
+              {
+                "backgroundColor": "#303030",
+                "borderRadius": 4,
+                "marginRight": 5,
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 0,
+                "shadowRadius": 0,
+              }
+            }
+            testID="chip-container-outer-layer"
+          >
+            <View
+              collapsable={false}
+              style={
+                {
+                  "backgroundColor": "#303030",
+                  "borderColor": "#ffd600",
+                  "borderRadius": 4,
+                  "borderStyle": "solid",
+                  "borderWidth": 1,
+                  "color": "#ffd600",
+                  "flex": undefined,
+                  "flexDirection": "column",
+                  "shadowColor": "#000",
+                  "shadowOffset": {
+                    "height": 0,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0,
+                  "shadowRadius": 0,
+                }
+              }
+              testID="chip-container"
+            >
+              <View
+                accessibilityRole="button"
+                accessibilityState={
+                  {
+                    "busy": undefined,
+                    "checked": undefined,
+                    "disabled": true,
+                    "expanded": undefined,
+                    "selected": false,
+                  }
+                }
+                accessibilityValue={
+                  {
+                    "max": undefined,
+                    "min": undefined,
+                    "now": undefined,
+                    "text": undefined,
+                  }
+                }
+                accessible={true}
+                collapsable={false}
+                focusable={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  [
+                    {
+                      "overflow": "hidden",
+                    },
+                    [
+                      {
+                        "borderRadius": 4,
+                      },
+                      {
+                        "width": "100%",
+                      },
+                    ],
+                  ]
+                }
+                testID="chip"
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "alignItems": "center",
+                        "flexDirection": "row",
+                        "paddingLeft": 4,
+                        "position": "relative",
+                      },
+                      {
+                        "paddingLeft": 0,
+                      },
+                      {
+                        "paddingRight": 0,
+                      },
+                    ]
+                  }
+                >
+                  <Text
+                    numberOfLines={1}
+                    selectable={false}
+                    style={
+                      [
+                        {
+                          "textAlign": "left",
+                        },
+                        {
+                          "color": "rgba(28, 27, 31, 1)",
+                          "writingDirection": "ltr",
+                        },
+                        [
+                          [
+                            {
+                              "marginVertical": 6,
+                              "textAlignVertical": "center",
+                            },
+                            {
+                              "color": "rgba(73, 69, 79, 1)",
+                              "fontFamily": "System",
+                              "fontSize": 14,
+                              "fontWeight": "500",
+                              "letterSpacing": 0.1,
+                              "lineHeight": 20,
+                            },
+                            {
+                              "marginLeft": 16,
+                              "marginRight": 16,
+                            },
+                            undefined,
+                          ],
+                          {
+                            "color": "#ffd600",
+                            "fontWeight": "bold",
+                          },
+                        ],
+                      ]
+                    }
+                  >
+                    <Text
+                      style={
+                        {
+                          "color": "#ffd600",
+                          "fontWeight": "bold",
+                        }
+                      }
+                    >
+                      0
+                       users
+                    </Text>
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View>
+          <View
+            collapsable={false}
+            style={
+              {
+                "backgroundColor": "#303030",
+                "borderRadius": 4,
+                "marginRight": 5,
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 0,
+                "shadowRadius": 0,
+              }
+            }
+            testID="chip-container-outer-layer"
+          >
+            <View
+              collapsable={false}
+              style={
+                {
+                  "backgroundColor": "#303030",
+                  "borderColor": "#ffd600",
+                  "borderRadius": 4,
+                  "borderStyle": "solid",
+                  "borderWidth": 1,
+                  "color": "#ffd600",
+                  "flex": undefined,
+                  "flexDirection": "column",
+                  "shadowColor": "#000",
+                  "shadowOffset": {
+                    "height": 0,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0,
+                  "shadowRadius": 0,
+                }
+              }
+              testID="chip-container"
+            >
+              <View
+                accessibilityRole="button"
+                accessibilityState={
+                  {
+                    "busy": undefined,
+                    "checked": undefined,
+                    "disabled": true,
+                    "expanded": undefined,
+                    "selected": false,
+                  }
+                }
+                accessibilityValue={
+                  {
+                    "max": undefined,
+                    "min": undefined,
+                    "now": undefined,
+                    "text": undefined,
+                  }
+                }
+                accessible={true}
+                collapsable={false}
+                focusable={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  [
+                    {
+                      "overflow": "hidden",
+                    },
+                    [
+                      {
+                        "borderRadius": 4,
+                      },
+                      {
+                        "width": "100%",
+                      },
+                    ],
+                  ]
+                }
+                testID="chip"
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "alignItems": "center",
+                        "flexDirection": "row",
+                        "paddingLeft": 4,
+                        "position": "relative",
+                      },
+                      {
+                        "paddingLeft": 0,
+                      },
+                      {
+                        "paddingRight": 0,
+                      },
+                    ]
+                  }
+                >
+                  <Text
+                    numberOfLines={1}
+                    selectable={false}
+                    style={
+                      [
+                        {
+                          "textAlign": "left",
+                        },
+                        {
+                          "color": "rgba(28, 27, 31, 1)",
+                          "writingDirection": "ltr",
+                        },
+                        [
+                          [
+                            {
+                              "marginVertical": 6,
+                              "textAlignVertical": "center",
+                            },
+                            {
+                              "color": "rgba(73, 69, 79, 1)",
+                              "fontFamily": "System",
+                              "fontSize": 14,
+                              "fontWeight": "500",
+                              "letterSpacing": 0.1,
+                              "lineHeight": 20,
+                            },
+                            {
+                              "marginLeft": 16,
+                              "marginRight": 16,
+                            },
+                            undefined,
+                          ],
+                          {
+                            "color": "#ffd600",
+                            "fontWeight": "bold",
+                          },
+                        ],
+                      ]
+                    }
+                  >
+                    <Text
+                      style={
+                        {
+                          "color": "#ffd600",
+                          "fontWeight": "bold",
+                        }
+                      }
+                    >
+                      0
+                       teams
                     </Text>
                   </Text>
                 </View>
@@ -1127,6 +1457,27 @@ exports[`should match snapshot 1`] = `
   </View>
   <RCTScrollView
     ListFooterComponent={[Function]}
+    ListHeaderComponent={
+      <ScrollView>
+        <Text
+          style={
+            [
+              {
+                "color": "#ffd600",
+                "fontSize": 61.64383561643835,
+                "fontWeight": "bold",
+              },
+              {
+                "alignSelf": "center",
+                "width": "90%",
+              },
+            ]
+          }
+        >
+          Games
+        </Text>
+      </ScrollView>
+    }
     data={
       [
         {
@@ -1197,13 +1548,48 @@ exports[`should match snapshot 1`] = `
   >
     <View>
       <View
+        collapsable={false}
+        onLayout={[Function]}
+      >
+        <RCTScrollView>
+          <View>
+            <Text
+              style={
+                [
+                  {
+                    "color": "#ffd600",
+                    "fontSize": 61.64383561643835,
+                    "fontWeight": "bold",
+                  },
+                  {
+                    "alignSelf": "center",
+                    "width": "90%",
+                  },
+                ]
+              }
+            >
+              Games
+            </Text>
+          </View>
+        </RCTScrollView>
+      </View>
+      <View
         onFocusCapture={[Function]}
         onLayout={[Function]}
         style={null}
       >
-        <div>
-          Game
-        </div>
+        <View
+          style={
+            {
+              "alignSelf": "center",
+              "width": "90%",
+            }
+          }
+        >
+          <div>
+            Game
+          </div>
+        </View>
       </View>
       <View
         onLayout={[Function]}

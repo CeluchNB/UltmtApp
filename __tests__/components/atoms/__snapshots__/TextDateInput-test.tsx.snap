@@ -66,6 +66,7 @@ exports[`should match snapshot while closed 1`] = `
             placeholder="01/01/22"
             placeholderTextColor="#ffd600"
             selectionColor="#ffd600"
+            showSoftInputOnFocus={false}
             style={
               [
                 {

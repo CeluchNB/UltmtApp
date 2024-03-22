@@ -13,7 +13,7 @@ import { useTheme } from '../hooks'
 import { usernameIsTaken } from '../services/data/user'
 import validator from 'validator'
 import { Controller, useForm, useWatch } from 'react-hook-form'
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text } from 'react-native'
 
 const CreateAccountScreen: React.FC<CreateAccountProps> = ({
     navigation,
@@ -93,7 +93,7 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Controller
                 control={control}
                 rules={getFormFieldRules('First name', true, undefined, 20)}
@@ -242,7 +242,7 @@ const CreateAccountScreen: React.FC<CreateAccountProps> = ({
                 }}
                 style={styles.backButton}
             />
-        </View>
+        </ScrollView>
     )
 }
 

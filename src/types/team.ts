@@ -24,7 +24,6 @@ export interface Team extends DisplayTeam {
     continuationId: string
     rosterOpen: boolean
     requests: string[]
-    games: string[]
 }
 
 export interface TeamRequestData {
@@ -49,3 +48,5 @@ export interface GuestTeam {
 }
 
 export type TeamNumber = 'one' | 'two'
+
+export type LocalUser = DisplayUser & { localGuest?: boolean }

@@ -109,7 +109,6 @@ const team: Team = {
     continuationId: 'id123',
     rosterOpen: true,
     requests: [],
-    games: [],
 }
 
 const teamStats: TeamStats = {

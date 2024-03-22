@@ -8,5 +8,6 @@ export const DisplayUserSchema: Realm.ObjectSchema = {
         firstName: 'string',
         lastName: 'string',
         username: 'string',
+        localGuest: 'bool?',
     },
 }

@@ -184,6 +184,9 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
                                 <LabeledFormInput
                                     label="Offline"
                                     onChange={onChange}
+                                    onLabelPress={() => {
+                                        onChange(!value)
+                                    }}
                                     value={value}
                                     error={errors.offline?.message}>
                                     <Switch

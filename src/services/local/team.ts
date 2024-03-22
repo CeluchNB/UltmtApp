@@ -1,30 +1,63 @@
+import * as Constants from '../../utils/constants'
+import { ApiError } from '../../types/services'
 import { Realm } from '@realm/react'
 import { Team } from '../../types/team'
 import { TeamSchema } from '../../models'
 import { getRealm } from '../../models/realm'
 
-export const saveTeams = async (teams: Team[]) => {
+export const saveTeams = async (teams: Team[], overwritePlayers = false) => {
     const realm = await getRealm()
-    realm.write(() => {
-        for (const team of teams) {
-            realm.create('Team', team, Realm.UpdateMode.Modified)
+    for (const team of teams) {
+        const teamObject = await realm.objectForPrimaryKey<TeamSchema>(
+            'Team',
+            team._id,
+        )
+
+        // default behavior is to only keep players from network responses and local guests
+        if (teamObject && !overwritePlayers) {
+            team.players = [
+                ...team.players,
+                ...teamObject.players.filter(p => p.localGuest),
+            ]
         }
-    })
+
+        realm.write(() => {
+            realm.create('Team', team, Realm.UpdateMode.Modified)
+        })
+    }
 }
 
-export const getTeamsById = async (ids: string[]): Promise<Team[]> => {
+export const getTeamsByManager = async (managerId: string): Promise<Team[]> => {
     const realm = await getRealm()
     const teams = await realm.objects<TeamSchema>('Team')
-    return teams.filter(t => ids.includes(t._id)).map(t => parseTeam(t))
+    return teams
+        .filter(t => t.managers.map(m => m._id).includes(managerId))
+        .map(t => parseTeam(t))
+}
+
+export const getTeamById = async (id: string): Promise<Team> => {
+    const realm = await getRealm()
+    const team = await realm.objectForPrimaryKey<TeamSchema>('Team', id)
+
+    if (!team) {
+        throw new ApiError(Constants.GET_TEAM_ERROR)
+    }
+
+    return parseTeam(team)
 }
 
 export const deleteTeamById = async (teamId: string) => {
-    const realm = await getRealm()
-    const team = await realm.objectForPrimaryKey('Team', teamId)
+    try {
+        const realm = await getRealm()
+        const team = await realm.objectForPrimaryKey('Team', teamId)
+        if (!team) return
 
-    realm.write(() => {
-        realm.delete(team)
-    })
+        realm.write(() => {
+            realm.delete(team)
+        })
+    } catch (e) {
+        // do nothing
+    }
 }
 
 const parseTeam = (schema: TeamSchema): Team => {

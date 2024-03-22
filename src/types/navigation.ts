@@ -11,6 +11,24 @@ export enum SecureEditField {
     PASSWORD,
 }
 
+export type SharedStackParamList = {
+    PublicTeamDetails: {
+        id: string
+        archive?: boolean
+    }
+    PublicUserDetails: {
+        userId: string
+        tab?: 'games' | 'stats'
+    }
+    ViewGame: { gameId: string }
+    Comment: {
+        gameId: string
+        pointId: string
+        live: boolean
+    }
+    GameStats: { gameId: string }
+}
+
 export type AccountStackParamList = {
     Login: undefined
     Profile: undefined
@@ -30,6 +48,7 @@ export type AccountStackParamList = {
         tab?: 'games' | 'stats'
     }
     RequestUser: { type: RequestType }
+    AddGuest: { teamId: string }
     ResetPassword: undefined
     RolloverTeam: undefined
     UserRequests: undefined
@@ -38,19 +57,12 @@ export type AccountStackParamList = {
     TeamGames: undefined
     ActiveGames: undefined
     OfflineGameOptions: { gameId: string }
-}
+} & SharedStackParamList
 
 export type GameStackParamList = {
     GameHome: undefined
     GameSearch: { live: string }
-    ViewGame: { gameId: string }
-    Comment: {
-        gameId: string
-        pointId: string
-        live: boolean
-    }
-    GameStats: { gameId: string }
-}
+} & SharedStackParamList
 
 export type TabParamList = {
     Account: NavigatorScreenParams<AccountStackParamList>
@@ -136,6 +148,10 @@ export type RequestUserProps = NativeStackScreenProps<
     AccountStackParamList,
     'RequestUser'
 >
+export type AddGuestProps = NativeStackScreenProps<
+    AccountStackParamList,
+    'AddGuest'
+>
 export type RequestTeamProps = NativeStackScreenProps<
     AccountStackParamList,
     'RequestTeam'
@@ -171,9 +187,9 @@ export type GameHomeProps = CompositeScreenProps<
     NativeStackScreenProps<TopLevelParamList>
 >
 
-export type GameSearchProps = NativeStackScreenProps<
-    GameStackParamList,
-    'GameSearch'
+export type GameSearchProps = CompositeScreenProps<
+    NativeStackScreenProps<GameStackParamList, 'GameSearch'>,
+    NativeStackScreenProps<TopLevelParamList>
 >
 export type ViewGameProps = NativeStackScreenProps<
     GameStackParamList,
@@ -250,6 +266,8 @@ export type OfflineGameOptionsProps = NativeStackScreenProps<
 
 declare global {
     namespace ReactNavigation {
-        interface RootParamList extends TopLevelParamList {}
+        interface RootParamList
+            extends TopLevelParamList,
+                SharedStackParamList {}
     }
 }

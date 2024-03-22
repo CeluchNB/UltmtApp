@@ -45,6 +45,7 @@ const TextDateInput: React.FC<TextDateInputProps> = ({
                     activeOutlineColor={colors.textPrimary}
                     placeholder={dayjs(value).format(format)}
                     placeholderTextColor={colors.textPrimary}
+                    showSoftInputOnFocus={false}
                     mode="outlined"
                     onPressOut={() => {
                         setOpen(true)

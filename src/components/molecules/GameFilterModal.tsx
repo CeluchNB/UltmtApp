@@ -1,4 +1,5 @@
 import BaseModal from '../atoms/BaseModal'
+import CheckBox from '@react-native-community/checkbox'
 import PrimaryButton from '../atoms/PrimaryButton'
 import { RadioButton } from 'react-native-paper'
 import React from 'react'
@@ -10,7 +11,13 @@ import { StyleSheet, Text, View } from 'react-native'
 
 interface GameFilterModalProps {
     visible: boolean
-    defaultValues: { live: string; after: Date; before: Date }
+    defaultValues: {
+        live: string
+        after: Date
+        before: Date
+        showUsers: boolean
+        showTeams: boolean
+    }
     onClose: (data: any) => void
 }
 
@@ -70,6 +77,9 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
             shadowColor: colors.textPrimary,
             elevation: 5,
             flex: 1,
+        },
+        checkboxLabel: {
+            marginLeft: 20,
         },
     })
 
@@ -144,6 +154,78 @@ const GameFilterModal: React.FC<GameFilterModalProps> = ({
                                 </View>
                             </RadioButton.Group>
                         )}
+                    />
+                </View>
+                <View style={styles.container}>
+                    <Controller
+                        control={control}
+                        name="showUsers"
+                        render={({ field: { value, onChange } }) => {
+                            return (
+                                <View style={styles.container}>
+                                    <CheckBox
+                                        value={value}
+                                        onValueChange={() => {
+                                            onChange(!value)
+                                        }}
+                                        tintColors={{
+                                            true: colors.textPrimary,
+                                            false: colors.gray,
+                                        }}
+                                        boxType="square"
+                                        tintColor={colors.gray}
+                                        onFillColor={colors.textPrimary}
+                                        onCheckColor={colors.primary}
+                                        onTintColor={colors.textPrimary}
+                                        onAnimationType="bounce"
+                                        offAnimationType="bounce"
+                                    />
+                                    <Text
+                                        style={{
+                                            ...styles.text,
+                                            ...styles.checkboxLabel,
+                                        }}>
+                                        Include Users
+                                    </Text>
+                                </View>
+                            )
+                        }}
+                    />
+                </View>
+                <View style={styles.container}>
+                    <Controller
+                        control={control}
+                        name="showTeams"
+                        render={({ field: { value, onChange } }) => {
+                            return (
+                                <View style={styles.container}>
+                                    <CheckBox
+                                        value={value}
+                                        onValueChange={() => {
+                                            onChange(!value)
+                                        }}
+                                        tintColors={{
+                                            true: colors.textPrimary,
+                                            false: colors.gray,
+                                        }}
+                                        boxType="square"
+                                        tintColor={colors.gray}
+                                        onFillColor={colors.textPrimary}
+                                        onCheckColor={colors.primary}
+                                        onTintColor={colors.textPrimary}
+                                        onAnimationType="bounce"
+                                        offAnimationType="bounce"
+                                    />
+                                    <Text
+                                        style={{
+                                            ...styles.text,
+                                            ...styles.checkboxLabel,
+                                        }}>
+                                        Include Teams
+                                    </Text>
+                                </View>
+                            )
+                        }}
                     />
                 </View>
                 <View style={styles.container}>

@@ -67,14 +67,13 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                 currentChecked.set(item.value, item.checked)
             }
 
-            return data?.games
-                .filter(gameId => gamesMap.has(gameId))
-                .map(gameId => {
-                    const game = gamesMap.get(gameId)
+            return games
+                .filter(game => gamesMap.has(game._id))
+                .map(game => {
                     return {
-                        display: <GameListItem game={game!} teamId={teamId} />,
+                        display: <GameListItem game={game} teamId={teamId} />,
                         value: game!._id,
-                        checked: currentChecked.get(gameId) || false,
+                        checked: currentChecked.get(game._id) || false,
                     }
                 })
         })
@@ -166,16 +165,8 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                             leader={item}
                             onPress={player => {
                                 if (player?.playerId || player?._id) {
-                                    navigation.navigate('Tabs', {
-                                        screen: 'Account',
-                                        params: {
-                                            screen: 'PublicUserDetails',
-                                            params: {
-                                                userId:
-                                                    player?.playerId ??
-                                                    player?._id,
-                                            },
-                                        },
+                                    navigation.navigate('PublicUserDetails', {
+                                        userId: player?.playerId ?? player?._id,
                                     })
                                 }
                             }}
