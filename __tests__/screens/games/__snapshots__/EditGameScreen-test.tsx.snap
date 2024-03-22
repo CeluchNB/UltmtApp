@@ -972,6 +972,7 @@ exports[`EditGameScreen matches snapshot 1`] = `
             }
           >
             <Text
+              onPress={[Function]}
               style={
                 {
                   "color": "#ffd600",
