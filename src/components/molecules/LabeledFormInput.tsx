@@ -11,6 +11,7 @@ interface LabeledFormInputProps {
     error?: string
     onChange: (...event: any[]) => void
     children?: React.ReactNode
+    onLabelPress?: () => void
 }
 
 const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
@@ -25,6 +26,7 @@ const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
         unit,
         error,
         onChange,
+        onLabelPress,
     } = props
 
     const styles = StyleSheet.create({
@@ -57,7 +59,9 @@ const LabeledFormInput: React.FC<LabeledFormInputProps> = props => {
     })
     return (
         <View style={styles.container}>
-            <Text style={styles.labelText}>{label}</Text>
+            <Text style={styles.labelText} onPress={onLabelPress}>
+                {label}
+            </Text>
             <View style={styles.input}>
                 {children ? (
                     children

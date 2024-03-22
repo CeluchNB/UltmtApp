@@ -159,7 +159,6 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
                     navigationState={{ index, routes }}
                     renderScene={renderScene(
                         gameId,
-                        // gameViewerData,
                         game?.teamOne?.name,
                         game?.teamTwo?.name,
                     )}

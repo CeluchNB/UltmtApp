@@ -88,13 +88,8 @@ const PublicUserGamesScene: React.FC<PublicUserGamesSceneProps> = ({
                                 game={item}
                                 teamId={teams[section.index]._id}
                                 onPress={() => {
-                                    navigation.navigate('Tabs', {
-                                        screen: 'Games',
-                                        params: {
-                                            screen: 'ViewGame',
-                                            params: { gameId: item._id },
-                                            initial: false,
-                                        },
+                                    navigation.navigate('ViewGame', {
+                                        gameId: item._id,
                                     })
                                 }}
                             />

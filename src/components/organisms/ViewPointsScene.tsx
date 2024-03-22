@@ -31,17 +31,7 @@ const ViewPointsScene: React.FC<ViewPointsScene> = ({ gameId }) => {
 
     const handleSelectAction = (action: ServerActionData) => {
         const { pointId, live } = onSelectAction(action)
-        navigation.navigate('Tabs', {
-            screen: 'Games',
-            params: {
-                screen: 'Comment',
-                params: {
-                    gameId,
-                    live,
-                    pointId,
-                },
-            },
-        })
+        navigation.navigate('Comment', { gameId, live, pointId })
     }
 
     const styles = StyleSheet.create({

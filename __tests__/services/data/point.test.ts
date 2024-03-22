@@ -65,6 +65,9 @@ const liveAction: LiveServerActionData = {
     tags: [],
 }
 
+const offlineGame = { ...game, offline: true, statsPoints: [] }
+const onlineGame = { ...game, offline: false, statsPoints: [] }
+
 afterEach(() => {
     jest.resetAllMocks()
 })
@@ -94,8 +97,8 @@ describe('test create point', () => {
             Promise.resolve(point),
         )
         jest.spyOn(LocalGameServices, 'getGameById')
-            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
-            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
+            .mockReturnValueOnce(Promise.resolve(offlineGame))
+            .mockReturnValueOnce(Promise.resolve(offlineGame))
         jest.spyOn(LocalGameServices, 'saveGame').mockReturnValueOnce(
             Promise.resolve(),
         )
@@ -127,8 +130,8 @@ describe('test create point', () => {
             Promise.resolve('game1'),
         )
         jest.spyOn(LocalGameServices, 'getGameById')
-            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
-            .mockReturnValueOnce(Promise.resolve({ ...game, offline: true }))
+            .mockReturnValueOnce(Promise.resolve(offlineGame))
+            .mockReturnValueOnce(Promise.resolve(offlineGame))
         jest.spyOn(
             LocalPointServices,
             'createOfflinePoint',
@@ -271,8 +274,17 @@ describe('test finish point', () => {
         jest.spyOn(LocalPointServices, 'getPointById').mockReturnValueOnce(
             Promise.resolve(point),
         )
+        jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
+            Promise.resolve('id'),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: false, statsPoints: [] }),
+        )
+        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(
+            Promise.resolve(),
+        )
 
-        const result = await finishPoint('point1')
+        const result = await finishPoint(point, [], 'one')
         expect(result).toMatchObject(point)
     })
 
@@ -287,7 +299,7 @@ describe('test finish point', () => {
             }),
         )
 
-        await expect(finishPoint('point1')).rejects.toBeDefined()
+        await expect(finishPoint(point, [], 'one')).rejects.toBeDefined()
     })
 
     it('with offline success team one score', async () => {
@@ -308,12 +320,20 @@ describe('test finish point', () => {
         jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
             Promise.resolve(undefined),
         )
-
         jest.spyOn(LocalPointServices, 'getPointById')
             .mockReturnValueOnce(Promise.resolve(point))
             .mockReturnValueOnce(Promise.resolve(point))
+        jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
+            Promise.resolve('id'),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: false, statsPoints: [] }),
+        )
+        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(
+            Promise.resolve(),
+        )
 
-        const result = await finishPoint('point1')
+        const result = await finishPoint(point, [], 'one')
         expect(result).toMatchObject({ ...point, teamOneActive: false })
     })
 
@@ -335,14 +355,22 @@ describe('test finish point', () => {
         jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
             Promise.resolve(undefined),
         )
-
         jest.spyOn(LocalPointServices, 'getPointById')
             .mockReturnValueOnce(
                 Promise.resolve({ ...point, teamOneActive: true }),
             )
             .mockReturnValueOnce(Promise.resolve(point))
+        jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
+            Promise.resolve('id'),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: false, statsPoints: [] }),
+        )
+        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(
+            Promise.resolve(),
+        )
 
-        const result = await finishPoint('point1')
+        const result = await finishPoint(point, [], 'two')
         expect(result).toMatchObject({ ...point, teamOneActive: false })
     })
 
@@ -364,7 +392,6 @@ describe('test finish point', () => {
         jest.spyOn(LocalPointServices, 'savePoint').mockReturnValueOnce(
             Promise.resolve(undefined),
         )
-
         jest.spyOn(LocalPointServices, 'getPointById')
             .mockReturnValueOnce(
                 Promise.resolve({ ...point, teamOneActive: false }),
@@ -372,8 +399,17 @@ describe('test finish point', () => {
             .mockReturnValueOnce(
                 Promise.resolve({ ...point, teamOneActive: false }),
             )
+        jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
+            Promise.resolve('id'),
+        )
+        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
+            Promise.resolve({ ...game, offline: false, statsPoints: [] }),
+        )
+        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(
+            Promise.resolve(),
+        )
 
-        const result = await finishPoint('point1')
+        const result = await finishPoint(point, [], 'one')
         expect(result).toMatchObject({ ...point, teamOneActive: false })
     })
 
@@ -386,7 +422,7 @@ describe('test finish point', () => {
             Promise.resolve({ message: Constants.FINISH_POINT_ERROR }),
         )
 
-        await expect(finishPoint('point1')).rejects.toMatchObject({
+        await expect(finishPoint(point, [], 'one')).rejects.toMatchObject({
             message: Constants.FINISH_POINT_ERROR,
         })
     })
@@ -552,7 +588,7 @@ describe('test reactivate point', () => {
     })
     it('with online game', async () => {
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
-            Promise.resolve({ ...game, offline: false }),
+            Promise.resolve(onlineGame),
         )
         const deleteSpy = jest
             .spyOn(PointServices, 'deletePoint')
@@ -615,7 +651,7 @@ describe('test reactivate point', () => {
 
     it('with offline point', async () => {
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
-            Promise.resolve({ ...game, offline: true }),
+            Promise.resolve(offlineGame),
         )
 
         const result = await reactivatePoint('point1', 1, 'one')
@@ -627,7 +663,7 @@ describe('test reactivate point', () => {
 
     it('with offline point error', async () => {
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
-            Promise.resolve({ ...game, offline: true }),
+            Promise.resolve(offlineGame),
         )
         jest.spyOn(LocalPointServices, 'getPointByPointNumber')
             .mockReset()
@@ -644,7 +680,7 @@ describe('test reactivate point', () => {
             Promise.resolve('game1'),
         )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
-            Promise.resolve({ ...game, offline: false }),
+            Promise.resolve(onlineGame),
         )
 
         await expect(reactivatePoint('point1', 1, 'one')).rejects.toMatchObject(
@@ -706,7 +742,7 @@ describe('test set pulling team', () => {
             Promise.resolve(true),
         )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
-            Promise.resolve({ ...game, offline: true }),
+            Promise.resolve(offlineGame),
         )
         jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
             Promise.resolve('id'),
@@ -730,7 +766,7 @@ describe('test set pulling team', () => {
             Promise.resolve(true),
         )
         jest.spyOn(LocalGameServices, 'getGameById').mockReturnValue(
-            Promise.resolve({ ...game, offline: true }),
+            Promise.resolve(offlineGame),
         )
         jest.spyOn(LocalGameServices, 'getActiveGameId').mockReturnValue(
             Promise.resolve('id'),

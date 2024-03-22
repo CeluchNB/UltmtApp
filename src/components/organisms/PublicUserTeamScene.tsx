@@ -96,15 +96,10 @@ const PublicUserTeamScene: React.FC<PublicUserTeamSceneProps> = ({
                                     key={team._id}
                                     team={team}
                                     onPress={async () => {
-                                        navigation.navigate('Tabs', {
-                                            screen: 'Account',
-                                            params: {
-                                                screen: 'PublicTeamDetails',
-                                                params: {
-                                                    id: team._id,
-                                                },
-                                            },
-                                        })
+                                        navigation.navigate(
+                                            'PublicTeamDetails',
+                                            { id: team._id },
+                                        )
                                     }}
                                 />
                             )

@@ -61,7 +61,6 @@ beforeEach(() => {
         seasonEnd: '2022',
         continuationId: 'id1234',
         rosterOpen: false,
-        games: [],
     }
     requestObject = {
         _id: 'request1',

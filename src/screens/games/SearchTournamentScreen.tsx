@@ -10,7 +10,7 @@ import { searchTournaments } from '../../services/data/tournament'
 import { setTournament } from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch } from 'react-redux'
 import { useTheme } from '../../hooks'
-import { FlatList, StyleSheet, Text } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
     navigation,
@@ -37,7 +37,7 @@ const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
 
     const styles = StyleSheet.create({
         list: {
-            height: '80%',
+            height: '98%',
             width: '90%',
             alignSelf: 'center',
         },
@@ -48,18 +48,44 @@ const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
             fontSize: size.fontThirty,
             color: colors.gray,
         },
+        contentContainerStyle: {
+            flexGrow: 1,
+        },
+        footer: {
+            flex: 1,
+            justifyContent: 'flex-end',
+        },
     })
 
     return (
         <BaseScreen containerWidth={90}>
-            <SearchBar
-                placeholder="Search Tournaments..."
-                onChangeText={search}
-            />
-            {error.length > 0 && <Text style={styles.error}>{error}</Text>}
             <FlatList
                 style={styles.list}
                 data={tournaments}
+                contentContainerStyle={styles.contentContainerStyle}
+                ListHeaderComponent={
+                    <View>
+                        <SearchBar
+                            placeholder="Search Tournaments..."
+                            onChangeText={search}
+                        />
+                        {error.length > 0 && (
+                            <Text style={styles.error}>{error}</Text>
+                        )}
+                    </View>
+                }
+                ListFooterComponentStyle={styles.footer}
+                ListFooterComponent={
+                    <PrimaryButton
+                        text="create tournament"
+                        onPress={() => {
+                            navigation.navigate('CreateTournament', {
+                                name: query,
+                            })
+                        }}
+                        loading={false}
+                    />
+                }
                 renderItem={({ item }) => {
                     return (
                         <TournamentListItem
@@ -71,13 +97,6 @@ const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
                         />
                     )
                 }}
-            />
-            <PrimaryButton
-                text="create tournament"
-                onPress={() => {
-                    navigation.navigate('CreateTournament', { name: query })
-                }}
-                loading={false}
             />
         </BaseScreen>
     )

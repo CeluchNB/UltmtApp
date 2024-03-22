@@ -101,15 +101,8 @@ describe('TeamGamesScene', () => {
         const teamItem = screen.getByText(`vs. ${game.teamTwo.name}`)
         fireEvent.press(teamItem)
 
-        expect(mockedNavigate).toHaveBeenCalledWith('Tabs', {
-            screen: 'Games',
-            params: {
-                screen: 'ViewGame',
-                params: {
-                    gameId: game._id,
-                },
-                initial: false,
-            },
+        expect(mockedNavigate).toHaveBeenCalledWith('ViewGame', {
+            gameId: game._id,
         })
     })
 })

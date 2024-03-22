@@ -23,11 +23,13 @@ interface GameHeaderProps {
         softcapMins: number
         hardcapMins: number
         tournament?: Tournament
+        resolveCode?: string
     }
     header?: boolean
+    editing?: boolean
 }
 
-const GameHeader: React.FC<GameHeaderProps> = ({ game, header }) => {
+const GameHeader: React.FC<GameHeaderProps> = ({ game, header, editing }) => {
     const {
         theme: { colors, size, weight },
     } = useTheme()
@@ -103,10 +105,14 @@ const GameHeader: React.FC<GameHeaderProps> = ({ game, header }) => {
                     <Text style={styles.infoText}>
                         Hardcap At: {game.hardcapMins} min
                     </Text>
-
                     <Text style={styles.infoText}>
                         Tournament: {game.tournament?.name ?? 'N/A'}
                     </Text>
+                    {editing && game.resolveCode && (
+                        <Text style={styles.infoText}>
+                            Join Code: {game.resolveCode}
+                        </Text>
+                    )}
                 </View>
             )}
             {header && (

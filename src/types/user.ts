@@ -23,6 +23,7 @@ export interface User extends DisplayUser {
     archiveTeams: DisplayTeam[]
     openToRequests: boolean
     private: boolean
+    guest: boolean
 }
 
 export interface GuestUser {
@@ -30,4 +31,12 @@ export interface GuestUser {
     firstName: string
     lastName: string
     username?: string
+}
+
+export interface InGameStatsUser extends DisplayUser {
+    pointsPlayed: number
+    goals: number
+    assists: number
+    turnovers: number
+    blocks: number
 }

@@ -71,14 +71,10 @@ const CommentScreen: React.FC<CommentProps> = ({ route }) => {
                                     comment={item}
                                     onDelete={handleDeleteComment}
                                     onPress={id => {
-                                        navigation.navigate('Tabs', {
-                                            screen: 'Account',
-                                            params: {
-                                                screen: 'PublicUserDetails',
-                                                params: { userId: id },
-                                                initial: false,
-                                            },
-                                        })
+                                        navigation.navigate(
+                                            'PublicUserDetails',
+                                            { userId: id },
+                                        )
                                     }}
                                 />
                             )

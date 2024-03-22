@@ -23,8 +23,11 @@ export const createAccount = async (
     )
 }
 
-export const searchUsers = async (term: string): Promise<AxiosResponse> => {
-    return await axios.get(`${API_URL_V1}/user/search?q=${term}`, {
+export const searchUsers = async (
+    term: string,
+    open?: boolean,
+): Promise<AxiosResponse> => {
+    return await axios.get(`${API_URL_V1}/user/search?q=${term}&open=${open}`, {
         headers: { 'X-API-Key': API_KEY },
     })
 }

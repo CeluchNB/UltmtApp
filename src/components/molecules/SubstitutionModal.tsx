@@ -4,13 +4,14 @@ import { DisplayUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import { nameSort } from '../../utils/player'
+import {
+    selectActiveTeam,
+    // selectGame,
+    // selectTeam,
+} from '../../store/reducers/features/game/liveGameReducer'
 import { useSelector } from 'react-redux'
 import { useTheme } from '../../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import {
-    selectGame,
-    selectTeam,
-} from '../../store/reducers/features/game/liveGameReducer'
 
 interface SubstitutionModalProps {
     visible: boolean
@@ -31,8 +32,7 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const game = useSelector(selectGame)
-    const team = useSelector(selectTeam)
+    const activeTeam = useSelector(selectActiveTeam)
     const [playerOne, setPlayerOne] = React.useState<DisplayUser | undefined>(
         undefined,
     )
@@ -47,22 +47,12 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     >(undefined)
 
     const availablePlayers = React.useMemo(() => {
-        if (team === 'one') {
-            return game.teamOnePlayers
-                .filter(
-                    player =>
-                        !activePlayers.map(p => p._id).includes(player._id),
-                )
-                .sort(nameSort)
-        } else {
-            return game.teamTwoPlayers
-                .filter(
-                    player =>
-                        !activePlayers.map(p => p._id).includes(player._id),
-                )
-                .sort(nameSort)
-        }
-    }, [team, game, activePlayers])
+        return activeTeam.players
+            .filter(
+                player => !activePlayers.map(p => p._id).includes(player._id),
+            )
+            .sort(nameSort)
+    }, [activeTeam.players, activePlayers])
 
     const handleSubstitution = async () => {
         if (playerOne && playerTwo && playerOneIndex !== undefined) {

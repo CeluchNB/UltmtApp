@@ -1,5 +1,7 @@
 import { ApiError } from '../types/services'
 import { AppDispatch } from '../store/store'
+import { ClaimGuestRequest } from '../types/claim-guest-request'
+import ClaimGuestRequestItem from '../components/atoms/ClaimGuestRequestItem'
 import MapSection from '../components/molecules/MapSection'
 import PrimaryButton from '../components/atoms/PrimaryButton'
 import React from 'react'
@@ -15,6 +17,11 @@ import {
     Text,
     View,
 } from 'react-native'
+import {
+    acceptClaimGuestRequest,
+    denyClaimGuestRequest,
+    getClaimGuestRequests,
+} from '../services/data/claim-guest-request'
 import {
     deleteTeamRequest,
     getRequestsByTeam,
@@ -54,6 +61,13 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
         },
     )
 
+    const { data: claimGuestRequests, refetch: refetchClaimGuestRequests } =
+        useQuery<ClaimGuestRequest[], ApiError>(
+            ['getClaimGuestRequests', { teamId: team?._id }],
+            () => getClaimGuestRequests(team?._id || ''),
+            { enabled: !!team },
+        )
+
     const { mutate: callDelete, error: deleteRequestError } = useMutation(
         (requestId: string) => deleteTeamRequest(requestId),
     )
@@ -61,6 +75,14 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
     const { mutate: callRespond, error: respondRequestError } = useMutation(
         ({ requestId, accept }: { requestId: string; accept: boolean }) =>
             respondToPlayerRequest(requestId, accept),
+    )
+
+    const { mutate: callAcceptClaimGuestRequest } = useMutation(
+        (requestId: string) => acceptClaimGuestRequest(requestId),
+    )
+
+    const { mutate: callDenyClaimGuestRequest } = useMutation(
+        (requestId: string) => denyClaimGuestRequest(requestId),
     )
 
     React.useEffect(() => {
@@ -98,6 +120,22 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
         callDelete(requestId, {
             onSettled() {
                 refetch()
+            },
+        })
+    }
+
+    const onAcceptClaimGuestRequest = async (requestId: string) => {
+        callAcceptClaimGuestRequest(requestId, {
+            onSuccess: () => {
+                refetchClaimGuestRequests()
+            },
+        })
+    }
+
+    const onDenyClaimGuestRequest = async (requestId: string) => {
+        callDenyClaimGuestRequest(requestId, {
+            onSuccess: () => {
+                refetchClaimGuestRequests()
             },
         })
     }
@@ -154,7 +192,7 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
                 />
                 <View style={styles.container}>
                     <MapSection
-                        title="Request From Players"
+                        title="Requests From Players"
                         listData={requests?.filter(
                             item => item.requestSource !== 'team',
                         )}
@@ -245,6 +283,27 @@ const TeamRequestsScreen: React.FC<TeamRequestProps> = ({ navigation }) => {
                                 item => item.requestSource !== 'player',
                             ).length <= 0
                                 ? 'No open requests to players'
+                                : undefined
+                        }
+                    />
+                    <MapSection
+                        title="Guest Claim Requests"
+                        listData={claimGuestRequests}
+                        renderItem={request => (
+                            <ClaimGuestRequestItem
+                                key={request._id}
+                                request={request}
+                                onAccept={onAcceptClaimGuestRequest}
+                                onDeny={onDenyClaimGuestRequest}
+                            />
+                        )}
+                        loading={false}
+                        showButton={false}
+                        showCreateButton={false}
+                        error={
+                            claimGuestRequests &&
+                            claimGuestRequests.length === 0
+                                ? 'No claim guest requests'
                                 : undefined
                         }
                     />

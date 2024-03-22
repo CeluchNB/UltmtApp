@@ -114,7 +114,7 @@ describe('ActiveGamesScreen', () => {
     it('navigates without a point', async () => {
         jest.spyOn(GameData, 'reactivateGame').mockReturnValueOnce(
             Promise.resolve({
-                game: { ...game, offline: false },
+                game: { ...game, offline: false, statsPoints: [] },
                 team: 'one',
                 activePoint: undefined,
                 hasActiveActions: false,

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTheme } from '../../hooks'
 import {
+    Keyboard,
     Modal,
     StyleSheet,
     TouchableOpacity,
@@ -53,7 +54,7 @@ const BaseModal: React.FC<BaseModalProps> = props => {
                 style={styles.modalContainer}
                 onPressOut={onClose}
                 activeOpacity={1}>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={styles.modalView}>{children}</View>
                 </TouchableWithoutFeedback>
             </TouchableOpacity>

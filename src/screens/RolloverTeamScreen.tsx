@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { ApiError } from '../types/services'
 import BaseScreen from '../components/atoms/BaseScreen'
+import { Button } from 'react-native-paper'
 import CheckBox from '@react-native-community/checkbox'
 import { Picker } from '@react-native-picker/picker'
 import PrimaryButton from '../components/atoms/PrimaryButton'
@@ -8,8 +9,15 @@ import { RolloverTeamProps } from '../types/navigation'
 import { rollover } from '../services/data/team'
 import { useMutation } from 'react-query'
 import { useTheme } from '../hooks'
+import {
+    ActionSheetIOS,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import { Controller, useForm } from 'react-hook-form'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import {
     selectTeam,
     setTeam,
@@ -129,6 +137,9 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
             alignSelf: 'center',
             marginBottom: 10,
         },
+        datePickerButton: {
+            flexDirection: 'row-reverse',
+        },
     })
 
     return (
@@ -176,25 +187,52 @@ const RolloverTeamScreen: React.FC<RolloverTeamProps> = ({ navigation }) => {
                     name="season"
                     control={control}
                     rules={{ required: true }}
-                    render={({ field: { onChange, value } }) => (
-                        <Picker
-                            style={styles.picker}
-                            selectedValue={value}
-                            itemStyle={{ color: colors.textPrimary }}
-                            dropdownIconColor={colors.textPrimary}
-                            prompt="Season"
-                            onValueChange={onChange}>
-                            {years.map(year => {
-                                return (
-                                    <Picker.Item
-                                        value={year}
-                                        label={year}
-                                        key={year}
-                                    />
-                                )
-                            })}
-                        </Picker>
-                    )}
+                    render={({ field: { onChange, value } }) => {
+                        if (Platform.OS === 'android') {
+                            return (
+                                <Picker
+                                    style={styles.picker}
+                                    selectedValue={value}
+                                    itemStyle={{ color: colors.textPrimary }}
+                                    dropdownIconColor={colors.textPrimary}
+                                    prompt="Season"
+                                    onValueChange={onChange}>
+                                    {years.map(year => {
+                                        return (
+                                            <Picker.Item
+                                                value={year}
+                                                label={year}
+                                                key={year}
+                                            />
+                                        )
+                                    })}
+                                </Picker>
+                            )
+                        } else {
+                            return (
+                                <Button
+                                    textColor={colors.textPrimary}
+                                    contentStyle={styles.datePickerButton}
+                                    icon="chevron-down"
+                                    onPress={() => {
+                                        ActionSheetIOS.showActionSheetWithOptions(
+                                            {
+                                                options: [...years, 'Cancel'],
+                                                cancelButtonIndex: years.length,
+                                                userInterfaceStyle: 'dark',
+                                            },
+                                            (buttonIndex: number) => {
+                                                if (buttonIndex === 3) return
+
+                                                onChange(years[buttonIndex])
+                                            },
+                                        )
+                                    }}>
+                                    {value}
+                                </Button>
+                            )
+                        }
+                    }}
                 />
                 <Text style={styles.warning}>
                     Warning: You will not be able to edit the current season

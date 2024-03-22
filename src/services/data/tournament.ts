@@ -1,5 +1,6 @@
 import * as Constants from '../../utils/constants'
 import { throwApiError } from '../../utils/service-utils'
+import { withToken } from './auth'
 import { LocalTournament, Tournament } from '../../types/tournament'
 import {
     createTournament as localCreateTournament,
@@ -23,7 +24,7 @@ export const createTournament = async (
     try {
         let tournamentId = ''
         try {
-            const result = await networkCreateTournament(data)
+            const result = await withToken(networkCreateTournament, data)
             const { tournament } = result.data
             tournamentId = await localCreateTournament(tournament)
         } catch (e) {

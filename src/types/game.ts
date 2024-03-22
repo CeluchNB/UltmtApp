@@ -1,7 +1,7 @@
 import { ClientPoint } from './point'
-import { DisplayUser } from './user'
 import { Tournament } from './tournament'
 import { DisplayTeam, GuestTeam } from './team'
+import { DisplayUser, InGameStatsUser } from './user'
 
 export interface CreateGame {
     creator: DisplayUser
@@ -73,3 +73,4 @@ export interface UpdateGame {
 }
 
 export type LocalGame = Game & { offline: boolean }
+export type PointStats = { _id: string; pointStats: InGameStatsUser[] }

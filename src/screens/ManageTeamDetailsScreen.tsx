@@ -59,7 +59,7 @@ const ManageTeamDetailsScreen: React.FC<ManagedTeamDetailsProps> = ({
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
-            if (!teamData && !teamLoading) {
+            if (!teamLoading) {
                 refetch()
             }
         })
