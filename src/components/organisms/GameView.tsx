@@ -146,6 +146,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
                     <GameUtilityBar
                         loading={reactivateLoading}
                         totalViews={game.totalViews}
+                        onExportStats={managingTeamId ? () => {} : undefined}
                         onReactivateGame={
                             managingTeamId ? handleReactivateGame : undefined
                         }

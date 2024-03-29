@@ -56,6 +56,7 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
         error: deleteError,
     } = useMutation(() => deleteTeam(team?._id ?? ''), {
         onSuccess: () => {
+            setConfirmModalVisible(false)
             navigation.navigate('ManageTeams')
         },
     })
@@ -67,6 +68,7 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
         error: archiveError,
     } = useMutation(() => archiveTeam(team?._id ?? ''), {
         onSuccess: () => {
+            setConfirmModalVisible(false)
             navigation.navigate('ManageTeams')
         },
     })
@@ -78,6 +80,7 @@ const TeamSettingsScreen: React.FC<TeamSettingsProps> = ({ navigation }) => {
         error: leaveError,
     } = useMutation(() => leaveManagerRole(team?._id ?? ''), {
         onSuccess: () => {
+            setConfirmModalVisible(false)
             navigation.navigate('ManageTeams')
         },
     })

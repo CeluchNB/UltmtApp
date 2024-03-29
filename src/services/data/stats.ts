@@ -12,6 +12,7 @@ import {
 } from '../../types/stats'
 import { addPlayerStats, calculatePlayerStats } from '../../utils/stats'
 import {
+    exportGameStats as networkExportGameStats,
     filterConnectionStats as networkFilterConnectionStats,
     filterPlayerStats as networkFilterPlayerStats,
     getConnectionStats as networkGetConnectionStats,
@@ -146,5 +147,13 @@ export const filterConnectionStats = async (
         )
     } catch (e) {
         return throwApiError(e, Constants.UNABLE_TO_GET_CONNECTION_STATS)
+    }
+}
+
+export const exportGameStats = async (userId: string, gameId: string) => {
+    try {
+        await networkExportGameStats(userId, gameId)
+    } catch (e) {
+        return throwApiError(e, Constants.UNABLE_TO_GET_GAME_STATS)
     }
 }
