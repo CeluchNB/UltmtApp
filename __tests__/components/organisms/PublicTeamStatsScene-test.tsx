@@ -1,11 +1,14 @@
 import * as StatsData from '../../../src/services/data/stats'
 import { NavigationContainer } from '@react-navigation/native'
+import { Provider } from 'react-redux'
 import PublicTeamStatsScene from '../../../src/components/organisms/PublicTeamStatsScene'
 import React from 'react'
 import { Team } from '../../../src/types/team'
-import { game } from '../../../fixtures/data'
+import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
+import store from '../../../src/store/store'
 import { GameStats, TeamStats } from '../../../src/types/stats'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { fetchProfileData, game } from '../../../fixtures/data'
 import {
     fireEvent,
     render,
@@ -142,7 +145,13 @@ describe('PublicTeamStatsScene', () => {
         render(
             <NavigationContainer>
                 <QueryClientProvider client={client}>
-                    <PublicTeamStatsScene teamId="" games={[]} />
+                    <Provider store={store}>
+                        <PublicTeamStatsScene
+                            teamId=""
+                            games={[]}
+                            managers={[]}
+                        />
+                    </Provider>
                 </QueryClientProvider>
             </NavigationContainer>,
         )
@@ -167,7 +176,13 @@ describe('PublicTeamStatsScene', () => {
         render(
             <NavigationContainer>
                 <QueryClientProvider client={client}>
-                    <PublicTeamStatsScene teamId="team1" games={[game]} />
+                    <Provider store={store}>
+                        <PublicTeamStatsScene
+                            teamId="team1"
+                            games={[game]}
+                            managers={[]}
+                        />
+                    </Provider>
                 </QueryClientProvider>
             </NavigationContainer>,
         )
@@ -178,7 +193,7 @@ describe('PublicTeamStatsScene', () => {
 
         spy.mockClear()
 
-        const filterBtn = screen.getByText('Filter by Game')
+        const filterBtn = screen.getByText('filter by game')
         fireEvent.press(filterBtn)
 
         expect(screen.getByText(`vs. ${game.teamTwo.name}`)).toBeTruthy()
@@ -192,11 +207,53 @@ describe('PublicTeamStatsScene', () => {
         expect(spy).toHaveBeenCalledTimes(1)
     })
 
+    it('calls export', async () => {
+        const exportSpy = jest
+            .spyOn(StatsData, 'exportTeamStats')
+            .mockResolvedValueOnce(undefined)
+
+        store.dispatch(setProfile(fetchProfileData))
+
+        render(
+            <NavigationContainer>
+                <QueryClientProvider client={client}>
+                    <Provider store={store}>
+                        <PublicTeamStatsScene
+                            teamId="team1"
+                            games={[game]}
+                            managers={[fetchProfileData]}
+                        />
+                    </Provider>
+                </QueryClientProvider>
+            </NavigationContainer>,
+        )
+
+        await waitFor(async () =>
+            expect(screen.getByText('Overview')).toBeTruthy(),
+        )
+
+        const exportButton = screen.getByText('export stats')
+        fireEvent.press(exportButton)
+
+        const confirmButton = screen.getByText('confirm')
+        fireEvent.press(confirmButton)
+
+        await waitFor(() => {
+            expect(exportSpy).toHaveBeenCalled()
+        })
+    })
+
     it('calls navigate', async () => {
         render(
             <NavigationContainer>
                 <QueryClientProvider client={client}>
-                    <PublicTeamStatsScene teamId="" games={[]} />
+                    <Provider store={store}>
+                        <PublicTeamStatsScene
+                            teamId=""
+                            games={[]}
+                            managers={[]}
+                        />
+                    </Provider>
                 </QueryClientProvider>
             </NavigationContainer>,
         )

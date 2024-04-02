@@ -1,7 +1,6 @@
 import ActionStack from '../utils/action-stack'
 import { Game } from '../types/game'
 import Point from '../types/point'
-import { selectManagerTeams } from '../store/reducers/features/account/accountReducer'
 import useLivePoint from '../hooks/useLivePoint'
 import usePointSocket from '../hooks/usePointSocket'
 import { useQuery } from 'react-query'
@@ -19,6 +18,10 @@ import {
 } from '../services/data/game'
 import { isLivePoint, normalizeActions } from '../utils/point'
 import {
+    selectAccount,
+    selectManagerTeams,
+} from '../store/reducers/features/account/accountReducer'
+import {
     setLiveAction,
     setSavedAction,
     setTeams,
@@ -26,6 +29,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 
 interface GameViewContextData {
+    userId?: string
     displayActions: (Action | { ad: boolean })[]
     game?: Game
     activePoint?: Point
@@ -71,6 +75,7 @@ const GameViewProvider = ({
 }) => {
     const dispatch = useDispatch()
     const managerTeams = useSelector(selectManagerTeams)
+    const account = useSelector(selectAccount)
     const [activePoint, setActivePoint] = useState<Point>()
     const emitter = usePointSocket(gameId, activePoint?._id ?? '')
     const { actionStack, setActionStack } = useLivePoint(emitter, {
@@ -227,6 +232,7 @@ const GameViewProvider = ({
     return (
         <GameViewContext.Provider
             value={{
+                userId: account._id,
                 displayActions,
                 game,
                 points: points ?? [],

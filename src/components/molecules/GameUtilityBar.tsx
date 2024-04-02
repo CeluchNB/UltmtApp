@@ -1,9 +1,8 @@
-import ConfirmModal from './ConfirmModal'
 import { IconButton } from 'react-native-paper'
+import React from 'react'
 import { pluralize } from '../../utils/stats'
 import { useTheme } from '../../hooks'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
 
 interface GameUtilityBarProps {
     loading: boolean
@@ -23,8 +22,6 @@ const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-
-    const [exportModalVisible, setExportModalVisible] = useState(false)
 
     const styles = StyleSheet.create({
         container: {
@@ -70,9 +67,7 @@ const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
                         size={20}
                         iconColor={colors.textPrimary}
                         icon="export"
-                        onPress={() => {
-                            setExportModalVisible(true)
-                        }}
+                        onPress={onExportStats}
                         testID="export-button"
                     />
                 )}
@@ -95,21 +90,6 @@ const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
                     />
                 )}
             </View>
-            <ConfirmModal
-                displayText="This will send a spreadsheet to your email. Export stats?"
-                loading={false}
-                visible={exportModalVisible}
-                confirmColor={colors.textPrimary}
-                onClose={async () => {
-                    setExportModalVisible(false)
-                }}
-                onCancel={async () => {
-                    setExportModalVisible(false)
-                }}
-                onConfirm={async () => {
-                    onExportStats?.()
-                }}
-            />
         </View>
     )
 }

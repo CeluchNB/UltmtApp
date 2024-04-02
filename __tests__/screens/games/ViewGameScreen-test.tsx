@@ -615,6 +615,50 @@ describe('ViewGameScreen', () => {
         expect(spy).toHaveBeenCalled()
     }, 20000)
 
+    it('exports stats', async () => {
+        store.dispatch(
+            setProfile({
+                ...fetchProfileData,
+                managerTeams: [
+                    {
+                        _id: game.teamOne._id,
+                        place: game.teamOne.place,
+                        name: game.teamOne.name,
+                        teamname: game.teamOne.teamname,
+                        seasonStart: game.teamOne.seasonStart,
+                        seasonEnd: game.teamOne.seasonEnd,
+                    },
+                ],
+            }),
+        )
+        const spy = jest
+            .spyOn(StatsData, 'exportGameStats')
+            .mockResolvedValueOnce(undefined)
+
+        const { getByTestId, getAllByText, getByText } = render(
+            <NavigationContainer>
+                <Provider store={store}>
+                    <QueryClientProvider client={client}>
+                        <ViewGameScreen {...props} />
+                    </QueryClientProvider>
+                </Provider>
+            </NavigationContainer>,
+        )
+        await waitFor(async () => {
+            expect(getAllByText('Temper').length).toBe(6)
+        })
+
+        const button = getByTestId('export-button')
+        fireEvent.press(button)
+
+        const confirmBtn = getByText('confirm')
+        fireEvent.press(confirmBtn)
+
+        await waitFor(async () => {
+            expect(spy).toHaveBeenCalled()
+        })
+    })
+
     it('displays stats', async () => {
         render(
             <NavigationContainer>

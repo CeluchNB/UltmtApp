@@ -41,6 +41,7 @@ const renderScene = (
                     <PublicTeamStatsScene
                         teamId={teamId}
                         games={gamesQuery.data || []}
+                        managers={team.managers}
                     />
                 )
         }

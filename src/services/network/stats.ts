@@ -105,7 +105,21 @@ export const exportGameStats = async (
         `${API_URL_V1}/stats/export/game/${gameId}?user=${userId}`,
         {
             headers: {
-                'X-API-Header': API_KEY,
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}
+
+export const exportTeamStats = async (
+    userId: string,
+    teamId: string,
+): Promise<AxiosResponse> => {
+    return await axios.get(
+        `${API_URL_V1}/stats/export/team/${teamId}?user=${userId}`,
+        {
+            headers: {
+                'X-API-Key': API_KEY,
             },
         },
     )

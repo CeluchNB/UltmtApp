@@ -6,6 +6,7 @@ import GameUtilityBar from '../molecules/GameUtilityBar'
 import { GameViewContext } from '../../context/game-view-context'
 import ViewPointsScene from './ViewPointsScene'
 import { deleteGame } from '../../services/data/game'
+import { exportGameStats } from '../../services/data/stats'
 import { setupMobileAds } from '../../utils/ads'
 import { useNavigation } from '@react-navigation/native'
 import {
@@ -63,6 +64,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
     }
 
     const {
+        userId,
         activePoint,
         allPointsLoading,
         game,
@@ -71,8 +73,10 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
         onSelectPoint,
     } = useContext(GameViewContext)
     const { onReactivateGame } = useGameReactivation()
-    const [modalVisible, setModalVisible] = React.useState(false)
+    const [deleteModalVisible, setDeleteModalVisible] = React.useState(false)
     const [deleteLoading, setDeleteLoading] = React.useState(false)
+    const [exportModalVisible, setExportModalVisible] = React.useState(false)
+    const [exportLoading, setExportLoading] = React.useState(false)
     const [reactivateLoading, setReactivateLoading] = React.useState(false)
     const [index, setIndex] = React.useState(mapTabNameToIndex('points'))
     const [routes] = React.useState([
@@ -111,7 +115,11 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
     }, [onReactivateGame, game, managingTeamId])
 
     const onDelete = () => {
-        setModalVisible(true)
+        setDeleteModalVisible(true)
+    }
+
+    const onExport = () => {
+        setExportModalVisible(true)
     }
 
     const handleDeleteGame = React.useCallback(async () => {
@@ -123,13 +131,31 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
             // TODO: error display? do nothing
         } finally {
             setDeleteLoading(false)
-            setModalVisible(false)
+            setDeleteModalVisible(false)
             navigation.goBack()
         }
     }, [gameId, managingTeamId, navigation])
 
-    const onClose = async () => {
-        setModalVisible(false)
+    const handleExportStats = React.useCallback(async () => {
+        try {
+            if (!managingTeamId) return
+            setExportLoading(true)
+            await exportGameStats(userId ?? '', gameId)
+        } catch (e) {
+            console.log('error', e)
+            // TODO: error display?
+        } finally {
+            setExportLoading(false)
+            setExportModalVisible(false)
+        }
+    }, [gameId, managingTeamId, userId])
+
+    const onDeleteModalClose = async () => {
+        setDeleteModalVisible(false)
+    }
+
+    const onExportModalClose = async () => {
+        setExportModalVisible(false)
     }
 
     const styles = StyleSheet.create({
@@ -146,7 +172,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
                     <GameUtilityBar
                         loading={reactivateLoading}
                         totalViews={game.totalViews}
-                        onExportStats={managingTeamId ? () => {} : undefined}
+                        onExportStats={managingTeamId ? onExport : undefined}
                         onReactivateGame={
                             managingTeamId ? handleReactivateGame : undefined
                         }
@@ -183,11 +209,20 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
             <ConfirmModal
                 confirmColor={colors.textPrimary}
                 displayText="Are you sure you want to delete the game? This cannot be undone."
-                visible={modalVisible}
-                onClose={onClose}
-                onCancel={onClose}
+                visible={deleteModalVisible}
+                onClose={onDeleteModalClose}
+                onCancel={onDeleteModalClose}
                 loading={deleteLoading}
                 onConfirm={handleDeleteGame}
+            />
+            <ConfirmModal
+                displayText="This will send a spreadsheet to your email. Export stats?"
+                loading={exportLoading}
+                visible={exportModalVisible}
+                confirmColor={colors.textPrimary}
+                onClose={onExportModalClose}
+                onCancel={onExportModalClose}
+                onConfirm={handleExportStats}
             />
         </BaseScreen>
     )
