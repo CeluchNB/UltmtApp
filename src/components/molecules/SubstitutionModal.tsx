@@ -5,7 +5,7 @@ import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import { nameSort } from '../../utils/player'
 import {
-    selectActiveTeam,
+    selectActiveTeamStats,
     // selectGame,
     // selectTeam,
 } from '../../store/reducers/features/game/liveGameReducer'
@@ -32,7 +32,7 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const activeTeam = useSelector(selectActiveTeam)
+    const activeTeam = useSelector(selectActiveTeamStats)
     const [playerOne, setPlayerOne] = React.useState<DisplayUser | undefined>(
         undefined,
     )

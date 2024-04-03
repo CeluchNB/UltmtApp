@@ -5,8 +5,8 @@ import MockDate from 'mockdate'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
+import { setActiveTeam } from '../../../src/store/reducers/features/game/liveGameReducer'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
-import { setTeamOne } from '../../../src/store/reducers/features/game/liveGameReducer'
 import store from '../../../src/store/store'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
@@ -80,7 +80,7 @@ describe('CreateGameScreen', () => {
             }),
         )
         store.dispatch(
-            setTeamOne({
+            setActiveTeam({
                 ...teamOne,
                 managers: [],
                 players: [],

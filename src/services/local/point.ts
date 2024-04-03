@@ -120,7 +120,7 @@ export const getActivePointByGame = async (
 
 export const deletePoint = async (pointId: string) => {
     const realm = await getRealm()
-    const point = await realm.objectForPrimaryKey('Point', pointId)
+    const point = realm.objectForPrimaryKey('Point', pointId)
 
     realm.write(() => {
         realm.delete(point)

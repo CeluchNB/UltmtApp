@@ -5,7 +5,7 @@ import JoinGameScreen from '../../../src/screens/games/JoinGameScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
-import { setTeamOne } from '../../../src/store/reducers/features/game/liveGameReducer'
+import { setActiveTeam } from '../../../src/store/reducers/features/game/liveGameReducer'
 import store from '../../../src/store/store'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
@@ -31,7 +31,7 @@ describe('JoinGameScreen', () => {
     beforeAll(() => {
         jest.useFakeTimers()
         store.dispatch(
-            setTeamOne({
+            setActiveTeam({
                 place: 'Pittsburgh',
                 name: 'Temper',
                 teamname: 'temper',

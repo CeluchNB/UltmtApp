@@ -21,7 +21,7 @@ import {
 } from 'react-native'
 import {
     createGame,
-    selectTeamOne,
+    selectActiveTeam,
     selectTournament,
 } from '../../store/reducers/features/game/liveGameReducer'
 import {
@@ -41,7 +41,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
     const dispatch = useDispatch<AppDispatch>()
     const account = useSelector(selectAccount)
     const createStatus = useSelector(selectCreateStatus)
-    const teamOne = useSelector(selectTeamOne)
+    const teamOne = useSelector(selectActiveTeam)
     const tournament = useSelector(selectTournament)
 
     const {

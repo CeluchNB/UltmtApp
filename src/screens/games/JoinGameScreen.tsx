@@ -8,7 +8,7 @@ import SearchDisplay from '../../components/molecules/SearchDisplay'
 import { setPoint } from '../../store/reducers/features/point/livePointReducer'
 import {
     addPlayers,
-    selectTeamOne,
+    selectActiveTeam,
     setActiveTeamId,
     setGame,
     setTeam,
@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
     const dispatch = useDispatch()
-    const teamTwo = useSelector(selectTeamOne)
+    const teamTwo = useSelector(selectActiveTeam)
     const [modalVisible, setModalVisible] = React.useState(false)
     const [gameId, setGameId] = React.useState('')
     const [joinLoading, setJoinLoading] = React.useState(false)

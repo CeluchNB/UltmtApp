@@ -49,7 +49,7 @@ export const getTeamById = async (id: string): Promise<Team> => {
 export const deleteTeamById = async (teamId: string) => {
     try {
         const realm = await getRealm()
-        const team = await realm.objectForPrimaryKey('Team', teamId)
+        const team = realm.objectForPrimaryKey('Team', teamId)
         if (!team) return
 
         realm.write(() => {

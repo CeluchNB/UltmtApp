@@ -43,12 +43,12 @@ export interface LiveGameSlice {
         tournament?: Tournament
         offline?: boolean
     }
-    teamOne: Team
+    activeTeam: Team
     activeTags: string[]
     team: TeamNumber
     createStatus: Status
     createError: string | undefined
-    activeTeam: {
+    activeTeamStats: {
         _id: string
         players: InGameStatsUser[]
         points: { [_id: string]: InGameStatsUser[] }
@@ -80,12 +80,12 @@ const initialState: LiveGameSlice = {
         tournament: undefined,
         offline: false,
     },
-    teamOne: {} as Team,
+    activeTeam: {} as Team,
     activeTags: ['huck', 'break', 'layout'],
     team: 'one',
     createStatus: 'idle',
     createError: undefined,
-    activeTeam: {
+    activeTeamStats: {
         _id: '',
         players: [],
         points: {},
@@ -103,8 +103,8 @@ const liveGameSlice = createSlice({
         setGame(state, action) {
             state.game = action.payload
         },
-        setTeamOne(state, action) {
-            state.teamOne = action.payload
+        setActiveTeam(state, action) {
+            state.activeTeam = action.payload
         },
         setTeam(state, action) {
             state.team = action.payload
@@ -126,35 +126,35 @@ const liveGameSlice = createSlice({
             state.team = initialState.team
             state.createStatus = initialState.createStatus
             state.createError = initialState.createError
-            state.teamOne = initialState.teamOne
             state.activeTeam = initialState.activeTeam
+            state.activeTeamStats = initialState.activeTeamStats
         },
         setActiveTeamId(state, action) {
-            state.activeTeam._id = action.payload
+            state.activeTeamStats._id = action.payload
         },
         addPlayers(state, action) {
-            state.activeTeam.players = updateInGameStatsPlayers(
-                state.activeTeam.players,
+            state.activeTeamStats.players = updateInGameStatsPlayers(
+                state.activeTeamStats.players,
                 action.payload,
             )
         },
         addPlayerStats(state, action) {
             const { pointId, players } = action.payload
-            state.activeTeam.players = addInGameStatsPlayers(
-                state.activeTeam.players,
+            state.activeTeamStats.players = addInGameStatsPlayers(
+                state.activeTeamStats.players,
                 players,
             )
-            state.activeTeam.points[pointId] = players
+            state.activeTeamStats.points[pointId] = players
         },
         subtractPlayerStats(state, action) {
             const { pointId } = action.payload
-            const point = state.activeTeam.points[pointId]
+            const point = state.activeTeamStats.points[pointId]
             if (point) {
-                state.activeTeam.players = subtractInGameStatsPlayers(
-                    state.activeTeam.players,
+                state.activeTeamStats.players = subtractInGameStatsPlayers(
+                    state.activeTeamStats.players,
                     point,
                 )
-                delete state.activeTeam.points[pointId]
+                delete state.activeTeamStats.points[pointId]
             }
         },
     },
@@ -197,15 +197,16 @@ export const selectCreateStatus = (state: RootState) =>
 export const selectGame = (state: RootState) => state.liveGame.game
 export const selectTeam = (state: RootState) => state.liveGame.team
 export const selectTags = (state: RootState) => state.liveGame.activeTags
-export const selectTeamOne = (state: RootState) => state.liveGame.teamOne
+export const selectActiveTeam = (state: RootState) => state.liveGame.activeTeam
 export const selectTournament = (state: RootState) =>
     state.liveGame.game.tournament
-export const selectActiveTeam = (state: RootState) => state.liveGame.activeTeam
+export const selectActiveTeamStats = (state: RootState) =>
+    state.liveGame.activeTeamStats
 export const {
     resetCreateStatus,
     setGame,
     setTeam,
-    setTeamOne,
+    setActiveTeam,
     setTournament,
     addTag,
     updateScore,

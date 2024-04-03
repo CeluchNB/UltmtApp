@@ -9,7 +9,7 @@ import TeamListItem from '../../components/atoms/TeamListItem'
 import { getManagingTeams } from '../../services/data/team'
 import { isLoggedIn } from '../../services/data/auth'
 import { selectManagerTeams } from '../../store/reducers/features/account/accountReducer'
-import { setTeamOne } from '../../store/reducers/features/game/liveGameReducer'
+import { setActiveTeam } from '../../store/reducers/features/game/liveGameReducer'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import {
@@ -48,7 +48,7 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
 
     const onSelect = async (teamOne: Team) => {
         try {
-            dispatch(setTeamOne(teamOne))
+            dispatch(setActiveTeam(teamOne))
             navigation.navigate('SelectOpponent', {})
         } catch (e) {
             // TODO: error display?

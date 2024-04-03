@@ -19,7 +19,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import {
     addPlayers,
-    selectActiveTeam,
+    selectActiveTeamStats,
     selectGame,
     selectTeam,
     subtractPlayerStats,
@@ -39,7 +39,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     const game = useSelector(selectGame)
     const team = useSelector(selectTeam)
     const point = useSelector(selectPoint)
-    const activeTeam = useSelector(selectActiveTeam)
+    const activeTeamStats = useSelector(selectActiveTeamStats)
     const dispatch = useDispatch<AppDispatch>()
 
     const [selectedPlayers, setSelectedPlayers] = useState<number[]>([])
@@ -49,8 +49,8 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
 
     // keep players up to date with any team edits
     useQuery(
-        ['getLocalTeam', { teamId: activeTeam._id }],
-        () => getTeamById(activeTeam._id),
+        ['getLocalTeam', { teamId: activeTeamStats._id }],
+        () => getTeamById(activeTeamStats._id),
         {
             onSuccess(localTeam) {
                 dispatch(addPlayers(localTeam.players))
@@ -66,14 +66,14 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
     } = useMutation((players: DisplayUser[]) => setPlayers(point._id, players))
 
     const playerList = React.useMemo(() => {
-        return activeTeam.players
+        return activeTeamStats.players
             .slice()
             .sort((a, b) =>
                 `${a.firstName} ${a.lastName}`.localeCompare(
                     `${b.firstName} ${b.lastName}`,
                 ),
             )
-    }, [activeTeam.players])
+    }, [activeTeamStats.players])
 
     // no guaranteed unique attribute of GuestPlayer
     // must select by index
@@ -292,7 +292,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
             </View>
             <GuestPlayerModal
                 visible={guestModalVisible}
-                teamId={activeTeam._id}
+                teamId={activeTeamStats._id}
                 onClose={() => {
                     setGuestModalVisible(false)
                 }}
