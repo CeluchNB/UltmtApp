@@ -1,6 +1,7 @@
 import * as Constants from '../../utils/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DisplayUser } from '../../types/user'
+import { Realm } from '@realm/react'
 import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
 import { ActionSchema, GameSchema, PointSchema } from '../../models'
@@ -132,31 +133,22 @@ export const getActiveGames = async (
 
 export const deleteFullGame = async (gameId: string): Promise<void> => {
     const realm = await getRealm()
-    const game = await realm.objectForPrimaryKey<GameSchema>('Game', gameId)
+    const game = realm.objectForPrimaryKey<GameSchema>('Game', gameId)
+    if (!game) return
 
-    const points = game?.points.map(id => {
-        return realm.objectForPrimaryKey<PointSchema>('Point', id)
-    })
+    const points = realm.objects<PointSchema>('Point')
+    const pointQuery = game.points.map(id => `_id = "${id}"`).join(' OR ')
+    const gamePoints = points.filtered(pointQuery)
 
-    const actions: (ActionSchema | null)[] = []
-    points?.forEach(p => {
-        p?.teamOneActions.forEach(id => {
-            const objectId = new Realm.BSON.ObjectID(id)
-            actions.push(
-                realm.objectForPrimaryKey<ActionSchema>('Action', objectId),
-            )
-        })
-        p?.teamTwoActions.forEach(id => {
-            const objectId = new Realm.BSON.ObjectID(id)
-            actions.push(
-                realm.objectForPrimaryKey<ActionSchema>('Action', objectId),
-            )
-        })
-    })
+    const actions = realm.objects<ActionSchema>('Action')
+    const actionQuery = gamePoints
+        .map(point => `pointId = "${point._id}"`)
+        .join(' OR ')
+    const gameActions = actions.filtered(actionQuery)
 
     realm.write(() => {
-        realm.delete(actions.filter(a => a !== null))
-        realm.delete(points?.filter(p => p !== null))
+        realm.delete(gameActions)
+        realm.delete(gamePoints)
         realm.delete(game)
     })
 }

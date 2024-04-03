@@ -127,10 +127,10 @@ const GameCard: React.FC<GameCardProps> = props => {
                 )}
                 <View style={styles.teamContainer}>
                     <View style={styles.teamNameContainer}>
-                        <Text style={styles.teamText}>{teamOne.name}</Text>
-                        {teamOne.teamname && (
+                        <Text style={styles.teamText}>{teamOne?.name}</Text>
+                        {teamOne?.teamname && (
                             <Text style={styles.teamNameText}>
-                                @{teamOne.teamname}
+                                @{teamOne?.teamname}
                             </Text>
                         )}
                     </View>
@@ -138,10 +138,10 @@ const GameCard: React.FC<GameCardProps> = props => {
                 </View>
                 <View style={styles.teamContainer}>
                     <View style={styles.teamNameContainer}>
-                        <Text style={styles.teamText}>{teamTwo.name}</Text>
-                        {teamTwo.teamname && (
+                        <Text style={styles.teamText}>{teamTwo?.name}</Text>
+                        {teamTwo?.teamname && (
                             <Text style={styles.teamNameText}>
-                                @{teamTwo.teamname}
+                                @{teamTwo?.teamname}
                             </Text>
                         )}
                     </View>
