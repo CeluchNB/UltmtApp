@@ -114,10 +114,10 @@ export const undoOfflineAction = async (
  */
 export const getLocalActionsByPoint = async (
     pointId: string,
-): Promise<Action[]> => {
+): Promise<LiveServerActionData[]> => {
     try {
         const actions = await localGetActionsByPoint(pointId)
-        return actions.map(action => ActionFactory.createFromAction(action))
+        return actions
     } catch (e) {
         return throwApiError(e, Constants.GET_ACTION_ERROR)
     }

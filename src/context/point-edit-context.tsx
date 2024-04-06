@@ -1,3 +1,4 @@
+import ActionStack from '../utils/action-stack'
 import { DisplayUser } from '../types/user'
 import Point from '../types/point'
 import { TeamNumber } from '../types/team'
@@ -80,13 +81,14 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         () => getLocalActionsByPoint(point._id),
         {
             onSuccess(data) {
-                const actions = data.map(a => ({
-                    ...a.action,
-                    teamNumber: 'one' as TeamNumber,
-                }))
-                setActionStack({
-                    ...actionStack.addTeamOneActions(actions),
-                })
+                const stack = new ActionStack()
+                stack.addTeamOneActions(
+                    data.filter(a => a.teamNumber === 'one'),
+                )
+                stack.addTeamTwoActions(
+                    data.filter(a => a.teamNumber === 'two'),
+                )
+                setActionStack(stack)
             },
         },
     )

@@ -170,8 +170,8 @@ const liveGameSlice = createSlice({
             // creator of game is always team one
             state.team = 'one'
             state.createStatus = 'success'
-            state.activeTeam._id = action.payload.teamOne._id
-            state.activeTeam.players = initializeInGameStatsPlayers(
+            state.activeTeamStats._id = action.payload.teamOne._id
+            state.activeTeamStats.players = initializeInGameStatsPlayers(
                 action.payload.teamOnePlayers,
             )
         })

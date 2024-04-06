@@ -244,17 +244,13 @@ export const finishGame = async (): Promise<Game> => {
             return game
         } else {
             const response = await withGameToken(networkFinishGame)
-            console.log('network finish game', response)
             const { game } = response.data
 
             await localDeleteFullGame(game._id)
-            console.log('local delete')
             closeRealm()
-            console.log('close realm')
             return game
         }
     } catch (e) {
-        console.log('e', e)
         return throwApiError(e, Constants.FINISH_GAME_ERROR)
     }
 }

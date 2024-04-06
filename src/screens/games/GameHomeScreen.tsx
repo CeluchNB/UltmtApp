@@ -41,7 +41,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
         refetch: refetchGames,
     } = useQuery(['searchGames'], () => searchGames())
     const liveGames = useMemo(() => {
-        return data?.filter(g => g.teamOneActive)
+        return data?.filter(g => g.teamOneActive || g.teamTwoActive)
     }, [data])
 
     const refetch = React.useCallback(() => {

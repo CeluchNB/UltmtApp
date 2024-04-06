@@ -22,16 +22,16 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
     const dispatch = useDispatch()
-    const teamTwo = useSelector(selectActiveTeam)
+    const activeTeam = useSelector(selectActiveTeam)
     const [modalVisible, setModalVisible] = React.useState(false)
     const [gameId, setGameId] = React.useState('')
     const [joinLoading, setJoinLoading] = React.useState(false)
     const [joinError, setJoinError] = React.useState('')
 
     React.useEffect(() => {
-        navigation.setOptions({ title: `Join Game with ${teamTwo.name}` })
+        navigation.setOptions({ title: `Join Game with ${activeTeam.name}` })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [teamTwo])
+    }, [activeTeam])
 
     const onSearch = async (q: string) => {
         if (q.length > 3) {
@@ -49,7 +49,7 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
         setJoinLoading(true)
         try {
             // create game and set live game in redux
-            const game = await joinGame(gameId, teamTwo._id, code)
+            const game = await joinGame(gameId, activeTeam._id, code)
             dispatch(
                 setGame({
                     ...game,

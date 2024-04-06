@@ -142,7 +142,6 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
             setExportLoading(true)
             await exportGameStats(userId ?? '', gameId)
         } catch (e) {
-            console.log('error', e)
             // TODO: error display?
         } finally {
             setExportLoading(false)

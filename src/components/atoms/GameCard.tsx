@@ -25,6 +25,7 @@ const GameCard: React.FC<GameCardProps> = props => {
         teamTwoScore,
         scoreLimit,
         teamOneActive,
+        teamTwoActive,
         totalViews,
     } = game
 
@@ -120,7 +121,7 @@ const GameCard: React.FC<GameCardProps> = props => {
                     onPress(_id)
                 }}
                 testID="game-card-pressable">
-                {teamOneActive && (
+                {(teamOneActive || teamTwoActive) && (
                     <Animated.View
                         style={[styles.circle, { opacity: liveOpacity }]}
                     />
