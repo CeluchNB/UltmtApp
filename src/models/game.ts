@@ -25,14 +25,14 @@ export class GameSchema {
             tournament: 'Tournament?',
             teamOneScore: 'int',
             teamTwoScore: 'int',
-            teamOneActive: 'bool',
-            teamTwoActive: 'bool',
             teamOnePlayers: 'DisplayUser[]',
             teamTwoPlayers: 'DisplayUser[]',
             resolveCode: 'string',
             points: 'string[]',
             statsPoints: 'PointStats[]',
             offline: 'bool',
+            teamOneStatus: 'string',
+            teamTwoStatus: 'string',
         },
     }
 
@@ -52,14 +52,13 @@ export class GameSchema {
     tournament?: Tournament
     teamOneScore: number
     teamTwoScore: number
-    teamOneActive: boolean
-    teamTwoActive: boolean
     teamOnePlayers: DisplayUser[]
     teamTwoPlayers: DisplayUser[]
     resolveCode: string
-    points: string[]
     statsPoints: PointStats[]
     offline: boolean
+    teamOneStatus: string
+    teamTwoStatus: string
 
     constructor(
         game: Game,
@@ -82,14 +81,13 @@ export class GameSchema {
         this.tournament = game.tournament
         this.teamOneScore = game.teamOneScore
         this.teamTwoScore = game.teamTwoScore
-        this.teamOneActive = game.teamOneActive
-        this.teamTwoActive = game.teamTwoActive
         this.teamOnePlayers = game.teamOnePlayers
         this.teamTwoPlayers = game.teamTwoPlayers
         this.resolveCode = game.resolveCode || ''
-        this.points = game.points
         this.statsPoints = statsPoints
         this.offline = offline
+        this.teamOneStatus = game.teamOneStatus
+        this.teamTwoStatus = game.teamTwoStatus
     }
 
     static createOfflineGame(game: CreateGame, teamOnePlayers: DisplayUser[]) {

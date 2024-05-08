@@ -43,13 +43,10 @@ export interface Game {
     tournament?: Tournament
     teamOneScore: number
     teamTwoScore: number
-    teamOneActive: boolean
-    teamTwoActive: boolean
     teamOnePlayers: DisplayUser[]
     teamTwoPlayers: DisplayUser[]
     resolveCode: string
     totalViews: number
-    points: string[]
     teamOneStatus: GameStatus
     teamTwoStatus: GameStatus
 }

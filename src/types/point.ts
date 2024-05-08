@@ -20,8 +20,6 @@ interface Point {
     pullingTeam: GuestTeam
     receivingTeam: GuestTeam
     scoringTeam?: GuestTeam
-    teamOneActive: boolean
-    teamTwoActive: boolean
     teamOneActions: string[]
     teamTwoActions: string[]
     gameId: string

@@ -14,7 +14,13 @@ import { parseClientAction } from '../../utils/action'
 import { parseClientPoint } from '../../utils/point'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
-import { CreateGame, Game, PointStats, UpdateGame } from '../../types/game'
+import {
+    CreateGame,
+    Game,
+    GameStatus,
+    PointStats,
+    UpdateGame,
+} from '../../types/game'
 import { DisplayUser, GuestUser } from '../../types/user'
 import Point, { ClientPoint } from '../../types/point'
 import {
@@ -238,7 +244,7 @@ export const finishGame = async (): Promise<Game> => {
         if (offline) {
             const gameId = await localActiveGameId()
             const game = await localGetGameById(gameId)
-            game.teamOneActive = false
+            game.teamOneStatus = GameStatus.COMPLETE
             await localSaveGame(game)
             closeRealm()
             return game
@@ -327,7 +333,7 @@ const getLocalGameIfExists = async (
 const reactivateOfflineGame = async (
     game: Game & { offline: boolean; statsPoints: PointStats[] },
 ) => {
-    game.teamOneActive = true
+    game.teamOneStatus = GameStatus.ACTIVE
     await activateGameLocally(game)
 
     // get the active point

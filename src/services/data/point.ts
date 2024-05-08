@@ -1,7 +1,7 @@
 import * as Constants from '../../utils/constants'
 import { DisplayUser } from '../../types/user'
 import { Game } from '../../types/game'
-import Point from '../../types/point'
+import Point, { PointStatus } from '../../types/point'
 import { TeamNumber } from '../../types/team'
 import { generatePlayerStatsForPoint } from '../../utils/in-game-stats'
 import { throwApiError } from '../../utils/service-utils'
@@ -74,7 +74,7 @@ export const createPoint = async (
             await localSavePoint(point)
         }
 
-        await addPointToGame(gameId, pointId)
+        // await addPointToGame(gameId, pointId)
         const result = await localGetPointById(pointId)
         return result
     } catch (e: any) {
@@ -91,10 +91,10 @@ const createOfflinePoint = async (
     return pointId
 }
 
-const addPointToGame = async (gameId: string, pointId: string) => {
-    const game = await localGetGameById(gameId)
-    await localSaveGame({ ...game, points: [...game.points, pointId] })
-}
+// const addPointToGame = async (gameId: string, pointId: string) => {
+//     const game = await localGetGameById(gameId)
+//     await localSaveGame({ ...game })
+// }
 
 /**
  * Method to select the players of a specific point
@@ -203,7 +203,7 @@ const removeInGamePlayerStats = async (pointId: string) => {
 const finishOfflinePoint = async (pointId: string) => {
     try {
         const point = await localGetPointById(pointId)
-        if (!point.teamOneActive) {
+        if (point.teamOneStatus !== PointStatus.ACTIVE) {
             return
         }
         const actions = await localGetActionsByPoint(pointId)
@@ -218,7 +218,7 @@ const finishOfflinePoint = async (pointId: string) => {
             }
         }
 
-        point.teamOneActive = false
+        point.teamOneStatus = PointStatus.COMPLETE
         await localSavePoint(point)
     } catch (e) {
         return throwApiError(e, Constants.FINISH_POINT_ERROR)

@@ -23,6 +23,9 @@ export class PointSchema {
             teamTwoActive: 'bool',
             teamOneActions: 'string[]',
             teamTwoActions: 'string[]',
+            gameId: 'string',
+            teamOneStatus: 'string',
+            teamTwoStatus: 'string',
         },
     }
 
@@ -37,10 +40,11 @@ export class PointSchema {
     pullingTeam: GuestTeam
     receivingTeam: GuestTeam
     scoringTeam?: GuestTeam
-    teamOneActive: boolean
-    teamTwoActive: boolean
     teamOneActions: string[]
     teamTwoActions: string[]
+    gameId: string
+    teamOneStatus: string
+    teamTwoStatus: string
 
     constructor(point: Point) {
         this._id = point._id
@@ -54,9 +58,10 @@ export class PointSchema {
         this.pullingTeam = point.pullingTeam
         this.receivingTeam = point.receivingTeam
         this.scoringTeam = point.scoringTeam
-        this.teamOneActive = point.teamOneActive
-        this.teamTwoActive = point.teamTwoActive
         this.teamOneActions = point.teamOneActions
         this.teamTwoActions = point.teamTwoActions
+        this.gameId = point.gameId
+        this.teamOneStatus = point.teamOneStatus
+        this.teamTwoStatus = point.teamTwoStatus
     }
 }

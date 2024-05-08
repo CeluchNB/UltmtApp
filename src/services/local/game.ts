@@ -28,14 +28,13 @@ const parseGame = (
             tournament: schema.tournament,
             teamOneScore: schema.teamOneScore,
             teamTwoScore: schema.teamTwoScore,
-            teamOneActive: schema.teamOneActive,
-            teamTwoActive: schema.teamTwoActive,
             teamOnePlayers: schema.teamOnePlayers,
             teamTwoPlayers: schema.teamTwoPlayers,
             resolveCode: schema.resolveCode,
             statsPoints: schema.statsPoints,
-            points: schema.points,
             offline: schema.offline,
+            teamOneStatus: schema.teamOneStatus,
+            teamTwoStatus: schema.teamTwoStatus,
         }),
     )
 }
