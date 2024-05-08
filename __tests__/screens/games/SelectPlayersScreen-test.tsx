@@ -1,7 +1,6 @@
 import * as PointData from '../../../src/services/data/point'
 import * as TeamData from '../../../src/services/data/team'
 import { NavigationContainer } from '@react-navigation/native'
-import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { SelectPlayersProps } from '../../../src/types/navigation'
@@ -10,6 +9,7 @@ import { Team } from '../../../src/types/team'
 import { game } from '../../../fixtures/data'
 import store from '../../../src/store/store'
 import { DisplayUser, GuestUser } from '../../../src/types/user'
+import Point, { PointStatus } from '../../../src/types/point'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     addPlayers,
@@ -145,6 +145,9 @@ const point: Point = {
     teamTwoActive: false,
     teamOneActions: [],
     teamTwoActions: [],
+    gameId: 'game1',
+    teamOneStatus: PointStatus.ACTIVE,
+    teamTwoStatus: PointStatus.FUTURE,
 }
 
 const team: Team = {

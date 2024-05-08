@@ -1,6 +1,5 @@
 import { GuestTeam } from '../../../src/types/team'
 import { NavigationContainer } from '@react-navigation/native'
-import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
 import store from '../../../src/store/store'
@@ -10,6 +9,7 @@ import {
     ActionType,
     LiveServerActionData,
 } from '../../../src/types/action'
+import Point, { PointStatus } from '../../../src/types/point'
 import PointAccordionGroup, {
     PointAccordionGroupProps,
 } from '../../../src/components/organisms/PointAccordionGroup'
@@ -54,6 +54,9 @@ const points: Point[] = [
         teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.ACTIVE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
     {
         _id: 'point2',
@@ -70,6 +73,9 @@ const points: Point[] = [
         teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.FUTURE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
     {
         _id: 'point1',
@@ -86,6 +92,9 @@ const points: Point[] = [
         teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.FUTURE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
 ]
 

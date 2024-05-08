@@ -3,7 +3,6 @@ import * as PointData from '../../../src/services/data/point'
 import * as StatsData from '../../../src/services/data/stats'
 import { GameStats } from '../../../src/types/stats'
 import { NavigationContainer } from '@react-navigation/native'
-import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { ViewGameProps } from '../../../src/types/navigation'
@@ -16,6 +15,7 @@ import {
     ActionType,
     LiveServerActionData,
 } from '../../../src/types/action'
+import Point, { PointStatus } from '../../../src/types/point'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { fetchProfileData, game } from '../../../fixtures/data'
 import {
@@ -108,6 +108,9 @@ const points: Point[] = [
         teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.ACTIVE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
     {
         _id: 'point2',
@@ -124,6 +127,9 @@ const points: Point[] = [
         teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.FUTURE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
     {
         _id: 'point1',
@@ -140,6 +146,9 @@ const points: Point[] = [
         teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.FUTURE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
 ]
 const savedActions: Action[] = [

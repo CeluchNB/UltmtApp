@@ -35,7 +35,11 @@ describe('GuestPlayerModal', () => {
         const snapshot = render(
             <Provider store={store}>
                 <QueryClientProvider client={client}>
-                    <GuestPlayerModal visible={true} onClose={jest.fn()} />
+                    <GuestPlayerModal
+                        visible={true}
+                        onClose={jest.fn()}
+                        teamId=""
+                    />
                 </QueryClientProvider>
             </Provider>,
         )
@@ -69,6 +73,7 @@ describe('GuestPlayerModal', () => {
                 startTime: '2022' as unknown as Date,
                 tournament: undefined,
                 offline: false,
+                statsPoints: [],
             }),
         )
         let visible = true
@@ -81,6 +86,7 @@ describe('GuestPlayerModal', () => {
                         onClose={() => {
                             visible = false
                         }}
+                        teamId=""
                     />
                 </QueryClientProvider>
             </Provider>,
@@ -134,6 +140,7 @@ describe('GuestPlayerModal', () => {
                         onClose={() => {
                             visible = false
                         }}
+                        teamId=""
                     />
                 </QueryClientProvider>
             </Provider>,
@@ -168,6 +175,7 @@ describe('GuestPlayerModal', () => {
                         onClose={() => {
                             visible = false
                         }}
+                        teamId=""
                     />
                 </QueryClientProvider>
             </Provider>,

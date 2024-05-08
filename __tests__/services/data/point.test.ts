@@ -4,7 +4,6 @@ import * as LocalGameServices from '../../../src/services/local/game'
 import * as LocalPointServices from '../../../src/services/local/point'
 import * as PointServices from '../../../src/services/network/point'
 import { AxiosResponse } from 'axios'
-import Point from '../../../src/types/point'
 import { game } from '../../../fixtures/data'
 import {
     ActionFactory,
@@ -12,6 +11,7 @@ import {
     LiveServerActionData,
     SavedServerActionData,
 } from '../../../src/types/action'
+import Point, { PointStatus } from '../../../src/types/point'
 import {
     createPoint,
     deleteLocalActionsByPoint,
@@ -39,6 +39,9 @@ const point: Point = {
     teamTwoPlayers: [],
     pullingTeam: { name: 'Team 1' },
     receivingTeam: { name: 'Team 2' },
+    gameId: 'game1',
+    teamOneStatus: PointStatus.ACTIVE,
+    teamTwoStatus: PointStatus.ACTIVE,
 }
 
 const action: SavedServerActionData = {
@@ -55,6 +58,7 @@ const action: SavedServerActionData = {
     },
     actionType: ActionType.PULL,
     tags: [],
+    pointId: 'point1',
 }
 
 const liveAction: LiveServerActionData = {

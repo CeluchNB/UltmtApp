@@ -1,9 +1,9 @@
 import * as PointData from '../../../../services/data/point'
 import { DisplayUser } from '../../../../types/user'
 import { GuestTeam } from '../../../../types/team'
-import Point from '../../../../types/point'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
+import Point, { PointStatus } from '../../../../types/point'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export interface LivePointSlice {
@@ -28,6 +28,9 @@ const initialState: LivePointSlice = {
         teamTwoActivePlayers: [],
         pullingTeam: {} as GuestTeam,
         receivingTeam: {} as GuestTeam,
+        gameId: '',
+        teamOneStatus: PointStatus.FUTURE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
     createStatus: 'idle',
     createError: undefined,

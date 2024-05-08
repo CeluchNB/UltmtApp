@@ -1,3 +1,4 @@
+import { GameStatus } from '../../../src/types/game'
 import React from 'react'
 import GameCard, { GameCardProps } from '../../../src/components/atoms/GameCard'
 import { fireEvent, render } from '@testing-library/react-native'
@@ -43,6 +44,8 @@ beforeEach(() => {
             resolveCode: '111111',
             totalViews: 0,
             points: [],
+            teamOneStatus: GameStatus.ACTIVE,
+            teamTwoStatus: GameStatus.DEFINED,
         },
         onPress: fn,
     }

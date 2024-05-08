@@ -17,7 +17,7 @@ import {
     ActionType,
     LiveServerActionData,
 } from '../../../src/types/action'
-import Point, { LocalPointEvents } from '../../../src/types/point'
+import Point, { LocalPointEvents, PointStatus } from '../../../src/types/point'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     act,
@@ -102,6 +102,9 @@ const point: Point = {
     teamTwoActive: false,
     teamOneActions: [],
     teamTwoActions: [],
+    teamOneStatus: PointStatus.ACTIVE,
+    teamTwoStatus: PointStatus.FUTURE,
+    gameId: 'game1',
 }
 
 beforeEach(() => {

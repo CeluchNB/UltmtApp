@@ -1,9 +1,9 @@
 import { List } from 'react-native-paper'
-import Point from '../../../src/types/point'
 import PointAccordion from '../../../src/components/molecules/PointAccordion'
 import React from 'react'
 import { render } from '@testing-library/react-native'
 import { Action, ActionFactory, ActionType } from '../../../src/types/action'
+import Point, { PointStatus } from '../../../src/types/point'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native-google-mobile-ads', () => {
@@ -31,6 +31,9 @@ const point: Point = {
     teamTwoActive: false,
     teamOneActions: [],
     teamTwoActions: [],
+    gameId: 'game1',
+    teamOneStatus: PointStatus.ACTIVE,
+    teamTwoStatus: PointStatus.FUTURE,
 }
 
 const actions: Action[] = [

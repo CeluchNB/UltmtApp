@@ -3,7 +3,6 @@ import * as GameData from '../../src/services/data/game'
 import * as StatsData from '../../src/services/data/stats'
 import * as UserData from '../../src/services/data/user'
 import { DisplayTeam } from '../../src/types/team'
-import { Game } from '../../src/types/game'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import { PublicUserDetailsProps } from '../../src/types/navigation'
@@ -13,6 +12,8 @@ import { User } from '../../src/types/user'
 import { fetchProfileData } from '../../fixtures/data'
 import { setProfile } from '../../src/store/reducers/features/account/accountReducer'
 import store from '../../src/store/store'
+
+import { Game, GameStatus } from '../../src/types/game'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     act,
@@ -70,6 +71,8 @@ export const getGame = (team: DisplayTeam): Game => {
         tournament: undefined,
         totalViews: 0,
         points: [],
+        teamOneStatus: GameStatus.ACTIVE,
+        teamTwoStatus: GameStatus.GUEST,
     }
 }
 

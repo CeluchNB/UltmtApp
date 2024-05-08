@@ -1,10 +1,10 @@
 import * as Constants from '../../utils/constants'
 import { Game } from '../../types/game'
-import Point from '../../types/point'
 import { PointSchema } from '../../models'
 import { Realm } from '@realm/react'
 import { getRealm } from '../../models/realm'
 import { throwLocalError } from '../../utils/service-utils'
+import Point, { PointStatus } from '../../types/point'
 
 const parsePoint = (schema: PointSchema): Point => {
     return JSON.parse(
@@ -51,6 +51,9 @@ export const createOfflinePoint = async (
         teamTwoActive: false,
         pullingTeam: pulling ? game.teamOne : game.teamTwo,
         receivingTeam: pulling ? game.teamTwo : game.teamOne,
+        gameId: game._id,
+        teamOneStatus: PointStatus.ACTIVE,
+        teamTwoStatus: PointStatus.FUTURE,
     }
 
     realm.write(() => {

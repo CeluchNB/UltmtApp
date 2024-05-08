@@ -38,6 +38,7 @@ const user: User = {
     archiveTeams: [],
     openToRequests: true,
     private: false,
+    guest: false,
 }
 
 const displayUsers: DisplayUser[] = [

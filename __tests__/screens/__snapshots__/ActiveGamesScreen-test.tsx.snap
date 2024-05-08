@@ -49,6 +49,7 @@ exports[`ActiveGamesScreen renders 1`] = `
             "teamOneActive": true,
             "teamOnePlayers": [],
             "teamOneScore": 3,
+            "teamOneStatus": "active",
             "teamTwo": {
               "name": "Sockeye",
             },
@@ -56,6 +57,7 @@ exports[`ActiveGamesScreen renders 1`] = `
             "teamTwoDefined": false,
             "teamTwoPlayers": [],
             "teamTwoScore": 0,
+            "teamTwoStatus": "guest",
             "timeoutPerHalf": 1,
             "totalViews": 0,
             "tournament": {
@@ -95,6 +97,7 @@ exports[`ActiveGamesScreen renders 1`] = `
             "teamOneActive": true,
             "teamOnePlayers": [],
             "teamOneScore": 3,
+            "teamOneStatus": "active",
             "teamTwo": {
               "name": "Sockeye",
             },
@@ -102,6 +105,7 @@ exports[`ActiveGamesScreen renders 1`] = `
             "teamTwoDefined": false,
             "teamTwoPlayers": [],
             "teamTwoScore": 0,
+            "teamTwoStatus": "guest",
             "timeoutPerHalf": 1,
             "totalViews": 0,
             "tournament": {

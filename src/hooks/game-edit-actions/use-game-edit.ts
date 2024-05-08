@@ -1,10 +1,10 @@
-import { UpdateGame } from '../types/game'
-import { editGame } from '../services/data/game'
-import { parseUpdateGame } from '../utils/game'
+import { UpdateGame } from '../../types/game'
+import { editGame } from '../../services/data/game'
+import { parseUpdateGame } from '../../utils/game'
 import {
     selectGame,
     setGame,
-} from '../store/reducers/features/game/liveGameReducer'
+} from '../../store/reducers/features/game/liveGameReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 export const useGameEditor = () => {

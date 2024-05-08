@@ -9,13 +9,13 @@ import * as TeamServices from '../../../src/services/network/team'
 import * as UserServices from '../../../src/services/data/user'
 import AsyncStorage from '../../../__mocks__/@react-native-async-storage/async-storage'
 import { AxiosResponse } from 'axios'
-import Point from '../../../src/types/point'
 import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import { Team } from '../../../src/types/team'
 import dayjs from 'dayjs'
 import { game } from '../../../fixtures/data'
 import jwt from 'jsonwebtoken'
 import { ActionType, LiveServerActionData } from '../../../src/types/action'
+import Point, { PointStatus } from '../../../src/types/point'
 import {
     activeGameOffline,
     addGuestPlayer,
@@ -53,6 +53,9 @@ const point: Point = {
     teamTwoPlayers: [],
     pullingTeam: { name: 'Team 1' },
     receivingTeam: { name: 'Team 2' },
+    gameId: 'game1',
+    teamOneStatus: PointStatus.ACTIVE,
+    teamTwoStatus: PointStatus.ACTIVE,
 }
 
 const onlineGame = { ...game, offline: false, statsPoints: [] }

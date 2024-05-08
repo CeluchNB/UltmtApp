@@ -23,6 +23,8 @@ it('should match snapshot', () => {
                 live: 'true',
                 after: new Date(),
                 before: new Date(),
+                showUsers: false,
+                showTeams: false,
             }}
             onClose={() => {}}
         />,
@@ -40,6 +42,8 @@ it('should call on close with correct data', async () => {
                 live: 'true',
                 after: new Date('2022-01-01'),
                 before: new Date('2022-06-01'),
+                showUsers: false,
+                showTeams: false,
             }}
             onClose={onClose}
         />,
@@ -84,6 +88,8 @@ it('should close on request close', () => {
                 live: 'true',
                 after: new Date('2022-01-02'),
                 before: new Date('2022-06-01'),
+                showUsers: false,
+                showTeams: false,
             }}
             onClose={onClose}
         />,

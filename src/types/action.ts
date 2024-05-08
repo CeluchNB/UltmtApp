@@ -59,6 +59,7 @@ export interface LiveServerActionData extends ServerActionData {
 export interface SavedServerActionData extends ServerActionData {
     _id: string
     team: DisplayTeam
+    pointId: string
 }
 
 export interface ActionList {

@@ -3,6 +3,13 @@ import { Tournament } from './tournament'
 import { DisplayTeam, GuestTeam } from './team'
 import { DisplayUser, InGameStatsUser } from './user'
 
+export enum GameStatus {
+    GUEST = 'guest',
+    DEFINED = 'defined',
+    ACTIVE = 'active',
+    COMPLETE = 'complete',
+}
+
 export interface CreateGame {
     creator: DisplayUser
     teamOne: DisplayTeam
@@ -43,6 +50,8 @@ export interface Game {
     resolveCode: string
     totalViews: number
     points: string[]
+    teamOneStatus: GameStatus
+    teamTwoStatus: GameStatus
 }
 
 export interface CreateFullGame extends CreateGame {

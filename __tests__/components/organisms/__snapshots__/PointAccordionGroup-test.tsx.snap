@@ -6,6 +6,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
     [
       {
         "_id": "point3",
+        "gameId": "game1",
         "pointNumber": 1,
         "pullingTeam": {
           "name": "Temper",
@@ -18,14 +19,17 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
         "teamOneActivePlayers": [],
         "teamOnePlayers": [],
         "teamOneScore": 2,
+        "teamOneStatus": "active",
         "teamTwoActions": [],
         "teamTwoActive": false,
         "teamTwoActivePlayers": [],
         "teamTwoPlayers": [],
         "teamTwoScore": 0,
+        "teamTwoStatus": "future",
       },
       {
         "_id": "point2",
+        "gameId": "game1",
         "pointNumber": 1,
         "pullingTeam": {
           "name": "Temper",
@@ -38,14 +42,17 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
         "teamOneActivePlayers": [],
         "teamOnePlayers": [],
         "teamOneScore": 2,
+        "teamOneStatus": "future",
         "teamTwoActions": [],
         "teamTwoActive": false,
         "teamTwoActivePlayers": [],
         "teamTwoPlayers": [],
         "teamTwoScore": 0,
+        "teamTwoStatus": "future",
       },
       {
         "_id": "point1",
+        "gameId": "game1",
         "pointNumber": 1,
         "pullingTeam": {
           "name": "Temper",
@@ -58,11 +65,13 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
         "teamOneActivePlayers": [],
         "teamOnePlayers": [],
         "teamOneScore": 1,
+        "teamOneStatus": "future",
         "teamTwoActions": [],
         "teamTwoActive": false,
         "teamTwoActivePlayers": [],
         "teamTwoPlayers": [],
         "teamTwoScore": 0,
+        "teamTwoStatus": "future",
       },
     ]
   }

@@ -51,7 +51,6 @@ interface GameViewContextData {
 
 export const GameViewContext = createContext<GameViewContextData>({
     displayActions: [],
-
     game: undefined,
     activePoint: undefined,
     points: [],

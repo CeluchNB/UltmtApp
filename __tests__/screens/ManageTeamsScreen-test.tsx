@@ -196,6 +196,7 @@ it('should handle leave team', async () => {
                 ],
                 openToRequests: false,
                 private: false,
+                guest: true,
             }
             return newUser
         })

@@ -1,11 +1,11 @@
 import { GuestUser } from '../../../src/types/user'
-import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
 import SubstitutionModal from '../../../src/components/molecules/SubstitutionModal'
 import { game } from '../../../fixtures/data'
 import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
+import Point, { PointStatus } from '../../../src/types/point'
 import {
     addPlayers,
     setGame,
@@ -110,6 +110,9 @@ const point: Point = {
     teamTwoActive: false,
     teamOneActions: [],
     teamTwoActions: [],
+    gameId: 'game1',
+    teamOneStatus: PointStatus.ACTIVE,
+    teamTwoStatus: PointStatus.FUTURE,
 }
 
 const getPlayerName = (player: GuestUser) => {

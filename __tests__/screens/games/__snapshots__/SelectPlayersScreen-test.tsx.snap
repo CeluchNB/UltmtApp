@@ -130,6 +130,7 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                     },
                   ],
                   "teamOneScore": 3,
+                  "teamOneStatus": "active",
                   "teamTwo": {
                     "name": "Sockeye",
                   },
@@ -180,6 +181,7 @@ exports[`SelectPlayersScreen should match snapshot 1`] = `
                     },
                   ],
                   "teamTwoScore": 0,
+                  "teamTwoStatus": "guest",
                   "timeoutPerHalf": 1,
                   "totalViews": 0,
                   "tournament": undefined,
@@ -3104,6 +3106,7 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                     },
                   ],
                   "teamOneScore": 3,
+                  "teamOneStatus": "active",
                   "teamTwo": {
                     "name": "Sockeye",
                   },
@@ -3154,6 +3157,7 @@ exports[`SelectPlayersScreen should match snapshot for team two 1`] = `
                     },
                   ],
                   "teamTwoScore": 0,
+                  "teamTwoStatus": "guest",
                   "timeoutPerHalf": 1,
                   "totalViews": 0,
                   "tournament": undefined,
