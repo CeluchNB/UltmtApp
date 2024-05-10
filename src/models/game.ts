@@ -1,7 +1,7 @@
 import { DisplayUser } from '../types/user'
 import { Realm } from '@realm/react'
 import { Tournament } from '../types/tournament'
-import { CreateGame, Game, PointStats } from '../types/game'
+import { CreateGame, Game, GameStatus, PointStats } from '../types/game'
 import { DisplayTeam, GuestTeam } from '../types/team'
 
 export class GameSchema {
@@ -57,8 +57,8 @@ export class GameSchema {
     resolveCode: string
     statsPoints: PointStats[]
     offline: boolean
-    teamOneStatus: string
-    teamTwoStatus: string
+    teamOneStatus: GameStatus
+    teamTwoStatus: GameStatus
 
     constructor(
         game: Game,

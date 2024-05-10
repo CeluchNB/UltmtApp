@@ -37,9 +37,9 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
     useEffect(() => {
         // TODO: refactor away from this pattern
         if (createStatus === 'success') {
-            navigation.navigate('SelectPlayers')
+            navigation.navigate('LiveGameEdit', { gameId: game._id })
         }
-    }, [createStatus, navigation, point])
+    }, [createStatus, navigation, game])
 
     const styles = StyleSheet.create({
         title: {

@@ -246,14 +246,12 @@ export const finishGame = async (): Promise<Game> => {
             const game = await localGetGameById(gameId)
             game.teamOneStatus = GameStatus.COMPLETE
             await localSaveGame(game)
-            closeRealm()
             return game
         } else {
             const response = await withGameToken(networkFinishGame)
             const { game } = response.data
 
             // await localDeleteFullGame(game._id)
-            closeRealm()
             return game
         }
     } catch (e) {
