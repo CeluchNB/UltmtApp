@@ -60,8 +60,6 @@ export const getGame = (team: DisplayTeam): Game => {
         startTime: new Date('2022-10-12'),
         softcapMins: 75,
         hardcapMins: 90,
-        teamOneActive: true,
-        teamTwoActive: false,
         playersPerPoint: 7,
         resolveCode: '111111',
         timeoutPerHalf: 1,
@@ -70,7 +68,6 @@ export const getGame = (team: DisplayTeam): Game => {
         teamTwoPlayers: [],
         tournament: undefined,
         totalViews: 0,
-        points: [],
         teamOneStatus: GameStatus.ACTIVE,
         teamTwoStatus: GameStatus.GUEST,
     }

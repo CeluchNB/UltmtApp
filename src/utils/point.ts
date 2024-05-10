@@ -1,10 +1,14 @@
 import { DisplayUser } from '../types/user'
 import { TeamNumber } from '../types/team'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
-import Point, { ClientPoint } from '../types/point'
+import Point, { ClientPoint, PointStatus } from '../types/point'
 
 export const isLivePoint = (point?: Point): boolean => {
-    return point?.teamOneActive || point?.teamTwoActive || false
+    return (
+        point?.teamOneStatus === PointStatus.ACTIVE ||
+        point?.teamTwoStatus === PointStatus.ACTIVE ||
+        false
+    )
 }
 
 export const isPulling = (

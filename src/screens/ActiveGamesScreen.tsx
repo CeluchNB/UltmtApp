@@ -6,7 +6,7 @@ import React from 'react'
 import { getUserId } from '../services/data/user'
 import { useQuery } from 'react-query'
 import { FlatList, StyleSheet, Text } from 'react-native'
-import { Game, LocalGame } from '../types/game'
+import { Game, GameStatus, LocalGame } from '../types/game'
 import { deleteGame, getActiveGames } from '../services/data/game'
 import { useGameReactivation, useTheme } from '../hooks'
 
@@ -51,7 +51,10 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     const onGamePress = async (activeGame: LocalGame) => {
         // get game data
         try {
-            if (activeGame.offline && !activeGame.teamOneActive) {
+            if (
+                activeGame.offline &&
+                activeGame.teamOneStatus !== GameStatus.ACTIVE
+            ) {
                 navigation.navigate('OfflineGameOptions', {
                     gameId: activeGame._id,
                 })

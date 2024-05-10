@@ -1,7 +1,6 @@
 import * as Constants from '../../utils/constants'
 import { DisplayUser } from '../../types/user'
 import { Game } from '../../types/game'
-import Point, { PointStatus } from '../../types/point'
 import { TeamNumber } from '../../types/team'
 import { generatePlayerStatsForPoint } from '../../utils/in-game-stats'
 import { throwApiError } from '../../utils/service-utils'
@@ -13,6 +12,7 @@ import {
     LiveServerActionData,
     SavedServerActionData,
 } from '../../types/action'
+import Point, { PointStatus } from '../../types/point'
 import {
     createOfflinePoint as localCreateOfflinePoint,
     deletePoint as localDeletePoint,
@@ -302,25 +302,22 @@ export const getLiveActionsByPoint = async (
  * @param game resurrected game
  * @returns active point
  */
+// TODO: GAME-REFACTOR
 export const getActivePointForGame = async (
     game: Game,
 ): Promise<Point | undefined> => {
     try {
-        if (game.points.length === 0) {
-            return undefined
-        }
-
         let activePoint: Point | undefined
-        for (const id of game.points) {
-            const localPoint = await localGetPointById(id)
-            if (
-                !activePoint ||
-                localPoint.pointNumber > activePoint.pointNumber
-            ) {
-                activePoint = localPoint
-            }
-        }
-        return activePoint
+        // for (const id of game.points) {
+        //     const localPoint = await localGetPointById(id)
+        //     if (
+        //         !activePoint ||
+        //         localPoint.pointNumber > activePoint.pointNumber
+        //     ) {
+        //         activePoint = localPoint
+        //     }
+        // }
+        return undefined
     } catch (e) {
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }
@@ -333,97 +330,95 @@ export const getActivePointForGame = async (
  * @param team team one or two
  * @returns updated point
  */
+// TODO: GAME-REFACTOR
 export const reactivatePoint = async (
     deleteId: string,
     pointNumber: number,
     team: TeamNumber,
 ): Promise<Point> => {
-    try {
-        let currentPointId
-        const gameId = await localGetActiveGameId()
-        const game = await localGetGameById(gameId)
-        // find point by point number
-        const point = await localGetPointByPointNumber(pointNumber, game.points)
-        if (!point) {
-            throw new Error()
-        }
-        if (game.offline) {
-            game.points = game.points.filter(id => id !== deleteId)
-            if (pointNumber === 1) {
-                point.teamOneScore = 0
-                point.teamTwoScore = 0
-                game.teamOneScore = 0
-                game.teamTwoScore = 0
-            } else {
-                const prevPoint = await localGetPointByPointNumber(
-                    pointNumber - 1,
-                    game.points,
-                )
-                currentPointId = prevPoint?._id ?? ''
-                if (!prevPoint) {
-                    throw new Error()
-                }
-
-                point.teamOneScore = prevPoint.teamOneScore
-                point.teamTwoScore = prevPoint.teamTwoScore
-                game.teamOneScore = prevPoint.teamOneScore
-                game.teamTwoScore = prevPoint.teamTwoScore
-            }
-            // currently, games can only be offline on creation
-            // therefore only team one will be active
-            point.teamOneActive = true
-            await localDeletePoint(deleteId)
-            await localSavePoint(point)
-            await localSaveGame(game)
-        } else {
-            // reactivate point on backend
-            await withGameToken(networkDeletePoint, deleteId)
-            const pointResponse = await withGameToken(
-                networkReactivatePoint,
-                point._id,
-            )
-            const { point: responsePoint } = pointResponse.data
-            currentPointId = responsePoint._id
-
-            // load actions from backend
-            const actionsResponse = await networkGetLiveActionsByPoint(
-                game._id,
-                point._id,
-            )
-
-            const { actions: networkActions } = actionsResponse.data
-            await localDeleteEditableActionsByPoint(team, point._id)
-            await localSaveMultipleActions(
-                networkActions.map((action: SavedServerActionData) => {
-                    return { ...action, teamNumber: team }
-                }),
-                point._id,
-            )
-            const newActions = await localGetActionsByPoint(responsePoint._id)
-            if (team === 'one') {
-                responsePoint.teamOneActions = newActions.map(
-                    action => action._id,
-                )
-            } else {
-                responsePoint.teamTwoActions = newActions.map(
-                    action => action._id,
-                )
-            }
-
-            await localDeletePoint(deleteId)
-            await localSavePoint(responsePoint)
-            await updateGameScore(
-                responsePoint.teamOneScore,
-                responsePoint.teamTwoScore,
-            )
-        }
-        await removeInGamePlayerStats(currentPointId)
-
-        const response = await localGetPointById(point._id)
-        return response
-    } catch (e) {
-        return throwApiError(e, Constants.GET_POINT_ERROR)
-    }
+    throw new Error('Not implemented yet')
+    // return await localGetPointByPointNumber(pointNumber, ['abc'])
+    // try {
+    //     let currentPointId
+    //     const gameId = await localGetActiveGameId()
+    //     const game = await localGetGameById(gameId)
+    //     // find point by point number
+    //     const point = await localGetPointByPointNumber(pointNumber, game.points)
+    //     if (!point) {
+    //         throw new Error()
+    //     }
+    //     if (game.offline) {
+    //         game.points = game.points.filter(id => id !== deleteId)
+    //         if (pointNumber === 1) {
+    //             point.teamOneScore = 0
+    //             point.teamTwoScore = 0
+    //             game.teamOneScore = 0
+    //             game.teamTwoScore = 0
+    //         } else {
+    //             const prevPoint = await localGetPointByPointNumber(
+    //                 pointNumber - 1,
+    //                 game.points,
+    //             )
+    //             currentPointId = prevPoint?._id ?? ''
+    //             if (!prevPoint) {
+    //                 throw new Error()
+    //             }
+    //             point.teamOneScore = prevPoint.teamOneScore
+    //             point.teamTwoScore = prevPoint.teamTwoScore
+    //             game.teamOneScore = prevPoint.teamOneScore
+    //             game.teamTwoScore = prevPoint.teamTwoScore
+    //         }
+    //         // currently, games can only be offline on creation
+    //         // therefore only team one will be active
+    //         point.teamOneActive = true
+    //         await localDeletePoint(deleteId)
+    //         await localSavePoint(point)
+    //         await localSaveGame(game)
+    //     } else {
+    //         // reactivate point on backend
+    //         await withGameToken(networkDeletePoint, deleteId)
+    //         const pointResponse = await withGameToken(
+    //             networkReactivatePoint,
+    //             point._id,
+    //         )
+    //         const { point: responsePoint } = pointResponse.data
+    //         currentPointId = responsePoint._id
+    //         // load actions from backend
+    //         const actionsResponse = await networkGetLiveActionsByPoint(
+    //             game._id,
+    //             point._id,
+    //         )
+    //         const { actions: networkActions } = actionsResponse.data
+    //         await localDeleteEditableActionsByPoint(team, point._id)
+    //         await localSaveMultipleActions(
+    //             networkActions.map((action: SavedServerActionData) => {
+    //                 return { ...action, teamNumber: team }
+    //             }),
+    //             point._id,
+    //         )
+    //         const newActions = await localGetActionsByPoint(responsePoint._id)
+    //         if (team === 'one') {
+    //             responsePoint.teamOneActions = newActions.map(
+    //                 action => action._id,
+    //             )
+    //         } else {
+    //             responsePoint.teamTwoActions = newActions.map(
+    //                 action => action._id,
+    //             )
+    //         }
+    //         await localDeletePoint(deleteId)
+    //         await localSavePoint(responsePoint)
+    //         await updateGameScore(
+    //             responsePoint.teamOneScore,
+    //             responsePoint.teamTwoScore,
+    //         )
+    //     }
+    //     await removeInGamePlayerStats(currentPointId)
+    //     const response = await localGetPointById(point._id)
+    //     return response
+    // } catch (e) {
+    //     return throwApiError(e, Constants.GET_POINT_ERROR)
+    // }
 }
 
 /**

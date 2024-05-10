@@ -1,5 +1,4 @@
 import { Chip } from 'react-native-paper'
-import { Game } from '../../types/game'
 import GameCard from '../../components/atoms/GameCard'
 import GameFilterModal from '../../components/molecules/GameFilterModal'
 import { GameSearchProps } from '../../types/navigation'
@@ -20,6 +19,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import { Game, GameStatus } from '../../types/game'
 import React, { useState } from 'react'
 import { useInfiniteQuery, useQuery } from 'react-query'
 
@@ -201,7 +201,11 @@ const GameSearchScreen: React.FC<GameSearchProps> = ({ navigation, route }) => {
                                 {
                                     data?.pages
                                         .flat()
-                                        .filter(g => g.teamOneActive).length
+                                        .filter(
+                                            g =>
+                                                g.teamOneStatus ===
+                                                GameStatus.ACTIVE,
+                                        ).length
                                 }{' '}
                                 live games
                             </Text>

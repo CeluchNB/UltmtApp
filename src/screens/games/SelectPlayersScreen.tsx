@@ -4,6 +4,7 @@ import ChangePullingTeamModal from '../../components/molecules/ChangePullingTeam
 import ConfirmModal from '../../components/molecules/ConfirmModal'
 import { DisplayUser } from '../../types/user'
 import GameHeader from '../../components/molecules/GameHeader'
+import { GameStatus } from '../../types/game'
 import GuestPlayerModal from '../../components/molecules/GuestPlayerModal'
 import LivePointUtilityBar from '../../components/molecules/LivePointUtilityBar'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
@@ -213,8 +214,9 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                             <LivePointUtilityBar
                                 loading={false}
                                 undoDisabled={
+                                    // TOOD: GAME-REFACTOR
                                     point.pointNumber === 1 ||
-                                    game.teamTwoActive
+                                    game.teamTwoStatus === GameStatus.ACTIVE
                                 }
                                 onUndo={onLastPoint}
                                 onEdit={() => {

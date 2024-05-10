@@ -1,6 +1,12 @@
 import { DisplayUser } from '../types/user'
 import { GameStats } from '../types/stats'
-import { CreateFullGame, Game, PointStats, UpdateGame } from '../types/game'
+import {
+    CreateFullGame,
+    Game,
+    GameStatus,
+    PointStats,
+    UpdateGame,
+} from '../types/game'
 
 export const parseFullGame = (game: Game): CreateFullGame => {
     return {
@@ -66,4 +72,14 @@ export const populateInGameStats = (
         }
     })
     return pointStats
+}
+
+export const gameIsActive = (game: {
+    teamOneStatus: GameStatus
+    teamTwoStatus: GameStatus
+}) => {
+    return (
+        game.teamOneStatus === GameStatus.ACTIVE ||
+        game.teamTwoStatus === GameStatus.ACTIVE
+    )
 }

@@ -27,8 +27,6 @@ const point: Point = {
     teamTwoActivePlayers: [],
     teamOneScore: 2,
     teamTwoScore: 1,
-    teamOneActive: true,
-    teamTwoActive: false,
     teamOneActions: [],
     teamTwoActions: [],
     gameId: 'game1',

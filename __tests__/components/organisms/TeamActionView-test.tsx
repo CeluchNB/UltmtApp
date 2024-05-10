@@ -151,8 +151,6 @@ const point: Point = {
     teamTwoScore: 0,
     pullingTeam: game.teamOne,
     receivingTeam: game.teamTwo,
-    teamOneActive: true,
-    teamTwoActive: false,
     teamOneActions: [],
     teamTwoActions: [],
     gameId: 'game1',

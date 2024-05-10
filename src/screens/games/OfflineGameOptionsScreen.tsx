@@ -9,7 +9,11 @@ import { useGameReactivation } from '../../hooks/useGameReactivation'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
-import { getOfflineGameById, pushOfflineGame } from '../../services/data/game'
+
+import {
+    getOfflineGameById,
+    // pushOfflineGame
+} from '../../services/data/game'
 
 const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     navigation,
@@ -29,7 +33,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     const pushGame = async () => {
         setLoading(true)
         try {
-            await pushOfflineGame(gameId)
+            // await pushOfflineGame(gameId)
             navigation.navigate('ActiveGames')
         } catch (e: any) {
             setError(e?.message ?? Constants.FINISH_GAME_ERROR)

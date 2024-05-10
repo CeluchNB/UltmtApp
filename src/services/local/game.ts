@@ -130,24 +130,25 @@ export const getActiveGames = async (
         .map(game => parseGame(game))
 }
 
-export const deleteFullGame = async (gameId: string): Promise<void> => {
-    const realm = await getRealm()
-    const game = realm.objectForPrimaryKey<GameSchema>('Game', gameId)
-    if (!game) return
+// TODO: GAME-REFACTOR
+// export const deleteFullGame = async (gameId: string): Promise<void> => {
+//     const realm = await getRealm()
+//     const game = realm.objectForPrimaryKey<GameSchema>('Game', gameId)
+//     if (!game) return
 
-    const points = realm.objects<PointSchema>('Point')
-    const pointQuery = game.points.map(id => `_id = "${id}"`).join(' OR ')
-    const gamePoints = points.filtered(pointQuery)
+//     const points = realm.objects<PointSchema>('Point')
+//     // const pointQuery = game.points.map(id => `_id = "${id}"`).join(' OR ')
+//     // const gamePoints = points.filtered(pointQuery)
 
-    const actions = realm.objects<ActionSchema>('Action')
-    const actionQuery = gamePoints
-        .map(point => `pointId = "${point._id}"`)
-        .join(' OR ')
-    const gameActions = actions.filtered(actionQuery)
+//     const actions = realm.objects<ActionSchema>('Action')
+//     const actionQuery = gamePoints
+//         .map(point => `pointId = "${point._id}"`)
+//         .join(' OR ')
+//     const gameActions = actions.filtered(actionQuery)
 
-    realm.write(() => {
-        realm.delete(gameActions)
-        realm.delete(gamePoints)
-        realm.delete(game)
-    })
-}
+//     realm.write(() => {
+//         realm.delete(gameActions)
+//         realm.delete(gamePoints)
+//         realm.delete(game)
+//     })
+// }

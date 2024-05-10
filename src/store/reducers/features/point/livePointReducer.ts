@@ -16,8 +16,6 @@ const initialState: LivePointSlice = {
     point: {
         _id: '',
         pointNumber: 1,
-        teamOneActive: false,
-        teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
         teamOneScore: 0,

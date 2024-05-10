@@ -1,8 +1,8 @@
 import * as GameData from '../../../../services/data/game'
-import { CreateGame } from '../../../../types/game'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'
 import { Tournament } from '../../../../types/tournament'
+import { CreateGame, GameStatus } from '../../../../types/game'
 import {
     DisplayTeam,
     GuestTeam,
@@ -36,8 +36,8 @@ export interface LiveGameSlice {
         floaterTimeout: boolean
         teamOneScore: number
         teamTwoScore: number
-        teamOneActive: boolean
-        teamTwoActive: boolean
+        teamOneStatus: GameStatus
+        teamTwoStatus: GameStatus
         teamOnePlayers: DisplayUser[]
         teamTwoPlayers: DisplayUser[]
         tournament?: Tournament
@@ -73,8 +73,8 @@ const initialState: LiveGameSlice = {
         floaterTimeout: true,
         teamOneScore: 0,
         teamTwoScore: 0,
-        teamOneActive: false,
-        teamTwoActive: false,
+        teamOneStatus: GameStatus.ACTIVE,
+        teamTwoStatus: GameStatus.GUEST,
         teamOnePlayers: [],
         teamTwoPlayers: [],
         tournament: undefined,

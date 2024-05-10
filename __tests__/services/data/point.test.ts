@@ -27,8 +27,6 @@ import {
 const point: Point = {
     _id: 'point1',
     pointNumber: 1,
-    teamOneActive: true,
-    teamTwoActive: true,
     teamOneActions: [],
     teamTwoActions: [],
     teamOneActivePlayers: [],
@@ -540,7 +538,7 @@ describe('test get live actions by point', () => {
 
 describe('test get active point for game', () => {
     it('with no points', async () => {
-        const result = await getActivePointForGame({ ...game, points: [] })
+        const result = await getActivePointForGame({ ...game })
         expect(result).toBeUndefined()
     })
 
@@ -550,7 +548,6 @@ describe('test get active point for game', () => {
             .mockReturnValueOnce(Promise.resolve({ ...point, pointNumber: 1 }))
         const result = await getActivePointForGame({
             ...game,
-            points: ['point1', 'point2'],
         })
         expect(result).toMatchObject({ ...point, pointNumber: 2 })
     })
@@ -562,7 +559,6 @@ describe('test get active point for game', () => {
         await expect(
             getActivePointForGame({
                 ...game,
-                points: ['point1', 'point2'],
             }),
         ).rejects.toMatchObject({ message: Constants.GET_POINT_ERROR })
     })

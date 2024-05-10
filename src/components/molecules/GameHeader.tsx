@@ -1,8 +1,10 @@
 import { Button } from 'react-native-paper'
+import { GameStatus } from '../../types/game'
 import React from 'react'
 import TeamScore from '../atoms/TeamScore'
 import { Tournament } from '../../types/tournament'
 import dayjs from 'dayjs'
+import { gameIsActive } from '../../utils/game'
 import { useTheme } from '../../hooks'
 import { DisplayTeam, GuestTeam } from '../../types/team'
 import { StyleSheet, Text, View } from 'react-native'
@@ -13,8 +15,8 @@ interface GameHeaderProps {
         teamTwo: GuestTeam
         teamOneScore: number
         teamTwoScore: number
-        teamOneActive: boolean
-        teamTwoActive: boolean
+        teamOneStatus: GameStatus
+        teamTwoStatus: GameStatus
         scoreLimit: number
         halfScore: number
         startTime: string | Date
@@ -73,9 +75,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({ game, header, editing }) => {
                     score={game.teamOneScore}
                 />
                 <Text style={styles.descriptionText}>
-                    {game.teamOneActive || game.teamTwoActive
-                        ? `Game to ${game.scoreLimit}`
-                        : ''}
+                    {gameIsActive(game) ? `Game to ${game.scoreLimit}` : ''}
                 </Text>
                 <TeamScore
                     name={game.teamTwo.name}

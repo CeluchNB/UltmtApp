@@ -1,6 +1,7 @@
 import { Game } from '../../types/game'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { IconButton } from 'react-native-paper'
+import { gameIsActive } from '../../utils/game'
 import { useTheme } from '../../hooks'
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
@@ -24,8 +25,6 @@ const GameCard: React.FC<GameCardProps> = props => {
         teamOneScore,
         teamTwoScore,
         scoreLimit,
-        teamOneActive,
-        teamTwoActive,
         totalViews,
     } = game
 
@@ -121,7 +120,7 @@ const GameCard: React.FC<GameCardProps> = props => {
                     onPress(_id)
                 }}
                 testID="game-card-pressable">
-                {(teamOneActive || teamTwoActive) && (
+                {gameIsActive(game) && (
                     <Animated.View
                         style={[styles.circle, { opacity: liveOpacity }]}
                     />
@@ -171,7 +170,7 @@ const GameCard: React.FC<GameCardProps> = props => {
                     </View>
 
                     <View style={styles.scoreLimitContainer}>
-                        {teamOneActive && (
+                        {gameIsActive(game) && (
                             <Text style={styles.footerText}>
                                 Game to {scoreLimit}
                             </Text>
