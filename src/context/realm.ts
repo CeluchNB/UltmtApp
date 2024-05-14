@@ -3,4 +3,4 @@ import { createRealmContext } from '@realm/react'
 
 const context = createRealmContext(config)
 
-export const { RealmProvider, useObject } = context
+export const { RealmProvider, useObject, useQuery, useRealm } = context

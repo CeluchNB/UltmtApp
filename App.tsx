@@ -11,7 +11,6 @@ import SelectOpponentScreen from './src/screens/games/SelectOpponentScreen'
 import SettingsScreen from './src/screens/SettingsScreen'
 import TabNavigator from './src/navigation/TabNavigator'
 import { TopLevelParamList } from './src/types/navigation'
-import { closeRealm } from './src/models/realm'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { deleteExpiredGameViews } from './src/services/data/game'
 import { useMutation } from 'react-query'
@@ -31,9 +30,6 @@ const App: React.FC<{}> = () => {
 
     React.useEffect(() => {
         onDeletGameViews()
-        return () => {
-            closeRealm()
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

@@ -28,7 +28,6 @@ export class GameSchema {
             teamOnePlayers: 'DisplayUser[]',
             teamTwoPlayers: 'DisplayUser[]',
             resolveCode: 'string',
-            points: 'string[]',
             statsPoints: 'PointStats[]',
             offline: 'bool',
             teamOneStatus: 'string',
@@ -113,7 +112,6 @@ export class GameSchema {
             teamOnePlayers: teamOnePlayers,
             teamTwoPlayers: [],
             resolveCode: '',
-            points: [],
             statsPoints: [],
             offline: true,
         }

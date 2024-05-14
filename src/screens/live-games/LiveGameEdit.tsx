@@ -1,6 +1,7 @@
 import { LiveGameProps } from '../../types/navigation'
 import LiveGameProvider from '../../context/live-game-context'
-import LiveGameView from '../../components/organisms/LiveGameView'
+import LiveGameWizard from '../../components/organisms/LiveGameWizard'
+import PointEditProvider from '../../context/point-edit-context'
 import React from 'react'
 
 const LiveGameEditScreen: React.FC<LiveGameProps> = ({ route }) => {
@@ -8,7 +9,9 @@ const LiveGameEditScreen: React.FC<LiveGameProps> = ({ route }) => {
 
     return (
         <LiveGameProvider gameId={gameId}>
-            <LiveGameView />
+            <PointEditProvider>
+                <LiveGameWizard />
+            </PointEditProvider>
         </LiveGameProvider>
     )
 }

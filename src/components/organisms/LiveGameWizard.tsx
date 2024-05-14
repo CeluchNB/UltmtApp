@@ -1,52 +1,58 @@
+import GameHeader from '../molecules/GameHeader'
+import LiveGameActionView from './LiveGameActionView'
+import { LiveGameContext } from '../../context/live-game-context'
+import { PointEditContext } from '../../context/point-edit-context'
 import PrimaryButton from '../atoms/PrimaryButton'
-import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import React, { useContext } from 'react'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
 
 const LiveGameWizard: React.FC<{}> = () => {
-    const [index, setIndex] = useState(0)
+    const { game } = useContext(LiveGameContext)
+    const { setPlayers } = useContext(PointEditContext)
+
+    const styles = StyleSheet.create({
+        screen: {
+            width: '100%',
+            height: '100%',
+            flexDirection: 'column',
+            flex: 1,
+        },
+        flexOne: {
+            flex: 1,
+        },
+        flexShrink: {
+            flexShrink: 0,
+        },
+        flexRow: {
+            flexDirection: 'row',
+        },
+    })
 
     return (
-        <View>
-            {index % 2 === 0 && (
-                <Text
-                    style={{
-                        color: 'red',
-                        fontSize: 32,
-                        alignSelf: 'center',
-                        marginTop: 50,
-                    }}>
-                    Select Players
-                </Text>
-            )}
-            {index % 2 === 1 && (
-                <Text
-                    style={{
-                        color: 'red',
-                        fontSize: 32,
-                        alignSelf: 'center',
-                        marginTop: 50,
-                    }}>
-                    Create Actions
-                </Text>
-            )}
-            <View
-                style={{
-                    flexDirection: 'row',
-                }}>
+        <SafeAreaView style={styles.screen}>
+            <View style={styles.flexShrink}>
+                <GameHeader game={game} editing={true} header={true} />
+            </View>
+            <View style={styles.flexOne}>
+                <LiveGameActionView />
+            </View>
+            <View style={[styles.flexRow, styles.flexShrink]}>
                 <PrimaryButton
-                    style={{ flex: 1 }}
-                    text="Set Players"
+                    style={[styles.flexOne]}
+                    text="Back"
                     loading={false}
-                    onPress={() => setIndex(curr => Math.max(curr - 1, 0))}
+                    onPress={() => {
+                        // TODO: GAME-REFACTOR
+                    }}
                 />
                 <PrimaryButton
-                    style={{ flex: 1 }}
-                    text="Next Point"
+                    style={[styles.flexOne]}
+                    text="Next"
                     loading={false}
-                    onPress={() => setIndex(curr => curr + 1)}
+                    onPress={() => setPlayers()}
                 />
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 

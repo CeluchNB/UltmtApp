@@ -1,6 +1,7 @@
 import * as Constants from '../../utils/constants'
 import { DisplayUser } from '../../types/user'
 import { Game } from '../../types/game'
+import { PointSchema } from '../../models'
 import { TeamNumber } from '../../types/team'
 import { generatePlayerStatsForPoint } from '../../utils/in-game-stats'
 import { throwApiError } from '../../utils/service-utils'
@@ -96,6 +97,8 @@ const createOfflinePoint = async (
 //     await localSaveGame({ ...game })
 // }
 
+// TODO: GAME-REFACTOR
+// should be unnecessary
 /**
  * Method to select the players of a specific point
  * @param pointId id of point
@@ -141,7 +144,7 @@ const updateOfflinePoint = async (pointId: string, data: Partial<Point>) => {
  * @returns updated point
  */
 export const finishPoint = async (
-    point: Point,
+    point: PointSchema,
     actions: LiveServerActionData[],
     team: TeamNumber,
 ): Promise<Point> => {
@@ -172,7 +175,7 @@ const updateGameScore = async (teamOneScore: number, teamTwoScore: number) => {
 }
 
 const addInGamePlayerStats = async (
-    point: Point,
+    point: PointSchema,
     actions: LiveServerActionData[],
     team: TeamNumber,
 ) => {

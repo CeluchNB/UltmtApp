@@ -90,11 +90,11 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         }
     }
 
+    // TODO: GAME-REFACTOR move this to point-edit-context
     const onSetPlayers = async () => {
         const players = playerList.filter((_p, i) =>
             selectedPlayers.includes(i),
         )
-
         const data = await setPlayerMutation(players)
         if (data.pullingTeam._id === point.pullingTeam._id) {
             // very weird case: putting dispatch before reset prevents reset

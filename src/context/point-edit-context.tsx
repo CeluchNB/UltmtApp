@@ -1,32 +1,32 @@
 import ActionStack from '../utils/action-stack'
 import { DisplayUser } from '../types/user'
-import Point from '../types/point'
+import { LiveGameContext } from './live-game-context'
+import { PointSchema } from '../models'
 import { TeamNumber } from '../types/team'
 import { finishGame } from '../services/data/game'
 import { generatePlayerStatsForPoint } from '../utils/in-game-stats'
 import { getLocalActionsByPoint } from '../services/data/live-action'
 import { isPullingNext } from '../utils/point'
 import { parseClientAction } from '../utils/action'
+import { useDispatch } from 'react-redux'
 import useLivePoint from '../hooks/useLivePoint'
 import usePointLocal from '../hooks/usePointLocal'
 import { useQuery } from 'react-query'
+import { useSelectPlayers } from '../hooks/game-edit-actions/use-select-players'
+import { useSetPlayers } from '../hooks/game-edit-actions/use-set-players'
 import { Action, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
-import React, { createContext, useMemo } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 import {
     addPlayerStats,
     resetGame,
-    selectGame,
-    selectTeam,
     updateScore,
 } from '../store/reducers/features/game/liveGameReducer'
 import { createPoint, finishPoint } from '../services/data/point'
 import {
     resetPoint,
-    selectPoint,
     setPoint,
 } from '../store/reducers/features/point/livePointReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
 interface PointEditContextProps {
     children: React.ReactNode
@@ -38,33 +38,34 @@ interface PointEditContextData {
     team: TeamNumber
     waiting: boolean
     game?: any
-    point?: Point
+    point?: PointSchema
     error: string
     onAction: DebouncedFunc<(action: Action) => Promise<void>>
     onUndo: DebouncedFunc<() => Promise<void>>
     onFinishPoint: () => Promise<void>
     onFinishGame: () => Promise<void>
+    setPlayers: () => Promise<void>
+    selectPlayers: ReturnType<typeof useSelectPlayers>
 }
 
 export const PointEditContext = createContext<PointEditContextData>({
-    myTeamActions: [],
-    activePlayers: [],
-    team: 'one',
-    waiting: false,
-    game: undefined,
-    point: undefined,
-    error: '',
-    onAction: debounce((_action: Action) => {}),
-    onUndo: debounce(() => {}),
-    onFinishPoint: async () => {},
-    onFinishGame: async () => {},
-})
+    // myTeamActions: [],
+    // activePlayers: [],
+    // team: 'one',
+    // waiting: false,
+    // game: undefined,
+    // point: undefined,
+    // error: '',
+    // onAction: debounce((_action: Action) => {}),
+    // onUndo: debounce(() => {}),
+    // onFinishPoint: async () => {},
+    // onFinishGame: async () => {},
+    // setPlayers: async () => {},
+} as PointEditContextData)
 
 const PointEditProvider = ({ children }: PointEditContextProps) => {
+    const { game, point, teamNumber } = useContext(LiveGameContext)
     const dispatch = useDispatch()
-    const game = useSelector(selectGame)
-    const team = useSelector(selectTeam)
-    const point = useSelector(selectPoint)
     const emitter = usePointLocal(game._id, point._id)
     const {
         actionStack,
@@ -76,6 +77,13 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         onUndo,
     } = useLivePoint(emitter)
 
+    const selectPlayers = useSelectPlayers()
+    const { setPlayers } = useSetPlayers(
+        point._id,
+        selectPlayers.selectedPlayers,
+    )
+
+    // TODO: GAME-REFACTOR refactor to using realm useQuery
     const { isLoading: livePointLoading } = useQuery(
         [{ liveActionByPoint: { gameId: game._id, pointId: point._id } }],
         () => getLocalActionsByPoint(point._id),
@@ -97,28 +105,28 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const teamTwoActions = actionStack.getTeamTwoActions()
 
     const myTeamActions = useMemo(() => {
-        if (team === 'one') {
+        if (teamNumber === 'one') {
             return teamOneActions
         } else {
             return teamTwoActions
         }
-    }, [teamOneActions, teamTwoActions, team])
+    }, [teamOneActions, teamTwoActions, teamNumber])
 
     const activePlayers = React.useMemo(() => {
-        if (team === 'one') {
+        if (teamNumber === 'one') {
             return point.teamOneActivePlayers ?? []
         } else {
             return point.teamTwoActivePlayers ?? []
         }
-    }, [point, team])
+    }, [point, teamNumber])
 
     const allPointPlayers = React.useMemo(() => {
-        if (team === 'one') {
+        if (teamNumber === 'one') {
             return point.teamOnePlayers ?? []
         } else {
             return point.teamTwoPlayers ?? []
         }
-    }, [point, team])
+    }, [point, teamNumber])
 
     const handleAction = async (action: Action) => {
         const clientAction = parseClientAction({
@@ -136,12 +144,12 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const onUndoDebounced = React.useCallback(debounce(onUndo, 150), [])
 
     const onFinishPoint = async () => {
-        const prevPoint = await finishPoint(point, myTeamActions, team)
+        const prevPoint = await finishPoint(point, myTeamActions, teamNumber)
         const { teamOneScore, teamTwoScore } = prevPoint
 
         const newPoint = await createPoint(
             isPullingNext(
-                team,
+                teamNumber,
                 myTeamActions[myTeamActions.length - 1].actionType,
             ),
             point.pointNumber + 1,
@@ -160,7 +168,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     }
 
     const onFinishGame = async () => {
-        await finishPoint(point, myTeamActions, team)
+        await finishPoint(point, myTeamActions, teamNumber)
         onNextPoint()
 
         await finishGame()
@@ -173,7 +181,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
             value={{
                 myTeamActions,
                 activePlayers,
-                team,
+                team: teamNumber,
                 game,
                 point,
                 waiting: waitingForActionResponse || livePointLoading,
@@ -182,6 +190,8 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                 onFinishGame,
                 onAction: onActionDebounced,
                 onUndo: onUndoDebounced,
+                setPlayers,
+                selectPlayers,
             }}>
             {children}
         </PointEditContext.Provider>
