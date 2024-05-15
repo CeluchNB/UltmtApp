@@ -35,7 +35,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
     }
 
     useEffect(() => {
-        // TODO: refactor away from this pattern
+        // TODO: GAME-REFACTOR refactor away from this pattern
         if (createStatus === 'success') {
             navigation.navigate('LiveGameEdit', { gameId: game._id })
         }

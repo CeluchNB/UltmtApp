@@ -1,6 +1,8 @@
+import { LiveGameContext } from '../../context/live-game-context'
+import { LiveGameWizardState } from '../../types/game'
+import PointEditView from './PointEditView'
 import SelectPlayersView from './SelectPlayersView'
-import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import React, { useContext } from 'react'
 
 interface LiveGameActionView {
     next: () => {}
@@ -8,23 +10,15 @@ interface LiveGameActionView {
 }
 
 const LiveGameActionView: React.FC<{}> = () => {
-    const [index, setIndex] = useState(0)
+    const {
+        wizardState: { state },
+    } = useContext(LiveGameContext)
 
     return (
-        <View>
-            {index % 2 === 0 && <SelectPlayersView />}
-            {index % 2 === 1 && (
-                <Text
-                    style={{
-                        color: 'red',
-                        fontSize: 32,
-                        alignSelf: 'center',
-                        marginTop: 50,
-                    }}>
-                    Create Actions
-                </Text>
-            )}
-        </View>
+        <>
+            {state === LiveGameWizardState.SET_PLAYERS && <SelectPlayersView />}
+            {state === LiveGameWizardState.LOG_ACTIONS && <PointEditView />}
+        </>
     )
 }
 

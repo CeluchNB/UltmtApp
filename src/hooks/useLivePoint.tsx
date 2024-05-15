@@ -70,6 +70,7 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
     const onNextPoint = () => {
         setError('')
         emitter.emit(LocalPointEvents.NEXT_POINT_EMIT)
+        setActionStack(new ActionStack())
     }
 
     const onComment = (

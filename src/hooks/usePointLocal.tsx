@@ -29,7 +29,7 @@ const usePointLocal = (gameId: string, pointId: string) => {
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [offline],
+        [offline, pointId],
     )
 
     useEffect(() => {
@@ -70,11 +70,12 @@ const usePointLocal = (gameId: string, pointId: string) => {
         networkEmitter.on(LocalPointEvents.NEXT_POINT_LISTEN, async data => {
             await handleOnlineEvent(LocalPointEvents.NEXT_POINT_LISTEN, data)
         })
+        networkEmitter.off(LocalPointEvents.ERROR_LISTEN)
         networkEmitter.on(LocalPointEvents.ERROR_LISTEN, async message => {
             localEmitter.emit(LocalPointEvents.ERROR_LISTEN, message)
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [emitOrHandle])
+    }, [emitOrHandle, pointId])
 
     const handleOnlineEvent = async (event: string, data: any) => {
         switch (event) {

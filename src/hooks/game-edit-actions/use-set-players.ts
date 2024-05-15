@@ -27,6 +27,8 @@ export const useSetPlayers = (pointId: string, players: DisplayUser[]) => {
             realm.write(() => {
                 point.teamOnePlayers = pointResponse.teamOnePlayers
                 point.teamTwoPlayers = pointResponse.teamTwoPlayers
+                point.teamOneActivePlayers = pointResponse.teamOneActivePlayers
+                point.teamTwoActivePlayers = pointResponse.teamTwoActivePlayers
             })
         }
     })

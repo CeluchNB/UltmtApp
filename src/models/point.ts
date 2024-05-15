@@ -19,8 +19,6 @@ export class PointSchema {
             pullingTeam: 'GuestTeam',
             receivingTeam: 'GuestTeam',
             scoringTeam: 'GuestTeam',
-            teamOneActive: 'bool',
-            teamTwoActive: 'bool',
             teamOneActions: 'string[]',
             teamTwoActions: 'string[]',
             gameId: 'string',

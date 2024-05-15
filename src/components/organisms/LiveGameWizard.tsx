@@ -7,8 +7,9 @@ import React, { useContext } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 
 const LiveGameWizard: React.FC<{}> = () => {
-    const { game } = useContext(LiveGameContext)
-    const { setPlayers } = useContext(PointEditContext)
+    const { game, wizardState } = useContext(LiveGameContext)
+    const { next } = useContext(PointEditContext)
+    const { nextDisabled, backDisabled } = wizardState
 
     const styles = StyleSheet.create({
         screen: {
@@ -39,6 +40,7 @@ const LiveGameWizard: React.FC<{}> = () => {
             <View style={[styles.flexRow, styles.flexShrink]}>
                 <PrimaryButton
                     style={[styles.flexOne]}
+                    disabled={backDisabled}
                     text="Back"
                     loading={false}
                     onPress={() => {
@@ -47,9 +49,10 @@ const LiveGameWizard: React.FC<{}> = () => {
                 />
                 <PrimaryButton
                     style={[styles.flexOne]}
+                    disabled={nextDisabled}
                     text="Next"
                     loading={false}
-                    onPress={() => setPlayers()}
+                    onPress={() => next()}
                 />
             </View>
         </SafeAreaView>

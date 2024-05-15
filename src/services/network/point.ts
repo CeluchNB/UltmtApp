@@ -1,6 +1,6 @@
 import { DisplayUser } from '../../types/user'
 import { TeamNumber } from '../../types/team'
-import { API_KEY, API_URL_V1 } from '@env'
+import { API_KEY, API_URL_V1, API_URL_V2 } from '@env'
 import axios, { AxiosResponse } from 'axios'
 
 export const createPoint = async (
@@ -120,6 +120,23 @@ export const setPullingTeam = async (
         {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}
+
+export const nextPoint = async (
+    gameToken: string,
+    pullingTeam: TeamNumber,
+    pointNumber: number,
+) => {
+    return await axios.post(
+        `${API_URL_V2}/point/next?pullingTeam=${pullingTeam}&pointNumber=${pointNumber}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${gameToken}`,
                 'X-API-Key': API_KEY,
             },
         },

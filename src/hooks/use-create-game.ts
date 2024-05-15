@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { withToken } from '../services/data/auth'
 import { useObject, useRealm } from '@realm/react'
 
-// TODO: use this when liveGameReducer is refactored away
+// TODO: GAME-REFACTOR use this when liveGameReducer is refactored away
 export const useCreateGame = () => {
     const realm = useRealm()
     const [gameId, setGameId] = useState('')

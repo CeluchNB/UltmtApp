@@ -10,6 +10,11 @@ export enum GameStatus {
     COMPLETE = 'complete',
 }
 
+export enum LiveGameWizardState {
+    SET_PLAYERS,
+    LOG_ACTIONS,
+}
+
 export interface CreateGame {
     creator: DisplayUser
     teamOne: DisplayTeam

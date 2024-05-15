@@ -16,5 +16,9 @@ export const useSelectPlayers = () => {
         }
     }
 
-    return { selectedPlayers, toggleSelection }
+    const clearSelection = () => {
+        setSelectedPlayers([])
+    }
+
+    return { selectedPlayers, toggleSelection, clearSelection }
 }
