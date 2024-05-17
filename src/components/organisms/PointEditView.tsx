@@ -2,11 +2,11 @@ import { LiveGameContext } from '../../context/live-game-context'
 import LivePointUtilityBar from '../molecules/LivePointUtilityBar'
 import PlayerActionView from './PlayerActionView'
 import { PointEditContext } from '../../context/point-edit-context'
+import { TeamActionList } from '../../types/action'
 import TeamActionView from './TeamActionView'
 import { isPulling } from '../../utils/point'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
-import { ActionFactory, ActionType, TeamActionList } from '../../types/action'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useContext } from 'react'
 
@@ -30,23 +30,6 @@ const PointEditView: React.FC<{}> = () => {
     if (!point || !game) {
         return null
     }
-
-    // TODO: GAME-REFACTOR
-    // const onFinishPoint = async () => {
-    //     try {
-    //         setFinishPointLoading(true)
-    //         setFinishError(undefined)
-    //         await finishPoint()
-
-    //         // TODO: GAME-REFACTOR
-    //     } catch (e) {
-    //         setFinishError(
-    //             (e as ApiError).message ?? Constants.FINISH_POINT_ERROR,
-    //         )
-    //     } finally {
-    //         setFinishPointLoading(false)
-    //     }
-    // }
 
     // TODO: GAME-REFACTOR
     // const onFinishGame = async () => {
@@ -128,7 +111,7 @@ const PointEditView: React.FC<{}> = () => {
                         {finishError && (
                             <Text style={styles.error}>{finishError}</Text>
                         )}
-                        {/* {myTeamActions.length > 0 && (
+                        {/* TODO: GAME-REFACTOR {myTeamActions.length > 0 && (
                             <View>
                                 <Text style={styles.header}>Last Action</Text>
                                 <ActionDisplayItem

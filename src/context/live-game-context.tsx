@@ -1,6 +1,4 @@
-import { LiveGameWizardState } from '../types/game'
 import { TeamNumber } from '../types/team'
-import { useWizardState } from '../hooks/use-wizard-state'
 import { GameSchema, PointSchema } from '../models'
 import React, { ReactNode, createContext, useMemo, useState } from 'react'
 import { useObject, useQuery } from './realm'
@@ -9,7 +7,6 @@ interface LiveGameContextData {
     game: GameSchema
     point: PointSchema
     team: TeamNumber
-    wizardState: ReturnType<typeof useWizardState<LiveGameWizardState>>
     setCurrentPointNumber: (pointNumber: number) => void
 }
 
@@ -47,9 +44,8 @@ const LiveGameProvider = ({
 
     // TODO: GAME-REFACTOR this may need to be an argument to the context?
     const [team] = useState<TeamNumber>('one')
-    const wizardState = useWizardState(LiveGameWizardState.SET_PLAYERS)
 
-    // finish game
+    // TODO: GAME-REFACTOR finish game
 
     return (
         <LiveGameContext.Provider
@@ -58,7 +54,6 @@ const LiveGameProvider = ({
                 game: game!,
                 point: point!,
                 team,
-                wizardState,
                 setCurrentPointNumber,
             }}>
             {children}

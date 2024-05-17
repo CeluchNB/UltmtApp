@@ -1,6 +1,5 @@
 import ChangePullingTeamModal from '../molecules/ChangePullingTeamModal'
 import ConfirmModal from '../molecules/ConfirmModal'
-import { GameStatus } from '../../types/game'
 import GuestPlayerModal from '../molecules/GuestPlayerModal'
 import { LiveGameContext } from '../../context/live-game-context'
 import LivePointUtilityBar from '../molecules/LivePointUtilityBar'
@@ -18,26 +17,13 @@ const SelectPlayersView: React.FC<{}> = () => {
     const {
         theme: { colors, size },
     } = useTheme()
-    const { game, point, teamNumber: team } = useContext(LiveGameContext)
+    const { game, point, team } = useContext(LiveGameContext)
     const { selectPlayers } = useContext(PointEditContext)
     const { selectedPlayers, toggleSelection } = selectPlayers
 
-    // const [selectedPlayers, setSelectedPlayers] = useState<number[]>([])
     const [guestModalVisible, setGuestModalVisible] = useState(false)
     const [pullingModalVisible, setPullingModalVisible] = useState(false)
     const [confirmModalVisible, setConfirmModalVisible] = useState(false)
-
-    // const toggleSelection = (i: number) => {
-    //     if (selectedPlayers.includes(i)) {
-    //         setSelectedPlayers(prev => {
-    //             return prev.filter(s => s !== i)
-    //         })
-    //     } else {
-    //         setSelectedPlayers(prev => {
-    //             return [i, ...prev]
-    //         })
-    //     }
-    // }
 
     const styles = StyleSheet.create({
         flatList: {
@@ -115,16 +101,8 @@ const SelectPlayersView: React.FC<{}> = () => {
                         </View>
                         <LivePointUtilityBar
                             loading={false}
-                            undoDisabled={
-                                // TOOD: GAME-REFACTOR
-                                // should be unnecessary
-                                point.pointNumber === 1 ||
-                                game.teamTwoStatus === GameStatus.ACTIVE
-                            }
-                            onUndo={() => {
-                                // TODO: GAME-REFACTOR
-                                // should be unnecessary
-                            }}
+                            undoDisabled={true}
+                            onUndo={() => {}}
                             onEdit={() => {
                                 navigation.navigate('LiveGame', {
                                     screen: 'EditGame',

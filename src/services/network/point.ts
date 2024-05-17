@@ -142,3 +142,16 @@ export const nextPoint = async (
         },
     )
 }
+
+export const backPoint = async (gameToken: string, pointNumber: number) => {
+    return await axios.put(
+        `${API_URL_V2}/point/back?pointNumber=${pointNumber}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${gameToken}`,
+                'X-API-Key': API_KEY,
+            },
+        },
+    )
+}

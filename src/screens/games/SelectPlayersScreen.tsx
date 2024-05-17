@@ -90,26 +90,6 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
         }
     }
 
-    // TODO: GAME-REFACTOR move this to point-edit-context
-    const onSetPlayers = async () => {
-        const players = playerList.filter((_p, i) =>
-            selectedPlayers.includes(i),
-        )
-        const data = await setPlayerMutation(players)
-        if (data.pullingTeam._id === point.pullingTeam._id) {
-            // very weird case: putting dispatch before reset prevents reset
-            // 'await'-ing dispatch also prevents this, but feels worse than dispatch after navigate
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'LivePointEdit' }],
-            })
-            dispatch(setPoint(data))
-        } else {
-            dispatch(setPoint(data))
-            setConfirmModalVisible(true)
-        }
-    }
-
     const onLastPoint = async () => {
         try {
             const reactivatedPoint = await reactivatePoint(
@@ -285,7 +265,7 @@ const SelectPlayersScreen: React.FC<SelectPlayersProps> = ({ navigation }) => {
                                     selectedPlayers.length !==
                                         game.playersPerPoint || isLoading
                                 }
-                                onPress={onSetPlayers}
+                                onPress={() => {}}
                                 loading={isLoading}
                             />
                         </View>

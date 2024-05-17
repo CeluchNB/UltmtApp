@@ -1,42 +1,44 @@
 import { LiveGameContext } from '../../context/live-game-context'
-import { TeamNumber } from '../../types/team'
-import { nextPoint } from '../../services/network/point'
+import { backPoint } from '../../services/network/point'
 import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { withGameToken } from '../../services/data/game'
 import { ActionSchema, PointSchema } from '../../models'
-import { useObject, useQuery, useRealm } from '../../context/realm'
+import { useObject, useQuery, useRealm } from './../../context/realm'
 
-export const useNextPoint = (currentPointId: string) => {
+export const useBackPoint = (currentPointId: string) => {
     const realm = useRealm()
     const point = useObject<PointSchema>('Point', currentPointId)
     const actions = useQuery<ActionSchema>('Action', a => {
         return a.filtered(`pointId == $0`, currentPointId)
     })
-    const { setCurrentPointNumber } = useContext(LiveGameContext)
+    const { team, setCurrentPointNumber } = useContext(LiveGameContext)
 
     const { mutateAsync, isLoading, error } = useMutation(
-        async (pullingTeam: TeamNumber) => {
-            if (!point) return
-
+        async () => {
             // TODO: GAME-REFACTOR ensure network error correctly passed to error prop
-            const response = await withGameToken(
-                nextPoint,
-                pullingTeam,
-                point.pointNumber,
-            )
-            const { point: pointResponse } = response.data
+            const response = await withGameToken(backPoint, point?.pointNumber)
 
-            const schema = new PointSchema(pointResponse)
+            const { point: pointResponse, actions: actionsResponse } =
+                response.data
+
             realm.write(() => {
-                // TODO: GAME-REFACTOR - START HERE, not convinced actions are correctly deleted every time
-                console.log('deleting actions from next', actions.length)
                 realm.delete(actions)
+                const schema = new PointSchema(pointResponse)
                 realm.create('Point', schema)
+
+                for (const action of actionsResponse) {
+                    const actionSchema = new ActionSchema(
+                        { ...action, teamNumber: team },
+                        action.pointId,
+                        new Realm.BSON.ObjectId(action._id),
+                    )
+                    realm.create('Action', actionSchema)
+                }
             })
             setCurrentPointNumber(pointResponse.pointNumber)
 
-            return pointResponse
+            return { pointResponse, actionsResponse }
         },
         {
             onSuccess: () => {
@@ -48,7 +50,7 @@ export const useNextPoint = (currentPointId: string) => {
     )
 
     return {
-        nextPoint: mutateAsync,
+        backPoint: mutateAsync,
         isLoading,
         error,
     }

@@ -80,6 +80,7 @@ const usePointLocal = (gameId: string, pointId: string) => {
     const handleOnlineEvent = async (event: string, data: any) => {
         switch (event) {
             case LocalPointEvents.ACTION_LISTEN:
+                // TODO: GAME-REFACTOR action + point data: change this to use realm hooks
                 const { action: newAction, point: actionUpdatePoint } =
                     await saveLocalAction(data as LiveServerActionData, pointId)
 

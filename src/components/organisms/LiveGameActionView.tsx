@@ -1,19 +1,13 @@
-import { LiveGameContext } from '../../context/live-game-context'
 import { LiveGameWizardState } from '../../types/game'
 import PointEditView from './PointEditView'
+import React from 'react'
 import SelectPlayersView from './SelectPlayersView'
-import React, { useContext } from 'react'
 
-interface LiveGameActionView {
-    next: () => {}
-    back: () => {}
+interface LiveGameActionViewProps {
+    state: LiveGameWizardState
 }
 
-const LiveGameActionView: React.FC<{}> = () => {
-    const {
-        wizardState: { state },
-    } = useContext(LiveGameContext)
-
+const LiveGameActionView: React.FC<LiveGameActionViewProps> = ({ state }) => {
     return (
         <>
             {state === LiveGameWizardState.SET_PLAYERS && <SelectPlayersView />}

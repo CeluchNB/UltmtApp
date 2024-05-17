@@ -1,15 +1,22 @@
 import GameHeader from '../molecules/GameHeader'
 import LiveGameActionView from './LiveGameActionView'
 import { LiveGameContext } from '../../context/live-game-context'
-import { PointEditContext } from '../../context/point-edit-context'
 import PrimaryButton from '../atoms/PrimaryButton'
+import { useLiveGameWizard } from '../../hooks/game-edit-actions/use-live-game-wizard'
 import React, { useContext } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 
 const LiveGameWizard: React.FC<{}> = () => {
-    const { game, wizardState } = useContext(LiveGameContext)
-    const { next } = useContext(PointEditContext)
-    const { nextDisabled, backDisabled } = wizardState
+    const { game } = useContext(LiveGameContext)
+    const {
+        state,
+        backDisabled,
+        nextDisabled,
+        backLoading,
+        nextLoading,
+        next,
+        back,
+    } = useLiveGameWizard()
 
     const styles = StyleSheet.create({
         screen: {
@@ -35,24 +42,22 @@ const LiveGameWizard: React.FC<{}> = () => {
                 <GameHeader game={game} editing={true} header={true} />
             </View>
             <View style={styles.flexOne}>
-                <LiveGameActionView />
+                <LiveGameActionView state={state} />
             </View>
             <View style={[styles.flexRow, styles.flexShrink]}>
                 <PrimaryButton
                     style={[styles.flexOne]}
-                    disabled={backDisabled}
+                    disabled={backDisabled || backLoading || nextLoading}
                     text="Back"
-                    loading={false}
-                    onPress={() => {
-                        // TODO: GAME-REFACTOR
-                    }}
+                    loading={backLoading}
+                    onPress={back}
                 />
                 <PrimaryButton
                     style={[styles.flexOne]}
-                    disabled={nextDisabled}
+                    disabled={nextDisabled || nextLoading || backLoading}
                     text="Next"
-                    loading={false}
-                    onPress={() => next()}
+                    loading={nextLoading}
+                    onPress={next}
                 />
             </View>
         </SafeAreaView>

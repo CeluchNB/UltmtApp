@@ -99,28 +99,6 @@ export const getPointByPointNumber = async (
     return parsePoint(points[0])
 }
 
-// TODO: GAME-REFACTOR
-export const getActivePointByGame = async (
-    game: Game,
-): Promise<Point | undefined> => {
-    const realm = await getRealm()
-
-    // const gameString = game.points.map(id => {
-    //     return `"${id}"`
-    // })
-
-    // const points = await realm
-    //     .objects<PointSchema>('Point')
-    //     .filtered(`teamOneActive == $0 && _id IN { $1 }`, true, gameString)
-
-    // if (points.length === 0 || points.length > 1) {
-    //     return undefined
-    // }
-
-    // return parsePoint(points[0])
-    return undefined
-}
-
 export const deletePoint = async (pointId: string) => {
     const realm = await getRealm()
     const point = realm.objectForPrimaryKey('Point', pointId)

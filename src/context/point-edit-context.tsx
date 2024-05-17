@@ -1,10 +1,9 @@
 import ActionStack from '../utils/action-stack'
 import { DisplayUser } from '../types/user'
 import { LiveGameContext } from './live-game-context'
-import { LiveGameWizardState } from '../types/game'
-import { generatePlayerStatsForPoint } from '../utils/in-game-stats'
 import { getLocalActionsByPoint } from '../services/data/live-action'
 import { parseClientAction } from '../utils/action'
+import { useBackPoint } from '../hooks/game-edit-actions/use-back-point'
 import useLivePoint from '../hooks/useLivePoint'
 import { useNextPoint } from '../hooks/game-edit-actions/use-next-point'
 import usePointLocal from '../hooks/usePointLocal'
@@ -13,7 +12,7 @@ import { useSelectPlayers } from '../hooks/game-edit-actions/use-select-players'
 import { useSetPlayers } from '../hooks/game-edit-actions/use-set-players'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
-import React, { createContext, useContext, useEffect, useMemo } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 
 interface PointEditContextProps {
     children: React.ReactNode
@@ -26,9 +25,9 @@ interface PointEditContextData {
     error: string
     onAction: DebouncedFunc<(action: Action) => Promise<void>>
     onUndo: DebouncedFunc<() => Promise<void>>
-    // onFinishPoint: () => Promise<void>
-    // setPlayers: () => Promise<void>
-    next: () => Promise<void>
+    setPlayers: () => Promise<void>
+    nextPoint: () => Promise<void>
+    backPoint: () => Promise<void>
     selectPlayers: ReturnType<typeof useSelectPlayers>
 }
 
@@ -37,9 +36,8 @@ export const PointEditContext = createContext<PointEditContextData>(
 )
 
 const PointEditProvider = ({ children }: PointEditContextProps) => {
-    const { game, point, team, wizardState, setCurrentPointNumber } =
-        useContext(LiveGameContext)
-    const { state, setBackDisabled, setNextDisabled, setState } = wizardState
+    const { game, point, team } = useContext(LiveGameContext)
+
     const emitter = usePointLocal(game._id, point._id)
     const {
         actionStack,
@@ -57,6 +55,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         selectPlayers.selectedPlayers,
     )
     const { nextPoint: nextPointMutation } = useNextPoint(point._id)
+    const { backPoint: backPointMutation } = useBackPoint(point._id)
 
     // TODO: GAME-REFACTOR refactor to using realm useQuery
     const { isLoading: livePointLoading } = useQuery(
@@ -95,13 +94,14 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         }
     }, [point, team])
 
-    const allPointPlayers = React.useMemo(() => {
-        if (team === 'one') {
-            return point.teamOnePlayers ?? []
-        } else {
-            return point.teamTwoPlayers ?? []
-        }
-    }, [point, team])
+    // TODO: GAME-REFACTOR needed for substitution?
+    // const allPointPlayers = React.useMemo(() => {
+    //     if (team === 'one') {
+    //         return point.teamOnePlayers ?? []
+    //     } else {
+    //         return point.teamTwoPlayers ?? []
+    //     }
+    // }, [point, team])
 
     const handleAction = async (action: Action) => {
         const clientAction = parseClientAction({
@@ -154,56 +154,20 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
 
     const setPlayers = async () => {
         await setPlayersMutation()
-        setState(LiveGameWizardState.LOG_ACTIONS)
         selectPlayers.clearSelection()
     }
 
     const nextPoint = async () => {
         const lastAction = myTeamActions[myTeamActions.length - 1].actionType
-        const currentPointNumber = await nextPointMutation(
+        await nextPointMutation(
             lastAction === ActionType.TEAM_ONE_SCORE ? 'one' : 'two',
         )
-        setCurrentPointNumber(currentPointNumber ?? 1)
-        setState(LiveGameWizardState.SET_PLAYERS)
         onNextPoint()
     }
 
-    const next = async () => {
-        if (state === LiveGameWizardState.SET_PLAYERS) {
-            await setPlayers()
-        } else {
-            await nextPoint()
-        }
+    const backPoint = async () => {
+        await backPointMutation()
     }
-
-    // TODO: GAME-REFACTOR back point
-
-    useEffect(() => {
-        if (state === LiveGameWizardState.SET_PLAYERS) {
-            setBackDisabled(point.pointNumber === 1)
-            setNextDisabled(
-                selectPlayers.selectedPlayers.length !== game.playersPerPoint,
-            )
-        } else if (state === LiveGameWizardState.LOG_ACTIONS) {
-            const lastAction = myTeamActions[myTeamActions.length - 1]
-            setBackDisabled(myTeamActions.length > 0)
-            setNextDisabled(
-                !!lastAction &&
-                    ![
-                        ActionType.TEAM_ONE_SCORE,
-                        ActionType.TEAM_TWO_SCORE,
-                    ].includes(lastAction.actionType),
-            )
-        }
-    }, [
-        selectPlayers,
-        point,
-        game,
-        state,
-        setBackDisabled,
-        setNextDisabled,
-        myTeamActions,
-    ])
 
     return (
         <PointEditContext.Provider
@@ -214,7 +178,9 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                 error: error ?? '',
                 onAction: onActionDebounced,
                 onUndo: onUndoDebounced,
-                next,
+                setPlayers,
+                nextPoint,
+                backPoint,
                 selectPlayers,
             }}>
             {children}
