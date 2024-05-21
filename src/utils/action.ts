@@ -1,3 +1,4 @@
+import { ActionSchema } from '../models/action'
 import { DisplayUser } from '../types/user'
 import { TeamNumber } from '../types/team'
 import {
@@ -8,6 +9,7 @@ import {
     CatchAction,
     ClientActionData,
     DropAction,
+    LiveServerActionData,
     PickupAction,
     PullAction,
     ScoreAction,
@@ -164,4 +166,22 @@ export const immutableFilter = <T extends { action: { actionNumber: number } }>(
     return (current: T[]): T[] => {
         return current.filter(item => item.action.actionNumber !== actionNumber)
     }
+}
+
+export const parseAction = (
+    schema: ActionSchema,
+): LiveServerActionData & { _id: string; pointId: string } => {
+    return JSON.parse(
+        JSON.stringify({
+            _id: schema._id.toHexString(),
+            pointId: schema.pointId,
+            actionType: schema.actionType,
+            actionNumber: schema.actionNumber,
+            teamNumber: schema.teamNumber,
+            tags: schema.tags,
+            comments: schema.comments,
+            playerOne: schema.playerOne,
+            playerTwo: schema.playerTwo,
+        }),
+    )
 }

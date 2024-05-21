@@ -29,8 +29,6 @@ export const useNextPoint = (currentPointId: string) => {
 
             const schema = new PointSchema(pointResponse)
             realm.write(() => {
-                // TODO: GAME-REFACTOR - START HERE, not convinced actions are correctly deleted every time
-                console.log('deleting actions from next', actions.length)
                 realm.delete(actions)
                 realm.create('Point', schema)
             })

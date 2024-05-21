@@ -6,14 +6,13 @@ import { ClientActionData, LiveServerActionData } from '../types/action'
 import { useEffect, useState } from 'react'
 
 interface LivePointOptions {
-    onNextPoint: () => void
+    onNextPoint?: () => void
+    onError?: () => void
 }
 // Handles common functionality for all live game use cases
 const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
     const [actionStack, setActionStack] = useState(new ActionStack())
     const [error, setError] = useState<string>()
-    const [waitingForActionResponse, setWaitingForActionResponse] =
-        useState(false)
 
     useEffect(() => {
         emitter.off(LocalPointEvents.ACTION_LISTEN)
@@ -34,7 +33,6 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
     // Listeners
     const onActionReceived = (data: LiveServerActionData) => {
         setActionStack(curr => ({ ...curr.reconcileAction(data) }))
-        setWaitingForActionResponse(false)
     }
 
     const onUndoReceived = (data: {
@@ -42,28 +40,25 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
         actionNumber: number
     }) => {
         setActionStack(curr => ({ ...curr.undoAction(data) }))
-        setWaitingForActionResponse(false)
     }
 
     const onActionError = (message?: string) => {
-        setWaitingForActionResponse(false)
         setError(message)
+        options?.onError?.()
     }
 
     const onNextPointReceived = () => {
-        options?.onNextPoint()
+        options?.onNextPoint?.()
     }
 
     // Emits
     const onAction = (action: ClientActionData) => {
         setError('')
-        setWaitingForActionResponse(true)
         emitter.emit(LocalPointEvents.ACTION_EMIT, action)
     }
 
     const onUndo = () => {
         setError('')
-        setWaitingForActionResponse(true)
         emitter.emit(LocalPointEvents.UNDO_EMIT)
     }
 
@@ -108,7 +103,6 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
     return {
         actionStack,
         error,
-        waitingForActionResponse,
         setActionStack,
         onAction,
         onUndo,

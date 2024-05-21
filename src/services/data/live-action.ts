@@ -1,6 +1,8 @@
 import * as Constants from '../../utils/constants'
 import Point from '../../types/point'
+import { PointSchema } from '../../models'
 import { TeamNumber } from '../../types/team'
+import { getPointById as localGetPointById } from '../local/point'
 import { throwApiError } from '../../utils/service-utils'
 import {
     Action,
@@ -14,10 +16,6 @@ import {
     getActionsByPoint as localGetActionsByPoint,
     upsertAction as localSaveAction,
 } from '../local/action'
-import {
-    getPointById as localGetPointById,
-    savePoint as localSavePoint,
-} from '../local/point'
 import {
     removePlayerFromArray,
     substituteActivePlayer,
@@ -35,9 +33,13 @@ export const saveLocalAction = async (
 ): Promise<{ action: Action; point: Point }> => {
     try {
         const savedAction = await localSaveAction(action, pointId)
-        const point = await handleCreateActionSideEffects(savedAction)
+        // TODO: GAME-REFACTOR
+        // const point = await handleCreateActionSideEffects(savedAction)
 
-        return { action: ActionFactory.createFromAction(savedAction), point }
+        return {
+            action: ActionFactory.createFromAction(savedAction),
+            point: {} as Point,
+        }
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
@@ -86,9 +88,10 @@ export const deleteLocalAction = async (
             pointId,
         )
 
-        const point = await handleUndoActionSideEffects(action, pointId)
+        // TODO: GAME-REFACTOR
+        // const point = await handleUndoActionSideEffects(action, pointId)
 
-        return { action, point }
+        return { action, point: {} as Point }
     } catch (e) {
         return throwApiError({}, Constants.GET_ACTION_ERROR)
     }
@@ -123,11 +126,10 @@ export const getLocalActionsByPoint = async (
     }
 }
 
-const handleCreateActionSideEffects = async (
-    action: LiveServerActionData & { _id: string; pointId: string },
-): Promise<Point> => {
-    const { pointId } = action
-    const point = await localGetPointById(pointId)
+export const handleCreateActionSideEffects = async (
+    point: PointSchema,
+    action: LiveServerActionData,
+) => {
     if (action.teamNumber === 'one') {
         if (action.actionType === ActionType.SUBSTITUTION) {
             if (action.playerOne && action.playerTwo) {
@@ -139,9 +141,6 @@ const handleCreateActionSideEffects = async (
                 point.teamOnePlayers.push(action.playerTwo)
             }
         }
-        point.teamOneActions = [
-            ...new Set([...point.teamOneActions, action._id]),
-        ]
     } else {
         if (action.actionType === ActionType.SUBSTITUTION) {
             if (action.playerOne && action.playerTwo) {
@@ -156,16 +155,15 @@ const handleCreateActionSideEffects = async (
         // TODO: add point team one actions
     }
 
-    await localSavePoint(point)
-    return await localGetPointById(pointId)
+    // await localSavePoint(point)
+    // return await localGetPointById(pointId)
 }
 
-const handleUndoActionSideEffects = async (
+export const handleUndoActionSideEffects = async (
     action: LiveServerActionData,
-    pointId: string,
-): Promise<Point> => {
+    point: PointSchema,
+) => {
     const { teamNumber, actionNumber } = action
-    const point = await localGetPointById(pointId)
     if (teamNumber === 'one') {
         point.teamOneActions.splice(actionNumber - 1)
 
@@ -193,7 +191,4 @@ const handleUndoActionSideEffects = async (
             }
         }
     }
-
-    await localSavePoint(point)
-    return await localGetPointById(pointId)
 }

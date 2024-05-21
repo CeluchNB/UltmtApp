@@ -14,15 +14,16 @@ export const LiveGameContext = createContext<LiveGameContextData>(
     {} as LiveGameContextData,
 )
 
-// TODO: pointNumber passed as argument (default to 1)
 const LiveGameProvider = ({
     children,
     gameId,
     pointNumber = 1,
+    teamNumber = 'one',
 }: {
     children: ReactNode
     gameId: string
     pointNumber?: number
+    teamNumber?: TeamNumber
 }) => {
     const game = useObject<GameSchema>('Game', gameId)
 
@@ -42,8 +43,7 @@ const LiveGameProvider = ({
         return pointQuery[0]
     }, [pointQuery])
 
-    // TODO: GAME-REFACTOR this may need to be an argument to the context?
-    const [team] = useState<TeamNumber>('one')
+    const [team] = useState<TeamNumber>(teamNumber)
 
     // TODO: GAME-REFACTOR finish game
 

@@ -8,6 +8,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 
 export const useGameEditor = () => {
+    // TODO: GAME-REFACTOR don't use redux
     const dispatch = useDispatch()
     const game = useSelector(selectGame)
 

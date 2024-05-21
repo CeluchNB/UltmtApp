@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Realm } from '@realm/react'
 import { TeamNumber } from '../../types/team'
 import { getRealm } from '../../models/realm'
+import { parseAction } from '../../utils/action'
 import { throwApiError } from '../../utils/service-utils'
 import { LiveServerActionData, SavedServerActionData } from '../../types/action'
 
@@ -157,22 +158,4 @@ export const getActionsByPoint = async (
     return actions.map(action => {
         return parseAction(action)
     })
-}
-
-const parseAction = (
-    schema: ActionSchema,
-): LiveServerActionData & { _id: string; pointId: string } => {
-    return JSON.parse(
-        JSON.stringify({
-            _id: schema._id.toHexString(),
-            pointId: schema.pointId,
-            actionType: schema.actionType,
-            actionNumber: schema.actionNumber,
-            teamNumber: schema.teamNumber,
-            tags: schema.tags,
-            comments: schema.comments,
-            playerOne: schema.playerOne,
-            playerTwo: schema.playerTwo,
-        }),
-    )
 }
