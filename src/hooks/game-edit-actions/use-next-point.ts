@@ -5,15 +5,14 @@ import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { withGameToken } from '../../services/data/game'
 import { ActionSchema, PointSchema } from '../../models'
-import { useObject, useQuery, useRealm } from '../../context/realm'
+import { useQuery, useRealm } from '../../context/realm'
 
 export const useNextPoint = (currentPointId: string) => {
     const realm = useRealm()
-    const point = useObject<PointSchema>('Point', currentPointId)
     const actions = useQuery<ActionSchema>('Action', a => {
         return a.filtered(`pointId == $0`, currentPointId)
     })
-    const { setCurrentPointNumber } = useContext(LiveGameContext)
+    const { game, point, setCurrentPointNumber } = useContext(LiveGameContext)
 
     const { mutateAsync, isLoading, error } = useMutation(
         async (pullingTeam: TeamNumber) => {
@@ -31,6 +30,9 @@ export const useNextPoint = (currentPointId: string) => {
             realm.write(() => {
                 realm.delete(actions)
                 realm.create('Point', schema)
+
+                game.teamOneScore = schema.teamOneScore
+                game.teamTwoScore = schema.teamTwoScore
             })
             setCurrentPointNumber(pointResponse.pointNumber)
 

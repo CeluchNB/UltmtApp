@@ -51,7 +51,7 @@ export class PointSchema {
         this.teamTwoPlayers = point.teamTwoPlayers
         this.teamOneActivePlayers = point.teamOneActivePlayers
         this.teamTwoActivePlayers = point.teamTwoActivePlayers
-        this.teamOneScore = point.teamTwoScore
+        this.teamOneScore = point.teamOneScore
         this.teamTwoScore = point.teamTwoScore
         this.pullingTeam = point.pullingTeam
         this.receivingTeam = point.receivingTeam

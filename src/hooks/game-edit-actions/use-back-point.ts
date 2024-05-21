@@ -4,15 +4,15 @@ import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { withGameToken } from '../../services/data/game'
 import { ActionSchema, PointSchema } from '../../models'
-import { useObject, useQuery, useRealm } from './../../context/realm'
+import { useQuery, useRealm } from './../../context/realm'
 
 export const useBackPoint = (currentPointId: string) => {
     const realm = useRealm()
-    const point = useObject<PointSchema>('Point', currentPointId)
     const actions = useQuery<ActionSchema>('Action', a => {
         return a.filtered(`pointId == $0`, currentPointId)
     })
-    const { team, setCurrentPointNumber } = useContext(LiveGameContext)
+    const { game, point, team, setCurrentPointNumber } =
+        useContext(LiveGameContext)
 
     const { mutateAsync, isLoading, error } = useMutation(
         async () => {
@@ -27,6 +27,7 @@ export const useBackPoint = (currentPointId: string) => {
                 const schema = new PointSchema(pointResponse)
                 realm.create('Point', schema)
 
+                // TODO: GAME-REFACTOR START HERE - UNDO DOES NOT WORK AFTER GOING BACK A POINT
                 for (const action of actionsResponse) {
                     const actionSchema = new ActionSchema(
                         { ...action, teamNumber: team },
@@ -35,6 +36,9 @@ export const useBackPoint = (currentPointId: string) => {
                     )
                     realm.create('Action', actionSchema)
                 }
+
+                game.teamOneScore = schema.teamOneScore
+                game.teamTwoScore = schema.teamTwoScore
             })
             setCurrentPointNumber(pointResponse.pointNumber)
 

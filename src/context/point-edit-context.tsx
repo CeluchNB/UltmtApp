@@ -7,7 +7,6 @@ import { useBackPoint } from '../hooks/game-edit-actions/use-back-point'
 import useLivePoint from '../hooks/useLivePoint'
 import { useNextPoint } from '../hooks/game-edit-actions/use-next-point'
 import usePointLocal from '../hooks/usePointLocal'
-import { useQuery } from './realm'
 import { useSelectPlayers } from '../hooks/game-edit-actions/use-select-players'
 import { useSetPlayers } from '../hooks/game-edit-actions/use-set-players'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
@@ -19,7 +18,12 @@ import React, {
     useMemo,
     useState,
 } from 'react'
+import {
+    addInGameStatsPlayers,
+    generatePlayerStatsForPoint,
+} from '../utils/in-game-stats'
 import { parseAction, parseClientAction } from '../utils/action'
+import { useQuery, useRealm } from './realm'
 
 interface PointEditContextProps {
     children: React.ReactNode
@@ -43,7 +47,8 @@ export const PointEditContext = createContext<PointEditContextData>(
 )
 
 const PointEditProvider = ({ children }: PointEditContextProps) => {
-    const { point, team } = useContext(LiveGameContext)
+    const realm = useRealm()
+    const { game, point, team } = useContext(LiveGameContext)
 
     const actions = useQuery<ActionSchema>(
         'Action',
@@ -119,14 +124,13 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         }
     }, [point, team])
 
-    // TODO: GAME-REFACTOR needed for substitution?
-    // const allPointPlayers = React.useMemo(() => {
-    //     if (team === 'one') {
-    //         return point.teamOnePlayers ?? []
-    //     } else {
-    //         return point.teamTwoPlayers ?? []
-    //     }
-    // }, [point, team])
+    const allPointPlayers = React.useMemo(() => {
+        if (team === 'one') {
+            return point.teamOnePlayers ?? []
+        } else {
+            return point.teamTwoPlayers ?? []
+        }
+    }, [point, team])
 
     const handleAction = async (action: Action) => {
         setWaitingForActionResponse(true)
@@ -173,6 +177,27 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
 
     //     onNextPoint()
     // }
+
+    const updateScore = () => {
+        realm.write(() => {
+            game.teamOneScore = point.teamOneScore
+            game.teamTwoScore = point.teamTwoScore
+        })
+    }
+
+    const updatePlayerStats = () => {
+        if (!game) return
+
+        realm.write(() => {
+            const stats = generatePlayerStatsForPoint(
+                allPointPlayers,
+                myTeamActions,
+            )
+
+            // addInGameStatsPlayers(game.statsPoints, stats)
+            //     dispatch(addPlayerStats({ pointId: prevPoint._id, players: stats }))
+        })
+    }
 
     // const onFinishGame = async () => {
     //     await finishPoint(point, myTeamActions, teamNumber)
