@@ -9,7 +9,10 @@ export const generatePlayerStatsForPoint = (
     for (const player of players) {
         if (!map.has(player._id)) {
             map.set(player._id, {
-                ...player,
+                _id: player._id,
+                firstName: player.firstName,
+                lastName: player.lastName,
+                username: player.username,
                 pointsPlayed: 1,
                 goals: 0,
                 assists: 0,
@@ -156,7 +159,10 @@ const addInGameStatsPlayerData = (
     playerTwo: InGameStatsUser,
 ): InGameStatsUser => {
     return {
-        ...playerOne,
+        _id: playerOne._id,
+        firstName: playerOne.firstName,
+        lastName: playerOne.lastName,
+        username: playerOne.username,
         pointsPlayed: playerOne.pointsPlayed + playerTwo.pointsPlayed,
         goals: playerOne.goals + playerTwo.goals,
         assists: playerOne.assists + playerTwo.assists,
@@ -170,7 +176,10 @@ const subtractInGameStatsPlayerData = (
     playerTwo: InGameStatsUser,
 ): InGameStatsUser => {
     return {
-        ...playerOne,
+        _id: playerOne._id,
+        firstName: playerOne.firstName,
+        lastName: playerOne.lastName,
+        username: playerOne.username,
         pointsPlayed: playerOne.pointsPlayed - playerTwo.pointsPlayed,
         goals: playerOne.goals - playerTwo.goals,
         assists: playerOne.assists - playerTwo.assists,

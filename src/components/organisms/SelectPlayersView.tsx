@@ -17,7 +17,7 @@ const SelectPlayersView: React.FC<{}> = () => {
     const {
         theme: { colors, size },
     } = useTheme()
-    const { game, point, team } = useContext(LiveGameContext)
+    const { game, point, team, players } = useContext(LiveGameContext)
     const { selectPlayers } = useContext(PointEditContext)
     const { selectedPlayers, toggleSelection } = selectPlayers
 
@@ -78,7 +78,7 @@ const SelectPlayersView: React.FC<{}> = () => {
             <FlatList
                 ListHeaderComponentStyle={styles.headerFooterContainer}
                 ListFooterComponentStyle={styles.headerFooterContainer}
-                data={game.teamOnePlayers}
+                data={players}
                 testID="players-flat-list"
                 style={styles.flatList}
                 ListHeaderComponent={
@@ -140,13 +140,11 @@ const SelectPlayersView: React.FC<{}> = () => {
                                     : colors.gray
                             }
                             ellipsizeMode="tail">
-                            {item.firstName} {item.lastName}
-                            {/* TODO: GAME-REFACTOR <Text style={{ color: colors.textPrimary }}>
-                                    {item.pointsPlayed} - {item.assists} -{' '}
-                                    {item.goals} - {item.blocks} -{' '}
-                                    {item.turnovers}
-                                </Text>
-                                ) */}
+                            {item.firstName} {item.lastName}{' '}
+                            <Text style={{ color: colors.textPrimary }}>
+                                ({item.pointsPlayed} - {item.assists} -{' '}
+                                {item.goals} - {item.blocks} - {item.turnovers})
+                            </Text>
                         </Chip>
                     )
                 }}

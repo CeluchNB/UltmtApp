@@ -1,8 +1,9 @@
-import { DisplayUser } from '../types/user'
 import { Realm } from '@realm/react'
 import { Tournament } from '../types/tournament'
+import { initializeInGameStatsPlayers } from '../utils/in-game-stats'
 import { CreateGame, Game, GameStatus, PointStats } from '../types/game'
 import { DisplayTeam, GuestTeam } from '../types/team'
+import { DisplayUser, InGameStatsUser } from '../types/user'
 
 export class GameSchema {
     static schema: Realm.ObjectSchema = {
@@ -25,8 +26,8 @@ export class GameSchema {
             tournament: 'Tournament?',
             teamOneScore: 'int',
             teamTwoScore: 'int',
-            teamOnePlayers: 'DisplayUser[]',
-            teamTwoPlayers: 'DisplayUser[]',
+            teamOnePlayers: 'PlayerPointStats[]',
+            teamTwoPlayers: 'PlayerPointStats[]',
             resolveCode: 'string',
             statsPoints: 'PointStats[]',
             offline: 'bool',
@@ -51,8 +52,8 @@ export class GameSchema {
     tournament?: Tournament
     teamOneScore: number
     teamTwoScore: number
-    teamOnePlayers: DisplayUser[]
-    teamTwoPlayers: DisplayUser[]
+    teamOnePlayers: InGameStatsUser[]
+    teamTwoPlayers: InGameStatsUser[]
     resolveCode: string
     statsPoints: PointStats[]
     offline: boolean
@@ -80,8 +81,8 @@ export class GameSchema {
         this.tournament = game.tournament
         this.teamOneScore = game.teamOneScore
         this.teamTwoScore = game.teamTwoScore
-        this.teamOnePlayers = game.teamOnePlayers
-        this.teamTwoPlayers = game.teamTwoPlayers
+        this.teamOnePlayers = initializeInGameStatsPlayers(game.teamOnePlayers)
+        this.teamTwoPlayers = initializeInGameStatsPlayers(game.teamTwoPlayers)
         this.resolveCode = game.resolveCode || ''
         this.statsPoints = statsPoints
         this.offline = offline

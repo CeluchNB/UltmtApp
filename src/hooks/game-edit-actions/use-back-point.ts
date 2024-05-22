@@ -8,9 +8,15 @@ import { useQuery, useRealm } from './../../context/realm'
 
 export const useBackPoint = (currentPointId: string) => {
     const realm = useRealm()
-    const actions = useQuery<ActionSchema>('Action', a => {
-        return a.filtered(`pointId == $0`, currentPointId)
-    })
+    const actions = useQuery<ActionSchema>(
+        {
+            type: 'Action',
+            query: collection => {
+                return collection.filtered('pointId == $0', currentPointId)
+            },
+        },
+        [currentPointId],
+    )
     const { game, point, team, setCurrentPointNumber } =
         useContext(LiveGameContext)
 

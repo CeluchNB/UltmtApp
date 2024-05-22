@@ -9,11 +9,13 @@ export const useUndoAction = () => {
     const { point } = useContext(LiveGameContext)
     const realm = useRealm()
     const actionQuery = useQuery<ActionSchema>(
-        'Action',
-        actions => {
-            return actions
-                .filtered('pointId == $0', point._id)
-                .sorted('actionNumber', true)
+        {
+            type: 'Action',
+            query: collection => {
+                return collection
+                    .filtered('pointId == $0', point._id)
+                    .sorted('actionNumber', true)
+            },
         },
         [point._id],
     )
