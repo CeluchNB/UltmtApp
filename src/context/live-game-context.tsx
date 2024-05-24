@@ -1,5 +1,6 @@
 import { InGameStatsUser } from '../types/user'
 import { TeamNumber } from '../types/team'
+import { parseInGameStatsUser } from '../utils/in-game-stats'
 import { useQuery } from './realm'
 import { GameSchema, PointSchema } from '../models'
 import React, { ReactNode, createContext, useMemo, useState } from 'react'
@@ -59,6 +60,7 @@ const LiveGameProvider = ({
                         `${b.firstName} ${b.lastName}`,
                     ),
                 )
+                .map(user => parseInGameStatsUser(user))
         } else if (team === 'two') {
             return game?.teamTwoPlayers
                 .slice()
@@ -67,8 +69,8 @@ const LiveGameProvider = ({
                         `${b.firstName} ${b.lastName}`,
                     ),
                 )
+                .map(user => parseInGameStatsUser(user))
         }
-        // TODO: GAME-REFACTOR cannot rely on currentPointNumber
     }, [game, team])
 
     // TODO: GAME-REFACTOR finish game

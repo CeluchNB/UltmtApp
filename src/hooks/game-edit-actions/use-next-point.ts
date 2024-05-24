@@ -1,3 +1,4 @@
+import { InGameStatsUser } from '../../types/user'
 import { LiveGameContext } from '../../context/live-game-context'
 import { TeamNumber } from '../../types/team'
 import { nextPoint } from '../../services/network/point'
@@ -45,7 +46,6 @@ export const useNextPoint = (currentPointId: string) => {
             )
             const { point: pointResponse } = response.data
 
-            // TODO: GAME-REFACTOR clean all this up
             const stats = generatePlayerStatsForPoint(
                 allPointPlayers,
                 actions.filter(action => action.teamNumber === team),
@@ -58,29 +58,8 @@ export const useNextPoint = (currentPointId: string) => {
 
                 game.teamOneScore = schema.teamOneScore
                 game.teamTwoScore = schema.teamTwoScore
-                if (team === 'one') {
-                    const newPlayers = addInGameStatsPlayers(
-                        game.teamOnePlayers,
-                        stats,
-                    )
 
-                    for (let i = 0; i < game.teamOnePlayers.length; i++) {
-                        // TODO: GAME-REFACTOR use map instead of find
-                        const newPlayer = newPlayers.find(
-                            p => p._id === game.teamOnePlayers[i]._id,
-                        )
-                        if (!newPlayer) continue
-
-                        game.teamOnePlayers[i] = newPlayer
-                    }
-                } else if (team === 'two') {
-                    game.teamTwoPlayers = []
-                    game.teamTwoPlayers = addInGameStatsPlayers(
-                        game.teamTwoPlayers,
-                        stats,
-                    )
-                }
-
+                updatePlayerStats(stats)
                 game.statsPoints.push({ _id: point._id, pointStats: stats })
             })
             setCurrentPointNumber(pointResponse.pointNumber)
@@ -90,11 +69,26 @@ export const useNextPoint = (currentPointId: string) => {
         {
             onSuccess: () => {
                 realm.write(() => {
+                    // TODO: GAME-REFACTOR is this safe?
                     realm.delete(point)
                 })
             },
         },
     )
+
+    const updatePlayerStats = (stats: InGameStatsUser[]) => {
+        const players =
+            team === 'one' ? game.teamOnePlayers : game.teamTwoPlayers
+        const newPlayers = addInGameStatsPlayers(players, stats)
+
+        for (let i = 0; i < players.length; i++) {
+            // TODO: GAME-REFACTOR use map instead of find?
+            const newPlayer = newPlayers.find(p => p._id === players[i]._id)
+            if (!newPlayer) continue
+
+            players[i] = newPlayer
+        }
+    }
 
     return {
         nextPoint: mutateAsync,

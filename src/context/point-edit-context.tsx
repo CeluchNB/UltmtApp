@@ -107,17 +107,12 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     }, [teamOneActions, teamTwoActions, team])
 
     const activePlayers = React.useMemo(() => {
-        if (team === 'one') {
-            return (
-                point.teamOneActivePlayers?.map(player => parseUser(player)) ??
-                []
-            )
-        } else {
-            return (
-                point.teamTwoActivePlayers?.map(player => parseUser(player)) ??
-                []
-            )
+        if (team === 'one' && point.teamOneActivePlayers) {
+            return point.teamOneActivePlayers?.map(player => parseUser(player))
+        } else if (team === 'two' && point.teamTwoActivePlayers) {
+            return point.teamTwoActivePlayers?.map(player => parseUser(player))
         }
+        return []
     }, [point, team])
 
     const handleAction = async (action: Action) => {

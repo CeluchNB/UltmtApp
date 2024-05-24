@@ -1,5 +1,8 @@
+import { BSON } from 'realm'
+import { InGameStatsUser } from '../../types/user'
 import { LiveGameContext } from '../../context/live-game-context'
 import { backPoint } from '../../services/network/point'
+import { subtractInGameStatsPlayers } from '../../utils/in-game-stats'
 import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { withGameToken } from '../../services/data/game'
@@ -33,18 +36,24 @@ export const useBackPoint = (currentPointId: string) => {
                 const schema = new PointSchema(pointResponse)
                 realm.create('Point', schema)
 
-                // TODO: GAME-REFACTOR START HERE - UNDO DOES NOT WORK AFTER GOING BACK A POINT
+                // TODO: GAME-REFACTOR START HERE - UNDO DOES NOT WORK AFTER GOING BACK A POINT? Seems to work now
                 for (const action of actionsResponse) {
                     const actionSchema = new ActionSchema(
                         { ...action, teamNumber: team },
                         action.pointId,
-                        new Realm.BSON.ObjectId(action._id),
+                        new BSON.ObjectId(action._id),
                     )
                     realm.create('Action', actionSchema)
                 }
 
                 game.teamOneScore = schema.teamOneScore
                 game.teamTwoScore = schema.teamTwoScore
+
+                // TODO: GAME-REFACTOR use _id rather than index
+                updatePlayerStats(
+                    game.statsPoints[game.statsPoints.length - 1].pointStats,
+                )
+                realm.delete(game.statsPoints[game.statsPoints.length - 1])
             })
             setCurrentPointNumber(pointResponse.pointNumber)
 
@@ -58,6 +67,20 @@ export const useBackPoint = (currentPointId: string) => {
             },
         },
     )
+
+    const updatePlayerStats = (stats: InGameStatsUser[]) => {
+        const players =
+            team === 'one' ? game.teamOnePlayers : game.teamTwoPlayers
+        const newPlayers = subtractInGameStatsPlayers(players, stats)
+
+        for (let i = 0; i < players.length; i++) {
+            // TODO: GAME-REFACTOR use map instead of find?
+            const newPlayer = newPlayers.find(p => p._id === players[i]._id)
+            if (!newPlayer) continue
+
+            players[i] = newPlayer
+        }
+    }
 
     return {
         backPoint: mutateAsync,

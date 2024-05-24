@@ -187,3 +187,19 @@ const subtractInGameStatsPlayerData = (
         turnovers: playerOne.turnovers - playerTwo.turnovers,
     }
 }
+
+export const parseInGameStatsUser = (
+    player: InGameStatsUser,
+): InGameStatsUser => {
+    return {
+        _id: player._id,
+        firstName: player.firstName,
+        lastName: player.lastName,
+        username: player.username,
+        pointsPlayed: player.pointsPlayed,
+        goals: player.goals,
+        assists: player.assists,
+        blocks: player.blocks,
+        turnovers: player.turnovers,
+    }
+}
