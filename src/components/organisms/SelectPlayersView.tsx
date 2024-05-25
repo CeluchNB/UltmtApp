@@ -108,6 +108,12 @@ const SelectPlayersView: React.FC<{}> = () => {
                                     screen: 'EditGame',
                                 })
                             }}
+                            actionButton={{
+                                title: 'Add Guest',
+                                loading: false,
+                                rightIcon: 'plus',
+                                onAction: () => setGuestModalVisible(true),
+                            }}
                         />
                         <View style={styles.statsKeyContainer}>
                             <Text style={styles.statsKey}>

@@ -1,15 +1,10 @@
-import { AppDispatch } from '../../store/store'
 import BaseModal from '../atoms/BaseModal'
-import { GuestUser } from '../../types/user'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import UserInput from '../atoms/UserInput'
-import { addPlayers } from '../../store/reducers/features/game/liveGameReducer'
-import { createGuest } from '../../services/data/team'
 import { getFormFieldRules } from '../../utils/form-utils'
-import { useDispatch } from 'react-redux'
-import { useMutation } from 'react-query'
+import { useAddGuest } from '../../hooks/game-edit-actions/use-add-guest'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
@@ -28,12 +23,16 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const dispatch = useDispatch<AppDispatch>()
 
-    const { mutate, isLoading, isError, error } = useMutation(
-        (player: { firstName: string; lastName: string }) =>
-            createGuest(teamId, player.firstName, player.lastName, true),
-    )
+    const { mutateAsync, isLoading, isError, error } = useAddGuest(teamId)
+
+    const onAddGuest = async (player: {
+        firstName: string
+        lastName: string
+    }) => {
+        await mutateAsync(player)
+        reset()
+    }
 
     const {
         control,
@@ -43,15 +42,6 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
     } = useForm({
         defaultValues: { firstName: '', lastName: '' },
     })
-
-    const onSubmitPlayer = async (player: GuestUser) => {
-        mutate(player, {
-            onSuccess(team) {
-                dispatch(addPlayers(team.players))
-                reset()
-            },
-        })
-    }
 
     const styles = StyleSheet.create({
         modalContainer: {
@@ -162,7 +152,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
                     style={styles.button}
                     text="add"
                     onPress={async () => {
-                        handleSubmit(onSubmitPlayer)()
+                        handleSubmit(onAddGuest)()
                     }}
                     loading={isLoading}
                 />

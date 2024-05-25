@@ -1,7 +1,7 @@
-import { IconButton } from 'react-native-paper'
 import React from 'react'
 import { useTheme } from '../../hooks'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import { Button, IconButton } from 'react-native-paper'
 
 interface LivePointUtilityBarProps {
     undoDisabled: boolean
@@ -9,6 +9,12 @@ interface LivePointUtilityBarProps {
     error?: string
     onUndo: () => void
     onEdit: () => void
+    actionButton?: {
+        title: string
+        loading: boolean
+        rightIcon?: string
+        onAction: () => void
+    }
 }
 
 const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
@@ -17,6 +23,7 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
     error,
     onUndo,
     onEdit,
+    actionButton,
 }) => {
     const {
         theme: { colors },
@@ -52,6 +59,15 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
                 onPress={onEdit}
                 testID="edit-button"
             />
+            {actionButton && (
+                <Button
+                    textColor={colors.textPrimary}
+                    onPress={actionButton.onAction}
+                    loading={actionButton.loading}
+                    icon={actionButton.rightIcon}>
+                    {actionButton.title}
+                </Button>
+            )}
         </View>
     )
 }
