@@ -24,14 +24,15 @@ export const useBackPoint = (currentPointId: string) => {
     const { game, point, team, setCurrentPointNumber } =
         useContext(LiveGameContext)
 
-    const updatePlayerStats = (stats: InGameStatsUser[]) => {
+    const updatePlayerStats = (stats?: InGameStatsUser[]) => {
+        if (!stats) return
+
         const players =
             team === 'one' ? game.teamOnePlayers : game.teamTwoPlayers
         const newPlayers = subtractInGameStatsPlayers(players, stats)
 
         for (let i = 0; i < players.length; i++) {
-            // TODO: GAME-REFACTOR use map instead of find?
-            const newPlayer = newPlayers.find(p => p._id === players[i]._id)
+            const newPlayer = newPlayers.get(players[i]._id)
             if (!newPlayer) continue
 
             players[i] = newPlayer
@@ -62,11 +63,16 @@ export const useBackPoint = (currentPointId: string) => {
                 game.teamOneScore = schema.teamOneScore
                 game.teamTwoScore = schema.teamTwoScore
 
-                // TODO: GAME-REFACTOR use _id rather than index
                 updatePlayerStats(
-                    game.statsPoints[game.statsPoints.length - 1].pointStats,
+                    game.statsPoints.find(
+                        stats => stats._id === pointResponse._id,
+                    )?.pointStats,
                 )
-                realm.delete(game.statsPoints[game.statsPoints.length - 1])
+                realm.delete(
+                    game.statsPoints.find(
+                        stats => stats._id === pointResponse._id,
+                    ),
+                )
                 realm.delete(point)
             })
             setCurrentPointNumber(pointResponse.pointNumber)

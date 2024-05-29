@@ -126,7 +126,7 @@ export const addInGameStatsPlayers = (
 export const subtractInGameStatsPlayers = (
     allPlayers: InGameStatsUser[],
     updatedPlayers: InGameStatsUser[],
-): InGameStatsUser[] => {
+): Map<string, InGameStatsUser> => {
     const map = initializeInGameStatsMap(allPlayers)
 
     for (const player of updatedPlayers) {
@@ -139,7 +139,7 @@ export const subtractInGameStatsPlayers = (
         }
     }
 
-    return Array.from(map.values())
+    return map
 }
 
 const initializeInGameStatsMap = (
