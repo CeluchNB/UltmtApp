@@ -2,25 +2,45 @@ import { LiveGameContext } from '../../context/live-game-context'
 import LivePointUtilityBar from '../molecules/LivePointUtilityBar'
 import PlayerActionView from './PlayerActionView'
 import { PointEditContext } from '../../context/point-edit-context'
-import { TeamActionList } from '../../types/action'
 import TeamActionView from './TeamActionView'
 import { isPulling } from '../../utils/point'
-import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
-import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { useContext } from 'react'
+import { ActionType, TeamActionList } from '../../types/action'
+import { FlatList, StyleSheet, View } from 'react-native'
+import React, { useContext, useMemo } from 'react'
 
 const PointEditView: React.FC<{}> = () => {
-    const navigation = useNavigation()
     const {
         theme: { colors, size, weight },
     } = useTheme()
-    const [finishError, setFinishError] = React.useState<string | undefined>(
-        undefined,
-    )
-    const { game, point, team } = useContext(LiveGameContext)
-    const { myTeamActions, waiting, error, onUndo } =
-        React.useContext(PointEditContext)
+    const {
+        game,
+        point,
+        team,
+        finishGameLoading,
+        finishGameError,
+        finishGame,
+    } = useContext(LiveGameContext)
+    const {
+        myTeamActions,
+        waiting,
+        error: actionError,
+        onUndo,
+    } = useContext(PointEditContext)
+
+    const error = useMemo(() => {
+        return [finishGameError, actionError].filter(msg => !!msg).join(' ')
+    }, [finishGameError, actionError])
+
+    const finishGameDisabled = useMemo(() => {
+        const lastAction = myTeamActions[myTeamActions.length - 1]
+        return (
+            !lastAction ||
+            ![ActionType.TEAM_ONE_SCORE, ActionType.TEAM_TWO_SCORE].includes(
+                lastAction.actionType,
+            )
+        )
+    }, [myTeamActions])
 
     const teamActions = React.useMemo(() => {
         const actionListData = new TeamActionList(myTeamActions, team)
@@ -29,30 +49,6 @@ const PointEditView: React.FC<{}> = () => {
 
     if (!point || !game) {
         return null
-    }
-
-    // TODO: GAME-REFACTOR
-    // const onFinishGame = async () => {
-    //     try {
-    //         setFinishGameLoading(true)
-    //         await finishGame()
-    //         navigation.navigate('Tabs', {
-    //             screen: 'Account',
-    //             params: { screen: 'Profile', initial: false },
-    //         })
-    //     } catch (e) {
-    //         setFinishError(
-    //             (e as ApiError).message ?? Constants.FINISH_GAME_ERROR,
-    //         )
-    //     } finally {
-    //         setFinishGameLoading(false)
-    //     }
-    // }
-
-    const onUndoPress = async () => {
-        if (myTeamActions.length > 0) {
-            await onUndo()
-        }
     }
 
     const styles = StyleSheet.create({
@@ -86,10 +82,17 @@ const PointEditView: React.FC<{}> = () => {
                             error={error}
                             loading={waiting}
                             undoDisabled={waiting || myTeamActions.length === 0}
-                            onUndo={onUndoPress}
+                            onUndo={onUndo}
                             onEdit={() => {
                                 // TODO: GAME-REFACTOR
                                 // navigation.navigate('EditGame')
+                            }}
+                            actionButton={{
+                                title: 'Finish Game',
+                                loading: finishGameLoading,
+                                leftIcon: 'arrow-right',
+                                disabled: false,
+                                onAction: finishGame,
                             }}
                         />
                         <PlayerActionView
@@ -100,17 +103,10 @@ const PointEditView: React.FC<{}> = () => {
                         />
                         <TeamActionView actions={teamActions} />
                         {/* 
-                            // TODO: GAME-REFACTOR
-                            <PrimaryButton
-                            style={styles.button}
-                            onPress={onFinishGame}
-                            text="finish game"
-                            loading={finishGameLoading}
-                            disabled={finishDisable}
-                        /> */}
+                         TODO: GAME-REFACTOR error displayed in live action bar
                         {finishError && (
                             <Text style={styles.error}>{finishError}</Text>
-                        )}
+                        )} */}
                         {/* TODO: GAME-REFACTOR {myTeamActions.length > 0 && (
                             <View>
                                 <Text style={styles.header}>Last Action</Text>

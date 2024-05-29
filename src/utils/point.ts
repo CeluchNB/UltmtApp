@@ -1,4 +1,5 @@
 import { DisplayUser } from '../types/user'
+import { PointSchema } from '../models'
 import { TeamNumber } from '../types/team'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
 import Point, { ClientPoint, PointStatus } from '../types/point'
@@ -229,4 +230,26 @@ export const removePlayerFromArray = (
         return
     }
     playerArray.splice(index, 1)
+}
+
+export const parsePoint = (schema: PointSchema): Point => {
+    return JSON.parse(
+        JSON.stringify({
+            _id: schema._id,
+            pointNumber: schema.pointNumber,
+            teamOnePlayers: schema.teamOnePlayers,
+            teamTwoPlayers: schema.teamTwoPlayers,
+            teamOneActivePlayers: schema.teamOneActivePlayers,
+            teamTwoActivePlayers: schema.teamTwoActivePlayers,
+            teamOneScore: schema.teamOneScore,
+            teamTwoScore: schema.teamTwoScore,
+            pullingTeam: schema.pullingTeam,
+            receivingTeam: schema.receivingTeam,
+            scoringTeam: schema.scoringTeam,
+            teamOneStatus: schema.teamOneStatus,
+            teamTwoStatus: schema.teamTwoStatus,
+            teamOneActions: schema.teamOneActions,
+            teamTwoActions: schema.teamTwoActions,
+        }),
+    )
 }

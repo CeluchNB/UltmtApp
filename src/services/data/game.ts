@@ -238,26 +238,27 @@ export const joinGame = async (
  * Method to finish a game as a game editor
  * @returns the updated game
  */
-export const finishGame = async (): Promise<Game> => {
-    try {
-        const offline = await localActiveGameOffline()
-        if (offline) {
-            const gameId = await localActiveGameId()
-            const game = await localGetGameById(gameId)
-            game.teamOneStatus = GameStatus.COMPLETE
-            await localSaveGame(game)
-            return game
-        } else {
-            const response = await withGameToken(networkFinishGame)
-            const { game } = response.data
+// TODO: GAME-REFACTOR delete
+// export const finishGame = async (): Promise<Game> => {
+//     try {
+//         const offline = await localActiveGameOffline()
+//         if (offline) {
+//             const gameId = await localActiveGameId()
+//             const game = await localGetGameById(gameId)
+//             game.teamOneStatus = GameStatus.COMPLETE
+//             await localSaveGame(game)
+//             return game
+//         } else {
+//             const response = await withGameToken(networkFinishGame)
+//             const { game } = response.data
 
-            // await localDeleteFullGame(game._id)
-            return game
-        }
-    } catch (e) {
-        return throwApiError(e, Constants.FINISH_GAME_ERROR)
-    }
-}
+//             // await localDeleteFullGame(game._id)
+//             return game
+//         }
+//     } catch (e) {
+//         return throwApiError(e, Constants.FINISH_GAME_ERROR)
+//     }
+// }
 
 /**
  * Get all games associated with a specific team. (Team ID must be teamOne's or teamTwo's _id)

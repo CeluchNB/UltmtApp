@@ -12,7 +12,8 @@ interface LivePointUtilityBarProps {
     actionButton?: {
         title: string
         loading: boolean
-        rightIcon?: string
+        leftIcon?: string
+        disabled: boolean
         onAction: () => void
     }
 }
@@ -30,44 +31,66 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
     } = useTheme()
 
     const styles = StyleSheet.create({
-        headerContainer: {
+        actionsContainer: {
             flexDirection: 'row',
-            alignSelf: 'flex-end',
+        },
+        leftContainer: {
+            alignContent: 'flex-start',
+            flexDirection: 'row',
+            flex: 1,
+        },
+        rightContainer: {
+            alignContent: 'flex-end',
+            alignSelf: 'center',
         },
         error: {
             color: colors.error,
             width: '75%',
         },
+        actionButton: { alignSelf: 'center' },
+        actionButtonContent: { flexDirection: 'row-reverse' },
     })
 
     return (
-        <View style={styles.headerContainer}>
-            <Text style={styles.error}>{error}</Text>
-            {!error && loading && (
-                <ActivityIndicator color={colors.textPrimary} size="small" />
-            )}
-            <IconButton
-                icon="undo"
-                iconColor={colors.textPrimary}
-                onPress={onUndo}
-                disabled={undoDisabled}
-                testID="undo-button"
-            />
-            <IconButton
-                icon="pencil"
-                iconColor={colors.textPrimary}
-                onPress={onEdit}
-                testID="edit-button"
-            />
-            {actionButton && (
-                <Button
-                    textColor={colors.textPrimary}
-                    onPress={actionButton.onAction}
-                    loading={actionButton.loading}
-                    icon={actionButton.rightIcon}>
-                    {actionButton.title}
-                </Button>
-            )}
+        <View>
+            <View style={styles.actionsContainer}>
+                <View style={styles.leftContainer}>
+                    <IconButton
+                        icon="pencil"
+                        iconColor={colors.textPrimary}
+                        onPress={onEdit}
+                        testID="edit-button"
+                    />
+                    <IconButton
+                        icon="undo"
+                        iconColor={colors.textPrimary}
+                        onPress={onUndo}
+                        disabled={undoDisabled}
+                        testID="undo-button"
+                    />
+                    {!error && loading && (
+                        <ActivityIndicator
+                            color={colors.textPrimary}
+                            size="small"
+                        />
+                    )}
+                </View>
+                {actionButton && (
+                    <View style={styles.rightContainer}>
+                        <Button
+                            textColor={colors.textPrimary}
+                            onPress={actionButton.onAction}
+                            loading={actionButton.loading}
+                            style={styles.actionButton}
+                            contentStyle={styles.actionButtonContent}
+                            disabled={actionButton.disabled}
+                            icon={actionButton.leftIcon}>
+                            {actionButton.title}
+                        </Button>
+                    </View>
+                )}
+            </View>
+            {error && <Text style={styles.error}>{error}</Text>}
         </View>
     )
 }

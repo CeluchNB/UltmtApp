@@ -311,6 +311,7 @@ export const createGuest = async (
     inGame = false,
 ): Promise<Team> => {
     try {
+        // TODO: GAME-REFACTOR unneeded after refactor?
         const offline = await isActiveGameOffline()
 
         if (inGame && offline) {

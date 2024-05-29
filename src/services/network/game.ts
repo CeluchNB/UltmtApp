@@ -92,13 +92,14 @@ export const joinGame = async (
 
 export const finishGame = async (token: string) => {
     return await axios.put(
-        `${API_URL_V1}/game/finish`,
+        `${API_URL_V2}/game/finish`,
         {},
         {
             headers: {
                 'X-API-Key': API_KEY,
                 authorization: `Bearer ${token}`,
             },
+            validateStatus: () => true,
         },
     )
 }

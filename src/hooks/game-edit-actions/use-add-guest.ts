@@ -1,30 +1,36 @@
+import { GuestUser } from '../../types/user'
 import { LiveGameContext } from '../../context/live-game-context'
-import { createGuest } from '../../services/data/team'
+import { createGuest } from '../../services/network/team'
 import { updateInGameStatsPlayers } from '../../utils/in-game-stats'
 import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { useRealm } from '../../context/realm'
+import { withToken } from '../../services/data/auth'
 
 export const useAddGuest = (teamId: string) => {
     const realm = useRealm()
     const { game } = useContext(LiveGameContext)
 
     const { mutateAsync, isLoading, isError, error } = useMutation(
-        (player: { firstName: string; lastName: string }) =>
-            createGuest(teamId, player.firstName, player.lastName, true),
-        {
-            onSuccess: team => {
-                realm.write(() => {
-                    game.teamOnePlayers = []
-                    const newPlayers = updateInGameStatsPlayers(
-                        game.teamOnePlayers,
-                        team.players,
-                    )
-                    for (const player of newPlayers) {
-                        game.teamOnePlayers.push(player)
-                    }
-                })
-            },
+        async (player: GuestUser) => {
+            const response = await withToken(createGuest, teamId, {
+                firstName: player.firstName,
+                lastName: player.lastName,
+            })
+
+            const { team } = response.data
+
+            // TOOD: GAME-REFACTOR update separately saved team?
+            realm.write(() => {
+                game.teamOnePlayers = []
+                const newPlayers = updateInGameStatsPlayers(
+                    game.teamOnePlayers,
+                    team.players,
+                )
+                for (const newPlayer of newPlayers) {
+                    game.teamOnePlayers.push(newPlayer)
+                }
+            })
         },
     )
 

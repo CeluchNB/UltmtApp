@@ -1,6 +1,7 @@
 import { InGameStatsUser } from '../types/user'
 import { TeamNumber } from '../types/team'
 import { parseInGameStatsUser } from '../utils/in-game-stats'
+import { useFinishGame } from '../hooks/game-edit-actions/use-finish-game'
 import { useQuery } from './realm'
 import { GameSchema, PointSchema } from '../models'
 import React, { ReactNode, createContext, useMemo, useState } from 'react'
@@ -9,8 +10,12 @@ interface LiveGameContextData {
     game: GameSchema
     point: PointSchema
     team: TeamNumber
+    teamId?: string
     players: InGameStatsUser[] | undefined
     setCurrentPointNumber: (pointNumber: number) => void
+    finishGame: () => Promise<void>
+    finishGameLoading: boolean
+    finishGameError?: string
 }
 
 export const LiveGameContext = createContext<LiveGameContextData>(
@@ -50,6 +55,9 @@ const LiveGameProvider = ({
     }, [pointQuery])
 
     const [team] = useState<TeamNumber>(teamNumber)
+    const teamId = useMemo(() => {
+        return team === 'one' ? game?.teamOne._id : game?.teamTwo._id
+    }, [team, game])
 
     const players = useMemo(() => {
         if (team === 'one') {
@@ -73,7 +81,11 @@ const LiveGameProvider = ({
         }
     }, [game, team])
 
-    // TODO: GAME-REFACTOR finish game
+    const {
+        mutateAsync: finishGame,
+        isLoading: finishGameLoading,
+        error: finishGameError,
+    } = useFinishGame(gameId)
 
     return (
         <LiveGameContext.Provider
@@ -83,7 +95,11 @@ const LiveGameProvider = ({
                 point: point!,
                 team,
                 players,
+                teamId,
                 setCurrentPointNumber,
+                finishGame,
+                finishGameLoading,
+                finishGameError: finishGameError?.message,
             }}>
             {children}
         </LiveGameContext.Provider>

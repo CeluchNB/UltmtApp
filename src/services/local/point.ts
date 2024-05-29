@@ -3,30 +3,9 @@ import { Game } from '../../types/game'
 import { PointSchema } from '../../models'
 import { Realm } from '@realm/react'
 import { getRealm } from '../../models/realm'
+import { parsePoint } from '../../utils/point'
 import { throwLocalError } from '../../utils/service-utils'
 import Point, { PointStatus } from '../../types/point'
-
-const parsePoint = (schema: PointSchema): Point => {
-    return JSON.parse(
-        JSON.stringify({
-            _id: schema._id,
-            pointNumber: schema.pointNumber,
-            teamOnePlayers: schema.teamOnePlayers,
-            teamTwoPlayers: schema.teamTwoPlayers,
-            teamOneActivePlayers: schema.teamOneActivePlayers,
-            teamTwoActivePlayers: schema.teamTwoActivePlayers,
-            teamOneScore: schema.teamOneScore,
-            teamTwoScore: schema.teamTwoScore,
-            pullingTeam: schema.pullingTeam,
-            receivingTeam: schema.receivingTeam,
-            scoringTeam: schema.scoringTeam,
-            teamOneStatus: schema.teamOneStatus,
-            teamTwoStatus: schema.teamTwoStatus,
-            teamOneActions: schema.teamOneActions,
-            teamTwoActions: schema.teamTwoActions,
-        }),
-    )
-}
 
 export const createOfflinePoint = async (
     pulling: boolean,

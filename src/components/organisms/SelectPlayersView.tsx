@@ -4,7 +4,6 @@ import GuestPlayerModal from '../molecules/GuestPlayerModal'
 import { LiveGameContext } from '../../context/live-game-context'
 import LivePointUtilityBar from '../molecules/LivePointUtilityBar'
 import { PointEditContext } from '../../context/point-edit-context'
-import SecondaryButton from '../atoms/SecondaryButton'
 import { isPulling } from '../../utils/point'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
@@ -17,7 +16,7 @@ const SelectPlayersView: React.FC<{}> = () => {
     const {
         theme: { colors, size },
     } = useTheme()
-    const { game, point, team, players } = useContext(LiveGameContext)
+    const { game, point, team, teamId, players } = useContext(LiveGameContext)
     const { selectPlayers } = useContext(PointEditContext)
     const { selectedPlayers, toggleSelection } = selectPlayers
 
@@ -111,7 +110,8 @@ const SelectPlayersView: React.FC<{}> = () => {
                             actionButton={{
                                 title: 'Add Guest',
                                 loading: false,
-                                rightIcon: 'plus',
+                                leftIcon: 'plus',
+                                disabled: false,
                                 onAction: () => setGuestModalVisible(true),
                             }}
                         />
@@ -157,27 +157,17 @@ const SelectPlayersView: React.FC<{}> = () => {
                 ListFooterComponent={
                     <View>
                         {/* {isError && (
-                                TODO: GAME-REFACTOR
+                                TODO: GAME-REFACTOR display add guest error in live point utility bar
                                 <Text style={styles.errorText}>
                                     {error?.toString()}
                                 </Text>
                             )} */}
-                        <SecondaryButton
-                            style={styles.button}
-                            onPress={async () => {
-                                setGuestModalVisible(true)
-                            }}
-                            text="add guest"
-                        />
                     </View>
                 }
             />
             <GuestPlayerModal
                 visible={guestModalVisible}
-                teamId={
-                    // TODO: GAME-REFACTOR
-                    game.teamOne._id
-                }
+                teamId={teamId ?? ''}
                 onClose={() => {
                     setGuestModalVisible(false)
                 }}
