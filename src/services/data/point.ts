@@ -92,52 +92,6 @@ const createOfflinePoint = async (
     return pointId
 }
 
-// const addPointToGame = async (gameId: string, pointId: string) => {
-//     const game = await localGetGameById(gameId)
-//     await localSaveGame({ ...game })
-// }
-
-// TODO: GAME-REFACTOR
-// should be unnecessary
-/**
- * Method to select the players of a specific point
- * @param pointId id of point
- * @param players array of players (length must equal game's players per point value)
- * @returns updated point
- */
-export const setPlayers = async (
-    pointId: string,
-    players: DisplayUser[],
-): Promise<Point> => {
-    try {
-        const offline = await localGetActiveGameOffline()
-        if (offline) {
-            await updateOfflinePoint(pointId, {
-                teamOnePlayers: players,
-                teamOneActivePlayers: players,
-            })
-        } else {
-            const response = await withGameToken(
-                networkSetPlayers,
-                pointId,
-                players,
-            )
-            const { point } = response.data
-            await localSavePoint(point)
-        }
-        const result = await localGetPointById(pointId)
-        return result
-    } catch (e) {
-        return throwApiError(e, Constants.SET_PLAYERS_ERROR)
-    }
-}
-
-const updateOfflinePoint = async (pointId: string, data: Partial<Point>) => {
-    const point = await localGetPointById(pointId)
-    const submit = { ...point, ...data }
-    await localSavePoint(submit)
-}
-
 /**
  * Method to finish a point. In the backend this moves actions out of redis and to mongo.
  * @param pointId id of point to finish
@@ -294,33 +248,6 @@ export const getLiveActionsByPoint = async (
         const { actions } = response.data
 
         return actions
-    } catch (e) {
-        return throwApiError(e, Constants.GET_POINT_ERROR)
-    }
-}
-
-/**
- * Method to get the currently active point of a game that
- * is being reactivated locally
- * @param game resurrected game
- * @returns active point
- */
-// TODO: GAME-REFACTOR
-export const getActivePointForGame = async (
-    game: Game,
-): Promise<Point | undefined> => {
-    try {
-        let activePoint: Point | undefined
-        // for (const id of game.points) {
-        //     const localPoint = await localGetPointById(id)
-        //     if (
-        //         !activePoint ||
-        //         localPoint.pointNumber > activePoint.pointNumber
-        //     ) {
-        //         activePoint = localPoint
-        //     }
-        // }
-        return undefined
     } catch (e) {
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }

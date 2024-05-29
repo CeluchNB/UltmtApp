@@ -2,7 +2,6 @@ import { ClientActionData } from '../types/action'
 import EventEmitter from 'eventemitter3'
 import { LiveGameContext } from '../context/live-game-context'
 import { LocalPointEvents } from '../types/point'
-import { activeGameOffline } from '../services/data/game'
 import { useCreateAction } from './game-edit-actions/use-create-action'
 import usePointSocket from './usePointSocket'
 import { useUndoAction } from './game-edit-actions/use-undo-action'
@@ -17,13 +16,12 @@ const usePointLocal = () => {
     const { game, point } = useContext(LiveGameContext)
     const networkEmitter = usePointSocket(game._id, point._id)
     const [localEmitter] = useState(new EventEmitter())
-    const [offline, setOffline] = useState(false)
 
     const { mutateAsync: createAction } = useCreateAction()
     const { mutateAsync: undoAction } = useUndoAction()
 
     const emitOrHandle = (event: string, data?: unknown) => {
-        if (offline) {
+        if (game.offline) {
             handleOfflineEvent(event, data)
         } else {
             networkEmitter.emit(event, data)
@@ -31,11 +29,6 @@ const usePointLocal = () => {
     }
 
     useEffect(() => {
-        // TODO: GAME-REFACTOR get offline straight from game object
-        activeGameOffline().then(isOffline => {
-            setOffline(isOffline)
-        })
-
         localEmitter.off(LocalPointEvents.ACTION_EMIT)
         localEmitter.on(LocalPointEvents.ACTION_EMIT, data =>
             emitOrHandle(LocalPointEvents.ACTION_EMIT, data),
