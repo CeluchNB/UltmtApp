@@ -2,6 +2,7 @@ import { ActionSchema } from '../models'
 import ActionStack from '../utils/action-stack'
 import { DisplayUser } from '../types/user'
 import { LiveGameContext } from './live-game-context'
+import { MutationData } from '../types/mutation'
 import { parseUser } from '../utils/player'
 import { useBackPoint } from '../hooks/game-edit-actions/use-back-point'
 import useLivePoint from '../hooks/useLivePoint'
@@ -32,9 +33,9 @@ interface PointEditContextData {
     error: string
     onAction: DebouncedFunc<(action: Action) => Promise<void>>
     onUndo: DebouncedFunc<() => Promise<void>>
-    setPlayers: () => Promise<void>
-    nextPoint: () => Promise<void>
-    backPoint: () => Promise<void>
+    setPlayers: MutationData
+    nextPoint: MutationData
+    backPoint: MutationData
     selectPlayers: ReturnType<typeof useSelectPlayers>
 }
 
@@ -84,12 +85,21 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     }, [actions])
 
     const selectPlayers = useSelectPlayers()
-    const { setPlayers: setPlayersMutation } = useSetPlayers(
-        point._id,
-        selectPlayers.selectedPlayers,
-    )
-    const { nextPoint: nextPointMutation } = useNextPoint(point._id)
-    const { backPoint: backPointMutation } = useBackPoint(point._id)
+    const {
+        mutateAsync: setPlayersMutation,
+        isLoading: setPlayersLoading,
+        error: setPlayersError,
+    } = useSetPlayers(point._id, selectPlayers.selectedPlayers)
+    const {
+        mutateAsync: nextPointMutation,
+        isLoading: nextPointLoading,
+        error: nextPointError,
+    } = useNextPoint(point._id)
+    const {
+        mutateAsync: backPointMutation,
+        isLoading: backPointLoading,
+        error: backPointError,
+    } = useBackPoint(point._id)
 
     const teamOneActions = useMemo(() => {
         return actionStack.getTeamOneActions()
@@ -136,15 +146,6 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onUndoDebounced = React.useCallback(debounce(handleUndo, 150), [])
 
-    // const onFinishGame = async () => {
-    //     await finishPoint(point, myTeamActions, teamNumber)
-    //     onNextPoint()
-
-    //     await finishGame()
-    //     dispatch(resetGame())
-    //     dispatch(resetPoint())
-    // }
-
     const setPlayers = async () => {
         await setPlayersMutation()
         selectPlayers.clearSelection()
@@ -171,9 +172,21 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                 error: error ?? '',
                 onAction: onActionDebounced,
                 onUndo: onUndoDebounced,
-                setPlayers,
-                nextPoint,
-                backPoint,
+                setPlayers: {
+                    mutate: setPlayers,
+                    error: setPlayersError?.message,
+                    isLoading: setPlayersLoading,
+                },
+                nextPoint: {
+                    mutate: nextPoint,
+                    error: nextPointError?.message,
+                    isLoading: nextPointLoading,
+                },
+                backPoint: {
+                    mutate: backPoint,
+                    error: backPointError?.message,
+                    isLoading: backPointLoading,
+                },
                 selectPlayers,
             }}>
             {children}

@@ -21,9 +21,9 @@ export const useLiveGameWizard = () => {
 
     const next = async () => {
         if (state === LiveGameWizardState.SET_PLAYERS) {
-            await setPlayers()
+            await setPlayers.mutate()
         } else if (state === LiveGameWizardState.LOG_ACTIONS) {
-            await nextPoint()
+            await nextPoint.mutate()
         }
     }
 
@@ -36,7 +36,7 @@ export const useLiveGameWizard = () => {
 
     const back = async () => {
         if (state === LiveGameWizardState.SET_PLAYERS) {
-            await backPoint()
+            await backPoint.mutate()
         }
     }
 

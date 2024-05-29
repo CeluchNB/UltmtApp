@@ -84,6 +84,7 @@ export const withToken = async (
     networkCall: (token: string, ...args: any) => Promise<AxiosResponse>,
     ...args: any
 ): Promise<AxiosResponse> => {
+    // TODO: GAME-REFACTOR - must handle axios not throwing case
     try {
         const currentToken =
             (await EncryptedStorage.getItem('access_token')) || ''

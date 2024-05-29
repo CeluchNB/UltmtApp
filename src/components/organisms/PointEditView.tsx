@@ -26,11 +26,14 @@ const PointEditView: React.FC<{}> = () => {
         waiting,
         error: actionError,
         onUndo,
+        nextPoint,
     } = useContext(PointEditContext)
 
     const error = useMemo(() => {
-        return [finishGameError, actionError].filter(msg => !!msg).join(' ')
-    }, [finishGameError, actionError])
+        return [finishGameError, actionError, nextPoint.error]
+            .filter(msg => !!msg)
+            .join(' ')
+    }, [finishGameError, actionError, nextPoint])
 
     const finishGameDisabled = useMemo(() => {
         const lastAction = myTeamActions[myTeamActions.length - 1]
@@ -91,7 +94,7 @@ const PointEditView: React.FC<{}> = () => {
                                 title: 'Finish Game',
                                 loading: finishGameLoading,
                                 leftIcon: 'arrow-right',
-                                disabled: false,
+                                disabled: finishGameDisabled,
                                 onAction: finishGame,
                             }}
                         />
@@ -102,11 +105,6 @@ const PointEditView: React.FC<{}> = () => {
                             team={team}
                         />
                         <TeamActionView actions={teamActions} />
-                        {/* 
-                         TODO: GAME-REFACTOR error displayed in live action bar
-                        {finishError && (
-                            <Text style={styles.error}>{finishError}</Text>
-                        )} */}
                         {/* TODO: GAME-REFACTOR {myTeamActions.length > 0 && (
                             <View>
                                 <Text style={styles.header}>Last Action</Text>

@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
 import { Chip, IconButton, Tooltip } from 'react-native-paper'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 
 const SelectPlayersView: React.FC<{}> = () => {
     const navigation = useNavigation()
@@ -17,12 +17,19 @@ const SelectPlayersView: React.FC<{}> = () => {
         theme: { colors, size },
     } = useTheme()
     const { game, point, team, teamId, players } = useContext(LiveGameContext)
-    const { selectPlayers } = useContext(PointEditContext)
+    const { selectPlayers, setPlayers, backPoint } =
+        useContext(PointEditContext)
     const { selectedPlayers, toggleSelection } = selectPlayers
 
     const [guestModalVisible, setGuestModalVisible] = useState(false)
     const [pullingModalVisible, setPullingModalVisible] = useState(false)
     const [confirmModalVisible, setConfirmModalVisible] = useState(false)
+
+    const error = useMemo(() => {
+        return [setPlayers.error, backPoint.error]
+            .filter(msg => !!msg)
+            .join(' ')
+    }, [setPlayers, backPoint])
 
     const styles = StyleSheet.create({
         flatList: {
@@ -114,6 +121,7 @@ const SelectPlayersView: React.FC<{}> = () => {
                                 disabled: false,
                                 onAction: () => setGuestModalVisible(true),
                             }}
+                            error={error}
                         />
                         <View style={styles.statsKeyContainer}>
                             <Text style={styles.statsKey}>
@@ -154,16 +162,6 @@ const SelectPlayersView: React.FC<{}> = () => {
                         </Chip>
                     )
                 }}
-                ListFooterComponent={
-                    <View>
-                        {/* {isError && (
-                                TODO: GAME-REFACTOR display add guest error in live point utility bar
-                                <Text style={styles.errorText}>
-                                    {error?.toString()}
-                                </Text>
-                            )} */}
-                    </View>
-                }
             />
             <GuestPlayerModal
                 visible={guestModalVisible}

@@ -1,3 +1,4 @@
+import { ApiError } from '../../types/services'
 import { BSON } from 'realm'
 import { InGameStatsUser } from '../../types/user'
 import { LiveGameContext } from '../../context/live-game-context'
@@ -23,20 +24,32 @@ export const useBackPoint = (currentPointId: string) => {
     const { game, point, team, setCurrentPointNumber } =
         useContext(LiveGameContext)
 
-    const { mutateAsync, isLoading, error } = useMutation(
-        async () => {
-            // TODO: GAME-REFACTOR ensure network error correctly passed to error prop
+    const updatePlayerStats = (stats: InGameStatsUser[]) => {
+        const players =
+            team === 'one' ? game.teamOnePlayers : game.teamTwoPlayers
+        const newPlayers = subtractInGameStatsPlayers(players, stats)
+
+        for (let i = 0; i < players.length; i++) {
+            // TODO: GAME-REFACTOR use map instead of find?
+            const newPlayer = newPlayers.find(p => p._id === players[i]._id)
+            if (!newPlayer) continue
+
+            players[i] = newPlayer
+        }
+    }
+
+    return useMutation<undefined, ApiError>({
+        mutationFn: async () => {
             const response = await withGameToken(backPoint, point?.pointNumber)
 
             const { point: pointResponse, actions: actionsResponse } =
                 response.data
 
+            const schema = new PointSchema(pointResponse)
             realm.write(() => {
                 realm.delete(actions)
-                const schema = new PointSchema(pointResponse)
                 realm.create('Point', schema)
 
-                // TODO: GAME-REFACTOR START HERE - UNDO DOES NOT WORK AFTER GOING BACK A POINT? Seems to work now
                 for (const action of actionsResponse) {
                     const actionSchema = new ActionSchema(
                         { ...action, teamNumber: team },
@@ -54,37 +67,9 @@ export const useBackPoint = (currentPointId: string) => {
                     game.statsPoints[game.statsPoints.length - 1].pointStats,
                 )
                 realm.delete(game.statsPoints[game.statsPoints.length - 1])
+                realm.delete(point)
             })
             setCurrentPointNumber(pointResponse.pointNumber)
-
-            return { pointResponse, actionsResponse }
         },
-        {
-            onSuccess: () => {
-                realm.write(() => {
-                    realm.delete(point)
-                })
-            },
-        },
-    )
-
-    const updatePlayerStats = (stats: InGameStatsUser[]) => {
-        const players =
-            team === 'one' ? game.teamOnePlayers : game.teamTwoPlayers
-        const newPlayers = subtractInGameStatsPlayers(players, stats)
-
-        for (let i = 0; i < players.length; i++) {
-            // TODO: GAME-REFACTOR use map instead of find?
-            const newPlayer = newPlayers.find(p => p._id === players[i]._id)
-            if (!newPlayer) continue
-
-            players[i] = newPlayer
-        }
-    }
-
-    return {
-        backPoint: mutateAsync,
-        isLoading,
-        error,
-    }
+    })
 }

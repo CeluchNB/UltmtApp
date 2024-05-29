@@ -1,3 +1,4 @@
+import { ApiError } from '../../types/services'
 import { InGameStatsUser } from '../../types/user'
 import { LiveGameContext } from '../../context/live-game-context'
 import { TeamNumber } from '../../types/team'
@@ -34,48 +35,6 @@ export const useNextPoint = (currentPointId: string) => {
         }
     }, [point, team])
 
-    const { mutateAsync, isLoading, error } = useMutation(
-        async (pullingTeam: TeamNumber) => {
-            if (!point) return
-
-            // TODO: GAME-REFACTOR ensure network error correctly passed to error prop
-            const response = await withGameToken(
-                nextPoint,
-                pullingTeam,
-                point.pointNumber,
-            )
-            const { point: pointResponse } = response.data
-
-            const stats = generatePlayerStatsForPoint(
-                allPointPlayers,
-                actions.filter(action => action.teamNumber === team),
-            )
-
-            const schema = new PointSchema(pointResponse)
-            realm.write(() => {
-                realm.delete(actions)
-                realm.create('Point', schema)
-
-                game.teamOneScore = schema.teamOneScore
-                game.teamTwoScore = schema.teamTwoScore
-
-                updatePlayerStats(stats)
-                game.statsPoints.push({ _id: point._id, pointStats: stats })
-            })
-            setCurrentPointNumber(pointResponse.pointNumber)
-
-            return pointResponse
-        },
-        {
-            onSuccess: () => {
-                realm.write(() => {
-                    // TODO: GAME-REFACTOR is this safe?
-                    realm.delete(point)
-                })
-            },
-        },
-    )
-
     const updatePlayerStats = (stats: InGameStatsUser[]) => {
         const players =
             team === 'one' ? game.teamOnePlayers : game.teamTwoPlayers
@@ -90,9 +49,33 @@ export const useNextPoint = (currentPointId: string) => {
         }
     }
 
-    return {
-        nextPoint: mutateAsync,
-        isLoading,
-        error,
-    }
+    return useMutation<undefined, ApiError, TeamNumber>(async pullingTeam => {
+        if (!point) return
+
+        const response = await withGameToken(
+            nextPoint,
+            pullingTeam,
+            point.pointNumber,
+        )
+        const { point: pointResponse } = response.data
+
+        const stats = generatePlayerStatsForPoint(
+            allPointPlayers,
+            actions.filter(action => action.teamNumber === team),
+        )
+
+        const schema = new PointSchema(pointResponse)
+        realm.write(() => {
+            realm.delete(actions)
+            realm.create('Point', schema)
+
+            game.teamOneScore = schema.teamOneScore
+            game.teamTwoScore = schema.teamTwoScore
+
+            updatePlayerStats(stats)
+            game.statsPoints.push({ _id: point._id, pointStats: stats })
+            realm.delete(point)
+        })
+        setCurrentPointNumber(pointResponse.pointNumber)
+    })
 }
