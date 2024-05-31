@@ -1,6 +1,5 @@
 import { ActionSchema } from '../models'
 import ActionStack from '../utils/action-stack'
-import { DisplayUser } from '../types/user'
 import { LiveGameContext } from './live-game-context'
 import { MutationData } from '../types/mutation'
 import { parseUser } from '../utils/player'
@@ -13,6 +12,7 @@ import { useSelectPlayers } from '../hooks/game-edit-actions/use-select-players'
 import { useSetPlayers } from '../hooks/game-edit-actions/use-set-players'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
+import { DisplayUser, InGameStatsUser } from '../types/user'
 import React, {
     createContext,
     useContext,
@@ -36,7 +36,7 @@ interface PointEditContextData {
     setPlayers: MutationData
     nextPoint: MutationData
     backPoint: MutationData
-    selectPlayers: ReturnType<typeof useSelectPlayers>
+    selectPlayers: Omit<ReturnType<typeof useSelectPlayers>, 'clearSelection'>
 }
 
 export const PointEditContext = createContext<PointEditContextData>(
@@ -89,16 +89,19 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         mutateAsync: setPlayersMutation,
         isLoading: setPlayersLoading,
         error: setPlayersError,
+        reset: setPlayersReset,
     } = useSetPlayers(point._id, selectPlayers.selectedPlayers)
     const {
         mutateAsync: nextPointMutation,
         isLoading: nextPointLoading,
         error: nextPointError,
+        reset: nextPointReset,
     } = useNextPoint(point._id)
     const {
         mutateAsync: backPointMutation,
         isLoading: backPointLoading,
         error: backPointError,
+        reset: backPointReset,
     } = useBackPoint(point._id)
 
     const teamOneActions = useMemo(() => {
@@ -126,6 +129,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     }, [point, team])
 
     const handleAction = async (action: Action) => {
+        resetMutations()
         setWaitingForActionResponse(true)
         const clientAction = parseClientAction({
             ...action.action,
@@ -139,6 +143,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     ])
 
     const handleUndo = async () => {
+        resetMutations()
         setWaitingForActionResponse(true)
         onUndo()
     }
@@ -147,11 +152,13 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const onUndoDebounced = React.useCallback(debounce(handleUndo, 150), [])
 
     const setPlayers = async () => {
+        resetMutations()
         await setPlayersMutation()
         selectPlayers.clearSelection()
     }
 
     const nextPoint = async () => {
+        resetMutations()
         const lastAction = myTeamActions[myTeamActions.length - 1].actionType
         await nextPointMutation(
             lastAction === ActionType.TEAM_ONE_SCORE ? 'one' : 'two',
@@ -160,7 +167,19 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     }
 
     const backPoint = async () => {
+        resetMutations()
         await backPointMutation()
+    }
+
+    const togglePlayerSelection = (player: InGameStatsUser) => {
+        resetMutations()
+        selectPlayers.toggleSelection(player)
+    }
+
+    const resetMutations = () => {
+        setPlayersReset()
+        nextPointReset()
+        backPointReset()
     }
 
     return (
@@ -187,7 +206,10 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                     error: backPointError?.message,
                     isLoading: backPointLoading,
                 },
-                selectPlayers,
+                selectPlayers: {
+                    selectedPlayers: selectPlayers.selectedPlayers,
+                    toggleSelection: togglePlayerSelection,
+                },
             }}>
             {children}
         </PointEditContext.Provider>

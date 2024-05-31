@@ -10,16 +10,12 @@ export const useCreateAction = () => {
     const { point } = useContext(LiveGameContext)
     const realm = useRealm()
 
-    const { mutateAsync, isLoading } = useMutation(
-        async (action: LiveServerActionData) => {
-            const schema = new ActionSchema(action, point._id)
-            realm.write(() => {
-                realm.create('Action', schema)
-                handleCreateActionSideEffects(point, action)
-            })
-            return schema
-        },
-    )
-
-    return { mutateAsync, isLoading }
+    return useMutation(async (action: LiveServerActionData) => {
+        const schema = new ActionSchema(action, point._id)
+        realm.write(() => {
+            realm.create('Action', schema)
+            handleCreateActionSideEffects(point, action)
+        })
+        return schema
+    })
 }

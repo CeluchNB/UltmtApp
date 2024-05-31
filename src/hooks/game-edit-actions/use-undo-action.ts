@@ -20,7 +20,7 @@ export const useUndoAction = () => {
         [point._id],
     )
 
-    const { mutateAsync, isLoading } = useMutation(async () => {
+    return useMutation(async () => {
         if (!actionQuery || actionQuery.length < 1) return
 
         realm.write(() => {
@@ -28,9 +28,4 @@ export const useUndoAction = () => {
             realm.delete(actionQuery[0])
         })
     })
-
-    return {
-        mutateAsync,
-        isLoading,
-    }
 }

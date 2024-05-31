@@ -98,7 +98,9 @@ const SelectPlayersView: React.FC<{}> = () => {
                             <Chip
                                 testID="active-warning-chip"
                                 mode="outlined"
-                                onPress={() => {}}
+                                onPress={() => {
+                                    // TODO: GAME-REFACTOR
+                                }}
                                 style={styles.setPullingChip}>
                                 <Text style={styles.setPullingText}>
                                     CHANGE PULLING TEAM
