@@ -21,6 +21,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
     const {
         theme: { colors, size, weight },
     } = useTheme()
+    // TODO: GAME-REFACTOR MOVE AWAY FROM liveGame/livePointReducer
     const dispatch = useDispatch<AppDispatch>()
     const game = useSelector(selectGame)
     const createStatus = useSelector(selectCreateStatus)

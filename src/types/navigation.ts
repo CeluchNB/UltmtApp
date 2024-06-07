@@ -1,4 +1,3 @@
-import { GuestTeam } from './team'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RequestType } from './request'
 import {
@@ -79,7 +78,7 @@ export type LiveGameParamList = {
 
 export type TopLevelParamList = {
     Tabs: NavigatorScreenParams<TabParamList>
-    CreateGame: { teamTwo: GuestTeam }
+    CreateGame: undefined
     SelectMyTeam: undefined
     SelectOpponent: { initialValue?: string }
     SearchTournaments: undefined

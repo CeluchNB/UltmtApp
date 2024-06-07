@@ -1,3 +1,4 @@
+import { CreateGameProvider } from './src/context/create-game-context'
 import CreateGameScreen from './src/screens/games/CreateGameScreen'
 import CreateTournamentScreen from './src/screens/games/CreateTournamentScreen'
 import InformationScreen from './src/screens/InformationScreen'
@@ -44,96 +45,108 @@ const App: React.FC<{}> = () => {
     return (
         <NavigationContainer theme={MyTheme}>
             {/* Settings Screen exists here for dark mode purposes */}
-            <Stack.Navigator
-                initialRouteName={'Tabs'}
-                screenOptions={{
-                    headerShown: false,
-                }}>
-                <Stack.Screen name="Tabs" component={TabNavigator} />
-                <Stack.Screen
-                    name="Settings"
-                    component={SettingsScreen}
-                    options={{
-                        title: 'Settings',
-                        headerShown: true,
-                        headerStyle: {
-                            backgroundColor: colors.primary,
-                        },
-                        headerTintColor: colors.textPrimary,
-                        headerBackTitle: 'Back',
-                    }}
-                />
-                <Stack.Screen
-                    name="SecureEdit"
-                    component={SecureEditScreen}
-                    options={{
-                        headerShown: true,
-                        headerStyle: {
-                            backgroundColor: colors.primary,
-                        },
-                        headerTintColor: colors.textPrimary,
-                        headerBackTitle: 'Back',
-                    }}
-                />
-                <Stack.Group
-                    screenOptions={({ route }) => {
-                        return {
+            {/* TODO: GAME-REFACTOR: don't want create game provider this high up */}
+            <CreateGameProvider>
+                <Stack.Navigator
+                    initialRouteName={'Tabs'}
+                    screenOptions={{
+                        headerShown: false,
+                    }}>
+                    <Stack.Screen name="Tabs" component={TabNavigator} />
+                    <Stack.Screen
+                        name="Settings"
+                        component={SettingsScreen}
+                        options={{
+                            title: 'Settings',
                             headerShown: true,
                             headerStyle: {
                                 backgroundColor: colors.primary,
                             },
                             headerTintColor: colors.textPrimary,
-                            title: route.name.split(/(?=[A-Z])/).join(' '),
-                        }
-                    }}>
-                    <Stack.Screen
-                        name="SelectMyTeam"
-                        component={SelectMyTeamScreen}
-                        options={{
-                            headerBackTitleVisible: true,
                             headerBackTitle: 'Back',
                         }}
                     />
                     <Stack.Screen
-                        name="SelectOpponent"
-                        component={SelectOpponentScreen}
+                        name="SecureEdit"
+                        component={SecureEditScreen}
                         options={{
-                            headerBackTitle: 'My Team',
+                            headerShown: true,
+                            headerStyle: {
+                                backgroundColor: colors.primary,
+                            },
+                            headerTintColor: colors.textPrimary,
+                            headerBackTitle: 'Back',
                         }}
                     />
+                    <Stack.Group
+                        screenOptions={({ route }) => {
+                            return {
+                                headerShown: true,
+                                headerStyle: {
+                                    backgroundColor: colors.primary,
+                                },
+                                headerTintColor: colors.textPrimary,
+                                title: route.name.split(/(?=[A-Z])/).join(' '),
+                            }
+                        }}>
+                        <Stack.Screen
+                            name="SelectMyTeam"
+                            component={SelectMyTeamScreen}
+                            options={{
+                                headerBackTitleVisible: true,
+                                headerBackTitle: 'Back',
+                            }}
+                        />
+                        <Stack.Screen
+                            name="SelectOpponent"
+                            component={SelectOpponentScreen}
+                            options={{
+                                headerBackTitle: 'My Team',
+                            }}
+                        />
+                        <Stack.Screen
+                            name="SearchTournaments"
+                            component={SearchTournamentScreen}
+                        />
+                        <Stack.Screen
+                            name="CreateTournament"
+                            component={CreateTournamentScreen}
+                            initialParams={{ name: '' }}
+                            options={{
+                                headerBackTitle: 'Search',
+                            }}
+                        />
+                        <Stack.Screen
+                            name="JoinGame"
+                            component={JoinGameScreen}
+                        />
+                        <Stack.Screen
+                            name="CreateGame"
+                            component={CreateGameScreen}
+                            options={{
+                                title: '',
+                                headerBackTitle: 'Opponent',
+                            }}
+                        />
+                    </Stack.Group>
                     <Stack.Screen
-                        name="SearchTournaments"
-                        component={SearchTournamentScreen}
+                        name="LiveGame"
+                        component={LiveGameNavigator}
                     />
                     <Stack.Screen
-                        name="CreateTournament"
-                        component={CreateTournamentScreen}
-                        initialParams={{ name: '' }}
+                        name="Information"
+                        component={InformationScreen}
                         options={{
-                            headerBackTitle: 'Search',
+                            title: 'More Info',
+                            headerShown: true,
+                            headerStyle: {
+                                backgroundColor: colors.primary,
+                            },
+                            headerTintColor: colors.textPrimary,
                         }}
                     />
-                    <Stack.Screen name="JoinGame" component={JoinGameScreen} />
-                    <Stack.Screen
-                        name="CreateGame"
-                        component={CreateGameScreen}
-                        options={{ title: '', headerBackTitle: 'Opponent' }}
-                    />
-                </Stack.Group>
-                <Stack.Screen name="LiveGame" component={LiveGameNavigator} />
-                <Stack.Screen
-                    name="Information"
-                    component={InformationScreen}
-                    options={{
-                        title: 'More Info',
-                        headerShown: true,
-                        headerStyle: {
-                            backgroundColor: colors.primary,
-                        },
-                        headerTintColor: colors.textPrimary,
-                    }}
-                />
-            </Stack.Navigator>
+                </Stack.Navigator>
+            </CreateGameProvider>
         </NavigationContainer>
     )
 }

@@ -31,7 +31,10 @@ export const createGame = async (
     return await axios.post(
         `${API_URL_V1}/game`,
         { createGameData: data },
-        { headers: { 'X-API-Key': API_KEY, Authorization: `Bearer ${token}` } },
+        {
+            headers: { 'X-API-Key': API_KEY, Authorization: `Bearer ${token}` },
+            validateStatus: () => true,
+        },
     )
 }
 

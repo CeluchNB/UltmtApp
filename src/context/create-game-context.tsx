@@ -1,0 +1,76 @@
+import { CreateGame } from '../types/game'
+import { selectAccount } from '../store/reducers/features/account/accountReducer'
+import { useCreateGame } from '../hooks/use-create-game'
+import { useSelector } from 'react-redux'
+import { DisplayTeam, GuestTeam, Team } from '../types/team'
+import React, { ReactNode, createContext, useState } from 'react'
+
+interface CreateGameContextData {
+    setActiveTeam: (team: Team) => void
+    setTeamTwo: (team: GuestTeam) => void
+    createGame: (
+        data: Omit<
+            CreateGame,
+            'teamOne' | 'teamTwo' | 'teamTwoDefined' | 'creator'
+        >,
+    ) => Promise<void>
+    createLoading: boolean
+    teamOne?: DisplayTeam
+    teamTwo?: GuestTeam
+}
+
+export const CreateGameContext = createContext<CreateGameContextData>(
+    {} as CreateGameContextData,
+)
+
+export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
+    const [activeTeam, setActiveTeam] = useState<DisplayTeam>()
+    const [teamTwo, setTeamTwo] = useState<GuestTeam>()
+    const account = useSelector(selectAccount)
+
+    const { mutateAsync, isLoading } = useCreateGame()
+
+    const reset = () => {
+        setActiveTeam(undefined)
+        setTeamTwo(undefined)
+    }
+
+    const createGame = async (
+        data: Omit<
+            CreateGame,
+            'teamOne' | 'teamTwo' | 'teamTwoDefined' | 'creator'
+        >,
+    ) => {
+        if (!activeTeam || !teamTwo) return
+
+        await mutateAsync(
+            {
+                ...data,
+                teamOne: activeTeam,
+                teamTwo,
+                teamTwoDefined: !!teamTwo._id,
+                creator: {
+                    _id: account._id,
+                    firstName: account.firstName,
+                    lastName: account.lastName,
+                    username: account.username,
+                },
+            },
+            { onSuccess: () => reset() },
+        )
+    }
+
+    return (
+        <CreateGameContext.Provider
+            value={{
+                teamOne: activeTeam,
+                teamTwo,
+                setActiveTeam,
+                setTeamTwo,
+                createGame: createGame,
+                createLoading: isLoading,
+            }}>
+            {children}
+        </CreateGameContext.Provider>
+    )
+}
