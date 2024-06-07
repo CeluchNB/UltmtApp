@@ -4,6 +4,7 @@ import PlayerActionView from './PlayerActionView'
 import { PointEditContext } from '../../context/point-edit-context'
 import TeamActionView from './TeamActionView'
 import { isPulling } from '../../utils/point'
+import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
 import { ActionType, TeamActionList } from '../../types/action'
 import { FlatList, StyleSheet, View } from 'react-native'
@@ -28,6 +29,7 @@ const PointEditView: React.FC<{}> = () => {
         onUndo,
         nextPoint,
     } = useContext(PointEditContext)
+    const navigation = useNavigation()
 
     const error = useMemo(() => {
         return [finishGameError, actionError, nextPoint.error]
@@ -87,8 +89,12 @@ const PointEditView: React.FC<{}> = () => {
                             undoDisabled={waiting || myTeamActions.length === 0}
                             onUndo={onUndo}
                             onEdit={() => {
-                                // TODO: GAME-REFACTOR
-                                // navigation.navigate('EditGame')
+                                navigation.navigate('LiveGame', {
+                                    screen: 'EditGame',
+                                    params: {
+                                        gameId: game._id,
+                                    },
+                                })
                             }}
                             actionButton={{
                                 title: 'Finish Game',

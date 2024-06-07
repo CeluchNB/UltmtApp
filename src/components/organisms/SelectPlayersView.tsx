@@ -99,7 +99,6 @@ const SelectPlayersView: React.FC<{}> = () => {
                                 testID="active-warning-chip"
                                 mode="outlined"
                                 onPress={() => {
-                                    // TODO: GAME-REFACTOR
                                     setPullingModalVisible(true)
                                 }}
                                 style={styles.setPullingChip}>
@@ -115,6 +114,7 @@ const SelectPlayersView: React.FC<{}> = () => {
                             onEdit={() => {
                                 navigation.navigate('LiveGame', {
                                     screen: 'EditGame',
+                                    params: { gameId: game._id },
                                 })
                             }}
                             actionButton={{

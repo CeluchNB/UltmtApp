@@ -1,25 +1,37 @@
+import { ApiError } from '../../types/services'
+import { GameSchema } from '../../models'
 import { UpdateGame } from '../../types/game'
-import { editGame } from '../../services/data/game'
+import { editGame } from '../../services/network/game'
 import { parseUpdateGame } from '../../utils/game'
-import {
-    selectGame,
-    setGame,
-} from '../../store/reducers/features/game/liveGameReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useMutation } from 'react-query'
+import { withGameToken } from '../../services/data/game'
+import { useObject, useRealm } from '../../context/realm'
 
-export const useGameEditor = () => {
-    // TODO: GAME-REFACTOR don't use redux
-    const dispatch = useDispatch()
-    const game = useSelector(selectGame)
+export const useGameEditor = (gameId: string) => {
+    const realm = useRealm()
+    const game = useObject<GameSchema>('Game', gameId)
 
-    const onEditGame = async (gameData: UpdateGame) => {
+    const { mutateAsync, isLoading, error } = useMutation<
+        void,
+        ApiError,
+        UpdateGame
+    >(async (gameData: UpdateGame) => {
         const data = parseUpdateGame(gameData)
-        const result = await editGame(game._id, data)
-        dispatch(setGame(result))
-    }
+        const response = await withGameToken(editGame, data)
+        const { game: gameResponse } = response.data
+
+        const schema = new GameSchema(gameResponse, false, game?.statsPoints)
+        realm.write(() => {
+            realm.delete(game)
+
+            realm.create('Game', schema)
+        })
+    })
 
     return {
         game,
-        onEditGame,
+        mutateAsync,
+        isLoading,
+        error,
     }
 }
