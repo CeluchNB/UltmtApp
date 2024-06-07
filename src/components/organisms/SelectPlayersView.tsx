@@ -100,6 +100,7 @@ const SelectPlayersView: React.FC<{}> = () => {
                                 mode="outlined"
                                 onPress={() => {
                                     // TODO: GAME-REFACTOR
+                                    setPullingModalVisible(true)
                                 }}
                                 style={styles.setPullingChip}>
                                 <Text style={styles.setPullingText}>
@@ -192,11 +193,6 @@ const SelectPlayersView: React.FC<{}> = () => {
                 }}
             />
             <ChangePullingTeamModal
-                game={game}
-                pointId={point._id}
-                team={
-                    game.teamOne._id === point.pullingTeam._id ? 'one' : 'two'
-                }
                 visible={pullingModalVisible}
                 onClose={() => {
                     setPullingModalVisible(false)
