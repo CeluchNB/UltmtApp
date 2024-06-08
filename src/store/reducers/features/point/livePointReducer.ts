@@ -71,20 +71,6 @@ export const createPoint = createAsyncThunk(
     },
 )
 
-export const setPlayers = createAsyncThunk(
-    'livePoint/players',
-    async (data: { players: DisplayUser[] }, thunkAPI) => {
-        const { players } = data
-        const {
-            livePoint: {
-                point: { _id },
-            },
-        } = thunkAPI.getState() as RootState
-
-        return await PointData.setPlayers(_id, players)
-    },
-)
-
 export const selectCreateStatus = (state: RootState) =>
     state.livePoint.createStatus
 export const selectCreateError = (state: RootState) =>

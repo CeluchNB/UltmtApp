@@ -203,14 +203,12 @@ export const selectTournament = (state: RootState) =>
 export const selectActiveTeamStats = (state: RootState) =>
     state.liveGame.activeTeamStats
 export const {
-    resetCreateStatus,
     setGame,
     setTeam,
-    setActiveTeam,
+
     setTournament,
     addTag,
     updateScore,
-    resetGame,
     addPlayers,
     addPlayerStats,
     subtractPlayerStats,

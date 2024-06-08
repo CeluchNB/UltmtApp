@@ -33,6 +33,7 @@ const PlayerActionTagModal: React.FC<PlayerActionTagModalProps> = ({
 
     const onAddTag = () => {
         if (newTag.length > 0) {
+            // TODO: GAME-REFACTOR tags in game context
             dispatch(addTag(newTag))
         }
         setNewTag('')

@@ -45,7 +45,7 @@ const App: React.FC<{}> = () => {
     return (
         <NavigationContainer theme={MyTheme}>
             {/* Settings Screen exists here for dark mode purposes */}
-            {/* TODO: GAME-REFACTOR: don't want create game provider this high up */}
+            {/* TODO: GAME-REFACTOR don't want create game provider this high up */}
             <CreateGameProvider>
                 <Stack.Navigator
                     initialRouteName={'Tabs'}

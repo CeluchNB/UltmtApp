@@ -1,4 +1,6 @@
+import { ApiError } from '../types/services'
 import { CreateGame } from '../types/game'
+import { GameSchema } from '../models'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
 import { useCreateGame } from '../hooks/use-create-game'
 import { useSelector } from 'react-redux'
@@ -13,7 +15,7 @@ interface CreateGameContextData {
             CreateGame,
             'teamOne' | 'teamTwo' | 'teamTwoDefined' | 'creator'
         >,
-    ) => Promise<void>
+    ) => Promise<GameSchema>
     createLoading: boolean
     teamOne?: DisplayTeam
     teamTwo?: GuestTeam
@@ -41,9 +43,9 @@ export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
             'teamOne' | 'teamTwo' | 'teamTwoDefined' | 'creator'
         >,
     ) => {
-        if (!activeTeam || !teamTwo) return
+        if (!activeTeam || !teamTwo) throw new ApiError('Missing team data')
 
-        await mutateAsync(
+        return await mutateAsync(
             {
                 ...data,
                 teamOne: activeTeam,

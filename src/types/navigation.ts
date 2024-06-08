@@ -69,7 +69,7 @@ export type TabParamList = {
 }
 
 export type LiveGameParamList = {
-    FirstPoint: undefined
+    FirstPoint: { gameId: string }
     SelectPlayers: undefined // consider passing point id and not relying on live point reducer
     LivePointEdit: undefined
     EditGame: { gameId: string }

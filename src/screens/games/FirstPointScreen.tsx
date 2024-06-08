@@ -1,46 +1,34 @@
-import { AppDispatch } from '../../store/store'
 import BaseModal from '../../components/atoms/BaseModal'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import { FirstPointProps } from '../../types/navigation'
-import { IconButton } from 'react-native-paper'
+import { GameSchema } from '../../models'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import ScreenTitle from '../../components/atoms/ScreenTitle'
-import { createPoint } from '../../store/reducers/features/point/livePointReducer'
-import { selectGame } from '../../store/reducers/features/game/liveGameReducer'
+import { TeamNumber } from '../../types/team'
+import { useFirstPoint } from '../../hooks/game-edit-actions/use-first-point'
+import { useObject } from '../../context/realm'
 import { useTheme } from '../../hooks'
-import React, { useEffect, useState } from 'react'
+import { IconButton, SegmentedButtons } from 'react-native-paper'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import {
-    selectCreateError,
-    selectCreateStatus,
-    selectPoint,
-} from '../../store/reducers/features/point/livePointReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
-const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
+const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation, route }) => {
+    const { gameId } = route.params
     const {
         theme: { colors, size, weight },
     } = useTheme()
-    // TODO: GAME-REFACTOR MOVE AWAY FROM liveGame/livePointReducer
-    const dispatch = useDispatch<AppDispatch>()
-    const game = useSelector(selectGame)
-    const createStatus = useSelector(selectCreateStatus)
-    const createError = useSelector(selectCreateError)
-    const point = useSelector(selectPoint)
+    const [pullingTeam, setPullingTeam] = useState<string>('one')
+    const game = useObject<GameSchema>('Game', gameId)
+    const { mutateAsync, isLoading, error } = useFirstPoint()
+
     const [showJoinModal, setShowJoinModal] = useState(false)
 
-    const onCreate = async (isPulling: boolean) => {
-        dispatch(
-            createPoint({ pulling: isPulling, pointNumber: point.pointNumber }),
-        )
-    }
+    const onCreate = async () => {
+        if (!game || !pullingTeam) return
 
-    useEffect(() => {
-        // TODO: GAME-REFACTOR refactor away from this pattern
-        if (createStatus === 'success') {
-            navigation.navigate('LiveGameEdit', { gameId: game._id })
-        }
-    }, [createStatus, navigation, game])
+        await mutateAsync(pullingTeam as TeamNumber)
+        navigation.navigate('LiveGameEdit', { gameId: game._id })
+    }
 
     const styles = StyleSheet.create({
         title: {
@@ -51,7 +39,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
             alignSelf: 'center',
             textAlign: 'center',
             marginTop: 10,
-            width: '60%',
+            width: '80%',
         },
         description: {
             color: colors.gray,
@@ -82,6 +70,10 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
         modalButton: {
             margin: 5,
         },
+        segmentedButton: {
+            marginTop: 10,
+            marginBottom: 10,
+        },
         text: {
             fontSize: size.fontTwenty,
             color: colors.textPrimary,
@@ -94,7 +86,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
             <View style={styles.container}>
                 <Text style={styles.description}>Join Passcode:</Text>
                 <View style={styles.joinCodeContainer}>
-                    <Text style={styles.passcode}>{game.resolveCode}</Text>
+                    <Text style={styles.passcode}>{game?.resolveCode}</Text>
                     <IconButton
                         style={styles.button}
                         iconColor={colors.textPrimary}
@@ -108,26 +100,43 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation }) => {
             </View>
             <View style={styles.container}>
                 <Text style={styles.description}>My team is</Text>
-                <PrimaryButton
-                    style={styles.button}
-                    text="pulling"
-                    disabled={createStatus === 'loading'}
-                    loading={createStatus === 'loading'}
-                    onPress={async () => {
-                        await onCreate(true)
+                <SegmentedButtons
+                    value={pullingTeam}
+                    onValueChange={setPullingTeam}
+                    buttons={[
+                        {
+                            label: 'PULLING',
+                            value: 'one',
+                            checkedColor: colors.textPrimary,
+                            uncheckedColor: colors.gray,
+                        },
+                        {
+                            label: 'RECEIVING',
+                            value: 'two',
+                            checkedColor: colors.textPrimary,
+                            uncheckedColor: colors.gray,
+                        },
+                    ]}
+                    style={styles.segmentedButton}
+                    theme={{
+                        colors: {
+                            primary: colors.textPrimary,
+                        },
                     }}
                 />
                 <PrimaryButton
                     style={styles.button}
-                    text="receiving"
-                    disabled={createStatus === 'loading'}
-                    loading={createStatus === 'loading'}
+                    text="start"
+                    disabled={isLoading}
+                    loading={isLoading}
                     onPress={async () => {
-                        await onCreate(false)
+                        await onCreate()
                     }}
                 />
-                {createError !== undefined && (
-                    <Text style={styles.errorText}>{createError}</Text>
+
+                {error !== undefined && error !== null && (
+                    // TODO: GAME-REFACTOR fix
+                    <Text style={styles.errorText}>{error?.toString()}</Text>
                 )}
             </View>
             <BaseModal

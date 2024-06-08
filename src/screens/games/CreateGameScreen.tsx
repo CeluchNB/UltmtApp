@@ -65,8 +65,11 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
     }) => {
         const { offline, ...data } = formData
 
-        await createGame(data)
-        navigation.navigate('LiveGame', { screen: 'FirstPoint' })
+        const game = await createGame(data)
+        navigation.navigate('LiveGame', {
+            screen: 'FirstPoint',
+            params: { gameId: game._id },
+        })
     }
 
     useEffect(() => {
