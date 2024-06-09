@@ -1,8 +1,10 @@
+import { Button } from 'react-native-paper'
 import GameHeader from '../molecules/GameHeader'
 import LiveGameActionView from './LiveGameActionView'
 import { LiveGameContext } from '../../context/live-game-context'
-import PrimaryButton from '../atoms/PrimaryButton'
+import { LiveGameWizardState } from '../../types/game'
 import { useLiveGameWizard } from '../../hooks/game-edit-actions/use-live-game-wizard'
+import { useTheme } from '../../hooks'
 import React, { useContext } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 
@@ -17,6 +19,9 @@ const LiveGameWizard: React.FC<{}> = () => {
         next,
         back,
     } = useLiveGameWizard()
+    const {
+        theme: { colors },
+    } = useTheme()
 
     const styles = StyleSheet.create({
         screen: {
@@ -34,6 +39,9 @@ const LiveGameWizard: React.FC<{}> = () => {
         flexRow: {
             flexDirection: 'row',
         },
+        rightActionButton: {
+            flexDirection: 'row-reverse',
+        },
     })
 
     return (
@@ -45,20 +53,29 @@ const LiveGameWizard: React.FC<{}> = () => {
                 <LiveGameActionView state={state} />
             </View>
             <View style={[styles.flexRow, styles.flexShrink]}>
-                <PrimaryButton
+                <Button
+                    textColor={colors.textPrimary}
+                    onPress={() => back()}
+                    loading={backLoading}
                     style={[styles.flexOne]}
                     disabled={backDisabled || backLoading || nextLoading}
-                    text="Back"
-                    loading={backLoading}
-                    onPress={back}
-                />
-                <PrimaryButton
-                    style={[styles.flexOne]}
-                    disabled={nextDisabled || nextLoading || backLoading}
-                    text="Next"
+                    theme={{ colors: { onSurfaceDisabled: colors.gray } }}
+                    icon="arrow-left">
+                    Back
+                </Button>
+                <Button
+                    textColor={colors.textPrimary}
+                    onPress={() => next()}
                     loading={nextLoading}
-                    onPress={next}
-                />
+                    style={[styles.flexOne]}
+                    contentStyle={styles.rightActionButton}
+                    theme={{ colors: { onSurfaceDisabled: colors.gray } }}
+                    disabled={nextDisabled || backLoading || nextLoading}
+                    icon="arrow-right">
+                    {state === LiveGameWizardState.LOG_ACTIONS
+                        ? 'Finish Point'
+                        : 'Start Point'}
+                </Button>
             </View>
         </SafeAreaView>
     )

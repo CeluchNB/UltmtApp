@@ -182,7 +182,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <PrimaryButton
-                        text="start"
+                        text="create game"
                         disabled={createLoading}
                         loading={createLoading}
                         onPress={handleSubmit(onCreate)}
