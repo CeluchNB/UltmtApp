@@ -2,6 +2,7 @@ import { ApiError } from '../../types/services'
 import { CreateGameContext } from '../../context/create-game-context'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { GameSchema } from '../../models'
+import { UpdateMode } from 'realm'
 import { joinGame } from '../../services/network/game'
 import { useContext } from 'react'
 import { useMutation } from 'react-query'
@@ -26,9 +27,10 @@ export const useJoinGame = () => {
             const { game, token } = response.data
             await EncryptedStorage.setItem('game_token', token)
 
+            // TODO: GAME-REFCTOR handle find tournament
             const schema = new GameSchema(game)
             realm.write(() => {
-                realm.create('Game', schema)
+                realm.create('Game', schema, UpdateMode.Modified)
             })
         },
     )

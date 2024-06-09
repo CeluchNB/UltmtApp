@@ -1,6 +1,7 @@
 import { CreateGame } from '../types/game'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { GameSchema } from '../models'
+import { UpdateMode } from 'realm'
 import { createGame as networkCreateGame } from '../services/network/game'
 import { useMutation } from 'react-query'
 import { useRealm } from '../context/realm'
@@ -16,8 +17,9 @@ export const useCreateGame = () => {
 
         await EncryptedStorage.setItem('game_token', token)
         const schema = new GameSchema(game)
+
         realm.write(() => {
-            realm.create('Game', schema)
+            realm.create('Game', schema, UpdateMode.Modified)
         })
         return schema
     })

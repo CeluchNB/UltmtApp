@@ -1,5 +1,4 @@
 import * as PointData from '../../../../services/data/point'
-import { DisplayUser } from '../../../../types/user'
 import { GuestTeam } from '../../../../types/team'
 import { RootState } from '../../../store'
 import { Status } from '../../../../types/reducers'

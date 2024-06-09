@@ -1,5 +1,6 @@
 import { PointSchema } from '../../models'
 import { TeamNumber } from '../../types/team'
+import { UpdateMode } from 'realm'
 import { nextPoint } from '../../services/network/point'
 import { useMutation } from 'react-query'
 import { useRealm } from '../../context/realm'
@@ -15,7 +16,7 @@ export const useFirstPoint = () => {
         const schema = new PointSchema(pointResponse)
 
         realm.write(() => {
-            realm.create('Point', schema)
+            realm.create('Point', schema, UpdateMode.Modified)
         })
     })
 }

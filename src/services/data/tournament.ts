@@ -48,8 +48,8 @@ export const searchTournaments = async (q: string): Promise<Tournament[]> => {
             throw new Error()
         }
         try {
-            const result = await networkSearchTournaments(q)
-            const { tournaments: networkTournaments } = result.data
+            const response = await networkSearchTournaments(q)
+            const { tournaments: networkTournaments } = response.data
             localSaveTournaments(networkTournaments)
         } finally {
             const tourneys = await localGetTournaments(q)

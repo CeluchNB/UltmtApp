@@ -2,6 +2,7 @@ import { ApiError } from '../../types/services'
 import { InGameStatsUser } from '../../types/user'
 import { LiveGameContext } from '../../context/live-game-context'
 import { TeamNumber } from '../../types/team'
+import { UpdateMode } from 'realm'
 import { nextPoint } from '../../services/network/point'
 import { useMutation } from 'react-query'
 import { withGameToken } from '../../services/data/game'
@@ -67,7 +68,7 @@ export const useNextPoint = (currentPointId: string) => {
         const schema = new PointSchema(pointResponse)
         realm.write(() => {
             realm.delete(actions)
-            realm.create('Point', schema)
+            realm.create('Point', schema, UpdateMode.Modified)
 
             game.teamOneScore = schema.teamOneScore
             game.teamTwoScore = schema.teamTwoScore

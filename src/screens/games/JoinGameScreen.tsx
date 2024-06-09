@@ -4,9 +4,9 @@ import GameCard from '../../components/atoms/GameCard'
 import JoinByCodeModal from '../../components/molecules/JoinByCodeModal'
 import { JoinGameProps } from '../../types/navigation'
 import SearchDisplay from '../../components/molecules/SearchDisplay'
+import { searchGames } from '../../services/data/game'
 import { useJoinGame } from '../../hooks/game-edit-actions/use-join-game'
 import React, { useContext } from 'react'
-import { getPointsByGame, searchGames } from '../../services/data/game'
 
 const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
     const { teamOne } = useContext(CreateGameContext)

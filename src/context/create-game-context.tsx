@@ -1,6 +1,7 @@
 import { ApiError } from '../types/services'
 import { CreateGame } from '../types/game'
 import { GameSchema } from '../models'
+import { Tournament } from '../types/tournament'
 import { selectAccount } from '../store/reducers/features/account/accountReducer'
 import { useCreateGame } from '../hooks/use-create-game'
 import { useSelector } from 'react-redux'
@@ -10,12 +11,14 @@ import React, { ReactNode, createContext, useState } from 'react'
 interface CreateGameContextData {
     setActiveTeam: (team: Team) => void
     setTeamTwo: (team: GuestTeam) => void
+    setTournament: (tournament: Tournament) => void
     createGame: (
         data: Omit<
             CreateGame,
             'teamOne' | 'teamTwo' | 'teamTwoDefined' | 'creator'
         >,
     ) => Promise<GameSchema>
+    tournament?: Tournament
     createLoading: boolean
     teamOne?: DisplayTeam
     teamTwo?: GuestTeam
@@ -28,6 +31,7 @@ export const CreateGameContext = createContext<CreateGameContextData>(
 export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
     const [activeTeam, setActiveTeam] = useState<DisplayTeam>()
     const [teamTwo, setTeamTwo] = useState<GuestTeam>()
+    const [tournament, setTournament] = useState<Tournament>()
     const account = useSelector(selectAccount)
 
     const { mutateAsync, isLoading } = useCreateGame()
@@ -35,6 +39,7 @@ export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
     const reset = () => {
         setActiveTeam(undefined)
         setTeamTwo(undefined)
+        setTournament(undefined)
     }
 
     const createGame = async (
@@ -50,6 +55,7 @@ export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
                 ...data,
                 teamOne: activeTeam,
                 teamTwo,
+                tournament,
                 teamTwoDefined: !!teamTwo._id,
                 creator: {
                     _id: account._id,
@@ -67,8 +73,10 @@ export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
             value={{
                 teamOne: activeTeam,
                 teamTwo,
+                tournament,
                 setActiveTeam,
                 setTeamTwo,
+                setTournament,
                 createGame: createGame,
                 createLoading: isLoading,
             }}>

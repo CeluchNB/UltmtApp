@@ -5,8 +5,6 @@ import { IconButton } from 'react-native-paper'
 import LabeledFormInput from '../../components/molecules/LabeledFormInput'
 import NetInfoIndicator from '../../components/atoms/NetInfoIndicator'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
-import { selectTournament } from '../../store/reducers/features/game/liveGameReducer'
-import { useSelector } from 'react-redux'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import React, { useContext, useEffect } from 'react'
@@ -27,12 +25,8 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
     const {
         theme: { colors, size, weight },
     } = useTheme()
-    const { teamOne, teamTwo, createGame, createLoading } =
+    const { teamOne, teamTwo, createGame, createLoading, tournament } =
         useContext(CreateGameContext)
-
-    // TODO: GAME-REFACTOR still need tournament support in new setup
-    // START HERE
-    const tournament = useSelector(selectTournament)
 
     const {
         control,

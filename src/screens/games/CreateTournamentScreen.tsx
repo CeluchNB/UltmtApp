@@ -1,18 +1,16 @@
-import * as Constants from '../../utils/constants'
 import BaseScreen from '../../components/atoms/BaseScreen'
+import { CreateGameContext } from '../../context/create-game-context'
 import { CreateTournamentProps } from '../../types/navigation'
 import FormError from '../../components/atoms/FormError'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
-import React from 'react'
 import TextDateInput from '../../components/atoms/TextDateInput'
 import UserInput from '../../components/atoms/UserInput'
-import { createTournament } from '../../services/data/tournament'
 import { getFormFieldRules } from '../../utils/form-utils'
-import { setTournament } from '../../store/reducers/features/game/liveGameReducer'
-import { useDispatch } from 'react-redux'
+import { useCreateTournament } from '../../hooks/game-edit-actions/use-create-tournament'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
 import { IconButton, Tooltip } from 'react-native-paper'
+import React, { useContext } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 const CreateTournamentScreen: React.FC<CreateTournamentProps> = ({
@@ -23,9 +21,9 @@ const CreateTournamentScreen: React.FC<CreateTournamentProps> = ({
     const {
         theme: { colors, size, weight },
     } = useTheme()
-    const dispatch = useDispatch()
-    const [loading, setLoading] = React.useState(false)
-    const [error, setError] = React.useState('')
+    const { setTournament } = useContext(CreateGameContext)
+
+    const { mutateAsync, isLoading, error } = useCreateTournament()
 
     const {
         control,
@@ -46,22 +44,15 @@ const CreateTournamentScreen: React.FC<CreateTournamentProps> = ({
         startDate: Date
         endDate: Date
     }) => {
-        setLoading(true)
-        try {
-            const tournament = await createTournament({
-                name: data.name || '',
-                eventId: data.eventId,
-                startDate: data.startDate.toISOString(),
-                endDate: data.endDate.toISOString(),
-            })
-            dispatch(setTournament(tournament))
-            setLoading(false)
+        const tournament = await mutateAsync({
+            name: data.name ?? '',
+            eventId: data.eventId,
+            startDate: data.startDate.toISOString(),
+            endDate: data.endDate.toISOString(),
+        })
 
-            navigation.pop(2)
-        } catch (e: any) {
-            setError(e?.message ?? Constants.CREATE_TOURNAMENT_ERROR)
-            setLoading(false)
-        }
+        setTournament(tournament)
+        navigation.pop(2)
     }
 
     const styles = StyleSheet.create({
@@ -222,12 +213,12 @@ const CreateTournamentScreen: React.FC<CreateTournamentProps> = ({
                     />
                     <FormError error={errors.endDate} />
                 </View>
-                {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+                {error && <Text style={styles.error}>{error?.toString()}</Text>}
                 <PrimaryButton
                     style={[styles.fieldContainer]}
                     text="create"
                     onPress={handleSubmit(onCreate)}
-                    loading={loading}
+                    loading={isLoading}
                 />
             </BaseScreen>
         </ScrollView>
