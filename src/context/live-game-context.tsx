@@ -12,6 +12,8 @@ interface LiveGameContextData {
     team: TeamNumber
     teamId?: string
     players: InGameStatsUser[] | undefined
+    tags: string[]
+    addTag: (tag: string) => void
     setCurrentPointNumber: (pointNumber: number) => void
     finishGame: () => Promise<void>
     finishGameLoading: boolean
@@ -58,6 +60,11 @@ const LiveGameProvider = ({
     const teamId = useMemo(() => {
         return team === 'one' ? game?.teamOne._id : game?.teamTwo._id
     }, [team, game])
+    const [tags, setTags] = useState(['huck', 'break', 'layout'])
+
+    const addTag = (tag: string) => {
+        setTags(curr => [...curr, tag])
+    }
 
     const players = useMemo(() => {
         if (team === 'one') {
@@ -96,6 +103,8 @@ const LiveGameProvider = ({
                 team,
                 players,
                 teamId,
+                tags,
+                addTag,
                 setCurrentPointNumber,
                 finishGame,
                 finishGameLoading,
