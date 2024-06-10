@@ -14,14 +14,14 @@ import { useContext, useEffect, useState } from 'react'
 // This hook mediates between local and backend data
 const usePointLocal = () => {
     const { game, point } = useContext(LiveGameContext)
-    const networkEmitter = usePointSocket(game._id, point._id)
+    const networkEmitter = usePointSocket(game?._id ?? '', point?._id ?? '')
     const [localEmitter] = useState(new EventEmitter())
 
     const { mutateAsync: createAction } = useCreateAction()
     const { mutateAsync: undoAction } = useUndoAction()
 
     const emitOrHandle = (event: string, data?: unknown) => {
-        if (game.offline) {
+        if (game?.offline) {
             handleOfflineEvent(event, data)
         } else {
             networkEmitter.emit(event, data)
@@ -98,7 +98,7 @@ const usePointLocal = () => {
                 const { action: newAction, point: actionUpdatePoint } =
                     await createOfflineAction(
                         data as ClientActionData,
-                        point._id,
+                        point?._id ?? '',
                     )
 
                 localEmitter.emit(
@@ -108,7 +108,7 @@ const usePointLocal = () => {
                 break
             case LocalPointEvents.UNDO_EMIT:
                 const { action: deletedAction, point: undoUpdatePoint } =
-                    await undoOfflineAction(point._id)
+                    await undoOfflineAction(point?._id ?? '')
 
                 localEmitter.emit(LocalPointEvents.UNDO_LISTEN, {
                     team: deletedAction.teamNumber,

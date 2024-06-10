@@ -11,6 +11,8 @@ export const useSetPullingTeam = () => {
     const realm = useRealm()
 
     return useMutation(async (team: TeamNumber) => {
+        if (!point) return
+
         const response = await withGameToken(setPullingTeam, point._id, team)
         const { point: pointResponse } = response.data
 

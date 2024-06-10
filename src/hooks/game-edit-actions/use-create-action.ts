@@ -11,6 +11,8 @@ export const useCreateAction = () => {
     const realm = useRealm()
 
     return useMutation(async (action: LiveServerActionData) => {
+        if (!point) return
+
         const schema = new ActionSchema(action, point._id)
         realm.write(() => {
             realm.create('Action', schema)

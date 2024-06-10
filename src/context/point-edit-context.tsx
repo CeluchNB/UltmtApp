@@ -49,10 +49,10 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         {
             type: 'Action',
             query: collection => {
-                return collection.filtered('pointId == $0', point._id)
+                return collection.filtered('pointId == $0', point?._id)
             },
         },
-        [point._id],
+        [point?._id],
     )
 
     const [waitingForActionResponse, setWaitingForActionResponse] =
@@ -90,19 +90,19 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         isLoading: setPlayersLoading,
         error: setPlayersError,
         reset: setPlayersReset,
-    } = useSetPlayers(point._id, selectPlayers.selectedPlayers)
+    } = useSetPlayers(point?._id ?? '', selectPlayers.selectedPlayers)
     const {
         mutateAsync: nextPointMutation,
         isLoading: nextPointLoading,
         error: nextPointError,
         reset: nextPointReset,
-    } = useNextPoint(point._id)
+    } = useNextPoint(point?._id ?? '')
     const {
         mutateAsync: backPointMutation,
         isLoading: backPointLoading,
         error: backPointError,
         reset: backPointReset,
-    } = useBackPoint(point._id)
+    } = useBackPoint(point?._id ?? '')
 
     const teamOneActions = useMemo(() => {
         return actionStack.getTeamOneActions()
@@ -120,9 +120,9 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     }, [teamOneActions, teamTwoActions, team])
 
     const activePlayers = React.useMemo(() => {
-        if (team === 'one' && point.teamOneActivePlayers) {
+        if (team === 'one' && point?.teamOneActivePlayers) {
             return point.teamOneActivePlayers?.map(player => parseUser(player))
-        } else if (team === 'two' && point.teamTwoActivePlayers) {
+        } else if (team === 'two' && point?.teamTwoActivePlayers) {
             return point.teamTwoActivePlayers?.map(player => parseUser(player))
         }
         return []

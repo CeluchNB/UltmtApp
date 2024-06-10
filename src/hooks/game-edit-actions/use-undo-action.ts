@@ -13,15 +13,15 @@ export const useUndoAction = () => {
             type: 'Action',
             query: collection => {
                 return collection
-                    .filtered('pointId == $0', point._id)
+                    .filtered('pointId == $0', point?._id)
                     .sorted('actionNumber', true)
             },
         },
-        [point._id],
+        [point?._id],
     )
 
     return useMutation(async () => {
-        if (!actionQuery || actionQuery.length < 1) return
+        if (!actionQuery || !point || actionQuery.length < 1) return
 
         realm.write(() => {
             handleUndoActionSideEffects(actionQuery[0], point)

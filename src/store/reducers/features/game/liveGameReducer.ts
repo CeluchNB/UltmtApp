@@ -13,7 +13,6 @@ import { DisplayUser, InGameStatsUser } from '../../../../types/user'
 import {
     addInGameStatsPlayers,
     initializeInGameStatsPlayers,
-    subtractInGameStatsPlayers,
     updateInGameStatsPlayers,
 } from '../../../../utils/in-game-stats'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
@@ -150,10 +149,10 @@ const liveGameSlice = createSlice({
             const { pointId } = action.payload
             const point = state.activeTeamStats.points[pointId]
             if (point) {
-                state.activeTeamStats.players = subtractInGameStatsPlayers(
-                    state.activeTeamStats.players,
-                    point,
-                )
+                // state.activeTeamStats.players = subtractInGameStatsPlayers(
+                //     state.activeTeamStats.players,
+                //     point,
+                // )
                 delete state.activeTeamStats.points[pointId]
             }
         },

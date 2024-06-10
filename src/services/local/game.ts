@@ -78,14 +78,15 @@ export const createOfflineGame = async (
     const realm = await getRealm()
 
     let id: string = ''
-    realm.write(() => {
-        const game = realm.create<GameSchema>(
-            'Game',
-            GameSchema.createOfflineGame(data, teamOnePlayers),
-            Realm.UpdateMode.All,
-        )
-        id = game._id
-    })
+    // TODO: GAME-REFACTOR
+    // realm.write(() => {
+    //     const game = realm.create<GameSchema>(
+    //         'Game',
+    //         GameSchema.createOfflineGame(data, teamOnePlayers),
+    //         Realm.UpdateMode.All,
+    //     )
+    //     id = game._id
+    // })
 
     return id
 }

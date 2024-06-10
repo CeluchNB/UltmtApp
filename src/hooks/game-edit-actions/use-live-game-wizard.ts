@@ -49,7 +49,7 @@ export const useLiveGameWizard = () => {
 
     const backDisabled = useMemo(() => {
         if (state === LiveGameWizardState.SET_PLAYERS) {
-            return point.pointNumber === 1
+            return point?.pointNumber === 1
         } else if (state === LiveGameWizardState.LOG_ACTIONS) {
             return myTeamActions.length > 0
         }
@@ -57,7 +57,9 @@ export const useLiveGameWizard = () => {
 
     const nextDisabled = useMemo(() => {
         if (state === LiveGameWizardState.SET_PLAYERS) {
-            return selectPlayers.selectedPlayers.length !== game.playersPerPoint
+            return (
+                selectPlayers.selectedPlayers.length !== game?.playersPerPoint
+            )
         } else if (state === LiveGameWizardState.LOG_ACTIONS) {
             const lastAction = myTeamActions[myTeamActions.length - 1]
             return (

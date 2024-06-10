@@ -7,8 +7,8 @@ import { GameSchema, PointSchema } from '../models'
 import React, { ReactNode, createContext, useMemo, useState } from 'react'
 
 interface LiveGameContextData {
-    game: GameSchema
-    point: PointSchema
+    game?: GameSchema
+    point?: PointSchema
     team: TeamNumber
     teamId?: string
     players: InGameStatsUser[] | undefined
@@ -98,8 +98,8 @@ const LiveGameProvider = ({
         <LiveGameContext.Provider
             // TODO: GAME-REFACTOR cannot have non-null assertions here, either check for null before hand or handle null on frontend
             value={{
-                game: game!,
-                point: point!,
+                game,
+                point,
                 team,
                 players,
                 teamId,

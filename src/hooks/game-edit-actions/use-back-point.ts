@@ -28,7 +28,7 @@ export const useBackPoint = (currentPointId: string) => {
         if (!stats) return
 
         const players =
-            team === 'one' ? game.teamOnePlayers : game.teamTwoPlayers
+            (team === 'one' ? game?.teamOnePlayers : game?.teamTwoPlayers) ?? []
         const newPlayers = subtractInGameStatsPlayers(players, stats)
 
         for (let i = 0; i < players.length; i++) {
@@ -41,6 +41,8 @@ export const useBackPoint = (currentPointId: string) => {
 
     return useMutation<undefined, ApiError>({
         mutationFn: async () => {
+            if (!game) return
+
             const response = await withGameToken(backPoint, point?.pointNumber)
 
             const { point: pointResponse, actions: actionsResponse } =

@@ -90,7 +90,7 @@ const SelectPlayersView: React.FC<{}> = () => {
                 ListHeaderComponent={
                     <View>
                         <Text style={styles.description}>
-                            {game.playersPerPoint} players on next{' '}
+                            {game?.playersPerPoint} players on next{' '}
                             {isPulling(point, game, team) ? 'D ' : 'O '}
                             point
                         </Text>
@@ -114,7 +114,7 @@ const SelectPlayersView: React.FC<{}> = () => {
                             onEdit={() => {
                                 navigation.navigate('LiveGame', {
                                     screen: 'EditGame',
-                                    params: { gameId: game._id },
+                                    params: { gameId: game?._id ?? '' },
                                 })
                             }}
                             actionButton={{

@@ -12,6 +12,8 @@ export const useAddGuest = (teamId: string) => {
     const { game } = useContext(LiveGameContext)
 
     return useMutation(async (player: GuestUser) => {
+        if (!game) return
+
         const response = await withToken(createGuest, teamId, {
             firstName: player.firstName,
             lastName: player.lastName,

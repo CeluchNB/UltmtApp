@@ -10,7 +10,7 @@ import { DisplayTeam, GuestTeam } from '../../types/team'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface GameHeaderProps {
-    game: {
+    game?: {
         teamOne: DisplayTeam
         teamTwo: GuestTeam
         teamOneScore: number
@@ -65,6 +65,8 @@ const GameHeader: React.FC<GameHeaderProps> = ({ game, header, editing }) => {
             alignSelf: 'center',
         },
     })
+
+    if (!game) return <Text>My Game</Text>
 
     return (
         <View style={styles.container}>

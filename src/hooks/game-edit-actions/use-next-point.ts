@@ -30,13 +30,15 @@ export const useNextPoint = (currentPointId: string) => {
 
     const allPointPlayers = useMemo(() => {
         if (team === 'one') {
-            return point.teamOnePlayers ?? []
+            return point?.teamOnePlayers ?? []
         } else {
-            return point.teamTwoPlayers ?? []
+            return point?.teamTwoPlayers ?? []
         }
     }, [point, team])
 
     const updatePlayerStats = (stats: InGameStatsUser[]) => {
+        if (!game) return
+
         const players =
             team === 'one' ? game.teamOnePlayers : game.teamTwoPlayers
         const newPlayers = addInGameStatsPlayers(players, stats)
@@ -51,7 +53,7 @@ export const useNextPoint = (currentPointId: string) => {
     }
 
     return useMutation<undefined, ApiError, TeamNumber>(async pullingTeam => {
-        if (!point) return
+        if (!point || !game) return
 
         const response = await withGameToken(
             nextPoint,

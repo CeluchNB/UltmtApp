@@ -24,7 +24,7 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
 
     const { game, point } = useContext(LiveGameContext)
     const pullingTeam =
-        game.teamOne._id === point.pullingTeam._id ? 'one' : 'two'
+        game?.teamOne._id === point?.pullingTeam._id ? 'one' : 'two'
 
     const { control, handleSubmit } = useForm({
         defaultValues: { team: pullingTeam },
@@ -74,7 +74,7 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                                     <Text
                                         style={styles.label}
                                         onPress={() => onChange('one')}>
-                                        {game.teamOne.name}
+                                        {game?.teamOne.name}
                                     </Text>
                                     <RadioButton.Android
                                         value="one"
@@ -93,7 +93,7 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                                     <Text
                                         style={styles.label}
                                         onPress={() => onChange('two')}>
-                                        {game.teamTwo.name}
+                                        {game?.teamTwo.name}
                                     </Text>
                                     <RadioButton.Android
                                         value="two"
