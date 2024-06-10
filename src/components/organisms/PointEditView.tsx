@@ -1,3 +1,5 @@
+import ActionDisplayItem from '../atoms/ActionDisplayItem'
+import { List } from 'react-native-paper'
 import { LiveGameContext } from '../../context/live-game-context'
 import LivePointUtilityBar from '../molecules/LivePointUtilityBar'
 import PlayerActionView from './PlayerActionView'
@@ -6,9 +8,23 @@ import TeamActionView from './TeamActionView'
 import { isPulling } from '../../utils/point'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
-import { ActionType, TeamActionList } from '../../types/action'
+import { ActionFactory, ActionType, TeamActionList } from '../../types/action'
 import { FlatList, StyleSheet, View } from 'react-native'
 import React, { useContext, useMemo } from 'react'
+
+const getAccordionIcon = () => {
+    return ({ isExpanded }: { isExpanded: boolean }) => {
+        const {
+            theme: { colors },
+        } = useTheme()
+        return (
+            <List.Icon
+                color={colors.textPrimary}
+                icon={isExpanded ? 'chevron-up' : 'chevron-down'}
+            />
+        )
+    }
+}
 
 const PointEditView: React.FC<{}> = () => {
     const {
@@ -111,18 +127,28 @@ const PointEditView: React.FC<{}> = () => {
                             team={team}
                         />
                         <TeamActionView actions={teamActions} />
-                        {/* TODO: GAME-REFACTOR {myTeamActions.length > 0 && (
-                            <View>
-                                <Text style={styles.header}>Last Action</Text>
-                                <ActionDisplayItem
-                                    action={ActionFactory.createFromAction(
-                                        myTeamActions[myTeamActions.length - 1],
-                                    )}
-                                    teamOne={game.teamOne}
-                                    teamTwo={game.teamTwo}
-                                />
-                            </View>
-                        )} */}
+                        <List.Accordion
+                            title="Actions"
+                            titleStyle={{
+                                color: colors.textPrimary,
+                                fontSize: size.fontTwenty,
+                            }}
+                            right={getAccordionIcon()}
+                            style={{
+                                backgroundColor: colors.primary,
+                            }}>
+                            {myTeamActions.map(value => {
+                                return (
+                                    <ActionDisplayItem
+                                        action={ActionFactory.createFromAction(
+                                            value,
+                                        )}
+                                        teamOne={game.teamOne}
+                                        teamTwo={game.teamTwo}
+                                    />
+                                )
+                            })}
+                        </List.Accordion>
                     </View>
                 }
             />
