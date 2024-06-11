@@ -137,17 +137,21 @@ const PointEditView: React.FC<{}> = () => {
                             style={{
                                 backgroundColor: colors.primary,
                             }}>
-                            {myTeamActions.map(value => {
-                                return (
-                                    <ActionDisplayItem
-                                        action={ActionFactory.createFromAction(
-                                            value,
-                                        )}
-                                        teamOne={game.teamOne}
-                                        teamTwo={game.teamTwo}
-                                    />
-                                )
-                            })}
+                            {myTeamActions
+                                .slice()
+                                .sort((a, b) => b.actionNumber - a.actionNumber)
+                                .map(value => {
+                                    return (
+                                        <ActionDisplayItem
+                                            key={value.actionNumber}
+                                            action={ActionFactory.createFromAction(
+                                                value,
+                                            )}
+                                            teamOne={game.teamOne}
+                                            teamTwo={game.teamTwo}
+                                        />
+                                    )
+                                })}
                         </List.Accordion>
                     </View>
                 }

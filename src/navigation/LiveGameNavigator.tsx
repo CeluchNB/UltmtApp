@@ -38,6 +38,7 @@ const LiveGameNavigator: React.FC<{}> = () => {
                 name="LiveGameEdit"
                 component={LiveGameEditScreen}
                 initialParams={{ gameId: '' }}
+                options={{ headerShown: false }}
             />
         </Stack.Navigator>
     )

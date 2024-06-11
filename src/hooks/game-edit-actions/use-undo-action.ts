@@ -1,6 +1,7 @@
 import { ActionSchema } from '../../models'
 import { LiveGameContext } from '../../context/live-game-context'
 import { handleUndoActionSideEffects } from '../../services/data/live-action'
+import { parseAction } from '../../utils/action'
 import { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { useQuery, useRealm } from '../../context/realm'
@@ -21,10 +22,10 @@ export const useUndoAction = () => {
     )
 
     return useMutation(async () => {
-        if (!actionQuery || !point || actionQuery.length < 1) return
+        if (!point || !actionQuery || actionQuery.length < 1) return
 
         realm.write(() => {
-            handleUndoActionSideEffects(actionQuery[0], point)
+            handleUndoActionSideEffects(parseAction(actionQuery[0]), point)
             realm.delete(actionQuery[0])
         })
     })

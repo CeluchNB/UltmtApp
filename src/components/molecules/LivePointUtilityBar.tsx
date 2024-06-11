@@ -27,7 +27,7 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
     actionButton,
 }) => {
     const {
-        theme: { colors },
+        theme: { colors, size },
     } = useTheme()
 
     const styles = StyleSheet.create({
@@ -67,6 +67,7 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
                         onPress={onUndo}
                         disabled={undoDisabled}
                         testID="undo-button"
+                        theme={{ colors: { onSurfaceDisabled: colors.gray } }}
                     />
                     {!error && loading && (
                         <ActivityIndicator
@@ -83,6 +84,10 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
                             loading={actionButton.loading}
                             style={styles.actionButton}
                             contentStyle={styles.actionButtonContent}
+                            labelStyle={{ fontSize: size.fontFifteen }}
+                            theme={{
+                                colors: { onSurfaceDisabled: colors.gray },
+                            }}
                             disabled={actionButton.disabled}
                             icon={actionButton.leftIcon}>
                             {actionButton.title}

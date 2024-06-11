@@ -96,7 +96,6 @@ const LiveGameProvider = ({
 
     return (
         <LiveGameContext.Provider
-            // TODO: GAME-REFACTOR cannot have non-null assertions here, either check for null before hand or handle null on frontend
             value={{
                 game,
                 point,

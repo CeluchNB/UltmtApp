@@ -20,7 +20,7 @@ const LiveGameWizard: React.FC<{}> = () => {
         back,
     } = useLiveGameWizard()
     const {
-        theme: { colors },
+        theme: { colors, size },
     } = useTheme()
 
     const styles = StyleSheet.create({
@@ -59,6 +59,7 @@ const LiveGameWizard: React.FC<{}> = () => {
                     loading={backLoading}
                     style={[styles.flexOne]}
                     disabled={backDisabled || backLoading || nextLoading}
+                    labelStyle={{ fontSize: size.fontFifteen }}
                     theme={{ colors: { onSurfaceDisabled: colors.gray } }}
                     icon="arrow-left">
                     Back
@@ -70,6 +71,7 @@ const LiveGameWizard: React.FC<{}> = () => {
                     style={[styles.flexOne]}
                     contentStyle={styles.rightActionButton}
                     theme={{ colors: { onSurfaceDisabled: colors.gray } }}
+                    labelStyle={{ fontSize: size.fontFifteen }}
                     disabled={nextDisabled || backLoading || nextLoading}
                     icon="arrow-right">
                     {state === LiveGameWizardState.LOG_ACTIONS

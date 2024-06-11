@@ -3,6 +3,7 @@ import ActionStack from '../utils/action-stack'
 import { LiveGameContext } from './live-game-context'
 import { MutationData } from '../types/mutation'
 import { parseUser } from '../utils/player'
+import { sortAlphabetically } from '../utils/stats'
 import { useBackPoint } from '../hooks/game-edit-actions/use-back-point'
 import useLivePoint from '../hooks/useLivePoint'
 import { useNextPoint } from '../hooks/game-edit-actions/use-next-point'
@@ -90,7 +91,16 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         isLoading: setPlayersLoading,
         error: setPlayersError,
         reset: setPlayersReset,
-    } = useSetPlayers(point?._id ?? '', selectPlayers.selectedPlayers)
+    } = useSetPlayers(
+        point?._id ?? '',
+        selectPlayers.selectedPlayers.sort((a, b) =>
+            sortAlphabetically(
+                `${a.firstName} ${a.lastName}`,
+                `${b.firstName} ${b.lastName}`,
+            ),
+        ),
+    )
+
     const {
         mutateAsync: nextPointMutation,
         isLoading: nextPointLoading,

@@ -215,9 +215,8 @@ export const substituteActivePlayer = (
     playerToAdd: DisplayUser,
 ) => {
     const index = playerArray.findIndex(p => p._id === playerToRemove._id)
-    if (index === -1) {
-        return
-    }
+    if (index === -1) return
+
     playerArray.splice(index, 1, playerToAdd)
 }
 
