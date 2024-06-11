@@ -11,6 +11,7 @@ import usePointLocal from '../hooks/usePointLocal'
 import { useQuery } from './realm'
 import { useSelectPlayers } from '../hooks/game-edit-actions/use-select-players'
 import { useSetPlayers } from '../hooks/game-edit-actions/use-set-players'
+import { useSwitchPullingTeam } from '../hooks/game-edit-actions/use-switch-pulling-team'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
 import { DisplayUser, InGameStatsUser } from '../types/user'
@@ -38,6 +39,9 @@ interface PointEditContextData {
     nextPoint: MutationData
     backPoint: MutationData
     selectPlayers: Omit<ReturnType<typeof useSelectPlayers>, 'clearSelection'>
+    pullingMismatchConfirmVisible: boolean
+    setPullingMismatchConfirmVisible: (value: boolean) => void
+    switchPullingTeam: () => Promise<void>
 }
 
 export const PointEditContext = createContext<PointEditContextData>(
@@ -65,6 +69,9 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
             setWaitingForActionResponse(false)
         },
     })
+
+    const [pullingMismatchConfirmVisible, setPullingMismatchConfirmVisible] =
+        useState(false)
 
     useEffect(() => {
         // TODO: GAME-REFACTOR, can this be more efficient?
@@ -99,7 +106,9 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                 `${b.firstName} ${b.lastName}`,
             ),
         ),
+        () => setPullingMismatchConfirmVisible(true),
     )
+    const { mutateAsync: switchPullingTeam } = useSwitchPullingTeam()
 
     const {
         mutateAsync: nextPointMutation,
@@ -220,6 +229,9 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                     selectedPlayers: selectPlayers.selectedPlayers,
                     toggleSelection: togglePlayerSelection,
                 },
+                pullingMismatchConfirmVisible,
+                setPullingMismatchConfirmVisible,
+                switchPullingTeam: switchPullingTeam,
             }}>
             {children}
         </PointEditContext.Provider>

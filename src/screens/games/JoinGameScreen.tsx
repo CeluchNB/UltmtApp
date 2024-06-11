@@ -53,7 +53,7 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
         setModalVisible(false)
         navigation.navigate('LiveGame', {
             screen: 'FirstPoint',
-            params: { gameId },
+            params: { gameId, team: 'two' },
         })
     }
 

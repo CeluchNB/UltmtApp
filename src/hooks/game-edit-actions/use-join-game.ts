@@ -27,7 +27,6 @@ export const useJoinGame = () => {
             const { game, token } = response.data
             await EncryptedStorage.setItem('game_token', token)
 
-            // TODO: GAME-REFCTOR handle find tournament
             const schema = new GameSchema(game)
             realm.write(() => {
                 realm.create('Game', schema, UpdateMode.Modified)

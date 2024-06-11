@@ -5,12 +5,18 @@ import SelectPlayersView from './SelectPlayersView'
 
 interface LiveGameActionViewProps {
     state: LiveGameWizardState
+    onNavigate: () => void
 }
 
-const LiveGameActionView: React.FC<LiveGameActionViewProps> = ({ state }) => {
+const LiveGameActionView: React.FC<LiveGameActionViewProps> = ({
+    state,
+    onNavigate,
+}) => {
     return (
         <>
-            {state === LiveGameWizardState.SET_PLAYERS && <SelectPlayersView />}
+            {state === LiveGameWizardState.SET_PLAYERS && (
+                <SelectPlayersView onNavigate={onNavigate} />
+            )}
             {state === LiveGameWizardState.LOG_ACTIONS && <PointEditView />}
         </>
     )

@@ -80,5 +80,6 @@ export const useLiveGameWizard = () => {
         nextLoading,
         next: nextMutate,
         back: backMutate,
+        navigate: onNavigateSuccess,
     }
 }

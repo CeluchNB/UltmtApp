@@ -18,6 +18,7 @@ const LiveGameWizard: React.FC<{}> = () => {
         nextLoading,
         next,
         back,
+        navigate,
     } = useLiveGameWizard()
     const {
         theme: { colors, size },
@@ -50,7 +51,7 @@ const LiveGameWizard: React.FC<{}> = () => {
                 <GameHeader game={game} editing={true} header={true} />
             </View>
             <View style={styles.flexOne}>
-                <LiveGameActionView state={state} />
+                <LiveGameActionView state={state} onNavigate={navigate} />
             </View>
             <View style={[styles.flexRow, styles.flexShrink]}>
                 <Button

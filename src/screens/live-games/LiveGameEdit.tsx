@@ -5,10 +5,10 @@ import PointEditProvider from '../../context/point-edit-context'
 import React from 'react'
 
 const LiveGameEditScreen: React.FC<LiveGameProps> = ({ route }) => {
-    const { gameId } = route.params
+    const { gameId, team } = route.params
 
     return (
-        <LiveGameProvider gameId={gameId}>
+        <LiveGameProvider gameId={gameId} teamNumber={team}>
             <PointEditProvider>
                 <LiveGameWizard />
             </PointEditProvider>

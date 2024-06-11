@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RequestType } from './request'
+import { TeamNumber } from './team'
 import {
     CompositeScreenProps,
     NavigatorScreenParams,
@@ -69,10 +70,10 @@ export type TabParamList = {
 }
 
 export type LiveGameParamList = {
-    FirstPoint: { gameId: string }
+    FirstPoint: { gameId: string; team: TeamNumber }
     LivePointEdit: undefined
     EditGame: { gameId: string }
-    LiveGameEdit: { gameId: string }
+    LiveGameEdit: { gameId: string; team: TeamNumber }
 }
 
 export type TopLevelParamList = {

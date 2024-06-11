@@ -13,7 +13,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation, route }) => {
-    const { gameId } = route.params
+    const { gameId, team } = route.params
     const {
         theme: { colors, size, weight },
     } = useTheme()
@@ -27,7 +27,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation, route }) => {
         if (!game || !pullingTeam) return
 
         await mutateAsync(pullingTeam as TeamNumber)
-        navigation.navigate('LiveGameEdit', { gameId: game._id })
+        navigation.navigate('LiveGameEdit', { gameId: game._id, team })
     }
 
     const styles = StyleSheet.create({
@@ -106,13 +106,13 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation, route }) => {
                     buttons={[
                         {
                             label: 'PULLING',
-                            value: 'one',
+                            value: team,
                             checkedColor: colors.textPrimary,
                             uncheckedColor: colors.gray,
                         },
                         {
                             label: 'RECEIVING',
-                            value: 'two',
+                            value: team === 'one' ? 'two' : 'one',
                             checkedColor: colors.textPrimary,
                             uncheckedColor: colors.gray,
                         },

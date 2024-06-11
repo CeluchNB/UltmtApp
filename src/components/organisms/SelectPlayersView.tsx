@@ -11,19 +11,30 @@ import { Chip, IconButton, Tooltip } from 'react-native-paper'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useMemo, useState } from 'react'
 
-const SelectPlayersView: React.FC<{}> = () => {
+interface SelectPlayersViewProps {
+    onNavigate: () => void
+}
+
+const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
+    onNavigate,
+}) => {
     const navigation = useNavigation()
     const {
         theme: { colors, size },
     } = useTheme()
     const { game, point, team, teamId, players } = useContext(LiveGameContext)
-    const { selectPlayers, setPlayers, backPoint } =
-        useContext(PointEditContext)
+    const {
+        selectPlayers,
+        setPlayers,
+        backPoint,
+        pullingMismatchConfirmVisible,
+        setPullingMismatchConfirmVisible,
+        switchPullingTeam,
+    } = useContext(PointEditContext)
     const { selectedPlayers, toggleSelection } = selectPlayers
 
     const [guestModalVisible, setGuestModalVisible] = useState(false)
     const [pullingModalVisible, setPullingModalVisible] = useState(false)
-    const [confirmModalVisible, setConfirmModalVisible] = useState(false)
 
     const error = useMemo(() => {
         return [setPlayers.error, backPoint.error]
@@ -174,22 +185,16 @@ const SelectPlayersView: React.FC<{}> = () => {
                 }}
             />
             <ConfirmModal
-                visible={confirmModalVisible}
+                visible={pullingMismatchConfirmVisible}
                 loading={false}
                 displayText="The stat keeper for the other team has switched the pulling and receiving teams. Do you wish to continue?"
                 confirmColor={colors.textPrimary}
-                onCancel={async () => setConfirmModalVisible(false)}
-                onClose={async () => setConfirmModalVisible(false)}
+                onCancel={async () => setPullingMismatchConfirmVisible(false)}
+                onClose={async () => setPullingMismatchConfirmVisible(false)}
                 onConfirm={async () => {
-                    setConfirmModalVisible(false)
-                    // set timeout needed to prevent known issue: https://github.com/react-navigation/react-navigation/issues/11201
-                    // TODO: GAME-REFACTOR
-                    // setTimeout(() => {
-                    //     navigation.reset({
-                    //         index: 0,
-                    //         routes: [{ name: 'LivePointEdit' }],
-                    //     })
-                    // }, 50)
+                    await switchPullingTeam()
+                    setPullingMismatchConfirmVisible(false)
+                    onNavigate()
                 }}
             />
             <ChangePullingTeamModal

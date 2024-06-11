@@ -62,7 +62,7 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
         const game = await createGame(data)
         navigation.navigate('LiveGame', {
             screen: 'FirstPoint',
-            params: { gameId: game._id },
+            params: { gameId: game._id, team: 'one' },
         })
     }
 
