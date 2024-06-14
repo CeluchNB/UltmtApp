@@ -1,6 +1,7 @@
 import { ApiError } from '../../types/services'
 import { InGameStatsUser } from '../../types/user'
 import { LiveGameContext } from '../../context/live-game-context'
+import { PointStatus } from '../../types/point'
 import { TeamNumber } from '../../types/team'
 import { UpdateMode } from 'realm'
 import { nextPoint } from '../../services/network/point'
@@ -52,7 +53,67 @@ export const useNextPoint = (currentPointId: string) => {
         }
     }
 
-    return useMutation<undefined, ApiError, TeamNumber>(async pullingTeam => {
+    const createOfflinePointSchema = (pullingTeam: TeamNumber): PointSchema => {
+        if (!game || !point)
+            throw new ApiError('Must have game and point to finish the point')
+
+        let teamOneScore = 0
+        let teamTwoScore = 0
+        if (pullingTeam === 'one') {
+            teamOneScore += 1
+        } else {
+            teamTwoScore += 1
+        }
+
+        const schema = PointSchema.createOfflinePoint({
+            pointNumber: point.pointNumber + 1,
+            teamOneScore: point.teamOneScore + teamOneScore,
+            teamTwoScore: point.teamTwoScore + teamTwoScore,
+            pullingTeam:
+                pullingTeam === 'one'
+                    ? Object.assign({}, game.teamOne)
+                    : Object.assign({}, game.teamTwo),
+            receivingTeam:
+                pullingTeam === 'one'
+                    ? Object.assign({}, game.teamTwo)
+                    : Object.assign({}, game.teamOne),
+            gameId: game._id,
+        })
+
+        return schema
+    }
+
+    const offlineNextPoint = async (pullingTeam: TeamNumber) => {
+        if (!game || !point) return
+
+        const stats = generatePlayerStatsForPoint(
+            allPointPlayers,
+            actions.filter(action => action.teamNumber === team),
+        )
+
+        const newPointSchema = createOfflinePointSchema(pullingTeam)
+
+        realm.write(() => {
+            point.teamOneStatus = PointStatus.COMPLETE
+            point.scoringTeam =
+                pullingTeam === 'one'
+                    ? Object.assign({}, game.teamOne)
+                    : Object.assign({}, game.teamTwo)
+            point.teamOneScore += newPointSchema.teamOneScore
+            point.teamTwoScore += newPointSchema.teamTwoScore
+
+            realm.create('Point', newPointSchema, UpdateMode.Modified)
+
+            game.teamOneScore = newPointSchema.teamOneScore
+            game.teamTwoScore = newPointSchema.teamTwoScore
+
+            updatePlayerStats(stats)
+            game.statsPoints.push({ _id: point._id, pointStats: stats })
+        })
+        setCurrentPointNumber(point.pointNumber + 1)
+    }
+
+    const onlineNextPoint = async (pullingTeam: TeamNumber) => {
         if (!point || !game) return
 
         const response = await withGameToken(
@@ -80,5 +141,15 @@ export const useNextPoint = (currentPointId: string) => {
             realm.delete(point)
         })
         setCurrentPointNumber(pointResponse.pointNumber)
+    }
+
+    return useMutation<undefined, ApiError, TeamNumber>(async pullingTeam => {
+        if (!point || !game) return
+
+        if (game.offline) {
+            await offlineNextPoint(pullingTeam)
+        } else {
+            await onlineNextPoint(pullingTeam)
+        }
     })
 }

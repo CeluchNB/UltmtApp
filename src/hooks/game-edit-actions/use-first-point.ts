@@ -18,8 +18,14 @@ export const useFirstPoint = (gameId: string) => {
             pointNumber: 1,
             teamOneScore: game.teamOneScore,
             teamTwoScore: game.teamTwoScore,
-            pullingTeam: pullingTeam === 'one' ? game.teamOne : game.teamTwo,
-            receivingTeam: pullingTeam === 'one' ? game.teamTwo : game.teamOne,
+            pullingTeam:
+                pullingTeam === 'one'
+                    ? Object.assign({}, game.teamOne)
+                    : Object.assign({}, game.teamTwo),
+            receivingTeam:
+                pullingTeam === 'one'
+                    ? Object.assign({}, game.teamTwo)
+                    : Object.assign({}, game.teamOne),
             gameId: game._id,
         })
 
