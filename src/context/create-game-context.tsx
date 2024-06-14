@@ -17,6 +17,7 @@ interface CreateGameContextData {
             CreateGame,
             'teamOne' | 'teamTwo' | 'teamTwoDefined' | 'creator'
         >,
+        offline?: boolean,
     ) => Promise<GameSchema>
     tournament?: Tournament
     createLoading: boolean
@@ -34,7 +35,7 @@ export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
     const [tournament, setTournament] = useState<Tournament>()
     const account = useSelector(selectAccount)
 
-    const { mutateAsync, isLoading } = useCreateGame()
+    const { mutateAsync, isLoading } = useCreateGame(activeTeam?._id)
 
     const reset = () => {
         setActiveTeam(undefined)
@@ -47,22 +48,26 @@ export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
             CreateGame,
             'teamOne' | 'teamTwo' | 'teamTwoDefined' | 'creator'
         >,
+        offline: boolean = false,
     ) => {
         if (!activeTeam || !teamTwo) throw new ApiError('Missing team data')
 
         return await mutateAsync(
             {
-                ...data,
-                teamOne: activeTeam,
-                teamTwo,
-                tournament,
-                teamTwoDefined: !!teamTwo._id,
-                creator: {
-                    _id: account._id,
-                    firstName: account.firstName,
-                    lastName: account.lastName,
-                    username: account.username,
+                gameData: {
+                    ...data,
+                    teamOne: activeTeam,
+                    teamTwo,
+                    tournament,
+                    teamTwoDefined: !!teamTwo._id,
+                    creator: {
+                        _id: account._id,
+                        firstName: account.firstName,
+                        lastName: account.lastName,
+                        username: account.username,
+                    },
                 },
+                offline,
             },
             { onSuccess: () => reset() },
         )

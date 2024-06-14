@@ -1,3 +1,4 @@
+import { BSON } from 'realm'
 import { Realm } from '@realm/react'
 import { Tournament } from '../types/tournament'
 import { initializeInGameStatsPlayers } from '../utils/in-game-stats'
@@ -90,12 +91,18 @@ export class GameSchema {
         this.teamTwoStatus = game.teamTwoStatus
     }
 
-    static createOfflineGame(game: CreateGame, teamOnePlayers: DisplayUser[]) {
+    static createOfflineGame(
+        game: CreateGame,
+        teamOnePlayers: DisplayUser[],
+    ): GameSchema {
         return {
             _id: new Realm.BSON.ObjectID().toHexString(),
             creator: game.creator,
             teamOne: game.teamOne,
-            teamTwo: game.teamTwo,
+            teamTwo: {
+                ...game.teamTwo,
+                _id: game.teamTwo._id ?? new BSON.ObjectId().toHexString(),
+            },
             teamTwoDefined: game.teamTwoDefined,
             scoreLimit: game.scoreLimit,
             halfScore: game.halfScore,
@@ -108,9 +115,11 @@ export class GameSchema {
             tournament: game.tournament,
             teamOneScore: 0,
             teamTwoScore: 0,
-            teamOneActive: true,
-            teamTwoActive: false,
-            teamOnePlayers: teamOnePlayers,
+            teamOneStatus: GameStatus.ACTIVE,
+            teamTwoStatus: game.teamTwo._id
+                ? GameStatus.DEFINED
+                : GameStatus.GUEST,
+            teamOnePlayers: initializeInGameStatsPlayers(teamOnePlayers),
             teamTwoPlayers: [],
             resolveCode: '',
             statsPoints: [],

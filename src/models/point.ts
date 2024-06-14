@@ -1,7 +1,8 @@
+import { BSON } from 'realm'
 import { DisplayUser } from '../types/user'
 import { GuestTeam } from '../types/team'
-import Point from '../types/point'
 import { Realm } from '@realm/react'
+import Point, { PointStatus } from '../types/point'
 
 export class PointSchema {
     static schema: Realm.ObjectSchema = {
@@ -61,5 +62,33 @@ export class PointSchema {
         this.gameId = point.gameId
         this.teamOneStatus = point.teamOneStatus
         this.teamTwoStatus = point.teamTwoStatus
+    }
+
+    static createOfflinePoint(data: {
+        pointNumber: number
+        teamOneScore: number
+        teamTwoScore: number
+        pullingTeam: GuestTeam
+        receivingTeam: GuestTeam
+        gameId: string
+    }): PointSchema {
+        return {
+            _id: new BSON.ObjectId().toHexString(),
+            pointNumber: data.pointNumber,
+            teamOnePlayers: [],
+            teamTwoPlayers: [],
+            teamOneActivePlayers: [],
+            teamTwoActivePlayers: [],
+            teamOneScore: data.teamOneScore,
+            teamTwoScore: data.teamTwoScore,
+            pullingTeam: data.pullingTeam,
+            receivingTeam: data.receivingTeam,
+            scoringTeam: undefined,
+            teamOneActions: [],
+            teamTwoActions: [],
+            gameId: data.gameId,
+            teamOneStatus: PointStatus.ACTIVE,
+            teamTwoStatus: PointStatus.FUTURE,
+        }
     }
 }

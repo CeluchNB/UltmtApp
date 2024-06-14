@@ -19,7 +19,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation, route }) => {
     } = useTheme()
     const [pullingTeam, setPullingTeam] = useState<string>('one')
     const game = useObject<GameSchema>('Game', gameId)
-    const { mutateAsync, isLoading, error } = useFirstPoint()
+    const { mutateAsync, isLoading, error } = useFirstPoint(gameId)
 
     const [showJoinModal, setShowJoinModal] = useState(false)
 
@@ -135,7 +135,6 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation, route }) => {
                 />
 
                 {error !== undefined && error !== null && (
-                    // TODO: GAME-REFACTOR fix
                     <Text style={styles.errorText}>{error?.toString()}</Text>
                 )}
             </View>
