@@ -1,28 +1,24 @@
-import { ClientActionData } from '../types/action'
 import EventEmitter from 'eventemitter3'
 import { LiveGameContext } from '../context/live-game-context'
+import { LiveServerActionData } from '../types/action'
 import { LocalPointEvents } from '../types/point'
 import { useCreateAction } from './game-edit-actions/use-create-action'
 import usePointSocket from './usePointSocket'
 import { useUndoAction } from './game-edit-actions/use-undo-action'
-import {
-    createOfflineAction,
-    undoOfflineAction,
-} from '../services/data/live-action'
 import { useContext, useEffect, useState } from 'react'
 
 // This hook mediates between local and backend data
 const usePointLocal = () => {
-    const { game, point } = useContext(LiveGameContext)
+    const { game, point, team } = useContext(LiveGameContext)
     const networkEmitter = usePointSocket(game?._id ?? '', point?._id ?? '')
     const [localEmitter] = useState(new EventEmitter())
 
     const { mutateAsync: createAction } = useCreateAction()
     const { mutateAsync: undoAction } = useUndoAction()
 
-    const emitOrHandle = (event: string, data?: unknown) => {
+    const emitOrHandle = async (event: string, data?: unknown) => {
         if (game?.offline) {
-            handleOfflineEvent(event, data)
+            await handleOfflineEvent(event, data)
         } else {
             networkEmitter.emit(event, data)
         }
@@ -30,16 +26,18 @@ const usePointLocal = () => {
 
     useEffect(() => {
         localEmitter.off(LocalPointEvents.ACTION_EMIT)
-        localEmitter.on(LocalPointEvents.ACTION_EMIT, data =>
-            emitOrHandle(LocalPointEvents.ACTION_EMIT, data),
+        localEmitter.on(
+            LocalPointEvents.ACTION_EMIT,
+            async data =>
+                await emitOrHandle(LocalPointEvents.ACTION_EMIT, data),
         )
         localEmitter.off(LocalPointEvents.UNDO_EMIT)
-        localEmitter.on(LocalPointEvents.UNDO_EMIT, data => {
-            emitOrHandle(LocalPointEvents.UNDO_EMIT, data)
+        localEmitter.on(LocalPointEvents.UNDO_EMIT, async data => {
+            await emitOrHandle(LocalPointEvents.UNDO_EMIT, data)
         })
         localEmitter.off(LocalPointEvents.NEXT_POINT_EMIT)
-        localEmitter.on(LocalPointEvents.NEXT_POINT_EMIT, () => {
-            emitOrHandle(LocalPointEvents.NEXT_POINT_EMIT)
+        localEmitter.on(LocalPointEvents.NEXT_POINT_EMIT, async () => {
+            await emitOrHandle(LocalPointEvents.NEXT_POINT_EMIT)
         })
         localEmitter.off(LocalPointEvents.COMMENT_EMIT)
         localEmitter.on(LocalPointEvents.COMMENT_EMIT, data => {
@@ -77,8 +75,7 @@ const usePointLocal = () => {
                 localEmitter.emit(LocalPointEvents.ACTION_LISTEN, action)
                 break
             case LocalPointEvents.UNDO_LISTEN:
-                const { team, actionNumber } = data
-                await undoAction()
+                const actionNumber = await undoAction()
 
                 localEmitter.emit(LocalPointEvents.UNDO_LISTEN, {
                     team,
@@ -91,28 +88,19 @@ const usePointLocal = () => {
         }
     }
 
-    // TODO: GAME-REFACTOR
     const handleOfflineEvent = async (event: string, data?: unknown) => {
         switch (event) {
             case LocalPointEvents.ACTION_EMIT:
-                const { action: newAction, point: actionUpdatePoint } =
-                    await createOfflineAction(
-                        data as ClientActionData,
-                        point?._id ?? '',
-                    )
+                const action = await createAction(data as LiveServerActionData)
 
-                localEmitter.emit(
-                    LocalPointEvents.ACTION_LISTEN,
-                    newAction.action,
-                )
+                localEmitter.emit(LocalPointEvents.ACTION_LISTEN, action)
                 break
             case LocalPointEvents.UNDO_EMIT:
-                const { action: deletedAction, point: undoUpdatePoint } =
-                    await undoOfflineAction(point?._id ?? '')
+                const actionNumber = await undoAction()
 
                 localEmitter.emit(LocalPointEvents.UNDO_LISTEN, {
-                    team: deletedAction.teamNumber,
-                    actionNumber: deletedAction.actionNumber,
+                    team,
+                    actionNumber,
                 })
                 break
             case LocalPointEvents.NEXT_POINT_EMIT:

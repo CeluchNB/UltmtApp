@@ -24,9 +24,12 @@ export const useUndoAction = () => {
     return useMutation(async () => {
         if (!point || !actionQuery || actionQuery.length < 1) return
 
+        const { actionNumber } = actionQuery[0]
         realm.write(() => {
             handleUndoActionSideEffects(parseAction(actionQuery[0]), point)
             realm.delete(actionQuery[0])
         })
+
+        return actionNumber
     })
 }

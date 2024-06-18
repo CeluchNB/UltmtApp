@@ -74,7 +74,6 @@ export class PlayerActionList implements ActionList {
         team: TeamNumber,
         pulling: boolean,
     ) {
-        // const actions = actionStack.map(action => action.action)
         this.actionList = getPlayerActionList(
             playerOne,
             actionStack,

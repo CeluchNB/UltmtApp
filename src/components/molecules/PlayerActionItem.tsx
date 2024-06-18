@@ -28,10 +28,10 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
         Action | undefined
     >()
 
-    const onModalClose = (submit: boolean, tags: string[]) => {
+    const onModalClose = async (submit: boolean, tags: string[]) => {
         if (submit && selectedAction) {
             selectedAction.setTags(tags)
-            onAction(selectedAction)
+            await onAction(selectedAction)
         }
         setModalVisible(false)
         setSelectedAction(undefined)
