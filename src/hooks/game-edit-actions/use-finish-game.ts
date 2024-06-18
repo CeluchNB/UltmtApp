@@ -1,4 +1,7 @@
+import { ActionType } from '../../types/action'
 import { ApiError } from '../../types/services'
+import { GameStatus } from '../../types/game'
+import { PointStatus } from '../../types/point'
 import { finishGame } from '../../services/network/game'
 import { useMutation } from 'react-query'
 import { useNavigation } from '@react-navigation/native'
@@ -14,7 +17,9 @@ export const useFinishGame = (gameId: string) => {
         {
             type: 'Point',
             query: collection => {
-                return collection.filtered('gameId == $0', gameId)
+                return collection
+                    .filtered('gameId == $0', gameId)
+                    .sorted('pointNumber', true)
             },
         },
         [gameId],
@@ -25,27 +30,60 @@ export const useFinishGame = (gameId: string) => {
             query: collection => {
                 return collection.filtered(
                     'pointId IN $0',
-                    pointQuery.map(point => `"${point._id}"`),
+                    pointQuery.map(point => point._id),
                 )
             },
         },
         [pointQuery],
     )
 
+    const offlineFinishGame = () => {
+        if (pointQuery.length < 0) return
+
+        const lastPoint = pointQuery[0]
+        const lastAction = actions
+            .filter(a => a.pointId === lastPoint._id)
+            .sort((a, b) => b.actionNumber - a.actionNumber)[0]
+
+        let teamOneScore = 0
+        let teamTwoScore = 0
+        if (lastAction.actionType === ActionType.TEAM_ONE_SCORE) {
+            teamOneScore += 1
+        } else {
+            teamTwoScore += 1
+        }
+
+        realm.write(() => {
+            lastPoint.teamOneScore += teamOneScore
+            lastPoint.teamTwoScore += teamTwoScore
+
+            game.teamOneScore = lastPoint.teamOneScore
+            game.teamTwoScore = lastPoint.teamTwoScore
+
+            lastPoint.teamOneStatus = PointStatus.COMPLETE
+            game.teamOneStatus = GameStatus.COMPLETE
+        })
+    }
+
+    const onlineFinishGame = async () => {
+        const response = await withGameToken(finishGame)
+        if (response.status !== 200) {
+            throw new ApiError(response.data.message)
+        }
+
+        realm.write(() => {
+            realm.delete(actions)
+            realm.delete(pointQuery)
+            realm.delete(game)
+        })
+    }
+
     return useMutation<undefined, ApiError>(
         async () => {
             if (game.offline) {
+                offlineFinishGame()
             } else {
-                const response = await withGameToken(finishGame)
-                if (response.status !== 200) {
-                    throw new ApiError(response.data.message)
-                }
-
-                realm.write(() => {
-                    realm.delete(actions)
-                    realm.delete(pointQuery)
-                    realm.delete(game)
-                })
+                await onlineFinishGame()
             }
         },
         {
