@@ -99,8 +99,8 @@ export const useNextPoint = (currentPointId: string) => {
                 pullingTeam === 'one'
                     ? Object.assign({}, game.teamOne)
                     : Object.assign({}, game.teamTwo)
-            point.teamOneScore += newPointSchema.teamOneScore
-            point.teamTwoScore += newPointSchema.teamTwoScore
+            point.teamOneScore = newPointSchema.teamOneScore
+            point.teamTwoScore = newPointSchema.teamTwoScore
 
             realm.create('Point', newPointSchema, UpdateMode.Modified)
 

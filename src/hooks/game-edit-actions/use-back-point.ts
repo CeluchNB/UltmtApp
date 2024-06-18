@@ -1,7 +1,9 @@
+import { ActionType } from '../../types/action'
 import { ApiError } from '../../types/services'
 import { BSON } from 'realm'
 import { InGameStatsUser } from '../../types/user'
 import { LiveGameContext } from '../../context/live-game-context'
+import { PointStatus } from '../../types/point'
 import { backPoint } from '../../services/network/point'
 import { subtractInGameStatsPlayers } from '../../utils/in-game-stats'
 import { useContext } from 'react'
@@ -21,8 +23,36 @@ export const useBackPoint = (currentPointId: string) => {
         },
         [currentPointId],
     )
+
     const { game, point, team, setCurrentPointNumber } =
         useContext(LiveGameContext)
+    const lastPointQuery = useQuery<PointSchema>(
+        {
+            type: 'Point',
+            query: collection => {
+                return collection.filtered(
+                    'pointNumber == $0 AND gameId = $1',
+                    (point?.pointNumber ?? 0) - 1,
+                    game?._id,
+                )
+            },
+        },
+        [point],
+    )
+    const lastPointActions = useQuery<ActionSchema>(
+        {
+            type: 'Action',
+            query: collection => {
+                return collection
+                    .filtered(
+                        'pointId == $0',
+                        lastPointQuery.length > 0 ? lastPointQuery[0]._id : '',
+                    )
+                    .sorted('actionNumber', true)
+            },
+        },
+        [lastPointQuery],
+    )
 
     const updatePlayerStats = (stats?: InGameStatsUser[]) => {
         if (!stats) return
@@ -39,45 +69,95 @@ export const useBackPoint = (currentPointId: string) => {
         }
     }
 
-    return useMutation<undefined, ApiError>({
-        mutationFn: async () => {
-            if (!game) return
+    const offlineBackPoint = () => {
+        if (!game || !point) return
 
-            const response = await withGameToken(backPoint, point?.pointNumber)
+        const pointNumber = point.pointNumber
 
-            const { point: pointResponse, actions: actionsResponse } =
-                response.data
+        const lastPoint =
+            lastPointQuery.length > 0 ? lastPointQuery[0] : undefined
 
-            const schema = new PointSchema(pointResponse)
-            realm.write(() => {
-                realm.delete(actions)
-                realm.create('Point', schema)
+        const lastAction =
+            lastPointActions.length > 0
+                ? lastPointActions[0].actionType
+                : ActionType.TEAM_ONE_SCORE
 
-                for (const action of actionsResponse) {
-                    const actionSchema = new ActionSchema(
-                        { ...action, teamNumber: team },
-                        action.pointId,
-                        new BSON.ObjectId(action._id),
-                    )
-                    realm.create('Action', actionSchema)
-                }
+        let teamOneScoreUpdate = 0
+        let teamTwoScoreUpdate = 0
+        if (lastAction === ActionType.TEAM_ONE_SCORE) {
+            teamOneScoreUpdate = 1
+        } else {
+            teamTwoScoreUpdate = 1
+        }
 
-                game.teamOneScore = schema.teamOneScore
-                game.teamTwoScore = schema.teamTwoScore
+        realm.write(() => {
+            if (lastPoint) {
+                lastPoint.teamOneStatus = PointStatus.ACTIVE
+
+                lastPoint.teamOneScore -= teamOneScoreUpdate
+                lastPoint.teamTwoScore -= teamTwoScoreUpdate
+
+                game.teamOneScore = lastPoint.teamOneScore
+                game.teamTwoScore = lastPoint.teamTwoScore
 
                 updatePlayerStats(
-                    game.statsPoints.find(
-                        stats => stats._id === pointResponse._id,
-                    )?.pointStats,
+                    game.statsPoints.find(stats => stats._id === lastPoint._id)
+                        ?.pointStats,
                 )
                 realm.delete(
-                    game.statsPoints.find(
-                        stats => stats._id === pointResponse._id,
-                    ),
+                    game.statsPoints.find(stats => stats._id === lastPoint._id),
                 )
-                realm.delete(point)
-            })
-            setCurrentPointNumber(pointResponse.pointNumber)
+            }
+
+            realm.delete(actions)
+            realm.delete(point)
+        })
+        setCurrentPointNumber(pointNumber - 1)
+    }
+
+    const onlineBackPoint = async () => {
+        if (!point || !game) return
+
+        const response = await withGameToken(backPoint, point.pointNumber)
+
+        const { point: pointResponse, actions: actionsResponse } = response.data
+
+        const schema = new PointSchema(pointResponse)
+        realm.write(() => {
+            realm.delete(actions)
+            realm.create('Point', schema)
+
+            for (const action of actionsResponse) {
+                const actionSchema = new ActionSchema(
+                    { ...action, teamNumber: team },
+                    action.pointId,
+                    new BSON.ObjectId(action._id),
+                )
+                realm.create('Action', actionSchema)
+            }
+
+            game.teamOneScore = schema.teamOneScore
+            game.teamTwoScore = schema.teamTwoScore
+
+            updatePlayerStats(
+                game.statsPoints.find(stats => stats._id === pointResponse._id)
+                    ?.pointStats,
+            )
+            realm.delete(
+                game.statsPoints.find(stats => stats._id === pointResponse._id),
+            )
+            realm.delete(point)
+        })
+        setCurrentPointNumber(pointResponse.pointNumber)
+    }
+
+    return useMutation<undefined, ApiError>({
+        mutationFn: async () => {
+            if (game?.offline) {
+                offlineBackPoint()
+            } else {
+                onlineBackPoint()
+            }
         },
     })
 }
