@@ -7,10 +7,25 @@ import { useRealm } from '../../context/realm'
 import { withGameToken } from '../../services/data/game'
 
 export const useSetPullingTeam = () => {
-    const { point } = useContext(LiveGameContext)
+    const { point, game } = useContext(LiveGameContext)
     const realm = useRealm()
 
-    return useMutation(async (team: TeamNumber) => {
+    const offlineSetPullingTeam = (team: TeamNumber) => {
+        if (!point || !game) return
+
+        realm.write(() => {
+            point.pullingTeam =
+                team === 'one'
+                    ? Object.assign({}, game.teamOne)
+                    : Object.assign({}, game.teamTwo)
+            point.receivingTeam =
+                team === 'one'
+                    ? Object.assign({}, game.teamTwo)
+                    : Object.assign({}, game.teamOne)
+        })
+    }
+
+    const onlineSetPullingTeam = async (team: TeamNumber) => {
         if (!point) return
 
         const response = await withGameToken(setPullingTeam, point._id, team)
@@ -20,5 +35,15 @@ export const useSetPullingTeam = () => {
             point.pullingTeam = pointResponse.pullingTeam
             point.receivingTeam = pointResponse.receivingTeam
         })
+    }
+
+    return useMutation(async (team: TeamNumber) => {
+        if (!point) return
+
+        if (game?.offline) {
+            offlineSetPullingTeam(team)
+        } else {
+            await onlineSetPullingTeam(team)
+        }
     })
 }

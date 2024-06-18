@@ -44,7 +44,11 @@ export const useSetPlayers = (
             point.teamTwoActivePlayers = pointResponse.teamTwoActivePlayers
         })
 
-        if (pointResponse.pullingTeam._id !== point.pullingTeam._id) {
+        // TODO: GAME-REFACTOR this needs to be fully tested
+        if (
+            !(!!point.pullingTeam._id && !!pointResponse.pullingTeam._id) ||
+            pointResponse.pullingTeam._id !== point.pullingTeam._id
+        ) {
             onPullingTeamMismatch()
             throw new Error()
         }
