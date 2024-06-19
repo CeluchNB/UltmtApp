@@ -5,9 +5,10 @@ import GameLeadersScene from './GameLeadersScene'
 import GameUtilityBar from '../molecules/GameUtilityBar'
 import { GameViewContext } from '../../context/game-view-context'
 import ViewPointsScene from './ViewPointsScene'
-import { deleteGame } from '../../services/data/game'
+// import { deleteGame } from '../../services/data/game'
 import { exportGameStats } from '../../services/data/stats'
 import { setupMobileAds } from '../../utils/ads'
+import { useDeleteGame } from '../../hooks/game-edit-actions/use-delete-game'
 import { useNavigation } from '@react-navigation/native'
 import {
     ActivityIndicator,
@@ -73,8 +74,9 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
         onSelectPoint,
     } = useContext(GameViewContext)
     const { onReactivateGame } = useGameReactivation()
+    const { mutateAsync: deleteGame, isLoading: deleteLoading } =
+        useDeleteGame()
     const [deleteModalVisible, setDeleteModalVisible] = React.useState(false)
-    const [deleteLoading, setDeleteLoading] = React.useState(false)
     const [exportModalVisible, setExportModalVisible] = React.useState(false)
     const [exportLoading, setExportLoading] = React.useState(false)
     const [reactivateLoading, setReactivateLoading] = React.useState(false)
@@ -122,23 +124,18 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
         setExportModalVisible(true)
     }
 
-    const handleDeleteGame = React.useCallback(async () => {
-        setDeleteLoading(true)
-        try {
-            if (!managingTeamId) return
-            await deleteGame(gameId, managingTeamId)
-        } catch (e) {
-            // TODO: error display? do nothing
-        } finally {
-            setDeleteLoading(false)
-            setDeleteModalVisible(false)
-            navigation.goBack()
-        }
-    }, [gameId, managingTeamId, navigation])
+    const handleDeleteGame = async () => {
+        if (!managingTeamId) return
+
+        await deleteGame({ gameId, teamId: managingTeamId })
+        setDeleteModalVisible(false)
+        navigation.goBack()
+    }
 
     const handleExportStats = React.useCallback(async () => {
         try {
             if (!managingTeamId) return
+
             setExportLoading(true)
             await exportGameStats(userId ?? '', gameId)
         } catch (e) {

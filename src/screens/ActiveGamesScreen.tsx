@@ -3,11 +3,13 @@ import BaseScreen from '../components/atoms/BaseScreen'
 import ConfirmModal from '../components/molecules/ConfirmModal'
 import GameListItem from '../components/atoms/GameListItem'
 import React from 'react'
+import { getActiveGames } from '../services/data/game'
 import { getUserId } from '../services/data/user'
+import { useDeleteGame } from '../hooks/game-edit-actions/use-delete-game'
 import { useQuery } from 'react-query'
 import { FlatList, StyleSheet, Text } from 'react-native'
 import { Game, GameStatus, LocalGame } from '../types/game'
-import { deleteGame, getActiveGames } from '../services/data/game'
+
 import { useGameReactivation, useTheme } from '../hooks'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
@@ -16,6 +18,9 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     } = useTheme()
 
     const { onReactivateGame } = useGameReactivation()
+    // TODO: GAME-REFACTOR decide on error display
+    const { mutateAsync: deleteGame, isLoading: deleteLoading } =
+        useDeleteGame()
     const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
         cacheTime: 0,
     })
@@ -26,7 +31,6 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     )
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deletingGame, setDeletingGame] = React.useState<Game>()
-    const [deleteLoading, setDeleteLoading] = React.useState(false)
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -69,17 +73,13 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
 
     const onDelete = async () => {
         if (deletingGame) {
-            setDeleteLoading(true)
-            try {
-                await deleteGame(deletingGame._id, getMyTeamId(deletingGame))
-            } catch (e) {
-                // TODO: error display do nothing
-            } finally {
-                refetch()
-                setDeleteLoading(false)
-            }
+            await deleteGame({
+                gameId: deletingGame._id,
+                teamId: getMyTeamId(deletingGame),
+            })
+            refetch()
+            setModalVisible(false)
         }
-        setModalVisible(false)
     }
 
     const onClose = async () => {

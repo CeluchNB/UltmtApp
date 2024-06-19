@@ -158,6 +158,7 @@ export const deleteGame = async (
             'X-API-Key': API_KEY,
             Authorization: `Bearer ${userJwt}`,
         },
+        validateStatus: () => true,
     })
 }
 
