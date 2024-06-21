@@ -1,28 +1,32 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
-import { Realm } from '@realm/react'
 import { Team } from '../../types/team'
 import { TeamSchema } from '../../models'
+import { UpdateMode } from 'realm'
 import { getRealm } from '../../models/realm'
+import { parseUser } from '../../utils/player'
 
 export const saveTeams = async (teams: Team[], overwritePlayers = false) => {
     const realm = await getRealm()
     for (const team of teams) {
-        const teamObject = await realm.objectForPrimaryKey<TeamSchema>(
+        const teamObject = realm.objectForPrimaryKey<TeamSchema>(
             'Team',
             team._id,
         )
 
         // default behavior is to only keep players from network responses and local guests
+        const players = [...team.players]
         if (teamObject && !overwritePlayers) {
-            team.players = [
-                ...team.players,
-                ...teamObject.players.filter(p => p.localGuest),
-            ]
+            players.push(
+                ...teamObject.players
+                    .filter(p => p.localGuest)
+                    .map(p => ({ ...parseUser(p), localGuest: true })), // parse user crucial for functionality
+            )
         }
 
+        const schema = new TeamSchema({ ...team, players })
         realm.write(() => {
-            realm.create('Team', team, Realm.UpdateMode.Modified)
+            realm.create('Team', schema, UpdateMode.All)
         })
     }
 }
