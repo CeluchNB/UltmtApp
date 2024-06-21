@@ -8,7 +8,13 @@ import { useTheme } from '../../hooks'
 import React, { useContext } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 
-const LiveGameWizard: React.FC<{}> = () => {
+interface LiveGameWizardProps {
+    state?: LiveGameWizardState
+}
+
+const LiveGameWizard: React.FC<LiveGameWizardProps> = ({
+    state: initialState,
+}) => {
     const { game } = useContext(LiveGameContext)
     const {
         state,
@@ -19,7 +25,7 @@ const LiveGameWizard: React.FC<{}> = () => {
         next,
         back,
         navigate,
-    } = useLiveGameWizard()
+    } = useLiveGameWizard(initialState)
     const {
         theme: { colors, size },
     } = useTheme()

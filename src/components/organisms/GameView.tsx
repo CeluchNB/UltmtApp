@@ -5,11 +5,12 @@ import GameLeadersScene from './GameLeadersScene'
 import GameUtilityBar from '../molecules/GameUtilityBar'
 import { GameViewContext } from '../../context/game-view-context'
 import ViewPointsScene from './ViewPointsScene'
-// import { deleteGame } from '../../services/data/game'
 import { exportGameStats } from '../../services/data/stats'
 import { setupMobileAds } from '../../utils/ads'
 import { useDeleteGame } from '../../hooks/game-edit-actions/use-delete-game'
 import { useNavigation } from '@react-navigation/native'
+import { useReenterGame } from '../../hooks/game-edit-actions/use-reenter-game'
+import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     StyleSheet,
@@ -18,7 +19,6 @@ import {
 } from 'react-native'
 import React, { useContext } from 'react'
 import { TabBar, TabView } from 'react-native-tab-view'
-import { useGameReactivation, useTheme } from '../../hooks'
 
 interface GameViewProps {
     gameId: string
@@ -73,13 +73,13 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
         managingTeamId,
         onSelectPoint,
     } = useContext(GameViewContext)
-    const { onReactivateGame } = useGameReactivation()
     const { mutateAsync: deleteGame, isLoading: deleteLoading } =
         useDeleteGame()
+    const { mutateAsync: reenterGame, isLoading: reactivateLoading } =
+        useReenterGame()
     const [deleteModalVisible, setDeleteModalVisible] = React.useState(false)
     const [exportModalVisible, setExportModalVisible] = React.useState(false)
     const [exportLoading, setExportLoading] = React.useState(false)
-    const [reactivateLoading, setReactivateLoading] = React.useState(false)
     const [index, setIndex] = React.useState(mapTabNameToIndex('points'))
     const [routes] = React.useState([
         { key: 'points', title: 'Points' },
@@ -101,20 +101,19 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
         }
     }, [activePoint, navigation, onSelectPoint])
 
-    const handleReactivateGame = React.useCallback(async () => {
+    const handleReactivateGame = async () => {
         try {
-            if (!onReactivateGame || !game || !managingTeamId) {
+            if (!game || !managingTeamId) {
                 return undefined
             }
-            setReactivateLoading(true)
 
-            await onReactivateGame(game._id, managingTeamId)
+            await reenterGame({ gameId: game._id, teamId: managingTeamId })
         } catch (e) {
             // TODO: error display?
         } finally {
-            setReactivateLoading(false)
+            // setReactivateLoading(false)
         }
-    }, [onReactivateGame, game, managingTeamId])
+    }
 
     const onDelete = () => {
         setDeleteModalVisible(true)

@@ -1,3 +1,4 @@
+import { LiveGameWizardState } from './game'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RequestType } from './request'
 import { TeamNumber } from './team'
@@ -73,7 +74,12 @@ export type LiveGameParamList = {
     FirstPoint: { gameId: string; team: TeamNumber }
     LivePointEdit: undefined
     EditGame: { gameId: string }
-    LiveGameEdit: { gameId: string; team: TeamNumber }
+    LiveGameEdit: {
+        gameId: string
+        team: TeamNumber
+        state?: LiveGameWizardState
+        pointNumber?: number
+    }
 }
 
 export type TopLevelParamList = {

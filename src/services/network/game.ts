@@ -130,6 +130,23 @@ export const reactivateGame = async (
     })
 }
 
+export const reenterGame = async (
+    userJwt: string,
+    gameId: string,
+    teamId: string,
+) => {
+    return await axios.put(
+        `${API_URL_V2}/game/${gameId}/reenter`,
+        { teamId },
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+                Authorization: `Bearer ${userJwt}`,
+            },
+        },
+    )
+}
+
 export const pushOfflineGame = async (
     token: string,
     gameData: CreateFullGame,

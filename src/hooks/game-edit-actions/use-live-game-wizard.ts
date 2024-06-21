@@ -5,11 +5,13 @@ import { PointEditContext } from '../../context/point-edit-context'
 import { useMutation } from 'react-query'
 import { useContext, useMemo, useState } from 'react'
 
-export const useLiveGameWizard = () => {
+export const useLiveGameWizard = (
+    initialState: LiveGameWizardState = LiveGameWizardState.SET_PLAYERS,
+) => {
     const { game, point } = useContext(LiveGameContext)
     const { selectPlayers, myTeamActions, setPlayers, nextPoint, backPoint } =
         useContext(PointEditContext)
-    const [state, setState] = useState(LiveGameWizardState.SET_PLAYERS)
+    const [state, setState] = useState(initialState)
 
     const onNavigateSuccess = () => {
         if (state === LiveGameWizardState.SET_PLAYERS) {
