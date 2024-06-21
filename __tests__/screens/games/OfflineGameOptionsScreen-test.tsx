@@ -88,7 +88,6 @@ describe('OfflineGameOptionsScreen', () => {
     })
 
     it('handles push', async () => {
-        // TODO: GAME-REFACTOR
         // const spy = jest
         //     .spyOn(GameData, 'pushOfflineGame')
         //     .mockReturnValueOnce(Promise.resolve())
@@ -126,9 +125,9 @@ describe('OfflineGameOptionsScreen', () => {
                 hasActiveActions: false,
             }),
         )
-        jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
-            Promise.resolve(undefined),
-        )
+        // jest.spyOn(PointData, 'getActivePointForGame').mockReturnValueOnce(
+        //     Promise.resolve(undefined),
+        // )
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>

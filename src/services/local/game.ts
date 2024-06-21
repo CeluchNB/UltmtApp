@@ -71,26 +71,6 @@ export const setActiveGameId = async (id: string) => {
     await AsyncStorage.setItem('active_game_id', id)
 }
 
-export const createOfflineGame = async (
-    data: CreateGame,
-    teamOnePlayers: DisplayUser[],
-): Promise<string> => {
-    const realm = await getRealm()
-
-    let id: string = ''
-    // TODO: GAME-REFACTOR
-    // realm.write(() => {
-    //     const game = realm.create<GameSchema>(
-    //         'Game',
-    //         GameSchema.createOfflineGame(data, teamOnePlayers),
-    //         Realm.UpdateMode.All,
-    //     )
-    //     id = game._id
-    // })
-
-    return id
-}
-
 export const saveGame = async (game: Game, stats?: PointStats[]) => {
     const realm = await getRealm()
     const gameRecord = await realm.objectForPrimaryKey<GameSchema>(
@@ -130,26 +110,3 @@ export const getActiveGames = async (
         .filter(g => g.creator._id === userId)
         .map(game => parseGame(game))
 }
-
-// TODO: GAME-REFACTOR
-// export const deleteFullGame = async (gameId: string): Promise<void> => {
-//     const realm = await getRealm()
-//     const game = realm.objectForPrimaryKey<GameSchema>('Game', gameId)
-//     if (!game) return
-
-//     const points = realm.objects<PointSchema>('Point')
-//     // const pointQuery = game.points.map(id => `_id = "${id}"`).join(' OR ')
-//     // const gamePoints = points.filtered(pointQuery)
-
-//     const actions = realm.objects<ActionSchema>('Action')
-//     const actionQuery = gamePoints
-//         .map(point => `pointId = "${point._id}"`)
-//         .join(' OR ')
-//     const gameActions = actions.filtered(actionQuery)
-
-//     realm.write(() => {
-//         realm.delete(gameActions)
-//         realm.delete(gamePoints)
-//         realm.delete(game)
-//     })
-// }

@@ -1,3 +1,4 @@
+import EncryptedStorage from 'react-native-encrypted-storage/lib/typescript/EncryptedStorage'
 import { GameSchema } from '../../models'
 import { deleteGame } from '../../services/network/game'
 import { useMutation } from 'react-query'
@@ -33,6 +34,9 @@ export const useDeleteGame = () => {
                     realm.delete(game)
                 }
             })
+
+            // TODO: GAME-REFACTOR test this on delete
+            EncryptedStorage.setItem('game_token', '')
         },
     )
 }

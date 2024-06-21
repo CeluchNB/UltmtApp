@@ -7,17 +7,15 @@ import { getActiveGames } from '../services/data/game'
 import { getUserId } from '../services/data/user'
 import { useDeleteGame } from '../hooks/game-edit-actions/use-delete-game'
 import { useQuery } from 'react-query'
+import { useTheme } from '../hooks'
 import { FlatList, StyleSheet, Text } from 'react-native'
 import { Game, GameStatus, LocalGame } from '../types/game'
-
-import { useGameReactivation, useTheme } from '../hooks'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
 
-    const { onReactivateGame } = useGameReactivation()
     // TODO: GAME-REFACTOR decide on error display
     const { mutateAsync: deleteGame, isLoading: deleteLoading } =
         useDeleteGame()
@@ -65,7 +63,8 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 return
             }
 
-            await onReactivateGame(activeGame._id, getMyTeamId(activeGame))
+            // TODO: GAME-REFACTOR
+            // await onReactivateGame(activeGame._id, getMyTeamId(activeGame))
         } catch (e) {
             // TODO: error display?
         }

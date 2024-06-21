@@ -10,8 +10,6 @@ import React, { useContext } from 'react'
 
 const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
     const { teamOne } = useContext(CreateGameContext)
-    // const dispatch = useDispatch()
-    // const activeTeam = useSelector(selectActiveTeam)
     const [modalVisible, setModalVisible] = React.useState(false)
     const [gameId, setGameId] = React.useState('')
 

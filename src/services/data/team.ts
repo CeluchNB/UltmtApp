@@ -304,34 +304,22 @@ export const teamnameIsTaken = async (teamname: string): Promise<boolean> => {
     }
 }
 
+// TODO: GAME-REFACTOR test this from team page
 export const createGuest = async (
     teamId: string,
     firstName: string,
     lastName: string,
-    inGame = false,
 ): Promise<Team> => {
     try {
-        // TODO: GAME-REFACTOR unneeded after refactor?
-        const offline = await isActiveGameOffline()
+        const response = await withToken(networkCreateGuest, teamId, {
+            firstName,
+            lastName,
+        })
+        const { team } = response.data
+        await localSaveTeams([team])
 
-        if (inGame && offline) {
-            const team = await localGetTeamById(teamId)
-            const guest = generateGuestData(firstName, lastName)
-            team.players.push(guest)
-            await localSaveTeams([team])
-        } else {
-            const response = await withToken(networkCreateGuest, teamId, {
-                firstName,
-                lastName,
-            })
-            const { team } = response.data
-            await localSaveTeams([team])
-            if (inGame) {
-                await withGameToken(networkUpdateGamePlayers)
-            }
-        }
-        const team = await localGetTeamById(teamId)
-        return team
+        const localTeam = await localGetTeamById(teamId)
+        return localTeam
     } catch (error) {
         return throwApiError(error, Constants.ADD_GUEST_ERROR)
     }
