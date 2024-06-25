@@ -1,4 +1,4 @@
-import EncryptedStorage from 'react-native-encrypted-storage/lib/typescript/EncryptedStorage'
+import EncryptedStorage from 'react-native-encrypted-storage'
 import { GameSchema } from '../../models'
 import { deleteGame } from '../../services/network/game'
 import { useMutation } from 'react-query'

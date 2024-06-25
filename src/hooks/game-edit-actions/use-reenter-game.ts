@@ -9,6 +9,10 @@ import { useNavigation } from '@react-navigation/native'
 import { useRealm } from '../../context/realm'
 import { withToken } from '../../services/data/auth'
 import { ActionSchema, GameSchema, PointSchema } from '../../models'
+import {
+    addInGameStatsPlayers,
+    initializeInGameStatsPlayers,
+} from '../../utils/in-game-stats'
 
 export const useReenterGame = () => {
     const realm = useRealm()
@@ -17,28 +21,48 @@ export const useReenterGame = () => {
     return useMutation(
         async ({ gameId, teamId }: { gameId: string; teamId: string }) => {
             const response = await withToken(reenterGame, gameId, teamId)
-
             const { game, point, actions, token } = response.data
 
-            // TODO: GAME-REFACTOR stats not working on reenter
             const statsResponse = await getGameStats(gameId)
             const gameStats = statsResponse.data
+
             const statsPoints = populateInGameStats(
                 gameStats.game,
                 game.teamOne._id === teamId
                     ? game.teamOnePlayers
                     : game.teamTwoPlayers,
             )
+            const players = addInGameStatsPlayers(
+                initializeInGameStatsPlayers(
+                    game.teamOne._id === teamId
+                        ? game.teamOnePlayers
+                        : game.teamTwoPlayers,
+                ),
+                statsPoints.map(playerPoints => playerPoints.pointStats).flat(),
+            )
 
-            await EncryptedStorage.setItem('game_token', token)
             const gameSchema = new GameSchema(game, false, statsPoints)
             const team = gameSchema.teamOne._id === teamId ? 'one' : 'two'
+            if (team === 'one') {
+                gameSchema.teamOnePlayers = players
+            } else {
+                gameSchema.teamTwoPlayers = players
+            }
 
+            await EncryptedStorage.setItem('game_token', token)
             realm.write(() => {
                 realm.create('Game', gameSchema, UpdateMode.All)
                 if (!point) return
 
                 const pointSchema = new PointSchema(point)
+                realm.create('Point', pointSchema, UpdateMode.All)
+
+                // delete previously saved actions b/c IDs change
+                const savedActions = realm
+                    .objects('Action')
+                    .filtered('pointId == $0', pointSchema._id)
+                realm.delete(savedActions)
+
                 for (const action of actions) {
                     realm.create(
                         'Action',

@@ -5,7 +5,7 @@ import { OfflineGameOptionsProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
-import { useGameReactivation } from '../../hooks/useGameReactivation'
+// import { useGameReactivation } from '../../hooks/useGameReactivation'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
@@ -23,7 +23,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const { onReactivateGame } = useGameReactivation()
+    // const { onReactivateGame } = useGameReactivation()
     const { data: game } = useQuery(['getOfflineGameById', { gameId }], () =>
         getOfflineGameById(gameId),
     )
@@ -44,8 +44,8 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
 
     const reactivateGame = async () => {
         if (game) {
-            // TODO: reactivate refactor
-            await onReactivateGame(game._id, game.teamOne._id)
+            // TODO: GAME-REFACTOR reactivate refactor
+            // await onReactivateGame(game._id, game.teamOne._id)
         }
     }
 

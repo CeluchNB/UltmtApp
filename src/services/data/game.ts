@@ -27,7 +27,7 @@ import {
     getActiveGameId as localActiveGameId,
     isActiveGameOffline as localActiveGameOffline,
     getActiveGames as localActiveGames,
-    createOfflineGame as localCreateOfflineGame,
+    // createOfflineGame as localCreateOfflineGame,
     // deleteFullGame as localDeleteFullGame,
     getGameById as localGetGameById,
     saveGame as localSaveGame,
@@ -116,7 +116,7 @@ export const createGame = async (
         if (offline) {
             const userId = await getUserId()
             data.creator._id = userId
-            id = await localCreateOfflineGame(data, teamOnePlayers)
+            // id = await localCreateOfflineGame(data, teamOnePlayers)
         } else {
             const response = await withToken(networkCreateGame, data)
             const { game, token } = response.data
@@ -124,9 +124,9 @@ export const createGame = async (
             await localSaveGame(game)
             await EncryptedStorage.setItem('game_token', token)
         }
-        await localSetActiveGameId(id)
+        // await localSetActiveGameId(id)
         await localSetActiveGameOffline(offline)
-        const result = await localGetGameById(id)
+        const result = await localGetGameById('')
         return result
     } catch (e) {
         return throwApiError(e, Constants.CREATE_GAME_ERROR)
