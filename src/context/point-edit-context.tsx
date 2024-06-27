@@ -76,6 +76,9 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     useEffect(() => {
         // TODO: GAME-REFACTOR, can this be more efficient?
         // Can this actually be in useLivePoint?
+        // Action stack needs to be a useMemo or just calculated
+        // waiting needs to be in useLivePoint
+        // Test going back after this is done
         const stack = new ActionStack()
         stack.addTeamOneActions(
             actions
