@@ -5,8 +5,8 @@ import { OfflineGameOptionsProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
-// import { useGameReactivation } from '../../hooks/useGameReactivation'
 import { useQuery } from 'react-query'
+import { useReenterGame } from '../../hooks/game-edit-actions/use-reenter-game'
 import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
 
@@ -24,6 +24,8 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
         theme: { colors, size },
     } = useTheme()
     // const { onReactivateGame } = useGameReactivation()
+    const { mutateAsync: reenterGame, isLoading: reenterLoading } =
+        useReenterGame()
     const { data: game } = useQuery(['getOfflineGameById', { gameId }], () =>
         getOfflineGameById(gameId),
     )
@@ -44,8 +46,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
 
     const reactivateGame = async () => {
         if (game) {
-            // TODO: GAME-REFACTOR reactivate refactor
-            // await onReactivateGame(game._id, game.teamOne._id)
+            await reenterGame({ gameId: game._id, teamId: game.teamOne._id })
         }
     }
 
@@ -76,7 +77,7 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
                     <SecondaryButton
                         style={styles.button}
                         text="reactivate"
-                        loading={false}
+                        loading={reenterLoading}
                         onPress={reactivateGame}
                     />
                 </View>

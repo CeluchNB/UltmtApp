@@ -7,7 +7,7 @@ import { throwApiError } from '../../utils/service-utils'
 import { ActionSchema, GameSchema, PointSchema } from '../../models'
 import { CreateGame, Game, PointStats } from '../../types/game'
 
-const parseGame = (
+export const parseGame = (
     schema: GameSchema,
 ): Game & { offline: boolean; statsPoints: PointStats[] } => {
     return JSON.parse(

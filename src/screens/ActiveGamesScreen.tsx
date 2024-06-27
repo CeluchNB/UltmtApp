@@ -2,11 +2,14 @@ import { ActiveGamesProps } from '../types/navigation'
 import BaseScreen from '../components/atoms/BaseScreen'
 import ConfirmModal from '../components/molecules/ConfirmModal'
 import GameListItem from '../components/atoms/GameListItem'
+import { GameSchema } from '../models'
 import React from 'react'
-import { getActiveGames } from '../services/data/game'
 import { getUserId } from '../services/data/user'
+import { parseGame } from '../services/local/game'
 import { useDeleteGame } from '../hooks/game-edit-actions/use-delete-game'
+import { useQuery as useLocalQuery } from '../context/realm'
 import { useQuery } from 'react-query'
+import { useReenterGame } from '../hooks/game-edit-actions/use-reenter-game'
 import { useTheme } from '../hooks'
 import { FlatList, StyleSheet, Text } from 'react-native'
 import { Game, GameStatus, LocalGame } from '../types/game'
@@ -19,25 +22,19 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     // TODO: GAME-REFACTOR decide on error display
     const { mutateAsync: deleteGame, isLoading: deleteLoading } =
         useDeleteGame()
+    // TODO: GAME-REFACTOR loading + error display
+    const { mutateAsync: reenterGame } = useReenterGame()
+
     const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
         cacheTime: 0,
     })
-    const { data: games, refetch } = useQuery<(Game & { offline: boolean })[]>(
-        ['getActiveGames'],
-        () => getActiveGames(),
-        { cacheTime: 0 },
+    const games = useLocalQuery<GameSchema>('Game').filtered(
+        'creator._id == $0',
+        userId,
     )
+
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deletingGame, setDeletingGame] = React.useState<Game>()
-
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            refetch()
-        })
-        return () => {
-            unsubscribe()
-        }
-    }, [navigation, refetch])
 
     const getMyTeamId = React.useCallback(
         (game: Game): string => {
@@ -51,23 +48,20 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     )
 
     const onGamePress = async (activeGame: LocalGame) => {
-        // get game data
-        try {
-            if (
-                activeGame.offline &&
-                activeGame.teamOneStatus !== GameStatus.ACTIVE
-            ) {
-                navigation.navigate('OfflineGameOptions', {
-                    gameId: activeGame._id,
-                })
-                return
-            }
-
-            // TODO: GAME-REFACTOR
-            // await onReactivateGame(activeGame._id, getMyTeamId(activeGame))
-        } catch (e) {
-            // TODO: error display?
+        if (
+            activeGame.offline &&
+            activeGame.teamOneStatus !== GameStatus.ACTIVE
+        ) {
+            navigation.navigate('OfflineGameOptions', {
+                gameId: activeGame._id,
+            })
+            return
         }
+
+        await reenterGame({
+            gameId: activeGame._id,
+            teamId: getMyTeamId(activeGame),
+        })
     }
 
     const onDelete = async () => {
@@ -76,7 +70,6 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 gameId: deletingGame._id,
                 teamId: getMyTeamId(deletingGame),
             })
-            refetch()
             setModalVisible(false)
         }
     }
@@ -101,7 +94,7 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 ))}
             <FlatList
                 style={styles.list}
-                data={games}
+                data={games.map(g => parseGame(g))}
                 renderItem={({ item }) => {
                     return (
                         <GameListItem

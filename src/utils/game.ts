@@ -46,31 +46,34 @@ export const parseUpdateGame = (data: UpdateGame): UpdateGame => {
 export const populateInGameStats = (
     game: GameStats,
     players: DisplayUser[],
+    activePointId: string = '',
 ): PointStats[] => {
     const playerMap = new Map<string, DisplayUser>()
     for (const player of players) {
         playerMap.set(player._id, player)
     }
 
-    const pointStats = game.points.map(point => {
-        return {
-            _id: point._id,
-            pointStats: point.players.map(player => {
-                const playerData = playerMap.get(player._id)
-                return {
-                    _id: player._id,
-                    firstName: playerData?.firstName ?? '',
-                    lastName: playerData?.lastName ?? '',
-                    username: playerData?.username ?? '',
-                    pointsPlayed: player.pointsPlayed,
-                    turnovers: player.drops + player.throwaways,
-                    goals: player.goals,
-                    assists: player.assists,
-                    blocks: player.blocks,
-                }
-            }),
-        }
-    })
+    const pointStats = game.points
+        .filter(p => p._id !== activePointId)
+        .map(point => {
+            return {
+                _id: point._id,
+                pointStats: point.players.map(player => {
+                    const playerData = playerMap.get(player._id)
+                    return {
+                        _id: player._id,
+                        firstName: playerData?.firstName ?? '',
+                        lastName: playerData?.lastName ?? '',
+                        username: playerData?.username ?? '',
+                        pointsPlayed: player.pointsPlayed,
+                        turnovers: player.drops + player.throwaways,
+                        goals: player.goals,
+                        assists: player.assists,
+                        blocks: player.blocks,
+                    }
+                }),
+            }
+        })
     return pointStats
 }
 
