@@ -18,6 +18,7 @@ interface LiveGameContextData {
     finishGame: () => Promise<void>
     finishGameLoading: boolean
     finishGameError?: string
+    finishGameReset: () => void // TODO: GAME-REFACTOR make finish game into single mutation object
 }
 
 export const LiveGameContext = createContext<LiveGameContextData>(
@@ -92,6 +93,7 @@ const LiveGameProvider = ({
         mutateAsync: finishGame,
         isLoading: finishGameLoading,
         error: finishGameError,
+        reset: finishGameReset,
     } = useFinishGame(gameId)
 
     return (
@@ -106,6 +108,7 @@ const LiveGameProvider = ({
                 addTag,
                 setCurrentPointNumber,
                 finishGame,
+                finishGameReset,
                 finishGameLoading,
                 finishGameError: finishGameError?.message,
             }}>

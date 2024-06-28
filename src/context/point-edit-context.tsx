@@ -49,7 +49,7 @@ export const PointEditContext = createContext<PointEditContextData>(
 )
 
 const PointEditProvider = ({ children }: PointEditContextProps) => {
-    const { point, team } = useContext(LiveGameContext)
+    const { point, team, finishGameReset } = useContext(LiveGameContext)
     const actions = useQuery<ActionSchema>(
         {
             type: 'Action',
@@ -202,6 +202,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         setPlayersReset()
         nextPointReset()
         backPointReset()
+        finishGameReset()
     }
 
     return (
