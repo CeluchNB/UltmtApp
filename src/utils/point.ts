@@ -195,7 +195,7 @@ const lastTwoActionsAreScores = (action1: Action, action2: Action): boolean => {
     )
 }
 
-export const parseClientPoint = (point: Point): ClientPoint => {
+export const parseClientPoint = (point: PointSchema): ClientPoint => {
     return {
         pointNumber: point.pointNumber,
         teamOnePlayers: point.teamOnePlayers,

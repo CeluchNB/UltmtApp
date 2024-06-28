@@ -1,14 +1,14 @@
 import { DisplayUser } from '../types/user'
+import { GameSchema } from '../models'
 import { GameStats } from '../types/stats'
 import {
     CreateFullGame,
-    Game,
     GameStatus,
     PointStats,
     UpdateGame,
 } from '../types/game'
 
-export const parseFullGame = (game: Game): CreateFullGame => {
+export const parseFullGame = (game: GameSchema): CreateFullGame => {
     return {
         creator: game.creator,
         teamOne: game.teamOne,

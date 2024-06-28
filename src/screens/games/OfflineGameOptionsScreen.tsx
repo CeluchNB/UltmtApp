@@ -1,19 +1,15 @@
-import * as Constants from '../../utils/constants'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
 import { OfflineGameOptionsProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
+import { getOfflineGameById } from '../../services/data/game'
+import { usePushFullGame } from '../../hooks/game-edit-actions/use-push-full-game'
 import { useQuery } from 'react-query'
 import { useReenterGame } from '../../hooks/game-edit-actions/use-reenter-game'
 import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
-
-import {
-    getOfflineGameById,
-    // pushOfflineGame
-} from '../../services/data/game'
 
 const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     navigation,
@@ -23,25 +19,21 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    // const { onReactivateGame } = useGameReactivation()
     const { mutateAsync: reenterGame, isLoading: reenterLoading } =
         useReenterGame()
+    const {
+        mutateAsync: pushOfflineGame,
+        isLoading: pushLoading,
+        error: pushError,
+    } = usePushFullGame()
+
     const { data: game } = useQuery(['getOfflineGameById', { gameId }], () =>
         getOfflineGameById(gameId),
     )
-    const [loading, setLoading] = React.useState(false)
-    const [error, setError] = React.useState('')
 
     const pushGame = async () => {
-        setLoading(true)
-        try {
-            // await pushOfflineGame(gameId)
-            navigation.navigate('ActiveGames')
-        } catch (e: any) {
-            setError(e?.message ?? Constants.FINISH_GAME_ERROR)
-        } finally {
-            setLoading(false)
-        }
+        await pushOfflineGame(gameId)
+        navigation.navigate('ActiveGames')
     }
 
     const reactivateGame = async () => {
@@ -67,12 +59,14 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
                     <PrimaryButton
                         style={styles.button}
                         text="push to cloud"
-                        loading={loading}
-                        disabled={loading}
+                        loading={pushLoading}
+                        disabled={pushLoading}
                         onPress={pushGame}
                     />
-                    {error.length > 0 && (
-                        <Text style={styles.errorText}>{error}</Text>
+                    {pushError && (
+                        <Text style={styles.errorText}>
+                            {pushError.message}
+                        </Text>
                     )}
                     <SecondaryButton
                         style={styles.button}

@@ -152,7 +152,7 @@ export const pushOfflineGame = async (
     gameData: CreateFullGame,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL_V1}/game/full`,
+        `${API_URL_V2}/game/full`,
         {
             gameData,
         },
