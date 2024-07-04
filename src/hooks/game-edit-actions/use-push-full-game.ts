@@ -1,5 +1,6 @@
 import { ApiError } from '../../types/services'
 import { CreateFullGame } from '../../types/game'
+import { DisplayUser } from '../../types/user'
 import { UpdateMode } from 'realm'
 import { getManagedTeam } from '../../services/network/team'
 import { parseClientAction } from '../../utils/action'
@@ -10,7 +11,6 @@ import { useMutation } from 'react-query'
 import { useRealm } from '../../context/realm'
 import { withToken } from '../../services/data/auth'
 import { ActionSchema, GameSchema, PointSchema, TeamSchema } from '../../models'
-import { DisplayUser, InGameStatsUser } from '../../types/user'
 
 export const usePushFullGame = () => {
     const realm = useRealm()
@@ -55,16 +55,16 @@ export const usePushFullGame = () => {
         realm.write(() => {
             // update all records based on guests
             allGames.forEach(game => {
-                const teamOnePlayers: InGameStatsUser[] = []
+                game.teamOnePlayers = []
+                // const teamOnePlayers: InGameStatsUser[] = []
                 for (const player of game.teamOnePlayers) {
                     const guest = guestMap.get(player._id)
                     if (guest) {
-                        teamOnePlayers.push({ ...player, ...guest })
+                        game.teamOnePlayers.push({ ...player, ...guest })
                     } else {
-                        teamOnePlayers.push(player)
+                        game.teamOnePlayers.push(player)
                     }
                 }
-                game.teamOnePlayers = teamOnePlayers
             })
 
             allPoints.forEach(point => {
