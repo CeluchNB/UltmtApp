@@ -2,68 +2,35 @@ import * as Constants from '../../utils/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { LocalUser } from '../../types/team'
-import { closeRealm } from '../../models/realm'
+import Point from '../../types/point'
 import { createGuestPlayer } from '../../utils/realm'
-import { createPlayerSet } from '../../utils/player'
 import dayjs from 'dayjs'
-import { getGameStats } from '../network/stats'
 import { getUserId } from './user'
-import { createGuest as networkCreateGuest } from '../network/team'
-import { parseClientAction } from '../../utils/action'
-import { parseClientPoint } from '../../utils/point'
 import { throwApiError } from '../../utils/service-utils'
 import { withToken } from './auth'
-import {
-    CreateGame,
-    Game,
-    GameStatus,
-    PointStats,
-    UpdateGame,
-} from '../../types/game'
+import { CreateGame, Game, UpdateGame } from '../../types/game'
 import { DisplayUser, GuestUser } from '../../types/user'
-import Point, { ClientPoint } from '../../types/point'
 import {
     getActiveGameId as localActiveGameId,
     isActiveGameOffline as localActiveGameOffline,
     getActiveGames as localActiveGames,
-    // createOfflineGame as localCreateOfflineGame,
-    // deleteFullGame as localDeleteFullGame,
     getGameById as localGetGameById,
     saveGame as localSaveGame,
     setActiveGameId as localSetActiveGameId,
     setActiveGameOffline as localSetActiveGameOffline,
 } from '../local/game'
 import {
-    deleteEditableActionsByPoint as localDeleteActions,
-    getActionsByPoint as localGetActionsByPoint,
-    saveMultipleServerActions as localSaveMultipleServerActions,
-} from '../local/action'
-import {
-    getPointById as localGetPointById,
-    getPointByPointNumber as localGetPointByPointNumber,
-    savePoint as localSavePoint,
-} from '../local/point'
-import {
-    getTeamById as localGetTeamById,
-    saveTeams as localSaveTeams,
-} from '../local/team'
-import {
     addGuestPlayer as networkAddGuestPlayer,
     createGame as networkCreateGame,
     deleteGame as networkDeleteGame,
     editGame as networkEditGame,
-    finishGame as networkFinishGame,
     getGameById as networkGetGameById,
     getGamesByTeam as networkGetGameByTeams,
     getPointsByGame as networkGetPointsByGame,
     joinGame as networkJoinGame,
     logGameOpen as networkLogGameOpen,
-    pushOfflineGame as networkPushOfflineGame,
-    reactivateGame as networkReactivateGame,
     searchGames as networkSearchGames,
 } from '../network/game'
-import { parseFullGame, populateInGameStats } from '../../utils/game'
 
 /**
  * Method to search games with available search and query parameters.
@@ -273,212 +240,6 @@ export const getActiveGames = async (): Promise<
 export const activeGameOffline = async (): Promise<boolean> => {
     return await localActiveGameOffline()
 }
-
-/**
- * Method to reactivate a game that is not currently live.
- * @param gameId id of game to reactivate
- * @param teamId id of team to reactivate from
- * @returns object with data: { game, team, active point, has active actions }
- */
-export const reactivateGame = async (gameId: string, teamId: string) => {
-    // look for game locally
-    const localGame = await getLocalGameIfExists(gameId)
-
-    if (localGame?.offline) {
-        return await reactivateOfflineGame(localGame)
-    } else {
-        return await reactivateOnlineGame(gameId, teamId)
-    }
-}
-
-const getLocalGameIfExists = async (
-    gameId: string,
-): Promise<
-    (Game & { offline: boolean; statsPoints: PointStats[] }) | undefined
-> => {
-    try {
-        return await localGetGameById(gameId)
-    } catch (e) {
-        return undefined
-    }
-}
-
-// TODO: GAME-REFACTOR
-const reactivateOfflineGame = async (
-    game: Game & { offline: boolean; statsPoints: PointStats[] },
-) => {
-    game.teamOneStatus = GameStatus.ACTIVE
-    await activateGameLocally(game)
-
-    // get the active point
-    let activePoint
-    try {
-        // activePoint = await localGetPointByPointNumber(
-        //     game.points.length,
-        //     game.points,
-        // )
-    } catch (e) {
-        activePoint = undefined
-    }
-
-    // get actions on active point
-    const actions = []
-    if (activePoint) {
-        // actions.push(...(await localGetActionsByPoint(activePoint._id)))
-    }
-
-    return {
-        activePoint,
-        game,
-        team: 'one',
-        hasActiveActions: actions.length > 0,
-    }
-}
-
-const reactivateOnlineGame = async (gameId: string, teamId: string) => {
-    // reactivate backend game
-    const gameResponse = await withToken(networkReactivateGame, gameId, teamId)
-    const { game, team, token, activePoint, actions } = gameResponse.data
-
-    const statsResponse = await getGameStats(gameId)
-    const gameStats = statsResponse.data
-    const statsPoints = populateInGameStats(
-        gameStats.game,
-        game.teamOne._id === teamId ? game.teamOnePlayers : game.teamTwoPlayers,
-    )
-
-    await activateGameLocally({ ...game, offline: false }, statsPoints)
-    await EncryptedStorage.setItem('game_token', token)
-
-    const gameResult = await localGetGameById(gameId)
-
-    if (activePoint) {
-        await localSavePoint(activePoint)
-        await localDeleteActions(team, activePoint._id)
-        await localSaveMultipleServerActions(actions, activePoint._id)
-    } else {
-        return {
-            game: gameResult,
-            team,
-            activePoint: undefined,
-            hasActiveActions: false,
-        }
-    }
-
-    const point = await localGetPointById(activePoint._id)
-
-    return {
-        game: gameResult,
-        team,
-        activePoint: point,
-        hasActiveActions: actions.length > 0,
-    }
-}
-
-const activateGameLocally = async (
-    game: Game & { offline: boolean },
-    statsPoints?: PointStats[],
-) => {
-    await localSaveGame(game, statsPoints)
-    await localSetActiveGameId(game._id)
-    await localSetActiveGameOffline(game.offline)
-}
-
-/**
- * Method to push a game created offline and stored locally to the backend.
- * @param gameId id of locally stored game
- */
-// TODO: GAME-REFACTOR
-// export const pushOfflineGame = async (gameId: string): Promise<void> => {
-//     try {
-//         // create game data
-//         const game = await localGetGameById(gameId)
-
-//         // create guests
-//         // guest map is used to reconcile guest players who are created in the backend
-//         // with different IDs than how they are stored locally
-//         const guestMap = new Map<string, DisplayUser>()
-//         const team = await localGetTeamById(game.teamOne._id)
-//         for (const player of team.players) {
-//             if ((player as LocalUser).localGuest) {
-//                 const response = await withToken(networkCreateGuest, team._id, {
-//                     _id: player._id,
-//                     firstName: player.firstName,
-//                     lastName: player.lastName,
-//                     username: player.username,
-//                 })
-//                 const { team: updatedTeam } = response.data
-//                 const newPlayers = createPlayerSet(
-//                     updatedTeam.players.map((p: DisplayUser) => ({
-//                         ...p,
-//                         localGuest: false,
-//                     })),
-//                     team.players,
-//                 )
-//                 await localSaveTeams(
-//                     [{ ...updatedTeam, players: newPlayers }],
-//                     true,
-//                 )
-
-//                 if (
-//                     !updatedTeam.players
-//                         .map((p: DisplayUser) => p._id)
-//                         .includes(player._id) &&
-//                     updatedTeam.players[updatedTeam.players.length - 1]._id !==
-//                         player._id
-//                 ) {
-//                     guestMap.set(
-//                         player._id,
-//                         updatedTeam[updatedTeam.players.length - 1],
-//                     )
-//                 }
-//             }
-//         }
-
-//         const localPoints = await Promise.all(
-//             // game.points.map(id => {
-//             //     return localGetPointById(id)
-//             // }),
-//         )
-
-//         const guestIds = Array.from(guestMap.keys())
-//         const points: ClientPoint[] = []
-//         localPoints.forEach(async point => {
-//             const actions = await localGetActionsByPoint(point._id)
-//             const clientPoint = parseClientPoint(point)
-//             clientPoint.actions = actions.map(action => {
-//                 if (
-//                     action.playerOne &&
-//                     guestIds.includes(action.playerOne._id)
-//                 ) {
-//                     action.playerOne = guestMap.get(action.playerOne._id)
-//                 } else if (
-//                     action.playerTwo &&
-//                     guestIds.includes(action.playerTwo._id)
-//                 ) {
-//                     action.playerTwo = guestMap.get(action.playerTwo._id)
-//                 }
-
-//                 return parseClientAction(action)
-//             })
-//             points.push(clientPoint)
-//         })
-
-//         const updatedTeam = await localGetTeamById(game.teamOne._id)
-//         game.teamOnePlayers = updatedTeam.players
-//         const fullGame = parseFullGame(game)
-//         fullGame.points = points
-
-//         await withToken(networkPushOfflineGame, fullGame)
-
-//         // delete local game
-//         await localDeleteFullGame(gameId)
-
-//         return
-//     } catch (e) {
-//         return throwApiError(e, Constants.FINISH_GAME_ERROR)
-//     }
-// }
 
 /**
  * Method to delete a game.

@@ -35,19 +35,6 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
 
         await mutateAsync({ gameId, code })
 
-        // get current points, if any exist, set most recent one as current point
-        // TODO: GAME-REFACTOR we don't need this with new point logic?
-        // const points = await getPointsByGame(gameId)
-        // if (points.length > 0) {
-        //     dispatch(
-        //         setPoint(
-        //             points.sort((a, b) => a.pointNumber - b.pointNumber)[
-        //                 points.length - 1
-        //             ],
-        //         ),
-        //     )
-        // }
-
         setModalVisible(false)
         navigation.navigate('LiveGame', {
             screen: 'FirstPoint',

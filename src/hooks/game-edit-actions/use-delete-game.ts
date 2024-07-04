@@ -35,7 +35,6 @@ export const useDeleteGame = () => {
                 }
             })
 
-            // TODO: GAME-REFACTOR test this on delete
             EncryptedStorage.setItem('game_token', '')
         },
     )

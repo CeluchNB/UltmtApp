@@ -1,11 +1,7 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { generateGuestData } from '../../utils/player'
-import { isActiveGameOffline } from '../local/game'
 import jwt_decode from 'jwt-decode'
-import { updateGamePlayers as networkUpdateGamePlayers } from '../network/game'
-import { withGameToken } from './game'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
 import { isTokenExpired, throwApiError } from '../../utils/service-utils'
@@ -304,7 +300,6 @@ export const teamnameIsTaken = async (teamname: string): Promise<boolean> => {
     }
 }
 
-// TODO: GAME-REFACTOR test this from team page
 export const createGuest = async (
     teamId: string,
     firstName: string,
