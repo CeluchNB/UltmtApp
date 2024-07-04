@@ -15,10 +15,12 @@ interface LiveGameContextData {
     tags: string[]
     addTag: (tag: string) => void
     setCurrentPointNumber: (pointNumber: number) => void
-    finishGame: () => Promise<void>
-    finishGameLoading: boolean
-    finishGameError?: string
-    finishGameReset: () => void // TODO: GAME-REFACTOR make finish game into single mutation object
+    finishGameMutation: {
+        finishGame: () => Promise<void>
+        finishGameLoading: boolean
+        finishGameError?: string
+        finishGameReset: () => void
+    }
 }
 
 export const LiveGameContext = createContext<LiveGameContextData>(
@@ -107,10 +109,12 @@ const LiveGameProvider = ({
                 tags,
                 addTag,
                 setCurrentPointNumber,
-                finishGame,
-                finishGameReset,
-                finishGameLoading,
-                finishGameError: finishGameError?.message,
+                finishGameMutation: {
+                    finishGame,
+                    finishGameReset,
+                    finishGameLoading,
+                    finishGameError: finishGameError?.message,
+                },
             }}>
             {children}
         </LiveGameContext.Provider>

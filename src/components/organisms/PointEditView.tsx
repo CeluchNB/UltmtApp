@@ -34,9 +34,7 @@ const PointEditView: React.FC<{}> = () => {
         game,
         point,
         team,
-        finishGameLoading,
-        finishGameError,
-        finishGame,
+        finishGameMutation: { finishGameLoading, finishGameError, finishGame },
     } = useContext(LiveGameContext)
     const {
         myTeamActions,
@@ -59,9 +57,10 @@ const PointEditView: React.FC<{}> = () => {
             !lastAction ||
             ![ActionType.TEAM_ONE_SCORE, ActionType.TEAM_TWO_SCORE].includes(
                 lastAction.actionType,
-            )
+            ) ||
+            finishGameLoading
         )
-    }, [myTeamActions])
+    }, [myTeamActions, finishGameLoading])
 
     const teamActions = React.useMemo(() => {
         const actionListData = new TeamActionList(myTeamActions, team)
