@@ -1,186 +1,21 @@
 import * as Constants from '../../utils/constants'
-import { DisplayUser } from '../../types/user'
-import { Game } from '../../types/game'
-import { PointSchema } from '../../models'
 import { TeamNumber } from '../../types/team'
-import { generatePlayerStatsForPoint } from '../../utils/in-game-stats'
 import { throwApiError } from '../../utils/service-utils'
-import { withGameToken } from './game'
 import {
     Action,
     ActionFactory,
-    ActionType,
     LiveServerActionData,
     SavedServerActionData,
 } from '../../types/action'
-import Point, { PointStatus } from '../../types/point'
-import {
-    createOfflinePoint as localCreateOfflinePoint,
-    deletePoint as localDeletePoint,
-    getPointById as localGetPointById,
-    getPointByPointNumber as localGetPointByPointNumber,
-    savePoint as localSavePoint,
-} from '../local/point'
 import {
     deleteAllDisplayActionsByPoint as localDeleteAllActionsByPoint,
-    deleteEditableActionsByPoint as localDeleteEditableActionsByPoint,
-    getActionsByPoint as localGetActionsByPoint,
     getDisplayActions as localGetDisplayActions,
     saveDisplayActions as localSaveDisplayActions,
-    saveMultipleServerActions as localSaveMultipleActions,
 } from '../local/action'
 import {
-    getActiveGameId as localGetActiveGameId,
-    isActiveGameOffline as localGetActiveGameOffline,
-    getGameById as localGetGameById,
-    saveGame as localSaveGame,
-} from '../local/game'
-import {
-    createPoint as networkCreatePoint,
-    deletePoint as networkDeletePoint,
-    finishPoint as networkFinishPoint,
     getActionsByPoint as networkGetActionsByPoint,
     getLiveActionsByPoint as networkGetLiveActionsByPoint,
-    reactivatePoint as networkReactivatePoint,
-    setPlayers as networkSetPlayers,
-    setPullingTeam as networkSetPullingTeam,
 } from '../network/point'
-
-/**
- * Method to create a point
- * @param pulling boolean - calling team pulling or not
- * @param pointNumber number of point in the game
- * @returns created point
- */
-export const createPoint = async (
-    pulling: boolean,
-    pointNumber: number,
-): Promise<Point> => {
-    try {
-        const offline = await localGetActiveGameOffline()
-        const gameId = await localGetActiveGameId()
-        const game = await localGetGameById(gameId)
-        let pointId: string = ''
-        if (offline) {
-            pointId = await createOfflinePoint(pulling, pointNumber, game)
-        } else {
-            const response = await withGameToken(
-                networkCreatePoint,
-                pulling,
-                pointNumber,
-            )
-
-            const { point } = response.data
-            pointId = point._id
-            await localSavePoint(point)
-        }
-
-        // await addPointToGame(gameId, pointId)
-        const result = await localGetPointById(pointId)
-        return result
-    } catch (e: any) {
-        return throwApiError(e, Constants.CREATE_POINT_ERROR)
-    }
-}
-
-const createOfflinePoint = async (
-    pulling: boolean,
-    pointNumber: number,
-    game: Game,
-): Promise<string> => {
-    const pointId = await localCreateOfflinePoint(pulling, pointNumber, game)
-    return pointId
-}
-
-/**
- * Method to finish a point. In the backend this moves actions out of redis and to mongo.
- * @param pointId id of point to finish
- * @returns updated point
- */
-export const finishPoint = async (
-    point: PointSchema,
-    actions: LiveServerActionData[],
-    team: TeamNumber,
-): Promise<Point> => {
-    try {
-        const pointId = point._id
-        const offline = await localGetActiveGameOffline()
-        if (offline) {
-            await finishOfflinePoint(pointId)
-        } else {
-            const response = await withGameToken(networkFinishPoint, pointId)
-            const { point: responsePoint } = response.data
-            await localSavePoint(responsePoint)
-        }
-
-        const result = await localGetPointById(pointId)
-        await updateGameScore(result.teamOneScore, result.teamTwoScore)
-        await addInGamePlayerStats(point, actions, team)
-        return result
-    } catch (e: any) {
-        return throwApiError(e, Constants.FINISH_POINT_ERROR)
-    }
-}
-
-const updateGameScore = async (teamOneScore: number, teamTwoScore: number) => {
-    const gameId = await localGetActiveGameId()
-    const game = await localGetGameById(gameId)
-    await localSaveGame({ ...game, teamOneScore, teamTwoScore })
-}
-
-const addInGamePlayerStats = async (
-    point: PointSchema,
-    actions: LiveServerActionData[],
-    team: TeamNumber,
-) => {
-    const gameId = await localGetActiveGameId()
-    const game = await localGetGameById(gameId)
-
-    const players = team === 'one' ? point.teamOnePlayers : point.teamTwoPlayers
-    const pointStats = generatePlayerStatsForPoint(players, actions)
-
-    const stats = [
-        ...game.statsPoints,
-        { _id: point._id, pointStats: pointStats },
-    ]
-    await localSaveGame({ ...game }, stats)
-}
-
-const removeInGamePlayerStats = async (pointId: string) => {
-    const gameId = await localGetActiveGameId()
-    const game = await localGetGameById(gameId)
-
-    game.statsPoints = game.statsPoints.filter(point => {
-        return point._id !== pointId
-    })
-
-    await localSaveGame({ ...game }, game.statsPoints)
-}
-
-const finishOfflinePoint = async (pointId: string) => {
-    try {
-        const point = await localGetPointById(pointId)
-        if (point.teamOneStatus !== PointStatus.ACTIVE) {
-            return
-        }
-        const actions = await localGetActionsByPoint(pointId)
-
-        for (const a of actions) {
-            if (a.actionType === ActionType.TEAM_ONE_SCORE) {
-                point.teamOneScore += 1
-                break
-            } else if (a.actionType === ActionType.TEAM_TWO_SCORE) {
-                point.teamTwoScore += 1
-                break
-            }
-        }
-
-        point.teamOneStatus = PointStatus.COMPLETE
-        await localSavePoint(point)
-    } catch (e) {
-        return throwApiError(e, Constants.FINISH_POINT_ERROR)
-    }
-}
 
 /**
  * Method to get actions belonging to a single team related to a point
@@ -251,58 +86,4 @@ export const getLiveActionsByPoint = async (
     } catch (e) {
         return throwApiError(e, Constants.GET_POINT_ERROR)
     }
-}
-
-/**
- * Update which team is pulling
- * @param pointId id of point to update
- * @param team team number of pulling team
- * @returns updated point
- */
-export const setPullingTeam = async (
-    pointId: string,
-    team: TeamNumber,
-): Promise<Point> => {
-    try {
-        const offline = await localGetActiveGameOffline()
-        if (offline) {
-            return await updateLocalPoint(pointId, team)
-        } else {
-            const response = await withGameToken(
-                networkSetPullingTeam,
-                pointId,
-                team,
-            )
-
-            const { point } = response.data
-            await localSavePoint(point)
-
-            const localPoint = await localGetPointById(point._id)
-            return localPoint
-        }
-    } catch (error) {
-        return throwApiError(error, Constants.MODIFY_LIVE_POINT_ERROR)
-    }
-}
-
-const updateLocalPoint = async (
-    pointId: string,
-    team: TeamNumber,
-): Promise<Point> => {
-    const activeGameId = await localGetActiveGameId()
-    const game = await localGetGameById(activeGameId)
-
-    const point = await localGetPointById(pointId)
-
-    if (team === 'one') {
-        point.pullingTeam = game.teamOne
-        point.receivingTeam = game.teamTwo
-    } else {
-        point.pullingTeam = game.teamTwo
-        point.receivingTeam = game.teamOne
-    }
-
-    await localSavePoint(point)
-    const localPoint = await localGetPointById(point._id)
-    return localPoint
 }
