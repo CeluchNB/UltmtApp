@@ -126,7 +126,7 @@
       "node"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(@react-native|react-native|react-native-iphone-x-helper|react-native-vector-icons|@realm/react)/)"
+      "node_modules/(?!(@react-native|react-native|react-native-iphone-x-helper|react-native-vector-icons|@realm/react|@realm/fetch)/)"
     ]
   }
 }
