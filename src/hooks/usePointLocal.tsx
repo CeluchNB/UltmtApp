@@ -1,6 +1,5 @@
 import EventEmitter from 'eventemitter3'
 import { LiveGameContext } from '../context/live-game-context'
-import { LiveServerActionData } from '../types/action'
 import { LocalPointEvents } from '../types/point'
 import { useCreateAction } from './game-edit-actions/use-create-action'
 import usePointSocket from './usePointSocket'
@@ -16,9 +15,22 @@ const usePointLocal = () => {
     const { mutateAsync: createAction } = useCreateAction()
     const { mutateAsync: undoAction } = useUndoAction()
 
+    const emitToListen = (event: string) => {
+        switch (event) {
+            case LocalPointEvents.ACTION_EMIT:
+                return LocalPointEvents.ACTION_LISTEN
+            case LocalPointEvents.UNDO_EMIT:
+                return LocalPointEvents.UNDO_LISTEN
+            case LocalPointEvents.NEXT_POINT_EMIT:
+                return LocalPointEvents.NEXT_POINT_LISTEN
+            default:
+                return LocalPointEvents.ACTION_EMIT
+        }
+    }
+
     const emitOrHandle = async (event: string, data?: unknown) => {
         if (game?.offline) {
-            await handleOfflineEvent(event, data)
+            await handleEvent(emitToListen(event), data)
         } else {
             networkEmitter.emit(event, data)
         }
@@ -50,15 +62,15 @@ const usePointLocal = () => {
 
         networkEmitter.off(LocalPointEvents.ACTION_LISTEN)
         networkEmitter.on(LocalPointEvents.ACTION_LISTEN, async data => {
-            await handleOnlineEvent(LocalPointEvents.ACTION_LISTEN, data)
+            await handleEvent(LocalPointEvents.ACTION_LISTEN, data)
         })
         networkEmitter.off(LocalPointEvents.UNDO_LISTEN)
         networkEmitter.on(LocalPointEvents.UNDO_LISTEN, async data => {
-            await handleOnlineEvent(LocalPointEvents.UNDO_LISTEN, data)
+            await handleEvent(LocalPointEvents.UNDO_LISTEN, data)
         })
         networkEmitter.off(LocalPointEvents.NEXT_POINT_LISTEN)
         networkEmitter.on(LocalPointEvents.NEXT_POINT_LISTEN, async data => {
-            await handleOnlineEvent(LocalPointEvents.NEXT_POINT_LISTEN, data)
+            await handleEvent(LocalPointEvents.NEXT_POINT_LISTEN, data)
         })
         networkEmitter.off(LocalPointEvents.ERROR_LISTEN)
         networkEmitter.on(LocalPointEvents.ERROR_LISTEN, async message => {
@@ -67,7 +79,7 @@ const usePointLocal = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [emitOrHandle, point])
 
-    const handleOnlineEvent = async (event: string, data: any) => {
+    const handleEvent = async (event: string, data: any) => {
         switch (event) {
             case LocalPointEvents.ACTION_LISTEN:
                 const action = await createAction(data)
@@ -83,27 +95,6 @@ const usePointLocal = () => {
                 })
                 break
             case LocalPointEvents.NEXT_POINT_LISTEN:
-                localEmitter.emit(LocalPointEvents.NEXT_POINT_LISTEN)
-                break
-        }
-    }
-
-    const handleOfflineEvent = async (event: string, data?: unknown) => {
-        switch (event) {
-            case LocalPointEvents.ACTION_EMIT:
-                const action = await createAction(data as LiveServerActionData)
-
-                localEmitter.emit(LocalPointEvents.ACTION_LISTEN, action)
-                break
-            case LocalPointEvents.UNDO_EMIT:
-                const actionNumber = await undoAction()
-
-                localEmitter.emit(LocalPointEvents.UNDO_LISTEN, {
-                    team,
-                    actionNumber,
-                })
-                break
-            case LocalPointEvents.NEXT_POINT_EMIT:
                 localEmitter.emit(LocalPointEvents.NEXT_POINT_LISTEN)
                 break
         }

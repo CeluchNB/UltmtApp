@@ -13,6 +13,7 @@ interface LivePointOptions {
 const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
     const [actionStack, setActionStack] = useState(new ActionStack())
     const [error, setError] = useState<string>()
+    const [waiting, setWaiting] = useState(false)
 
     useEffect(() => {
         emitter.off(LocalPointEvents.ACTION_LISTEN)
@@ -33,6 +34,7 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
     // Listeners
     const onActionReceived = (data: LiveServerActionData) => {
         setActionStack(curr => ({ ...curr.reconcileAction(data) }))
+        setWaiting(false)
     }
 
     const onUndoReceived = (data: {
@@ -40,11 +42,13 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
         actionNumber: number
     }) => {
         setActionStack(curr => ({ ...curr.undoAction(data) }))
+        setWaiting(false)
     }
 
     const onActionError = (message?: string) => {
         setError(message)
         options?.onError?.()
+        setWaiting(false)
     }
 
     const onNextPointReceived = () => {
@@ -54,11 +58,13 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
     // Emits
     const onAction = (action: ClientActionData) => {
         setError('')
+        setWaiting(true)
         emitter.emit(LocalPointEvents.ACTION_EMIT, action)
     }
 
     const onUndo = () => {
         setError('')
+        setWaiting(true)
         emitter.emit(LocalPointEvents.UNDO_EMIT)
     }
 
@@ -103,6 +109,7 @@ const useLivePoint = (emitter: EventEmitter, options?: LivePointOptions) => {
     return {
         actionStack,
         error,
+        waiting,
         setActionStack,
         onAction,
         onUndo,

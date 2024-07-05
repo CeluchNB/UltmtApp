@@ -8,7 +8,7 @@ import { useBackPoint } from '../hooks/game-edit-actions/use-back-point'
 import useLivePoint from '../hooks/useLivePoint'
 import { useNextPoint } from '../hooks/game-edit-actions/use-next-point'
 import usePointLocal from '../hooks/usePointLocal'
-import { useQuery } from './realm'
+import { useRealm } from './realm'
 import { useSelectPlayers } from '../hooks/game-edit-actions/use-select-players'
 import { useSetPlayers } from '../hooks/game-edit-actions/use-set-players'
 import { useSwitchPullingTeam } from '../hooks/game-edit-actions/use-switch-pulling-team'
@@ -54,35 +54,27 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         team,
         finishGameMutation: { finishGameReset },
     } = useContext(LiveGameContext)
-    const actions = useQuery<ActionSchema>(
-        {
-            type: 'Action',
-            query: collection => {
-                return collection.filtered('pointId == $0', point?._id)
-            },
-        },
-        [point?._id],
-    )
+    const realm = useRealm()
 
-    const [waitingForActionResponse, setWaitingForActionResponse] =
-        useState(false)
-    const [actionStack, setActionStack] = useState(new ActionStack())
     const emitter = usePointLocal()
-    const { error, onAction, onNextPoint, onUndo } = useLivePoint(emitter, {
-        onError: () => {
-            setWaitingForActionResponse(false)
-        },
-    })
+    const {
+        error,
+        actionStack,
+        waiting,
+        setActionStack,
+        onAction,
+        onNextPoint,
+        onUndo,
+    } = useLivePoint(emitter)
 
     const [pullingMismatchConfirmVisible, setPullingMismatchConfirmVisible] =
         useState(false)
 
     useEffect(() => {
-        // TODO: GAME-REFACTOR, can this be more efficient?
-        // Can this actually be in useLivePoint?
-        // Action stack needs to be a useMemo or just calculated
-        // waiting needs to be in useLivePoint
-        // Test going back after this is done
+        // this only runs on initialize for re-enter point functionality
+        const actions = realm
+            .objects<ActionSchema>('Action')
+            .filtered('pointId == $0', point?._id)
         const stack = new ActionStack()
         stack.addTeamOneActions(
             actions
@@ -96,8 +88,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         )
 
         setActionStack(stack)
-        setWaitingForActionResponse(false)
-    }, [actions])
+    }, [realm, point, setActionStack])
 
     const selectPlayers = useSelectPlayers()
     const {
@@ -156,7 +147,6 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
 
     const handleAction = async (action: Action) => {
         resetMutations()
-        setWaitingForActionResponse(true)
         const clientAction = parseClientAction({
             ...action.action,
         })
@@ -170,7 +160,6 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
 
     const handleUndo = async () => {
         resetMutations()
-        setWaitingForActionResponse(true)
         onUndo()
     }
 
@@ -214,7 +203,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
             value={{
                 myTeamActions,
                 activePlayers,
-                waiting: waitingForActionResponse,
+                waiting,
                 error: error ?? '',
                 onAction: onActionDebounced,
                 onUndo: onUndoDebounced,

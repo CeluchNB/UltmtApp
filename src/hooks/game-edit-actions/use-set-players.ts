@@ -44,7 +44,7 @@ export const useSetPlayers = (
             point.teamTwoActivePlayers = pointResponse.teamTwoActivePlayers
         })
 
-        // TODO: GAME-REFACTOR this needs to be fully tested
+        // TODO: GAME-REFACTOR this needs to be fully tested - START HERE
         if (
             !(!!point.pullingTeam._id && !!pointResponse.pullingTeam._id) ||
             pointResponse.pullingTeam._id !== point.pullingTeam._id
