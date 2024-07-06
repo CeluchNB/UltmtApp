@@ -3,14 +3,8 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import SubstitutionModal from '../../../src/components/molecules/SubstitutionModal'
 import { game } from '../../../fixtures/data'
-import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
 import Point, { PointStatus } from '../../../src/types/point'
-import {
-    addPlayers,
-    setGame,
-    setTeam,
-} from '../../../src/store/reducers/features/game/liveGameReducer'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -117,20 +111,6 @@ const getPlayerName = (player: GuestUser) => {
     return `${player.firstName} ${player.lastName}`
 }
 
-beforeEach(() => {
-    store.dispatch(
-        setGame({
-            ...game,
-            teamOnePlayers: playerList1,
-            tournament: undefined,
-            startTime: '2022',
-        }),
-    )
-    store.dispatch(addPlayers(playerList1))
-    store.dispatch(setTeam('one'))
-    store.dispatch(setPoint(point))
-})
-
 it('should match snapshot with team one', () => {
     const snapshot = render(
         <Provider store={store}>
@@ -148,18 +128,6 @@ it('should match snapshot with team one', () => {
 })
 
 it('should match snapshot with team two', () => {
-    store.dispatch(
-        setGame({
-            ...game,
-            teamTwoPlayers: playerList1,
-            tournament: undefined,
-            startTime: '2022',
-        }),
-    )
-    store.dispatch(setTeam('two'))
-    store.dispatch(
-        setPoint({ ...point, teamTwoPlayers: playerList1.slice(0, 7) }),
-    )
     const snapshot = render(
         <Provider store={store}>
             <SubstitutionModal

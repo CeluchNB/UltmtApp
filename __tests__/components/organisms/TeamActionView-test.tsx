@@ -3,15 +3,9 @@ import { Provider } from 'react-redux'
 import React from 'react'
 import TeamActionView from '../../../src/components/organisms/TeamActionView'
 import { game } from '../../../fixtures/data'
-import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
 import store from '../../../src/store/store'
 import { Action, ActionType } from '../../../src/types/action'
 import Point, { PointStatus } from '../../../src/types/point'
-import {
-    addPlayers,
-    setGame,
-    setTeam,
-} from '../../../src/store/reducers/features/game/liveGameReducer'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -158,22 +152,7 @@ const point: Point = {
     teamTwoStatus: PointStatus.FUTURE,
 }
 
-beforeEach(() => {
-    store.dispatch(
-        setGame({
-            ...game,
-            teamOnePlayers: playerList1,
-            tournament: undefined,
-            startTime: '2022',
-        }),
-    )
-
-    store.dispatch(setTeam('one'))
-    store.dispatch(setPoint(point))
-})
-
 beforeAll(() => {
-    store.dispatch(addPlayers(playerList1))
     jest.useFakeTimers({ legacyFakeTimers: true })
 })
 

@@ -72,7 +72,6 @@ export type TabParamList = {
 
 export type LiveGameParamList = {
     FirstPoint: { gameId: string; team: TeamNumber }
-    LivePointEdit: undefined
     EditGame: { gameId: string }
     LiveGameEdit: {
         gameId: string
@@ -243,10 +242,6 @@ export type CreateTournamentProps = NativeStackScreenProps<
 export type FirstPointProps = NativeStackScreenProps<
     LiveGameParamList,
     'FirstPoint'
->
-export type LivePointEditProps = CompositeScreenProps<
-    NativeStackScreenProps<LiveGameParamList, 'LivePointEdit'>,
-    NativeStackScreenProps<TopLevelParamList>
 >
 export type EditGameProps = NativeStackScreenProps<
     LiveGameParamList,

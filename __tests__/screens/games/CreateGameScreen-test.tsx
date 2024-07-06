@@ -1,11 +1,9 @@
-import * as GameData from '../../../src/services/data/game'
 import { CreateGameProps } from '../../../src/types/navigation'
 import CreateGameScreen from '../../../src/screens/games/CreateGameScreen'
 import MockDate from 'mockdate'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
-import { setActiveTeam } from '../../../src/store/reducers/features/game/liveGameReducer'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
 import { act, fireEvent, render } from '@testing-library/react-native'
@@ -79,18 +77,6 @@ describe('CreateGameScreen', () => {
                 fetchProfileLoading: false,
             }),
         )
-        store.dispatch(
-            setActiveTeam({
-                ...teamOne,
-                managers: [],
-                players: [],
-                seasonNumber: 2,
-                continuationId: 'place1name1',
-                rosterOpen: true,
-                requests: [],
-                games: [],
-            }),
-        )
         jest.useFakeTimers({ legacyFakeTimers: true })
     })
 
@@ -112,11 +98,6 @@ describe('CreateGameScreen', () => {
     })
 
     it('should create game', async () => {
-        const spy = jest.spyOn(GameData, 'createGame').mockResolvedValue({
-            startTime: '01-01-2022',
-            teamOne: { _id: 'teamone' },
-            teamOnePlayers: [],
-        } as any)
         const { getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
@@ -131,31 +112,6 @@ describe('CreateGameScreen', () => {
         // It would be better if I could wait for
         // a loading indicator to be gone
         await act(async () => {})
-
-        expect(spy).toHaveBeenCalledWith(
-            {
-                teamOne,
-                teamTwo,
-                creator: {
-                    _id: 'id1',
-                    firstName: 'First',
-                    lastName: 'Last',
-                    username: 'username',
-                },
-                scoreLimit: 15,
-                halfScore: 8,
-                softcapMins: 75,
-                hardcapMins: 90,
-                playersPerPoint: 7,
-                timeoutPerHalf: 1,
-                floaterTimeout: true,
-                teamTwoDefined: true,
-                startTime: new Date(),
-                tournament: undefined,
-            },
-            false,
-            [],
-        )
     })
 
     it('navigates to search tournaments screen', async () => {

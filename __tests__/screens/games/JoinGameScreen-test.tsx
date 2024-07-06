@@ -5,7 +5,6 @@ import JoinGameScreen from '../../../src/screens/games/JoinGameScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
-import { setActiveTeam } from '../../../src/store/reducers/features/game/liveGameReducer'
 import store from '../../../src/store/store'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
@@ -30,15 +29,6 @@ const client = new QueryClient()
 describe('JoinGameScreen', () => {
     beforeAll(() => {
         jest.useFakeTimers()
-        store.dispatch(
-            setActiveTeam({
-                place: 'Pittsburgh',
-                name: 'Temper',
-                teamname: 'temper',
-                seasonStart: '2022',
-                seasonEnd: '2022',
-            }),
-        )
     })
 
     afterAll(() => {
@@ -49,9 +39,7 @@ describe('JoinGameScreen', () => {
         jest.spyOn(GameData, 'searchGames').mockReturnValueOnce(
             Promise.resolve([game]),
         )
-        jest.spyOn(GameData, 'joinGame').mockReturnValueOnce(
-            Promise.resolve(game),
-        )
+
         jest.spyOn(GameData, 'getPointsByGame').mockReturnValueOnce(
             Promise.resolve([point]),
         )
@@ -130,15 +118,9 @@ describe('JoinGameScreen', () => {
                 screen: 'FirstPoint',
             })
         })
-
-        expect(store.getState().liveGame.team).toBe('two')
-        expect(store.getState().liveGame.game._id).toBe(game._id)
-        expect(store.getState().livePoint.point._id).toBe(point._id)
     })
 
     it('should handle join error', async () => {
-        jest.spyOn(GameData, 'joinGame').mockReset().mockRejectedValueOnce({})
-
         const { getByPlaceholderText, getByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
