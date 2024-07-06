@@ -23,6 +23,9 @@ export const useJoinGame = () => {
                 teamOne._id,
                 code,
             )
+            if (response.status !== 200) {
+                throw new ApiError(response.data.message)
+            }
 
             const { game, token } = response.data
             await EncryptedStorage.setItem('game_token', token)

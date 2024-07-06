@@ -33,13 +33,14 @@ const JoinGameScreen: React.FC<JoinGameProps> = ({ navigation }) => {
             return
         }
 
-        await mutateAsync({ gameId, code })
-
-        setModalVisible(false)
-        navigation.navigate('LiveGame', {
-            screen: 'FirstPoint',
-            params: { gameId, team: 'two' },
-        })
+        try {
+            await mutateAsync({ gameId, code })
+            setModalVisible(false)
+            navigation.navigate('LiveGame', {
+                screen: 'FirstPoint',
+                params: { gameId, team: 'two' },
+            })
+        } catch {}
     }
 
     const onClose = () => {

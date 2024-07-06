@@ -89,6 +89,7 @@ export const joinGame = async (
                 'X-API-Key': API_KEY,
                 authorization: `Bearer ${token}`,
             },
+            validateStatus: () => true,
         },
     )
 }
