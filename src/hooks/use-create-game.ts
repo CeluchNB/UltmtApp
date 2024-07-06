@@ -8,6 +8,11 @@ import { withToken } from '../services/data/auth'
 import { GameSchema, TeamSchema } from '../models'
 import { useObject, useRealm } from '../context/realm'
 
+interface CreateGameData {
+    gameData: CreateGame
+    offline: boolean
+}
+
 export const useCreateGame = (teamOneId?: string) => {
     const realm = useRealm()
     const team = useObject<TeamSchema>('Team', teamOneId ?? '')
@@ -28,6 +33,9 @@ export const useCreateGame = (teamOneId?: string) => {
 
     const createOnlineGame = async (gameData: CreateGame) => {
         const response = await withToken(networkCreateGame, gameData)
+        if (response.status !== 201) {
+            throw new ApiError(response.data.message)
+        }
         const { game, token } = response.data
 
         await EncryptedStorage.setItem('game_token', token)
@@ -39,14 +47,8 @@ export const useCreateGame = (teamOneId?: string) => {
         return schema
     }
 
-    return useMutation(
-        async ({
-            gameData,
-            offline,
-        }: {
-            gameData: CreateGame
-            offline: boolean
-        }) => {
+    return useMutation<GameSchema, ApiError, CreateGameData>(
+        async ({ gameData, offline }) => {
             if (offline) {
                 return await createOfflineGame(gameData)
             } else {

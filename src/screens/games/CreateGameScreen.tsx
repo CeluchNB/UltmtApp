@@ -25,8 +25,15 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
     const {
         theme: { colors, size, weight },
     } = useTheme()
-    const { teamOne, teamTwo, createGame, createLoading, tournament } =
-        useContext(CreateGameContext)
+    const {
+        teamOne,
+        teamTwo,
+        createGame,
+        createReset,
+        createLoading,
+        createError,
+        tournament,
+    } = useContext(CreateGameContext)
 
     const {
         control,
@@ -57,13 +64,15 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
         timeoutPerHalf: number
         floaterTimeout: boolean
     }) => {
-        const { offline, ...data } = formData
+        try {
+            const { offline, ...data } = formData
 
-        const game = await createGame(data, offline)
-        navigation.navigate('LiveGame', {
-            screen: 'FirstPoint',
-            params: { gameId: game._id, team: 'one' },
-        })
+            const game = await createGame(data, offline)
+            navigation.navigate('LiveGame', {
+                screen: 'FirstPoint',
+                params: { gameId: game._id, team: 'one' },
+            })
+        } catch {}
     }
 
     useEffect(() => {
@@ -123,6 +132,11 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
             alignItems: 'center',
             justifyContent: 'center',
         },
+        error: {
+            fontSize: size.fontFifteen,
+            marginBottom: 2,
+            color: colors.error,
+        },
     })
 
     return (
@@ -159,7 +173,13 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
                             )
                         }}
                     />
-                    <GameForm control={control} errors={errors} />
+                    <GameForm
+                        control={control}
+                        errors={errors}
+                        onFormChange={() => {
+                            createReset()
+                        }}
+                    />
                     <View style={styles.tournamentContainer}>
                         <Text style={styles.labelText}>Tournament</Text>
                         <TouchableOpacity
@@ -181,6 +201,9 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
                             />
                         </TouchableOpacity>
                     </View>
+                    {createError && (
+                        <Text style={styles.error}>{createError.message}</Text>
+                    )}
                     <PrimaryButton
                         text="create game"
                         disabled={createLoading}

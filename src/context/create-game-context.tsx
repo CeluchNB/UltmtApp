@@ -21,6 +21,8 @@ interface CreateGameContextData {
     ) => Promise<GameSchema>
     tournament?: Tournament
     createLoading: boolean
+    createError: ApiError | null
+    createReset: () => void
     teamOne?: DisplayTeam
     teamTwo?: GuestTeam
 }
@@ -35,7 +37,12 @@ export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
     const [tournament, setTournament] = useState<Tournament>()
     const account = useSelector(selectAccount)
 
-    const { mutateAsync, isLoading } = useCreateGame(activeTeam?._id)
+    const {
+        mutateAsync,
+        isLoading: createLoading,
+        error: createError,
+        reset: createReset,
+    } = useCreateGame(activeTeam?._id)
 
     const reset = () => {
         setActiveTeam(undefined)
@@ -82,8 +89,10 @@ export const CreateGameProvider = ({ children }: { children: ReactNode }) => {
                 setActiveTeam,
                 setTeamTwo,
                 setTournament,
-                createGame: createGame,
-                createLoading: isLoading,
+                createGame,
+                createReset,
+                createLoading,
+                createError,
             }}>
             {children}
         </CreateGameContext.Provider>
