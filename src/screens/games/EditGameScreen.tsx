@@ -40,8 +40,10 @@ const EditGameScreen: React.FC<EditGameProps> = ({ navigation, route }) => {
     })
 
     const onSubmit = async () => {
-        await handleSubmit(data => onEditGame(data))()
-        navigation.goBack()
+        try {
+            await handleSubmit(data => onEditGame(data))()
+            navigation.goBack()
+        } catch {}
     }
 
     const styles = StyleSheet.create({

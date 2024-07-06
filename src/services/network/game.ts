@@ -1,3 +1,5 @@
+import * as Constants from '../../utils/constants'
+import { ApiError } from '../../types/services'
 import { GuestUser } from '../../types/user'
 import { addQueryParam } from '../../utils/service-utils'
 import { API_KEY, API_URL_V1, API_URL_V2 } from '@env'
@@ -184,7 +186,7 @@ export const editGame = async (
     token: string,
     gameData: UpdateGame,
 ): Promise<AxiosResponse> => {
-    return await axios.put(
+    const response = await axios.put(
         `${API_URL_V1}/game`,
         {
             gameData,
@@ -197,6 +199,10 @@ export const editGame = async (
             validateStatus: () => true,
         },
     )
+    if (response.status !== 200) {
+        throw new ApiError(response.data.message ?? Constants.UPDATE_GAME_ERROR)
+    }
+    return response
 }
 
 export const logGameOpen = async (gameId: string): Promise<AxiosResponse> => {

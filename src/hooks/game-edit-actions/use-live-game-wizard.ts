@@ -13,7 +13,7 @@ export const useLiveGameWizard = (
         useContext(PointEditContext)
     const [state, setState] = useState(initialState)
 
-    const onNavigateSuccess = () => {
+    const navigate = () => {
         if (state === LiveGameWizardState.SET_PLAYERS) {
             setState(LiveGameWizardState.LOG_ACTIONS)
         } else if (state === LiveGameWizardState.LOG_ACTIONS) {
@@ -28,7 +28,7 @@ export const useLiveGameWizard = (
             } else if (state === LiveGameWizardState.LOG_ACTIONS) {
                 await nextPoint.mutate()
             }
-            onNavigateSuccess()
+            navigate()
         } catch {}
     }
 
@@ -41,7 +41,7 @@ export const useLiveGameWizard = (
             if (state === LiveGameWizardState.SET_PLAYERS) {
                 await backPoint.mutate()
             }
-            onNavigateSuccess()
+            navigate()
         } catch {}
     }
 
@@ -82,6 +82,6 @@ export const useLiveGameWizard = (
         nextLoading,
         next: nextMutate,
         back: backMutate,
-        navigate: onNavigateSuccess,
+        navigate: navigate,
     }
 }
