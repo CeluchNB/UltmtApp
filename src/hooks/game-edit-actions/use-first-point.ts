@@ -36,6 +36,9 @@ export const useFirstPoint = (gameId: string) => {
 
     const createOnlinePoint = async (pullingTeam: TeamNumber) => {
         const response = await withGameToken(nextPoint, pullingTeam, 0)
+        if (response.status !== 201) {
+            throw new ApiError(response.data.message)
+        }
         const { point: pointResponse } = response.data
 
         const schema = new PointSchema(pointResponse)
@@ -45,11 +48,13 @@ export const useFirstPoint = (gameId: string) => {
         })
     }
 
-    return useMutation(async (pullingTeam: TeamNumber) => {
-        if (game?.offline) {
-            await createOfflinePoint(pullingTeam)
-        } else {
-            await createOnlinePoint(pullingTeam)
-        }
-    })
+    return useMutation<void, ApiError, TeamNumber>(
+        async (pullingTeam: TeamNumber) => {
+            if (game?.offline) {
+                await createOfflinePoint(pullingTeam)
+            } else {
+                await createOnlinePoint(pullingTeam)
+            }
+        },
+    )
 }

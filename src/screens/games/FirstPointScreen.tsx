@@ -26,8 +26,10 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation, route }) => {
     const onCreate = async () => {
         if (!game || !pullingTeam) return
 
-        await mutateAsync(pullingTeam as TeamNumber)
-        navigation.navigate('LiveGameEdit', { gameId: game._id, team })
+        try {
+            await mutateAsync(pullingTeam as TeamNumber)
+            navigation.navigate('LiveGameEdit', { gameId: game._id, team })
+        } catch {}
     }
 
     const styles = StyleSheet.create({
@@ -134,9 +136,7 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation, route }) => {
                     }}
                 />
 
-                {error !== undefined && error !== null && (
-                    <Text style={styles.errorText}>{error?.toString()}</Text>
-                )}
+                {error && <Text style={styles.errorText}>{error.message}</Text>}
             </View>
             <BaseModal
                 visible={showJoinModal}
