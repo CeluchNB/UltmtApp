@@ -156,7 +156,7 @@ export const useBackPoint = (currentPointId: string) => {
             if (game?.offline) {
                 offlineBackPoint()
             } else {
-                onlineBackPoint()
+                await onlineBackPoint()
             }
         },
     })

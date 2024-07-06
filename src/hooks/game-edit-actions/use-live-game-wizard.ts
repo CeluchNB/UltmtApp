@@ -22,31 +22,31 @@ export const useLiveGameWizard = (
     }
 
     const next = async () => {
-        if (state === LiveGameWizardState.SET_PLAYERS) {
-            await setPlayers.mutate()
-        } else if (state === LiveGameWizardState.LOG_ACTIONS) {
-            await nextPoint.mutate()
-        }
+        try {
+            if (state === LiveGameWizardState.SET_PLAYERS) {
+                await setPlayers.mutate()
+            } else if (state === LiveGameWizardState.LOG_ACTIONS) {
+                await nextPoint.mutate()
+            }
+            onNavigateSuccess()
+        } catch {}
     }
 
     const { mutateAsync: nextMutate, isLoading: nextLoading } = useMutation(
         () => next(),
-        {
-            onSuccess: onNavigateSuccess,
-        },
     )
 
     const back = async () => {
-        if (state === LiveGameWizardState.SET_PLAYERS) {
-            await backPoint.mutate()
-        }
+        try {
+            if (state === LiveGameWizardState.SET_PLAYERS) {
+                await backPoint.mutate()
+            }
+            onNavigateSuccess()
+        } catch {}
     }
 
     const { mutateAsync: backMutate, isLoading: backLoading } = useMutation(
         () => back(),
-        {
-            onSuccess: onNavigateSuccess,
-        },
     )
 
     const backDisabled = useMemo(() => {
