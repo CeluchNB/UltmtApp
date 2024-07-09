@@ -11,7 +11,7 @@ import { useQuery as useLocalQuery } from '../context/realm'
 import { useQuery } from 'react-query'
 import { useReenterGame } from '../hooks/game-edit-actions/use-reenter-game'
 import { useTheme } from '../hooks'
-import { FlatList, StyleSheet, Text } from 'react-native'
+import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native'
 import { Game, GameStatus, LocalGame } from '../types/game'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
@@ -19,11 +19,18 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
         theme: { colors, size },
     } = useTheme()
 
-    // TODO: GAME-REFACTOR decide on error display
-    const { mutateAsync: deleteGame, isLoading: deleteLoading } =
-        useDeleteGame()
-    // TODO: GAME-REFACTOR loading + error display
-    const { mutateAsync: reenterGame } = useReenterGame()
+    const {
+        mutateAsync: deleteGame,
+        isLoading: deleteLoading,
+        error: deleteError,
+        reset: deleteReset,
+    } = useDeleteGame()
+    const {
+        mutateAsync: reenterGame,
+        error: reenterError,
+        isLoading: reenterLoading,
+        reset: reenterReset,
+    } = useReenterGame()
 
     const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
         cacheTime: 0,
@@ -48,33 +55,39 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     )
 
     const onGamePress = async (activeGame: LocalGame) => {
-        if (
-            activeGame.offline &&
-            activeGame.teamOneStatus !== GameStatus.ACTIVE
-        ) {
-            navigation.navigate('OfflineGameOptions', {
-                gameId: activeGame._id,
-            })
-            return
-        }
+        try {
+            if (
+                activeGame.offline &&
+                activeGame.teamOneStatus !== GameStatus.ACTIVE
+            ) {
+                navigation.navigate('OfflineGameOptions', {
+                    gameId: activeGame._id,
+                })
+                return
+            }
 
-        await reenterGame({
-            gameId: activeGame._id,
-            teamId: getMyTeamId(activeGame),
-        })
+            await reenterGame({
+                gameId: activeGame._id,
+                teamId: getMyTeamId(activeGame),
+            })
+        } catch {}
     }
 
     const onDelete = async () => {
-        if (deletingGame) {
-            await deleteGame({
-                gameId: deletingGame._id,
-                teamId: getMyTeamId(deletingGame),
-            })
-            setModalVisible(false)
-        }
+        try {
+            reenterReset()
+            if (deletingGame) {
+                await deleteGame({
+                    gameId: deletingGame._id,
+                    teamId: getMyTeamId(deletingGame),
+                })
+                setModalVisible(false)
+            }
+        } catch {}
     }
 
     const onClose = async () => {
+        deleteReset()
         setModalVisible(false)
     }
 
@@ -84,6 +97,10 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
             color: colors.gray,
         },
         list: { marginTop: 10 },
+        error: {
+            fontSize: size.fontFifteen,
+            color: colors.error,
+        },
     })
 
     return (
@@ -92,6 +109,10 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 (games?.length === 0 && (
                     <Text style={styles.infoText}>No active games</Text>
                 ))}
+            {reenterError && (
+                <Text style={styles.error}>{reenterError.toString()}</Text>
+            )}
+            {reenterLoading && <ActivityIndicator color={colors.textPrimary} />}
             <FlatList
                 style={styles.list}
                 data={games.map(g => parseGame(g))}
@@ -120,6 +141,7 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 onCancel={onClose}
                 onConfirm={onDelete}
                 confirmColor={colors.textPrimary}
+                error={deleteError}
             />
         </BaseScreen>
     )

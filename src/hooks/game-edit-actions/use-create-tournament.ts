@@ -16,7 +16,9 @@ export const useCreateTournament = () => {
             try {
                 const response = await withToken(createTournament, data)
                 if (response.status !== 201)
-                    throw new ApiError(CREATE_TOURNAMENT_ERROR)
+                    throw new ApiError(
+                        response.data.message ?? CREATE_TOURNAMENT_ERROR,
+                    )
                 const { tournament } = response.data
 
                 const schema = new TournamentSchema(tournament)

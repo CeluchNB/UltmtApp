@@ -208,6 +208,7 @@ export const createGuest = async (
                 Authorization: `Bearer ${token}`,
                 'X-API-Key': API_KEY,
             },
+            validateStatus: () => true,
         },
     )
 }
