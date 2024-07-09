@@ -1,3 +1,4 @@
+import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { PointStatus } from '../../types/point'
 import { UpdateMode } from 'realm'
@@ -156,8 +157,8 @@ export const useReenterGame = () => {
         }
     }
 
-    return useMutation(
-        async ({ gameId, teamId }: { gameId: string; teamId: string }) => {
+    return useMutation<void, ApiError, { gameId: string; teamId: string }>(
+        async ({ gameId, teamId }) => {
             const savedGame = realm.objectForPrimaryKey<GameSchema>(
                 'Game',
                 gameId,

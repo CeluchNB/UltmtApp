@@ -1,3 +1,4 @@
+import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import { GameSchema } from '../../models'
 import { deleteGame } from '../../services/network/game'
@@ -8,8 +9,8 @@ import { withToken } from '../../services/data/auth'
 export const useDeleteGame = () => {
     const realm = useRealm()
 
-    return useMutation(
-        async ({ gameId, teamId }: { gameId: string; teamId: string }) => {
+    return useMutation<void, ApiError, { gameId: string; teamId: string }>(
+        async ({ gameId, teamId }) => {
             const game = realm.objectForPrimaryKey<GameSchema>('Game', gameId)
 
             if (!game?.offline) {

@@ -17,6 +17,7 @@ export const createTeam = async (
                 Authorization: `Bearer ${token}`,
                 'X-API-Key': API_KEY,
             },
+            validateStatus: () => true,
         },
     )
 }

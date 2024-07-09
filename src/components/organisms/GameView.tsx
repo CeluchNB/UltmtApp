@@ -14,6 +14,7 @@ import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     StyleSheet,
+    Text,
     View,
     useWindowDimensions,
 } from 'react-native'
@@ -52,7 +53,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
     const navigation = useNavigation()
 
     const {
-        theme: { colors },
+        theme: { colors, size },
     } = useTheme()
 
     const mapTabNameToIndex = (name: 'points' | 'stats'): number => {
@@ -73,10 +74,20 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
         managingTeamId,
         onSelectPoint,
     } = useContext(GameViewContext)
-    const { mutateAsync: deleteGame, isLoading: deleteLoading } =
-        useDeleteGame()
-    const { mutateAsync: reenterGame, isLoading: reactivateLoading } =
-        useReenterGame()
+
+    const {
+        mutateAsync: deleteGame,
+        isLoading: deleteLoading,
+        error: deleteError,
+        reset: deleteReset,
+    } = useDeleteGame()
+    const {
+        mutateAsync: reenterGame,
+        isLoading: reactivateLoading,
+        error: reenterError,
+        reset: reenterReset,
+    } = useReenterGame()
+
     const [deleteModalVisible, setDeleteModalVisible] = React.useState(false)
     const [exportModalVisible, setExportModalVisible] = React.useState(false)
     const [exportLoading, setExportLoading] = React.useState(false)
@@ -108,11 +119,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
             }
 
             await reenterGame({ gameId: game._id, teamId: managingTeamId })
-        } catch (e) {
-            // TODO: error display?
-        } finally {
-            // setReactivateLoading(false)
-        }
+        } catch {}
     }
 
     const onDelete = () => {
@@ -125,10 +132,11 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
 
     const handleDeleteGame = async () => {
         if (!managingTeamId) return
-
-        await deleteGame({ gameId, teamId: managingTeamId })
-        setDeleteModalVisible(false)
-        navigation.goBack()
+        try {
+            await deleteGame({ gameId, teamId: managingTeamId })
+            setDeleteModalVisible(false)
+            navigation.goBack()
+        } catch {}
     }
 
     const handleExportStats = React.useCallback(async () => {
@@ -146,16 +154,22 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
     }, [gameId, managingTeamId, userId])
 
     const onDeleteModalClose = async () => {
+        deleteReset()
         setDeleteModalVisible(false)
     }
 
     const onExportModalClose = async () => {
+        reenterReset()
         setExportModalVisible(false)
     }
 
     const styles = StyleSheet.create({
         tabContainer: {
             height: '100%',
+        },
+        error: {
+            color: colors.error,
+            fontSize: size.fontFifteen,
         },
     })
 
@@ -173,6 +187,9 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
                         }
                         onDeleteGame={managingTeamId ? onDelete : undefined}
                     />
+                )}
+                {reenterError && (
+                    <Text style={styles.error}>{reenterError.toString()}</Text>
                 )}
                 {(allPointsLoading || gameLoading) && (
                     <ActivityIndicator color={colors.textPrimary} />
@@ -209,6 +226,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
                 onCancel={onDeleteModalClose}
                 loading={deleteLoading}
                 onConfirm={handleDeleteGame}
+                error={deleteError}
             />
             <ConfirmModal
                 displayText="This will send a spreadsheet to your email. Export stats?"

@@ -1,10 +1,9 @@
 import { ApiError, LocalError } from '../types/services'
 
-// TODO: investigate correct type for error. Should be error.response?.data?.message ??
 export const throwApiError = (error: any, message: string) => {
     if (error.data?.message) {
         throw new ApiError(error.data.message)
-    } else if (typeof error === typeof ApiError) {
+    } else if (error.message) {
         throw new ApiError(error.message)
     } else {
         throw new ApiError(message)
