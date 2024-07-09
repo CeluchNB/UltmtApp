@@ -66,10 +66,7 @@ export const useFinishGame = (gameId: string) => {
     }
 
     const onlineFinishGame = async () => {
-        const response = await withGameToken(finishGame)
-        if (response.status !== 200) {
-            throw new ApiError(response.data.message)
-        }
+        await withGameToken(finishGame)
 
         realm.write(() => {
             realm.delete(actions)

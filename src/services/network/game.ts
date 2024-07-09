@@ -97,7 +97,7 @@ export const joinGame = async (
 }
 
 export const finishGame = async (token: string) => {
-    return await axios.put(
+    const response = await axios.put(
         `${API_URL_V2}/game/finish`,
         {},
         {
@@ -108,6 +108,13 @@ export const finishGame = async (token: string) => {
             validateStatus: () => true,
         },
     )
+    if (response.status === 401) {
+        throw new ApiError(Constants.FINISH_GAME_ERROR)
+    }
+    if (response.status !== 200) {
+        throw new ApiError(response.data.message)
+    }
+    return response
 }
 
 export const getGamesByTeam = async (teamId: string) => {

@@ -52,7 +52,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const {
         point,
         team,
-        finishGameMutation: { finishGameReset },
+        finishGameMutation: { reset: finishGameReset },
     } = useContext(LiveGameContext)
     const realm = useRealm()
 

@@ -80,7 +80,11 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
                     <View style={styles.rightContainer}>
                         <Button
                             textColor={colors.textPrimary}
-                            onPress={actionButton.onAction}
+                            onPress={() => {
+                                try {
+                                    actionButton.onAction()
+                                } catch {}
+                            }}
                             loading={actionButton.loading}
                             style={styles.actionButton}
                             contentStyle={styles.actionButtonContent}

@@ -1,3 +1,4 @@
+import { ApiError } from '../types/services'
 import { InGameStatsUser } from '../types/user'
 import { TeamNumber } from '../types/team'
 import { parseInGameStatsUser } from '../utils/in-game-stats'
@@ -16,10 +17,10 @@ interface LiveGameContextData {
     addTag: (tag: string) => void
     setCurrentPointNumber: (pointNumber: number) => void
     finishGameMutation: {
-        finishGame: () => Promise<void>
-        finishGameLoading: boolean
-        finishGameError?: string
-        finishGameReset: () => void
+        mutate: () => Promise<void>
+        isLoading: boolean
+        error: ApiError | null
+        reset: () => void
     }
 }
 
@@ -110,10 +111,10 @@ const LiveGameProvider = ({
                 addTag,
                 setCurrentPointNumber,
                 finishGameMutation: {
-                    finishGame,
-                    finishGameReset,
-                    finishGameLoading,
-                    finishGameError: finishGameError?.message,
+                    mutate: finishGame,
+                    reset: finishGameReset,
+                    isLoading: finishGameLoading,
+                    error: finishGameError,
                 },
             }}>
             {children}

@@ -34,7 +34,11 @@ const PointEditView: React.FC<{}> = () => {
         game,
         point,
         team,
-        finishGameMutation: { finishGameLoading, finishGameError, finishGame },
+        finishGameMutation: {
+            isLoading: finishGameLoading,
+            error: finishGameError,
+            mutate: finishGame,
+        },
     } = useContext(LiveGameContext)
     const {
         myTeamActions,
@@ -46,7 +50,7 @@ const PointEditView: React.FC<{}> = () => {
     const navigation = useNavigation()
 
     const error = useMemo(() => {
-        return [finishGameError, actionError, nextPoint.error]
+        return [finishGameError?.message, actionError, nextPoint.error]
             .filter(msg => !!msg)
             .join(' ')
     }, [finishGameError, actionError, nextPoint])
