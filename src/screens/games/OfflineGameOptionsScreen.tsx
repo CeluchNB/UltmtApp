@@ -19,12 +19,17 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const { mutateAsync: reenterGame, isLoading: reenterLoading } =
-        useReenterGame()
+    const {
+        mutateAsync: reenterGame,
+        isLoading: reenterLoading,
+        error: reenterError,
+        reset: reenterReset,
+    } = useReenterGame()
     const {
         mutateAsync: pushOfflineGame,
         isLoading: pushLoading,
         error: pushError,
+        reset: pushReset,
     } = usePushFullGame()
 
     const { data: game } = useQuery(['getOfflineGameById', { gameId }], () =>
@@ -32,14 +37,23 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     )
 
     const pushGame = async () => {
-        await pushOfflineGame(gameId)
-        navigation.navigate('ActiveGames')
+        try {
+            reenterReset()
+            await pushOfflineGame(gameId)
+            navigation.navigate('ActiveGames')
+        } catch {}
     }
 
-    const reactivateGame = async () => {
-        if (game) {
-            await reenterGame({ gameId: game._id, teamId: game.teamOne._id })
-        }
+    const onReenterGame = async () => {
+        try {
+            pushReset()
+            if (game) {
+                await reenterGame({
+                    gameId: game._id,
+                    teamId: game.teamOne._id,
+                })
+            }
+        } catch {}
     }
 
     const styles = StyleSheet.create({
@@ -68,11 +82,16 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
                             {pushError.message}
                         </Text>
                     )}
+                    {reenterError && (
+                        <Text style={styles.errorText}>
+                            {reenterError.message}
+                        </Text>
+                    )}
                     <SecondaryButton
                         style={styles.button}
                         text="reactivate"
                         loading={reenterLoading}
-                        onPress={reactivateGame}
+                        onPress={onReenterGame}
                     />
                 </View>
             )}
