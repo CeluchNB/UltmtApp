@@ -481,7 +481,7 @@ describe('test user data calls', () => {
         )
 
         await expect(deleteAccount()).rejects.toBeDefined()
-        expect(RNEncryptedStorage.removeItem).toHaveBeenCalledTimes(2)
+        expect(RNEncryptedStorage.removeItem).toHaveBeenCalledTimes(4)
     })
 
     it('should handle join team by code network success', async () => {

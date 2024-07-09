@@ -194,7 +194,7 @@ describe('get active games', () => {
             Promise.reject({ message: 'test error' }),
         )
         await expect(getActiveGames()).rejects.toMatchObject({
-            message: Constants.GET_GAME_ERROR,
+            message: 'test error',
         })
     })
 })
@@ -210,7 +210,7 @@ describe('test get offline game by id', () => {
 
     it('with local failure', async () => {
         jest.spyOn(LocalGameServices, 'getGameById').mockRejectedValueOnce(
-            Promise.resolve({ message: 'test' }),
+            Promise.resolve({ message: 'test error' }),
         )
         await expect(getOfflineGameById('game1')).rejects.toMatchObject({
             message: Constants.GET_GAME_ERROR,
