@@ -199,6 +199,7 @@ const GameViewProvider = ({
         const point = getPointById(pointId)
         if (!point) return
 
+        setActionStack(new ActionStack())
         setActivePoint(point)
     }
 

@@ -113,6 +113,7 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                 style={styles.button}
                 text="submit"
                 loading={isLoading}
+                disabled={isLoading}
                 onPress={async () => {
                     handleSubmit(({ team: teamNumber }) => {
                         mutate(teamNumber as TeamNumber, {

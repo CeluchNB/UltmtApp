@@ -45,8 +45,8 @@ export const useSetPlayers = (
         })
 
         if (
-            !(!!point.pullingTeam._id && !!pointResponse.pullingTeam._id) ||
-            pointResponse.pullingTeam._id !== point.pullingTeam._id
+            !(!point.pullingTeam._id && !pointResponse.pullingTeam._id) && // false if both undefined
+            pointResponse.pullingTeam._id !== point.pullingTeam._id //
         ) {
             onPullingTeamMismatch()
             throw new Error()

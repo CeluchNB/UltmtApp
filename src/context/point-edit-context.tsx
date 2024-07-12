@@ -175,10 +175,11 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const nextPoint = async () => {
         resetMutations()
         const lastAction = myTeamActions[myTeamActions.length - 1].actionType
-        await nextPointMutation(
-            lastAction === ActionType.TEAM_ONE_SCORE ? 'one' : 'two',
-        )
-        onNextPoint()
+        await nextPointMutation({
+            pullingTeam:
+                lastAction === ActionType.TEAM_ONE_SCORE ? 'one' : 'two',
+            emitNextPoint: onNextPoint,
+        })
     }
 
     const backPoint = async () => {

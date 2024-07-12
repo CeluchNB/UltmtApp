@@ -112,7 +112,10 @@ export const useNextPoint = (currentPointId: string) => {
         setCurrentPointNumber(point.pointNumber + 1)
     }
 
-    const onlineNextPoint = async (pullingTeam: TeamNumber) => {
+    const onlineNextPoint = async (
+        pullingTeam: TeamNumber,
+        emitNextPoint: () => void,
+    ) => {
         if (!point || !game) return
 
         const response = await withGameToken(
@@ -121,6 +124,7 @@ export const useNextPoint = (currentPointId: string) => {
             point.pointNumber,
         )
         const { point: pointResponse } = response.data
+        emitNextPoint()
 
         const stats = generatePlayerStatsForPoint(
             allPointPlayers,
@@ -142,13 +146,17 @@ export const useNextPoint = (currentPointId: string) => {
         setCurrentPointNumber(pointResponse.pointNumber)
     }
 
-    return useMutation<undefined, ApiError, TeamNumber>(async pullingTeam => {
+    return useMutation<
+        undefined,
+        ApiError,
+        { pullingTeam: TeamNumber; emitNextPoint: () => void }
+    >(async ({ pullingTeam, emitNextPoint }) => {
         if (!point || !game) return
 
         if (game.offline) {
             await offlineNextPoint(pullingTeam)
         } else {
-            await onlineNextPoint(pullingTeam)
+            await onlineNextPoint(pullingTeam, emitNextPoint)
         }
     })
 }
