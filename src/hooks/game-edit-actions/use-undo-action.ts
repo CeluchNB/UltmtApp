@@ -1,35 +1,49 @@
 import { ActionSchema } from '../../models'
 import { LiveGameContext } from '../../context/live-game-context'
+import { TeamNumber } from '../../types/team'
 import { handleUndoActionSideEffects } from '../../services/data/live-action'
 import { parseAction } from '../../utils/action'
 import { useContext } from 'react'
 import { useMutation } from 'react-query'
-import { useQuery, useRealm } from '../../context/realm'
+import { useRealm } from '../../context/realm'
 
 export const useUndoAction = () => {
     const { point } = useContext(LiveGameContext)
     const realm = useRealm()
-    const actionQuery = useQuery<ActionSchema>(
+
+    return useMutation(async () =>
+        //     {
+        //     actionNumber,
+        //     team,
+        // }: {
+        //     actionNumber: number
+        //     team: TeamNumber
+        // }
         {
-            type: 'Action',
-            query: collection => {
-                return collection
-                    .filtered('pointId == $0', point?._id)
-                    .sorted('actionNumber', true)
-            },
+            if (!point) return
+
+            const actions = realm
+                .objects<ActionSchema>('Action')
+                .filtered('pointId == $0', point._id)
+                .sorted('actionNumber', true)
+            if (actions.length < 1) return
+
+            // This convoluted method appears to fix the undo error where
+            // actions were sometimes not deleted. Continue to monitor
+            const { _id } = actions[0]
+            const action = realm.objectForPrimaryKey<ActionSchema>(
+                'Action',
+                _id,
+            )
+            if (!action) return
+
+            const { actionNumber } = action
+            realm.write(() => {
+                handleUndoActionSideEffects(parseAction(actions[0]), point)
+                realm.delete(action)
+            })
+
+            return actionNumber
         },
-        [point?._id],
     )
-
-    return useMutation(async () => {
-        if (!point || !actionQuery || actionQuery.length < 1) return
-
-        const { actionNumber } = actionQuery[0]
-        realm.write(() => {
-            handleUndoActionSideEffects(parseAction(actionQuery[0]), point)
-            realm.delete(actionQuery[0])
-        })
-
-        return actionNumber
-    })
 }
