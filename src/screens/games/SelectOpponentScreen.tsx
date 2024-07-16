@@ -20,7 +20,10 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
 
     const onSelect = (team: GuestTeam) => {
         setTeamTwo(team)
-        navigation.navigate('CreateGame')
+        navigation.reset({
+            index: 1,
+            routes: [{ name: 'Tabs' }, { name: 'CreateGame' }],
+        })
     }
 
     const styles = StyleSheet.create({

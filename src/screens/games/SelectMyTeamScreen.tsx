@@ -48,7 +48,10 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
 
     const onSelect = async (teamOne: Team) => {
         setActiveTeam(teamOne)
-        navigation.navigate('SelectOpponent', {})
+        navigation.reset({
+            index: 1,
+            routes: [{ name: 'Tabs' }, { name: 'SelectOpponent', params: {} }],
+        })
     }
 
     const onCreateTeam = async () => {

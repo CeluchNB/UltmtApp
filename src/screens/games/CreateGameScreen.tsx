@@ -68,9 +68,22 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
             const { offline, ...data } = formData
 
             const game = await createGame(data, offline)
-            navigation.navigate('LiveGame', {
-                screen: 'FirstPoint',
-                params: { gameId: game._id, team: 'one' },
+            navigation.reset({
+                index: 1,
+                routes: [
+                    { name: 'Tabs' },
+                    {
+                        name: 'LiveGame',
+                        state: {
+                            routes: [
+                                {
+                                    name: 'FirstPoint',
+                                    params: { gameId: game._id, team: 'one' },
+                                },
+                            ],
+                        },
+                    },
+                ],
             })
         } catch {}
     }

@@ -28,7 +28,15 @@ const FirstPointScreen: React.FC<FirstPointProps> = ({ navigation, route }) => {
 
         try {
             await mutateAsync(pullingTeam as TeamNumber)
-            navigation.navigate('LiveGameEdit', { gameId: game._id, team })
+            navigation.reset({
+                index: 0,
+                routes: [
+                    {
+                        name: 'LiveGameEdit',
+                        params: { gameId: game._id, team },
+                    },
+                ],
+            })
         } catch {}
     }
 
