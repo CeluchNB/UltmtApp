@@ -32,6 +32,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
         switchPullingTeam,
     } = useContext(PointEditContext)
     const { selectedPlayers, toggleSelection } = selectPlayers
+    const selectedPlayerIds = selectedPlayers.map(player => player._id)
 
     const [guestModalVisible, setGuestModalVisible] = useState(false)
     const [pullingModalVisible, setPullingModalVisible] = useState(false)
@@ -163,7 +164,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                                 toggleSelection(item)
                             }}
                             selectedColor={
-                                selectedPlayers.includes(item)
+                                selectedPlayerIds.includes(item._id)
                                     ? colors.textPrimary
                                     : colors.gray
                             }
