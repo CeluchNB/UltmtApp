@@ -23,6 +23,7 @@ const PlayerActionTagModal: React.FC<PlayerActionTagModalProps> = ({
         theme: { colors },
     } = useTheme()
     const { tags, addTag } = useContext(LiveGameContext)
+
     const [newTag, setNewTag] = useState('')
     const [selectedTags, setSelectedTags] = useState<string[]>([])
 
