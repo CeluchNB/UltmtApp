@@ -2,7 +2,7 @@ import LivePointUtilityBar from '../../../src/components/molecules/LivePointUtil
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react-native'
 
-describe('LivePointStatus', () => {
+describe('LivePointUtilityBar', () => {
     it('matches base snapshot', () => {
         const onUndo = jest.fn()
         const snapshot = render(
