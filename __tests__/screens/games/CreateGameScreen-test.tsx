@@ -2,10 +2,8 @@ import { CreateGameProps } from '../../../src/types/navigation'
 import CreateGameScreen from '../../../src/screens/games/CreateGameScreen'
 import MockDate from 'mockdate'
 import { NavigationContainer } from '@react-navigation/native'
-import { Provider } from 'react-redux'
 import React from 'react'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
-import store from '../../../src/store/store'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -57,26 +55,6 @@ jest.mock('react-native-paper', () => {
 describe('CreateGameScreen', () => {
     beforeAll(() => {
         MockDate.set('2022')
-        store.dispatch(
-            setProfile({
-                _id: 'id1',
-                firstName: 'First',
-                lastName: 'Last',
-                email: 'email@email.com',
-                username: 'username',
-                error: undefined,
-                leaveManagerError: undefined,
-                privateProfile: false,
-                openToRequests: true,
-                playerTeams: [],
-                managerTeams: [],
-                archiveTeams: [],
-                requests: [],
-                toggleRosterStatusLoading: false,
-                editLoading: false,
-                fetchProfileLoading: false,
-            }),
-        )
         jest.useFakeTimers({ legacyFakeTimers: true })
     })
 
@@ -87,11 +65,9 @@ describe('CreateGameScreen', () => {
 
     it('should match snapshot', () => {
         const snapshot = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <CreateGameScreen {...props} />
-                </NavigationContainer>
-            </Provider>,
+            <NavigationContainer>
+                <CreateGameScreen {...props} />
+            </NavigationContainer>,
         )
 
         expect(snapshot.toJSON()).toMatchSnapshot()
@@ -99,14 +75,12 @@ describe('CreateGameScreen', () => {
 
     it('should create game', async () => {
         const { getByText } = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <CreateGameScreen {...props} />
-                </NavigationContainer>
-            </Provider>,
+            <NavigationContainer>
+                <CreateGameScreen {...props} />
+            </NavigationContainer>,
         )
 
-        const button = getByText('start')
+        const button = getByText('create game')
         fireEvent.press(button)
 
         // It would be better if I could wait for
@@ -116,11 +90,9 @@ describe('CreateGameScreen', () => {
 
     it('navigates to search tournaments screen', async () => {
         const { getByText, getByTestId } = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <CreateGameScreen {...props} />
-                </NavigationContainer>
-            </Provider>,
+            <NavigationContainer>
+                <CreateGameScreen {...props} />
+            </NavigationContainer>,
         )
 
         const tournamentField = getByText('N/A')

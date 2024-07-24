@@ -30,8 +30,10 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
         firstName: string
         lastName: string
     }) => {
-        await mutateAsync(player)
-        reset()
+        try {
+            await mutateAsync(player)
+            reset()
+        } catch {}
     }
 
     const {
