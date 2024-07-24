@@ -17,6 +17,7 @@ export const useJoinGame = () => {
         async ({ gameId, code }: { gameId: string; code: string }) => {
             if (!teamOne)
                 throw new ApiError('You must select your own team first')
+
             const response = await withToken(
                 joinGame,
                 gameId,

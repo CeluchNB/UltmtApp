@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { DisplayTeam, GuestTeam, Team } from '../types/team'
 import React, { ReactNode, createContext, useState } from 'react'
 
-interface CreateGameContextData {
+export interface CreateGameContextData {
     setActiveTeam: (team: Team) => void
     setTeamTwo: (team: GuestTeam) => void
     setTournament: (tournament: Tournament) => void

@@ -1,19 +1,31 @@
+import * as AuthServices from '../../../src/services/network/auth'
 import * as Constants from '../../../src/utils/constants'
 import * as GameData from '../../../src/services/data/game'
+import * as GameNetwork from '../../../src/services/network/game'
+import { AxiosResponse } from 'axios'
+import { DisplayTeamFactory } from '../../test-data/team'
+import { GameFactory } from '../../test-data/game'
 import { JoinGameProps } from '../../../src/types/navigation'
 import JoinGameScreen from '../../../src/screens/games/JoinGameScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
+import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import React from 'react'
 import store from '../../../src/store/store'
+import { withRealm } from '../../utils/renderers'
+import {
+    CreateGameContext,
+    CreateGameContextData,
+    CreateGameProvider,
+} from '../../../src/context/create-game-context'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     fireEvent,
     render,
+    screen,
     waitFor,
     waitForElementToBeRemoved,
 } from '@testing-library/react-native'
-import { game, point } from '../../../fixtures/data'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -35,25 +47,26 @@ describe('JoinGameScreen', () => {
         jest.useRealTimers()
     })
 
+    const game = GameFactory.build()
     beforeEach(() => {
         jest.spyOn(GameData, 'searchGames').mockReturnValueOnce(
             Promise.resolve([game]),
-        )
-
-        jest.spyOn(GameData, 'getPointsByGame').mockReturnValueOnce(
-            Promise.resolve([point]),
         )
     })
 
     it('should match snapshot', async () => {
         const snapshot = render(
-            <Provider store={store}>
+            withRealm(
                 <NavigationContainer>
-                    <QueryClientProvider client={client}>
-                        <JoinGameScreen {...props} />
-                    </QueryClientProvider>
-                </NavigationContainer>
-            </Provider>,
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <CreateGameProvider>
+                                <JoinGameScreen {...props} />
+                            </CreateGameProvider>
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
         await waitForElementToBeRemoved(() =>
@@ -64,95 +77,142 @@ describe('JoinGameScreen', () => {
     })
 
     it('should handle search', async () => {
-        const { getByPlaceholderText, getByText } = render(
-            <Provider store={store}>
+        render(
+            withRealm(
                 <NavigationContainer>
-                    <QueryClientProvider client={client}>
-                        <JoinGameScreen {...props} />
-                    </QueryClientProvider>
-                </NavigationContainer>
-            </Provider>,
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <CreateGameProvider>
+                                <JoinGameScreen {...props} />
+                            </CreateGameProvider>
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
-        const search = getByPlaceholderText('Search Games...')
-        fireEvent.changeText(search, 'sockeye')
+        const search = screen.getByPlaceholderText('Search Games...')
+        fireEvent.changeText(search, game.teamTwo.name)
 
         await waitFor(() => {
-            expect(getByText('Sockeye')).toBeTruthy()
+            expect(screen.getByText(game.teamTwo.name)).toBeTruthy()
         })
     })
 
     it('should handle join', async () => {
-        const { getByPlaceholderText, getByText } = render(
-            <Provider store={store}>
+        jest.spyOn(GameNetwork, 'joinGame').mockReturnValueOnce(
+            Promise.resolve({
+                data: { game: GameFactory.build(), token: 'token' },
+                status: 200,
+                statusText: 'Good',
+            } as AxiosResponse),
+        )
+        render(
+            withRealm(
                 <NavigationContainer>
-                    <QueryClientProvider client={client}>
-                        <JoinGameScreen {...props} />
-                    </QueryClientProvider>
-                </NavigationContainer>
-            </Provider>,
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <CreateGameContext.Provider
+                                value={
+                                    {
+                                        teamOne: DisplayTeamFactory.build(),
+                                    } as CreateGameContextData
+                                }>
+                                <JoinGameScreen {...props} />
+                            </CreateGameContext.Provider>
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
-        const search = getByPlaceholderText('Search Games...')
-        fireEvent.changeText(search, 'sockeye')
+        const search = screen.getByPlaceholderText('Search Games...')
+        fireEvent.changeText(search, game.teamTwo.name)
 
         await waitFor(() => {
-            expect(getByText('Sockeye')).toBeTruthy()
+            expect(screen.getByText(game.teamTwo.name)).toBeTruthy()
         })
 
-        const gameCard = getByText('Sockeye')
+        const gameCard = screen.getByText(game.teamTwo.name)
         fireEvent.press(gameCard)
 
         await waitFor(() => {
-            expect(getByText('Join With Code')).toBeTruthy()
+            expect(screen.getByText('Join With Code')).toBeTruthy()
         })
 
-        const input = getByPlaceholderText('6 Digit Code')
+        const input = screen.getByPlaceholderText('6 Digit Code')
         fireEvent.changeText(input, '123456')
 
-        const button = getByText('join')
+        const button = screen.getByText('join')
         fireEvent.press(button)
 
         await waitFor(() => {
             expect(props.navigation.navigate).toHaveBeenCalledWith('LiveGame', {
                 screen: 'FirstPoint',
+                params: {
+                    gameId: game._id,
+                    team: 'two',
+                },
             })
         })
     })
 
-    it('should handle join error', async () => {
-        const { getByPlaceholderText, getByText } = render(
-            <Provider store={store}>
+    it('should handle error joining', async () => {
+        RNEncryptedStorage.getItem.mockReturnValue(Promise.resolve('token'))
+        jest.spyOn(AuthServices, 'refreshToken').mockReturnValue(
+            Promise.resolve({
+                data: { tokens: { access: 'access', refresh: 'refresh' } },
+                status: 200,
+            } as AxiosResponse),
+        )
+        jest.spyOn(GameNetwork, 'joinGame').mockReturnValue(
+            Promise.resolve({
+                data: { message: Constants.JOIN_GAME_ERROR },
+                status: 400,
+                statusText: 'Bad',
+            } as AxiosResponse),
+        )
+        render(
+            withRealm(
                 <NavigationContainer>
-                    <QueryClientProvider client={client}>
-                        <JoinGameScreen {...props} />
-                    </QueryClientProvider>
-                </NavigationContainer>
-            </Provider>,
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <CreateGameContext.Provider
+                                value={
+                                    {
+                                        teamOne: DisplayTeamFactory.build(),
+                                    } as CreateGameContextData
+                                }>
+                                <JoinGameScreen {...props} />
+                            </CreateGameContext.Provider>
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
-        const search = getByPlaceholderText('Search Games...')
-        fireEvent.changeText(search, 'sockeye')
+        const search = screen.getByPlaceholderText('Search Games...')
+        fireEvent.changeText(search, game.teamTwo.name)
 
         await waitFor(() => {
-            expect(getByText('Sockeye')).toBeTruthy()
+            expect(screen.getByText(game.teamTwo.name)).toBeTruthy()
         })
 
-        const gameCard = getByText('Sockeye')
+        const gameCard = screen.getByText(game.teamTwo.name)
         fireEvent.press(gameCard)
 
         await waitFor(() => {
-            expect(getByText('Join With Code')).toBeTruthy()
+            expect(screen.getByText('Join With Code')).toBeTruthy()
         })
 
-        const input = getByPlaceholderText('6 Digit Code')
+        const input = screen.getByPlaceholderText('6 Digit Code')
         fireEvent.changeText(input, '123456')
 
-        const button = getByText('join')
+        const button = screen.getByText('join')
         fireEvent.press(button)
 
         await waitFor(() => {
-            expect(getByText(Constants.JOIN_GAME_ERROR)).toBeTruthy()
+            expect(screen.getByText(Constants.JOIN_GAME_ERROR)).toBeTruthy()
         })
     })
 })
