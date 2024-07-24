@@ -42,7 +42,6 @@ export const useFirstPoint = (gameId: string) => {
         const { point: pointResponse } = response.data
 
         const schema = new PointSchema(pointResponse)
-
         realm.write(() => {
             realm.create('Point', schema, UpdateMode.Modified)
         })
