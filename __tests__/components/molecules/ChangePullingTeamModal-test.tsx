@@ -1,8 +1,9 @@
 import ChangePullingTeamModal from '../../../src/components/molecules/ChangePullingTeamModal'
-import { Provider } from 'react-redux'
+import LiveGameProvider from '../../../src/context/live-game-context'
+import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
 import { game } from '../../../fixtures/data'
-import store from '../../../src/store/store'
+import { withRealm } from '../../utils/renderers'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     fireEvent,
@@ -23,14 +24,18 @@ describe('ChangePullingTeamModal', () => {
 
     it('displays correctly', () => {
         render(
-            <Provider store={store}>
-                <QueryClientProvider client={client}>
-                    <ChangePullingTeamModal
-                        visible={true}
-                        onClose={jest.fn()}
-                    />
-                </QueryClientProvider>
-            </Provider>,
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <LiveGameProvider gameId={game._id}>
+                            <ChangePullingTeamModal
+                                visible={true}
+                                onClose={jest.fn()}
+                            />
+                        </LiveGameProvider>
+                    </QueryClientProvider>
+                </NavigationContainer>,
+            ),
         )
 
         expect(screen.getByText(game.teamOne.name)).toBeTruthy()
@@ -41,11 +46,18 @@ describe('ChangePullingTeamModal', () => {
         const onClose = jest.fn()
 
         render(
-            <Provider store={store}>
-                <QueryClientProvider client={client}>
-                    <ChangePullingTeamModal visible={true} onClose={onClose} />
-                </QueryClientProvider>
-            </Provider>,
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <LiveGameProvider gameId={game._id}>
+                            <ChangePullingTeamModal
+                                visible={true}
+                                onClose={onClose}
+                            />
+                        </LiveGameProvider>
+                    </QueryClientProvider>
+                </NavigationContainer>,
+            ),
         )
 
         // press team one first

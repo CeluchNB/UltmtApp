@@ -1,6 +1,13 @@
 import { Factory } from 'fishery'
-import { InGameStatsUser } from '../../src/types/user'
 import { faker } from '@faker-js/faker'
+import { DisplayUser, InGameStatsUser } from '../../src/types/user'
+
+export const DisplayUserFactory = Factory.define<DisplayUser>(() => ({
+    _id: faker.database.mongodbObjectId(),
+    username: faker.internet.userName(),
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+}))
 
 export const InGameStatsUserFactory = Factory.define<InGameStatsUser>(() => ({
     _id: faker.database.mongodbObjectId(),
