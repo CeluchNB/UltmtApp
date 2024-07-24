@@ -1,8 +1,8 @@
 import ChangePullingTeamModal from '../../../src/components/molecules/ChangePullingTeamModal'
+import { GameFactory } from '../../test-data/game'
 import LiveGameProvider from '../../../src/context/live-game-context'
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-import { game } from '../../../fixtures/data'
 import { withRealm } from '../../utils/renderers'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
@@ -15,6 +15,7 @@ import {
 const client = new QueryClient()
 
 describe('ChangePullingTeamModal', () => {
+    const game = GameFactory.build()
     beforeAll(() => {
         jest.useFakeTimers({ legacyFakeTimers: true })
     })
@@ -35,6 +36,12 @@ describe('ChangePullingTeamModal', () => {
                         </LiveGameProvider>
                     </QueryClientProvider>
                 </NavigationContainer>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', { ...game, offline: false })
+                    })
+                },
             ),
         )
 
@@ -57,6 +64,12 @@ describe('ChangePullingTeamModal', () => {
                         </LiveGameProvider>
                     </QueryClientProvider>
                 </NavigationContainer>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', { ...game, offline: false })
+                    })
+                },
             ),
         )
 
