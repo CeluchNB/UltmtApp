@@ -1,4 +1,5 @@
 import * as TournamentData from '../../../src/services/data/tournament'
+import { CreateGameProvider } from '../../../src/context/create-game-context'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
 import React from 'react'
@@ -6,6 +7,8 @@ import { SearchTournamentProps } from '../../../src/types/navigation'
 import SearchTournamentScreen from '../../../src/screens/games/SearchTournamentScreen'
 import store from '../../../src/store/store'
 import { tourney } from '../../../fixtures/data'
+import { withRealm } from '../../utils/renderers'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     act,
     fireEvent,
@@ -13,9 +16,7 @@ import {
     screen,
     waitFor,
 } from '@testing-library/react-native'
-import { withRealm } from '../../utils/renderers'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { CreateGameProvider } from '../../../src/context/create-game-context'
+
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const goBack = jest.fn()
