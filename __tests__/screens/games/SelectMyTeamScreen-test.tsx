@@ -7,10 +7,15 @@ import React from 'react'
 import { SelectMyTeamProps } from '../../../src/types/navigation'
 import SelectMyTeamScreen from '../../../src/screens/games/SelectMyTeamScreen'
 import store from '../../../src/store/store'
+import {
+    CreateGameContext,
+    CreateGameContextData,
+} from '../../../src/context/create-game-context'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     fireEvent,
     render,
+    screen,
     waitFor,
     waitForElementToBeRemoved,
 } from '@testing-library/react-native'
@@ -20,11 +25,13 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const client = new QueryClient()
 const navigate = jest.fn()
 const addListener = jest.fn()
+const reset = jest.fn()
 
 const props: SelectMyTeamProps = {
     navigation: {
         navigate,
         addListener,
+        reset,
     } as any,
     route: {} as any,
 }
@@ -81,7 +88,7 @@ describe('SelectMyTeamScreen', () => {
             Promise.resolve([]),
         )
 
-        const snapshot = render(
+        render(
             <Provider store={store}>
                 <NavigationContainer>
                     <QueryClientProvider client={client}>
@@ -92,12 +99,12 @@ describe('SelectMyTeamScreen', () => {
         )
 
         await waitForElementToBeRemoved(() =>
-            snapshot.getByTestId('select-team-loading'),
+            screen.getByTestId('select-team-loading'),
         )
 
-        expect(snapshot.toJSON()).toMatchSnapshot()
-        expect(snapshot.getByText(Constants.MANAGE_TO_CREATE)).not.toBeNull()
-        fireEvent.press(snapshot.getByText('create team'))
+        expect(screen.toJSON()).toMatchSnapshot()
+        expect(screen.getByText(Constants.MANAGE_TO_CREATE)).not.toBeNull()
+        fireEvent.press(screen.getByText('create team'))
         expect(navigate).toHaveBeenCalledWith('Tabs', {
             screen: 'Account',
             params: { screen: 'CreateTeam' },
@@ -128,25 +135,38 @@ describe('SelectMyTeamScreen', () => {
             ]),
         )
 
-        const snapshot = render(
+        render(
             <Provider store={store}>
-                <NavigationContainer>
-                    <QueryClientProvider client={client}>
-                        <SelectMyTeamScreen {...props} />
-                    </QueryClientProvider>
-                </NavigationContainer>
+                <CreateGameContext.Provider
+                    value={
+                        {
+                            setActiveTeam: jest.fn(),
+                        } as unknown as CreateGameContextData
+                    }>
+                    <NavigationContainer>
+                        <QueryClientProvider client={client}>
+                            <SelectMyTeamScreen {...props} />
+                        </QueryClientProvider>
+                    </NavigationContainer>
+                </CreateGameContext.Provider>
             </Provider>,
         )
 
         await waitForElementToBeRemoved(() =>
-            snapshot.getByTestId('select-team-loading'),
+            screen.getByTestId('select-team-loading'),
         )
 
-        expect(snapshot.toJSON()).toMatchSnapshot()
-        expect(snapshot.getByText('@place1name1')).not.toBeNull()
-        fireEvent.press(snapshot.getByText('@place1name1'))
+        expect(screen.toJSON()).toMatchSnapshot()
+        expect(screen.getByText('@place1name1')).not.toBeNull()
+        fireEvent.press(screen.getByText('@place1name1'))
         await waitFor(async () => {
-            expect(navigate).toHaveBeenCalledWith('SelectOpponent', {})
+            expect(reset).toHaveBeenCalledWith({
+                index: 1,
+                routes: [
+                    { name: 'Tabs' },
+                    { name: 'SelectOpponent', params: {} },
+                ],
+            })
         })
     })
 })
