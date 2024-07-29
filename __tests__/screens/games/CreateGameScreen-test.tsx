@@ -3,7 +3,6 @@ import CreateGameScreen from '../../../src/screens/games/CreateGameScreen'
 import MockDate from 'mockdate'
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')

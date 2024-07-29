@@ -1,11 +1,11 @@
 import * as Constants from '../../utils/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { DisplayUser } from '../../types/user'
+import { GameSchema } from '../../models'
 import { Realm } from '@realm/react'
 import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
-import { ActionSchema, GameSchema, PointSchema } from '../../models'
-import { CreateGame, Game, PointStats } from '../../types/game'
+
+import { Game, PointStats } from '../../types/game'
 
 export const parseGame = (
     schema: GameSchema,
