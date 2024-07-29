@@ -7,7 +7,7 @@ import { useQuery } from './realm'
 import { GameSchema, PointSchema } from '../models'
 import React, { ReactNode, createContext, useMemo, useState } from 'react'
 
-interface LiveGameContextData {
+export interface LiveGameContextData {
     game?: GameSchema
     point?: PointSchema
     team: TeamNumber

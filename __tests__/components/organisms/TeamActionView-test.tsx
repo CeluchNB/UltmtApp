@@ -1,12 +1,17 @@
 import { PointEditContext } from '../../../src/context/point-edit-context'
-import { Provider } from 'react-redux'
 import React from 'react'
 import TeamActionView from '../../../src/components/organisms/TeamActionView'
-import { game } from '../../../fixtures/data'
-import store from '../../../src/store/store'
 import { Action, ActionType } from '../../../src/types/action'
-import Point, { PointStatus } from '../../../src/types/point'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import {
+    LiveGameContext,
+    LiveGameContextData,
+} from '../../../src/context/live-game-context'
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -134,24 +139,6 @@ const props = {
     actions,
 }
 
-const point: Point = {
-    _id: 'point1',
-    pointNumber: 1,
-    teamOnePlayers: playerList1.slice(0, 7),
-    teamOneActivePlayers,
-    teamTwoPlayers: [],
-    teamTwoActivePlayers: [],
-    teamOneScore: 0,
-    teamTwoScore: 0,
-    pullingTeam: game.teamOne,
-    receivingTeam: game.teamTwo,
-    teamOneActions: [],
-    teamTwoActions: [],
-    gameId: 'game1',
-    teamOneStatus: PointStatus.ACTIVE,
-    teamTwoStatus: PointStatus.FUTURE,
-}
-
 beforeAll(() => {
     jest.useFakeTimers({ legacyFakeTimers: true })
 })
@@ -161,38 +148,38 @@ afterAll(() => {
 })
 
 it('should match snapshot', () => {
-    const snapshot = render(
-        <Provider store={store}>
-            <TeamActionView {...props} />
-        </Provider>,
-    )
+    const snapshot = render(<TeamActionView {...props} />)
     expect(snapshot.toJSON()).toMatchSnapshot()
 })
 
 it('should handle non-substitution press', () => {
     const onAction = jest.fn()
-    const { getByText } = render(
-        <Provider store={store}>
-            <PointEditContext.Provider
-                value={
-                    {
-                        onAction,
-                        activePlayers: teamOneActivePlayers,
-                    } as any
-                }>
-                <TeamActionView {...props} />
-            </PointEditContext.Provider>
-        </Provider>,
+    render(
+        <PointEditContext.Provider
+            value={
+                {
+                    onAction,
+                    activePlayers: teamOneActivePlayers,
+                } as any
+            }>
+            <TeamActionView {...props} />
+        </PointEditContext.Provider>,
     )
-    fireEvent.press(getByText(ActionType.TIMEOUT.toString()))
+    fireEvent.press(screen.getByText(ActionType.TIMEOUT.toString()))
 
     expect(onAction).toHaveBeenCalledWith(actions[0])
 })
 
 it('should handle non-substitution long press', async () => {
     const onAction = jest.fn()
-    const { getByText, queryByText } = render(
-        <Provider store={store}>
+    render(
+        <LiveGameContext.Provider
+            value={
+                {
+                    tags: ['huck'],
+                    addTag: jest.fn(),
+                } as unknown as LiveGameContextData
+            }>
             <PointEditContext.Provider
                 value={
                     {
@@ -202,17 +189,17 @@ it('should handle non-substitution long press', async () => {
                 }>
                 <TeamActionView {...props} />
             </PointEditContext.Provider>
-        </Provider>,
+        </LiveGameContext.Provider>,
     )
 
-    expect(queryByText('Tags')).not.toBeTruthy()
-    fireEvent(getByText(ActionType.TIMEOUT.toString()), 'onLongPress')
-    expect(getByText('Tags')).toBeTruthy()
+    expect(screen.queryByText('Tags')).not.toBeTruthy()
+    fireEvent(screen.getByText(ActionType.TIMEOUT.toString()), 'onLongPress')
+    expect(screen.getByText('Tags')).toBeTruthy()
 
-    fireEvent.press(getByText('huck'))
-    fireEvent.press(getByText('done'))
+    fireEvent.press(screen.getByText('huck'))
+    fireEvent.press(screen.getByText('done'))
     await waitFor(() => {
-        expect(queryByText('Tags')).not.toBeTruthy()
+        expect(screen.queryByText('Tags')).not.toBeTruthy()
     })
     expect(actions[0].setTags).toHaveBeenCalledWith(['huck'])
     expect(onAction).toHaveBeenCalledWith(actions[0])
@@ -220,35 +207,34 @@ it('should handle non-substitution long press', async () => {
 
 it('should handle tag modal non submit', async () => {
     const onAction = jest.fn()
-    const { getByText, queryByText, getAllByTestId } = render(
-        <Provider store={store}>
-            <PointEditContext.Provider
-                value={
-                    {
-                        onAction: onAction,
-                        activePlayers: teamOneActivePlayers,
-                    } as any
-                }>
-                <TeamActionView {...props} />
-            </PointEditContext.Provider>
-        </Provider>,
+    render(
+        <PointEditContext.Provider
+            value={
+                {
+                    onAction: onAction,
+                    activePlayers: teamOneActivePlayers,
+                } as any
+            }>
+            <TeamActionView {...props} />
+        </PointEditContext.Provider>,
     )
 
-    expect(queryByText('Tags')).not.toBeTruthy()
-    fireEvent(getByText(ActionType.TIMEOUT.toString()), 'onLongPress')
-    expect(getByText('Tags')).toBeTruthy()
+    expect(screen.queryByText('Tags')).not.toBeTruthy()
+    fireEvent(screen.getByText(ActionType.TIMEOUT.toString()), 'onLongPress')
+    expect(screen.getByText('Tags')).toBeTruthy()
 
-    fireEvent(getAllByTestId('base-modal')[1], 'onRequestClose')
+    fireEvent(screen.getAllByTestId('base-modal')[1], 'onRequestClose')
     await waitFor(() => {
-        expect(queryByText('Tags')).not.toBeTruthy()
+        expect(screen.queryByText('Tags')).not.toBeTruthy()
     })
     expect(onAction).not.toHaveBeenCalledWith(actions[0])
 })
 
 it('should handle substitution press', async () => {
     const onAction = jest.fn()
-    const { getByText, queryByText } = render(
-        <Provider store={store}>
+    render(
+        <LiveGameContext.Provider
+            value={{ players: playerList1 } as LiveGameContextData}>
             <PointEditContext.Provider
                 value={
                     {
@@ -258,19 +244,19 @@ it('should handle substitution press', async () => {
                 }>
                 <TeamActionView {...props} />
             </PointEditContext.Provider>
-        </Provider>,
+        </LiveGameContext.Provider>,
     )
 
-    expect(queryByText('Player to Remove')).not.toBeTruthy()
-    fireEvent.press(getByText(ActionType.SUBSTITUTION.toString()))
-    expect(queryByText('Player to Remove')).toBeTruthy()
+    expect(screen.queryByText('Player to Remove')).not.toBeTruthy()
+    fireEvent.press(screen.getByText(ActionType.SUBSTITUTION.toString()))
+    expect(screen.queryByText('Player to Remove')).toBeTruthy()
 
-    fireEvent.press(getByText('First 1 Last 1'))
-    fireEvent.press(getByText('First 10 Last 10'))
-    fireEvent.press(getByText('substitute'))
+    fireEvent.press(screen.getByText('First 1 Last 1'))
+    fireEvent.press(screen.getByText('First 10 Last 10'))
+    fireEvent.press(screen.getByText('substitute'))
 
     await waitFor(() => {
-        expect(queryByText('Player to Remove')).not.toBeTruthy()
+        expect(screen.queryByText('Player to Remove')).not.toBeTruthy()
     })
     expect(actions[2].setPlayersAndUpdateViewerDisplay).toHaveBeenCalledWith(
         expect.objectContaining(playerList1[0]),
@@ -280,22 +266,23 @@ it('should handle substitution press', async () => {
 })
 
 it('should handle subsitution long press', async () => {
-    const { getByText, queryByText } = render(
-        <Provider store={store}>
-            <PointEditContext.Provider
-                value={
-                    {
-                        activePlayers: teamOneActivePlayers,
-                    } as any
-                }>
-                <TeamActionView {...props} />
-            </PointEditContext.Provider>
-        </Provider>,
+    render(
+        <PointEditContext.Provider
+            value={
+                {
+                    activePlayers: teamOneActivePlayers,
+                } as any
+            }>
+            <TeamActionView {...props} />
+        </PointEditContext.Provider>,
     )
 
-    expect(queryByText('Player to Remove')).not.toBeTruthy()
-    fireEvent(getByText(ActionType.SUBSTITUTION.toString()), 'onLongPress')
+    expect(screen.queryByText('Player to Remove')).not.toBeTruthy()
+    fireEvent(
+        screen.getByText(ActionType.SUBSTITUTION.toString()),
+        'onLongPress',
+    )
     await waitFor(() => {
-        expect(getByText('Player to Remove')).toBeTruthy()
+        expect(screen.getByText('Player to Remove')).toBeTruthy()
     })
 })
