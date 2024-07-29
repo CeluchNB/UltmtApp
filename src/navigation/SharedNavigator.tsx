@@ -5,12 +5,6 @@ import PublicUserScreen from '../screens/PublicUserScreen'
 import React from 'react'
 import ViewGameScreen from '../screens/games/ViewGameScreen'
 
-// function sharedNativeStackNavigator<T extends SharedStackParamList>() {
-//     return createNativeStackNavigator<T>()
-// }
-
-// type StackType = ReturnType<typeof sharedNativeStackNavigator>
-
 export const getStack = (Stack: any) => {
     return [
         <Stack.Screen
