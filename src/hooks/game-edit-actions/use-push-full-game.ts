@@ -55,16 +55,16 @@ export const usePushFullGame = () => {
         realm.write(() => {
             // update all records based on guests
             allGames.forEach(game => {
-                game.teamOnePlayers = []
-                // const teamOnePlayers: InGameStatsUser[] = []
+                const players = []
                 for (const player of game.teamOnePlayers) {
                     const guest = guestMap.get(player._id)
                     if (guest) {
-                        game.teamOnePlayers.push({ ...player, ...guest })
+                        players.push({ ...player, ...guest })
                     } else {
-                        game.teamOnePlayers.push(player)
+                        players.push(player)
                     }
                 }
+                game.teamOnePlayers = players
             })
 
             allPoints.forEach(point => {

@@ -144,7 +144,7 @@ const GuestPlayerModal: React.FC<GuestPlayerModalProps> = ({
             <View style={styles.buttonContainer}>
                 <SecondaryButton
                     style={styles.button}
-                    text="cancel"
+                    text="close"
                     onPress={async () => {
                         reset()
                         onClose()

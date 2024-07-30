@@ -455,7 +455,7 @@ exports[`GuestPlayerModal should match snapshot 1`] = `
                   }
                   testID="button-text"
                 >
-                  cancel
+                  close
                 </Text>
               </View>
             </View>

@@ -131,7 +131,7 @@ export const useReenterGame = () => {
                         savedGame.teamOneScore = 0
                         savedGame.teamTwoScore = 0
                         point.teamOneScore = 0
-                        point.teamTwoScore
+                        point.teamTwoScore = 0
                     }
                 }
 
