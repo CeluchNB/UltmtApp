@@ -30,7 +30,9 @@ const App: React.FC<{}> = () => {
     )
 
     React.useEffect(() => {
-        onDeletGameViews()
+        try {
+            onDeletGameViews()
+        } catch {}
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
