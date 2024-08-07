@@ -28,6 +28,8 @@ const GameCard: React.FC<GameCardProps> = props => {
         totalViews,
     } = game
 
+    const activeGame = gameIsActive(game)
+
     useEffect(() => {
         Animated.loop(
             Animated.sequence([
@@ -66,8 +68,10 @@ const GameCard: React.FC<GameCardProps> = props => {
             paddingTop: 5,
             color: colors.textPrimary,
         },
-        teamNameContainer: {
+        winnerIndicatorContainer: {
+            marginLeft: 10,
             flex: 1,
+            marginTop: 4,
         },
         teamNameText: {
             color: colors.textPrimary,
@@ -107,8 +111,16 @@ const GameCard: React.FC<GameCardProps> = props => {
             borderRadius: 5,
             marginTop: 5,
             marginRight: 5,
+        },
+        liveCircle: {
             backgroundColor: 'red',
             alignSelf: 'flex-end',
+        },
+        winnerCircle: {
+            backgroundColor: !activeGame ? colors.textPrimary : colors.primary,
+        },
+        loserCircle: {
+            backgroundColor: colors.primary,
         },
     })
 
@@ -120,13 +132,17 @@ const GameCard: React.FC<GameCardProps> = props => {
                     onPress(_id)
                 }}
                 testID="game-card-pressable">
-                {gameIsActive(game) && (
+                {activeGame && (
                     <Animated.View
-                        style={[styles.circle, { opacity: liveOpacity }]}
+                        style={[
+                            styles.circle,
+                            styles.liveCircle,
+                            { opacity: liveOpacity },
+                        ]}
                     />
                 )}
                 <View style={styles.teamContainer}>
-                    <View style={styles.teamNameContainer}>
+                    <View>
                         <Text style={styles.teamText}>{teamOne?.name}</Text>
                         {teamOne?.teamname && (
                             <Text style={styles.teamNameText}>
@@ -134,10 +150,20 @@ const GameCard: React.FC<GameCardProps> = props => {
                             </Text>
                         )}
                     </View>
+                    <View style={styles.winnerIndicatorContainer}>
+                        <View
+                            style={[
+                                styles.circle,
+                                game.teamOneScore > game.teamTwoScore
+                                    ? styles.winnerCircle
+                                    : styles.loserCircle,
+                            ]}
+                        />
+                    </View>
                     <Text style={styles.teamText}>{teamOneScore}</Text>
                 </View>
                 <View style={styles.teamContainer}>
-                    <View style={styles.teamNameContainer}>
+                    <View>
                         <Text style={styles.teamText}>{teamTwo?.name}</Text>
                         {teamTwo?.teamname && (
                             <Text style={styles.teamNameText}>
@@ -145,7 +171,16 @@ const GameCard: React.FC<GameCardProps> = props => {
                             </Text>
                         )}
                     </View>
-
+                    <View style={styles.winnerIndicatorContainer}>
+                        <View
+                            style={[
+                                styles.circle,
+                                game.teamTwoScore > game.teamOneScore
+                                    ? styles.winnerCircle
+                                    : styles.loserCircle,
+                            ]}
+                        />
+                    </View>
                     <Text style={styles.teamText}>{teamTwoScore}</Text>
                 </View>
                 <View style={styles.footer}>
