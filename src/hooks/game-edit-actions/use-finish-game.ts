@@ -56,6 +56,10 @@ export const useFinishGame = (gameId: string) => {
         realm.write(() => {
             lastPoint.teamOneScore += teamOneScore
             lastPoint.teamTwoScore += teamTwoScore
+            lastPoint.scoringTeam =
+                teamOneScore === 1
+                    ? Object.assign({}, game.teamOne)
+                    : Object.assign({}, game.teamTwo)
 
             game.teamOneScore = lastPoint.teamOneScore
             game.teamTwoScore = lastPoint.teamTwoScore
