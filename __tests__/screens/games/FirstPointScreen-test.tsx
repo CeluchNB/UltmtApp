@@ -1,119 +1,124 @@
-import * as PointData from '../../../src/services/data/point'
+import * as PointNetwork from '../../../src/services/network/point'
+import { AxiosResponse } from 'axios'
 import { FirstPointProps } from '../../../src/types/navigation'
 import FirstPointScreen from '../../../src/screens/games/FirstPointScreen'
+import { GameFactory } from '../../test-data/game'
 import { NavigationContainer } from '@react-navigation/native'
-import Point from '../../../src/types/point'
-import { Provider } from 'react-redux'
+import { PointFactory } from '../../test-data/point'
 import React from 'react'
-import { game } from '../../../fixtures/data'
-import { setGame } from '../../../src/store/reducers/features/game/liveGameReducer'
-import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
-import store from '../../../src/store/store'
-import { fireEvent, render, waitFor } from '@testing-library/react-native'
+import { withRealm } from '../../utils/renderers'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+} from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const navigate = jest.fn()
+const reset = jest.fn()
+const game = GameFactory.build()
+
 const props: FirstPointProps = {
     navigation: {
         navigate,
+        reset,
     } as any,
-    route: {} as any,
+    route: { params: { gameId: game._id, team: 'one' } } as any,
 }
 
-const spy = jest.spyOn(PointData, 'createPoint')
-
-beforeEach(() => {
-    store.dispatch(
-        setGame({ ...game, startTime: '2022', tournament: undefined }),
-    )
-    store.dispatch(
-        setPoint({
-            _id: '',
-            pointNumber: 1,
-            teamOneActive: false,
-            teamTwoActive: false,
-            teamOneActions: [],
-            teamTwoActions: [],
-            teamOneScore: 0,
-            teamTwoScore: 0,
-            teamOnePlayers: [],
-            teamTwoPlayers: [],
-            pullingTeam: {},
-            receivingTeam: {},
-        }),
-    )
-})
-
-afterEach(() => {
-    spy.mockClear()
-})
-
-it('should match snapshot with data', () => {
-    const snapshot = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <FirstPointScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-    expect(snapshot.getByText('111111')).not.toBeNull()
-    expect(snapshot.toJSON()).toMatchSnapshot()
-})
-
-it('should handle pulling press', async () => {
-    spy.mockReturnValueOnce(Promise.resolve({} as Point))
-
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <FirstPointScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    const pullBtn = getByText('pulling')
-    fireEvent.press(pullBtn)
-    await waitFor(() => {
-        expect(navigate).toHaveBeenCalled()
+const client = new QueryClient()
+describe('FirstPointScreen', () => {
+    it('renders', () => {
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <FirstPointScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', { ...game, offline: false })
+                    })
+                },
+            ),
+        )
+        expect(screen.getByText(game.resolveCode)).not.toBeNull()
+        expect(screen.getByText('PULLING')).toBeTruthy()
+        expect(screen.getByText('RECEIVING')).toBeTruthy()
+        expect(screen.getByText('start')).toBeTruthy()
     })
 
-    expect(spy).toHaveBeenCalledWith(true, 1)
-})
+    it('should handle start', async () => {
+        jest.spyOn(PointNetwork, 'nextPoint').mockReturnValueOnce(
+            Promise.resolve({
+                data: { point: PointFactory.build() },
+                status: 201,
+                statusText: 'Point created',
+            } as AxiosResponse),
+        )
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <FirstPointScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', { ...game, offline: false })
+                    })
+                },
+            ),
+        )
 
-it('should handle receiving press', async () => {
-    spy.mockReturnValueOnce(Promise.resolve({} as Point))
+        const pullBtn = screen.getByText('RECEIVING')
+        fireEvent.press(pullBtn)
 
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <FirstPointScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        const startBtn = screen.getByText('start')
+        fireEvent.press(startBtn)
 
-    const pullBtn = getByText('receiving')
-    fireEvent.press(pullBtn)
-    await waitFor(() => {
-        expect(navigate).toHaveBeenCalled()
+        await waitFor(() => {
+            expect(reset).toHaveBeenCalled()
+        })
     })
 
-    expect(spy).toHaveBeenCalledWith(false, 1)
-})
+    it('with error', async () => {
+        jest.spyOn(PointNetwork, 'nextPoint').mockReturnValueOnce(
+            Promise.resolve({
+                data: { message: 'Bad stuff' },
+                status: 400,
+                statusText: 'Bad',
+            } as AxiosResponse),
+        )
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <FirstPointScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', { ...game, offline: false })
+                    })
+                },
+            ),
+        )
 
-it('with error', async () => {
-    spy.mockReturnValueOnce(Promise.reject({ message: 'Bad stuff' }))
+        const pullBtn = screen.getByText('PULLING')
+        fireEvent.press(pullBtn)
 
-    const { getByText, findByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <FirstPointScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        const startBtn = screen.getByText('start')
+        fireEvent.press(startBtn)
 
-    const pullBtn = getByText('pulling')
-    fireEvent.press(pullBtn)
-    const errorMessage = await findByText('Bad stuff')
-    expect(errorMessage).not.toBeNull()
+        const errorMessage = await screen.findByText('Bad stuff')
+        expect(errorMessage).not.toBeNull()
+    })
 })

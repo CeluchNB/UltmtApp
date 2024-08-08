@@ -1,12 +1,13 @@
+import * as AuthServices from '../../../src/services/network/auth'
 import * as Constants from '../../../src/utils/constants'
-import * as LocalGameServices from '../../../src/services/local/game'
 import * as TeamServices from '../../../src/services/network/team'
 import { AxiosResponse } from 'axios'
 import GuestPlayerModal from '../../../src/components/molecules/GuestPlayerModal'
-import { Provider } from 'react-redux'
+import LiveGameProvider from '../../../src/context/live-game-context'
+import RNEncryptedStorage from '../../../__mocks__/react-native-encrypted-storage'
 import React from 'react'
 import { game } from '../../../fixtures/data'
-import store from '../../../src/store/store'
+import { withRealm } from '../../utils/renderers'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     fireEvent,
@@ -15,6 +16,9 @@ import {
     waitFor,
 } from '@testing-library/react-native'
 
+import { NavigationContainer } from '@react-navigation/native'
+import { TeamFactory } from '../../test-data/team'
+
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const client = new QueryClient()
@@ -22,32 +26,40 @@ const client = new QueryClient()
 describe('GuestPlayerModal', () => {
     beforeAll(() => {
         jest.useFakeTimers({ legacyFakeTimers: true })
-        jest.spyOn(LocalGameServices, 'saveGame').mockReturnValue(
-            Promise.resolve(undefined),
-        )
     })
 
     afterAll(() => {
         jest.useRealTimers()
     })
 
+    afterEach(() => {
+        RNEncryptedStorage.getItem.mockReset()
+        RNEncryptedStorage.setItem.mockReset()
+    })
+
     it('should match snapshot', () => {
         const snapshot = render(
-            <Provider store={store}>
+            withRealm(
                 <QueryClientProvider client={client}>
-                    <GuestPlayerModal visible={true} onClose={jest.fn()} />
-                </QueryClientProvider>
-            </Provider>,
+                    <GuestPlayerModal
+                        visible={true}
+                        onClose={jest.fn()}
+                        teamId=""
+                    />
+                </QueryClientProvider>,
+            ),
         )
 
         expect(snapshot.toJSON()).toMatchSnapshot()
     })
 
     it('should call add player correctly', async () => {
+        const team = TeamFactory.build()
         const spy = jest.spyOn(TeamServices, 'createGuest').mockReturnValue(
             Promise.resolve({
                 data: {
                     team: {
+                        ...team,
                         players: [
                             ...game.teamOnePlayers,
                             {
@@ -63,27 +75,36 @@ describe('GuestPlayerModal', () => {
                 statusText: 'Good',
             } as AxiosResponse),
         )
-        jest.spyOn(LocalGameServices, 'getGameById').mockReturnValueOnce(
-            Promise.resolve({
-                ...game,
-                startTime: '2022' as unknown as Date,
-                tournament: undefined,
-                offline: false,
-            }),
-        )
         let visible = true
 
         render(
-            <Provider store={store}>
+            withRealm(
                 <QueryClientProvider client={client}>
-                    <GuestPlayerModal
-                        visible={true}
-                        onClose={() => {
-                            visible = false
-                        }}
-                    />
-                </QueryClientProvider>
-            </Provider>,
+                    <NavigationContainer>
+                        <LiveGameProvider gameId={game._id}>
+                            <GuestPlayerModal
+                                visible={true}
+                                onClose={() => {
+                                    visible = false
+                                }}
+                                teamId=""
+                            />
+                        </LiveGameProvider>
+                    </NavigationContainer>
+                </QueryClientProvider>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', {
+                            ...game,
+                            startTime: '2022' as unknown as Date,
+                            tournament: undefined,
+                            offline: false,
+                            statsPoints: [],
+                        })
+                    })
+                },
+            ),
         )
 
         const firstInput = screen.getByPlaceholderText('First Name')
@@ -104,10 +125,12 @@ describe('GuestPlayerModal', () => {
     })
 
     it('with form errors', async () => {
+        const team = TeamFactory.build()
         const spy = jest.spyOn(TeamServices, 'createGuest').mockReturnValue(
             Promise.resolve({
                 data: {
                     team: {
+                        ...team,
                         players: [
                             ...game.teamOnePlayers,
                             {
@@ -127,16 +150,31 @@ describe('GuestPlayerModal', () => {
         let visible = true
 
         const { getByText, findByText } = render(
-            <Provider store={store}>
-                <QueryClientProvider client={client}>
-                    <GuestPlayerModal
-                        visible={true}
-                        onClose={() => {
-                            visible = false
-                        }}
-                    />
-                </QueryClientProvider>
-            </Provider>,
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <GuestPlayerModal
+                            visible={true}
+                            onClose={() => {
+                                visible = false
+                            }}
+                            teamId=""
+                        />
+                    </QueryClientProvider>
+                </NavigationContainer>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', {
+                            ...game,
+                            startTime: '2022' as unknown as Date,
+                            tournament: undefined,
+                            offline: false,
+                            statsPoints: [],
+                        })
+                    })
+                },
+            ),
         )
 
         const button = getByText('add')
@@ -148,29 +186,54 @@ describe('GuestPlayerModal', () => {
     })
 
     it('with network error', async () => {
+        RNEncryptedStorage.getItem.mockReturnValue(Promise.resolve('token'))
+        jest.spyOn(AuthServices, 'refreshToken').mockReturnValue(
+            Promise.resolve({
+                data: { tokens: { access: 'access', refresh: 'refresh' } },
+                status: 200,
+            } as AxiosResponse),
+        )
         const spy = jest.spyOn(TeamServices, 'createGuest').mockReturnValue(
-            Promise.reject({
-                data: { message: 'Bad guest' },
+            Promise.resolve({
+                data: { message: Constants.ADD_GUEST_ERROR },
                 status: 400,
                 statusText: 'Bad',
                 config: {},
                 headers: {},
-            }),
+            } as AxiosResponse),
         )
+
         spy.mockClear()
         let visible = true
 
         const { getByPlaceholderText, getByText } = render(
-            <Provider store={store}>
-                <QueryClientProvider client={client}>
-                    <GuestPlayerModal
-                        visible={true}
-                        onClose={() => {
-                            visible = false
-                        }}
-                    />
-                </QueryClientProvider>
-            </Provider>,
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <LiveGameProvider gameId={game._id}>
+                            <GuestPlayerModal
+                                visible={true}
+                                onClose={() => {
+                                    visible = false
+                                }}
+                                teamId=""
+                            />
+                        </LiveGameProvider>
+                    </QueryClientProvider>
+                </NavigationContainer>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', {
+                            ...game,
+                            startTime: '2022' as unknown as Date,
+                            tournament: undefined,
+                            offline: false,
+                            statsPoints: [],
+                        })
+                    })
+                },
+            ),
         )
 
         const firstInput = getByPlaceholderText('First Name')
@@ -185,7 +248,7 @@ describe('GuestPlayerModal', () => {
         await waitFor(() => {
             expect(spy).toHaveBeenCalled()
         })
-        expect(getByText(Constants.ADD_GUEST_ERROR)).not.toBeNull()
+        expect(getByText(Constants.ADD_GUEST_ERROR)).toBeTruthy()
         expect(visible).toBe(true)
     })
 })

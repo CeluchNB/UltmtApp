@@ -13,7 +13,7 @@ import {
     TournamentSchema,
 } from './index'
 
-const SCHEMAS = [
+export const SCHEMAS = [
     DisplayTeamSchema,
     DisplayUserSchema,
     GameSchema.schema,
@@ -27,13 +27,14 @@ const SCHEMAS = [
     PointStatsSchema,
 ]
 
-const config = {
+export const config: Realm.Configuration = {
     schema: SCHEMAS,
     deleteRealmIfMigrationNeeded: true,
-    shouldCompactOnLaunch: function (_totalSize: number, _usedSpace: number) {
-        // TODO: should implement this, but never seems to be called?
-        return false
-    },
+    schemaVersion: 1,
+    // shouldCompactOnLaunch: function (_totalSize: number, _usedSpace: number) {
+    //     // TODO: should implement this, but never seems to be called?
+    //     return false
+    // },
 }
 
 let realm: Realm | undefined

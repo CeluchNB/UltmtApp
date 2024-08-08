@@ -20,10 +20,11 @@ interface EditGameData {
 interface GameFormProps {
     control: Control<any & EditGameData, any>
     errors: Partial<FieldErrorsImpl<EditGameData>>
+    onFormChange?: () => void
 }
 
 const GameForm: React.FC<GameFormProps> = props => {
-    const { control, errors } = props
+    const { control, errors, onFormChange } = props
     const {
         theme: { colors, size, weight },
     } = useTheme()
@@ -69,6 +70,7 @@ const GameForm: React.FC<GameFormProps> = props => {
                             label="Game to"
                             onChange={event => {
                                 onChange(onNumberChange(event))
+                                onFormChange?.()
                             }}
                             value={value}
                             unit="points"
@@ -93,6 +95,7 @@ const GameForm: React.FC<GameFormProps> = props => {
                             label="Half at"
                             onChange={event => {
                                 onChange(onNumberChange(event))
+                                onFormChange?.()
                             }}
                             value={value}
                             unit="points"
@@ -115,7 +118,10 @@ const GameForm: React.FC<GameFormProps> = props => {
                                 format="hh:mma"
                                 style={styles.timeInput}
                                 value={value}
-                                onChange={onChange}
+                                onChange={date => {
+                                    onChange(date)
+                                    onFormChange?.()
+                                }}
                             />
                         </View>
                     )
@@ -136,6 +142,7 @@ const GameForm: React.FC<GameFormProps> = props => {
                             label="Soft cap"
                             onChange={event => {
                                 onChange(onNumberChange(event))
+                                onFormChange?.()
                             }}
                             value={value}
                             unit="minutes"
@@ -160,6 +167,7 @@ const GameForm: React.FC<GameFormProps> = props => {
                             label="Hard cap"
                             onChange={event => {
                                 onChange(onNumberChange(event))
+                                onFormChange?.()
                             }}
                             value={value}
                             unit="points"
@@ -191,6 +199,7 @@ const GameForm: React.FC<GameFormProps> = props => {
                             label="Players"
                             onChange={event => {
                                 onChange(onNumberChange(event))
+                                onFormChange?.()
                             }}
                             value={value}
                             unit="per point"
@@ -222,6 +231,7 @@ const GameForm: React.FC<GameFormProps> = props => {
                             label="Timeouts"
                             onChange={event => {
                                 onChange(onNumberChange(event))
+                                onFormChange?.()
                             }}
                             value={value}
                             unit="per half"

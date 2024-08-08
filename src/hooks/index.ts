@@ -1,5 +1,4 @@
-export * from './useGameEditor'
-export * from './useGameReactivation'
+export * from './game-edit-actions/use-game-edit'
 export * from './useCommenter'
 export * from './useTheme'
 export * from './useLivePoint'

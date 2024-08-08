@@ -1,3 +1,4 @@
+import { ApiError } from '../../types/services'
 import BaseModal from '../atoms/BaseModal'
 import PrimaryButton from '../atoms/PrimaryButton'
 import React from 'react'
@@ -10,6 +11,7 @@ interface ConfirmModalProps {
     displayText: string
     loading: boolean
     confirmColor?: string
+    error?: ApiError | string | null
     onConfirm: () => {}
     onCancel: () => {}
     onClose: () => {}
@@ -24,6 +26,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = props => {
         displayText,
         loading,
         confirmColor = colors.primary,
+        error,
         onConfirm,
         onCancel,
         onClose,
@@ -43,11 +46,16 @@ const ConfirmModal: React.FC<ConfirmModalProps> = props => {
         confirmButton: {
             backgroundColor: confirmColor,
         },
+        error: {
+            color: colors.error,
+            fontSize: size.fontFifteen,
+        },
     })
 
     return (
         <BaseModal visible={visible} onClose={onClose}>
             <Text style={styles.text}>{displayText}</Text>
+            {error && <Text style={styles.error}>{error.toString()}</Text>}
             <View style={styles.buttonContainer}>
                 <SecondaryButton
                     style={styles.button}
@@ -59,6 +67,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = props => {
                     text="confirm"
                     onPress={onConfirm}
                     loading={loading}
+                    disabled={loading}
                 />
             </View>
         </BaseModal>

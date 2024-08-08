@@ -73,3 +73,12 @@ export const createPlayerSet = (
         localGuest: p.localGuest,
     }))
 }
+
+export const parseUser = (user: DisplayUser): DisplayUser => {
+    return {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+    }
+}

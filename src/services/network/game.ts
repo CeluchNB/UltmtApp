@@ -1,3 +1,5 @@
+import * as Constants from '../../utils/constants'
+import { ApiError } from '../../types/services'
 import { GuestUser } from '../../types/user'
 import { addQueryParam } from '../../utils/service-utils'
 import { API_KEY, API_URL_V1, API_URL_V2 } from '@env'
@@ -31,7 +33,10 @@ export const createGame = async (
     return await axios.post(
         `${API_URL_V1}/game`,
         { createGameData: data },
-        { headers: { 'X-API-Key': API_KEY, Authorization: `Bearer ${token}` } },
+        {
+            headers: { 'X-API-Key': API_KEY, Authorization: `Bearer ${token}` },
+            validateStatus: () => true,
+        },
     )
 }
 
@@ -86,21 +91,30 @@ export const joinGame = async (
                 'X-API-Key': API_KEY,
                 authorization: `Bearer ${token}`,
             },
+            validateStatus: () => true,
         },
     )
 }
 
 export const finishGame = async (token: string) => {
-    return await axios.put(
-        `${API_URL_V1}/game/finish`,
+    const response = await axios.put(
+        `${API_URL_V2}/game/finish`,
         {},
         {
             headers: {
                 'X-API-Key': API_KEY,
                 authorization: `Bearer ${token}`,
             },
+            validateStatus: () => true,
         },
     )
+    if (response.status === 401) {
+        throw new ApiError(Constants.FINISH_GAME_ERROR)
+    }
+    if (response.status !== 200) {
+        throw new ApiError(response.data.message)
+    }
+    return response
 }
 
 export const getGamesByTeam = async (teamId: string) => {
@@ -126,12 +140,30 @@ export const reactivateGame = async (
     })
 }
 
+export const reenterGame = async (
+    userJwt: string,
+    gameId: string,
+    teamId: string,
+) => {
+    return await axios.put(
+        `${API_URL_V2}/game/${gameId}/reenter`,
+        { teamId },
+        {
+            headers: {
+                'X-API-Key': API_KEY,
+                Authorization: `Bearer ${userJwt}`,
+            },
+            validateStatus: () => true,
+        },
+    )
+}
+
 export const pushOfflineGame = async (
     token: string,
     gameData: CreateFullGame,
 ): Promise<AxiosResponse> => {
     return await axios.post(
-        `${API_URL_V1}/game/full`,
+        `${API_URL_V2}/game/full`,
         {
             gameData,
         },
@@ -154,6 +186,7 @@ export const deleteGame = async (
             'X-API-Key': API_KEY,
             Authorization: `Bearer ${userJwt}`,
         },
+        validateStatus: () => true,
     })
 }
 
@@ -161,7 +194,7 @@ export const editGame = async (
     token: string,
     gameData: UpdateGame,
 ): Promise<AxiosResponse> => {
-    return await axios.put(
+    const response = await axios.put(
         `${API_URL_V1}/game`,
         {
             gameData,
@@ -171,8 +204,13 @@ export const editGame = async (
                 Authorization: `Bearer ${token}`,
                 'X-API-Key': API_KEY,
             },
+            validateStatus: () => true,
         },
     )
+    if (response.status !== 200) {
+        throw new ApiError(response.data.message ?? Constants.UPDATE_GAME_ERROR)
+    }
+    return response
 }
 
 export const logGameOpen = async (gameId: string): Promise<AxiosResponse> => {

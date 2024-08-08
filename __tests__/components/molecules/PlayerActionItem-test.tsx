@@ -1,9 +1,9 @@
 import { DisplayUser } from '../../../src/types/user'
+import { InGameStatsUserFactory } from '../../test-data/user'
+import { LiveGameContext } from '../../../src/context/live-game-context'
 import PlayerActionItem from '../../../src/components/molecules/PlayerActionItem'
-import { Provider } from 'react-redux'
 import React from 'react'
 import { debounce } from 'lodash'
-import store from '../../../src/store/store'
 import { Action, ActionType } from '../../../src/types/action'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
@@ -25,6 +25,8 @@ const player: DisplayUser = {
 }
 
 describe('PlayerActionItem', () => {
+    const players = InGameStatsUserFactory.buildList(7)
+
     const actions: Action[] = [
         {
             action: {
@@ -75,14 +77,27 @@ describe('PlayerActionItem', () => {
 
     it('should match snapshot', () => {
         const snapshot = render(
-            <Provider store={store}>
+            <LiveGameContext.Provider
+                value={{
+                    team: 'one',
+                    players,
+                    tags: ['huck', 'break', 'layout'],
+                    addTag: jest.fn(),
+                    setCurrentPointNumber: jest.fn(),
+                    finishGameMutation: {
+                        mutate: jest.fn(),
+                        isLoading: false,
+                        error: null,
+                        reset: jest.fn(),
+                    },
+                }}>
                 <PlayerActionItem
                     player={player}
                     actions={actions}
                     onAction={debounce(jest.fn())}
                     loading={false}
                 />
-            </Provider>,
+            </LiveGameContext.Provider>,
         )
         expect(snapshot.toJSON()).toMatchSnapshot()
     })
@@ -90,14 +105,27 @@ describe('PlayerActionItem', () => {
     it('should call action appropriately', async () => {
         const spy = jest.fn()
         const { getByText } = render(
-            <Provider store={store}>
+            <LiveGameContext.Provider
+                value={{
+                    team: 'one',
+                    players,
+                    tags: ['huck', 'break', 'layout'],
+                    addTag: jest.fn(),
+                    setCurrentPointNumber: jest.fn(),
+                    finishGameMutation: {
+                        mutate: jest.fn(),
+                        isLoading: false,
+                        error: null,
+                        reset: jest.fn(),
+                    },
+                }}>
                 <PlayerActionItem
                     player={player}
                     actions={actions}
                     onAction={debounce(spy)}
                     loading={false}
                 />
-            </Provider>,
+            </LiveGameContext.Provider>,
         )
 
         const scoreBtn = getByText('score')
@@ -110,14 +138,27 @@ describe('PlayerActionItem', () => {
     it('should handle tag call', async () => {
         const spy = jest.fn()
         const { getByText } = render(
-            <Provider store={store}>
+            <LiveGameContext.Provider
+                value={{
+                    team: 'one',
+                    players,
+                    tags: ['huck', 'break', 'layout'],
+                    addTag: jest.fn(),
+                    setCurrentPointNumber: jest.fn(),
+                    finishGameMutation: {
+                        mutate: jest.fn(),
+                        isLoading: false,
+                        error: null,
+                        reset: jest.fn(),
+                    },
+                }}>
                 <PlayerActionItem
                     player={player}
                     actions={actions}
                     onAction={debounce(spy)}
                     loading={false}
                 />
-            </Provider>,
+            </LiveGameContext.Provider>,
         )
 
         const scoreBtn = getByText('score')

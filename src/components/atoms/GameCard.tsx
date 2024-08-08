@@ -1,6 +1,7 @@
 import { Game } from '../../types/game'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { IconButton } from 'react-native-paper'
+import { gameIsActive } from '../../utils/game'
 import { useTheme } from '../../hooks'
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
@@ -24,9 +25,10 @@ const GameCard: React.FC<GameCardProps> = props => {
         teamOneScore,
         teamTwoScore,
         scoreLimit,
-        teamOneActive,
         totalViews,
     } = game
+
+    const activeGame = gameIsActive(game)
 
     useEffect(() => {
         Animated.loop(
@@ -66,8 +68,10 @@ const GameCard: React.FC<GameCardProps> = props => {
             paddingTop: 5,
             color: colors.textPrimary,
         },
-        teamNameContainer: {
+        winnerIndicatorContainer: {
+            marginLeft: 10,
             flex: 1,
+            marginTop: 4,
         },
         teamNameText: {
             color: colors.textPrimary,
@@ -107,8 +111,16 @@ const GameCard: React.FC<GameCardProps> = props => {
             borderRadius: 5,
             marginTop: 5,
             marginRight: 5,
+        },
+        liveCircle: {
             backgroundColor: 'red',
             alignSelf: 'flex-end',
+        },
+        winnerCircle: {
+            backgroundColor: !activeGame ? colors.textPrimary : colors.primary,
+        },
+        loserCircle: {
+            backgroundColor: colors.primary,
         },
     })
 
@@ -120,32 +132,55 @@ const GameCard: React.FC<GameCardProps> = props => {
                     onPress(_id)
                 }}
                 testID="game-card-pressable">
-                {teamOneActive && (
+                {activeGame && (
                     <Animated.View
-                        style={[styles.circle, { opacity: liveOpacity }]}
+                        style={[
+                            styles.circle,
+                            styles.liveCircle,
+                            { opacity: liveOpacity },
+                        ]}
                     />
                 )}
                 <View style={styles.teamContainer}>
-                    <View style={styles.teamNameContainer}>
-                        <Text style={styles.teamText}>{teamOne.name}</Text>
-                        {teamOne.teamname && (
+                    <View>
+                        <Text style={styles.teamText}>{teamOne?.name}</Text>
+                        {teamOne?.teamname && (
                             <Text style={styles.teamNameText}>
-                                @{teamOne.teamname}
+                                @{teamOne?.teamname}
                             </Text>
                         )}
+                    </View>
+                    <View style={styles.winnerIndicatorContainer}>
+                        <View
+                            style={[
+                                styles.circle,
+                                game.teamOneScore > game.teamTwoScore
+                                    ? styles.winnerCircle
+                                    : styles.loserCircle,
+                            ]}
+                        />
                     </View>
                     <Text style={styles.teamText}>{teamOneScore}</Text>
                 </View>
                 <View style={styles.teamContainer}>
-                    <View style={styles.teamNameContainer}>
-                        <Text style={styles.teamText}>{teamTwo.name}</Text>
-                        {teamTwo.teamname && (
+                    <View>
+                        <Text style={styles.teamText}>{teamTwo?.name}</Text>
+                        {teamTwo?.teamname && (
                             <Text style={styles.teamNameText}>
-                                @{teamTwo.teamname}
+                                @{teamTwo?.teamname}
                             </Text>
                         )}
                     </View>
-
+                    <View style={styles.winnerIndicatorContainer}>
+                        <View
+                            style={[
+                                styles.circle,
+                                game.teamTwoScore > game.teamOneScore
+                                    ? styles.winnerCircle
+                                    : styles.loserCircle,
+                            ]}
+                        />
+                    </View>
                     <Text style={styles.teamText}>{teamTwoScore}</Text>
                 </View>
                 <View style={styles.footer}>
@@ -170,7 +205,7 @@ const GameCard: React.FC<GameCardProps> = props => {
                     </View>
 
                     <View style={styles.scoreLimitContainer}>
-                        {teamOneActive && (
+                        {gameIsActive(game) && (
                             <Text style={styles.footerText}>
                                 Game to {scoreLimit}
                             </Text>

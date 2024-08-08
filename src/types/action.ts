@@ -59,6 +59,7 @@ export interface LiveServerActionData extends ServerActionData {
 export interface SavedServerActionData extends ServerActionData {
     _id: string
     team: DisplayTeam
+    pointId: string
 }
 
 export interface ActionList {
@@ -73,7 +74,6 @@ export class PlayerActionList implements ActionList {
         team: TeamNumber,
         pulling: boolean,
     ) {
-        // const actions = actionStack.map(action => action.action)
         this.actionList = getPlayerActionList(
             playerOne,
             actionStack,

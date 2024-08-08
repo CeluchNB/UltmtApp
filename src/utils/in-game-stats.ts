@@ -9,7 +9,10 @@ export const generatePlayerStatsForPoint = (
     for (const player of players) {
         if (!map.has(player._id)) {
             map.set(player._id, {
-                ...player,
+                _id: player._id,
+                firstName: player.firstName,
+                lastName: player.lastName,
+                username: player.username,
                 pointsPlayed: 1,
                 goals: 0,
                 assists: 0,
@@ -123,7 +126,7 @@ export const addInGameStatsPlayers = (
 export const subtractInGameStatsPlayers = (
     allPlayers: InGameStatsUser[],
     updatedPlayers: InGameStatsUser[],
-): InGameStatsUser[] => {
+): Map<string, InGameStatsUser> => {
     const map = initializeInGameStatsMap(allPlayers)
 
     for (const player of updatedPlayers) {
@@ -136,7 +139,7 @@ export const subtractInGameStatsPlayers = (
         }
     }
 
-    return Array.from(map.values())
+    return map
 }
 
 const initializeInGameStatsMap = (
@@ -156,7 +159,10 @@ const addInGameStatsPlayerData = (
     playerTwo: InGameStatsUser,
 ): InGameStatsUser => {
     return {
-        ...playerOne,
+        _id: playerOne._id,
+        firstName: playerOne.firstName,
+        lastName: playerOne.lastName,
+        username: playerOne.username,
         pointsPlayed: playerOne.pointsPlayed + playerTwo.pointsPlayed,
         goals: playerOne.goals + playerTwo.goals,
         assists: playerOne.assists + playerTwo.assists,
@@ -170,11 +176,30 @@ const subtractInGameStatsPlayerData = (
     playerTwo: InGameStatsUser,
 ): InGameStatsUser => {
     return {
-        ...playerOne,
+        _id: playerOne._id,
+        firstName: playerOne.firstName,
+        lastName: playerOne.lastName,
+        username: playerOne.username,
         pointsPlayed: playerOne.pointsPlayed - playerTwo.pointsPlayed,
         goals: playerOne.goals - playerTwo.goals,
         assists: playerOne.assists - playerTwo.assists,
         blocks: playerOne.blocks - playerTwo.blocks,
         turnovers: playerOne.turnovers - playerTwo.turnovers,
+    }
+}
+
+export const parseInGameStatsUser = (
+    player: InGameStatsUser,
+): InGameStatsUser => {
+    return {
+        _id: player._id,
+        firstName: player.firstName,
+        lastName: player.lastName,
+        username: player.username,
+        pointsPlayed: player.pointsPlayed,
+        goals: player.goals,
+        assists: player.assists,
+        blocks: player.blocks,
+        turnovers: player.turnovers,
     }
 }

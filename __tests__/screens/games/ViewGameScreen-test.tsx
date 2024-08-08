@@ -1,23 +1,27 @@
 import * as GameData from '../../../src/services/data/game'
+import * as GameNetwork from '../../../src/services/network/game'
 import * as PointData from '../../../src/services/data/point'
 import * as StatsData from '../../../src/services/data/stats'
-import { GameStats } from '../../../src/types/stats'
+import * as StatsNetwork from '../../../src/services/network/stats'
+import { AxiosResponse } from 'axios'
 import { NavigationContainer } from '@react-navigation/native'
-import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
 import { ViewGameProps } from '../../../src/types/navigation'
 import ViewGameScreen from '../../../src/screens/games/ViewGameScreen'
+import { fetchProfileData } from '../../../fixtures/data'
 import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
 import store from '../../../src/store/store'
+import { withRealm } from '../../utils/renderers'
 import {
     Action,
     ActionFactory,
     ActionType,
     LiveServerActionData,
 } from '../../../src/types/action'
+import { GameFactory, GameStatsFactory } from '../../test-data/game'
+import Point, { PointStatus } from '../../../src/types/point'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { fetchProfileData, game } from '../../../fixtures/data'
 import {
     fireEvent,
     render,
@@ -104,10 +108,11 @@ const points: Point[] = [
         teamTwoActivePlayers: [],
         teamOneScore: 2,
         teamTwoScore: 0,
-        teamOneActive: true,
-        teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.ACTIVE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
     {
         _id: 'point2',
@@ -120,10 +125,11 @@ const points: Point[] = [
         teamTwoActivePlayers: [],
         teamOneScore: 2,
         teamTwoScore: 0,
-        teamOneActive: false,
-        teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.FUTURE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
     {
         _id: 'point1',
@@ -136,10 +142,11 @@ const points: Point[] = [
         teamTwoActivePlayers: [],
         teamOneScore: 1,
         teamTwoScore: 0,
-        teamOneActive: false,
-        teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.FUTURE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
 ]
 const savedActions: Action[] = [
@@ -262,43 +269,8 @@ const liveActions: LiveServerActionData[] = [
     },
 ]
 
-const playerOne = {
-    _id: 'user1',
-    firstName: 'First 1',
-    lastName: 'Last 1',
-    username: 'firstlast1',
-}
-const gameStats: GameStats = {
-    _id: 'game1',
-    startTime: '01/01/2023',
-    teamOneId: 'team1',
-    points: [],
-    goalsLeader: {
-        player: playerOne,
-        total: 1,
-    },
-    assistsLeader: {
-        player: playerOne,
-        total: 1,
-    },
-    blocksLeader: {
-        player: playerOne,
-        total: 1,
-    },
-    turnoversLeader: {
-        player: playerOne,
-        total: 1,
-    },
-    plusMinusLeader: {
-        player: playerOne,
-        total: 1,
-    },
-    pointsPlayedLeader: {
-        player: playerOne,
-        total: 1,
-    },
-    momentumData: [],
-}
+const game = GameFactory.build()
+const gameStats = GameStatsFactory.build({ _id: game._id })
 
 const client = new QueryClient({
     defaultOptions: {
@@ -345,20 +317,22 @@ describe('ViewGameScreen', () => {
 
     it('should match snapshot after data loaded', async () => {
         render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
+            withRealm(
+                <NavigationContainer>
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <ViewGameScreen {...props} />
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
         await waitFor(() => {
-            expect(screen.queryAllByText('Temper').length).toBe(6)
+            expect(screen.queryAllByText(game.teamOne.name).length).toBe(3)
         })
 
-        expect(screen.getAllByText('Sockeye').length).toBe(4)
+        expect(screen.getAllByText(game.teamTwo.name).length).toBe(1)
 
         expect(gameSpy).toHaveBeenCalled()
         expect(pointsSpy).toHaveBeenCalled()
@@ -366,72 +340,80 @@ describe('ViewGameScreen', () => {
     }, 20000)
 
     it('should handle next point', async () => {
-        const { getAllByText } = render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <ViewGameScreen {...props} />
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
         await waitFor(() => {
-            expect(getAllByText('Temper')).toBeTruthy()
+            expect(screen.getAllByText(game.teamOne.name)).toBeTruthy()
         })
 
-        fireEvent.press(getAllByText('Temper')[1])
+        fireEvent.press(screen.getAllByText(game.teamOne.name)[1])
 
         expect(gameSpy).toHaveBeenCalled()
         expect(pointsSpy).toHaveBeenCalled()
     }, 20000)
 
     it('handles saved point functionality', async () => {
-        const { getAllByText, queryAllByText } = render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <ViewGameScreen {...props} />
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
-        const savedPoint = getAllByText('Temper')[4]
+        const savedPoint = screen.getAllByText(
+            `${game.teamOne.name} (receive)`,
+        )[1]
         fireEvent.press(savedPoint)
 
         await waitFor(async () => {
-            expect(queryAllByText('pickup').length).toBe(2)
+            expect(screen.queryAllByText('pickup').length).toBe(2)
         })
     }, 20000)
 
     it('handles live action select', async () => {
-        const { getAllByText, getByText } = render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <ViewGameScreen {...props} />
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
-        const livePoint = getAllByText('Temper')[2]
+        const livePoint = screen.getAllByText(game.teamOne.name)[2]
         fireEvent.press(livePoint)
 
         await waitFor(async () => {
-            expect(getByText('huck')).toBeTruthy()
+            expect(screen.getByText('huck')).toBeTruthy()
         })
 
-        fireEvent.press(getByText('huck'))
+        fireEvent.press(screen.getByText('huck'))
 
         expect(mockedNavigate).toHaveBeenCalledWith('Comment', {
             gameId: 'game1',
@@ -463,28 +445,32 @@ describe('ViewGameScreen', () => {
     }, 20000)
 
     it('handles saved action select', async () => {
-        const { getAllByText, queryAllByText } = render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <ViewGameScreen {...props} />
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
-        const savedPoint = getAllByText('Temper')[4]
+        const savedPoint = screen.getAllByText(
+            `${game.teamOne.name} (receive)`,
+        )[1]
         fireEvent.press(savedPoint)
 
         await waitFor(async () => {
-            expect(queryAllByText('pickup')).toBeTruthy()
+            expect(screen.queryAllByText('pickup')).toBeTruthy()
         })
 
-        fireEvent.press(queryAllByText('pickup')[0])
+        fireEvent.press(screen.queryAllByText('pickup')[0])
 
         expect(mockedNavigate).toHaveBeenCalledWith('Comment', {
             gameId: 'game1',
@@ -539,35 +525,49 @@ describe('ViewGameScreen', () => {
                 ],
             }),
         )
-        const spy = jest
-            .spyOn(GameData, 'reactivateGame')
-            .mockResolvedValueOnce({
-                game: { ...game, startTime: '2023', offline: false } as any,
-                team: 'one',
-                activePoint: undefined,
-                hasActiveActions: false,
-            })
-
-        jest.spyOn(PointData, 'getActivePointForGame').mockResolvedValueOnce(
-            points[0],
+        const spy = jest.spyOn(GameNetwork, 'reenterGame').mockReturnValueOnce(
+            Promise.resolve({
+                data: {
+                    game: {
+                        ...game,
+                        startTime: '2023',
+                        offline: false,
+                    } as any,
+                    team: 'one',
+                    activePoint: undefined,
+                    hasActiveActions: false,
+                },
+                status: 200,
+                statusText: 'Good',
+            } as AxiosResponse),
         )
-        const { getByTestId, getAllByText } = render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
+
+        jest.spyOn(StatsNetwork, 'getGameStats').mockResolvedValueOnce({
+            data: { game: gameStats },
+            status: 200,
+            statusText: 'Good',
+        } as AxiosResponse)
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <ViewGameScreen {...props} />
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
-        const button = getByTestId('reactivate-button')
+        const button = screen.getByTestId('reactivate-button')
         fireEvent.press(button)
 
-        expect(spy).toHaveBeenCalled()
+        await waitFor(() => {
+            expect(spy).toHaveBeenCalled()
+        })
     }, 20000)
 
     it('deletes game', async () => {
@@ -586,27 +586,33 @@ describe('ViewGameScreen', () => {
                 ],
             }),
         )
-        const spy = jest
-            .spyOn(GameData, 'deleteGame')
-            .mockResolvedValueOnce(undefined)
+        const spy = jest.spyOn(GameNetwork, 'deleteGame').mockReturnValue(
+            Promise.resolve({
+                data: undefined,
+                status: 200,
+                statusText: 'Good',
+            } as AxiosResponse),
+        )
 
-        const { getByTestId, getAllByText, getByText } = render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <ViewGameScreen {...props} />
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
         await waitFor(async () => {
-            expect(getAllByText('Temper').length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
-        const button = getByTestId('delete-button')
+        const button = screen.getByTestId('delete-button')
         fireEvent.press(button)
 
-        const confirmBtn = getByText('confirm')
+        const confirmBtn = screen.getByText('confirm')
         fireEvent.press(confirmBtn)
 
         await waitFor(async () => {
@@ -615,19 +621,67 @@ describe('ViewGameScreen', () => {
         expect(spy).toHaveBeenCalled()
     }, 20000)
 
+    it('exports stats', async () => {
+        store.dispatch(
+            setProfile({
+                ...fetchProfileData,
+                managerTeams: [
+                    {
+                        _id: game.teamOne._id,
+                        place: game.teamOne.place,
+                        name: game.teamOne.name,
+                        teamname: game.teamOne.teamname,
+                        seasonStart: game.teamOne.seasonStart,
+                        seasonEnd: game.teamOne.seasonEnd,
+                    },
+                ],
+            }),
+        )
+        const spy = jest
+            .spyOn(StatsData, 'exportGameStats')
+            .mockResolvedValueOnce(undefined)
+
+        render(
+            withRealm(
+                <NavigationContainer>
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <ViewGameScreen {...props} />
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
+        )
+        await waitFor(async () => {
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
+        })
+
+        const button = screen.getByTestId('export-button')
+        fireEvent.press(button)
+
+        const confirmBtn = screen.getByText('confirm')
+        fireEvent.press(confirmBtn)
+
+        await waitFor(async () => {
+            expect(spy).toHaveBeenCalled()
+        })
+    })
+
     it('displays stats', async () => {
         render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <QueryClientProvider client={client}>
-                        <ViewGameScreen {...props} />
-                    </QueryClientProvider>
-                </Provider>
-            </NavigationContainer>,
+            withRealm(
+                <NavigationContainer>
+                    <Provider store={store}>
+                        <QueryClientProvider client={client}>
+                            <ViewGameScreen {...props} />
+                        </QueryClientProvider>
+                    </Provider>
+                </NavigationContainer>,
+            ),
         )
 
         await waitFor(() => {
-            expect(screen.queryAllByText('Temper').length).toBe(6)
+            expect(screen.queryAllByText(game.teamOne.name).length).toBe(3)
             expect(screen.queryAllByText('Overview').length).toBe(2)
         })
 

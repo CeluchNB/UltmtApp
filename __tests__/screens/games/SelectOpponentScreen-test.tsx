@@ -1,12 +1,19 @@
 import * as TeamData from '../../../src/services/data/team'
+import { CreateGameProvider } from '../../../src/context/create-game-context'
 import { NavigationContainer } from '@react-navigation/native'
+import { Provider } from 'react-redux'
 import React from 'react'
 import { SelectOpponentProps } from '../../../src/types/navigation'
 import SelectOpponentScreen from '../../../src/screens/games/SelectOpponentScreen'
+import { fetchProfileData } from '../../../fixtures/data'
+import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
+import store from '../../../src/store/store'
+import { withRealm } from '../../utils/renderers'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     fireEvent,
     render,
+    screen,
     waitForElementToBeRemoved,
 } from '@testing-library/react-native'
 
@@ -22,9 +29,11 @@ const teamOne = {
 }
 
 const navigate = jest.fn()
+const reset = jest.fn()
 const props: SelectOpponentProps = {
     navigation: {
         navigate,
+        reset,
     } as any,
     route: { params: { teamOne } } as any,
 }
@@ -34,6 +43,7 @@ const client = new QueryClient()
 describe('SelectOpponentScreen', () => {
     beforeAll(() => {
         jest.useFakeTimers()
+        store.dispatch(setProfile(fetchProfileData))
     })
 
     afterAll(() => {
@@ -75,43 +85,67 @@ describe('SelectOpponentScreen', () => {
         jest.spyOn(TeamData, 'searchTeam').mockReturnValue(
             Promise.resolve([teamTwo]),
         )
-        const { getByTestId, getByText, getByPlaceholderText } = render(
-            <NavigationContainer>
-                <QueryClientProvider client={client}>
-                    <SelectOpponentScreen {...props} />
-                </QueryClientProvider>
-            </NavigationContainer>,
+        render(
+            withRealm(
+                <Provider store={store}>
+                    <NavigationContainer>
+                        <QueryClientProvider client={client}>
+                            <CreateGameProvider>
+                                <SelectOpponentScreen {...props} />
+                            </CreateGameProvider>
+                        </QueryClientProvider>
+                    </NavigationContainer>
+                </Provider>,
+            ),
         )
 
-        fireEvent.changeText(getByPlaceholderText('Search teams...'), 'team2')
-        await waitForElementToBeRemoved(() => getByTestId('search-indicator'))
+        fireEvent.changeText(
+            screen.getByPlaceholderText('Search teams...'),
+            'team2',
+        )
+        await waitForElementToBeRemoved(() =>
+            screen.getByTestId('search-indicator'),
+        )
 
-        const team = getByText('@place2name2')
+        const team = screen.getByText('@place2name2')
         fireEvent.press(team)
 
-        expect(navigate).toHaveBeenCalledWith('CreateGame', {
-            teamTwo,
+        expect(reset).toHaveBeenCalledWith({
+            index: 1,
+            routes: [{ name: 'Tabs' }, { name: 'CreateGame' }],
         })
     })
 
     it('with guest team', async () => {
         jest.spyOn(TeamData, 'searchTeam').mockReturnValue(Promise.resolve([]))
-        const { getByTestId, getByText, getByPlaceholderText } = render(
-            <NavigationContainer>
-                <QueryClientProvider client={client}>
-                    <SelectOpponentScreen {...props} />
-                </QueryClientProvider>
-            </NavigationContainer>,
+        render(
+            withRealm(
+                <Provider store={store}>
+                    <NavigationContainer>
+                        <QueryClientProvider client={client}>
+                            <CreateGameProvider>
+                                <SelectOpponentScreen {...props} />
+                            </CreateGameProvider>
+                        </QueryClientProvider>
+                    </NavigationContainer>
+                </Provider>,
+            ),
         )
 
-        fireEvent.changeText(getByPlaceholderText('Search teams...'), 'team2')
-        await waitForElementToBeRemoved(() => getByTestId('search-indicator'))
+        fireEvent.changeText(
+            screen.getByPlaceholderText('Search teams...'),
+            'team2',
+        )
+        await waitForElementToBeRemoved(() =>
+            screen.getByTestId('search-indicator'),
+        )
 
-        const team = getByText('continue with guest team')
+        const team = screen.getByText('continue with guest team')
         fireEvent.press(team)
 
-        expect(navigate).toHaveBeenCalledWith('CreateGame', {
-            teamTwo: { name: 'team2' },
+        expect(reset).toHaveBeenCalledWith({
+            index: 1,
+            routes: [{ name: 'Tabs' }, { name: 'CreateGame' }],
         })
     })
 })

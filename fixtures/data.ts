@@ -1,12 +1,12 @@
 import { DetailedRequest } from '../src/types/request'
-import { Game } from '../src/types/game'
-import Point from '../src/types/point'
 import { User } from '../src/types/user'
 import {
     ActionType,
     LiveServerActionData,
     SavedServerActionData,
 } from '../src/types/action'
+import { Game, GameStatus } from '../src/types/game'
+import Point, { PointStatus } from '../src/types/point'
 
 export const fetchProfileData: User = {
     _id: 'testid',
@@ -14,6 +14,7 @@ export const fetchProfileData: User = {
     lastName: 'last',
     email: 'test@email.com',
     username: 'testuser',
+    guest: false,
     playerTeams: [
         {
             _id: 'id1',
@@ -122,8 +123,6 @@ export const game: Game = {
     startTime: new Date('2022-10-12'),
     softcapMins: 75,
     hardcapMins: 90,
-    teamOneActive: true,
-    teamTwoActive: false,
     playersPerPoint: 7,
     resolveCode: '111111',
     timeoutPerHalf: 1,
@@ -132,7 +131,8 @@ export const game: Game = {
     teamTwoPlayers: [],
     tournament: tourney,
     totalViews: 0,
-    points: [],
+    teamOneStatus: GameStatus.ACTIVE,
+    teamTwoStatus: GameStatus.GUEST,
 }
 
 export const reduxGame = {
@@ -182,10 +182,11 @@ export const point: Point = {
     teamTwoActivePlayers: [],
     teamOneScore: 2,
     teamTwoScore: 1,
-    teamOneActive: true,
-    teamTwoActive: false,
     teamOneActions: [],
     teamTwoActions: [],
+    gameId: 'game1',
+    teamOneStatus: PointStatus.ACTIVE,
+    teamTwoStatus: PointStatus.FUTURE,
 }
 
 export const liveAction: LiveServerActionData = {
@@ -213,4 +214,5 @@ export const savedAction: SavedServerActionData = {
     actionType: ActionType.PULL,
     tags: ['ib'],
     team: teamOne,
+    pointId: 'point1',
 }

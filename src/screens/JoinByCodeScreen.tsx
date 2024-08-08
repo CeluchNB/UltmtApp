@@ -113,6 +113,7 @@ const JoinByCodeScreen: React.FC<JoinByCodeProps> = ({ navigation }) => {
                             text="Done"
                             loading={false}
                             onPress={async () => {
+                                setModalVisible(false)
                                 navigation.navigate('ManageTeams')
                             }}
                         />

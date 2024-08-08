@@ -1,4 +1,6 @@
 import CompletionsCharts from '../molecules/CompletionsCharts'
+import ConfirmModal from '../molecules/ConfirmModal'
+import { DisplayUser } from '../../types/user'
 import { Game } from '../../types/game'
 import GameListItem from '../atoms/GameListItem'
 import PlayerConnectionsView from './PlayerConnectionsView'
@@ -6,9 +8,10 @@ import React from 'react'
 import SecondaryButton from '../atoms/SecondaryButton'
 import SmallLeaderListItem from '../atoms/SmallLeaderListItem'
 import StatsTable from '../molecules/StatsTable'
-import { getTeamStats } from '../../services/data/stats'
+import { selectAccount } from '../../store/reducers/features/account/accountReducer'
 import { useNavigation } from '@react-navigation/native'
 import { useQuery } from 'react-query'
+import { useSelector } from 'react-redux'
 import { useTheme } from '../../hooks'
 import {
     FlatList,
@@ -16,6 +19,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    View,
 } from 'react-native'
 import StatsFilterModal, { CheckBoxItem } from '../molecules/StatsFilterModal'
 import {
@@ -23,22 +27,28 @@ import {
     convertGameStatsToLeaderItems,
     convertTeamStatsToTeamOverviewItems,
 } from '../../utils/stats'
+import { exportTeamStats, getTeamStats } from '../../services/data/stats'
 
 interface PublicTeamStatsSceneProps {
     teamId: string
     games: Game[]
+    managers: DisplayUser[]
 }
 
 const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
     teamId,
     games,
+    managers,
 }) => {
     const {
         theme: { colors, size },
     } = useTheme()
     const navigation = useNavigation()
+    const account = useSelector(selectAccount)
 
-    const [modalVisible, setModalVisible] = React.useState(false)
+    const [filterModalVisible, setFilterModalVisible] = React.useState(false)
+    const [exportModalVisible, setExportModalVisible] = React.useState(false)
+    const [exportLoading, setExportLoading] = React.useState(false)
     const [gameFilterOptions, setGameFilterOptions] = React.useState<
         CheckBoxItem[]
     >([])
@@ -48,10 +58,14 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
             .map(value => value.value)
     }, [gameFilterOptions])
 
+    const showExportButton = React.useMemo(() => {
+        return managers?.some(manager => manager._id === account._id)
+    }, [managers, account])
+
     const { data, isLoading, isRefetching, refetch } = useQuery(
         ['getTeamStats', { teamId, gameIds }],
         () => getTeamStats(teamId, gameIds),
-        { enabled: !modalVisible },
+        { enabled: !filterModalVisible },
     )
 
     React.useEffect(() => {
@@ -115,8 +129,20 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
     }
 
     const onFilter = () => {
-        setModalVisible(false)
+        setFilterModalVisible(false)
         refetch()
+    }
+
+    const onExportStats = async () => {
+        try {
+            setExportLoading(true)
+            await exportTeamStats(account._id, teamId)
+        } catch (e) {
+            // TODO: error display
+        } finally {
+            setExportLoading(false)
+            setExportModalVisible(false)
+        }
     }
 
     const styles = StyleSheet.create({
@@ -125,8 +151,12 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
             color: colors.textSecondary,
         },
         button: {
-            alignSelf: 'flex-end',
             margin: 5,
+        },
+        headerContainer: {
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'center',
         },
     })
 
@@ -140,13 +170,24 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
                     tintColor={colors.textSecondary}
                 />
             }>
-            <SecondaryButton
-                style={styles.button}
-                text="Filter by Game"
-                onPress={async () => {
-                    setModalVisible(true)
-                }}
-            />
+            <View style={styles.headerContainer}>
+                {showExportButton && (
+                    <SecondaryButton
+                        style={styles.button}
+                        text="export stats"
+                        onPress={async () => {
+                            setExportModalVisible(true)
+                        }}
+                    />
+                )}
+                <SecondaryButton
+                    style={styles.button}
+                    text="filter by game"
+                    onPress={async () => {
+                        setFilterModalVisible(true)
+                    }}
+                />
+            </View>
             <Text style={styles.title}>Overview</Text>
             <FlatList
                 horizontal
@@ -186,12 +227,21 @@ const PublicTeamStatsScene: React.FC<PublicTeamStatsSceneProps> = ({
             <Text style={styles.title}>Players</Text>
             {data && <StatsTable players={data.players || []} />}
             <StatsFilterModal
-                visible={modalVisible}
+                visible={filterModalVisible}
                 title="Games"
                 data={gameFilterOptions}
                 onSelect={onGameSelect}
                 onClear={onGameClear}
                 onDone={onFilter}
+            />
+            <ConfirmModal
+                displayText="This will send a spreadsheet to your email. Export stats?"
+                loading={exportLoading}
+                visible={exportModalVisible}
+                confirmColor={colors.textPrimary}
+                onClose={async () => setExportModalVisible(false)}
+                onCancel={async () => setExportModalVisible(false)}
+                onConfirm={onExportStats}
             />
         </ScrollView>
     )

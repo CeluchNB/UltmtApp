@@ -1,32 +1,11 @@
 import * as Constants from '../../utils/constants'
 import { Game } from '../../types/game'
-import Point from '../../types/point'
 import { PointSchema } from '../../models'
 import { Realm } from '@realm/react'
 import { getRealm } from '../../models/realm'
+import { parsePoint } from '../../utils/point'
 import { throwLocalError } from '../../utils/service-utils'
-
-const parsePoint = (schema: PointSchema): Point => {
-    return JSON.parse(
-        JSON.stringify({
-            _id: schema._id,
-            pointNumber: schema.pointNumber,
-            teamOnePlayers: schema.teamOnePlayers,
-            teamTwoPlayers: schema.teamTwoPlayers,
-            teamOneActivePlayers: schema.teamOneActivePlayers,
-            teamTwoActivePlayers: schema.teamTwoActivePlayers,
-            teamOneScore: schema.teamOneScore,
-            teamTwoScore: schema.teamTwoScore,
-            pullingTeam: schema.pullingTeam,
-            receivingTeam: schema.receivingTeam,
-            scoringTeam: schema.scoringTeam,
-            teamOneActive: schema.teamOneActive,
-            teamTwoActive: schema.teamTwoActive,
-            teamOneActions: schema.teamOneActions,
-            teamTwoActions: schema.teamTwoActions,
-        }),
-    )
-}
+import Point, { PointStatus } from '../../types/point'
 
 export const createOfflinePoint = async (
     pulling: boolean,
@@ -47,10 +26,11 @@ export const createOfflinePoint = async (
         teamTwoScore: game.teamTwoScore,
         teamOneActions: [],
         teamTwoActions: [],
-        teamOneActive: true,
-        teamTwoActive: false,
         pullingTeam: pulling ? game.teamOne : game.teamTwo,
         receivingTeam: pulling ? game.teamTwo : game.teamOne,
+        gameId: game._id,
+        teamOneStatus: PointStatus.ACTIVE,
+        teamTwoStatus: PointStatus.FUTURE,
     }
 
     realm.write(() => {
@@ -98,29 +78,9 @@ export const getPointByPointNumber = async (
     return parsePoint(points[0])
 }
 
-export const getActivePointByGame = async (
-    game: Game,
-): Promise<Point | undefined> => {
-    const realm = await getRealm()
-
-    const gameString = game.points.map(id => {
-        return `"${id}"`
-    })
-
-    const points = await realm
-        .objects<PointSchema>('Point')
-        .filtered(`teamOneActive == $0 && _id IN { $1 }`, true, gameString)
-
-    if (points.length === 0 || points.length > 1) {
-        return undefined
-    }
-
-    return parsePoint(points[0])
-}
-
 export const deletePoint = async (pointId: string) => {
     const realm = await getRealm()
-    const point = await realm.objectForPrimaryKey('Point', pointId)
+    const point = realm.objectForPrimaryKey('Point', pointId)
 
     realm.write(() => {
         realm.delete(point)

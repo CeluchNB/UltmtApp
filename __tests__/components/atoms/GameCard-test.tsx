@@ -1,3 +1,4 @@
+import { GameStatus } from '../../../src/types/game'
 import React from 'react'
 import GameCard, { GameCardProps } from '../../../src/components/atoms/GameCard'
 import { fireEvent, render } from '@testing-library/react-native'
@@ -27,7 +28,6 @@ beforeEach(() => {
             teamOneScore: 10,
             teamTwoScore: 7,
             scoreLimit: 15,
-            teamOneActive: true,
             creator: {} as any,
             teamTwoDefined: false,
             halfScore: 8,
@@ -37,12 +37,12 @@ beforeEach(() => {
             playersPerPoint: 7,
             timeoutPerHalf: 1,
             floaterTimeout: true,
-            teamTwoActive: false,
             teamOnePlayers: [],
             teamTwoPlayers: [],
             resolveCode: '111111',
             totalViews: 0,
-            points: [],
+            teamOneStatus: GameStatus.ACTIVE,
+            teamTwoStatus: GameStatus.DEFINED,
         },
         onPress: fn,
     }

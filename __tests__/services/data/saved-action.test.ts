@@ -46,7 +46,7 @@ describe('test add comment', () => {
 
         await expect(
             addComment('action1', 'point1', 'Test'),
-        ).rejects.toMatchObject({ message: Constants.COMMENT_ERROR })
+        ).rejects.toMatchObject({ message: Constants.GENERIC_GET_TOKEN_ERROR })
         expect(localSpy).not.toHaveBeenCalled()
     })
 })
@@ -89,7 +89,7 @@ describe('delete comment', () => {
 
         await expect(
             deleteComment('action1', '1', 'point1'),
-        ).rejects.toMatchObject({ message: Constants.COMMENT_ERROR })
+        ).rejects.toMatchObject({ message: Constants.GENERIC_GET_TOKEN_ERROR })
         expect(localSpy).not.toHaveBeenCalled()
     })
 })

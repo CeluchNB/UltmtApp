@@ -1,10 +1,15 @@
 import { DisplayUser } from '../types/user'
+import { PointSchema } from '../models'
 import { TeamNumber } from '../types/team'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
-import Point, { ClientPoint } from '../types/point'
+import Point, { ClientPoint, PointStatus } from '../types/point'
 
 export const isLivePoint = (point?: Point): boolean => {
-    return point?.teamOneActive || point?.teamTwoActive || false
+    return (
+        point?.teamOneStatus === PointStatus.ACTIVE ||
+        point?.teamTwoStatus === PointStatus.ACTIVE ||
+        false
+    )
 }
 
 export const isPulling = (
@@ -190,7 +195,7 @@ const lastTwoActionsAreScores = (action1: Action, action2: Action): boolean => {
     )
 }
 
-export const parseClientPoint = (point: Point): ClientPoint => {
+export const parseClientPoint = (point: PointSchema): ClientPoint => {
     return {
         pointNumber: point.pointNumber,
         teamOnePlayers: point.teamOnePlayers,
@@ -210,9 +215,8 @@ export const substituteActivePlayer = (
     playerToAdd: DisplayUser,
 ) => {
     const index = playerArray.findIndex(p => p._id === playerToRemove._id)
-    if (index === -1) {
-        return
-    }
+    if (index === -1) return
+
     playerArray.splice(index, 1, playerToAdd)
 }
 
@@ -225,4 +229,26 @@ export const removePlayerFromArray = (
         return
     }
     playerArray.splice(index, 1)
+}
+
+export const parsePoint = (schema: PointSchema): Point => {
+    return JSON.parse(
+        JSON.stringify({
+            _id: schema._id,
+            pointNumber: schema.pointNumber,
+            teamOnePlayers: schema.teamOnePlayers,
+            teamTwoPlayers: schema.teamTwoPlayers,
+            teamOneActivePlayers: schema.teamOneActivePlayers,
+            teamTwoActivePlayers: schema.teamTwoActivePlayers,
+            teamOneScore: schema.teamOneScore,
+            teamTwoScore: schema.teamTwoScore,
+            pullingTeam: schema.pullingTeam,
+            receivingTeam: schema.receivingTeam,
+            scoringTeam: schema.scoringTeam,
+            teamOneStatus: schema.teamOneStatus,
+            teamTwoStatus: schema.teamTwoStatus,
+            teamOneActions: schema.teamOneActions,
+            teamTwoActions: schema.teamTwoActions,
+        }),
+    )
 }

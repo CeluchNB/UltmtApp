@@ -1,17 +1,13 @@
 import BaseModal from '../atoms/BaseModal'
 import { Chip } from 'react-native-paper'
+import { LiveGameContext } from '../../context/live-game-context'
 import PrimaryButton from '../atoms/PrimaryButton'
-import React from 'react'
 import ScreenTitle from '../atoms/ScreenTitle'
 import SecondaryButton from '../atoms/SecondaryButton'
 import UserInput from '../atoms/UserInput'
 import { useTheme } from '../../hooks'
 import { FlatList, LogBox, StyleSheet, View } from 'react-native'
-import {
-    addTag,
-    selectTags,
-} from '../../store/reducers/features/game/liveGameReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useContext, useState } from 'react'
 
 interface PlayerActionTagModalProps {
     visible: boolean
@@ -26,14 +22,14 @@ const PlayerActionTagModal: React.FC<PlayerActionTagModalProps> = ({
     const {
         theme: { colors },
     } = useTheme()
-    const dispatch = useDispatch()
-    const tags = useSelector(selectTags)
-    const [newTag, setNewTag] = React.useState('')
-    const [selectedTags, setSelectedTags] = React.useState<string[]>([])
+    const { tags, addTag } = useContext(LiveGameContext)
+
+    const [newTag, setNewTag] = useState('')
+    const [selectedTags, setSelectedTags] = useState<string[]>([])
 
     const onAddTag = () => {
         if (newTag.length > 0) {
-            dispatch(addTag(newTag))
+            addTag(newTag)
         }
         setNewTag('')
     }

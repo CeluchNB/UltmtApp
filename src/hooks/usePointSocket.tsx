@@ -14,15 +14,19 @@ const usePointSocket = (gameId: string, pointId: string) => {
     useEffect(() => {
         if (!socket) return
 
+        socket.off(NetworkPointEvents.ACTION_LISTEN)
         socket.on(NetworkPointEvents.ACTION_LISTEN, data => {
             emitter.emit(LocalPointEvents.ACTION_LISTEN, data)
         })
+        socket.off(NetworkPointEvents.UNDO_LISTEN)
         socket.on(NetworkPointEvents.UNDO_LISTEN, data => {
             emitter.emit(LocalPointEvents.UNDO_LISTEN, data)
         })
+        socket.off(NetworkPointEvents.ERROR_LISTEN)
         socket.on(NetworkPointEvents.ERROR_LISTEN, data => {
             emitter.emit(LocalPointEvents.ERROR_LISTEN, data)
         })
+        socket.off(NetworkPointEvents.NEXT_POINT_LISTEN)
         socket.on(NetworkPointEvents.NEXT_POINT_LISTEN, () => {
             emitter.emit(LocalPointEvents.NEXT_POINT_LISTEN)
         })
@@ -31,10 +35,15 @@ const usePointSocket = (gameId: string, pointId: string) => {
             socket.emit(NetworkPointEvents.JOIN_POINT_EMIT, gameId, pointId)
         })
 
+        emitter.off(LocalPointEvents.ACTION_EMIT)
         emitter.addListener(LocalPointEvents.ACTION_EMIT, onAction)
+        emitter.off(LocalPointEvents.UNDO_EMIT)
         emitter.addListener(LocalPointEvents.UNDO_EMIT, onUndo)
+        emitter.off(LocalPointEvents.NEXT_POINT_EMIT)
         emitter.addListener(LocalPointEvents.NEXT_POINT_EMIT, onNextPoint)
+        emitter.off(LocalPointEvents.COMMENT_EMIT)
         emitter.addListener(LocalPointEvents.COMMENT_EMIT, onComment)
+        emitter.off(LocalPointEvents.DELETE_COMMENT_EMIT)
         emitter.addListener(
             LocalPointEvents.DELETE_COMMENT_EMIT,
             onDeleteComment,

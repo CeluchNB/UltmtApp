@@ -5,6 +5,6 @@ export const createGuestPlayer = (player: GuestUser): DisplayUser => {
     return {
         _id: new Realm.BSON.ObjectID().toHexString(),
         ...player,
-        username: 'guest',
+        username: `guest${new Date().getTime()}`,
     }
 }

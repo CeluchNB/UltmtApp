@@ -9,6 +9,7 @@ interface GameUtilityBarProps {
     totalViews?: number
     onReactivateGame?: () => void
     onDeleteGame?: () => void
+    onExportStats?: () => void
 }
 
 const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
@@ -16,6 +17,7 @@ const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
     totalViews = 0,
     onReactivateGame,
     onDeleteGame,
+    onExportStats,
 }) => {
     const {
         theme: { colors, size },
@@ -58,6 +60,15 @@ const GameUtilityBar: React.FC<GameUtilityBarProps> = ({
                     <ActivityIndicator
                         size="small"
                         color={colors.textPrimary}
+                    />
+                )}
+                {onExportStats && (
+                    <IconButton
+                        size={20}
+                        iconColor={colors.textPrimary}
+                        icon="export"
+                        onPress={onExportStats}
+                        testID="export-button"
                     />
                 )}
                 {onReactivateGame && (

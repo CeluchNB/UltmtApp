@@ -1,6 +1,5 @@
 import { GuestTeam } from '../../../src/types/team'
 import { NavigationContainer } from '@react-navigation/native'
-import Point from '../../../src/types/point'
 import { Provider } from 'react-redux'
 import React from 'react'
 import store from '../../../src/store/store'
@@ -10,6 +9,7 @@ import {
     ActionType,
     LiveServerActionData,
 } from '../../../src/types/action'
+import Point, { PointStatus } from '../../../src/types/point'
 import PointAccordionGroup, {
     PointAccordionGroupProps,
 } from '../../../src/components/organisms/PointAccordionGroup'
@@ -50,10 +50,11 @@ const points: Point[] = [
         teamTwoActivePlayers: [],
         teamOneScore: 2,
         teamTwoScore: 0,
-        teamOneActive: true,
-        teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.ACTIVE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
     {
         _id: 'point2',
@@ -66,10 +67,11 @@ const points: Point[] = [
         teamTwoActivePlayers: [],
         teamOneScore: 2,
         teamTwoScore: 0,
-        teamOneActive: false,
-        teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.FUTURE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
     {
         _id: 'point1',
@@ -82,10 +84,11 @@ const points: Point[] = [
         teamTwoActivePlayers: [],
         teamOneScore: 1,
         teamTwoScore: 0,
-        teamOneActive: false,
-        teamTwoActive: false,
         teamOneActions: [],
         teamTwoActions: [],
+        gameId: 'game1',
+        teamOneStatus: PointStatus.FUTURE,
+        teamTwoStatus: PointStatus.FUTURE,
     },
 ]
 
@@ -252,7 +255,7 @@ describe('PointAccordionGroup', () => {
 
         expect(queryByText('huck')).toBeFalsy()
 
-        const point = getAllByText('Temper')[0]
+        const point = getAllByText('Temper (pull)')[0]
         fireEvent.press(point)
 
         await waitFor(() => {
@@ -272,7 +275,7 @@ describe('PointAccordionGroup', () => {
         )
         expect(queryByText('pickup')).toBeFalsy()
 
-        const point = getAllByText('Temper')[1]
+        const point = getAllByText('Temper (pull)')[1]
         fireEvent.press(point)
 
         await waitFor(() => {
@@ -289,7 +292,7 @@ describe('PointAccordionGroup', () => {
                 </Provider>
             </NavigationContainer>,
         )
-        const point = getAllByText('Temper')[0]
+        const point = getAllByText('Temper (pull)')[0]
         fireEvent.press(point)
 
         await waitFor(() => {
@@ -334,7 +337,7 @@ describe('PointAccordionGroup', () => {
                 </Provider>
             </NavigationContainer>,
         )
-        const point = getAllByText('Temper')[0]
+        const point = getAllByText('Temper (pull)')[0]
         fireEvent.press(point)
 
         await waitFor(() => {

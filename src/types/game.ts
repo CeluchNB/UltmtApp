@@ -3,6 +3,18 @@ import { Tournament } from './tournament'
 import { DisplayTeam, GuestTeam } from './team'
 import { DisplayUser, InGameStatsUser } from './user'
 
+export enum GameStatus {
+    GUEST = 'guest',
+    DEFINED = 'defined',
+    ACTIVE = 'active',
+    COMPLETE = 'complete',
+}
+
+export enum LiveGameWizardState {
+    SET_PLAYERS,
+    LOG_ACTIONS,
+}
+
 export interface CreateGame {
     creator: DisplayUser
     teamOne: DisplayTeam
@@ -36,13 +48,12 @@ export interface Game {
     tournament?: Tournament
     teamOneScore: number
     teamTwoScore: number
-    teamOneActive: boolean
-    teamTwoActive: boolean
     teamOnePlayers: DisplayUser[]
     teamTwoPlayers: DisplayUser[]
     resolveCode: string
     totalViews: number
-    points: string[]
+    teamOneStatus: GameStatus
+    teamTwoStatus: GameStatus
 }
 
 export interface CreateFullGame extends CreateGame {

@@ -373,7 +373,7 @@ describe('test team services', () => {
             jest.spyOn(LocalTeamServices, 'getTeamById').mockReturnValue(
                 Promise.resolve(team),
             )
-            const result = await createGuest('', '', '', true)
+            const result = await createGuest('', '', '')
             expect(result).toMatchObject(team)
         })
 

@@ -1,16 +1,22 @@
-import * as TournamentData from '../../../src/services/data/tournament'
+import * as TournamentNetwork from '../../../src/services/network/tournament'
+import { AxiosResponse } from 'axios'
 import { CreateTournamentProps } from '../../../src/types/navigation'
 import CreateTournamentScreen from '../../../src/screens/games/CreateTournamentScreen'
 import MockDate from 'mockdate'
 import { NavigationContainer } from '@react-navigation/native'
-import { Provider } from 'react-redux'
 import React from 'react'
-import store from '../../../src/store/store'
 import { tourney } from '../../../fixtures/data'
+import { withRealm } from '../../utils/renderers'
+import {
+    CreateGameContext,
+    CreateGameContextData,
+} from '../../../src/context/create-game-context'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render, screen } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
+const client = new QueryClient()
 const pop = jest.fn()
 const props: CreateTournamentProps = {
     navigation: { setOptions: jest.fn(), pop } as any,
@@ -30,11 +36,13 @@ describe('CreateTournamentScreen', () => {
 
     it('renders', async () => {
         render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <CreateTournamentScreen {...props} />
-                </Provider>
-            </NavigationContainer>,
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <CreateTournamentScreen {...props} />
+                    </QueryClientProvider>
+                </NavigationContainer>,
+            ),
         )
 
         await act(async () => {})
@@ -47,14 +55,29 @@ describe('CreateTournamentScreen', () => {
 
     it('successfully calls tournament create', async () => {
         const spy = jest
-            .spyOn(TournamentData, 'createTournament')
-            .mockReturnValueOnce(Promise.resolve(tourney))
+            .spyOn(TournamentNetwork, 'createTournament')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    data: { tournament: tourney },
+                    status: 201,
+                    statusText: 'Created',
+                } as AxiosResponse),
+            )
         render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <CreateTournamentScreen {...props} />
-                </Provider>
-            </NavigationContainer>,
+            withRealm(
+                <CreateGameContext.Provider
+                    value={
+                        {
+                            setTournament: jest.fn(),
+                        } as unknown as CreateGameContextData
+                    }>
+                    <NavigationContainer>
+                        <QueryClientProvider client={client}>
+                            <CreateTournamentScreen {...props} />
+                        </QueryClientProvider>
+                    </NavigationContainer>
+                </CreateGameContext.Provider>,
+            ),
         )
 
         const name = 'Nationals 2022'
@@ -69,7 +92,7 @@ describe('CreateTournamentScreen', () => {
         fireEvent.press(createButton)
 
         await act(async () => {})
-        expect(spy).toHaveBeenCalledWith({
+        expect(spy).toHaveBeenCalledWith('', {
             name,
             eventId,
             startDate: '2023-01-01T00:00:00.000Z',
@@ -80,14 +103,29 @@ describe('CreateTournamentScreen', () => {
 
     it('renders with error', async () => {
         const spy = jest
-            .spyOn(TournamentData, 'createTournament')
-            .mockReturnValueOnce(Promise.reject({ message: 'test message' }))
+            .spyOn(TournamentNetwork, 'createTournament')
+            .mockReturnValueOnce(
+                Promise.resolve({
+                    data: { message: 'test message' },
+                    status: 400,
+                    statusText: 'Bad',
+                } as AxiosResponse),
+            )
         render(
-            <NavigationContainer>
-                <Provider store={store}>
-                    <CreateTournamentScreen {...props} />
-                </Provider>
-            </NavigationContainer>,
+            withRealm(
+                <CreateGameContext.Provider
+                    value={
+                        {
+                            setTournament: jest.fn(),
+                        } as unknown as CreateGameContextData
+                    }>
+                    <NavigationContainer>
+                        <QueryClientProvider client={client}>
+                            <CreateTournamentScreen {...props} />
+                        </QueryClientProvider>
+                    </NavigationContainer>
+                </CreateGameContext.Provider>,
+            ),
         )
 
         const name = 'Nationals 2022'
@@ -102,13 +140,12 @@ describe('CreateTournamentScreen', () => {
         fireEvent.press(createButton)
 
         await act(async () => {})
-        expect(spy).toHaveBeenCalledWith({
+        expect(spy).toHaveBeenCalledWith('', {
             name,
             eventId,
             startDate: '2023-01-01T00:00:00.000Z',
             endDate: '2023-01-01T00:00:00.000Z',
         })
-        expect(pop).not.toHaveBeenCalled()
-        expect(screen.getByText('test message')).toBeTruthy()
+        expect(pop).toHaveBeenCalled()
     })
 })

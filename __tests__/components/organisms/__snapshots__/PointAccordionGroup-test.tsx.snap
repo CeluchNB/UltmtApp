@@ -6,6 +6,7 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
     [
       {
         "_id": "point3",
+        "gameId": "game1",
         "pointNumber": 1,
         "pullingTeam": {
           "name": "Temper",
@@ -14,18 +15,19 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
           "name": "Truck",
         },
         "teamOneActions": [],
-        "teamOneActive": true,
         "teamOneActivePlayers": [],
         "teamOnePlayers": [],
         "teamOneScore": 2,
+        "teamOneStatus": "active",
         "teamTwoActions": [],
-        "teamTwoActive": false,
         "teamTwoActivePlayers": [],
         "teamTwoPlayers": [],
         "teamTwoScore": 0,
+        "teamTwoStatus": "future",
       },
       {
         "_id": "point2",
+        "gameId": "game1",
         "pointNumber": 1,
         "pullingTeam": {
           "name": "Temper",
@@ -34,18 +36,19 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
           "name": "Truck",
         },
         "teamOneActions": [],
-        "teamOneActive": false,
         "teamOneActivePlayers": [],
         "teamOnePlayers": [],
         "teamOneScore": 2,
+        "teamOneStatus": "future",
         "teamTwoActions": [],
-        "teamTwoActive": false,
         "teamTwoActivePlayers": [],
         "teamTwoPlayers": [],
         "teamTwoScore": 0,
+        "teamTwoStatus": "future",
       },
       {
         "_id": "point1",
+        "gameId": "game1",
         "pointNumber": 1,
         "pullingTeam": {
           "name": "Temper",
@@ -54,15 +57,15 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
           "name": "Truck",
         },
         "teamOneActions": [],
-        "teamOneActive": false,
         "teamOneActivePlayers": [],
         "teamOnePlayers": [],
         "teamOneScore": 1,
+        "teamOneStatus": "future",
         "teamTwoActions": [],
-        "teamTwoActive": false,
         "teamTwoActivePlayers": [],
         "teamTwoPlayers": [],
         "teamTwoScore": 0,
+        "teamTwoStatus": "future",
       },
     ]
   }
@@ -239,28 +242,90 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                           }
                         }
                       >
-                        <Text
+                        <View
                           style={
                             {
-                              "color": "#ffd600",
-                              "fontSize": 30.821917808219176,
-                              "fontWeight": "bold",
+                              "display": "flex",
+                              "flexDirection": "row",
                             }
                           }
                         >
-                          Temper
-                        </Text>
-                        <Text
+                          <Text
+                            numberOfLines={1}
+                            style={
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 30.821917808219176,
+                                "fontWeight": "bold",
+                                "marginRight": 5,
+                                "overflow": "hidden",
+                              }
+                            }
+                          >
+                            Temper
+                             (
+                            pull
+                            )
+                          </Text>
+                          <View
+                            style={
+                              [
+                                {
+                                  "borderRadius": 5,
+                                  "height": 10,
+                                  "marginRight": 5,
+                                  "marginTop": 5,
+                                  "width": 10,
+                                },
+                                {
+                                  "backgroundColor": "#303030",
+                                },
+                              ]
+                            }
+                          />
+                        </View>
+                        <View
                           style={
                             {
-                              "color": "#ffd600",
-                              "fontSize": 30.821917808219176,
-                              "fontWeight": "bold",
+                              "display": "flex",
+                              "flexDirection": "row",
                             }
                           }
                         >
-                          Truck
-                        </Text>
+                          <Text
+                            numberOfLines={1}
+                            style={
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 30.821917808219176,
+                                "fontWeight": "bold",
+                                "marginRight": 5,
+                                "overflow": "hidden",
+                              }
+                            }
+                          >
+                            Truck
+                             (
+                            receive
+                            )
+                          </Text>
+                          <View
+                            style={
+                              [
+                                {
+                                  "borderRadius": 5,
+                                  "height": 10,
+                                  "marginRight": 5,
+                                  "marginTop": 5,
+                                  "width": 10,
+                                },
+                                {
+                                  "backgroundColor": "#303030",
+                                },
+                              ]
+                            }
+                          />
+                        </View>
                       </View>
                       <View>
                         <Text
@@ -269,6 +334,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
+                              "marginRight": 5,
+                              "overflow": "hidden",
                             }
                           }
                         >
@@ -280,6 +347,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
+                              "marginRight": 5,
+                              "overflow": "hidden",
                             }
                           }
                         >
@@ -522,28 +591,90 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                           }
                         }
                       >
-                        <Text
+                        <View
                           style={
                             {
-                              "color": "#ffd600",
-                              "fontSize": 30.821917808219176,
-                              "fontWeight": "bold",
+                              "display": "flex",
+                              "flexDirection": "row",
                             }
                           }
                         >
-                          Temper
-                        </Text>
-                        <Text
+                          <Text
+                            numberOfLines={1}
+                            style={
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 30.821917808219176,
+                                "fontWeight": "bold",
+                                "marginRight": 5,
+                                "overflow": "hidden",
+                              }
+                            }
+                          >
+                            Temper
+                             (
+                            pull
+                            )
+                          </Text>
+                          <View
+                            style={
+                              [
+                                {
+                                  "borderRadius": 5,
+                                  "height": 10,
+                                  "marginRight": 5,
+                                  "marginTop": 5,
+                                  "width": 10,
+                                },
+                                {
+                                  "backgroundColor": "#3183ff",
+                                },
+                              ]
+                            }
+                          />
+                        </View>
+                        <View
                           style={
                             {
-                              "color": "#ffd600",
-                              "fontSize": 30.821917808219176,
-                              "fontWeight": "bold",
+                              "display": "flex",
+                              "flexDirection": "row",
                             }
                           }
                         >
-                          Truck
-                        </Text>
+                          <Text
+                            numberOfLines={1}
+                            style={
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 30.821917808219176,
+                                "fontWeight": "bold",
+                                "marginRight": 5,
+                                "overflow": "hidden",
+                              }
+                            }
+                          >
+                            Truck
+                             (
+                            receive
+                            )
+                          </Text>
+                          <View
+                            style={
+                              [
+                                {
+                                  "borderRadius": 5,
+                                  "height": 10,
+                                  "marginRight": 5,
+                                  "marginTop": 5,
+                                  "width": 10,
+                                },
+                                {
+                                  "backgroundColor": "#3183ff",
+                                },
+                              ]
+                            }
+                          />
+                        </View>
                       </View>
                       <View>
                         <Text
@@ -552,6 +683,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
+                              "marginRight": 5,
+                              "overflow": "hidden",
                             }
                           }
                         >
@@ -563,6 +696,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
+                              "marginRight": 5,
+                              "overflow": "hidden",
                             }
                           }
                         >
@@ -784,28 +919,90 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                           }
                         }
                       >
-                        <Text
+                        <View
                           style={
                             {
-                              "color": "#ffd600",
-                              "fontSize": 30.821917808219176,
-                              "fontWeight": "bold",
+                              "display": "flex",
+                              "flexDirection": "row",
                             }
                           }
                         >
-                          Temper
-                        </Text>
-                        <Text
+                          <Text
+                            numberOfLines={1}
+                            style={
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 30.821917808219176,
+                                "fontWeight": "bold",
+                                "marginRight": 5,
+                                "overflow": "hidden",
+                              }
+                            }
+                          >
+                            Temper
+                             (
+                            pull
+                            )
+                          </Text>
+                          <View
+                            style={
+                              [
+                                {
+                                  "borderRadius": 5,
+                                  "height": 10,
+                                  "marginRight": 5,
+                                  "marginTop": 5,
+                                  "width": 10,
+                                },
+                                {
+                                  "backgroundColor": "#3183ff",
+                                },
+                              ]
+                            }
+                          />
+                        </View>
+                        <View
                           style={
                             {
-                              "color": "#ffd600",
-                              "fontSize": 30.821917808219176,
-                              "fontWeight": "bold",
+                              "display": "flex",
+                              "flexDirection": "row",
                             }
                           }
                         >
-                          Truck
-                        </Text>
+                          <Text
+                            numberOfLines={1}
+                            style={
+                              {
+                                "color": "#ffd600",
+                                "fontSize": 30.821917808219176,
+                                "fontWeight": "bold",
+                                "marginRight": 5,
+                                "overflow": "hidden",
+                              }
+                            }
+                          >
+                            Truck
+                             (
+                            receive
+                            )
+                          </Text>
+                          <View
+                            style={
+                              [
+                                {
+                                  "borderRadius": 5,
+                                  "height": 10,
+                                  "marginRight": 5,
+                                  "marginTop": 5,
+                                  "width": 10,
+                                },
+                                {
+                                  "backgroundColor": "#3183ff",
+                                },
+                              ]
+                            }
+                          />
+                        </View>
                       </View>
                       <View>
                         <Text
@@ -814,6 +1011,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
+                              "marginRight": 5,
+                              "overflow": "hidden",
                             }
                           }
                         >
@@ -825,6 +1024,8 @@ exports[`PointAccordionGroup should match snapshot 1`] = `
                               "color": "#ffd600",
                               "fontSize": 30.821917808219176,
                               "fontWeight": "bold",
+                              "marginRight": 5,
+                              "overflow": "hidden",
                             }
                           }
                         >

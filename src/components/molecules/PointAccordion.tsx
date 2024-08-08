@@ -133,12 +133,68 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
             color: colors.textPrimary,
             fontSize: size.fontFifteen,
             fontWeight: weight.bold,
+            marginRight: 5,
+            overflow: 'hidden',
         },
         error: {
             color: colors.error,
             fontSize: size.fontFifteen,
         },
+        circle: {
+            width: 10,
+            height: 10,
+            borderRadius: 5,
+            marginTop: 5,
+            marginRight: 5,
+        },
+        holdCircle: {
+            backgroundColor: colors.success,
+        },
+        breakCircle: {
+            backgroundColor: '#3183ff',
+        },
+        notScoringCircle: {
+            backgroundColor: colors.primary,
+        },
     })
+
+    const circleColor = (team: GuestTeam) => {
+        if (isLivePoint(point)) return styles.notScoringCircle
+
+        // team is team one
+        // team one pulls and scores - blue
+        // team one receives and scores - green
+        // team is team two
+        // team one pulls and doesn't score - green
+        // team one receives and doesn't score - blue
+        if (team._id === teamOne._id) {
+            if (
+                point.pullingTeam._id === teamOne._id &&
+                point.scoringTeam?._id === teamOne._id
+            ) {
+                return styles.breakCircle
+            } else if (
+                point.pullingTeam._id !== teamOne._id &&
+                point.scoringTeam?._id === teamOne._id
+            ) {
+                return styles.holdCircle
+            }
+        } else {
+            if (
+                point.pullingTeam._id === teamOne._id &&
+                point.scoringTeam?._id !== teamOne._id
+            ) {
+                return styles.holdCircle
+            } else if (
+                point.pullingTeam._id !== teamOne._id &&
+                point.scoringTeam?._id !== teamOne._id
+            ) {
+                return styles.breakCircle
+            }
+        }
+
+        return styles.notScoringCircle
+    }
 
     return (
         <View style={{ backgroundColor: colors.primary }}>
@@ -151,8 +207,40 @@ const PointAccordion: React.FC<PointAccordionProps> = ({
                 title={
                     <View style={styles.titleContainer}>
                         <View style={styles.teamContainer}>
-                            <Text style={styles.titleText}>{teamOne.name}</Text>
-                            <Text style={styles.titleText}>{teamTwo.name}</Text>
+                            <View style={styles.titleContainer}>
+                                <Text
+                                    style={styles.titleText}
+                                    numberOfLines={1}>
+                                    {teamOne.name} (
+                                    {point.pullingTeam._id === teamOne._id
+                                        ? 'pull'
+                                        : 'receive'}
+                                    )
+                                </Text>
+                                <View
+                                    style={[
+                                        styles.circle,
+                                        circleColor(teamOne),
+                                    ]}
+                                />
+                            </View>
+                            <View style={styles.titleContainer}>
+                                <Text
+                                    style={styles.titleText}
+                                    numberOfLines={1}>
+                                    {teamTwo.name} (
+                                    {point.pullingTeam._id === teamOne._id
+                                        ? 'receive'
+                                        : 'pull'}
+                                    )
+                                </Text>
+                                <View
+                                    style={[
+                                        styles.circle,
+                                        circleColor(teamTwo),
+                                    ]}
+                                />
+                            </View>
                         </View>
                         <View>
                             <Text style={styles.titleText}>

@@ -1,15 +1,13 @@
-import { AppDispatch } from '../../store/store'
-import { CreateGame } from '../../types/game'
+import { CreateGameContext } from '../../context/create-game-context'
 import { CreateGameProps } from '../../types/navigation'
 import GameForm from '../../components/organisms/GameForm'
 import { IconButton } from 'react-native-paper'
 import LabeledFormInput from '../../components/molecules/LabeledFormInput'
 import NetInfoIndicator from '../../components/atoms/NetInfoIndicator'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
-import { selectAccount } from '../../store/reducers/features/account/accountReducer'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import {
     SafeAreaView,
     ScrollView,
@@ -19,30 +17,23 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
-import {
-    createGame,
-    selectTeamOne,
-    selectTournament,
-} from '../../store/reducers/features/game/liveGameReducer'
-import {
-    resetCreateStatus,
-    selectCreateStatus,
-} from '../../store/reducers/features/game/liveGameReducer'
-import { useDispatch, useSelector } from 'react-redux'
 
-const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
+const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation }) => {
     // Team One and Team Two are populated through
     // SelectMyTeamScreen and SelectOpponentScreen
     // Flow SelectMyTeamScreen -> SelectOpponentScreen -> CreateGameScreen
-    const { teamTwo } = route.params
     const {
         theme: { colors, size, weight },
     } = useTheme()
-    const dispatch = useDispatch<AppDispatch>()
-    const account = useSelector(selectAccount)
-    const createStatus = useSelector(selectCreateStatus)
-    const teamOne = useSelector(selectTeamOne)
-    const tournament = useSelector(selectTournament)
+    const {
+        teamOne,
+        teamTwo,
+        createGame,
+        createReset,
+        createLoading,
+        createError,
+        tournament,
+    } = useContext(CreateGameContext)
 
     const {
         control,
@@ -73,48 +64,36 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
         timeoutPerHalf: number
         floaterTimeout: boolean
     }) => {
-        dispatch(resetCreateStatus())
-        const { offline, ...data } = formData
-        const createGameData: CreateGame = {
-            ...data,
-            teamTwo,
-            tournament,
-            teamTwoDefined: teamTwo._id !== undefined,
-            teamOne: {
-                _id: teamOne._id,
-                place: teamOne.place,
-                name: teamOne.name,
-                teamname: teamOne.teamname,
-                seasonStart: teamOne.seasonStart,
-                seasonEnd: teamOne.seasonEnd,
-            },
-            creator: {
-                _id: account._id,
-                firstName: account.firstName,
-                lastName: account.lastName,
-                username: account.username,
-            },
-        }
+        try {
+            const { offline, ...data } = formData
 
-        dispatch(
-            createGame({
-                ...createGameData,
-                offline,
-                teamOnePlayers: teamOne.players,
-            }),
-        )
+            const game = await createGame(data, offline)
+            navigation.reset({
+                index: 1,
+                routes: [
+                    { name: 'Tabs' },
+                    {
+                        name: 'LiveGame',
+                        state: {
+                            routes: [
+                                {
+                                    name: 'FirstPoint',
+                                    params: { gameId: game._id, team: 'one' },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            })
+        } catch {}
     }
 
     useEffect(() => {
         navigation.setOptions({
-            title: `${teamOne.name} vs. ${teamTwo.name}`,
+            title: `${teamOne?.name} vs. ${teamTwo?.name}`,
         })
-        // TODO: refactor away from this use effect behavior
-        if (createStatus === 'success') {
-            navigation.navigate('LiveGame', { screen: 'FirstPoint' })
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [createStatus])
+    }, [])
 
     const styles = StyleSheet.create({
         screen: {
@@ -166,6 +145,11 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
             alignItems: 'center',
             justifyContent: 'center',
         },
+        error: {
+            fontSize: size.fontFifteen,
+            marginBottom: 2,
+            color: colors.error,
+        },
     })
 
     return (
@@ -202,7 +186,13 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
                             )
                         }}
                     />
-                    <GameForm control={control} errors={errors} />
+                    <GameForm
+                        control={control}
+                        errors={errors}
+                        onFormChange={() => {
+                            createReset()
+                        }}
+                    />
                     <View style={styles.tournamentContainer}>
                         <Text style={styles.labelText}>Tournament</Text>
                         <TouchableOpacity
@@ -224,10 +214,13 @@ const CreateGameScreen: React.FC<CreateGameProps> = ({ navigation, route }) => {
                             />
                         </TouchableOpacity>
                     </View>
+                    {createError && (
+                        <Text style={styles.error}>{createError.message}</Text>
+                    )}
                     <PrimaryButton
-                        text="start"
-                        disabled={createStatus === 'loading'}
-                        loading={createStatus === 'loading'}
+                        text="create game"
+                        disabled={createLoading}
+                        loading={createLoading}
                         onPress={handleSubmit(onCreate)}
                     />
                 </View>

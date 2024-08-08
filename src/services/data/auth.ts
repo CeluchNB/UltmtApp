@@ -67,9 +67,12 @@ export const refreshToken = async (): Promise<string> => {
         await EncryptedStorage.setItem('refresh_token', refresh)
         return access
     } catch (error: any) {
-        await EncryptedStorage.removeItem('access_token')
-        await EncryptedStorage.removeItem('refresh_token')
-        return throwApiError(error, Constants.GENERIC_GET_TOKEN_ERROR)
+        try {
+            await EncryptedStorage.removeItem('access_token')
+            await EncryptedStorage.removeItem('refresh_token')
+        } finally {
+            return throwApiError(error, Constants.GENERIC_GET_TOKEN_ERROR)
+        }
     }
 }
 
@@ -87,16 +90,25 @@ export const withToken = async (
     try {
         const currentToken =
             (await EncryptedStorage.getItem('access_token')) || ''
+        // network call will either throw or receive response with status
         const response = await networkCall(currentToken, ...args)
+        if (response.status > 299) {
+            throw new ApiError(
+                response.data.message ?? Constants.GENERIC_GET_TOKEN_ERROR,
+            )
+        }
         return response
     } catch (error: any) {
-        const errorJson = error.toJSON()
-        if (errorJson.status !== 401) {
-            throw error
-        }
         try {
             const newToken = await refreshToken()
-            return await networkCall(newToken, ...args)
+            const response = await networkCall(newToken, ...args)
+            // network call will either throw or receive response with status
+            if (response.status > 299) {
+                throw new ApiError(
+                    response.data.message ?? Constants.GENERIC_GET_TOKEN_ERROR,
+                )
+            }
+            return response
         } catch (error2) {
             throw throwApiError(error2, Constants.GENERIC_GET_TOKEN_ERROR)
         }
