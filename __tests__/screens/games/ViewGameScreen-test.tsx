@@ -329,10 +329,10 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(() => {
-            expect(screen.queryAllByText(game.teamOne.name).length).toBe(6)
+            expect(screen.queryAllByText(game.teamOne.name).length).toBe(3)
         })
 
-        expect(screen.getAllByText(game.teamTwo.name).length).toBe(4)
+        expect(screen.getAllByText(game.teamTwo.name).length).toBe(1)
 
         expect(gameSpy).toHaveBeenCalled()
         expect(pointsSpy).toHaveBeenCalled()
@@ -376,10 +376,12 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(screen.getAllByText(game.teamOne.name).length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
-        const savedPoint = screen.getAllByText(game.teamOne.name)[4]
+        const savedPoint = screen.getAllByText(
+            `${game.teamOne.name} (receive)`,
+        )[1]
         fireEvent.press(savedPoint)
 
         await waitFor(async () => {
@@ -401,7 +403,7 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(screen.getAllByText(game.teamOne.name).length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
         const livePoint = screen.getAllByText(game.teamOne.name)[2]
@@ -456,10 +458,12 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(async () => {
-            expect(screen.getAllByText(game.teamOne.name).length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
-        const savedPoint = screen.getAllByText(game.teamOne.name)[4]
+        const savedPoint = screen.getAllByText(
+            `${game.teamOne.name} (receive)`,
+        )[1]
         fireEvent.press(savedPoint)
 
         await waitFor(async () => {
@@ -555,7 +559,7 @@ describe('ViewGameScreen', () => {
             ),
         )
         await waitFor(async () => {
-            expect(screen.getAllByText(game.teamOne.name).length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
         const button = screen.getByTestId('reactivate-button')
@@ -602,7 +606,7 @@ describe('ViewGameScreen', () => {
             ),
         )
         await waitFor(async () => {
-            expect(screen.getAllByText(game.teamOne.name).length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
         const button = screen.getByTestId('delete-button')
@@ -649,7 +653,7 @@ describe('ViewGameScreen', () => {
             ),
         )
         await waitFor(async () => {
-            expect(screen.getAllByText(game.teamOne.name).length).toBe(6)
+            expect(screen.getAllByText(game.teamOne.name).length).toBe(3)
         })
 
         const button = screen.getByTestId('export-button')
@@ -677,7 +681,7 @@ describe('ViewGameScreen', () => {
         )
 
         await waitFor(() => {
-            expect(screen.queryAllByText(game.teamOne.name).length).toBe(6)
+            expect(screen.queryAllByText(game.teamOne.name).length).toBe(3)
             expect(screen.queryAllByText('Overview').length).toBe(2)
         })
 

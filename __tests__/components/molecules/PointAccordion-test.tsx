@@ -94,8 +94,8 @@ describe('PointAccordion', () => {
             </List.AccordionGroup>,
         )
 
-        expect(snapshot.getByText('Temper')).toBeTruthy()
-        expect(snapshot.getByText('Truck')).toBeTruthy()
+        expect(snapshot.getByText('Temper (pull)')).toBeTruthy()
+        expect(snapshot.getByText('Truck (receive)')).toBeTruthy()
         expect(snapshot.getByText('1')).toBeTruthy()
         expect(snapshot.getByText('2')).toBeTruthy()
 

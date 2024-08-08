@@ -255,7 +255,7 @@ describe('PointAccordionGroup', () => {
 
         expect(queryByText('huck')).toBeFalsy()
 
-        const point = getAllByText('Temper')[0]
+        const point = getAllByText('Temper (pull)')[0]
         fireEvent.press(point)
 
         await waitFor(() => {
@@ -275,7 +275,7 @@ describe('PointAccordionGroup', () => {
         )
         expect(queryByText('pickup')).toBeFalsy()
 
-        const point = getAllByText('Temper')[1]
+        const point = getAllByText('Temper (pull)')[1]
         fireEvent.press(point)
 
         await waitFor(() => {
@@ -292,7 +292,7 @@ describe('PointAccordionGroup', () => {
                 </Provider>
             </NavigationContainer>,
         )
-        const point = getAllByText('Temper')[0]
+        const point = getAllByText('Temper (pull)')[0]
         fireEvent.press(point)
 
         await waitFor(() => {
@@ -337,7 +337,7 @@ describe('PointAccordionGroup', () => {
                 </Provider>
             </NavigationContainer>,
         )
-        const point = getAllByText('Temper')[0]
+        const point = getAllByText('Temper (pull)')[0]
         fireEvent.press(point)
 
         await waitFor(() => {
