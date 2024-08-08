@@ -139,28 +139,90 @@ exports[`PointAccordion should match snapshot closed 1`] = `
                     }
                   }
                 >
-                  <Text
+                  <View
                     style={
                       {
-                        "color": "#ffd600",
-                        "fontSize": 30.821917808219176,
-                        "fontWeight": "bold",
+                        "display": "flex",
+                        "flexDirection": "row",
                       }
                     }
                   >
-                    Temper
-                  </Text>
-                  <Text
+                    <Text
+                      numberOfLines={1}
+                      style={
+                        {
+                          "color": "#ffd600",
+                          "fontSize": 30.821917808219176,
+                          "fontWeight": "bold",
+                          "marginRight": 5,
+                          "overflow": "hidden",
+                        }
+                      }
+                    >
+                      Temper
+                       (
+                      pull
+                      )
+                    </Text>
+                    <View
+                      style={
+                        [
+                          {
+                            "borderRadius": 5,
+                            "height": 10,
+                            "marginRight": 5,
+                            "marginTop": 5,
+                            "width": 10,
+                          },
+                          {
+                            "backgroundColor": "#303030",
+                          },
+                        ]
+                      }
+                    />
+                  </View>
+                  <View
                     style={
                       {
-                        "color": "#ffd600",
-                        "fontSize": 30.821917808219176,
-                        "fontWeight": "bold",
+                        "display": "flex",
+                        "flexDirection": "row",
                       }
                     }
                   >
-                    Truck
-                  </Text>
+                    <Text
+                      numberOfLines={1}
+                      style={
+                        {
+                          "color": "#ffd600",
+                          "fontSize": 30.821917808219176,
+                          "fontWeight": "bold",
+                          "marginRight": 5,
+                          "overflow": "hidden",
+                        }
+                      }
+                    >
+                      Truck
+                       (
+                      receive
+                      )
+                    </Text>
+                    <View
+                      style={
+                        [
+                          {
+                            "borderRadius": 5,
+                            "height": 10,
+                            "marginRight": 5,
+                            "marginTop": 5,
+                            "width": 10,
+                          },
+                          {
+                            "backgroundColor": "#303030",
+                          },
+                        ]
+                      }
+                    />
+                  </View>
                 </View>
                 <View>
                   <Text
@@ -169,6 +231,8 @@ exports[`PointAccordion should match snapshot closed 1`] = `
                         "color": "#ffd600",
                         "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
+                        "marginRight": 5,
+                        "overflow": "hidden",
                       }
                     }
                   >
@@ -180,6 +244,8 @@ exports[`PointAccordion should match snapshot closed 1`] = `
                         "color": "#ffd600",
                         "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
+                        "marginRight": 5,
+                        "overflow": "hidden",
                       }
                     }
                   >
@@ -419,28 +485,90 @@ exports[`PointAccordion should match snapshot open 1`] = `
                     }
                   }
                 >
-                  <Text
+                  <View
                     style={
                       {
-                        "color": "#ffd600",
-                        "fontSize": 30.821917808219176,
-                        "fontWeight": "bold",
+                        "display": "flex",
+                        "flexDirection": "row",
                       }
                     }
                   >
-                    Temper
-                  </Text>
-                  <Text
+                    <Text
+                      numberOfLines={1}
+                      style={
+                        {
+                          "color": "#ffd600",
+                          "fontSize": 30.821917808219176,
+                          "fontWeight": "bold",
+                          "marginRight": 5,
+                          "overflow": "hidden",
+                        }
+                      }
+                    >
+                      Temper
+                       (
+                      pull
+                      )
+                    </Text>
+                    <View
+                      style={
+                        [
+                          {
+                            "borderRadius": 5,
+                            "height": 10,
+                            "marginRight": 5,
+                            "marginTop": 5,
+                            "width": 10,
+                          },
+                          {
+                            "backgroundColor": "#303030",
+                          },
+                        ]
+                      }
+                    />
+                  </View>
+                  <View
                     style={
                       {
-                        "color": "#ffd600",
-                        "fontSize": 30.821917808219176,
-                        "fontWeight": "bold",
+                        "display": "flex",
+                        "flexDirection": "row",
                       }
                     }
                   >
-                    Truck
-                  </Text>
+                    <Text
+                      numberOfLines={1}
+                      style={
+                        {
+                          "color": "#ffd600",
+                          "fontSize": 30.821917808219176,
+                          "fontWeight": "bold",
+                          "marginRight": 5,
+                          "overflow": "hidden",
+                        }
+                      }
+                    >
+                      Truck
+                       (
+                      receive
+                      )
+                    </Text>
+                    <View
+                      style={
+                        [
+                          {
+                            "borderRadius": 5,
+                            "height": 10,
+                            "marginRight": 5,
+                            "marginTop": 5,
+                            "width": 10,
+                          },
+                          {
+                            "backgroundColor": "#303030",
+                          },
+                        ]
+                      }
+                    />
+                  </View>
                 </View>
                 <View>
                   <Text
@@ -449,6 +577,8 @@ exports[`PointAccordion should match snapshot open 1`] = `
                         "color": "#ffd600",
                         "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
+                        "marginRight": 5,
+                        "overflow": "hidden",
                       }
                     }
                   >
@@ -460,6 +590,8 @@ exports[`PointAccordion should match snapshot open 1`] = `
                         "color": "#ffd600",
                         "fontSize": 30.821917808219176,
                         "fontWeight": "bold",
+                        "marginRight": 5,
+                        "overflow": "hidden",
                       }
                     }
                   >

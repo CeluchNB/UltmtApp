@@ -2,40 +2,46 @@ import { ActiveGamesProps } from '../types/navigation'
 import BaseScreen from '../components/atoms/BaseScreen'
 import ConfirmModal from '../components/molecules/ConfirmModal'
 import GameListItem from '../components/atoms/GameListItem'
+import { GameSchema } from '../models'
 import React from 'react'
 import { getUserId } from '../services/data/user'
+import { parseGame } from '../services/local/game'
+import { useDeleteGame } from '../hooks/game-edit-actions/use-delete-game'
+import { useQuery as useLocalQuery } from '../context/realm'
 import { useQuery } from 'react-query'
-import { FlatList, StyleSheet, Text } from 'react-native'
-import { Game, LocalGame } from '../types/game'
-import { deleteGame, getActiveGames } from '../services/data/game'
-import { useGameReactivation, useTheme } from '../hooks'
+import { useReenterGame } from '../hooks/game-edit-actions/use-reenter-game'
+import { useTheme } from '../hooks'
+import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native'
+import { Game, GameStatus, LocalGame } from '../types/game'
 
 const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
 
-    const { onReactivateGame } = useGameReactivation()
+    const {
+        mutateAsync: deleteGame,
+        isLoading: deleteLoading,
+        error: deleteError,
+        reset: deleteReset,
+    } = useDeleteGame()
+    const {
+        mutateAsync: reenterGame,
+        error: reenterError,
+        isLoading: reenterLoading,
+        reset: reenterReset,
+    } = useReenterGame()
+
     const { data: userId } = useQuery(['getUserId'], () => getUserId(), {
         cacheTime: 0,
     })
-    const { data: games, refetch } = useQuery<(Game & { offline: boolean })[]>(
-        ['getActiveGames'],
-        () => getActiveGames(),
-        { cacheTime: 0 },
+    const games = useLocalQuery<GameSchema>('Game').filtered(
+        'creator._id == $0',
+        userId,
     )
+
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deletingGame, setDeletingGame] = React.useState<Game>()
-    const [deleteLoading, setDeleteLoading] = React.useState(false)
-
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            refetch()
-        })
-        return () => {
-            unsubscribe()
-        }
-    }, [navigation, refetch])
 
     const getMyTeamId = React.useCallback(
         (game: Game): string => {
@@ -49,37 +55,39 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
     )
 
     const onGamePress = async (activeGame: LocalGame) => {
-        // get game data
         try {
-            if (activeGame.offline && !activeGame.teamOneActive) {
+            if (
+                activeGame.offline &&
+                activeGame.teamOneStatus !== GameStatus.ACTIVE
+            ) {
                 navigation.navigate('OfflineGameOptions', {
                     gameId: activeGame._id,
                 })
                 return
             }
 
-            await onReactivateGame(activeGame._id, getMyTeamId(activeGame))
-        } catch (e) {
-            // TODO: error display?
-        }
+            await reenterGame({
+                gameId: activeGame._id,
+                teamId: getMyTeamId(activeGame),
+            })
+        } catch {}
     }
 
     const onDelete = async () => {
-        if (deletingGame) {
-            setDeleteLoading(true)
-            try {
-                await deleteGame(deletingGame._id, getMyTeamId(deletingGame))
-            } catch (e) {
-                // TODO: error display do nothing
-            } finally {
-                refetch()
-                setDeleteLoading(false)
+        try {
+            reenterReset()
+            if (deletingGame) {
+                await deleteGame({
+                    gameId: deletingGame._id,
+                    teamId: getMyTeamId(deletingGame),
+                })
+                setModalVisible(false)
             }
-        }
-        setModalVisible(false)
+        } catch {}
     }
 
     const onClose = async () => {
+        deleteReset()
         setModalVisible(false)
     }
 
@@ -89,6 +97,10 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
             color: colors.gray,
         },
         list: { marginTop: 10 },
+        error: {
+            fontSize: size.fontFifteen,
+            color: colors.error,
+        },
     })
 
     return (
@@ -97,9 +109,13 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 (games?.length === 0 && (
                     <Text style={styles.infoText}>No active games</Text>
                 ))}
+            {reenterError && (
+                <Text style={styles.error}>{reenterError.toString()}</Text>
+            )}
+            {reenterLoading && <ActivityIndicator color={colors.textPrimary} />}
             <FlatList
                 style={styles.list}
-                data={games}
+                data={games.map(g => parseGame(g))}
                 renderItem={({ item }) => {
                     return (
                         <GameListItem
@@ -125,6 +141,7 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
                 onCancel={onClose}
                 onConfirm={onDelete}
                 confirmColor={colors.textPrimary}
+                error={deleteError}
             />
         </BaseScreen>
     )

@@ -1,4 +1,5 @@
 import GameHeader from '../../../src/components/molecules/GameHeader'
+import { GameStatus } from '../../../src/types/game'
 import React from 'react'
 import { game } from '../../../fixtures/data'
 import { fireEvent, render, screen } from '@testing-library/react-native'
@@ -12,7 +13,11 @@ describe('Game Header', () => {
     it('should match snapshot with no description', () => {
         const snapshot = render(
             <GameHeader
-                game={{ ...game, teamOneActive: false, teamTwoActive: false }}
+                game={{
+                    ...game,
+                    teamOneStatus: GameStatus.COMPLETE,
+                    teamTwoStatus: GameStatus.DEFINED,
+                }}
             />,
         )
         expect(snapshot.toJSON()).toMatchSnapshot()

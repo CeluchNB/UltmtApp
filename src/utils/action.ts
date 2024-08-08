@@ -1,3 +1,4 @@
+import { ActionSchema } from '../models/action'
 import { DisplayUser } from '../types/user'
 import { TeamNumber } from '../types/team'
 import {
@@ -8,6 +9,7 @@ import {
     CatchAction,
     ClientActionData,
     DropAction,
+    LiveServerActionData,
     PickupAction,
     PullAction,
     ScoreAction,
@@ -55,8 +57,8 @@ export const getPlayerActionList = (
     pulling: boolean,
 ): Action[] => {
     let currentUser: string | undefined = playerOne._id
+    const substitutionMap = new Map<string, DisplayUser>()
     for (const action of actionStack.slice().reverse()) {
-        const playerTwo = action.playerOne
         switch (action.actionType) {
             case ActionType.PICKUP:
             case ActionType.CATCH:
@@ -66,6 +68,16 @@ export const getPlayerActionList = (
                         new StallAction(playerOne),
                     ]
                 } else {
+                    let playerTwo
+                    if (
+                        action.playerOne &&
+                        substitutionMap.has(action.playerOne._id)
+                    ) {
+                        playerTwo = substitutionMap.get(action.playerOne._id)
+                    } else {
+                        playerTwo = action.playerOne
+                    }
+
                     return [
                         new CatchAction(playerOne, playerTwo),
                         new DropAction(playerOne, playerTwo),
@@ -84,7 +96,7 @@ export const getPlayerActionList = (
                 return [
                     new BlockAction(playerOne),
                     new PickupAction(playerOne),
-                    new ScoreAction(playerTeam, 'clhn', playerOne, undefined),
+                    new ScoreAction(playerTeam, 'clhn', playerOne),
                 ]
             case ActionType.BLOCK:
                 return [new PickupAction(playerOne)]
@@ -99,6 +111,9 @@ export const getPlayerActionList = (
                 if (playerOne._id === action.playerTwo?._id) {
                     // inherit the actions from the player that was substituted for
                     currentUser = action.playerOne?._id
+                }
+                if (action.playerOne && action.playerTwo) {
+                    substitutionMap.set(action.playerOne._id, action.playerTwo)
                 }
                 continue
         }
@@ -164,4 +179,22 @@ export const immutableFilter = <T extends { action: { actionNumber: number } }>(
     return (current: T[]): T[] => {
         return current.filter(item => item.action.actionNumber !== actionNumber)
     }
+}
+
+export const parseAction = (
+    schema: ActionSchema,
+): LiveServerActionData & { _id: string; pointId: string } => {
+    return JSON.parse(
+        JSON.stringify({
+            _id: schema._id.toHexString(),
+            pointId: schema.pointId,
+            actionType: schema.actionType,
+            actionNumber: schema.actionNumber,
+            teamNumber: schema.teamNumber,
+            tags: schema.tags,
+            comments: schema.comments,
+            playerOne: schema.playerOne,
+            playerTwo: schema.playerTwo,
+        }),
+    )
 }

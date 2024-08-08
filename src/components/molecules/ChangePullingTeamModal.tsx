@@ -1,45 +1,36 @@
 import BaseModal from '../atoms/BaseModal'
-import { Game } from '../../types/game'
+import { LiveGameContext } from '../../context/live-game-context'
 import PrimaryButton from '../atoms/PrimaryButton'
 import { RadioButton } from 'react-native-paper'
-import React from 'react'
 import { TeamNumber } from '../../types/team'
-import { setPoint } from '../../store/reducers/features/point/livePointReducer'
-import { setPullingTeam } from '../../services/data/point'
-import { useDispatch } from 'react-redux'
-import { useMutation } from 'react-query'
+import { useSetPullingTeam } from '../../hooks/game-edit-actions/use-set-pulling-team'
 import { useTheme } from '../../hooks'
 import { Controller, useForm } from 'react-hook-form'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface ChangePullingTeamModalProps {
     visible: boolean
-    game: Pick<Game, 'teamOne' | 'teamTwo'>
-    pointId: string
-    team: TeamNumber
     onClose: () => void
 }
 
 const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
-    game,
-    pointId,
     visible,
-    team,
     onClose,
 }) => {
     const {
         theme: { colors, size, weight },
     } = useTheme()
 
-    const dispatch = useDispatch()
+    const { game, point } = useContext(LiveGameContext)
+    const pullingTeam =
+        game?.teamOne._id === point?.pullingTeam._id ? 'one' : 'two'
 
     const { control, handleSubmit } = useForm({
-        defaultValues: { team },
+        defaultValues: { team: pullingTeam },
     })
 
-    const { mutate, isLoading, isError, error } = useMutation(
-        (teamNumber: TeamNumber) => setPullingTeam(pointId, teamNumber),
-    )
+    const { mutate, isLoading, isError, error } = useSetPullingTeam()
 
     const styles = StyleSheet.create({
         buttonContainer: {
@@ -83,7 +74,7 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                                     <Text
                                         style={styles.label}
                                         onPress={() => onChange('one')}>
-                                        {game.teamOne.name}
+                                        {game?.teamOne.name}
                                     </Text>
                                     <RadioButton.Android
                                         value="one"
@@ -102,7 +93,7 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                                     <Text
                                         style={styles.label}
                                         onPress={() => onChange('two')}>
-                                        {game.teamTwo.name}
+                                        {game?.teamTwo.name}
                                     </Text>
                                     <RadioButton.Android
                                         value="two"
@@ -122,11 +113,11 @@ const ChangePullingTeamModal: React.FC<ChangePullingTeamModalProps> = ({
                 style={styles.button}
                 text="submit"
                 loading={isLoading}
+                disabled={isLoading}
                 onPress={async () => {
                     handleSubmit(({ team: teamNumber }) => {
                         mutate(teamNumber as TeamNumber, {
-                            onSuccess(data) {
-                                dispatch(setPoint(data))
+                            onSuccess() {
                                 onClose()
                             },
                         })

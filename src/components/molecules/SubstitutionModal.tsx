@@ -1,17 +1,12 @@
 import BaseModal from '../atoms/BaseModal'
 import { Chip } from 'react-native-paper'
 import { DisplayUser } from '../../types/user'
+import { LiveGameContext } from '../../context/live-game-context'
 import PrimaryButton from '../atoms/PrimaryButton'
-import React from 'react'
 import { nameSort } from '../../utils/player'
-import {
-    selectActiveTeam,
-    // selectGame,
-    // selectTeam,
-} from '../../store/reducers/features/game/liveGameReducer'
-import { useSelector } from 'react-redux'
 import { useTheme } from '../../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
+import React, { useContext, useState } from 'react'
 
 interface SubstitutionModalProps {
     visible: boolean
@@ -32,27 +27,27 @@ const SubstitutionModal: React.FC<SubstitutionModalProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const activeTeam = useSelector(selectActiveTeam)
-    const [playerOne, setPlayerOne] = React.useState<DisplayUser | undefined>(
+    const { players: allPlayers } = useContext(LiveGameContext)
+    const [playerOne, setPlayerOne] = useState<DisplayUser | undefined>(
         undefined,
     )
-    const [playerOneIndex, setPlayerOneIndex] = React.useState<
-        number | undefined
-    >(undefined)
-    const [playerTwo, setPlayerTwo] = React.useState<DisplayUser | undefined>(
+    const [playerOneIndex, setPlayerOneIndex] = useState<number | undefined>(
         undefined,
     )
-    const [playerTwoIndex, setPlayerTwoIndex] = React.useState<
-        number | undefined
-    >(undefined)
+    const [playerTwo, setPlayerTwo] = useState<DisplayUser | undefined>(
+        undefined,
+    )
+    const [playerTwoIndex, setPlayerTwoIndex] = useState<number | undefined>(
+        undefined,
+    )
 
     const availablePlayers = React.useMemo(() => {
-        return activeTeam.players
-            .filter(
+        return allPlayers
+            ?.filter(
                 player => !activePlayers.map(p => p._id).includes(player._id),
             )
             .sort(nameSort)
-    }, [activeTeam.players, activePlayers])
+    }, [allPlayers, activePlayers])
 
     const handleSubstitution = async () => {
         if (playerOne && playerTwo && playerOneIndex !== undefined) {

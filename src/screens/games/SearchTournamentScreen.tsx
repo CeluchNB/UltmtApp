@@ -1,16 +1,15 @@
 import * as Constants from '../../utils/constants'
 import BaseScreen from '../../components/atoms/BaseScreen'
+import { CreateGameContext } from '../../context/create-game-context'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
-import React from 'react'
 import SearchBar from '../../components/atoms/SearchBar'
 import { SearchTournamentProps } from '../../types/navigation'
 import { Tournament } from '../../types/tournament'
 import TournamentListItem from '../../components/atoms/TournamentListItem'
 import { searchTournaments } from '../../services/data/tournament'
-import { setTournament } from '../../store/reducers/features/game/liveGameReducer'
-import { useDispatch } from 'react-redux'
 import { useTheme } from '../../hooks'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react'
 
 const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
     navigation,
@@ -18,10 +17,10 @@ const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const dispatch = useDispatch()
     const [query, setQuery] = React.useState('')
     const [tournaments, setTournaments] = React.useState<Tournament[]>([])
     const [error, setError] = React.useState('')
+    const { setTournament } = useContext(CreateGameContext)
 
     const search = async (q: string) => {
         try {
@@ -91,7 +90,7 @@ const SearchTournamentScreen: React.FC<SearchTournamentProps> = ({
                         <TournamentListItem
                             tournament={item}
                             onPress={async () => {
-                                dispatch(setTournament(item))
+                                setTournament(item)
                                 navigation.goBack()
                             }}
                         />

@@ -7,6 +7,8 @@ import { getInitialPlayerData } from '../../../fixtures/utils'
 import { teamOne } from '../../../fixtures/data'
 import { GameStats, TeamStats } from '../../../src/types/stats'
 import {
+    exportGameStats,
+    exportTeamStats,
     filterConnectionStats,
     filterPlayerStats,
     getConnectionStats,
@@ -403,5 +405,53 @@ describe('getConnectionStats', () => {
         await expect(
             getConnectionStats('thrower', 'receiver'),
         ).rejects.toMatchObject({ message: 'test error' })
+    })
+})
+
+describe('exportGameStats', () => {
+    it('handles success', async () => {
+        const spy = jest
+            .spyOn(StatsNetwork, 'exportGameStats')
+            .mockReturnValue(Promise.resolve({ data: {} } as AxiosResponse))
+
+        await expect(exportGameStats('user', 'game')).resolves.toBeUndefined()
+        expect(spy).toHaveBeenCalled()
+    })
+
+    it('handles error', async () => {
+        const spy = jest.spyOn(StatsNetwork, 'exportGameStats').mockReturnValue(
+            Promise.reject({
+                data: { message: 'test error' },
+            } as AxiosResponse),
+        )
+
+        await expect(exportGameStats('user', 'game')).rejects.toMatchObject({
+            message: 'test error',
+        })
+        expect(spy).toHaveBeenCalled()
+    })
+})
+
+describe('exportTeamStats', () => {
+    it('handles success', async () => {
+        const spy = jest
+            .spyOn(StatsNetwork, 'exportTeamStats')
+            .mockReturnValue(Promise.resolve({ data: {} } as AxiosResponse))
+
+        await expect(exportTeamStats('user', 'team')).resolves.toBeUndefined()
+        expect(spy).toHaveBeenCalled()
+    })
+
+    it('handles error', async () => {
+        const spy = jest.spyOn(StatsNetwork, 'exportTeamStats').mockReturnValue(
+            Promise.reject({
+                data: { message: 'test error' },
+            } as AxiosResponse),
+        )
+
+        await expect(exportTeamStats('user', 'team')).rejects.toMatchObject({
+            message: 'test error',
+        })
+        expect(spy).toHaveBeenCalled()
     })
 })

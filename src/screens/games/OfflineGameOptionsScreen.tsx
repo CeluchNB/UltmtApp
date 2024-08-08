@@ -1,15 +1,15 @@
-import * as Constants from '../../utils/constants'
 import BaseScreen from '../../components/atoms/BaseScreen'
 import GameHeader from '../../components/molecules/GameHeader'
 import { OfflineGameOptionsProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import React from 'react'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
-import { useGameReactivation } from '../../hooks/useGameReactivation'
+import { getOfflineGameById } from '../../services/data/game'
+import { usePushFullGame } from '../../hooks/game-edit-actions/use-push-full-game'
 import { useQuery } from 'react-query'
+import { useReenterGame } from '../../hooks/game-edit-actions/use-reenter-game'
 import { useTheme } from '../../hooks'
 import { StyleSheet, Text, View } from 'react-native'
-import { getOfflineGameById, pushOfflineGame } from '../../services/data/game'
 
 const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     navigation,
@@ -19,30 +19,41 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const { onReactivateGame } = useGameReactivation()
+    const {
+        mutateAsync: reenterGame,
+        isLoading: reenterLoading,
+        error: reenterError,
+        reset: reenterReset,
+    } = useReenterGame()
+    const {
+        mutateAsync: pushOfflineGame,
+        isLoading: pushLoading,
+        error: pushError,
+        reset: pushReset,
+    } = usePushFullGame()
+
     const { data: game } = useQuery(['getOfflineGameById', { gameId }], () =>
         getOfflineGameById(gameId),
     )
-    const [loading, setLoading] = React.useState(false)
-    const [error, setError] = React.useState('')
 
     const pushGame = async () => {
-        setLoading(true)
         try {
+            reenterReset()
             await pushOfflineGame(gameId)
             navigation.navigate('ActiveGames')
-        } catch (e: any) {
-            setError(e?.message ?? Constants.FINISH_GAME_ERROR)
-        } finally {
-            setLoading(false)
-        }
+        } catch {}
     }
 
-    const reactivateGame = async () => {
-        if (game) {
-            // TODO: reactivate refactor
-            await onReactivateGame(game._id, game.teamOne._id)
-        }
+    const onReenterGame = async () => {
+        try {
+            pushReset()
+            if (game) {
+                await reenterGame({
+                    gameId: game._id,
+                    teamId: game.teamOne._id,
+                })
+            }
+        } catch {}
     }
 
     const styles = StyleSheet.create({
@@ -62,18 +73,25 @@ const OfflineGameOptionsScreen: React.FC<OfflineGameOptionsProps> = ({
                     <PrimaryButton
                         style={styles.button}
                         text="push to cloud"
-                        loading={loading}
-                        disabled={loading}
+                        loading={pushLoading}
+                        disabled={pushLoading}
                         onPress={pushGame}
                     />
-                    {error.length > 0 && (
-                        <Text style={styles.errorText}>{error}</Text>
+                    {pushError && (
+                        <Text style={styles.errorText}>
+                            {pushError.message}
+                        </Text>
+                    )}
+                    {reenterError && (
+                        <Text style={styles.errorText}>
+                            {reenterError.message}
+                        </Text>
                     )}
                     <SecondaryButton
                         style={styles.button}
                         text="reactivate"
-                        loading={false}
-                        onPress={reactivateGame}
+                        loading={reenterLoading}
+                        onPress={onReenterGame}
                     />
                 </View>
             )}

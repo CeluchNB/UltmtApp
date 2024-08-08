@@ -610,6 +610,7 @@ exports[`should match snapshot 1`] = `
                     "true": "#ffd600",
                   }
                 }
+                value={false}
               />
             </View>
             <Text
@@ -686,6 +687,7 @@ exports[`should match snapshot 1`] = `
                     "true": "#ffd600",
                   }
                 }
+                value={false}
               />
             </View>
             <Text

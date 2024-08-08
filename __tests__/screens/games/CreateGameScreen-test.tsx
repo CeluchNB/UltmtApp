@@ -1,13 +1,8 @@
-import * as GameData from '../../../src/services/data/game'
 import { CreateGameProps } from '../../../src/types/navigation'
 import CreateGameScreen from '../../../src/screens/games/CreateGameScreen'
 import MockDate from 'mockdate'
 import { NavigationContainer } from '@react-navigation/native'
-import { Provider } from 'react-redux'
 import React from 'react'
-import { setProfile } from '../../../src/store/reducers/features/account/accountReducer'
-import { setTeamOne } from '../../../src/store/reducers/features/game/liveGameReducer'
-import store from '../../../src/store/store'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -59,38 +54,6 @@ jest.mock('react-native-paper', () => {
 describe('CreateGameScreen', () => {
     beforeAll(() => {
         MockDate.set('2022')
-        store.dispatch(
-            setProfile({
-                _id: 'id1',
-                firstName: 'First',
-                lastName: 'Last',
-                email: 'email@email.com',
-                username: 'username',
-                error: undefined,
-                leaveManagerError: undefined,
-                privateProfile: false,
-                openToRequests: true,
-                playerTeams: [],
-                managerTeams: [],
-                archiveTeams: [],
-                requests: [],
-                toggleRosterStatusLoading: false,
-                editLoading: false,
-                fetchProfileLoading: false,
-            }),
-        )
-        store.dispatch(
-            setTeamOne({
-                ...teamOne,
-                managers: [],
-                players: [],
-                seasonNumber: 2,
-                continuationId: 'place1name1',
-                rosterOpen: true,
-                requests: [],
-                games: [],
-            }),
-        )
         jest.useFakeTimers({ legacyFakeTimers: true })
     })
 
@@ -101,70 +64,34 @@ describe('CreateGameScreen', () => {
 
     it('should match snapshot', () => {
         const snapshot = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <CreateGameScreen {...props} />
-                </NavigationContainer>
-            </Provider>,
+            <NavigationContainer>
+                <CreateGameScreen {...props} />
+            </NavigationContainer>,
         )
 
         expect(snapshot.toJSON()).toMatchSnapshot()
     })
 
     it('should create game', async () => {
-        const spy = jest.spyOn(GameData, 'createGame').mockResolvedValue({
-            startTime: '01-01-2022',
-            teamOne: { _id: 'teamone' },
-            teamOnePlayers: [],
-        } as any)
         const { getByText } = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <CreateGameScreen {...props} />
-                </NavigationContainer>
-            </Provider>,
+            <NavigationContainer>
+                <CreateGameScreen {...props} />
+            </NavigationContainer>,
         )
 
-        const button = getByText('start')
+        const button = getByText('create game')
         fireEvent.press(button)
 
         // It would be better if I could wait for
         // a loading indicator to be gone
         await act(async () => {})
-
-        expect(spy).toHaveBeenCalledWith(
-            {
-                teamOne,
-                teamTwo,
-                creator: {
-                    _id: 'id1',
-                    firstName: 'First',
-                    lastName: 'Last',
-                    username: 'username',
-                },
-                scoreLimit: 15,
-                halfScore: 8,
-                softcapMins: 75,
-                hardcapMins: 90,
-                playersPerPoint: 7,
-                timeoutPerHalf: 1,
-                floaterTimeout: true,
-                teamTwoDefined: true,
-                startTime: new Date(),
-                tournament: undefined,
-            },
-            false,
-            [],
-        )
     })
 
     it('navigates to search tournaments screen', async () => {
         const { getByText, getByTestId } = render(
-            <Provider store={store}>
-                <NavigationContainer>
-                    <CreateGameScreen {...props} />
-                </NavigationContainer>
-            </Provider>,
+            <NavigationContainer>
+                <CreateGameScreen {...props} />
+            </NavigationContainer>,
         )
 
         const tournamentField = getByText('N/A')

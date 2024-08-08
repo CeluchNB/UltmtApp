@@ -1,12 +1,13 @@
 import * as Constants from '../../utils/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { DisplayUser } from '../../types/user'
+import { GameSchema } from '../../models'
+import { Realm } from '@realm/react'
 import { getRealm } from '../../models/realm'
 import { throwApiError } from '../../utils/service-utils'
-import { ActionSchema, GameSchema, PointSchema } from '../../models'
-import { CreateGame, Game, PointStats } from '../../types/game'
 
-const parseGame = (
+import { Game, PointStats } from '../../types/game'
+
+export const parseGame = (
     schema: GameSchema,
 ): Game & { offline: boolean; statsPoints: PointStats[] } => {
     return JSON.parse(
@@ -27,14 +28,13 @@ const parseGame = (
             tournament: schema.tournament,
             teamOneScore: schema.teamOneScore,
             teamTwoScore: schema.teamTwoScore,
-            teamOneActive: schema.teamOneActive,
-            teamTwoActive: schema.teamTwoActive,
             teamOnePlayers: schema.teamOnePlayers,
             teamTwoPlayers: schema.teamTwoPlayers,
             resolveCode: schema.resolveCode,
             statsPoints: schema.statsPoints,
-            points: schema.points,
             offline: schema.offline,
+            teamOneStatus: schema.teamOneStatus,
+            teamTwoStatus: schema.teamTwoStatus,
         }),
     )
 }
@@ -69,25 +69,6 @@ export const setActiveGameOffline = async (offline: boolean) => {
  */
 export const setActiveGameId = async (id: string) => {
     await AsyncStorage.setItem('active_game_id', id)
-}
-
-export const createOfflineGame = async (
-    data: CreateGame,
-    teamOnePlayers: DisplayUser[],
-): Promise<string> => {
-    const realm = await getRealm()
-
-    let id: string = ''
-    realm.write(() => {
-        const game = realm.create<GameSchema>(
-            'Game',
-            GameSchema.createOfflineGame(data, teamOnePlayers),
-            Realm.UpdateMode.All,
-        )
-        id = game._id
-    })
-
-    return id
 }
 
 export const saveGame = async (game: Game, stats?: PointStats[]) => {
@@ -128,35 +109,4 @@ export const getActiveGames = async (
     return games
         .filter(g => g.creator._id === userId)
         .map(game => parseGame(game))
-}
-
-export const deleteFullGame = async (gameId: string): Promise<void> => {
-    const realm = await getRealm()
-    const game = await realm.objectForPrimaryKey<GameSchema>('Game', gameId)
-
-    const points = game?.points.map(id => {
-        return realm.objectForPrimaryKey<PointSchema>('Point', id)
-    })
-
-    const actions: (ActionSchema | null)[] = []
-    points?.forEach(p => {
-        p?.teamOneActions.forEach(id => {
-            const objectId = new Realm.BSON.ObjectID(id)
-            actions.push(
-                realm.objectForPrimaryKey<ActionSchema>('Action', objectId),
-            )
-        })
-        p?.teamTwoActions.forEach(id => {
-            const objectId = new Realm.BSON.ObjectID(id)
-            actions.push(
-                realm.objectForPrimaryKey<ActionSchema>('Action', objectId),
-            )
-        })
-    })
-
-    realm.write(() => {
-        realm.delete(actions.filter(a => a !== null))
-        realm.delete(points?.filter(p => p !== null))
-        realm.delete(game)
-    })
 }

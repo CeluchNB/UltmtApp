@@ -1,16 +1,15 @@
 import * as Constants from '../../utils/constants'
-import { AppDispatch } from '../../store/store'
 import BaseScreen from '../../components/atoms/BaseScreen'
+import { CreateGameContext } from '../../context/create-game-context'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
-import React from 'react'
 import { SelectMyTeamProps } from '../../types/navigation'
 import { Team } from '../../types/team'
 import TeamListItem from '../../components/atoms/TeamListItem'
 import { getManagingTeams } from '../../services/data/team'
 import { isLoggedIn } from '../../services/data/auth'
 import { selectManagerTeams } from '../../store/reducers/features/account/accountReducer'
-import { setTeamOne } from '../../store/reducers/features/game/liveGameReducer'
 import { useQuery } from 'react-query'
+import { useSelector } from 'react-redux'
 import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
@@ -19,13 +18,14 @@ import {
     Text,
     View,
 } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useContext } from 'react'
 
 const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
     const {
         theme: { colors, size },
     } = useTheme()
-    const dispatch = useDispatch<AppDispatch>()
+
+    const { setActiveTeam } = useContext(CreateGameContext)
     const profileTeams = useSelector(selectManagerTeams)
 
     const { data: managerTeams, isLoading: teamsLoading } = useQuery(
@@ -47,12 +47,11 @@ const SelectMyTeamScreen: React.FC<SelectMyTeamProps> = ({ navigation }) => {
     })
 
     const onSelect = async (teamOne: Team) => {
-        try {
-            dispatch(setTeamOne(teamOne))
-            navigation.navigate('SelectOpponent', {})
-        } catch (e) {
-            // TODO: error display?
-        }
+        setActiveTeam(teamOne)
+        navigation.reset({
+            index: 1,
+            routes: [{ name: 'Tabs' }, { name: 'SelectOpponent', params: {} }],
+        })
     }
 
     const onCreateTeam = async () => {

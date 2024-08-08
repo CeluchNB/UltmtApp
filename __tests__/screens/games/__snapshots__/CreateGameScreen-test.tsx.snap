@@ -1587,7 +1587,7 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                   }
                   testID="button-text"
                 >
-                  start
+                  create game
                 </Text>
               </View>
             </View>

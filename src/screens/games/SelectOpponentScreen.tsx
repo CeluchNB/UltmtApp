@@ -1,4 +1,5 @@
 import BaseScreen from '../../components/atoms/BaseScreen'
+import { CreateGameContext } from '../../context/create-game-context'
 import { GuestTeam } from '../../types/team'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SearchDisplay from '../../components/molecules/SearchDisplay'
@@ -6,7 +7,7 @@ import SearchResultItem from '../../components/atoms/SearchResultItem'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import { SelectOpponentProps } from '../../types/navigation'
 import { searchTeam } from '../../services/data/team'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
@@ -14,10 +15,15 @@ const SelectOpponentScreen: React.FC<SelectOpponentProps> = ({
     route,
 }) => {
     const { initialValue } = route.params
+    const { setTeamTwo } = useContext(CreateGameContext)
     const [searchText, setSearchText] = useState(initialValue)
 
     const onSelect = (team: GuestTeam) => {
-        navigation.navigate('CreateGame', { teamTwo: team })
+        setTeamTwo(team)
+        navigation.reset({
+            index: 1,
+            routes: [{ name: 'Tabs' }, { name: 'CreateGame' }],
+        })
     }
 
     const styles = StyleSheet.create({

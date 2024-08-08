@@ -1,8 +1,10 @@
-import { DisplayUser } from '../types/user'
+import { BSON } from 'realm'
 import { Realm } from '@realm/react'
 import { Tournament } from '../types/tournament'
-import { CreateGame, Game, PointStats } from '../types/game'
+import { initializeInGameStatsPlayers } from '../utils/in-game-stats'
+import { CreateGame, Game, GameStatus, PointStats } from '../types/game'
 import { DisplayTeam, GuestTeam } from '../types/team'
+import { DisplayUser, InGameStatsUser } from '../types/user'
 
 export class GameSchema {
     static schema: Realm.ObjectSchema = {
@@ -25,14 +27,13 @@ export class GameSchema {
             tournament: 'Tournament?',
             teamOneScore: 'int',
             teamTwoScore: 'int',
-            teamOneActive: 'bool',
-            teamTwoActive: 'bool',
-            teamOnePlayers: 'DisplayUser[]',
-            teamTwoPlayers: 'DisplayUser[]',
+            teamOnePlayers: 'PlayerPointStats[]',
+            teamTwoPlayers: 'PlayerPointStats[]',
             resolveCode: 'string',
-            points: 'string[]',
             statsPoints: 'PointStats[]',
             offline: 'bool',
+            teamOneStatus: 'string',
+            teamTwoStatus: 'string',
         },
     }
 
@@ -52,14 +53,13 @@ export class GameSchema {
     tournament?: Tournament
     teamOneScore: number
     teamTwoScore: number
-    teamOneActive: boolean
-    teamTwoActive: boolean
-    teamOnePlayers: DisplayUser[]
-    teamTwoPlayers: DisplayUser[]
+    teamOnePlayers: InGameStatsUser[]
+    teamTwoPlayers: InGameStatsUser[]
     resolveCode: string
-    points: string[]
     statsPoints: PointStats[]
     offline: boolean
+    teamOneStatus: GameStatus
+    teamTwoStatus: GameStatus
 
     constructor(
         game: Game,
@@ -82,22 +82,27 @@ export class GameSchema {
         this.tournament = game.tournament
         this.teamOneScore = game.teamOneScore
         this.teamTwoScore = game.teamTwoScore
-        this.teamOneActive = game.teamOneActive
-        this.teamTwoActive = game.teamTwoActive
-        this.teamOnePlayers = game.teamOnePlayers
-        this.teamTwoPlayers = game.teamTwoPlayers
+        this.teamOnePlayers = initializeInGameStatsPlayers(game.teamOnePlayers)
+        this.teamTwoPlayers = initializeInGameStatsPlayers(game.teamTwoPlayers)
         this.resolveCode = game.resolveCode || ''
-        this.points = game.points
         this.statsPoints = statsPoints
         this.offline = offline
+        this.teamOneStatus = game.teamOneStatus
+        this.teamTwoStatus = game.teamTwoStatus
     }
 
-    static createOfflineGame(game: CreateGame, teamOnePlayers: DisplayUser[]) {
+    static createOfflineGame(
+        game: CreateGame,
+        teamOnePlayers: DisplayUser[],
+    ): GameSchema {
         return {
             _id: new Realm.BSON.ObjectID().toHexString(),
             creator: game.creator,
             teamOne: game.teamOne,
-            teamTwo: game.teamTwo,
+            teamTwo: {
+                ...game.teamTwo,
+                _id: game.teamTwo._id ?? new BSON.ObjectId().toHexString(),
+            },
             teamTwoDefined: game.teamTwoDefined,
             scoreLimit: game.scoreLimit,
             halfScore: game.halfScore,
@@ -110,12 +115,13 @@ export class GameSchema {
             tournament: game.tournament,
             teamOneScore: 0,
             teamTwoScore: 0,
-            teamOneActive: true,
-            teamTwoActive: false,
-            teamOnePlayers: teamOnePlayers,
+            teamOneStatus: GameStatus.ACTIVE,
+            teamTwoStatus: game.teamTwo._id
+                ? GameStatus.DEFINED
+                : GameStatus.GUEST,
+            teamOnePlayers: initializeInGameStatsPlayers(teamOnePlayers),
             teamTwoPlayers: [],
             resolveCode: '',
-            points: [],
             statsPoints: [],
             offline: true,
         }

@@ -1,9 +1,9 @@
-import * as PointData from '../../../src/services/data/point'
 import ChangePullingTeamModal from '../../../src/components/molecules/ChangePullingTeamModal'
-import { Provider } from 'react-redux'
+import { GameFactory } from '../../test-data/game'
+import LiveGameProvider from '../../../src/context/live-game-context'
+import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-import { setPoint } from '../../../src/store/reducers/features/point/livePointReducer'
-import store from '../../../src/store/store'
+import { withRealm } from '../../utils/renderers'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import {
     fireEvent,
@@ -11,11 +11,11 @@ import {
     screen,
     waitFor,
 } from '@testing-library/react-native'
-import { game, point } from '../../../fixtures/data'
 
 const client = new QueryClient()
 
 describe('ChangePullingTeamModal', () => {
+    const game = GameFactory.build()
     beforeAll(() => {
         jest.useFakeTimers({ legacyFakeTimers: true })
     })
@@ -25,17 +25,24 @@ describe('ChangePullingTeamModal', () => {
 
     it('displays correctly', () => {
         render(
-            <Provider store={store}>
-                <QueryClientProvider client={client}>
-                    <ChangePullingTeamModal
-                        visible={true}
-                        team="one"
-                        game={game}
-                        pointId="pointId"
-                        onClose={jest.fn()}
-                    />
-                </QueryClientProvider>
-            </Provider>,
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <LiveGameProvider gameId={game._id}>
+                            <ChangePullingTeamModal
+                                visible={true}
+                                onClose={jest.fn()}
+                            />
+                        </LiveGameProvider>
+                    </QueryClientProvider>
+                </NavigationContainer>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', { ...game, offline: false })
+                    })
+                },
+            ),
         )
 
         expect(screen.getByText(game.teamOne.name)).toBeTruthy()
@@ -43,30 +50,27 @@ describe('ChangePullingTeamModal', () => {
     })
 
     it('handles submit', async () => {
-        store.dispatch(setPoint(point))
-        const updatedPoint = {
-            ...point,
-            pullingTeam: game.teamTwo,
-            receivingTeam: game.teamOne,
-        }
-        jest.spyOn(PointData, 'setPullingTeam').mockReturnValue(
-            Promise.resolve(updatedPoint),
-        )
-
         const onClose = jest.fn()
 
         render(
-            <Provider store={store}>
-                <QueryClientProvider client={client}>
-                    <ChangePullingTeamModal
-                        visible={true}
-                        team="one"
-                        game={game}
-                        pointId="pointId"
-                        onClose={onClose}
-                    />
-                </QueryClientProvider>
-            </Provider>,
+            withRealm(
+                <NavigationContainer>
+                    <QueryClientProvider client={client}>
+                        <LiveGameProvider gameId={game._id}>
+                            <ChangePullingTeamModal
+                                visible={true}
+                                onClose={onClose}
+                            />
+                        </LiveGameProvider>
+                    </QueryClientProvider>
+                </NavigationContainer>,
+                realm => {
+                    realm.write(() => {
+                        realm.deleteAll()
+                        realm.create('Game', { ...game, offline: false })
+                    })
+                },
+            ),
         )
 
         // press team one first
@@ -82,7 +86,5 @@ describe('ChangePullingTeamModal', () => {
         await waitFor(() => {
             expect(onClose).toHaveBeenCalled()
         })
-
-        expect(store.getState().livePoint.point).toMatchObject(updatedPoint)
     })
 })

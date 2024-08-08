@@ -76,13 +76,7 @@ exports[`should match snapshot 1`] = `
         }
       }
     >
-      <View
-        style={
-          {
-            "flex": 1,
-          }
-        }
-      >
+      <View>
         <Text
           style={
             {
@@ -104,6 +98,32 @@ exports[`should match snapshot 1`] = `
           @
           placename1
         </Text>
+      </View>
+      <View
+        style={
+          {
+            "flex": 1,
+            "marginLeft": 10,
+            "marginTop": 4,
+          }
+        }
+      >
+        <View
+          style={
+            [
+              {
+                "borderRadius": 5,
+                "height": 10,
+                "marginRight": 5,
+                "marginTop": 5,
+                "width": 10,
+              },
+              {
+                "backgroundColor": "#303030",
+              },
+            ]
+          }
+        />
       </View>
       <Text
         style={
@@ -129,13 +149,7 @@ exports[`should match snapshot 1`] = `
         }
       }
     >
-      <View
-        style={
-          {
-            "flex": 1,
-          }
-        }
-      >
+      <View>
         <Text
           style={
             {
@@ -157,6 +171,32 @@ exports[`should match snapshot 1`] = `
           @
           placename2
         </Text>
+      </View>
+      <View
+        style={
+          {
+            "flex": 1,
+            "marginLeft": 10,
+            "marginTop": 4,
+          }
+        }
+      >
+        <View
+          style={
+            [
+              {
+                "borderRadius": 5,
+                "height": 10,
+                "marginRight": 5,
+                "marginTop": 5,
+                "width": 10,
+              },
+              {
+                "backgroundColor": "#303030",
+              },
+            ]
+          }
+        />
       </View>
       <Text
         style={

@@ -5,18 +5,21 @@ import GameLeadersScene from './GameLeadersScene'
 import GameUtilityBar from '../molecules/GameUtilityBar'
 import { GameViewContext } from '../../context/game-view-context'
 import ViewPointsScene from './ViewPointsScene'
-import { deleteGame } from '../../services/data/game'
+import { exportGameStats } from '../../services/data/stats'
 import { setupMobileAds } from '../../utils/ads'
+import { useDeleteGame } from '../../hooks/game-edit-actions/use-delete-game'
 import { useNavigation } from '@react-navigation/native'
+import { useReenterGame } from '../../hooks/game-edit-actions/use-reenter-game'
+import { useTheme } from '../../hooks'
 import {
     ActivityIndicator,
     StyleSheet,
+    Text,
     View,
     useWindowDimensions,
 } from 'react-native'
 import React, { useContext } from 'react'
 import { TabBar, TabView } from 'react-native-tab-view'
-import { useGameReactivation, useTheme } from '../../hooks'
 
 interface GameViewProps {
     gameId: string
@@ -50,7 +53,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
     const navigation = useNavigation()
 
     const {
-        theme: { colors },
+        theme: { colors, size },
     } = useTheme()
 
     const mapTabNameToIndex = (name: 'points' | 'stats'): number => {
@@ -63,6 +66,7 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
     }
 
     const {
+        userId,
         activePoint,
         allPointsLoading,
         game,
@@ -70,10 +74,23 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
         managingTeamId,
         onSelectPoint,
     } = useContext(GameViewContext)
-    const { onReactivateGame } = useGameReactivation()
-    const [modalVisible, setModalVisible] = React.useState(false)
-    const [deleteLoading, setDeleteLoading] = React.useState(false)
-    const [reactivateLoading, setReactivateLoading] = React.useState(false)
+
+    const {
+        mutateAsync: deleteGame,
+        isLoading: deleteLoading,
+        error: deleteError,
+        reset: deleteReset,
+    } = useDeleteGame()
+    const {
+        mutateAsync: reenterGame,
+        isLoading: reactivateLoading,
+        error: reenterError,
+        reset: reenterReset,
+    } = useReenterGame()
+
+    const [deleteModalVisible, setDeleteModalVisible] = React.useState(false)
+    const [exportModalVisible, setExportModalVisible] = React.useState(false)
+    const [exportLoading, setExportLoading] = React.useState(false)
     const [index, setIndex] = React.useState(mapTabNameToIndex('points'))
     const [routes] = React.useState([
         { key: 'points', title: 'Points' },
@@ -95,46 +112,64 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
         }
     }, [activePoint, navigation, onSelectPoint])
 
-    const handleReactivateGame = React.useCallback(async () => {
+    const handleReactivateGame = async () => {
         try {
-            if (!onReactivateGame || !game || !managingTeamId) {
+            if (!game || !managingTeamId) {
                 return undefined
             }
-            setReactivateLoading(true)
 
-            await onReactivateGame(game._id, managingTeamId)
+            await reenterGame({ gameId: game._id, teamId: managingTeamId })
+        } catch {}
+    }
+
+    const onDelete = () => {
+        setDeleteModalVisible(true)
+    }
+
+    const onExport = () => {
+        setExportModalVisible(true)
+    }
+
+    const handleDeleteGame = async () => {
+        if (!managingTeamId) return
+        try {
+            await deleteGame({ gameId, teamId: managingTeamId })
+            setDeleteModalVisible(false)
+            navigation.goBack()
+        } catch {}
+    }
+
+    const handleExportStats = React.useCallback(async () => {
+        try {
+            if (!managingTeamId) return
+
+            setExportLoading(true)
+            await exportGameStats(userId ?? '', gameId)
         } catch (e) {
             // TODO: error display?
         } finally {
-            setReactivateLoading(false)
+            setExportLoading(false)
+            setExportModalVisible(false)
         }
-    }, [onReactivateGame, game, managingTeamId])
+    }, [gameId, managingTeamId, userId])
 
-    const onDelete = () => {
-        setModalVisible(true)
+    const onDeleteModalClose = async () => {
+        deleteReset()
+        setDeleteModalVisible(false)
     }
 
-    const handleDeleteGame = React.useCallback(async () => {
-        setDeleteLoading(true)
-        try {
-            if (!managingTeamId) return
-            await deleteGame(gameId, managingTeamId)
-        } catch (e) {
-            // TODO: error display? do nothing
-        } finally {
-            setDeleteLoading(false)
-            setModalVisible(false)
-            navigation.goBack()
-        }
-    }, [gameId, managingTeamId, navigation])
-
-    const onClose = async () => {
-        setModalVisible(false)
+    const onExportModalClose = async () => {
+        reenterReset()
+        setExportModalVisible(false)
     }
 
     const styles = StyleSheet.create({
         tabContainer: {
             height: '100%',
+        },
+        error: {
+            color: colors.error,
+            fontSize: size.fontFifteen,
         },
     })
 
@@ -146,11 +181,15 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
                     <GameUtilityBar
                         loading={reactivateLoading}
                         totalViews={game.totalViews}
+                        onExportStats={managingTeamId ? onExport : undefined}
                         onReactivateGame={
                             managingTeamId ? handleReactivateGame : undefined
                         }
                         onDeleteGame={managingTeamId ? onDelete : undefined}
                     />
+                )}
+                {reenterError && (
+                    <Text style={styles.error}>{reenterError.toString()}</Text>
                 )}
                 {(allPointsLoading || gameLoading) && (
                     <ActivityIndicator color={colors.textPrimary} />
@@ -182,11 +221,21 @@ const GameView: React.FC<GameViewProps> = ({ gameId }) => {
             <ConfirmModal
                 confirmColor={colors.textPrimary}
                 displayText="Are you sure you want to delete the game? This cannot be undone."
-                visible={modalVisible}
-                onClose={onClose}
-                onCancel={onClose}
+                visible={deleteModalVisible}
+                onClose={onDeleteModalClose}
+                onCancel={onDeleteModalClose}
                 loading={deleteLoading}
                 onConfirm={handleDeleteGame}
+                error={deleteError}
+            />
+            <ConfirmModal
+                displayText="This will send a spreadsheet to your email. Export stats?"
+                loading={exportLoading}
+                visible={exportModalVisible}
+                confirmColor={colors.textPrimary}
+                onClose={onExportModalClose}
+                onCancel={onExportModalClose}
+                onConfirm={handleExportStats}
             />
         </BaseScreen>
     )

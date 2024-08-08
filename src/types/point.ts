@@ -2,6 +2,12 @@ import { DisplayUser } from './user'
 import { GuestTeam } from './team'
 import { ClientActionData, SavedServerActionData } from './action'
 
+export enum PointStatus {
+    FUTURE = 'future',
+    ACTIVE = 'active',
+    COMPLETE = 'complete',
+}
+
 interface Point {
     _id: string
     pointNumber: number
@@ -14,10 +20,11 @@ interface Point {
     pullingTeam: GuestTeam
     receivingTeam: GuestTeam
     scoringTeam?: GuestTeam
-    teamOneActive: boolean
-    teamTwoActive: boolean
     teamOneActions: string[]
     teamTwoActions: string[]
+    gameId: string
+    teamOneStatus: PointStatus
+    teamTwoStatus: PointStatus
 }
 
 export interface ClientPoint {

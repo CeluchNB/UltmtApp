@@ -38,4 +38,14 @@ describe('GameUtilityBar', () => {
         fireEvent.press(getByTestId('delete-button'))
         expect(onDeleteGame).toHaveBeenCalled()
     })
+
+    it('calls export function', () => {
+        const onExportStats = jest.fn()
+        const { getByTestId } = render(
+            <GameUtilityBar onExportStats={onExportStats} loading={false} />,
+        )
+
+        fireEvent.press(getByTestId('export-button'))
+        expect(onExportStats).toHaveBeenCalled()
+    })
 })

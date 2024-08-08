@@ -1,11 +1,7 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import { generateGuestData } from '../../utils/player'
-import { isActiveGameOffline } from '../local/game'
 import jwt_decode from 'jwt-decode'
-import { updateGamePlayers as networkUpdateGamePlayers } from '../network/game'
-import { withGameToken } from './game'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
 import { isTokenExpired, throwApiError } from '../../utils/service-utils'
@@ -308,29 +304,17 @@ export const createGuest = async (
     teamId: string,
     firstName: string,
     lastName: string,
-    inGame = false,
 ): Promise<Team> => {
     try {
-        const offline = await isActiveGameOffline()
+        const response = await withToken(networkCreateGuest, teamId, {
+            firstName,
+            lastName,
+        })
+        const { team } = response.data
+        await localSaveTeams([team])
 
-        if (inGame && offline) {
-            const team = await localGetTeamById(teamId)
-            const guest = generateGuestData(firstName, lastName)
-            team.players.push(guest)
-            await localSaveTeams([team])
-        } else {
-            const response = await withToken(networkCreateGuest, teamId, {
-                firstName,
-                lastName,
-            })
-            const { team } = response.data
-            await localSaveTeams([team])
-            if (inGame) {
-                await withGameToken(networkUpdateGamePlayers)
-            }
-        }
-        const team = await localGetTeamById(teamId)
-        return team
+        const localTeam = await localGetTeamById(teamId)
+        return localTeam
     } catch (error) {
         return throwApiError(error, Constants.ADD_GUEST_ERROR)
     }

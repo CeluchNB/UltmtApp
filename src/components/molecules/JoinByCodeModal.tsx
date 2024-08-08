@@ -90,6 +90,7 @@ const JoinByCodeModal: React.FC<JoinByCodeModalProps> = ({
                     reset()
                 }}
                 loading={loading}
+                disabled={loading}
             />
         </BaseModal>
     )

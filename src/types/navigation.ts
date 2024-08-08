@@ -1,6 +1,7 @@
-import { GuestTeam } from './team'
+import { LiveGameWizardState } from './game'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RequestType } from './request'
+import { TeamNumber } from './team'
 import {
     CompositeScreenProps,
     NavigatorScreenParams,
@@ -70,15 +71,19 @@ export type TabParamList = {
 }
 
 export type LiveGameParamList = {
-    FirstPoint: undefined
-    SelectPlayers: undefined // consider passing point id and not relying on live point reducer
-    LivePointEdit: undefined
-    EditGame: undefined
+    FirstPoint: { gameId: string; team: TeamNumber }
+    EditGame: { gameId: string }
+    LiveGameEdit: {
+        gameId: string
+        team: TeamNumber
+        state?: LiveGameWizardState
+        pointNumber?: number
+    }
 }
 
 export type TopLevelParamList = {
     Tabs: NavigatorScreenParams<TabParamList>
-    CreateGame: { teamTwo: GuestTeam }
+    CreateGame: undefined
     SelectMyTeam: undefined
     SelectOpponent: { initialValue?: string }
     SearchTournaments: undefined
@@ -238,17 +243,13 @@ export type FirstPointProps = NativeStackScreenProps<
     LiveGameParamList,
     'FirstPoint'
 >
-export type SelectPlayersProps = NativeStackScreenProps<
-    LiveGameParamList,
-    'SelectPlayers'
->
-export type LivePointEditProps = CompositeScreenProps<
-    NativeStackScreenProps<LiveGameParamList, 'LivePointEdit'>,
-    NativeStackScreenProps<TopLevelParamList>
->
 export type EditGameProps = NativeStackScreenProps<
     LiveGameParamList,
     'EditGame'
+>
+export type LiveGameProps = NativeStackScreenProps<
+    LiveGameParamList,
+    'LiveGameEdit'
 >
 
 export type TeamGameProps = CompositeScreenProps<

@@ -1,15 +1,16 @@
 import { FAB } from 'react-native-paper'
-import { Game } from '../../types/game'
 import GameCard from '../../components/atoms/GameCard'
 import { GameHomeProps } from '../../types/navigation'
 import MapSection from '../../components/molecules/MapSection'
 import SearchBar from '../../components/atoms/SearchBar'
 import { fetchProfile } from '../../services/data/user'
+import { gameIsActive } from '../../utils/game'
 import { searchGames } from '../../services/data/game'
 import { setProfile } from '../../store/reducers/features/account/accountReducer'
 import { useDispatch } from 'react-redux'
 import { useQuery } from 'react-query'
 import { useTheme } from '../../hooks'
+import { Game, GameStatus } from '../../types/game'
 import React, { useMemo } from 'react'
 import {
     RefreshControl,
@@ -41,7 +42,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
         refetch: refetchGames,
     } = useQuery(['searchGames'], () => searchGames())
     const liveGames = useMemo(() => {
-        return data?.filter(g => g.teamOneActive)
+        return data?.filter(g => gameIsActive(g))
     }, [data])
 
     const refetch = React.useCallback(() => {
@@ -59,7 +60,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     }, [navigation, refetch])
 
     const recentGames = useMemo(() => {
-        return data?.filter(g => !g.teamOneActive)
+        return data?.filter(g => g.teamOneStatus !== GameStatus.ACTIVE)
     }, [data])
 
     const navigateToSearch = (live: string) => {
