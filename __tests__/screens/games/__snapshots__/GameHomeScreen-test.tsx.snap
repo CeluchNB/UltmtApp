@@ -121,6 +121,14 @@ exports[`GameHomeScreen should match snapshot with live and recent data 1`] = `
       </View>
     </View>
   </View>
+  <View
+    style={
+      {
+        "alignSelf": "center",
+        "margin": 5,
+      }
+    }
+  />
   <RCTScrollView
     refreshControl={
       <RefreshControlMock
@@ -641,6 +649,14 @@ exports[`GameHomeScreen should match snapshot with no data 1`] = `
       </View>
     </View>
   </View>
+  <View
+    style={
+      {
+        "alignSelf": "center",
+        "margin": 5,
+      }
+    }
+  />
   <RCTScrollView
     refreshControl={
       <RefreshControlMock

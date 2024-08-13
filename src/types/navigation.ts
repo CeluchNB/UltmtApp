@@ -28,6 +28,7 @@ export type SharedStackParamList = {
         live: boolean
     }
     GameStats: { gameId: string }
+    ActiveGames: undefined
 }
 
 export type AccountStackParamList = {
