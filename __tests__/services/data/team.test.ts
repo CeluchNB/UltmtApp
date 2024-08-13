@@ -14,6 +14,7 @@ import {
     getArchivedTeam,
     getManagedTeam,
     getTeam,
+    getTeamsByContinutationId,
     removePlayer,
     rollover,
     searchTeam,
@@ -386,6 +387,46 @@ describe('test team services', () => {
                 teamError,
             )
             await expect(createGuest('', '', '')).rejects.toBeDefined()
+        })
+    })
+
+    describe('gets teams by continuation id', () => {
+        it('handle network success', async () => {
+            jest.spyOn(
+                TeamServices,
+                'getTeamsByContinutationId',
+            ).mockReturnValueOnce(
+                Promise.resolve({
+                    data: { teams: [team] },
+                    status: 200,
+                    statusText: 'Good',
+                    headers: {},
+                    config: {},
+                } as AxiosResponse),
+            )
+
+            await expect(
+                getTeamsByContinutationId(team._id),
+            ).resolves.toMatchObject([team])
+        })
+
+        it('handles network failure', async () => {
+            jest.spyOn(
+                TeamServices,
+                'getTeamsByContinutationId',
+            ).mockReturnValueOnce(
+                Promise.resolve({
+                    data: { message: 'test error' },
+                    status: 400,
+                    statusText: 'Bad',
+                    headers: {},
+                    config: {},
+                } as AxiosResponse),
+            )
+
+            await expect(
+                getTeamsByContinutationId(team._id),
+            ).rejects.toMatchObject({ message: 'test error' })
         })
     })
 })

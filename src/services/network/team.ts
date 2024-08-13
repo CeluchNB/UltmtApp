@@ -212,3 +212,12 @@ export const createGuest = async (
         },
     )
 }
+
+export const getTeamsByContinutationId = async (continuationId: string) => {
+    return await axios.get(`${API_URL_V1}/team/all/${continuationId}`, {
+        headers: {
+            'X-API-Key': API_KEY,
+        },
+        validateStatus: () => true,
+    })
+}
