@@ -120,7 +120,7 @@ const GameCard: React.FC<GameCardProps> = props => {
             backgroundColor: !activeGame ? colors.textPrimary : colors.primary,
         },
         loserCircle: {
-            backgroundColor: colors.primary,
+            display: 'none',
         },
     })
 
