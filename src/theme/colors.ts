@@ -5,11 +5,12 @@ export const lightColors: ColorPalette = {
     secondary: '#303030',
     textPrimary: '#005D8F',
     textSecondary: '#665600',
-    success: '#40dd50',
+    success: '#2e8540',
     error: '#ff0000',
-    gray: '#505050',
-    darkGray: '#303030',
+    gray: '#101010',
+    darkGray: '#000000',
     darkPrimary: '#dddddd',
+    defensivePlay: '#2c2c2c',
 }
 
 export const darkColors: ColorPalette = {
@@ -22,4 +23,5 @@ export const darkColors: ColorPalette = {
     gray: '#CEC6B4',
     darkGray: '#ebebeb',
     darkPrimary: '#1a1a1a',
+    defensivePlay: '#00BBFF',
 }
