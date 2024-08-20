@@ -30,10 +30,13 @@ const usePointSocket = (gameId: string, pointId: string) => {
         socket.on(NetworkPointEvents.NEXT_POINT_LISTEN, () => {
             emitter.emit(LocalPointEvents.NEXT_POINT_LISTEN)
         })
-        socket.emit(NetworkPointEvents.JOIN_POINT_EMIT, gameId, pointId)
-        socket.io.on('reconnect', () => {
+
+        if (pointId) {
             socket.emit(NetworkPointEvents.JOIN_POINT_EMIT, gameId, pointId)
-        })
+            socket.io.on('reconnect', () => {
+                socket.emit(NetworkPointEvents.JOIN_POINT_EMIT, gameId, pointId)
+            })
+        }
 
         emitter.off(LocalPointEvents.ACTION_EMIT)
         emitter.addListener(LocalPointEvents.ACTION_EMIT, onAction)

@@ -76,7 +76,10 @@ const GameViewProvider = ({
     const managerTeams = useSelector(selectManagerTeams)
     const account = useSelector(selectAccount)
     const [activePoint, setActivePoint] = useState<Point>()
-    const emitter = usePointSocket(gameId, activePoint?._id ?? '')
+    const emitter = usePointSocket(
+        gameId,
+        activePoint && isLivePoint(activePoint) ? activePoint?._id : '',
+    )
     const { actionStack, setActionStack } = useLivePoint(emitter, {
         onNextPoint: () => {
             setActivePoint(undefined)
