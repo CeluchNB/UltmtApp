@@ -1,3 +1,4 @@
+import * as AuthServices from '../../../src/services/data/auth'
 import * as LocalTeamServices from '../../../src/services/local/team'
 import * as UserServices from '../../../src/services/network/user'
 import { AxiosResponse } from 'axios'
@@ -72,6 +73,9 @@ describe('test user data calls', () => {
     })
 
     it('should handle network fetch profile success', async () => {
+        jest.spyOn(AuthServices, 'getTokens').mockReturnValue(
+            Promise.resolve({ access: 'test', refresh: 'test' }),
+        )
         jest.spyOn(UserServices, 'fetchProfile').mockReturnValueOnce(
             Promise.resolve({
                 data: { user, fullManagerTeams: [] },
@@ -90,14 +94,8 @@ describe('test user data calls', () => {
     })
 
     it('should handle network fetch profile failure', async () => {
-        jest.spyOn(UserServices, 'fetchProfile').mockReturnValueOnce(
-            Promise.reject({
-                data: { message: errorText },
-                status: 400,
-                statusText: 'Bad',
-                headers: {},
-                config: {},
-            }),
+        jest.spyOn(AuthServices, 'getTokens').mockReturnValue(
+            Promise.resolve({ access: undefined, refresh: undefined }),
         )
 
         await expect(fetchProfile()).rejects.toBeDefined()
