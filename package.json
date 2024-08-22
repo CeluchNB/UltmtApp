@@ -117,6 +117,7 @@
     "rootDir": ".",
     "testMatch": [
       "<rootDir>/__tests__/**/*.test.ts",
+      "<rootDir>/__tests__/**/*.test.tsx",
       "<rootDir>/__tests__/**/*-test.tsx"
     ],
     "moduleFileExtensions": [
@@ -127,6 +128,9 @@
       "json",
       "node"
     ],
+    "moduleNameMapper": {
+      "@ultmt-app/(.*)": "<rootDir>/src/$1"
+    },
     "transformIgnorePatterns": [
       "node_modules/(?!(@react-native|react-native|react-native-iphone-x-helper|react-native-vector-icons|@realm/react|@realm/fetch)/)"
     ]
