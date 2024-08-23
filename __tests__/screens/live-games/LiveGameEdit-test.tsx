@@ -148,6 +148,4 @@ describe('LiveGameEdit', () => {
         )
         expect(screen.getByText('Back')).toBeTruthy()
     })
-
-    it('handles point finish', async () => {})
 })
