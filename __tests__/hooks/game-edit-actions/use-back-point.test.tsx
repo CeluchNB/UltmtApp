@@ -5,36 +5,24 @@ import { BSON } from 'realm'
 import { GameFactory } from '../../test-data/game'
 import { InGameStatsUserFactory } from '../../test-data/user'
 import { PointFactory } from '../../test-data/point'
+import { TopLevelComponent } from './utils'
 import { renderHook } from '@testing-library/react-native'
 import { useBackPoint } from '@ultmt-app/hooks/game-edit-actions/use-back-point'
+import { useRealm } from '@ultmt-app/context/realm'
 import { ActionSchema, GameSchema, PointSchema } from '@ultmt-app/models'
 import {
     LiveGameContext,
     LiveGameContextData,
 } from '@ultmt-app/context/live-game-context'
-import { QueryClient, QueryClientProvider } from 'react-query'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { RealmProvider, useRealm } from '@ultmt-app/context/realm'
-
-const client = new QueryClient()
 
 const setCurrentPointNumber = jest.fn()
 const pointId = new BSON.ObjectId()
 const lastPoint = PointFactory.build({ pointNumber: 1 })
-
-const TopLevelComponent = ({ children }: { children: ReactNode }) => {
-    return (
-        <RealmProvider>
-            <QueryClientProvider client={client}>
-                {children}
-            </QueryClientProvider>
-        </RealmProvider>
-    )
-}
+const game = GameFactory.build()
 
 const OfflineGameComponent = ({ children }: { children: ReactNode }) => {
     const realm = useRealm()
-    const game = GameFactory.build()
     const gameSchema = GameSchema.createOfflineGame(game, [])
 
     const point = PointFactory.build({
@@ -98,7 +86,6 @@ const OfflineGameComponent = ({ children }: { children: ReactNode }) => {
 
 const OnlineGameComponent = ({ children }: { children: ReactNode }) => {
     const realm = useRealm()
-    const game = GameFactory.build()
     const user = InGameStatsUserFactory.build()
     const gameSchema = new GameSchema(game, false, [
         { _id: lastPoint._id, pointStats: [user] },
