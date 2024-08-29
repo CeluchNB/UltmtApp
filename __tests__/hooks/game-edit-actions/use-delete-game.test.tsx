@@ -38,6 +38,7 @@ const GameComponent = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         realmData = realm
         realm.write(() => {
+            realm.deleteAll()
             realm.create('Game', gameSchema)
             realm.create('Point', pointSchema)
             realm.create('Action', actionSchema)
@@ -76,7 +77,6 @@ describe('useDeleteGame', () => {
         expect(spy).toHaveBeenCalled()
         expect(RNEncryptedStorage.setItem).toHaveBeenCalled()
 
-        // this is not good logic, where does other game comes from?
         const gameResult = realmData.objectForPrimaryKey('Game', game._id)
         expect(gameResult).toBeNull()
 
