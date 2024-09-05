@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match basic snapshot 1`] = `
+exports[`LabeledFormInput should match basic snapshot 1`] = `
 <View
   style={
     {
@@ -148,7 +148,7 @@ exports[`should match basic snapshot 1`] = `
 </View>
 `;
 
-exports[`should match snapshot with non-user input 1`] = `
+exports[`LabeledFormInput should match snapshot with non-user input 1`] = `
 <View
   style={
     {
@@ -208,7 +208,7 @@ exports[`should match snapshot with non-user input 1`] = `
 </View>
 `;
 
-exports[`should match snapshot without unit 1`] = `
+exports[`LabeledFormInput should match snapshot without unit 1`] = `
 <View
   style={
     {
