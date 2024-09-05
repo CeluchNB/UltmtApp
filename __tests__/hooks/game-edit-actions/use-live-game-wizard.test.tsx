@@ -35,6 +35,13 @@ const getWrapper = (
 }
 
 describe('useLiveGameWizard', () => {
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     describe('in set players state', () => {
         it('calls next', async () => {
             const onSelectPlayers = jest.fn()

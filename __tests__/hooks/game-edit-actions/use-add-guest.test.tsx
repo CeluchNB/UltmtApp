@@ -3,7 +3,6 @@ import { AxiosResponse } from 'axios'
 import { DisplayUserFactory } from '../../test-data/user'
 import { GameFactory } from '../../test-data/game'
 import { TeamFactory } from '../../test-data/team'
-import { renderHook } from '@testing-library/react-native'
 import { useAddGuest } from '@ultmt-app/hooks/game-edit-actions/use-add-guest'
 import { withRealm } from '../../utils/renderers'
 import { GameSchema, TeamSchema } from '@ultmt-app/models'
@@ -13,6 +12,7 @@ import {
 } from '@ultmt-app/context/live-game-context'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import React, { ReactNode } from 'react'
+import { act, renderHook } from '@testing-library/react-native'
 
 const client = new QueryClient()
 
@@ -46,14 +46,23 @@ const getWrapper = (game: GameSchema) => {
 }
 
 describe('useAddGuest', () => {
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     it('handles offline guest creation', async () => {
         const { result } = renderHook(() => useAddGuest(team._id), {
             wrapper: getWrapper(offlineGameSchema),
         })
 
-        await result.current.mutateAsync({
-            firstName: 'First',
-            lastName: 'Last',
+        await act(async () => {
+            await result.current.mutateAsync({
+                firstName: 'First',
+                lastName: 'Last',
+            })
         })
 
         const newTeam = realmData.objectForPrimaryKey<TeamSchema>(
@@ -89,9 +98,11 @@ describe('useAddGuest', () => {
             wrapper: getWrapper(onlineGameSchema),
         })
 
-        await result.current.mutateAsync({
-            firstName: 'First',
-            lastName: 'Last',
+        await act(async () => {
+            await result.current.mutateAsync({
+                firstName: 'First',
+                lastName: 'Last',
+            })
         })
 
         expect(spy).toHaveBeenCalled()

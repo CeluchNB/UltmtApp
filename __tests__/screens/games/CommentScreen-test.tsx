@@ -94,7 +94,7 @@ describe('Live CommentScreen', () => {
             onAction: jest.fn(),
             onNextPoint: jest.fn(),
             onUndo: jest.fn(),
-            waitingForActionResponse: false,
+            waiting: false,
         })
     })
     afterEach(() => {
@@ -218,13 +218,13 @@ describe('Saved CommentScreen', () => {
         } as any,
     }
 
-    // beforeAll(() => {
-    //     jest.useFakeTimers({ legacyFakeTimers: true })
-    // })
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
 
-    // afterAll(() => {
-    //     jest.useRealTimers()
-    // })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
 
     beforeEach(() => {
         store.dispatch(setSavedAction(updatedSavedAction))
@@ -244,7 +244,7 @@ describe('Saved CommentScreen', () => {
             onAction: jest.fn(),
             onNextPoint: jest.fn(),
             onUndo: jest.fn(),
-            waitingForActionResponse: false,
+            waiting: false,
         })
     })
     afterEach(() => {

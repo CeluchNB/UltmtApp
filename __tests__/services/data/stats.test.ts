@@ -2,9 +2,9 @@ import * as Constants from '../../../src/utils/constants'
 import * as StatsNetwork from '../../../src/services/network/stats'
 import { ApiError } from '../../../src/types/services'
 import { AxiosResponse } from 'axios'
+import { DisplayTeamFactory } from '../../test-data/team'
 import { DisplayUser } from '../../../src/types/user'
 import { getInitialPlayerData } from '../../../fixtures/utils'
-import { teamOne } from '../../../fixtures/data'
 import { GameStats, TeamStats } from '../../../src/types/stats'
 import {
     exportGameStats,
@@ -225,6 +225,7 @@ describe('getGameStatsByTeam', () => {
     })
 })
 
+const teamOne = DisplayTeamFactory.build()
 const team: TeamStats = {
     ...teamOne,
     players: [],

@@ -2,10 +2,10 @@ import * as TournamentNetwork from '@ultmt-app/services/network/tournament'
 import { AxiosResponse } from 'axios'
 import { BSON } from 'realm'
 import { RealmProvider } from '@ultmt-app/context/realm'
-import { renderHook } from '@testing-library/react-native'
 import { useCreateTournament } from '@ultmt-app/hooks/game-edit-actions/use-create-tournament'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import React, { ReactNode } from 'react'
+import { act, renderHook } from '@testing-library/react-native'
 
 const client = new QueryClient()
 const wrapper = ({ children }: { children: ReactNode }) => {
@@ -38,17 +38,18 @@ describe('useCreateTournament', () => {
             )
         const { result } = renderHook(() => useCreateTournament(), { wrapper })
 
-        const tournament = await result.current.mutateAsync({
-            startDate: '2024-01-01',
-            endDate: '2024-01-02',
-            name: 'tournament',
-            eventId: 'tournament',
+        await act(async () => {
+            const tournament = await result.current.mutateAsync({
+                startDate: '2024-01-01',
+                endDate: '2024-01-02',
+                name: 'tournament',
+                eventId: 'tournament',
+            })
+            expect(spy).toHaveBeenCalled()
+
+            expect(tournament._id).toBe(_id.toHexString())
+            expect(tournament.eventId).toBe('tournament')
         })
-
-        expect(spy).toHaveBeenCalled()
-
-        expect(tournament._id).toBe(_id.toHexString())
-        expect(tournament.eventId).toBe('tournament')
     })
 
     it('with failed network response', async () => {
@@ -63,16 +64,18 @@ describe('useCreateTournament', () => {
             )
         const { result } = renderHook(() => useCreateTournament(), { wrapper })
 
-        const tournament = await result.current.mutateAsync({
-            startDate: '2024-01-01',
-            endDate: '2024-01-02',
-            name: 'tournament',
-            eventId: 'tournament',
+        await act(async () => {
+            const tournament = await result.current.mutateAsync({
+                startDate: '2024-01-01',
+                endDate: '2024-01-02',
+                name: 'tournament',
+                eventId: 'tournament',
+            })
+
+            expect(spy).toHaveBeenCalled()
+
+            expect(tournament._id).toBeDefined()
+            expect(tournament.eventId).toBe('tournament')
         })
-
-        expect(spy).toHaveBeenCalled()
-
-        expect(tournament._id).toBeDefined()
-        expect(tournament.eventId).toBe('tournament')
     })
 })

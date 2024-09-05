@@ -105,7 +105,7 @@ const client = new QueryClient({
 
 describe('PublicUserScreen', () => {
     beforeAll(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({ legacyFakeTimers: true })
     })
 
     afterAll(() => {

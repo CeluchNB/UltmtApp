@@ -25,12 +25,14 @@ const props: CreateTournamentProps = {
 
 describe('CreateTournamentScreen', () => {
     beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
         MockDate.set('01-01-2023')
     })
     afterEach(() => {
         jest.clearAllMocks()
     })
     afterAll(() => {
+        jest.useRealTimers()
         MockDate.reset()
     })
 

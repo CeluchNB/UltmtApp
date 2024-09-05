@@ -28,6 +28,13 @@ beforeEach(() => {
 })
 
 describe('test forgot password screen', () => {
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     it('should match snapshot', () => {
         const snapshot = renderer.create(
             <NavigationContainer>

@@ -125,7 +125,7 @@ const client = new QueryClient({
 
 describe('TeamRequestsScreen', () => {
     beforeAll(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({ legacyFakeTimers: true })
     })
 
     afterAll(() => {

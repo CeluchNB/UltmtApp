@@ -6,7 +6,6 @@ import { GameFactory } from '../../test-data/game'
 import { InGameStatsUserFactory } from '../../test-data/user'
 import { PointFactory } from '../../test-data/point'
 import { TopLevelComponent } from './utils'
-import { renderHook } from '@testing-library/react-native'
 import { useBackPoint } from '@ultmt-app/hooks/game-edit-actions/use-back-point'
 import { useRealm } from '@ultmt-app/context/realm'
 import { ActionSchema, GameSchema, PointSchema } from '@ultmt-app/models'
@@ -15,6 +14,7 @@ import {
     LiveGameContextData,
 } from '@ultmt-app/context/live-game-context'
 import React, { ReactNode, useEffect, useState } from 'react'
+import { act, renderHook } from '@testing-library/react-native'
 
 const setCurrentPointNumber = jest.fn()
 const pointId = new BSON.ObjectId()
@@ -171,7 +171,9 @@ describe('useBackPoint', () => {
             },
         )
 
-        await result.current.mutateAsync()
+        await act(async () => {
+            await result.current.mutateAsync()
+        })
 
         expect(setCurrentPointNumber).toHaveBeenCalledWith(1)
     })
@@ -199,7 +201,9 @@ describe('useBackPoint', () => {
             },
         )
 
-        await result.current.mutateAsync()
+        await act(async () => {
+            await result.current.mutateAsync()
+        })
 
         expect(setCurrentPointNumber).toHaveBeenCalledWith(1)
         expect(spy).toHaveBeenCalled()

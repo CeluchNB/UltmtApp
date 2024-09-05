@@ -43,6 +43,13 @@ const team3 = TeamFactory.build({
 const client = new QueryClient()
 
 describe('PublicTeamAllYearsScene', () => {
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     it('renders years', async () => {
         jest.spyOn(TeamData, 'getTeamsByContinutationId').mockReturnValue(
             Promise.resolve([team1, team2, team3]),

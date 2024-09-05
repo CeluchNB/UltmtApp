@@ -75,7 +75,7 @@ beforeEach(async () => {
 
 describe('OfflineGameOptionsScreen', () => {
     beforeAll(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({ legacyFakeTimers: true })
     })
 
     afterAll(() => {

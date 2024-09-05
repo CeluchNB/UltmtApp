@@ -11,15 +11,8 @@ export const useSetPullingTeam = () => {
     const realm = useRealm()
 
     const offlineSetPullingTeam = (team: TeamNumber) => {
-        console.log('offline set', team)
         if (!point || !game) return
 
-        console.log(
-            'setting',
-            team === 'one'
-                ? Object.assign({}, game.teamOne)
-                : Object.assign({}, game.teamTwo),
-        )
         realm.write(() => {
             point.pullingTeam =
                 team === 'one'
