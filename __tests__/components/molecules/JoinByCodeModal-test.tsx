@@ -6,6 +6,13 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 describe('JoinByCodeModal', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     it('should match snapshot', () => {
         const snapshot = render(
             <JoinByCodeModal

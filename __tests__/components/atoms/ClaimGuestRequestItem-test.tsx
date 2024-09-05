@@ -43,7 +43,10 @@ describe('ClaimGuestRequestItem', () => {
             </NavigationContainer>,
         )
 
-        expect(screen.debug()).toMatchSnapshot()
+        expect(screen.getByText('Noah Celuch')).toBeTruthy()
+        expect(screen.getByText('@noah')).toBeTruthy()
+        expect(screen.getByText('Noah Celuch (guest)')).toBeTruthy()
+        expect(screen.getByText('Pending')).toBeTruthy()
     })
 
     it('calls accept', async () => {
