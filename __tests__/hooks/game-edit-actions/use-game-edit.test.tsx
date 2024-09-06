@@ -20,8 +20,8 @@ jest.mock('@react-navigation/native', () => {
     }
 })
 
-const gameId = new BSON.ObjectId()
-const game = GameFactory.build({ _id: gameId.toHexString() })
+const onlineGameId = new BSON.ObjectId()
+const onlineGame = GameFactory.build({ _id: onlineGameId.toHexString() })
 
 let realmData: import('realm')
 
@@ -30,7 +30,25 @@ const OnlineComponent = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         realmData = realm
-        const gameSchema = new GameSchema(game, false, [])
+        const gameSchema = new GameSchema(onlineGame, false, [])
+        realm.write(() => {
+            realm.deleteAll()
+            realm.create('Game', gameSchema)
+        })
+    }, [realm])
+
+    return <>{children}</>
+}
+
+const offlineGameId = new BSON.ObjectId()
+const offlineGame = GameFactory.build({ _id: offlineGameId.toHexString() })
+
+const OfflineComponent = ({ children }: { children: ReactNode }) => {
+    const realm = useRealm()
+
+    useEffect(() => {
+        realmData = realm
+        const gameSchema = new GameSchema(offlineGame, true, [])
         realm.write(() => {
             realm.deleteAll()
             realm.create('Game', gameSchema)
@@ -41,10 +59,10 @@ const OnlineComponent = ({ children }: { children: ReactNode }) => {
 }
 
 describe('useGameEdit', () => {
-    it('handles edit', async () => {
+    it('handles online edit', async () => {
         const spy = jest.spyOn(GameNetwork, 'editGame').mockReturnValue(
             Promise.resolve({
-                data: { game: { ...game, scoreLimit: 99 } },
+                data: { game: { ...onlineGame, scoreLimit: 99 } },
                 status: 200,
                 statusText: 'Good',
             } as AxiosResponse),
@@ -58,7 +76,7 @@ describe('useGameEdit', () => {
         }
 
         const { result } = renderHook(
-            () => useGameEditor(gameId.toHexString()),
+            () => useGameEditor(onlineGameId.toHexString()),
             { wrapper },
         )
 
@@ -74,7 +92,36 @@ describe('useGameEdit', () => {
 
         const gameResult = realmData.objectForPrimaryKey(
             'Game',
-            gameId.toHexString(),
+            onlineGameId.toHexString(),
+        )
+        expect(gameResult?.scoreLimit).toBe(99)
+    })
+
+    it('handles offline edit', async () => {
+        const wrapper = ({ children }: { children: ReactNode }) => {
+            return (
+                <TopLevelComponent>
+                    <OfflineComponent>{children}</OfflineComponent>
+                </TopLevelComponent>
+            )
+        }
+
+        const { result } = renderHook(
+            () => useGameEditor(offlineGameId.toHexString()),
+            { wrapper },
+        )
+
+        await waitFor(() => {
+            expect(result.current.game).not.toBeNull()
+        })
+
+        await act(async () => {
+            await result.current.mutateAsync({ scoreLimit: 99 })
+        })
+
+        const gameResult = realmData.objectForPrimaryKey(
+            'Game',
+            offlineGameId.toHexString(),
         )
         expect(gameResult?.scoreLimit).toBe(99)
     })
