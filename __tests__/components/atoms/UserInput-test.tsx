@@ -3,6 +3,14 @@ import UserInput from '../../../src/components/atoms/UserInput'
 import { render } from '@testing-library/react-native'
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
+beforeAll(() => {
+    jest.useFakeTimers()
+})
+
+afterAll(() => {
+    jest.useRealTimers()
+})
+
 it('test snapshot', () => {
     const snapshot = render(<UserInput placeholder="Placeholder" />).toJSON()
     expect(snapshot).toMatchSnapshot()

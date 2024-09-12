@@ -293,7 +293,7 @@ describe('ViewGameScreen', () => {
 
     beforeAll(() => {
         userEvent.setup()
-        jest.useFakeTimers({ legacyFakeTimers: true })
+        jest.useFakeTimers()
     })
 
     afterAll(() => {
