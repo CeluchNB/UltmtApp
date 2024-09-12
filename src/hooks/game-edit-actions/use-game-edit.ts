@@ -1,7 +1,6 @@
 import { ApiError } from '../../types/services'
 import { GameSchema } from '../../models'
 import { UpdateGame } from '../../types/game'
-import { UpdateMode } from 'realm'
 import { editGame } from '../../services/network/game'
 import { parseUpdateGame } from '../../utils/game'
 import { useMutation } from 'react-query'
@@ -15,45 +14,45 @@ export const useGameEditor = (gameId: string) => {
     const offlineEdit = async (gameData: UpdateGame) => {
         if (!game) return
 
-        const parsedValues: UpdateGame = {
-            ...gameData,
-            floaterTimeout: gameData.floaterTimeout ?? game.floaterTimeout,
-            halfScore: Number(gameData.halfScore ?? game.halfScore),
-            hardcapMins: Number(gameData.hardcapMins ?? game.hardcapMins),
-            softcapMins: Number(gameData.softcapMins ?? game.softcapMins),
-            playersPerPoint: Number(
-                gameData.playersPerPoint ?? game.playersPerPoint,
-            ),
-            scoreLimit: Number(gameData.scoreLimit ?? game.scoreLimit),
-            timeoutPerHalf: Number(
-                gameData.timeoutPerHalf ?? game.timeoutPerHalf,
-            ),
-        }
-
-        const schema = new GameSchema(
-            {
-                ...game,
-                ...parsedValues,
-                totalViews: 0,
-            },
-            true,
-            game.statsPoints,
-        )
-        // TODO: update team one players
         realm.write(() => {
-            realm.create('Game', schema, UpdateMode.Modified)
+            game.floaterTimeout = gameData.floaterTimeout ?? game.floaterTimeout
+            game.halfScore = Number(gameData.halfScore ?? game.halfScore)
+            game.hardcapMins = Number(gameData.hardcapMins ?? game.hardcapMins)
+            game.softcapMins = Number(gameData.softcapMins ?? game.softcapMins)
+            game.playersPerPoint = Number(
+                gameData.playersPerPoint ?? game.playersPerPoint,
+            )
+            game.scoreLimit = Number(gameData.scoreLimit ?? game.scoreLimit)
+            game.timeoutPerHalf = Number(
+                gameData.timeoutPerHalf ?? game.timeoutPerHalf,
+            )
         })
     }
 
     const onlineEdit = async (gameData: UpdateGame) => {
+        if (!game) return
+
         const data = parseUpdateGame(gameData)
         const response = await withGameToken(editGame, data)
         const { game: gameResponse } = response.data
 
-        const schema = new GameSchema(gameResponse, false, game?.statsPoints)
-        // TODO: update team one and two players
         realm.write(() => {
-            realm.create('Game', schema, UpdateMode.Modified)
+            game.floaterTimeout =
+                gameResponse.floaterTimeout ?? game.floaterTimeout
+            game.halfScore = Number(gameResponse.halfScore ?? game.halfScore)
+            game.hardcapMins = Number(
+                gameResponse.hardcapMins ?? game.hardcapMins,
+            )
+            game.softcapMins = Number(
+                gameResponse.softcapMins ?? game.softcapMins,
+            )
+            game.playersPerPoint = Number(
+                gameResponse.playersPerPoint ?? game.playersPerPoint,
+            )
+            game.scoreLimit = Number(gameResponse.scoreLimit ?? game.scoreLimit)
+            game.timeoutPerHalf = Number(
+                gameResponse.timeoutPerHalf ?? game.timeoutPerHalf,
+            )
         })
     }
 

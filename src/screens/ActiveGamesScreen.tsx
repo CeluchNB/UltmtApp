@@ -39,7 +39,6 @@ const ActiveGamesScreen: React.FC<ActiveGamesProps> = ({ navigation }) => {
         'creator._id == $0',
         userId,
     )
-    console.log('games', games)
 
     const [modalVisible, setModalVisible] = React.useState(false)
     const [deletingGame, setDeletingGame] = React.useState<Game>()
