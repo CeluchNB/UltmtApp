@@ -58,7 +58,6 @@ const GameCard: React.FC<GameCardProps> = props => {
             borderWidth: 1,
             borderRadius: 8,
             elevation: 10,
-            shadowColor: colors.textPrimary,
         },
         teamContainer: {
             display: 'flex',
