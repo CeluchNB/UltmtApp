@@ -21,6 +21,7 @@ import {
     getArchivedTeam as networkGetArchivedTeam,
     getManagedTeam as networkGetManagedTeam,
     getTeam as networkGetTeam,
+    getTeamsByContinutationId as networkGetTeamsByContinuationId,
     removePlayer as networkRemovePlayer,
     rollover as networkRollover,
     searchTeam as networkSearchTeam,
@@ -318,4 +319,15 @@ export const createGuest = async (
     } catch (error) {
         return throwApiError(error, Constants.ADD_GUEST_ERROR)
     }
+}
+
+export const getTeamsByContinutationId = async (
+    continuationId: string,
+): Promise<Team[]> => {
+    const response = await networkGetTeamsByContinuationId(continuationId)
+    if (response.status !== 200) {
+        throw new ApiError(response.data.message)
+    }
+    const { teams } = response.data
+    return teams
 }

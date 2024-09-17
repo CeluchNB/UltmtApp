@@ -176,6 +176,7 @@ it('should handle player click', async () => {
     )
     expect(screen.getAllByText('Players').length).toBeGreaterThan(1)
     expect(screen.getAllByText('Stats').length).toBeGreaterThan(1)
+    expect(screen.getAllByText('Years').length).toBeGreaterThan(0)
 
     fireEvent.press(playerView)
     expect(mockedNavigate).toHaveBeenCalled()

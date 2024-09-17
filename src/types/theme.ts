@@ -8,6 +8,7 @@ export interface ColorPalette {
     gray: string
     darkGray: string
     darkPrimary: string
+    defensivePlay: string
 }
 
 export interface FontSize {

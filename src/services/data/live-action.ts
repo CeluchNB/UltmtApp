@@ -53,9 +53,6 @@ export const handleCreateActionSideEffects = async (
         }
         // TODO: add point team one actions
     }
-
-    // await localSavePoint(point)
-    // return await localGetPointById(pointId)
 }
 
 export const handleUndoActionSideEffects = async (

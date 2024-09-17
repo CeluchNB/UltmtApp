@@ -167,3 +167,12 @@ export const refreshTokenIfNecessary = async () => {
         await refreshToken()
     }
 }
+
+export const getTokens = async (): Promise<{
+    access?: string | null
+    refresh?: string | null
+}> => {
+    const access = await EncryptedStorage.getItem('access_token')
+    const refresh = await EncryptedStorage.getItem('refresh_token')
+    return { access, refresh }
+}

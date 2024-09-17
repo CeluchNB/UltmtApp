@@ -3,8 +3,8 @@ import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import jwt_decode from 'jwt-decode'
 import { throwApiError } from '../../utils/service-utils'
-import { withToken } from './auth'
 import { CreateUserData, DisplayUser, User } from '../../types/user'
+import { getTokens, withToken } from './auth'
 import {
     deleteTeamById as localDeleteTeamById,
     saveTeams as localSaveTeams,
@@ -35,6 +35,11 @@ import {
  */
 export const fetchProfile = async (): Promise<User> => {
     try {
+        const tokens = await getTokens()
+        if (!tokens.refresh && !tokens.access) {
+            throw new Error()
+        }
+
         const response = await withToken(networkFetchProfile)
         const { user, fullManagerTeams } = response.data
         await localSaveTeams(fullManagerTeams)

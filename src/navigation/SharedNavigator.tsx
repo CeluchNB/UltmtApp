@@ -1,3 +1,4 @@
+import ActiveGamesScreen from '../screens/ActiveGamesScreen'
 import CommentScreen from '../screens/games/CommentScreen'
 import GameStatsScreen from '../screens/games/GameStatsScreen'
 import PublicTeamScreen from '../screens/PublicTeamScreen'
@@ -44,6 +45,12 @@ export const getStack = (Stack: any) => {
             name="GameStats"
             component={GameStatsScreen}
             options={{ title: '', headerBackTitle: 'Back' }}
+        />,
+        <Stack.Screen
+            key="ActiveGames"
+            name="ActiveGames"
+            component={ActiveGamesScreen}
+            options={{ title: 'Active Games', headerBackTitle: 'Back' }}
         />,
     ]
 }

@@ -13,7 +13,6 @@ exports[`should match snapshot 1`] = `
       "marginLeft": 5,
       "marginRight": 5,
       "marginTop": 10,
-      "shadowColor": "#ffd600",
     }
   }
 >
@@ -192,7 +191,7 @@ exports[`should match snapshot 1`] = `
                 "width": 10,
               },
               {
-                "backgroundColor": "#303030",
+                "display": "none",
               },
             ]
           }

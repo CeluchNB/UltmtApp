@@ -95,7 +95,9 @@ describe('JoinGameScreen', () => {
         fireEvent.changeText(search, game.teamTwo.name)
 
         await waitFor(() => {
-            expect(screen.getByText(game.teamTwo.name)).toBeTruthy()
+            expect(
+                screen.getAllByText(game.teamTwo.name).length,
+            ).toBeGreaterThan(0)
         })
     })
 
@@ -130,10 +132,12 @@ describe('JoinGameScreen', () => {
         fireEvent.changeText(search, game.teamTwo.name)
 
         await waitFor(() => {
-            expect(screen.getByText(game.teamTwo.name)).toBeTruthy()
+            expect(
+                screen.getAllByText(game.teamTwo.name).length,
+            ).toBeGreaterThan(0)
         })
 
-        const gameCard = screen.getByText(game.teamTwo.name)
+        const gameCard = screen.getAllByText(game.teamTwo.name)[0]
         fireEvent.press(gameCard)
 
         await waitFor(() => {
@@ -198,7 +202,7 @@ describe('JoinGameScreen', () => {
             expect(screen.getByText(game.teamTwo.name)).toBeTruthy()
         })
 
-        const gameCard = screen.getByText(game.teamTwo.name)
+        const gameCard = screen.getAllByText(game.teamTwo.name)[0]
         fireEvent.press(gameCard)
 
         await waitFor(() => {

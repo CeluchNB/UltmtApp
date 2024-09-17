@@ -69,7 +69,7 @@ const client = new QueryClient({
 
 describe('UserRequestsScreen', () => {
     beforeAll(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({ legacyFakeTimers: true })
     })
 
     afterAll(() => {

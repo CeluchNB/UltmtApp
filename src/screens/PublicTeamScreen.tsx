@@ -1,6 +1,7 @@
 import * as TeamData from '../services/data/team'
 import BaseScreen from '../components/atoms/BaseScreen'
 import { Game } from '../types/game'
+import { PublicTeamAllYearsScene } from '../components/organisms/PublicTeamAllYearsScene'
 import { PublicTeamDetailsProps } from '../types/navigation'
 import PublicTeamPlayersScene from '../components/organisms/PublicTeamPlayersScene'
 import PublicTeamStatsScene from '../components/organisms/PublicTeamStatsScene'
@@ -44,6 +45,12 @@ const renderScene = (
                         managers={team.managers}
                     />
                 )
+            case 'years':
+                return (
+                    <PublicTeamAllYearsScene
+                        continuationId={team.continuationId}
+                    />
+                )
         }
     }
 }
@@ -62,7 +69,9 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         getGamesByTeam(id),
     )
 
-    const mapTabNameToIndex = (name: 'players' | 'stats' | 'games'): number => {
+    const mapTabNameToIndex = (
+        name: 'players' | 'stats' | 'games' | 'years',
+    ): number => {
         switch (name) {
             case 'players':
                 return 0
@@ -70,6 +79,8 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
                 return 1
             case 'stats':
                 return 2
+            case 'years':
+                return 3
         }
     }
 
@@ -81,6 +92,7 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
         { key: 'players', title: 'Players' },
         { key: 'games', title: 'Games' },
         { key: 'stats', title: 'Stats' },
+        { key: 'years', title: 'Years' },
     ])
 
     const initializeScreen = React.useCallback(async () => {
@@ -93,19 +105,17 @@ const PublicTeamScreen: React.FC<PublicTeamDetailsProps> = ({
 
         setError('')
         setLoading(true)
-        getTeam()
-            .then(teamResponse => {
-                setTeam(teamResponse)
-            })
-            .catch(e => {
-                setError(
-                    e.message ??
-                        'An error occurred looking for this team. Please try again',
-                )
-            })
-            .finally(() => {
-                setLoading(false)
-            })
+        try {
+            const teamResponse = await getTeam()
+            setTeam(teamResponse)
+        } catch (e: any) {
+            setError(
+                e?.message ??
+                    'An error occurred looking for this team. Please try again',
+            )
+        } finally {
+            setLoading(false)
+        }
     }, [archive, id])
 
     React.useEffect(() => {

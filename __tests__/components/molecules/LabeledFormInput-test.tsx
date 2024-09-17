@@ -16,30 +16,41 @@ beforeEach(() => {
     onChange.mockClear()
 })
 
-it('should match basic snapshot', () => {
-    const snapshot = render(<LabeledFormInput {...props} />)
-    expect(snapshot.toJSON()).toMatchSnapshot()
-})
+describe('LabeledFormInput', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
 
-it('should match snapshot without unit', () => {
-    const snapshot = render(<LabeledFormInput {...props} unit={undefined} />)
-    expect(snapshot.toJSON()).toMatchSnapshot()
-})
+    it('should match basic snapshot', () => {
+        const snapshot = render(<LabeledFormInput {...props} />)
+        expect(snapshot.toJSON()).toMatchSnapshot()
+    })
 
-it('should match snapshot with non-user input', () => {
-    const snapshot = render(
-        <LabeledFormInput {...props}>
-            <Text>Test display</Text>
-        </LabeledFormInput>,
-    )
-    expect(snapshot.toJSON()).toMatchSnapshot()
-})
+    it('should match snapshot without unit', () => {
+        const snapshot = render(
+            <LabeledFormInput {...props} unit={undefined} />,
+        )
+        expect(snapshot.toJSON()).toMatchSnapshot()
+    })
 
-it('text change should fire prop method', () => {
-    const { getByPlaceholderText } = render(<LabeledFormInput {...props} />)
+    it('should match snapshot with non-user input', () => {
+        const snapshot = render(
+            <LabeledFormInput {...props}>
+                <Text>Test display</Text>
+            </LabeledFormInput>,
+        )
+        expect(snapshot.toJSON()).toMatchSnapshot()
+    })
 
-    const input = getByPlaceholderText('Test field')
+    it('text change should fire prop method', () => {
+        const { getByPlaceholderText } = render(<LabeledFormInput {...props} />)
 
-    fireEvent.changeText(input, 'test')
-    expect(onChange).toHaveBeenCalledWith('test')
+        const input = getByPlaceholderText('Test field')
+
+        fireEvent.changeText(input, 'test')
+        expect(onChange).toHaveBeenCalledWith('test')
+    })
 })

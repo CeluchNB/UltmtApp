@@ -12,14 +12,14 @@ jest.mock('react-native-element-dropdown', () => {
 
 const client = new QueryClient()
 
-beforeAll(() => {
-    jest.useFakeTimers({ legacyFakeTimers: true })
-})
-afterAll(() => {
-    jest.useRealTimers()
-})
-
 describe('PlayerConnectionView', () => {
+    beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
+    })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
+
     const players = [
         { firstName: 'First 1', lastName: 'Last 1', playerId: 'player1' },
         { firstName: 'First 2', lastName: 'Last 2', playerId: 'player2' },

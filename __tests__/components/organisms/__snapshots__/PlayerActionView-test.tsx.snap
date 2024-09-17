@@ -594,7 +594,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -614,12 +614,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -760,7 +759,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -780,12 +779,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -926,7 +924,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -946,12 +944,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -1149,7 +1146,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -1169,12 +1166,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -1315,7 +1311,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -1335,12 +1331,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -1481,7 +1476,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -1501,12 +1496,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -1704,7 +1698,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -1724,12 +1718,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -1870,7 +1863,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -1890,12 +1883,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -2093,7 +2085,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -2113,12 +2105,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -2259,7 +2250,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -2279,12 +2270,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -2425,7 +2415,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -2445,12 +2435,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -2648,7 +2637,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -2668,12 +2657,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -2814,7 +2802,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -2834,12 +2822,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -2980,7 +2967,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -3000,12 +2987,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -3203,7 +3189,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -3223,12 +3209,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -3369,7 +3354,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -3389,12 +3374,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -3535,7 +3519,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -3555,12 +3539,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -3758,7 +3741,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -3778,12 +3761,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -3924,7 +3906,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -3944,12 +3926,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
@@ -4090,7 +4071,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "#303030",
+                  "backgroundColor": "transparent",
                   "borderRadius": 20,
                   "flex": 1,
                   "marginRight": 5,
@@ -4110,12 +4091,11 @@ exports[`PlayerActionView should match snapshot 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "backgroundColor": "#303030",
+                    "backgroundColor": "transparent",
                     "borderColor": "#ffd600",
                     "borderRadius": 20,
                     "borderStyle": "solid",
                     "borderWidth": 1,
-                    "color": "#ffd600",
                     "flex": undefined,
                     "minWidth": "auto",
                     "shadowColor": "#000",
