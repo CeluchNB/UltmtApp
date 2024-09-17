@@ -1,11 +1,11 @@
-import ActionDisplayItem from '../../../src/components/atoms/ActionDisplayItem'
+import ActionDisplayItem from '@ultmt-app/components/atoms/ActionDisplayItem'
 import React from 'react'
 import {
     ActionFactory,
     ActionType,
     LiveServerActionData,
     SavedServerActionData,
-} from '../../../src/types/action'
+} from '@ultmt-app/types/action'
 import { fireEvent, render } from '@testing-library/react-native'
 
 describe('ActionDisplayItem', () => {

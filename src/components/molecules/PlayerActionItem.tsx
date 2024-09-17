@@ -1,10 +1,10 @@
-import { Action } from '../../types/action'
 import { Button } from 'react-native-paper'
 import { DebouncedFunc } from 'lodash'
 import { DisplayUser } from '../../types/user'
 import PlayerActionTagModal from './PlayerActionTagModal'
 import React from 'react'
 import { useTheme } from '../../hooks'
+import { Action, ActionType } from '../../types/action'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface PlayerActionItemProps {
@@ -59,8 +59,6 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
         },
         button: {
             borderColor: colors.textPrimary,
-            color: colors.textPrimary,
-            backgroundColor: colors.primary,
             flex: 1,
             width: '100%',
             marginRight: 5,
@@ -69,6 +67,21 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
             fontSize: size.fontTen,
         },
     })
+
+    const getTextColorByAction = (action: Action): string => {
+        switch (action.action.actionType) {
+            case ActionType.BLOCK:
+                return colors.defensivePlay
+            case ActionType.TEAM_ONE_SCORE:
+            case ActionType.TEAM_TWO_SCORE:
+                return colors.success
+            case ActionType.THROWAWAY:
+            case ActionType.DROP:
+                return colors.error
+            default:
+                return colors.textPrimary
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -90,7 +103,8 @@ const PlayerActionItem: React.FC<PlayerActionItemProps> = ({
                         compact={true}
                         style={styles.button}
                         labelStyle={styles.buttonText}
-                        textColor={colors.textPrimary}
+                        textColor={getTextColorByAction(action)}
+                        buttonColor={colors.primary}
                         uppercase={true}
                         collapsable={true}
                         disabled={loading}

@@ -40,7 +40,7 @@ const client = new QueryClient()
 
 describe('RequestUserScreen', () => {
     beforeAll(() => {
-        jest.useFakeTimers()
+        jest.useFakeTimers({ legacyFakeTimers: true })
         store.dispatch(
             ManagedTeamReducer.setTeam({
                 _id: 'team1',

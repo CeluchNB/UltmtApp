@@ -37,6 +37,7 @@ export const useFirstPoint = (gameId: string) => {
     const createOnlinePoint = async (pullingTeam: TeamNumber) => {
         const response = await withGameToken(nextPoint, pullingTeam, 0)
         if (response.status !== 201) {
+            // TOOD: this can be removed
             throw new ApiError(response.data.message)
         }
         const { point: pointResponse } = response.data

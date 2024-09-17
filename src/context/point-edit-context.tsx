@@ -28,7 +28,7 @@ interface PointEditContextProps {
     children: React.ReactNode
 }
 
-interface PointEditContextData {
+export interface PointEditContextData {
     myTeamActions: LiveServerActionData[]
     activePlayers: DisplayUser[]
     waiting: boolean

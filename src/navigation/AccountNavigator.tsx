@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { AccountStackParamList } from './../types/navigation'
-import ActiveGamesScreen from '../screens/ActiveGamesScreen'
 import AddGuestScreen from '../screens/teams/AddGuestScreen'
 import CreateAccountScreen from './../screens/CreateAccountScreen'
 import CreateTeamScreen from './../screens/CreateTeamScreen'
@@ -16,7 +15,6 @@ import { RequestType } from './../types/request'
 import RequestUserScreen from './../screens/RequestUserScreen'
 import ResetPasswordScreen from '../screens/ResetPasswordScreen'
 import RolloverTeamScreen from './../screens/RolloverTeamScreen'
-
 import TeamRequestsScreen from '../screens/TeamRequestsScreen'
 import TeamSettingsScreen from '../screens/teams/TeamSettingsScreen'
 import UserRequestsScreen from '../screens/UserRequestsScreen'
@@ -99,7 +97,6 @@ const AccountNavigator: React.FC<{}> = () => {
             />
             <Stack.Screen name="TeamRequests" component={TeamRequestsScreen} />
             <Stack.Screen name="JoinByCode" component={JoinByCodeScreen} />
-            <Stack.Screen name="ActiveGames" component={ActiveGamesScreen} />
             <Stack.Screen
                 name="OfflineGameOptions"
                 component={OfflineGameOptionsScreen}

@@ -150,7 +150,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                                 false: colors.gray,
                                 true: colors.textSecondary,
                             }}
-                            ios_backgroundColor={colors.gray}
+                            ios_backgroundColor={colors.darkPrimary}
                             value={themeId === 'dark'}
                             onValueChange={async () => {
                                 toggleTheme()

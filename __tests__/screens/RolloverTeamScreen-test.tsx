@@ -30,11 +30,13 @@ const client = new QueryClient()
 
 describe('RolloverTeamScreen', () => {
     beforeAll(() => {
+        jest.useFakeTimers({ legacyFakeTimers: true })
         store.dispatch(ManagedTeamReducer.setTeam({ _id: 'team1' }))
         mockDate.set('06/01/2022')
     })
 
     afterAll(() => {
+        jest.useRealTimers()
         mockDate.reset()
     })
 

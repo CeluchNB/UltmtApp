@@ -5,83 +5,92 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
-it('should match snapshot', () => {
-    const snapshot = render(
-        <EditField
-            label="test"
-            initialValue="test"
-            onSubmit={async () => {}}
-        />,
-    ).toJSON()
+describe('EditField', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+    afterAll(() => {
+        jest.useRealTimers()
+    })
 
-    expect(snapshot).toMatchSnapshot()
-})
+    it('should match snapshot', () => {
+        const snapshot = render(
+            <EditField
+                label="test"
+                initialValue="test"
+                onSubmit={async () => {}}
+            />,
+        ).toJSON()
 
-it('should toggle with edit button', async () => {
-    const spy = jest.fn()
+        expect(snapshot).toMatchSnapshot()
+    })
 
-    const { getByTestId, queryByTestId, queryByPlaceholderText } = render(
-        <EditField label="test" initialValue="test" onSubmit={spy} />,
-    )
+    it('should toggle with edit button', async () => {
+        const spy = jest.fn()
 
-    const submitButton1 = await queryByTestId('ef-submit-button')
-    expect(submitButton1).toBeNull()
-    const input1 = await queryByPlaceholderText('test')
-    expect(input1).toBeNull()
+        const { getByTestId, queryByTestId, queryByPlaceholderText } = render(
+            <EditField label="test" initialValue="test" onSubmit={spy} />,
+        )
 
-    const editButton = getByTestId('ef-edit-button')
-    fireEvent.press(editButton)
-    await act(async () => {})
+        const submitButton1 = await queryByTestId('ef-submit-button')
+        expect(submitButton1).toBeNull()
+        const input1 = await queryByPlaceholderText('test')
+        expect(input1).toBeNull()
 
-    const submitButton2 = await queryByTestId('ef-submit-button')
-    expect(submitButton2).not.toBeNull()
-    const input2 = await queryByPlaceholderText('test')
-    expect(input2).not.toBeNull()
+        const editButton = getByTestId('ef-edit-button')
+        fireEvent.press(editButton)
+        await act(async () => {})
 
-    fireEvent.press(editButton)
-    await act(async () => {})
+        const submitButton2 = await queryByTestId('ef-submit-button')
+        expect(submitButton2).not.toBeNull()
+        const input2 = await queryByPlaceholderText('test')
+        expect(input2).not.toBeNull()
 
-    const submitButton3 = await queryByTestId('ef-submit-button')
-    expect(submitButton3).toBeNull()
-    const input3 = await queryByPlaceholderText('test')
-    expect(input3).toBeNull()
-})
+        fireEvent.press(editButton)
+        await act(async () => {})
 
-it('should call custom edit function', async () => {
-    const editSpy = jest.fn()
-    const submitSpy = jest.fn()
+        const submitButton3 = await queryByTestId('ef-submit-button')
+        expect(submitButton3).toBeNull()
+        const input3 = await queryByPlaceholderText('test')
+        expect(input3).toBeNull()
+    })
 
-    const { getByTestId, queryByPlaceholderText } = render(
-        <EditField
-            label="test"
-            initialValue="test"
-            onSubmit={submitSpy}
-            onEdit={editSpy}
-        />,
-    )
+    it('should call custom edit function', async () => {
+        const editSpy = jest.fn()
+        const submitSpy = jest.fn()
 
-    const editButton = getByTestId('ef-edit-button')
-    fireEvent.press(editButton)
+        const { getByTestId, queryByPlaceholderText } = render(
+            <EditField
+                label="test"
+                initialValue="test"
+                onSubmit={submitSpy}
+                onEdit={editSpy}
+            />,
+        )
 
-    expect(editSpy).toHaveBeenCalled()
+        const editButton = getByTestId('ef-edit-button')
+        fireEvent.press(editButton)
 
-    const input = await queryByPlaceholderText('test')
-    expect(input).toBeNull()
-})
+        expect(editSpy).toHaveBeenCalled()
 
-it('test on submit called', async () => {
-    const spy = jest.fn()
+        const input = await queryByPlaceholderText('test')
+        expect(input).toBeNull()
+    })
 
-    const { getByTestId } = render(
-        <EditField label="test" initialValue="test" onSubmit={spy} />,
-    )
+    it('test on submit called', async () => {
+        const spy = jest.fn()
 
-    const editButton = getByTestId('ef-edit-button')
-    fireEvent.press(editButton)
+        const { getByTestId } = render(
+            <EditField label="test" initialValue="test" onSubmit={spy} />,
+        )
 
-    const submitButton2 = getByTestId('ef-submit-button')
-    fireEvent.press(submitButton2)
-    await waitFor(() => {
-        expect(spy).toHaveBeenCalled()
+        const editButton = getByTestId('ef-edit-button')
+        fireEvent.press(editButton)
+
+        const submitButton2 = getByTestId('ef-submit-button')
+        fireEvent.press(submitButton2)
+        await waitFor(() => {
+            expect(spy).toHaveBeenCalled()
+        })
     })
 })

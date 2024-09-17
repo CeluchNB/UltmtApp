@@ -76,7 +76,10 @@ const GameViewProvider = ({
     const managerTeams = useSelector(selectManagerTeams)
     const account = useSelector(selectAccount)
     const [activePoint, setActivePoint] = useState<Point>()
-    const emitter = usePointSocket(gameId, activePoint?._id ?? '')
+    const emitter = usePointSocket(
+        gameId,
+        activePoint && isLivePoint(activePoint) ? activePoint?._id : '',
+    )
     const { actionStack, setActionStack } = useLivePoint(emitter, {
         onNextPoint: () => {
             setActivePoint(undefined)
@@ -116,7 +119,11 @@ const GameViewProvider = ({
         },
     })
 
-    const { isLoading: livePointLoading, error: livePointError } = useQuery(
+    const {
+        isLoading: livePointLoading,
+        error: livePointError,
+        refetch: refetchLiveActions,
+    } = useQuery(
         [{ liveActionByPoint: { gameId, pointId: activePoint?._id } }],
         () => getLiveActionsByPoint(gameId, activePoint?._id ?? ''),
         {
@@ -199,8 +206,10 @@ const GameViewProvider = ({
         const point = getPointById(pointId)
         if (!point) return
 
-        setActionStack(new ActionStack())
         setActivePoint(point)
+        if (isLivePoint(point)) {
+            refetchLiveActions()
+        }
     }
 
     const onSelectAction = (

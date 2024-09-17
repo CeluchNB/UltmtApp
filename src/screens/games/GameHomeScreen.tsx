@@ -1,3 +1,4 @@
+import ActiveGameWarning from '../../components/atoms/ActiveGameWarning'
 import { FAB } from 'react-native-paper'
 import GameCard from '../../components/atoms/GameCard'
 import { GameHomeProps } from '../../types/navigation'
@@ -5,7 +6,6 @@ import MapSection from '../../components/molecules/MapSection'
 import SearchBar from '../../components/atoms/SearchBar'
 import { fetchProfile } from '../../services/data/user'
 import { gameIsActive } from '../../utils/game'
-import { searchGames } from '../../services/data/game'
 import { setProfile } from '../../store/reducers/features/account/accountReducer'
 import { useDispatch } from 'react-redux'
 import { useQuery } from 'react-query'
@@ -18,7 +18,9 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    View,
 } from 'react-native'
+import { getActiveGames, searchGames } from '../../services/data/game'
 
 const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     const {
@@ -41,6 +43,13 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
         isLoading,
         refetch: refetchGames,
     } = useQuery(['searchGames'], () => searchGames())
+
+    const { data: activeGames, refetch: activeGameRefetch } = useQuery<Game[]>(
+        ['activeGames'],
+        () => getActiveGames(),
+        { cacheTime: 0 },
+    )
+
     const liveGames = useMemo(() => {
         return data?.filter(g => gameIsActive(g))
     }, [data])
@@ -48,7 +57,8 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
     const refetch = React.useCallback(() => {
         refetchProfile()
         refetchGames()
-    }, [refetchProfile, refetchGames])
+        activeGameRefetch()
+    }, [refetchProfile, refetchGames, activeGameRefetch])
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -110,6 +120,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
             borderRadius: 8,
             backgroundColor: colors.textPrimary,
         },
+        activeGameContainer: { alignSelf: 'center', margin: 5 },
     })
 
     return (
@@ -118,6 +129,14 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
                 placeholder="Search..."
                 onPress={() => navigateToSearch('undefined')}
             />
+            <View style={styles.activeGameContainer}>
+                <ActiveGameWarning
+                    count={activeGames?.length}
+                    onPress={() => {
+                        navigation.navigate('ActiveGames')
+                    }}
+                />
+            </View>
             <ScrollView
                 style={styles.container}
                 testID="game-home-scroll-view"

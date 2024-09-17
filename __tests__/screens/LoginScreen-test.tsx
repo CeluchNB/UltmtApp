@@ -31,109 +31,118 @@ beforeEach(() => {
     navigate.mockReset()
 })
 
-it('test matches snapshot', () => {
-    const tree = renderer
-        .create(
-            <Provider store={store}>
-                <LoginScreen {...props} />
-            </Provider>,
-        )
-        .toJSON()
-    expect(tree).toMatchSnapshot()
-})
-
-it('test successful login', async () => {
-    const spy = jest
-        .spyOn(AuthData, 'login')
-        .mockImplementationOnce(async () => {
-            return
-        })
-    const { getByPlaceholderText, getAllByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <LoginScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
-
-    fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
-    fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
-    fireEvent.press(getAllByText('Login')[1])
-
-    await waitFor(() => {
-        expect(reset).toHaveBeenCalled()
+describe('LoginScreen', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+    afterAll(() => {
+        jest.useRealTimers()
     })
 
-    spy.mockRestore()
-})
+    it('test matches snapshot', () => {
+        const tree = renderer
+            .create(
+                <Provider store={store}>
+                    <LoginScreen {...props} />
+                </Provider>,
+            )
+            .toJSON()
+        expect(tree).toMatchSnapshot()
+    })
 
-it('should handle login error', async () => {
-    const spy = jest
-        .spyOn(AuthData, 'login')
-        .mockImplementationOnce(async () => {
-            throw new ApiError('error')
+    it('test successful login', async () => {
+        const spy = jest
+            .spyOn(AuthData, 'login')
+            .mockImplementationOnce(async () => {
+                return
+            })
+        const { getByPlaceholderText, getAllByText } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <LoginScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
+        fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
+        fireEvent.press(getAllByText('Login')[1])
+
+        await waitFor(() => {
+            expect(reset).toHaveBeenCalled()
         })
 
-    const { getAllByText, getByPlaceholderText, queryByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <LoginScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        spy.mockRestore()
+    })
 
-    fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
-    fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
-    fireEvent.press(getAllByText('Login')[1])
+    it('should handle login error', async () => {
+        const spy = jest
+            .spyOn(AuthData, 'login')
+            .mockImplementationOnce(async () => {
+                throw new ApiError('error')
+            })
 
-    await waitFor(() => queryByText('error'))
-    expect(reset).not.toHaveBeenCalled()
-    spy.mockRestore()
-})
+        const { getAllByText, getByPlaceholderText, queryByText } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <LoginScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-it('should handle get local token success', async () => {
-    const spy = jest
-        .spyOn(AuthData, 'isLoggedIn')
-        .mockImplementationOnce(async () => {
-            return true
-        })
+        fireEvent.changeText(getByPlaceholderText('Username or Email'), 'user')
+        fireEvent.changeText(getByPlaceholderText('Password'), 'pass')
+        fireEvent.press(getAllByText('Login')[1])
 
-    render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <LoginScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        await waitFor(() => queryByText('error'))
+        expect(reset).not.toHaveBeenCalled()
+        spy.mockRestore()
+    })
 
-    await waitFor(() => expect(reset).toHaveBeenCalled())
-    spy.mockRestore()
-})
+    it('should handle get local token success', async () => {
+        const spy = jest
+            .spyOn(AuthData, 'isLoggedIn')
+            .mockImplementationOnce(async () => {
+                return true
+            })
 
-it('should handle create profile button press', async () => {
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <LoginScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <LoginScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-    fireEvent.press(getByText('Create Account'))
+        await waitFor(() => expect(reset).toHaveBeenCalled())
+        spy.mockRestore()
+    })
 
-    expect(navigate).toHaveBeenCalled()
-})
+    it('should handle create profile button press', async () => {
+        const { getByText } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <LoginScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
 
-it('should handle forgot password button press', async () => {
-    const { getByText } = render(
-        <Provider store={store}>
-            <NavigationContainer>
-                <LoginScreen {...props} />
-            </NavigationContainer>
-        </Provider>,
-    )
+        fireEvent.press(getByText('Create Account'))
 
-    fireEvent.press(getByText('Forgot Password?'))
+        expect(navigate).toHaveBeenCalled()
+    })
 
-    expect(navigate).toHaveBeenCalledWith('ForgotPassword')
+    it('should handle forgot password button press', async () => {
+        const { getByText } = render(
+            <Provider store={store}>
+                <NavigationContainer>
+                    <LoginScreen {...props} />
+                </NavigationContainer>
+            </Provider>,
+        )
+
+        fireEvent.press(getByText('Forgot Password?'))
+
+        expect(navigate).toHaveBeenCalledWith('ForgotPassword')
+    })
 })
