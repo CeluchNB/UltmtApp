@@ -121,8 +121,24 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                         </View>
                         <LivePointUtilityBar
                             loading={false}
-                            undoDisabled={true}
-                            onUndo={() => {}}
+                            undoButton={{
+                                onPress: () => {},
+                                visible: false,
+                                disabled: true,
+                            }}
+                            lineBuilderButton={{
+                                onPress: () => {
+                                    navigation.navigate('LiveGame', {
+                                        screen: 'LineBuilder',
+                                        params: {
+                                            gameId: game?._id ?? '',
+                                            teamId: teamId ?? '',
+                                        },
+                                    })
+                                },
+                                visible: true,
+                                disabled: false,
+                            }}
                             onEdit={() => {
                                 navigation.navigate('LiveGame', {
                                     screen: 'EditGame',
