@@ -1,9 +1,11 @@
 import { InGameStatsUser } from '../../types/user'
 import { useState } from 'react'
 
-export const useSelectPlayers = () => {
+export const useSelectPlayers = (
+    initialSelectedPlayers: InGameStatsUser[] = [],
+) => {
     const [selectedPlayers, setSelectedPlayers] = useState<InGameStatsUser[]>(
-        [],
+        initialSelectedPlayers,
     )
 
     const toggleSelection = (player: InGameStatsUser) => {
