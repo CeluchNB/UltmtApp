@@ -1,4 +1,5 @@
 import BaseModal from '../../components/atoms/BaseModal'
+import ConfirmModal from '../../components/molecules/ConfirmModal'
 import { GameSchema } from '../../models'
 import { InGameStatsUser } from '../../types/user'
 import { LineBuilderProps } from '../../types/navigation'
@@ -8,9 +9,9 @@ import UserInput from '../../components/atoms/UserInput'
 import { useObject } from '../../context/realm'
 import { useSelectPlayers } from '../../hooks/game-edit-actions/use-select-players'
 import { useTheme } from '../../hooks'
-import { Button, Chip } from 'react-native-paper'
+import { Button, Chip, IconButton } from 'react-native-paper'
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React, { SetStateAction, useState } from 'react'
+import React, { useState } from 'react'
 
 interface Line {
     name: string
@@ -18,10 +19,8 @@ interface Line {
 }
 
 interface CreateLineModalProps {
-    lines: Line[]
-    setLines: React.Dispatch<SetStateAction<Line[]>>
-    setActiveLine: (value: number) => void
     setModalVisible: (value: boolean) => void
+    onCreate: (lineName: string) => void
 }
 const CreateLineModal: React.FC<CreateLineModalProps> = props => {
     const {
@@ -29,7 +28,7 @@ const CreateLineModal: React.FC<CreateLineModalProps> = props => {
     } = useTheme()
     const [lineName, setLineName] = useState('')
 
-    const { lines, setLines, setActiveLine, setModalVisible } = props
+    const { setModalVisible, onCreate } = props
 
     return (
         <>
@@ -49,12 +48,7 @@ const CreateLineModal: React.FC<CreateLineModalProps> = props => {
             <PrimaryButton
                 text="done"
                 onPress={() => {
-                    if (lineName.length === 0) return
-
-                    setLines(curr =>
-                        curr.concat({ name: lineName, players: [] }),
-                    )
-                    setActiveLine(lines.length)
+                    onCreate(lineName)
                     setLineName('')
                     setModalVisible(false)
                 }}
@@ -149,10 +143,9 @@ const EditLineList: React.FC<EditLineListParams> = ({
     )
 }
 
-export const LineBuilder: React.FC<LineBuilderProps> = ({
-    route,
-    navigation,
-}) => {
+type LineBuilderState = 'view' | 'edit'
+
+export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
     const { gameId, teamId } = route.params
 
     const {
@@ -161,14 +154,18 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({
 
     const [lines, setLines] = useState<Line[]>([])
     const [activeLine, setActiveLine] = useState<number | undefined>(undefined)
-    const [modalVisible, setModalVisible] = useState(false)
+    const [addModalVisible, setAddModalVisible] = useState(false)
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false)
+    const [deletingLine, setDeletingLine] = useState<number | undefined>(
+        undefined,
+    )
 
     const [initialSelectedPlayers, setInitialSelectedPlayers] = useState<
         InGameStatsUser[]
     >([])
     const { selectedPlayers, toggleSelection, clearSelection } =
         useSelectPlayers(initialSelectedPlayers)
-    const [mode, setMode] = useState<'edit' | 'view'>('view')
+    const [mode, setMode] = useState<LineBuilderState>('view')
 
     const game = useObject<GameSchema>('Game', gameId)
     const players =
@@ -183,6 +180,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({
         for (const player of item.players) {
             toggleSelection(player)
         }
+        setMode('view')
     }
 
     const styles = StyleSheet.create({
@@ -210,13 +208,6 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({
 
     return (
         <SafeAreaView style={styles.screen}>
-            <Text
-                style={{
-                    color: colors.textPrimary,
-                    fontSize: size.fontThirty,
-                }}>
-                Build Lines
-            </Text>
             <View style={styles.pageContainer}>
                 <View style={styles.contentContainer}>
                     {lines.length === 0 ? (
@@ -229,19 +220,36 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({
                                 data={lines}
                                 renderItem={({ item, index }) => {
                                     return (
-                                        <Button
-                                            mode="text"
-                                            textColor={
-                                                activeLine === index
-                                                    ? colors.textPrimary
-                                                    : colors.gray
-                                            }
-                                            rippleColor={`${colors.textPrimary}44`}
-                                            onPress={() =>
-                                                onSelectLine(item, index)
-                                            }>
-                                            {item.name} ({item.players.length})
-                                        </Button>
+                                        <View
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                            }}>
+                                            <Button
+                                                mode="text"
+                                                textColor={
+                                                    activeLine === index
+                                                        ? colors.textPrimary
+                                                        : colors.gray
+                                                }
+                                                rippleColor={`${colors.textPrimary}44`}
+                                                onPress={() =>
+                                                    onSelectLine(item, index)
+                                                }>
+                                                {item.name} (
+                                                {item.players.length})
+                                            </Button>
+                                            <IconButton
+                                                icon="delete"
+                                                iconColor={colors.error}
+                                                onPress={() => {
+                                                    // open delete modal
+                                                    setDeletingLine(index)
+                                                    setDeleteModalVisible(true)
+                                                }}
+                                            />
+                                        </View>
                                     )
                                 }}
                             />
@@ -259,44 +267,36 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({
                         </View>
                     )}
                 </View>
-                {activeLine === undefined ? (
+                {mode === 'view' && activeLine !== undefined && (
+                    <PrimaryButton
+                        style={{ backgroundColor: colors.success }}
+                        text="edit"
+                        onPress={() => {
+                            setMode('edit')
+                        }}
+                        loading={false}
+                    />
+                )}
+                {mode === 'view' && (
+                    <SecondaryButton
+                        style={styles.button}
+                        text="add line"
+                        onPress={async () => {
+                            setAddModalVisible(true)
+                        }}
+                    />
+                )}
+                {mode === 'edit' && (
                     <>
-                        <SecondaryButton
-                            style={styles.button}
-                            text="add line"
-                            onPress={async () => {
-                                setModalVisible(true)
-                            }}
-                        />
-                        <PrimaryButton
-                            text="done"
-                            onPress={() => navigation.goBack()}
-                            loading={false}
-                        />
-                    </>
-                ) : (
-                    <>
-                        <PrimaryButton
-                            style={{ backgroundColor: colors.success }}
-                            text="edit"
-                            onPress={() => {
-                                setMode('edit')
-                            }}
-                            loading={false}
-                        />
-                        <PrimaryButton
-                            style={{ backgroundColor: colors.error }}
-                            text="delete"
-                            onPress={() => {}}
-                            loading={false}
-                        />
                         <PrimaryButton
                             style={styles.button}
                             text="save"
                             onPress={() => {
                                 setMode('view')
+                                setActiveLine(undefined)
                                 setLines(curr => {
-                                    curr[activeLine].players = selectedPlayers
+                                    curr[activeLine ?? 0].players =
+                                        selectedPlayers
                                     return curr
                                 })
                             }}
@@ -305,24 +305,50 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({
                         <SecondaryButton
                             text="cancel"
                             onPress={async () => {
-                                setActiveLine(undefined)
+                                setMode('view')
+                                setActiveLine(
+                                    lines.length - 1 >= 0 ? 0 : undefined,
+                                )
                             }}
                         />
                     </>
                 )}
             </View>
             <BaseModal
-                visible={modalVisible}
+                visible={addModalVisible}
                 onClose={() => {
-                    setModalVisible(false)
+                    setAddModalVisible(false)
                 }}>
                 <CreateLineModal
-                    lines={lines}
-                    setActiveLine={setActiveLine}
-                    setLines={setLines}
-                    setModalVisible={setModalVisible}
+                    setModalVisible={setAddModalVisible}
+                    onCreate={lineName => {
+                        if (lineName.length === 0) return
+
+                        setLines(curr =>
+                            curr.concat({ name: lineName, players: [] }),
+                        )
+                        setActiveLine(lines.length)
+                    }}
                 />
             </BaseModal>
+
+            <ConfirmModal
+                visible={deleteModalVisible}
+                displayText="Are you sure you want to delete this line?"
+                loading={false}
+                confirmColor={colors.error}
+                onCancel={async () => setDeleteModalVisible(false)}
+                onClose={async () => setDeleteModalVisible(false)}
+                onConfirm={async () => {
+                    setLines(curr => {
+                        return curr.filter(
+                            (line, index) => index !== deletingLine,
+                        )
+                    })
+                    setDeletingLine(undefined)
+                    setDeleteModalVisible(false)
+                }}
+            />
         </SafeAreaView>
     )
 }

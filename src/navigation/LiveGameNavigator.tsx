@@ -36,7 +36,19 @@ const LiveGameNavigator: React.FC<{}> = () => {
                 initialParams={{ gameId: '' }}
                 options={{ headerShown: false }}
             />
-            <Stack.Screen name="LineBuilder" component={LineBuilder} />
+            <Stack.Screen
+                name="LineBuilder"
+                component={LineBuilder}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: colors.primary,
+                    },
+                    headerTintColor: colors.textPrimary,
+                    title: 'Build Lines',
+                    headerBackTitle: 'Back',
+                }}
+            />
         </Stack.Navigator>
     )
 }
