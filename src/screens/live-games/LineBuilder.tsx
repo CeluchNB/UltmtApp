@@ -6,6 +6,7 @@ import { LineBuilderProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import UserInput from '../../components/atoms/UserInput'
+import { nameSort } from '../../utils/player'
 import { useObject } from '../../context/realm'
 import { useSelectPlayers } from '../../hooks/game-edit-actions/use-select-players'
 import { useTheme } from '../../hooks'
@@ -30,6 +31,10 @@ const CreateLineModal: React.FC<CreateLineModalProps> = props => {
 
     const { setModalVisible, onCreate } = props
 
+    const styles = StyleSheet.create({
+        input: { width: 200, marginBottom: 10 },
+    })
+
     return (
         <>
             <Text
@@ -40,6 +45,7 @@ const CreateLineModal: React.FC<CreateLineModalProps> = props => {
                 Name your line
             </Text>
             <UserInput
+                style={styles.input}
                 placeholder="Line name"
                 onChangeText={text => {
                     setLineName(text)
@@ -143,7 +149,7 @@ const EditLineList: React.FC<EditLineListParams> = ({
     )
 }
 
-type LineBuilderState = 'view' | 'edit'
+type LineBuilderState = 'add' | 'view' | 'edit'
 
 export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
     const { gameId, teamId } = route.params
@@ -159,13 +165,12 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
     const [deletingLine, setDeletingLine] = useState<number | undefined>(
         undefined,
     )
-
     const [initialSelectedPlayers, setInitialSelectedPlayers] = useState<
         InGameStatsUser[]
     >([])
     const { selectedPlayers, toggleSelection, clearSelection } =
         useSelectPlayers(initialSelectedPlayers)
-    const [mode, setMode] = useState<LineBuilderState>('view')
+    const [mode, setMode] = useState<LineBuilderState>('add')
 
     const game = useObject<GameSchema>('Game', gameId)
     const players =
@@ -174,13 +179,24 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
             : game?.teamTwoPlayers
 
     const onSelectLine = (item: Line, index: number) => {
-        clearSelection()
         setActiveLine(index)
         setInitialSelectedPlayers(item.players)
-        for (const player of item.players) {
-            toggleSelection(player)
-        }
         setMode('view')
+
+        if (!players) return
+        for (const player of players) {
+            if (
+                selectedPlayers.findIndex(p => p._id === player._id) > -1 &&
+                item.players.findIndex(p => p._id === player._id) === -1
+            ) {
+                toggleSelection(player)
+            } else if (
+                selectedPlayers.findIndex(p => p._id === player._id) === -1 &&
+                item.players.findIndex(p => p._id === player._id) > -1
+            ) {
+                toggleSelection(player)
+            }
+        }
     }
 
     const styles = StyleSheet.create({
@@ -201,6 +217,11 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
         listContainer: {
             flexDirection: 'row',
         },
+        lineContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+        },
         button: {
             marginBottom: 10,
         },
@@ -220,12 +241,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                                 data={lines}
                                 renderItem={({ item, index }) => {
                                     return (
-                                        <View
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                            }}>
+                                        <View style={styles.lineContainer}>
                                             <Button
                                                 mode="text"
                                                 textColor={
@@ -253,13 +269,17 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                                     )
                                 }}
                             />
-                            {mode === 'view' ? (
+                            {mode === 'add' || mode === 'view' ? (
                                 <ViewLineList
-                                    players={lines[activeLine ?? 0].players}
+                                    players={lines[
+                                        activeLine ?? 0
+                                    ]?.players.sort(nameSort)}
                                 />
                             ) : (
                                 <EditLineList
-                                    players={players ?? []}
+                                    players={
+                                        players?.slice().sort(nameSort) ?? []
+                                    }
                                     selectedPlayers={selectedPlayers}
                                     toggleSelection={toggleSelection}
                                 />
@@ -267,17 +287,25 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                         </View>
                     )}
                 </View>
-                {mode === 'view' && activeLine !== undefined && (
-                    <PrimaryButton
-                        style={{ backgroundColor: colors.success }}
-                        text="edit"
-                        onPress={() => {
-                            setMode('edit')
-                        }}
-                        loading={false}
-                    />
-                )}
                 {mode === 'view' && (
+                    <>
+                        <PrimaryButton
+                            style={styles.button}
+                            text="edit"
+                            onPress={() => {
+                                setMode('edit')
+                            }}
+                            loading={false}
+                        />
+                        <SecondaryButton
+                            text="cancel"
+                            onPress={async () => {
+                                setMode('add')
+                            }}
+                        />
+                    </>
+                )}
+                {mode === 'add' && (
                     <SecondaryButton
                         style={styles.button}
                         text="add line"
@@ -292,8 +320,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                             style={styles.button}
                             text="save"
                             onPress={() => {
-                                setMode('view')
-                                setActiveLine(undefined)
+                                setMode('add')
                                 setLines(curr => {
                                     curr[activeLine ?? 0].players =
                                         selectedPlayers
@@ -305,7 +332,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                         <SecondaryButton
                             text="cancel"
                             onPress={async () => {
-                                setMode('view')
+                                setMode('add')
                                 setActiveLine(
                                     lines.length - 1 >= 0 ? 0 : undefined,
                                 )
@@ -324,10 +351,12 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                     onCreate={lineName => {
                         if (lineName.length === 0) return
 
+                        clearSelection()
                         setLines(curr =>
                             curr.concat({ name: lineName, players: [] }),
                         )
                         setActiveLine(lines.length)
+                        setMode('edit')
                     }}
                 />
             </BaseModal>
@@ -340,6 +369,9 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                 onCancel={async () => setDeleteModalVisible(false)}
                 onClose={async () => setDeleteModalVisible(false)}
                 onConfirm={async () => {
+                    setActiveLine(
+                        lines.length - 1 > 0 ? lines.length - 2 : undefined,
+                    )
                     setLines(curr => {
                         return curr.filter(
                             (line, index) => index !== deletingLine,
@@ -347,6 +379,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                     })
                     setDeletingLine(undefined)
                     setDeleteModalVisible(false)
+                    setMode('add')
                 }}
             />
         </SafeAreaView>
