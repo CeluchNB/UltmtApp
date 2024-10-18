@@ -1,5 +1,6 @@
 import { ActionSchema } from '../models'
 import ActionStack from '../utils/action-stack'
+import { DisplayUser } from '../types/user'
 import { LiveGameContext } from './live-game-context'
 import { MutationData } from '../types/mutation'
 import { parseUser } from '../utils/player'
@@ -14,7 +15,6 @@ import { useSetPlayers } from '../hooks/game-edit-actions/use-set-players'
 import { useSwitchPullingTeam } from '../hooks/game-edit-actions/use-switch-pulling-team'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
-import { DisplayUser, InGameStatsUser } from '../types/user'
 import React, {
     createContext,
     useContext,
@@ -187,7 +187,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         await backPointMutation()
     }
 
-    const togglePlayerSelection = (player: InGameStatsUser) => {
+    const togglePlayerSelection = (player: DisplayUser) => {
         resetMutations()
         selectPlayers.toggleSelection(player)
     }

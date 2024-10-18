@@ -1,23 +1,19 @@
 import BaseModal from '../../components/atoms/BaseModal'
 import ConfirmModal from '../../components/molecules/ConfirmModal'
-import { GameSchema } from '../../models'
-import { InGameStatsUser } from '../../types/user'
+import { DisplayUser } from '../../types/user'
+import { Line } from '../../types/game'
 import { LineBuilderProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
 import UserInput from '../../components/atoms/UserInput'
 import { nameSort } from '../../utils/player'
-import { useObject } from '../../context/realm'
 import { useSelectPlayers } from '../../hooks/game-edit-actions/use-select-players'
 import { useTheme } from '../../hooks'
 import { Button, Chip, IconButton } from 'react-native-paper'
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { GameSchema, LineSchema } from '../../models'
 import React, { useState } from 'react'
-
-interface Line {
-    name: string
-    players: InGameStatsUser[]
-}
+import { useObject, useQuery, useRealm } from '../../context/realm'
 
 interface CreateLineModalProps {
     setModalVisible: (value: boolean) => void
@@ -65,7 +61,7 @@ const CreateLineModal: React.FC<CreateLineModalProps> = props => {
 }
 
 interface ViewLineListProps {
-    players: InGameStatsUser[]
+    players: DisplayUser[]
 }
 
 const ViewLineList: React.FC<ViewLineListProps> = ({ players }) => {
@@ -101,9 +97,9 @@ const ViewLineList: React.FC<ViewLineListProps> = ({ players }) => {
 }
 
 interface EditLineListParams {
-    selectedPlayers: InGameStatsUser[]
-    players: InGameStatsUser[]
-    toggleSelection: (player: InGameStatsUser) => void
+    selectedPlayers: DisplayUser[]
+    players: DisplayUser[]
+    toggleSelection: (player: DisplayUser) => void
 }
 
 const EditLineList: React.FC<EditLineListParams> = ({
@@ -166,12 +162,16 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
         undefined,
     )
     const [initialSelectedPlayers, setInitialSelectedPlayers] = useState<
-        InGameStatsUser[]
+        DisplayUser[]
     >([])
     const { selectedPlayers, toggleSelection, clearSelection } =
         useSelectPlayers(initialSelectedPlayers)
     const [mode, setMode] = useState<LineBuilderState>('add')
 
+    const realm = useRealm()
+    const gameLines = useQuery<LineSchema>('Line').filtered(
+        `gameId == '${gameId}'`,
+    )
     const game = useObject<GameSchema>('Game', gameId)
     const players =
         game?.teamOne._id === teamId
@@ -231,14 +231,14 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
         <SafeAreaView style={styles.screen}>
             <View style={styles.pageContainer}>
                 <View style={styles.contentContainer}>
-                    {lines.length === 0 ? (
+                    {gameLines.length === 0 ? (
                         <Text style={styles.noLineWarning}>
                             No lines created yet
                         </Text>
                     ) : (
                         <View style={styles.listContainer}>
                             <FlatList
-                                data={lines}
+                                data={gameLines}
                                 renderItem={({ item, index }) => {
                                     return (
                                         <View style={styles.lineContainer}>
@@ -326,6 +326,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                                         selectedPlayers
                                     return curr
                                 })
+                                gameLines
                             }}
                             loading={false}
                         />
@@ -353,8 +354,23 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
 
                         clearSelection()
                         setLines(curr =>
-                            curr.concat({ name: lineName, players: [] }),
+                            curr.concat({
+                                gameId,
+                                name: lineName,
+                                players: [],
+                            }),
                         )
+                        realm.write(() => {
+                            realm.create(
+                                'Line',
+                                new LineSchema({
+                                    gameId,
+                                    name: lineName,
+                                    players: [],
+                                }),
+                            )
+                        })
+
                         setActiveLine(lines.length)
                         setMode('edit')
                     }}
