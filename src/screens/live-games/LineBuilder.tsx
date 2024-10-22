@@ -154,8 +154,19 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
         theme: { colors, size },
     } = useTheme()
 
-    const [lines, setLines] = useState<Line[]>([])
-    const [activeLine, setActiveLine] = useState<number | undefined>(undefined)
+    const realm = useRealm()
+    const gameLines = useQuery<LineSchema>('Line').filtered(
+        `gameId == '${gameId}'`,
+    )
+    const game = useObject<GameSchema>('Game', gameId)
+    const players =
+        game?.teamOne._id === teamId
+            ? game.teamOnePlayers
+            : game?.teamTwoPlayers
+
+    const [activeLine, setActiveLine] = useState<number | undefined>(
+        gameLines.length > 0 ? 0 : undefined,
+    )
     const [addModalVisible, setAddModalVisible] = useState(false)
     const [deleteModalVisible, setDeleteModalVisible] = useState(false)
     const [deletingLine, setDeletingLine] = useState<number | undefined>(
@@ -167,16 +178,6 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
     const { selectedPlayers, toggleSelection, clearSelection } =
         useSelectPlayers(initialSelectedPlayers)
     const [mode, setMode] = useState<LineBuilderState>('add')
-
-    const realm = useRealm()
-    const gameLines = useQuery<LineSchema>('Line').filtered(
-        `gameId == '${gameId}'`,
-    )
-    const game = useObject<GameSchema>('Game', gameId)
-    const players =
-        game?.teamOne._id === teamId
-            ? game.teamOnePlayers
-            : game?.teamTwoPlayers
 
     const onSelectLine = (item: Line, index: number) => {
         setActiveLine(index)
@@ -197,6 +198,18 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                 toggleSelection(player)
             }
         }
+    }
+
+    const onDelete = async () => {
+        setActiveLine(
+            gameLines.length - 1 > 0 ? gameLines.length - 2 : undefined,
+        )
+        // setLines(curr => {
+        //     return curr.filter((line, index) => index !== deletingLine)
+        // })
+        setDeletingLine(undefined)
+        setDeleteModalVisible(false)
+        setMode('add')
     }
 
     const styles = StyleSheet.create({
@@ -271,9 +284,9 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                             />
                             {mode === 'add' || mode === 'view' ? (
                                 <ViewLineList
-                                    players={lines[
-                                        activeLine ?? 0
-                                    ]?.players.sort(nameSort)}
+                                    players={gameLines[activeLine ?? 0]?.players
+                                        .slice()
+                                        .sort(nameSort)}
                                 />
                             ) : (
                                 <EditLineList
@@ -321,12 +334,15 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                             text="save"
                             onPress={() => {
                                 setMode('add')
-                                setLines(curr => {
-                                    curr[activeLine ?? 0].players =
+                                // setLines(curr => {
+                                //     curr[activeLine ?? 0].players =
+                                //         selectedPlayers
+                                //     return curr
+                                // })
+                                realm.write(() => {
+                                    gameLines[activeLine ?? 0].players =
                                         selectedPlayers
-                                    return curr
                                 })
-                                gameLines
                             }}
                             loading={false}
                         />
@@ -335,7 +351,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                             onPress={async () => {
                                 setMode('add')
                                 setActiveLine(
-                                    lines.length - 1 >= 0 ? 0 : undefined,
+                                    gameLines.length - 1 >= 0 ? 0 : undefined,
                                 )
                             }}
                         />
@@ -353,13 +369,13 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                         if (lineName.length === 0) return
 
                         clearSelection()
-                        setLines(curr =>
-                            curr.concat({
-                                gameId,
-                                name: lineName,
-                                players: [],
-                            }),
-                        )
+                        // setLines(curr =>
+                        //     curr.concat({
+                        //         gameId,
+                        //         name: lineName,
+                        //         players: [],
+                        //     }),
+                        // )
                         realm.write(() => {
                             realm.create(
                                 'Line',
@@ -371,7 +387,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                             )
                         })
 
-                        setActiveLine(lines.length)
+                        setActiveLine(gameLines.length)
                         setMode('edit')
                     }}
                 />
@@ -384,19 +400,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                 confirmColor={colors.error}
                 onCancel={async () => setDeleteModalVisible(false)}
                 onClose={async () => setDeleteModalVisible(false)}
-                onConfirm={async () => {
-                    setActiveLine(
-                        lines.length - 1 > 0 ? lines.length - 2 : undefined,
-                    )
-                    setLines(curr => {
-                        return curr.filter(
-                            (line, index) => index !== deletingLine,
-                        )
-                    })
-                    setDeletingLine(undefined)
-                    setDeleteModalVisible(false)
-                    setMode('add')
-                }}
+                onConfirm={onDelete}
             />
         </SafeAreaView>
     )

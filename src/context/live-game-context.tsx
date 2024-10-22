@@ -4,12 +4,13 @@ import { TeamNumber } from '../types/team'
 import { parseInGameStatsUser } from '../utils/in-game-stats'
 import { useFinishGame } from '../hooks/game-edit-actions/use-finish-game'
 import { useQuery } from './realm'
-import { GameSchema, PointSchema } from '../models'
+import { GameSchema, LineSchema, PointSchema } from '../models'
 import React, { ReactNode, createContext, useMemo, useState } from 'react'
 
 export interface LiveGameContextData {
     game?: GameSchema
     point?: PointSchema
+    lines: LineSchema[]
     team: TeamNumber
     teamId?: string
     players: InGameStatsUser[] | undefined
@@ -64,8 +65,10 @@ const LiveGameProvider = ({
     const teamId = useMemo(() => {
         return team === 'one' ? game?.teamOne._id : game?.teamTwo._id
     }, [team, game])
-    const [tags, setTags] = useState(['huck', 'break', 'layout'])
 
+    const lines = useQuery<LineSchema>('Line').filtered(`gameId == '${gameId}'`)
+
+    const [tags, setTags] = useState(['huck', 'break', 'layout'])
     const addTag = (tag: string) => {
         setTags(curr => [...curr, tag])
     }
@@ -104,6 +107,7 @@ const LiveGameProvider = ({
             value={{
                 game,
                 point,
+                lines: lines?.slice(),
                 team,
                 players,
                 teamId,

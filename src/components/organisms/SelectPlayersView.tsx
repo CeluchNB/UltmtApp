@@ -1,6 +1,7 @@
 import ChangePullingTeamModal from '../molecules/ChangePullingTeamModal'
 import ConfirmModal from '../molecules/ConfirmModal'
 import GuestPlayerModal from '../molecules/GuestPlayerModal'
+import { LineSchema } from '../../models'
 import { LiveGameContext } from '../../context/live-game-context'
 import LivePointUtilityBar from '../molecules/LivePointUtilityBar'
 import { PointEditContext } from '../../context/point-edit-context'
@@ -22,7 +23,8 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const { game, point, team, teamId, players } = useContext(LiveGameContext)
+    const { game, point, lines, team, teamId, players } =
+        useContext(LiveGameContext)
     const {
         selectPlayers,
         setPlayers,
@@ -31,6 +33,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
         setPullingMismatchConfirmVisible,
         switchPullingTeam,
     } = useContext(PointEditContext)
+    const [selectedLines, setSelectedLines] = useState<string[]>([])
     const { selectedPlayers, toggleSelection } = selectPlayers
     const selectedPlayerIds = selectedPlayers.map(player => player._id)
 
@@ -42,6 +45,22 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
             .filter(msg => !!msg)
             .join(' ')
     }, [setPlayers, backPoint])
+
+    const selectLine = (line: LineSchema) => {
+        const lineId = line._id
+        if (!lineId) return
+
+        if (!selectedLines.includes(lineId.toHexString())) {
+            setSelectedLines(curr => [...curr, lineId.toHexString()])
+        } else {
+            setSelectedLines(curr =>
+                curr.filter(id => id !== lineId.toHexString()),
+            )
+        }
+        for (const player of line.players) {
+            toggleSelection(player)
+        }
+    }
 
     const styles = StyleSheet.create({
         flatList: {
@@ -153,6 +172,29 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                                 onAction: () => setGuestModalVisible(true),
                             }}
                             error={error}
+                        />
+                        <FlatList
+                            data={lines}
+                            horizontal={true}
+                            renderItem={({ item }) => {
+                                return (
+                                    <Chip
+                                        selectedColor={
+                                            item._id &&
+                                            selectedLines.includes(
+                                                item._id.toHexString(),
+                                            )
+                                                ? colors.textPrimary
+                                                : colors.gray
+                                        }
+                                        style={styles.chip}
+                                        onPress={() => {
+                                            selectLine(item)
+                                        }}>
+                                        {item.name}
+                                    </Chip>
+                                )
+                            }}
                         />
                         <View style={styles.statsKeyContainer}>
                             <Text style={styles.statsKey}>
