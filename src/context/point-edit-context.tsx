@@ -38,7 +38,7 @@ export interface PointEditContextData {
     setPlayers: MutationData
     nextPoint: MutationData
     backPoint: MutationData
-    selectPlayers: Omit<ReturnType<typeof useSelectPlayers>, 'clearSelection'>
+    selectPlayers: ReturnType<typeof useSelectPlayers>
     pullingMismatchConfirmVisible: boolean
     setPullingMismatchConfirmVisible: (value: boolean) => void
     switchPullingTeam: () => Promise<void>
@@ -52,6 +52,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const {
         point,
         team,
+        players,
         finishGameMutation: { reset: finishGameReset },
     } = useContext(LiveGameContext)
     const realm = useRealm()
@@ -90,7 +91,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         setActionStack(stack)
     }, [realm, point, setActionStack])
 
-    const selectPlayers = useSelectPlayers()
+    const selectPlayers = useSelectPlayers(point?.gameId ?? '', players ?? [])
     const {
         mutateAsync: setPlayersMutation,
         isLoading: setPlayersLoading,
@@ -98,12 +99,15 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         reset: setPlayersReset,
     } = useSetPlayers(
         point?._id ?? '',
-        selectPlayers.selectedPlayers.sort((a, b) =>
-            sortAlphabetically(
-                `${a.firstName} ${a.lastName}`,
-                `${b.firstName} ${b.lastName}`,
+        Object.values(selectPlayers.playerOptions) // TODO-SELECT: Simplify
+            .filter(p => p.selected)
+            .map(p => p.player)
+            .sort((a, b) =>
+                sortAlphabetically(
+                    `${a.firstName} ${a.lastName}`,
+                    `${b.firstName} ${b.lastName}`,
+                ),
             ),
-        ),
         () => setPullingMismatchConfirmVisible(true),
     )
     const { mutateAsync: switchPullingTeam } = useSwitchPullingTeam()
@@ -192,6 +196,16 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         selectPlayers.toggleSelection(player)
     }
 
+    const clearPlayerSelection = () => {
+        resetMutations()
+        selectPlayers.clearSelection()
+    }
+
+    const selectPlayerLine = (lineId: string) => {
+        resetMutations()
+        selectPlayers.selectLine(lineId)
+    }
+
     const resetMutations = () => {
         setPlayersReset()
         nextPointReset()
@@ -224,8 +238,11 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                     isLoading: backPointLoading,
                 },
                 selectPlayers: {
-                    selectedPlayers: selectPlayers.selectedPlayers,
+                    lines: selectPlayers.lines,
+                    playerOptions: selectPlayers.playerOptions,
+                    selectLine: selectPlayerLine,
                     toggleSelection: togglePlayerSelection,
+                    clearSelection: clearPlayerSelection,
                 },
                 pullingMismatchConfirmVisible,
                 setPullingMismatchConfirmVisible,

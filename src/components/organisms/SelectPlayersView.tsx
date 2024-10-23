@@ -23,8 +23,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const { game, point, lines, team, teamId, players } =
-        useContext(LiveGameContext)
+    const { game, point, team, teamId } = useContext(LiveGameContext)
     const {
         selectPlayers,
         setPlayers,
@@ -34,8 +33,13 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
         switchPullingTeam,
     } = useContext(PointEditContext)
     const [selectedLines, setSelectedLines] = useState<string[]>([])
-    const { selectedPlayers, toggleSelection } = selectPlayers
-    const selectedPlayerIds = selectedPlayers.map(player => player._id)
+    const {
+        playerOptions,
+        lines,
+        toggleSelection,
+        selectLine,
+        clearSelection,
+    } = selectPlayers
 
     const [guestModalVisible, setGuestModalVisible] = useState(false)
     const [pullingModalVisible, setPullingModalVisible] = useState(false)
@@ -46,7 +50,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
             .join(' ')
     }, [setPlayers, backPoint])
 
-    const selectLine = (line: LineSchema) => {
+    const onSelectLine = (line: LineSchema) => {
         const lineId = line._id
         if (!lineId) return
 
@@ -57,9 +61,8 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                 curr.filter(id => id !== lineId.toHexString()),
             )
         }
-        for (const player of line.players) {
-            toggleSelection(player)
-        }
+
+        selectLine(line._id?.toHexString() ?? '')
     }
 
     const styles = StyleSheet.create({
@@ -115,7 +118,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
             <FlatList
                 ListHeaderComponentStyle={styles.headerFooterContainer}
                 ListFooterComponentStyle={styles.headerFooterContainer}
-                data={players}
+                data={Object.values(playerOptions)}
                 testID="players-flat-list"
                 style={styles.flatList}
                 ListHeaderComponent={
@@ -189,7 +192,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                                         }
                                         style={styles.chip}
                                         onPress={() => {
-                                            selectLine(item)
+                                            onSelectLine(item)
                                         }}>
                                         {item.name}
                                     </Chip>
@@ -214,23 +217,23 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                     </View>
                 }
                 renderItem={({ item }) => {
+                    const { player, selected } = item
                     return (
                         <Chip
                             style={styles.chip}
                             mode="outlined"
                             onPress={() => {
-                                toggleSelection(item)
+                                toggleSelection(player)
                             }}
                             selectedColor={
-                                selectedPlayerIds.includes(item._id)
-                                    ? colors.textPrimary
-                                    : colors.gray
+                                selected ? colors.textPrimary : colors.gray
                             }
                             ellipsizeMode="tail">
-                            {item.firstName} {item.lastName}{' '}
+                            {player.firstName} {player.lastName}{' '}
                             <Text style={{ color: colors.textPrimary }}>
-                                ({item.pointsPlayed} - {item.assists} -{' '}
-                                {item.goals} - {item.blocks} - {item.turnovers})
+                                ({player.pointsPlayed} - {player.assists} -{' '}
+                                {player.goals} - {player.blocks} -{' '}
+                                {player.turnovers})
                             </Text>
                         </Chip>
                     )

@@ -1,7 +1,5 @@
 import BaseModal from '../../components/atoms/BaseModal'
 import ConfirmModal from '../../components/molecules/ConfirmModal'
-import { DisplayUser } from '../../types/user'
-import { Line } from '../../types/game'
 import { LineBuilderProps } from '../../types/navigation'
 import PrimaryButton from '../../components/atoms/PrimaryButton'
 import SecondaryButton from '../../components/atoms/SecondaryButton'
@@ -10,6 +8,7 @@ import { nameSort } from '../../utils/player'
 import { useSelectPlayers } from '../../hooks/game-edit-actions/use-select-players'
 import { useTheme } from '../../hooks'
 import { Button, Chip, IconButton } from 'react-native-paper'
+import { DisplayUser, InGameStatsUser } from '../../types/user'
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { GameSchema, LineSchema } from '../../models'
 import React, { useState } from 'react'
@@ -97,23 +96,17 @@ const ViewLineList: React.FC<ViewLineListProps> = ({ players }) => {
 }
 
 interface EditLineListParams {
-    selectedPlayers: DisplayUser[]
-    players: DisplayUser[]
+    players: { player: InGameStatsUser; selected: boolean }[]
     toggleSelection: (player: DisplayUser) => void
 }
 
 const EditLineList: React.FC<EditLineListParams> = ({
-    selectedPlayers,
     toggleSelection,
     players,
 }) => {
     const {
         theme: { colors },
     } = useTheme()
-
-    const isPlayerSelected = (playerId: string) => {
-        return selectedPlayers.find(p => p._id === playerId)
-    }
 
     const styles = StyleSheet.create({
         chip: {
@@ -132,12 +125,10 @@ const EditLineList: React.FC<EditLineListParams> = ({
                     <Chip
                         style={styles.chip}
                         selectedColor={
-                            isPlayerSelected(item._id)
-                                ? colors.textPrimary
-                                : colors.gray
+                            item.selected ? colors.textPrimary : colors.gray
                         }
-                        onPress={() => toggleSelection(item)}>
-                        {item.firstName} {item.lastName}
+                        onPress={() => toggleSelection(item.player)}>
+                        {item.player.firstName} {item.player.lastName}
                     </Chip>
                 )
             }}
@@ -164,49 +155,35 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
             ? game.teamOnePlayers
             : game?.teamTwoPlayers
 
-    const [activeLine, setActiveLine] = useState<number | undefined>(
-        gameLines.length > 0 ? 0 : undefined,
+    const [mode, setMode] = useState<LineBuilderState>('add')
+    const [activeLine, setActiveLine] = useState<LineSchema | undefined>(
+        gameLines.at(0),
     )
     const [addModalVisible, setAddModalVisible] = useState(false)
     const [deleteModalVisible, setDeleteModalVisible] = useState(false)
-    const [deletingLine, setDeletingLine] = useState<number | undefined>(
+    const [deletingLine, setDeletingLine] = useState<string | undefined>(
         undefined,
     )
-    const [initialSelectedPlayers, setInitialSelectedPlayers] = useState<
-        DisplayUser[]
-    >([])
-    const { selectedPlayers, toggleSelection, clearSelection } =
-        useSelectPlayers(initialSelectedPlayers)
-    const [mode, setMode] = useState<LineBuilderState>('add')
 
-    const onSelectLine = (item: Line, index: number) => {
-        setActiveLine(index)
-        setInitialSelectedPlayers(item.players)
+    const { playerOptions, toggleSelection, clearSelection, selectLine } =
+        useSelectPlayers(gameId, players ?? [])
+
+    const onSelectLine = (line: LineSchema) => {
+        setActiveLine(line)
         setMode('view')
-
-        if (!players) return
-        for (const player of players) {
-            if (
-                selectedPlayers.findIndex(p => p._id === player._id) > -1 &&
-                item.players.findIndex(p => p._id === player._id) === -1
-            ) {
-                toggleSelection(player)
-            } else if (
-                selectedPlayers.findIndex(p => p._id === player._id) === -1 &&
-                item.players.findIndex(p => p._id === player._id) > -1
-            ) {
-                toggleSelection(player)
-            }
-        }
+        clearSelection()
+        selectLine(line._id?.toHexString() ?? '')
     }
 
     const onDelete = async () => {
-        setActiveLine(
-            gameLines.length - 1 > 0 ? gameLines.length - 2 : undefined,
-        )
-        // setLines(curr => {
-        //     return curr.filter((line, index) => index !== deletingLine)
-        // })
+        setActiveLine(gameLines.at(0))
+        realm.write(() => {
+            realm.delete(
+                gameLines.find(
+                    line => line._id?.toHexString() === deletingLine,
+                ),
+            )
+        })
         setDeletingLine(undefined)
         setDeleteModalVisible(false)
         setMode('add')
@@ -252,19 +229,20 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                         <View style={styles.listContainer}>
                             <FlatList
                                 data={gameLines}
-                                renderItem={({ item, index }) => {
+                                renderItem={({ item }) => {
                                     return (
                                         <View style={styles.lineContainer}>
                                             <Button
                                                 mode="text"
                                                 textColor={
-                                                    activeLine === index
+                                                    activeLine?._id?.toHexString() ===
+                                                    item._id?.toHexString()
                                                         ? colors.textPrimary
                                                         : colors.gray
                                                 }
                                                 rippleColor={`${colors.textPrimary}44`}
                                                 onPress={() =>
-                                                    onSelectLine(item, index)
+                                                    onSelectLine(item)
                                                 }>
                                                 {item.name} (
                                                 {item.players.length})
@@ -274,7 +252,9 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                                                 iconColor={colors.error}
                                                 onPress={() => {
                                                     // open delete modal
-                                                    setDeletingLine(index)
+                                                    setDeletingLine(
+                                                        item._id?.toHexString(),
+                                                    )
                                                     setDeleteModalVisible(true)
                                                 }}
                                             />
@@ -284,16 +264,15 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                             />
                             {mode === 'add' || mode === 'view' ? (
                                 <ViewLineList
-                                    players={gameLines[activeLine ?? 0]?.players
-                                        .slice()
-                                        .sort(nameSort)}
+                                    players={
+                                        activeLine?.players
+                                            ?.slice()
+                                            .sort(nameSort) ?? []
+                                    }
                                 />
                             ) : (
                                 <EditLineList
-                                    players={
-                                        players?.slice().sort(nameSort) ?? []
-                                    }
-                                    selectedPlayers={selectedPlayers}
+                                    players={Object.values(playerOptions)}
                                     toggleSelection={toggleSelection}
                                 />
                             )}
@@ -334,14 +313,16 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                             text="save"
                             onPress={() => {
                                 setMode('add')
-                                // setLines(curr => {
-                                //     curr[activeLine ?? 0].players =
-                                //         selectedPlayers
-                                //     return curr
-                                // })
                                 realm.write(() => {
-                                    gameLines[activeLine ?? 0].players =
-                                        selectedPlayers
+                                    const line = gameLines.find(
+                                        gl =>
+                                            gl._id?.toHexString() ===
+                                            activeLine,
+                                    )
+                                    if (!line) return
+                                    line.players = Object.values(playerOptions)
+                                        .filter(p => p.selected)
+                                        .map(p => p.player) // TODO-SELECT: THIS IS THE MAIN BROKEN PART
                                 })
                             }}
                             loading={false}
@@ -351,7 +332,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                             onPress={async () => {
                                 setMode('add')
                                 setActiveLine(
-                                    gameLines.length - 1 >= 0 ? 0 : undefined,
+                                    gameLines.at(gameLines.length - 1),
                                 )
                             }}
                         />
@@ -369,13 +350,6 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                         if (lineName.length === 0) return
 
                         clearSelection()
-                        // setLines(curr =>
-                        //     curr.concat({
-                        //         gameId,
-                        //         name: lineName,
-                        //         players: [],
-                        //     }),
-                        // )
                         realm.write(() => {
                             realm.create(
                                 'Line',
@@ -386,13 +360,11 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                                 }),
                             )
                         })
-
-                        setActiveLine(gameLines.length)
+                        setActiveLine(gameLines.at(gameLines.length - 1))
                         setMode('edit')
                     }}
                 />
             </BaseModal>
-
             <ConfirmModal
                 visible={deleteModalVisible}
                 displayText="Are you sure you want to delete this line?"

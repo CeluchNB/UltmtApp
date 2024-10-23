@@ -1,28 +1,57 @@
-import { DisplayUser } from '../../types/user'
+import { LineSchema } from '@ultmt-app/models'
+import { useQuery } from '@ultmt-app/context/realm'
 import { useState } from 'react'
+import { DisplayUser, InGameStatsUser } from '../../types/user'
+
+const mapPlayers = (
+    players: InGameStatsUser[],
+    selected: (player: InGameStatsUser) => boolean,
+) => {
+    const map: { [x: string]: { player: InGameStatsUser; selected: boolean } } =
+        {}
+    for (const player of players) {
+        map[player._id] = { player, selected: selected(player) }
+    }
+    return map
+}
 
 export const useSelectPlayers = (
-    initialSelectedPlayers: DisplayUser[] = [],
+    gameId: string,
+    players: InGameStatsUser[],
 ) => {
-    const [selectedPlayers, setSelectedPlayers] = useState<DisplayUser[]>(
-        initialSelectedPlayers,
-    )
+    const lines = useQuery<LineSchema>('Line').filtered(`gameId == '${gameId}'`)
+
+    const [playerOptions, setPlayerOptions] = useState<{
+        [x: string]: { player: InGameStatsUser; selected: boolean }
+    }>(mapPlayers(players, () => false))
 
     const toggleSelection = (player: DisplayUser) => {
-        if (selectedPlayers.map(p => p._id).includes(player._id)) {
-            setSelectedPlayers(prev => {
-                return prev.filter(s => s._id !== player._id)
-            })
-        } else {
-            setSelectedPlayers(prev => {
-                return [player, ...prev]
-            })
-        }
+        setPlayerOptions(curr => ({
+            ...curr,
+            [player._id]: {
+                ...curr[player._id],
+                selected: !curr[player._id].selected,
+            },
+        }))
+    }
+
+    const selectLine = (lineId: string) => {
+        const line = lines.find(l => l._id?.toHexString() === lineId)
+        if (!line) return
+
+        setPlayerOptions(
+            mapPlayers(
+                players,
+                player =>
+                    line.players.findIndex(p => p._id === player._id) > -1 ||
+                    playerOptions[player._id].selected,
+            ),
+        )
     }
 
     const clearSelection = () => {
-        setSelectedPlayers([])
+        setPlayerOptions(mapPlayers(players, () => false))
     }
 
-    return { selectedPlayers, toggleSelection, clearSelection }
+    return { lines, playerOptions, selectLine, toggleSelection, clearSelection }
 }
