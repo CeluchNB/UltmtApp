@@ -59,12 +59,10 @@ export const useLiveGameWizard = (
 
     const nextDisabled = useMemo(() => {
         if (state === LiveGameWizardState.SET_PLAYERS) {
-            return (
-                Object.values(selectPlayers.playerOptions).filter(
-                    // TODO-SELECT: Simplify
-                    p => p.selected,
-                ).length !== game?.playersPerPoint
-            )
+            const selectedPlayers = Object.values(
+                selectPlayers.playerOptions,
+            ).filter(p => p.selected)
+            return selectedPlayers.length !== game?.playersPerPoint
         } else if (state === LiveGameWizardState.LOG_ACTIONS) {
             const lastAction = myTeamActions[myTeamActions.length - 1]
             return (

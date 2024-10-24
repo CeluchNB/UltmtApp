@@ -97,18 +97,8 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         isLoading: setPlayersLoading,
         error: setPlayersError,
         reset: setPlayersReset,
-    } = useSetPlayers(
-        point?._id ?? '',
-        Object.values(selectPlayers.playerOptions) // TODO-SELECT: Simplify
-            .filter(p => p.selected)
-            .map(p => p.player)
-            .sort((a, b) =>
-                sortAlphabetically(
-                    `${a.firstName} ${a.lastName}`,
-                    `${b.firstName} ${b.lastName}`,
-                ),
-            ),
-        () => setPullingMismatchConfirmVisible(true),
+    } = useSetPlayers(point?._id ?? '', () =>
+        setPullingMismatchConfirmVisible(true),
     )
     const { mutateAsync: switchPullingTeam } = useSwitchPullingTeam()
 
@@ -172,7 +162,16 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
 
     const setPlayers = async () => {
         resetMutations()
-        await setPlayersMutation()
+        const selectedPlayers = Object.values(selectPlayers.playerOptions)
+            .filter(p => p.selected)
+            .map(p => p.player)
+            .sort((a, b) =>
+                sortAlphabetically(
+                    `${a.firstName} ${a.lastName}`,
+                    `${b.firstName} ${b.lastName}`,
+                ),
+            )
+        await setPlayersMutation(selectedPlayers)
         selectPlayers.clearSelection()
     }
 
@@ -201,9 +200,9 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         selectPlayers.clearSelection()
     }
 
-    const selectPlayerLine = (lineId: string) => {
+    const togglePlayerLine = (lineId: string) => {
         resetMutations()
-        selectPlayers.selectLine(lineId)
+        selectPlayers.toggleLine(lineId)
     }
 
     const resetMutations = () => {
@@ -240,7 +239,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                 selectPlayers: {
                     lines: selectPlayers.lines,
                     playerOptions: selectPlayers.playerOptions,
-                    selectLine: selectPlayerLine,
+                    toggleLine: togglePlayerLine,
                     toggleSelection: togglePlayerSelection,
                     clearSelection: clearPlayerSelection,
                 },

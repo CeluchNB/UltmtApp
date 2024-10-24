@@ -37,7 +37,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
         playerOptions,
         lines,
         toggleSelection,
-        selectLine,
+        toggleLine,
         clearSelection,
     } = selectPlayers
 
@@ -62,7 +62,8 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
             )
         }
 
-        selectLine(line._id?.toHexString() ?? '')
+        clearSelection()
+        toggleLine(line._id?.toHexString() ?? '')
     }
 
     const styles = StyleSheet.create({

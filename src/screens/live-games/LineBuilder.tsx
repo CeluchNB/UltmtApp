@@ -165,14 +165,30 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
         undefined,
     )
 
-    const { playerOptions, toggleSelection, clearSelection, selectLine } =
+    const { playerOptions, toggleSelection, clearSelection, toggleLine } =
         useSelectPlayers(gameId, players ?? [])
 
     const onSelectLine = (line: LineSchema) => {
         setActiveLine(line)
         setMode('view')
         clearSelection()
-        selectLine(line._id?.toHexString() ?? '')
+        toggleLine(line._id?.toHexString() ?? '')
+    }
+
+    const onSave = () => {
+        const line = gameLines.find(
+            gl => gl._id?.toHexString() === activeLine?._id?.toHexString(),
+        )
+        if (!line) return
+
+        setMode('add')
+        realm.write(() => {
+            const newPlayers = Object.values(playerOptions)
+                .filter(p => p.selected)
+                .map(p => p.player)
+
+            line.players = newPlayers
+        })
     }
 
     const onDelete = async () => {
@@ -272,7 +288,10 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                                 />
                             ) : (
                                 <EditLineList
-                                    players={Object.values(playerOptions)}
+                                    players={Object.values(playerOptions).sort(
+                                        (p1, p2) =>
+                                            nameSort(p1.player, p2.player),
+                                    )}
                                     toggleSelection={toggleSelection}
                                 />
                             )}
@@ -311,20 +330,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                         <PrimaryButton
                             style={styles.button}
                             text="save"
-                            onPress={() => {
-                                setMode('add')
-                                realm.write(() => {
-                                    const line = gameLines.find(
-                                        gl =>
-                                            gl._id?.toHexString() ===
-                                            activeLine,
-                                    )
-                                    if (!line) return
-                                    line.players = Object.values(playerOptions)
-                                        .filter(p => p.selected)
-                                        .map(p => p.player) // TODO-SELECT: THIS IS THE MAIN BROKEN PART
-                                })
-                            }}
+                            onPress={onSave}
                             loading={false}
                         />
                         <SecondaryButton
