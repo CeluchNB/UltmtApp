@@ -60,6 +60,7 @@ export const useSelectPlayers = (
         // in all cases above, duplicate players are selected
         // if a line is deselected, players on this line that are not on any other selected lines are deselected
         const lineOption = lineOptions[lineId]
+        if (!lineOption) return
 
         const lineSelectedPlayers: DisplayUser[] = Object.values(lineOptions)
             .filter(o => o.selected && o.line._id?.toHexString() !== lineId)
@@ -131,11 +132,16 @@ export const useSelectPlayers = (
         setPlayerOptions(mapPlayers(players, () => false))
     }
 
+    const refreshLines = () => {
+        setLineOptions(mapLines(lines.slice(), () => false))
+    }
+
     return {
         lineOptions,
         playerOptions,
         toggleLine,
         toggleSelection,
         clearSelection,
+        refreshLines,
     }
 }

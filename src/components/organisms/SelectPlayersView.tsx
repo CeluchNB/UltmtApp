@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
 import { Chip, IconButton, Tooltip } from 'react-native-paper'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 
 interface SelectPlayersViewProps {
     onNavigate: () => void
@@ -39,10 +39,18 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
         toggleSelection,
         toggleLine,
         clearSelection,
+        refreshLines,
     } = selectPlayers
 
     const [guestModalVisible, setGuestModalVisible] = useState(false)
     const [pullingModalVisible, setPullingModalVisible] = useState(false)
+
+    useEffect(() => {
+        navigation.addListener('focus', () => {
+            refreshLines()
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const error = useMemo(() => {
         return [setPlayers.error, backPoint.error]

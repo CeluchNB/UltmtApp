@@ -242,6 +242,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                     toggleLine: togglePlayerLine,
                     toggleSelection: togglePlayerSelection,
                     clearSelection: clearPlayerSelection,
+                    refreshLines: selectPlayers.refreshLines,
                 },
                 pullingMismatchConfirmVisible,
                 setPullingMismatchConfirmVisible,

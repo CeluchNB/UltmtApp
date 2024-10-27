@@ -1,3 +1,4 @@
+import { BSON } from 'realm'
 import BaseModal from '../../components/atoms/BaseModal'
 import ConfirmModal from '../../components/molecules/ConfirmModal'
 import { LineBuilderProps } from '../../types/navigation'
@@ -11,7 +12,7 @@ import { Button, Chip, IconButton } from 'react-native-paper'
 import { DisplayUser, InGameStatsUser } from '../../types/user'
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { GameSchema, LineSchema } from '../../models'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useObject, useQuery, useRealm } from '../../context/realm'
 
 interface CreateLineModalProps {
@@ -146,14 +147,24 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
     } = useTheme()
 
     const realm = useRealm()
-    const gameLines = useQuery<LineSchema>('Line').filtered(
-        `gameId == '${gameId}'`,
-    )
     const game = useObject<GameSchema>('Game', gameId)
     const players =
         game?.teamOne._id === teamId
             ? game.teamOnePlayers
             : game?.teamTwoPlayers
+
+    const { playerOptions, toggleSelection, clearSelection, toggleLine } =
+        useSelectPlayers(gameId, players ?? [])
+
+    const realmLines = useQuery<LineSchema>('Line').filtered(
+        `gameId == '${gameId}'`,
+    )
+    const gameLines = useMemo(() => {
+        return realmLines.map(line => ({
+            ...new LineSchema(line),
+            _id: line._id,
+        }))
+    }, [realmLines])
 
     const [mode, setMode] = useState<LineBuilderState>('add')
     const [activeLine, setActiveLine] = useState<LineSchema | undefined>(
@@ -161,12 +172,9 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
     )
     const [addModalVisible, setAddModalVisible] = useState(false)
     const [deleteModalVisible, setDeleteModalVisible] = useState(false)
-    const [deletingLine, setDeletingLine] = useState<string | undefined>(
+    const [deletingLine, setDeletingLine] = useState<BSON.ObjectId | undefined>(
         undefined,
     )
-
-    const { playerOptions, toggleSelection, clearSelection, toggleLine } =
-        useSelectPlayers(gameId, players ?? [])
 
     const onSelectLine = (line: LineSchema) => {
         setActiveLine(line)
@@ -176,8 +184,9 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
     }
 
     const onSave = () => {
-        const line = gameLines.find(
-            gl => gl._id?.toHexString() === activeLine?._id?.toHexString(),
+        const line = realm.objectForPrimaryKey<LineSchema>(
+            'Line',
+            activeLine?._id,
         )
         if (!line) return
 
@@ -192,13 +201,12 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
     }
 
     const onDelete = async () => {
-        setActiveLine(gameLines.at(0))
+        const line = realm.objectForPrimaryKey<LineSchema>('Line', deletingLine)
+        if (!line) return
+
+        setActiveLine(gameLines.length > 0 ? gameLines.at(0) : undefined)
         realm.write(() => {
-            realm.delete(
-                gameLines.find(
-                    line => line._id?.toHexString() === deletingLine,
-                ),
-            )
+            realm.delete(line)
         })
         setDeletingLine(undefined)
         setDeleteModalVisible(false)
@@ -268,9 +276,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                                                 iconColor={colors.error}
                                                 onPress={() => {
                                                     // open delete modal
-                                                    setDeletingLine(
-                                                        item._id?.toHexString(),
-                                                    )
+                                                    setDeletingLine(item._id)
                                                     setDeleteModalVisible(true)
                                                 }}
                                             />
@@ -355,18 +361,16 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                     onCreate={lineName => {
                         if (lineName.length === 0) return
 
+                        const line = new LineSchema({
+                            gameId,
+                            name: lineName,
+                            players: [],
+                        })
                         clearSelection()
                         realm.write(() => {
-                            realm.create(
-                                'Line',
-                                new LineSchema({
-                                    gameId,
-                                    name: lineName,
-                                    players: [],
-                                }),
-                            )
+                            realm.create('Line', line)
                         })
-                        setActiveLine(gameLines.at(gameLines.length - 1))
+                        setActiveLine(line)
                         setMode('edit')
                     }}
                 />
