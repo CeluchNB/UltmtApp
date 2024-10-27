@@ -59,10 +59,55 @@ export const useSelectPlayers = (
         // if a second line is selected, the line players are added
         // in all cases above, duplicate players are selected
         // if a line is deselected, players on this line that are not on any other selected lines are deselected
+        const lineOption = lineOptions[lineId]
 
-        // other
+        const lineSelectedPlayers: DisplayUser[] = Object.values(lineOptions)
+            .filter(o => o.selected && o.line._id?.toHexString() !== lineId)
+            .reduce<DisplayUser[]>((current, next) => {
+                return [...current, ...next.line.players]
+            }, [])
 
-        const line = lineOptions[lineId]
+        const selected = (player: InGameStatsUser) => {
+            if (lineOption.selected) {
+                // if we are deselecting the line
+                if (
+                    lineOption.line.players.findIndex(
+                        p => p._id === player._id,
+                    ) > -1
+                ) {
+                    // if player is on the line
+                    if (
+                        lineSelectedPlayers.findIndex(
+                            p => p._id === player._id,
+                        ) > -1
+                    ) {
+                        // if player is on any other selected lines
+                        return playerOptions[player._id].selected
+                    } else {
+                        // if player is not on any other selected lines
+                        return false
+                    }
+                } else {
+                    // if player is not on the line
+                    // then retain current selection
+                    return playerOptions[player._id].selected
+                }
+            } else {
+                // if we are selecting the line
+                // any player on the line is selected
+                if (
+                    lineOption.line.players.findIndex(
+                        p => p._id === player._id,
+                    ) > -1
+                ) {
+                    return true
+                } else {
+                    return playerOptions[player._id].selected
+                }
+            }
+        }
+
+        setPlayerOptions(mapPlayers(players, selected))
 
         setLineOptions(curr =>
             mapLines(
@@ -80,15 +125,6 @@ export const useSelectPlayers = (
                 },
             ),
         )
-
-        const selected = (player: InGameStatsUser) => {
-            return (
-                line.line.players.findIndex(p => p._id === player._id) > -1 ||
-                playerOptions[player._id].selected
-            )
-        }
-
-        setPlayerOptions(mapPlayers(players, selected))
     }
 
     const clearSelection = () => {
@@ -96,7 +132,7 @@ export const useSelectPlayers = (
     }
 
     return {
-        lines,
+        lineOptions,
         playerOptions,
         toggleLine,
         toggleSelection,

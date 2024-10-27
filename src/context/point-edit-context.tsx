@@ -237,7 +237,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                     isLoading: backPointLoading,
                 },
                 selectPlayers: {
-                    lines: selectPlayers.lines,
+                    lineOptions: selectPlayers.lineOptions,
                     playerOptions: selectPlayers.playerOptions,
                     toggleLine: togglePlayerLine,
                     toggleSelection: togglePlayerSelection,

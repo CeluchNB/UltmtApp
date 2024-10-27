@@ -32,10 +32,10 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
         setPullingMismatchConfirmVisible,
         switchPullingTeam,
     } = useContext(PointEditContext)
-    const [selectedLines, setSelectedLines] = useState<string[]>([])
+
     const {
         playerOptions,
-        lines,
+        lineOptions,
         toggleSelection,
         toggleLine,
         clearSelection,
@@ -53,14 +53,6 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
     const onSelectLine = (line: LineSchema) => {
         const lineId = line._id
         if (!lineId) return
-
-        if (!selectedLines.includes(lineId.toHexString())) {
-            setSelectedLines(curr => [...curr, lineId.toHexString()])
-        } else {
-            setSelectedLines(curr =>
-                curr.filter(id => id !== lineId.toHexString()),
-            )
-        }
 
         clearSelection()
         toggleLine(line._id?.toHexString() ?? '')
@@ -178,24 +170,21 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                             error={error}
                         />
                         <FlatList
-                            data={lines}
+                            data={Object.values(lineOptions)}
                             horizontal={true}
                             renderItem={({ item }) => {
                                 return (
                                     <Chip
                                         selectedColor={
-                                            item._id &&
-                                            selectedLines.includes(
-                                                item._id.toHexString(),
-                                            )
+                                            item.selected
                                                 ? colors.textPrimary
                                                 : colors.gray
                                         }
                                         style={styles.chip}
                                         onPress={() => {
-                                            onSelectLine(item)
+                                            onSelectLine(item.line)
                                         }}>
-                                        {item.name}
+                                        {item.line.name}
                                     </Chip>
                                 )
                             }}
