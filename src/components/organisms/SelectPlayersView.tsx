@@ -151,6 +151,8 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                             }}
                             lineBuilderButton={{
                                 onPress: () => {
+                                    clearSelection()
+                                    refreshLines()
                                     navigation.navigate('LiveGame', {
                                         screen: 'LineBuilder',
                                         params: {

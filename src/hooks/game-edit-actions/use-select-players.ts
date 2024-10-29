@@ -33,10 +33,15 @@ export const useSelectPlayers = (
     gameId: string,
     players: InGameStatsUser[],
 ) => {
-    const lines = useQuery<LineSchema>('Line').filtered(`gameId == '${gameId}'`)
+    const realmLines = useQuery<LineSchema>('Line').filtered(
+        `gameId == '${gameId}'`,
+    )
 
     const [lineOptions, setLineOptions] = useState(
-        mapLines(lines.slice(), () => false),
+        mapLines(
+            realmLines.map(l => ({ ...new LineSchema(l), _id: l._id })),
+            () => false,
+        ),
     )
 
     const [playerOptions, setPlayerOptions] = useState<{
@@ -133,7 +138,12 @@ export const useSelectPlayers = (
     }
 
     const refreshLines = () => {
-        setLineOptions(mapLines(lines.slice(), () => false))
+        setLineOptions(
+            mapLines(
+                realmLines.map(l => ({ ...new LineSchema(l), _id: l._id })),
+                () => false,
+            ),
+        )
     }
 
     return {
