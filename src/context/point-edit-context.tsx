@@ -173,6 +173,7 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
             )
         await setPlayersMutation(selectedPlayers)
         selectPlayers.clearSelection()
+        selectPlayers.refreshLines()
     }
 
     const nextPoint = async () => {

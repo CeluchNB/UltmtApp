@@ -1,7 +1,7 @@
 import { LineSchema } from '@ultmt-app/models'
 import { useQuery } from '@ultmt-app/context/realm'
-import { useState } from 'react'
 import { DisplayUser, InGameStatsUser } from '../../types/user'
+import { useEffect, useState } from 'react'
 
 const mapPlayers = (
     players: InGameStatsUser[],
@@ -43,11 +43,15 @@ export const useSelectPlayers = (
             () => false,
         ),
     )
-    console.log('line options', lineOptions)
 
     const [playerOptions, setPlayerOptions] = useState<{
         [x: string]: { player: InGameStatsUser; selected: boolean }
     }>(mapPlayers(players, () => false))
+
+    useEffect(() => {
+        setPlayerOptions(mapPlayers(players, () => false))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(players)]) // TODO: can this be more efficient? Is it good for very large team?
 
     const toggleSelection = (player: DisplayUser) => {
         setPlayerOptions(curr => ({
