@@ -43,6 +43,7 @@ export const useSelectPlayers = (
             () => false,
         ),
     )
+    console.log('line options', lineOptions)
 
     const [playerOptions, setPlayerOptions] = useState<{
         [x: string]: { player: InGameStatsUser; selected: boolean }
