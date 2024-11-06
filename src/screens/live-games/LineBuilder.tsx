@@ -279,6 +279,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                                                     setDeletingLine(item._id)
                                                     setDeleteModalVisible(true)
                                                 }}
+                                                testID="delete-button"
                                             />
                                         </View>
                                     )
