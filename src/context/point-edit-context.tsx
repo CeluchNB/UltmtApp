@@ -1,6 +1,5 @@
 import { ActionSchema } from '../models'
 import ActionStack from '../utils/action-stack'
-import { DisplayUser } from '../types/user'
 import { LiveGameContext } from './live-game-context'
 import { MutationData } from '../types/mutation'
 import { parseUser } from '../utils/player'
@@ -15,6 +14,7 @@ import { useSetPlayers } from '../hooks/game-edit-actions/use-set-players'
 import { useSwitchPullingTeam } from '../hooks/game-edit-actions/use-switch-pulling-team'
 import { Action, ActionType, LiveServerActionData } from '../types/action'
 import { DebouncedFunc, debounce } from 'lodash'
+import { DisplayUser, InGameStatsUser } from '../types/user'
 import React, {
     createContext,
     useContext,
@@ -38,7 +38,7 @@ export interface PointEditContextData {
     setPlayers: MutationData
     nextPoint: MutationData
     backPoint: MutationData
-    selectPlayers: ReturnType<typeof useSelectPlayers>
+    selectPlayers: Omit<ReturnType<typeof useSelectPlayers>, 'clearSelection'>
     pullingMismatchConfirmVisible: boolean
     setPullingMismatchConfirmVisible: (value: boolean) => void
     switchPullingTeam: () => Promise<void>
@@ -52,7 +52,6 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
     const {
         point,
         team,
-        players,
         finishGameMutation: { reset: finishGameReset },
     } = useContext(LiveGameContext)
     const realm = useRealm()
@@ -91,14 +90,21 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         setActionStack(stack)
     }, [realm, point, setActionStack])
 
-    const selectPlayers = useSelectPlayers(point?.gameId ?? '', players ?? [])
+    const selectPlayers = useSelectPlayers()
     const {
         mutateAsync: setPlayersMutation,
         isLoading: setPlayersLoading,
         error: setPlayersError,
         reset: setPlayersReset,
-    } = useSetPlayers(point?._id ?? '', () =>
-        setPullingMismatchConfirmVisible(true),
+    } = useSetPlayers(
+        point?._id ?? '',
+        selectPlayers.selectedPlayers.sort((a, b) =>
+            sortAlphabetically(
+                `${a.firstName} ${a.lastName}`,
+                `${b.firstName} ${b.lastName}`,
+            ),
+        ),
+        () => setPullingMismatchConfirmVisible(true),
     )
     const { mutateAsync: switchPullingTeam } = useSwitchPullingTeam()
 
@@ -162,18 +168,8 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
 
     const setPlayers = async () => {
         resetMutations()
-        const selectedPlayers = Object.values(selectPlayers.playerOptions)
-            .filter(p => p.selected)
-            .map(p => p.player)
-            .sort((a, b) =>
-                sortAlphabetically(
-                    `${a.firstName} ${a.lastName}`,
-                    `${b.firstName} ${b.lastName}`,
-                ),
-            )
-        await setPlayersMutation(selectedPlayers)
+        await setPlayersMutation()
         selectPlayers.clearSelection()
-        selectPlayers.refreshLines()
     }
 
     const nextPoint = async () => {
@@ -191,19 +187,9 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
         await backPointMutation()
     }
 
-    const togglePlayerSelection = (player: DisplayUser) => {
+    const togglePlayerSelection = (player: InGameStatsUser) => {
         resetMutations()
         selectPlayers.toggleSelection(player)
-    }
-
-    const clearPlayerSelection = () => {
-        resetMutations()
-        selectPlayers.clearSelection()
-    }
-
-    const togglePlayerLine = (lineId: string) => {
-        resetMutations()
-        selectPlayers.toggleLine(lineId)
     }
 
     const resetMutations = () => {
@@ -238,12 +224,8 @@ const PointEditProvider = ({ children }: PointEditContextProps) => {
                     isLoading: backPointLoading,
                 },
                 selectPlayers: {
-                    lineOptions: selectPlayers.lineOptions,
-                    playerOptions: selectPlayers.playerOptions,
-                    toggleLine: togglePlayerLine,
+                    selectedPlayers: selectPlayers.selectedPlayers,
                     toggleSelection: togglePlayerSelection,
-                    clearSelection: clearPlayerSelection,
-                    refreshLines: selectPlayers.refreshLines,
                 },
                 pullingMismatchConfirmVisible,
                 setPullingMismatchConfirmVisible,

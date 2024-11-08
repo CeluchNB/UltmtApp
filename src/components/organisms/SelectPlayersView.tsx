@@ -1,7 +1,6 @@
 import ChangePullingTeamModal from '../molecules/ChangePullingTeamModal'
 import ConfirmModal from '../molecules/ConfirmModal'
 import GuestPlayerModal from '../molecules/GuestPlayerModal'
-import { LineSchema } from '../../models'
 import { LiveGameContext } from '../../context/live-game-context'
 import LivePointUtilityBar from '../molecules/LivePointUtilityBar'
 import { PointEditContext } from '../../context/point-edit-context'
@@ -10,7 +9,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../hooks'
 import { Chip, IconButton, Tooltip } from 'react-native-paper'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 
 interface SelectPlayersViewProps {
     onNavigate: () => void
@@ -23,7 +22,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
     const {
         theme: { colors, size },
     } = useTheme()
-    const { game, point, team, teamId } = useContext(LiveGameContext)
+    const { game, point, team, teamId, players } = useContext(LiveGameContext)
     const {
         selectPlayers,
         setPlayers,
@@ -32,39 +31,17 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
         setPullingMismatchConfirmVisible,
         switchPullingTeam,
     } = useContext(PointEditContext)
-
-    const {
-        playerOptions,
-        lineOptions,
-        toggleSelection,
-        toggleLine,
-        clearSelection,
-        refreshLines,
-    } = selectPlayers
+    const { selectedPlayers, toggleSelection } = selectPlayers
+    const selectedPlayerIds = selectedPlayers.map(player => player._id)
 
     const [guestModalVisible, setGuestModalVisible] = useState(false)
     const [pullingModalVisible, setPullingModalVisible] = useState(false)
-
-    useEffect(() => {
-        navigation.addListener('focus', () => {
-            refreshLines()
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     const error = useMemo(() => {
         return [setPlayers.error, backPoint.error]
             .filter(msg => !!msg)
             .join(' ')
     }, [setPlayers, backPoint])
-
-    const onSelectLine = (line: LineSchema) => {
-        const lineId = line._id
-        if (!lineId) return
-
-        clearSelection()
-        toggleLine(line._id?.toHexString() ?? '')
-    }
 
     const styles = StyleSheet.create({
         flatList: {
@@ -119,7 +96,7 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
             <FlatList
                 ListHeaderComponentStyle={styles.headerFooterContainer}
                 ListFooterComponentStyle={styles.headerFooterContainer}
-                data={Object.values(playerOptions)}
+                data={players}
                 testID="players-flat-list"
                 style={styles.flatList}
                 ListHeaderComponent={
@@ -144,26 +121,8 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                         </View>
                         <LivePointUtilityBar
                             loading={false}
-                            undoButton={{
-                                onPress: () => {},
-                                visible: false,
-                                disabled: true,
-                            }}
-                            lineBuilderButton={{
-                                onPress: () => {
-                                    clearSelection()
-                                    refreshLines()
-                                    navigation.navigate('LiveGame', {
-                                        screen: 'LineBuilder',
-                                        params: {
-                                            gameId: game?._id ?? '',
-                                            teamId: teamId ?? '',
-                                        },
-                                    })
-                                },
-                                visible: true,
-                                disabled: false,
-                            }}
+                            undoDisabled={true}
+                            onUndo={() => {}}
                             onEdit={() => {
                                 navigation.navigate('LiveGame', {
                                     screen: 'EditGame',
@@ -178,26 +137,6 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                                 onAction: () => setGuestModalVisible(true),
                             }}
                             error={error}
-                        />
-                        <FlatList
-                            data={Object.values(lineOptions)}
-                            horizontal={true}
-                            renderItem={({ item }) => {
-                                return (
-                                    <Chip
-                                        selectedColor={
-                                            item.selected
-                                                ? colors.textPrimary
-                                                : colors.gray
-                                        }
-                                        style={styles.chip}
-                                        onPress={() => {
-                                            onSelectLine(item.line)
-                                        }}>
-                                        {item.line.name}
-                                    </Chip>
-                                )
-                            }}
                         />
                         <View style={styles.statsKeyContainer}>
                             <Text style={styles.statsKey}>
@@ -217,23 +156,23 @@ const SelectPlayersView: React.FC<SelectPlayersViewProps> = ({
                     </View>
                 }
                 renderItem={({ item }) => {
-                    const { player, selected } = item
                     return (
                         <Chip
                             style={styles.chip}
                             mode="outlined"
                             onPress={() => {
-                                toggleSelection(player)
+                                toggleSelection(item)
                             }}
                             selectedColor={
-                                selected ? colors.textPrimary : colors.gray
+                                selectedPlayerIds.includes(item._id)
+                                    ? colors.textPrimary
+                                    : colors.gray
                             }
                             ellipsizeMode="tail">
-                            {player.firstName} {player.lastName}{' '}
+                            {item.firstName} {item.lastName}{' '}
                             <Text style={{ color: colors.textPrimary }}>
-                                ({player.pointsPlayed} - {player.assists} -{' '}
-                                {player.goals} - {player.blocks} -{' '}
-                                {player.turnovers})
+                                ({item.pointsPlayed} - {item.assists} -{' '}
+                                {item.goals} - {item.blocks} - {item.turnovers})
                             </Text>
                         </Chip>
                     )

@@ -80,10 +80,6 @@ export type LiveGameParamList = {
         state?: LiveGameWizardState
         pointNumber?: number
     }
-    LineBuilder: {
-        gameId: string
-        teamId: string
-    }
 }
 
 export type TopLevelParamList = {
@@ -255,10 +251,6 @@ export type EditGameProps = NativeStackScreenProps<
 export type LiveGameProps = NativeStackScreenProps<
     LiveGameParamList,
     'LiveGameEdit'
->
-export type LineBuilderProps = NativeStackScreenProps<
-    LiveGameParamList,
-    'LineBuilder'
 >
 
 export type TeamGameProps = CompositeScreenProps<

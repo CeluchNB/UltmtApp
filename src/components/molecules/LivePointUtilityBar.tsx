@@ -4,19 +4,11 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { Button, IconButton } from 'react-native-paper'
 
 interface LivePointUtilityBarProps {
+    undoDisabled: boolean
     loading: boolean
     error?: string
+    onUndo: () => void
     onEdit: () => void
-    undoButton: {
-        onPress: () => void
-        disabled: boolean
-        visible: boolean
-    }
-    lineBuilderButton: {
-        onPress: () => void
-        disabled: boolean
-        visible: boolean
-    }
     actionButton?: {
         title: string
         loading: boolean
@@ -27,28 +19,16 @@ interface LivePointUtilityBarProps {
 }
 
 const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
+    undoDisabled,
     loading,
     error,
+    onUndo,
     onEdit,
-    undoButton,
-    lineBuilderButton,
     actionButton,
 }) => {
     const {
         theme: { colors, size },
     } = useTheme()
-
-    const {
-        onPress: onUndo,
-        disabled: undoDisabled,
-        visible: undoVisible,
-    } = undoButton
-
-    const {
-        onPress: onLineBuilder,
-        disabled: lineBuilderDisabled,
-        visible: lineBuilderVisible,
-    } = lineBuilderButton
 
     const styles = StyleSheet.create({
         actionsContainer: {
@@ -81,30 +61,14 @@ const LivePointUtilityBar: React.FC<LivePointUtilityBarProps> = ({
                         onPress={onEdit}
                         testID="edit-button"
                     />
-                    {undoVisible && (
-                        <IconButton
-                            icon="undo"
-                            iconColor={colors.textPrimary}
-                            onPress={() => onUndo?.()}
-                            disabled={undoDisabled}
-                            testID="undo-button"
-                            theme={{
-                                colors: { onSurfaceDisabled: colors.gray },
-                            }}
-                        />
-                    )}
-                    {lineBuilderVisible && (
-                        <IconButton
-                            icon="account-supervisor-outline"
-                            iconColor={colors.textPrimary}
-                            onPress={() => onLineBuilder?.()}
-                            disabled={lineBuilderDisabled}
-                            testID="line-builder-button"
-                            theme={{
-                                colors: { onSurfaceDisabled: colors.gray },
-                            }}
-                        />
-                    )}
+                    <IconButton
+                        icon="undo"
+                        iconColor={colors.textPrimary}
+                        onPress={onUndo}
+                        disabled={undoDisabled}
+                        testID="undo-button"
+                        theme={{ colors: { onSurfaceDisabled: colors.gray } }}
+                    />
                     {!error && loading && (
                         <ActivityIndicator
                             color={colors.textPrimary}

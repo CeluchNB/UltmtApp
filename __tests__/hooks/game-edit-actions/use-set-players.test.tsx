@@ -79,13 +79,13 @@ describe('useSetPlayers', () => {
             )
         }
         const { result } = renderHook(
-            () => useSetPlayers(point1._id, jest.fn()),
+            () => useSetPlayers(point1._id, players, jest.fn()),
             { wrapper },
         )
 
         await new Promise(r => setTimeout(r, 1000))
         await act(async () => {
-            await result.current.mutateAsync(players)
+            await result.current.mutateAsync()
         })
 
         const pointResult = realmData.objectForPrimaryKey<PointSchema>(
@@ -122,13 +122,13 @@ describe('useSetPlayers', () => {
             )
         }
         const { result } = renderHook(
-            () => useSetPlayers(point2._id, jest.fn()),
+            () => useSetPlayers(point2._id, players, jest.fn()),
             { wrapper },
         )
 
         await new Promise(r => setTimeout(r, 1000))
         await act(async () => {
-            await result.current.mutateAsync(players)
+            await result.current.mutateAsync()
         })
 
         await waitFor(async () => {

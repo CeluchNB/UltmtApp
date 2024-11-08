@@ -6,7 +6,6 @@ import {
     DisplayUserSchema,
     GameSchema,
     GuestTeamSchema,
-    LineSchema,
     PlayerPointStatsSchema,
     PointSchema,
     PointStatsSchema,
@@ -26,7 +25,6 @@ export const SCHEMAS = [
     TeamSchema.schema,
     PlayerPointStatsSchema,
     PointStatsSchema,
-    LineSchema.schema,
 ]
 
 export const config: Realm.Configuration = {
