@@ -7,5 +7,13 @@ module.exports = {
                 moduleName: '@env',
             },
         ],
+        [
+            'module-resolver',
+            {
+                alias: {
+                    '@ultmt-app': './src',
+                },
+            },
+        ],
     ],
 }

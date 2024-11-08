@@ -64,8 +64,8 @@ const LiveGameProvider = ({
     const teamId = useMemo(() => {
         return team === 'one' ? game?.teamOne._id : game?.teamTwo._id
     }, [team, game])
-    const [tags, setTags] = useState(['huck', 'break', 'layout'])
 
+    const [tags, setTags] = useState(['huck', 'break', 'layout'])
     const addTag = (tag: string) => {
         setTags(curr => [...curr, tag])
     }
