@@ -10,13 +10,14 @@ import { useObject, useRealm } from '../../context/realm'
 
 export const useSetPlayers = (
     pointId: string,
+    players: DisplayUser[],
     onPullingTeamMismatch: () => void,
 ) => {
     const realm = useRealm()
     const point = useObject<PointSchema>('Point', pointId)
     const { game } = useContext(LiveGameContext)
 
-    const setOfflinePlayers = (players: DisplayUser[]) => {
+    const setOfflinePlayers = () => {
         if (!point) return
 
         realm.write(() => {
@@ -25,7 +26,7 @@ export const useSetPlayers = (
         })
     }
 
-    const setOnlinePlayers = async (players: DisplayUser[]) => {
+    const setOnlinePlayers = async () => {
         if (!point) return
 
         const response = await withGameToken(
@@ -52,15 +53,13 @@ export const useSetPlayers = (
         }
     }
 
-    return useMutation<void, ApiError, DisplayUser[]>(
-        async (players: DisplayUser[]) => {
-            if (!point || !game) return
+    return useMutation<void, ApiError>(async () => {
+        if (!point || !game) return
 
-            if (game.offline) {
-                setOfflinePlayers(players)
-            } else {
-                await setOnlinePlayers(players)
-            }
-        },
-    )
+        if (game.offline) {
+            setOfflinePlayers()
+        } else {
+            await setOnlinePlayers()
+        }
+    })
 }

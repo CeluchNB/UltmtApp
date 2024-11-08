@@ -1,5 +1,4 @@
 import { ActionType } from '@ultmt-app/types/action'
-import { InGameStatsUserFactory } from '../../test-data/user'
 import { LiveGameWizardState } from '@ultmt-app/types/game'
 import { useLiveGameWizard } from '@ultmt-app/hooks/game-edit-actions/use-live-game-wizard'
 import {
@@ -43,8 +42,6 @@ describe('useLiveGameWizard', () => {
         jest.useRealTimers()
     })
 
-    const playerOne = InGameStatsUserFactory.build()
-
     describe('in set players state', () => {
         it('calls next', async () => {
             const onSelectPlayers = jest.fn()
@@ -57,12 +54,7 @@ describe('useLiveGameWizard', () => {
                     } as LiveGameContextData,
                     {
                         selectPlayers: {
-                            playerOptions: {
-                                [playerOne._id]: {
-                                    player: playerOne,
-                                    selected: true,
-                                },
-                            },
+                            selectedPlayers: [1],
                             toggleSelection: jest.fn(),
                         },
                         setPlayers: {
@@ -93,12 +85,7 @@ describe('useLiveGameWizard', () => {
                     } as LiveGameContextData,
                     {
                         selectPlayers: {
-                            playerOptions: {
-                                [playerOne._id]: {
-                                    player: playerOne,
-                                    selected: true,
-                                },
-                            },
+                            selectedPlayers: [1],
                             toggleSelection: jest.fn(),
                         },
                         backPoint: {
@@ -128,12 +115,7 @@ describe('useLiveGameWizard', () => {
                     } as LiveGameContextData,
                     {
                         selectPlayers: {
-                            playerOptions: {
-                                [playerOne._id]: {
-                                    player: playerOne,
-                                    selected: true,
-                                },
-                            },
+                            selectedPlayers: [1],
                             toggleSelection: jest.fn(),
                         },
                         myTeamActions: [],
@@ -154,12 +136,7 @@ describe('useLiveGameWizard', () => {
                     } as LiveGameContextData,
                     {
                         selectPlayers: {
-                            playerOptions: {
-                                [playerOne._id]: {
-                                    player: playerOne,
-                                    selected: true,
-                                },
-                            },
+                            selectedPlayers: [1],
                             toggleSelection: jest.fn(),
                         },
                         myTeamActions: [],
@@ -185,12 +162,7 @@ describe('useLiveGameWizard', () => {
                         } as LiveGameContextData,
                         {
                             selectPlayers: {
-                                playerOptions: {
-                                    [playerOne._id]: {
-                                        player: playerOne,
-                                        selected: true,
-                                    },
-                                },
+                                selectedPlayers: [1],
                                 toggleSelection: jest.fn(),
                             },
                             nextPoint: {
@@ -223,12 +195,7 @@ describe('useLiveGameWizard', () => {
                         } as LiveGameContextData,
                         {
                             selectPlayers: {
-                                playerOptions: {
-                                    [playerOne._id]: {
-                                        player: playerOne,
-                                        selected: true,
-                                    },
-                                },
+                                selectedPlayers: [1],
                                 toggleSelection: jest.fn(),
                             },
                             myTeamActions: [],
@@ -252,12 +219,7 @@ describe('useLiveGameWizard', () => {
                         } as LiveGameContextData,
                         {
                             selectPlayers: {
-                                playerOptions: {
-                                    [playerOne._id]: {
-                                        player: playerOne,
-                                        selected: true,
-                                    },
-                                },
+                                selectedPlayers: [1],
                                 toggleSelection: jest.fn(),
                             },
                             myTeamActions: [

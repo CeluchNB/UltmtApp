@@ -85,9 +85,3 @@ export interface UpdateGame {
 
 export type LocalGame = Game & { offline: boolean }
 export type PointStats = { _id: string; pointStats: InGameStatsUser[] }
-
-export interface Line {
-    gameId: string
-    name: string
-    players: DisplayUser[]
-}

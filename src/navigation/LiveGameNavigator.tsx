@@ -1,6 +1,5 @@
 import EditGameScreen from '../screens/games/EditGameScreen'
 import FirstPointScreen from '../screens/games/FirstPointScreen'
-import LineBuilder from '../screens/live-games/LineBuilder'
 import LiveGameEditScreen from '../screens/live-games/LiveGameEdit'
 import { LiveGameParamList } from '../types/navigation'
 import React from 'react'
@@ -35,19 +34,6 @@ const LiveGameNavigator: React.FC<{}> = () => {
                 component={LiveGameEditScreen}
                 initialParams={{ gameId: '' }}
                 options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="LineBuilder"
-                component={LineBuilder}
-                options={{
-                    headerShown: true,
-                    headerStyle: {
-                        backgroundColor: colors.primary,
-                    },
-                    headerTintColor: colors.textPrimary,
-                    title: 'Build Lines',
-                    headerBackTitle: 'Back',
-                }}
             />
         </Stack.Navigator>
     )

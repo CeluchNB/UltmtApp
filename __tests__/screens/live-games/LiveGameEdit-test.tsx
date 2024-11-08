@@ -96,7 +96,6 @@ describe('LiveGameEdit', () => {
         expect(screen.getByText(`@${teamOne.teamname}`)).toBeTruthy()
         expect(screen.getByText(`@${teamTwo.teamname}`)).toBeTruthy()
 
-        // TODO: This needs to be fixed. Check initial "playerOptions" value
         for (const player of players.slice(0, 9)) {
             const regex = new RegExp(
                 `.*${player.firstName}.*${player.lastName}.*`,
