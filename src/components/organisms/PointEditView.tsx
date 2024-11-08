@@ -105,8 +105,16 @@ const PointEditView: React.FC<{}> = () => {
                         <LivePointUtilityBar
                             error={error}
                             loading={waiting}
-                            undoDisabled={waiting || myTeamActions.length === 0}
-                            onUndo={onUndo}
+                            undoButton={{
+                                onPress: onUndo,
+                                disabled: waiting || myTeamActions.length === 0,
+                                visible: true,
+                            }}
+                            lineBuilderButton={{
+                                onPress: () => {},
+                                disabled: true,
+                                visible: false,
+                            }}
                             onEdit={() => {
                                 navigation.navigate('LiveGame', {
                                     screen: 'EditGame',
