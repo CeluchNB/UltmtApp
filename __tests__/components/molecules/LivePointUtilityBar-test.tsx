@@ -7,9 +7,17 @@ describe('LivePointUtilityBar', () => {
         const onUndo = jest.fn()
         const snapshot = render(
             <LivePointUtilityBar
-                undoDisabled={false}
+                undoButton={{
+                    onPress: onUndo,
+                    disabled: false,
+                    visible: true,
+                }}
+                lineBuilderButton={{
+                    onPress: () => {},
+                    disabled: false,
+                    visible: false,
+                }}
                 loading={false}
-                onUndo={onUndo}
                 onEdit={() => {}}
             />,
         )
@@ -24,9 +32,17 @@ describe('LivePointUtilityBar', () => {
         const onUndo = jest.fn()
         const snapshot = render(
             <LivePointUtilityBar
-                undoDisabled={true}
+                undoButton={{
+                    onPress: onUndo,
+                    disabled: true,
+                    visible: true,
+                }}
+                lineBuilderButton={{
+                    onPress: () => {},
+                    disabled: false,
+                    visible: false,
+                }}
                 loading={true}
-                onUndo={jest.fn()}
                 onEdit={() => {}}
             />,
         )
@@ -41,9 +57,17 @@ describe('LivePointUtilityBar', () => {
         const onEdit = jest.fn()
         const snapshot = render(
             <LivePointUtilityBar
-                undoDisabled={true}
+                undoButton={{
+                    onPress: () => {},
+                    disabled: false,
+                    visible: true,
+                }}
+                lineBuilderButton={{
+                    onPress: () => {},
+                    disabled: false,
+                    visible: false,
+                }}
                 loading={false}
-                onUndo={jest.fn()}
                 onEdit={onEdit}
             />,
         )
