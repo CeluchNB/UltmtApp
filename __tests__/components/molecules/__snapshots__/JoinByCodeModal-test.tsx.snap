@@ -117,6 +117,9 @@ exports[`JoinByCodeModal should match snapshot 1`] = `
                   "top": 6,
                 },
                 {
+                  "top": 0,
+                },
+                {
                   "backgroundColor": "#303030",
                   "borderColor": "#7AC6FF",
                   "borderRadius": 4,
@@ -127,70 +130,71 @@ exports[`JoinByCodeModal should match snapshot 1`] = `
             }
             testID="text-input-outline"
           />
-          <View>
-            <View
+          <View
+            style={
+              [
+                {
+                  "flexGrow": 1,
+                  "paddingBottom": 0,
+                },
+                {
+                  "minHeight": 56,
+                  "paddingTop": 0,
+                },
+              ]
+            }
+          >
+            <TextInput
+              accessibilityLabel="6 Digit Code"
+              autoCapitalize="none"
+              cursorColor="#ffd600"
+              editable={true}
+              keyboardType="default"
+              maxFontSizeMultiplier={1.5}
+              multiline={false}
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              onLayout={[Function]}
+              placeholder="6 Digit Code"
+              placeholderTextColor="#ffffff"
+              selectionColor="#ffd600"
               style={
                 [
                   {
-                    "paddingBottom": 0,
+                    "flexGrow": 1,
+                    "margin": 0,
                   },
                   {
-                    "minHeight": 56,
-                    "paddingTop": 8,
+                    "height": 56,
                   },
+                  {
+                    "paddingBottom": 0,
+                    "paddingTop": 0,
+                  },
+                  {
+                    "color": "#ffd600",
+                    "fontFamily": "System",
+                    "fontSize": 16,
+                    "fontWeight": undefined,
+                    "letterSpacing": 0.15,
+                    "lineHeight": undefined,
+                    "minWidth": 65,
+                    "paddingHorizontal": 16,
+                    "textAlign": "left",
+                    "textAlignVertical": "center",
+                  },
+                  false,
+                  [
+                    {},
+                  ],
+                  undefined,
                 ]
               }
-            >
-              <TextInput
-                accessibilityLabel="6 Digit Code"
-                autoCapitalize="none"
-                cursorColor="#ffd600"
-                editable={true}
-                keyboardType="default"
-                maxFontSizeMultiplier={1.5}
-                multiline={false}
-                onBlur={[Function]}
-                onChangeText={[Function]}
-                onFocus={[Function]}
-                placeholder="6 Digit Code"
-                placeholderTextColor="#ffffff"
-                selectionColor="#ffd600"
-                style={
-                  [
-                    {
-                      "margin": 0,
-                      "zIndex": 1,
-                    },
-                    {
-                      "height": 48,
-                    },
-                    {
-                      "paddingBottom": 0,
-                      "paddingTop": 0,
-                    },
-                    {
-                      "color": "#ffd600",
-                      "fontFamily": "System",
-                      "fontSize": 16,
-                      "fontWeight": undefined,
-                      "letterSpacing": 0.15,
-                      "lineHeight": undefined,
-                      "paddingHorizontal": 16,
-                      "textAlign": "left",
-                      "textAlignVertical": "center",
-                    },
-                    false,
-                    [
-                      {},
-                    ],
-                    undefined,
-                  ]
-                }
-                testID="text-input-outlined"
-                underlineColorAndroid="transparent"
-                value=""
-              />
-            </View>
+              testID="text-input-outlined"
+              underlineColorAndroid="transparent"
+              value=""
+            />
           </View>
         </View>
       </View>
