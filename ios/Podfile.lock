@@ -1183,14 +1183,14 @@ PODS:
     - React-perflogger (= 0.73.11)
   - RealmJS (12.8.1):
     - React
-  - RNCAsyncStorage (1.24.0):
+  - RNCAsyncStorage (2.1.0):
     - React-Core
   - RNCCheckbox (0.5.17):
     - BEMCheckBox (~> 1.4)
     - React-Core
   - RNCClipboard (1.15.0):
     - React-Core
-  - RNCPicker (2.5.0):
+  - RNCPicker (2.10.2):
     - React-Core
   - RNGestureHandler (2.21.2):
     - glog
@@ -1541,10 +1541,10 @@ SPEC CHECKSUMS:
   React-utils: eaaed6083fccd050a594baf1d72db5f949a3b9bb
   ReactCommon: 1a93f1ef5c6e33bf14b9563cdb8e7621a893aa37
   RealmJS: 2c7fdb3991d7655fba5f88eb288f75eaf5cb9980
-  RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
+  RNCAsyncStorage: cc6479c4acd84cc7004946946c8afe30b018184d
   RNCCheckbox: a3ca9978cb0846b981d28da4e9914bd437403d77
   RNCClipboard: 69ab8e51324d5b351f6ba72bbdb72478087a2c64
-  RNCPicker: 32ca102146bc7d34a8b93a998d9938d9f9ec7898
+  RNCPicker: d162737e03e48797110dbb60e5ddc03012e87e0b
   RNGestureHandler: 57144b74a3402b21180df3ec7b3a0266ddf89548
   RNGoogleMobileAds: d6f580a764970768086240dc329129fee62a0d74
   RNPermissions: ea65e337fe77af23ac0c56217e947b9de21cc5fd
