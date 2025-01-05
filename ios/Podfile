@@ -13,7 +13,7 @@ end
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
 
-platform :ios, '12.4'
+platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
 setup_permissions([
@@ -26,7 +26,6 @@ target 'UltmtApp' do
   use_react_native!(
     :path => config[:reactNativePath],
     # to enable hermes on iOS, change `false` to `true` and then install pods
-    :hermes_enabled => false
   )
 
   target 'UltmtAppTests' do
@@ -42,6 +41,5 @@ target 'UltmtApp' do
 
   post_install do |installer|
     react_native_post_install(installer)
-    __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end

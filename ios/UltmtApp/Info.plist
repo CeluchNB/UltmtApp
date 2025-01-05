@@ -26,11 +26,14 @@
 		<true/>
 		<key>NSAppTransportSecurity</key>
 		<dict>
+			<!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 			<key>NSAllowsArbitraryLoads</key>
-			<true/>
+			<false /> <!-- I purposefully had this as true on RN 0.72 for a reason I don't fully remember, but 0.73 adds above comment saying this must be true. This may cause issues on next release. -->
 			<key>NSAllowsArbitraryLoadsForMedia</key>
 			<true/>
 			<key>NSAllowsArbitraryLoadsInWebContent</key>
+			<true/>
+			<key>NSAllowsLocalNetworking</key>
 			<true/>
 		</dict>
 		<key>NSLocationWhenInUseUsageDescription</key>

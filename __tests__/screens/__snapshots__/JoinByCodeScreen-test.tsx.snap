@@ -9,13 +9,6 @@ exports[`JoinByCodeScreen should match snapshot 1`] = `
     }
   }
 >
-  <Modal
-    animationType="slide"
-    hardwareAccelerated={false}
-    onRequestClose={[Function]}
-    transparent={true}
-    visible={false}
-  />
   <View
     style={
       {

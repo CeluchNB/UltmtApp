@@ -538,13 +538,5 @@ exports[`PlayerActionItem should match snapshot 1`] = `
       </View>
     </View>
   </View>
-  <Modal
-    animationType="slide"
-    hardwareAccelerated={false}
-    onRequestClose={[Function]}
-    testID="base-modal"
-    transparent={true}
-    visible={false}
-  />
 </View>
 `;

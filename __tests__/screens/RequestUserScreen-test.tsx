@@ -316,7 +316,7 @@ describe('RequestUserScreen', () => {
             expect(spy).toHaveBeenCalled()
         })
 
-        const modal = getByTestId('base-modal')
+        const modal = getByTestId('base-modal', { includeHiddenElements: true })
         await act(async () => {})
         expect(modal.props.visible).toBe(true)
     })

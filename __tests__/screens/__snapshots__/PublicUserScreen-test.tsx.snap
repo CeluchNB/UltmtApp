@@ -1388,14 +1388,6 @@ exports[`PublicUserScreen should match snapshot 1`] = `
         </RNCViewPager>
       </View>
     </View>
-    <Modal
-      animationType="slide"
-      hardwareAccelerated={false}
-      onRequestClose={[Function]}
-      testID="base-modal"
-      transparent={true}
-      visible={false}
-    />
   </View>
 </RCTSafeAreaView>
 `;

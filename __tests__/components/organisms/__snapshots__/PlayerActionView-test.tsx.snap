@@ -531,7 +531,7 @@ exports[`PlayerActionView should match snapshot 1`] = `
     onScrollEndDrag={[Function]}
     removeClippedSubviews={false}
     renderItem={[Function]}
-    scrollEventThrottle={50}
+    scrollEventThrottle={0.0001}
     stickyHeaderIndices={[]}
     viewabilityConfigCallbackPairs={[]}
   >
@@ -1078,14 +1078,6 @@ exports[`PlayerActionView should match snapshot 1`] = `
               </View>
             </View>
           </View>
-          <Modal
-            animationType="slide"
-            hardwareAccelerated={false}
-            onRequestClose={[Function]}
-            testID="base-modal"
-            transparent={true}
-            visible={false}
-          />
         </View>
       </View>
       <View
@@ -1630,14 +1622,6 @@ exports[`PlayerActionView should match snapshot 1`] = `
               </View>
             </View>
           </View>
-          <Modal
-            animationType="slide"
-            hardwareAccelerated={false}
-            onRequestClose={[Function]}
-            testID="base-modal"
-            transparent={true}
-            visible={false}
-          />
         </View>
       </View>
       <View
@@ -2017,14 +2001,6 @@ exports[`PlayerActionView should match snapshot 1`] = `
               </View>
             </View>
           </View>
-          <Modal
-            animationType="slide"
-            hardwareAccelerated={false}
-            onRequestClose={[Function]}
-            testID="base-modal"
-            transparent={true}
-            visible={false}
-          />
         </View>
       </View>
       <View
@@ -2569,14 +2545,6 @@ exports[`PlayerActionView should match snapshot 1`] = `
               </View>
             </View>
           </View>
-          <Modal
-            animationType="slide"
-            hardwareAccelerated={false}
-            onRequestClose={[Function]}
-            testID="base-modal"
-            transparent={true}
-            visible={false}
-          />
         </View>
       </View>
       <View
@@ -3121,14 +3089,6 @@ exports[`PlayerActionView should match snapshot 1`] = `
               </View>
             </View>
           </View>
-          <Modal
-            animationType="slide"
-            hardwareAccelerated={false}
-            onRequestClose={[Function]}
-            testID="base-modal"
-            transparent={true}
-            visible={false}
-          />
         </View>
       </View>
       <View
@@ -3673,14 +3633,6 @@ exports[`PlayerActionView should match snapshot 1`] = `
               </View>
             </View>
           </View>
-          <Modal
-            animationType="slide"
-            hardwareAccelerated={false}
-            onRequestClose={[Function]}
-            testID="base-modal"
-            transparent={true}
-            visible={false}
-          />
         </View>
       </View>
       <View
@@ -4225,14 +4177,6 @@ exports[`PlayerActionView should match snapshot 1`] = `
               </View>
             </View>
           </View>
-          <Modal
-            animationType="slide"
-            hardwareAccelerated={false}
-            onRequestClose={[Function]}
-            testID="base-modal"
-            transparent={true}
-            visible={false}
-          />
         </View>
       </View>
     </View>
