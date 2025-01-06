@@ -341,12 +341,10 @@ describe('RequestUserScreen', () => {
 
         expect(spy).toHaveBeenCalled()
 
-        const modal = getByTestId('base-modal')
-        await act(async () => {})
-        expect(modal.props.visible).toBe(true)
-
-        const error = getByText('bulk code error')
-        expect(error).toBeTruthy()
+        await waitFor(async () => {
+            expect(getByText('bulk code error')).toBeTruthy()
+        })
+        
     })
 
     it('should close bulk code modal', async () => {
@@ -354,7 +352,7 @@ describe('RequestUserScreen', () => {
             .spyOn(TeamData, 'createBulkJoinCode')
             .mockReturnValueOnce(Promise.resolve('123456'))
 
-        const { getByText, getByTestId } = render(
+        const { getByText, queryByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
                     <QueryClientProvider client={client}>
@@ -369,16 +367,14 @@ describe('RequestUserScreen', () => {
 
         expect(spy).toHaveBeenCalled()
 
-        const modal = getByTestId('base-modal')
-        await act(async () => {})
-        expect(modal.props.visible).toBe(true)
+        await waitFor(async () => {
+            expect(getByText('123456')).toBeTruthy()
+        })
 
         const doneButton = getByText('done')
         fireEvent.press(doneButton)
 
-        const closedModal = getByTestId('base-modal')
-        await act(async () => {})
-        expect(closedModal.props.visible).toBe(false)
+        expect(queryByText('123456')).toBeFalsy()
     })
 
     it('handles add guest click', async () => {
