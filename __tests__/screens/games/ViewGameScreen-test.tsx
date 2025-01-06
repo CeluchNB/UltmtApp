@@ -40,7 +40,6 @@ jest.mock('react-native-safe-area-context', () => {
         __esModule: true,
     }
 })
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native-gesture-handler', () => {})
 jest.mock('react-native-permissions', () => {
     return {

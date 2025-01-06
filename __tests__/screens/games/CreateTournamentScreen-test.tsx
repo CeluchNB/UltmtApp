@@ -14,8 +14,6 @@ import {
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render, screen } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const client = new QueryClient()
 const pop = jest.fn()
 const props: CreateTournamentProps = {

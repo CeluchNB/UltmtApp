@@ -11,7 +11,6 @@ import {
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { render, screen, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native-gifted-charts', () => {
     return {
         BarChart: () => {},

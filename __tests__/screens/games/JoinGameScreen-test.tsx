@@ -27,8 +27,6 @@ import {
     waitForElementToBeRemoved,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const setOptions = jest.fn()
 
 const props: JoinGameProps = {

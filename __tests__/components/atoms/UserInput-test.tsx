@@ -1,7 +1,6 @@
 import * as React from 'react'
 import UserInput from '../../../src/components/atoms/UserInput'
 import { render } from '@testing-library/react-native'
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 beforeAll(() => {
     jest.useFakeTimers()

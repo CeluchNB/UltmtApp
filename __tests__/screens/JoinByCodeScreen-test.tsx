@@ -10,8 +10,6 @@ import store from '../../src/store/store'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const navigate = jest.fn()
 
 const props: JoinByCodeProps = {

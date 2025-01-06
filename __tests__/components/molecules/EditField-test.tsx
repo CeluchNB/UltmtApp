@@ -3,7 +3,6 @@ import * as React from 'react'
 import EditField from '../../../src/components/molecules/EditField'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 describe('EditField', () => {
     beforeAll(() => {

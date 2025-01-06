@@ -307,7 +307,6 @@ exports[`PublicUserScreen should match snapshot 1`] = `
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               stickyHeaderIndices={[]}
-              style={{}}
               viewabilityConfigCallbackPairs={
                 [
                   {

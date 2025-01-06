@@ -16,7 +16,6 @@ import {
 import MockDate from 'mockdate'
 MockDate.set('01 October 2022 00:00 UTC')
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('../../../src/components/atoms/GameCard', () => () => {
     return <div>Game</div>
 })

@@ -10,7 +10,6 @@ import { waitUntilRefreshComplete } from '../../../fixtures/utils'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { fetchProfileData, game } from '../../../fixtures/data'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('../../../src/components/atoms/GameCard', () => () => {
     return <div>Game</div>
 })

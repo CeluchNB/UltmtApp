@@ -1033,7 +1033,6 @@ exports[`ProfileScreen profile screen matches snapshot 1`] = `
               getItem={[Function]}
               getItemCount={[Function]}
               keyExtractor={[Function]}
-              onContentSizeChange={[Function]}
               onLayout={[Function]}
               onMomentumScrollBegin={[Function]}
               onMomentumScrollEnd={[Function]}

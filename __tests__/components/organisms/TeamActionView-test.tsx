@@ -13,8 +13,6 @@ import {
     waitFor,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const originalWarn = console.warn.bind(console.warn)
 beforeAll(() => {
     console.warn = msg =>

@@ -27,7 +27,6 @@ import {
     waitUntilRefreshComplete,
 } from '../../fixtures/utils'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native-element-dropdown', () => {
     return {
         Dropdown: () => <span>dropdown</span>,

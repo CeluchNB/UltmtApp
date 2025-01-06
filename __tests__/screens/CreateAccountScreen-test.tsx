@@ -10,8 +10,6 @@ import store from '../../src/store/store'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const reset = jest.fn()
 const navigate = jest.fn()
 const goBack = jest.fn()
