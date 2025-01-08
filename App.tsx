@@ -58,6 +58,7 @@ const App: React.FC<{}> = () => {
                         name="Settings"
                         component={SettingsScreen}
                         options={{
+                            
                             title: 'Settings',
                             headerShown: true,
                             headerStyle: {
@@ -94,7 +95,7 @@ const App: React.FC<{}> = () => {
                             name="SelectMyTeam"
                             component={SelectMyTeamScreen}
                             options={{
-                                headerBackTitleVisible: true,
+                                headerBackVisible: true,
                                 headerBackTitle: 'Back',
                             }}
                         />
@@ -141,9 +142,9 @@ const App: React.FC<{}> = () => {
                             title: 'More Info',
                             headerShown: true,
                             headerStyle: {
-                                backgroundColor: colors.primary,
+                                // backgroundColor: colors.primary,
                             },
-                            headerTintColor: colors.textPrimary,
+                            // headerTintColor: colors.textPrimary,
                         }}
                     />
                 </Stack.Navigator>
