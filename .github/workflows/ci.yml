@@ -21,6 +21,9 @@ jobs:
         with:
             node-version: 20
             cache: yarn
+      
+      - name: Set yarn version
+        run: yarn set version berry
 
       - name: Install ninja
         run: sudo apt-get install ninja-build
