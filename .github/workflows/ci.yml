@@ -20,13 +20,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
             node-version: 20
-            cache: yarn
       
-      - name: Set yarn version
-        run: yarn set version berry
+      - name: Increase node size
+        run: export NODE_OPTIONS=--max-old-space-size=4096
 
-      - name: Install ninja
-        run: sudo apt-get install ninja-build
+      # - name: Install ninja
+      #   run: sudo apt-get install ninja-build
 
       - name: Install Dependencies
         run: yarn install --immutable
