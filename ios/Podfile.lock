@@ -1553,9 +1553,9 @@ PODS:
   - RNCCheckbox (0.5.17):
     - BEMCheckBox (~> 1.4)
     - React-Core
-  - RNCClipboard (1.15.0):
+  - RNCClipboard (1.16.0):
     - React-Core
-  - RNCPicker (2.10.2):
+  - RNCPicker (2.11.0):
     - React-Core
   - RNGestureHandler (2.21.2):
     - DoubleConversion
@@ -1984,8 +1984,8 @@ SPEC CHECKSUMS:
   RealmJS: 054540707292206eadf069f110e79defb632a1b3
   RNCAsyncStorage: cc6479c4acd84cc7004946946c8afe30b018184d
   RNCCheckbox: a3ca9978cb0846b981d28da4e9914bd437403d77
-  RNCClipboard: 69ab8e51324d5b351f6ba72bbdb72478087a2c64
-  RNCPicker: d162737e03e48797110dbb60e5ddc03012e87e0b
+  RNCClipboard: 88f7f4933e7731052210d77535560c485ecb75b0
+  RNCPicker: 4f6d5e8d107064be32dfc8f1bcb5a3741135db0b
   RNGestureHandler: aa9690789023c9be8f06aa90e10ce637ea788f4d
   RNGoogleMobileAds: 559a647a148085202c63f027c380cf2d61ee8cf5
   RNPermissions: f2ac9c4f25d1a1c73d2d7fe975fe7ee77125a00e

@@ -46,7 +46,7 @@
     "react-native-gesture-handler": "^2.21.2",
     "react-native-get-random-values": "^1.11.0",
     "react-native-gifted-charts": "^1.4.53",
-    "react-native-google-mobile-ads": "14.8.0",
+    "react-native-google-mobile-ads": "14.7.2",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-pager-view": "^6.6.1",
     "react-native-paper": "5.12.5",
@@ -135,5 +135,5 @@
       "node_modules/(?!(@react-native|react-native|react-native-iphone-x-helper|react-native-vector-icons|@realm/react|@realm/fetch)/)"
     ]
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@1.22.22"
 }
