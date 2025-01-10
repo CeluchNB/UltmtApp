@@ -15,13 +15,13 @@ const ClipboardMock = {
     addListener: jest.fn(),
     removeAllListeners: jest.fn(),
     getEnforcing: jest.fn(),
-  };
-  
-  const useClipboard = jest.fn(() => ['mockString', jest.fn()]);
-  
-  const RNCClipboardMock = {
+}
+
+const useClipboard = jest.fn(() => ['mockString', jest.fn()])
+
+const RNCClipboardMock = {
     ...ClipboardMock,
     useClipboard,
-  };
-  
-  module.exports = RNCClipboardMock;
+}
+
+module.exports = RNCClipboardMock

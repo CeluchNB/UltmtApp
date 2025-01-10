@@ -9,8 +9,8 @@ import {
     act,
     fireEvent,
     render,
+    waitFor,
     waitForElementToBeRemoved,
-    waitFor
 } from '@testing-library/react-native'
 
 import MockDate from 'mockdate'

@@ -5,7 +5,6 @@ import { act, fireEvent, render } from '@testing-library/react-native'
 import MockDate from 'mockdate'
 MockDate.set('01 October 2022 00:00 UTC')
 
-
 beforeAll(() => {
     jest.useFakeTimers({ legacyFakeTimers: true })
 })

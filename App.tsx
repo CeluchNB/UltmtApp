@@ -58,7 +58,6 @@ const App: React.FC<{}> = () => {
                         name="Settings"
                         component={SettingsScreen}
                         options={{
-                            
                             title: 'Settings',
                             headerShown: true,
                             headerStyle: {

@@ -343,7 +343,6 @@ describe('RequestUserScreen', () => {
         await waitFor(async () => {
             expect(getByText('bulk code error')).toBeTruthy()
         })
-        
     })
 
     it('should close bulk code modal', async () => {

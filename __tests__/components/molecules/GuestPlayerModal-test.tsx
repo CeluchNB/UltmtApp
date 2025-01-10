@@ -19,7 +19,6 @@ import {
 import { NavigationContainer } from '@react-navigation/native'
 import { TeamFactory } from '../../test-data/team'
 
-
 const client = new QueryClient()
 
 describe('GuestPlayerModal', () => {

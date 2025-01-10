@@ -18,7 +18,7 @@ jobs:
           corepack enable
       - name: Install Dependencies
         run: |
-          yarn install --frozen-lockfile
+          yarn install --immutable
       - name: Lint
         run: |
           yarn lint
