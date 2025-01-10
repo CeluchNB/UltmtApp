@@ -1,5 +1,8 @@
 name: Continuous Integration
 
+env:
+  REALM_DISABLE_ANALYTICS: 1
+
 on:
   push:
 
@@ -10,18 +13,22 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-            node-version: latest
+            node-version: 20
+
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Install ninja
+        run: sudo apt-get install ninja-build
+
       - name: Enable corepack
-        run: |
-          corepack enable
+        run: corepack enable
+
       - name: Install Dependencies
-        run: |
-          yarn install --immutable
+        run: yarn install --immutable
+
       - name: Lint
-        run: |
-          yarn lint
+        run: yarn lint
+
       - name: Test
-        run: |
-          yarn test-ci
+        run: yarn test-ci
