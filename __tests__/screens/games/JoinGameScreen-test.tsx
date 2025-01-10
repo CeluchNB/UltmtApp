@@ -47,9 +47,10 @@ describe('JoinGameScreen', () => {
 
     const game = GameFactory.build()
     beforeEach(() => {
-        jest.spyOn(GameData, 'searchGames').mockReturnValueOnce(
-            Promise.resolve([game]),
-        )
+        jest.spyOn(GameData, 'searchGames').mockImplementation(async () => {
+            console.log('hitting spy')
+            return Promise.resolve([game])
+        })
     })
 
     it('should match snapshot', async () => {
