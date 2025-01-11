@@ -3,7 +3,6 @@ import BulkCodeModal from '../../../src/components/molecules/BulkCodeModal'
 import renderer from 'react-test-renderer'
 import { fireEvent, render } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 it('should match snapshot when visible', async () => {

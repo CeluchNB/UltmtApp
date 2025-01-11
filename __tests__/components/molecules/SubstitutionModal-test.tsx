@@ -5,8 +5,6 @@ import React from 'react'
 import SubstitutionModal from '../../../src/components/molecules/SubstitutionModal'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const originalWarn = console.warn.bind(console.warn)
 beforeAll(() => {
     console.warn = msg =>

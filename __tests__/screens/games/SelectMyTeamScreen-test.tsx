@@ -20,8 +20,6 @@ import {
     waitForElementToBeRemoved,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const client = new QueryClient()
 const navigate = jest.fn()
 const addListener = jest.fn()

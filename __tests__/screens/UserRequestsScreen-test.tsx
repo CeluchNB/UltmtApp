@@ -13,8 +13,6 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 import { fetchProfileData, requestObject } from '../../fixtures/data'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const navigate = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})
 

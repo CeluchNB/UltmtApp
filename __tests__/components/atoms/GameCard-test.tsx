@@ -2,7 +2,6 @@ import { GameStatus } from '../../../src/types/game'
 import React from 'react'
 import GameCard, { GameCardProps } from '../../../src/components/atoms/GameCard'
 import { fireEvent, render } from '@testing-library/react-native'
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 let props: GameCardProps
 const fn = jest.fn()

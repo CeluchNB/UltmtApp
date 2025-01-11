@@ -27,8 +27,6 @@ import {
     waitForElementToBeRemoved,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const setOptions = jest.fn()
 
 const props: JoinGameProps = {
@@ -49,9 +47,10 @@ describe('JoinGameScreen', () => {
 
     const game = GameFactory.build()
     beforeEach(() => {
-        jest.spyOn(GameData, 'searchGames').mockReturnValueOnce(
-            Promise.resolve([game]),
-        )
+        jest.spyOn(GameData, 'searchGames').mockImplementation(async () => {
+            console.log('hitting spy')
+            return Promise.resolve([game])
+        })
     })
 
     it('should match snapshot', async () => {

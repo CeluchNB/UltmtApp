@@ -17,8 +17,6 @@ import {
     waitFor,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const goBack = jest.fn()
 const props: SearchTournamentProps = {
     navigation: { goBack } as any,

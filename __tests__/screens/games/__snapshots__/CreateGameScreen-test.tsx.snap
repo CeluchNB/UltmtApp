@@ -277,6 +277,9 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                         "top": 6,
                       },
                       {
+                        "top": 0,
+                      },
+                      {
                         "backgroundColor": "#303030",
                         "borderColor": "#7AC6FF",
                         "borderRadius": 4,
@@ -287,70 +290,71 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                   }
                   testID="text-input-outline"
                 />
-                <View>
-                  <View
+                <View
+                  style={
+                    [
+                      {
+                        "flexGrow": 1,
+                        "paddingBottom": 0,
+                      },
+                      {
+                        "minHeight": 56,
+                        "paddingTop": 0,
+                      },
+                    ]
+                  }
+                >
+                  <TextInput
+                    accessibilityLabel="Game to"
+                    autoCapitalize="none"
+                    cursorColor="#ffd600"
+                    editable={true}
+                    keyboardType="number-pad"
+                    maxFontSizeMultiplier={1.5}
+                    multiline={false}
+                    onBlur={[Function]}
+                    onChangeText={[Function]}
+                    onFocus={[Function]}
+                    onLayout={[Function]}
+                    placeholder="Game to"
+                    placeholderTextColor="#ffffff"
+                    selectionColor="#ffd600"
                     style={
                       [
                         {
-                          "paddingBottom": 0,
+                          "flexGrow": 1,
+                          "margin": 0,
                         },
                         {
-                          "minHeight": 56,
-                          "paddingTop": 8,
+                          "height": 56,
                         },
+                        {
+                          "paddingBottom": 0,
+                          "paddingTop": 0,
+                        },
+                        {
+                          "color": "#ffd600",
+                          "fontFamily": "System",
+                          "fontSize": 16,
+                          "fontWeight": undefined,
+                          "letterSpacing": 0.15,
+                          "lineHeight": undefined,
+                          "minWidth": 65,
+                          "paddingHorizontal": 16,
+                          "textAlign": "left",
+                          "textAlignVertical": "center",
+                        },
+                        false,
+                        [
+                          {},
+                        ],
+                        undefined,
                       ]
                     }
-                  >
-                    <TextInput
-                      accessibilityLabel="Game to"
-                      autoCapitalize="none"
-                      cursorColor="#ffd600"
-                      editable={true}
-                      keyboardType="number-pad"
-                      maxFontSizeMultiplier={1.5}
-                      multiline={false}
-                      onBlur={[Function]}
-                      onChangeText={[Function]}
-                      onFocus={[Function]}
-                      placeholder="Game to"
-                      placeholderTextColor="#ffffff"
-                      selectionColor="#ffd600"
-                      style={
-                        [
-                          {
-                            "margin": 0,
-                            "zIndex": 1,
-                          },
-                          {
-                            "height": 48,
-                          },
-                          {
-                            "paddingBottom": 0,
-                            "paddingTop": 0,
-                          },
-                          {
-                            "color": "#ffd600",
-                            "fontFamily": "System",
-                            "fontSize": 16,
-                            "fontWeight": undefined,
-                            "letterSpacing": 0.15,
-                            "lineHeight": undefined,
-                            "paddingHorizontal": 16,
-                            "textAlign": "left",
-                            "textAlignVertical": "center",
-                          },
-                          false,
-                          [
-                            {},
-                          ],
-                          undefined,
-                        ]
-                      }
-                      testID="text-input-outlined"
-                      underlineColorAndroid="transparent"
-                      value="15"
-                    />
-                  </View>
+                    testID="text-input-outlined"
+                    underlineColorAndroid="transparent"
+                    value="15"
+                  />
                 </View>
               </View>
             </View>
@@ -412,6 +416,9 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                         "top": 6,
                       },
                       {
+                        "top": 0,
+                      },
+                      {
                         "backgroundColor": "#303030",
                         "borderColor": "#7AC6FF",
                         "borderRadius": 4,
@@ -422,70 +429,71 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                   }
                   testID="text-input-outline"
                 />
-                <View>
-                  <View
+                <View
+                  style={
+                    [
+                      {
+                        "flexGrow": 1,
+                        "paddingBottom": 0,
+                      },
+                      {
+                        "minHeight": 56,
+                        "paddingTop": 0,
+                      },
+                    ]
+                  }
+                >
+                  <TextInput
+                    accessibilityLabel="Half at"
+                    autoCapitalize="none"
+                    cursorColor="#ffd600"
+                    editable={true}
+                    keyboardType="number-pad"
+                    maxFontSizeMultiplier={1.5}
+                    multiline={false}
+                    onBlur={[Function]}
+                    onChangeText={[Function]}
+                    onFocus={[Function]}
+                    onLayout={[Function]}
+                    placeholder="Half at"
+                    placeholderTextColor="#ffffff"
+                    selectionColor="#ffd600"
                     style={
                       [
                         {
-                          "paddingBottom": 0,
+                          "flexGrow": 1,
+                          "margin": 0,
                         },
                         {
-                          "minHeight": 56,
-                          "paddingTop": 8,
+                          "height": 56,
                         },
+                        {
+                          "paddingBottom": 0,
+                          "paddingTop": 0,
+                        },
+                        {
+                          "color": "#ffd600",
+                          "fontFamily": "System",
+                          "fontSize": 16,
+                          "fontWeight": undefined,
+                          "letterSpacing": 0.15,
+                          "lineHeight": undefined,
+                          "minWidth": 65,
+                          "paddingHorizontal": 16,
+                          "textAlign": "left",
+                          "textAlignVertical": "center",
+                        },
+                        false,
+                        [
+                          {},
+                        ],
+                        undefined,
                       ]
                     }
-                  >
-                    <TextInput
-                      accessibilityLabel="Half at"
-                      autoCapitalize="none"
-                      cursorColor="#ffd600"
-                      editable={true}
-                      keyboardType="number-pad"
-                      maxFontSizeMultiplier={1.5}
-                      multiline={false}
-                      onBlur={[Function]}
-                      onChangeText={[Function]}
-                      onFocus={[Function]}
-                      placeholder="Half at"
-                      placeholderTextColor="#ffffff"
-                      selectionColor="#ffd600"
-                      style={
-                        [
-                          {
-                            "margin": 0,
-                            "zIndex": 1,
-                          },
-                          {
-                            "height": 48,
-                          },
-                          {
-                            "paddingBottom": 0,
-                            "paddingTop": 0,
-                          },
-                          {
-                            "color": "#ffd600",
-                            "fontFamily": "System",
-                            "fontSize": 16,
-                            "fontWeight": undefined,
-                            "letterSpacing": 0.15,
-                            "lineHeight": undefined,
-                            "paddingHorizontal": 16,
-                            "textAlign": "left",
-                            "textAlignVertical": "center",
-                          },
-                          false,
-                          [
-                            {},
-                          ],
-                          undefined,
-                        ]
-                      }
-                      testID="text-input-outlined"
-                      underlineColorAndroid="transparent"
-                      value="8"
-                    />
-                  </View>
+                    testID="text-input-outlined"
+                    underlineColorAndroid="transparent"
+                    value="8"
+                  />
                 </View>
               </View>
             </View>
@@ -554,6 +562,9 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                           "top": 6,
                         },
                         {
+                          "top": 0,
+                        },
+                        {
                           "backgroundColor": "#303030",
                           "borderColor": "#7AC6FF",
                           "borderRadius": 4,
@@ -564,69 +575,70 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                     }
                     testID="text-input-outline"
                   />
-                  <View>
-                    <View
+                  <View
+                    style={
+                      [
+                        {
+                          "flexGrow": 1,
+                          "paddingBottom": 0,
+                        },
+                        {
+                          "minHeight": 56,
+                          "paddingTop": 0,
+                        },
+                      ]
+                    }
+                  >
+                    <TextInput
+                      cursorColor="#ffd600"
+                      editable={true}
+                      focusable={false}
+                      maxFontSizeMultiplier={1.5}
+                      multiline={false}
+                      onBlur={[Function]}
+                      onChangeText={[Function]}
+                      onFocus={[Function]}
+                      onLayout={[Function]}
+                      onPressOut={[Function]}
+                      placeholder="12:00am"
+                      placeholderTextColor="#ffd600"
+                      selectionColor="#ffd600"
+                      showSoftInputOnFocus={false}
                       style={
                         [
                           {
-                            "paddingBottom": 0,
+                            "flexGrow": 1,
+                            "margin": 0,
                           },
                           {
-                            "minHeight": 56,
-                            "paddingTop": 8,
+                            "height": 56,
                           },
+                          {
+                            "paddingBottom": 0,
+                            "paddingTop": 0,
+                          },
+                          {
+                            "color": "rgba(28, 27, 31, 1)",
+                            "fontFamily": "System",
+                            "fontSize": 16,
+                            "fontWeight": undefined,
+                            "letterSpacing": 0.15,
+                            "lineHeight": undefined,
+                            "minWidth": 65,
+                            "paddingHorizontal": 16,
+                            "textAlign": "center",
+                            "textAlignVertical": "center",
+                          },
+                          false,
+                          [
+                            {},
+                          ],
+                          undefined,
                         ]
                       }
-                    >
-                      <TextInput
-                        cursorColor="#ffd600"
-                        editable={true}
-                        focusable={false}
-                        maxFontSizeMultiplier={1.5}
-                        multiline={false}
-                        onBlur={[Function]}
-                        onChangeText={[Function]}
-                        onFocus={[Function]}
-                        onPressOut={[Function]}
-                        placeholder="12:00am"
-                        placeholderTextColor="#ffd600"
-                        selectionColor="#ffd600"
-                        showSoftInputOnFocus={false}
-                        style={
-                          [
-                            {
-                              "margin": 0,
-                              "zIndex": 1,
-                            },
-                            {
-                              "height": 48,
-                            },
-                            {
-                              "paddingBottom": 0,
-                              "paddingTop": 0,
-                            },
-                            {
-                              "color": "rgba(28, 27, 31, 1)",
-                              "fontFamily": "System",
-                              "fontSize": 16,
-                              "fontWeight": undefined,
-                              "letterSpacing": 0.15,
-                              "lineHeight": undefined,
-                              "paddingHorizontal": 16,
-                              "textAlign": "center",
-                              "textAlignVertical": "center",
-                            },
-                            false,
-                            [
-                              {},
-                            ],
-                            undefined,
-                          ]
-                        }
-                        testID="date-text-input"
-                        underlineColorAndroid="transparent"
-                      />
-                    </View>
+                      testID="date-text-input"
+                      underlineColorAndroid="transparent"
+                    />
                   </View>
                 </View>
               </View>
@@ -677,6 +689,9 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                         "top": 6,
                       },
                       {
+                        "top": 0,
+                      },
+                      {
                         "backgroundColor": "#303030",
                         "borderColor": "#7AC6FF",
                         "borderRadius": 4,
@@ -687,70 +702,71 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                   }
                   testID="text-input-outline"
                 />
-                <View>
-                  <View
+                <View
+                  style={
+                    [
+                      {
+                        "flexGrow": 1,
+                        "paddingBottom": 0,
+                      },
+                      {
+                        "minHeight": 56,
+                        "paddingTop": 0,
+                      },
+                    ]
+                  }
+                >
+                  <TextInput
+                    accessibilityLabel="Soft cap"
+                    autoCapitalize="none"
+                    cursorColor="#ffd600"
+                    editable={true}
+                    keyboardType="number-pad"
+                    maxFontSizeMultiplier={1.5}
+                    multiline={false}
+                    onBlur={[Function]}
+                    onChangeText={[Function]}
+                    onFocus={[Function]}
+                    onLayout={[Function]}
+                    placeholder="Soft cap"
+                    placeholderTextColor="#ffffff"
+                    selectionColor="#ffd600"
                     style={
                       [
                         {
-                          "paddingBottom": 0,
+                          "flexGrow": 1,
+                          "margin": 0,
                         },
                         {
-                          "minHeight": 56,
-                          "paddingTop": 8,
+                          "height": 56,
                         },
+                        {
+                          "paddingBottom": 0,
+                          "paddingTop": 0,
+                        },
+                        {
+                          "color": "#ffd600",
+                          "fontFamily": "System",
+                          "fontSize": 16,
+                          "fontWeight": undefined,
+                          "letterSpacing": 0.15,
+                          "lineHeight": undefined,
+                          "minWidth": 65,
+                          "paddingHorizontal": 16,
+                          "textAlign": "left",
+                          "textAlignVertical": "center",
+                        },
+                        false,
+                        [
+                          {},
+                        ],
+                        undefined,
                       ]
                     }
-                  >
-                    <TextInput
-                      accessibilityLabel="Soft cap"
-                      autoCapitalize="none"
-                      cursorColor="#ffd600"
-                      editable={true}
-                      keyboardType="number-pad"
-                      maxFontSizeMultiplier={1.5}
-                      multiline={false}
-                      onBlur={[Function]}
-                      onChangeText={[Function]}
-                      onFocus={[Function]}
-                      placeholder="Soft cap"
-                      placeholderTextColor="#ffffff"
-                      selectionColor="#ffd600"
-                      style={
-                        [
-                          {
-                            "margin": 0,
-                            "zIndex": 1,
-                          },
-                          {
-                            "height": 48,
-                          },
-                          {
-                            "paddingBottom": 0,
-                            "paddingTop": 0,
-                          },
-                          {
-                            "color": "#ffd600",
-                            "fontFamily": "System",
-                            "fontSize": 16,
-                            "fontWeight": undefined,
-                            "letterSpacing": 0.15,
-                            "lineHeight": undefined,
-                            "paddingHorizontal": 16,
-                            "textAlign": "left",
-                            "textAlignVertical": "center",
-                          },
-                          false,
-                          [
-                            {},
-                          ],
-                          undefined,
-                        ]
-                      }
-                      testID="text-input-outlined"
-                      underlineColorAndroid="transparent"
-                      value="75"
-                    />
-                  </View>
+                    testID="text-input-outlined"
+                    underlineColorAndroid="transparent"
+                    value="75"
+                  />
                 </View>
               </View>
             </View>
@@ -812,6 +828,9 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                         "top": 6,
                       },
                       {
+                        "top": 0,
+                      },
+                      {
                         "backgroundColor": "#303030",
                         "borderColor": "#7AC6FF",
                         "borderRadius": 4,
@@ -822,70 +841,71 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                   }
                   testID="text-input-outline"
                 />
-                <View>
-                  <View
+                <View
+                  style={
+                    [
+                      {
+                        "flexGrow": 1,
+                        "paddingBottom": 0,
+                      },
+                      {
+                        "minHeight": 56,
+                        "paddingTop": 0,
+                      },
+                    ]
+                  }
+                >
+                  <TextInput
+                    accessibilityLabel="Hard cap"
+                    autoCapitalize="none"
+                    cursorColor="#ffd600"
+                    editable={true}
+                    keyboardType="number-pad"
+                    maxFontSizeMultiplier={1.5}
+                    multiline={false}
+                    onBlur={[Function]}
+                    onChangeText={[Function]}
+                    onFocus={[Function]}
+                    onLayout={[Function]}
+                    placeholder="Hard cap"
+                    placeholderTextColor="#ffffff"
+                    selectionColor="#ffd600"
                     style={
                       [
                         {
-                          "paddingBottom": 0,
+                          "flexGrow": 1,
+                          "margin": 0,
                         },
                         {
-                          "minHeight": 56,
-                          "paddingTop": 8,
+                          "height": 56,
                         },
+                        {
+                          "paddingBottom": 0,
+                          "paddingTop": 0,
+                        },
+                        {
+                          "color": "#ffd600",
+                          "fontFamily": "System",
+                          "fontSize": 16,
+                          "fontWeight": undefined,
+                          "letterSpacing": 0.15,
+                          "lineHeight": undefined,
+                          "minWidth": 65,
+                          "paddingHorizontal": 16,
+                          "textAlign": "left",
+                          "textAlignVertical": "center",
+                        },
+                        false,
+                        [
+                          {},
+                        ],
+                        undefined,
                       ]
                     }
-                  >
-                    <TextInput
-                      accessibilityLabel="Hard cap"
-                      autoCapitalize="none"
-                      cursorColor="#ffd600"
-                      editable={true}
-                      keyboardType="number-pad"
-                      maxFontSizeMultiplier={1.5}
-                      multiline={false}
-                      onBlur={[Function]}
-                      onChangeText={[Function]}
-                      onFocus={[Function]}
-                      placeholder="Hard cap"
-                      placeholderTextColor="#ffffff"
-                      selectionColor="#ffd600"
-                      style={
-                        [
-                          {
-                            "margin": 0,
-                            "zIndex": 1,
-                          },
-                          {
-                            "height": 48,
-                          },
-                          {
-                            "paddingBottom": 0,
-                            "paddingTop": 0,
-                          },
-                          {
-                            "color": "#ffd600",
-                            "fontFamily": "System",
-                            "fontSize": 16,
-                            "fontWeight": undefined,
-                            "letterSpacing": 0.15,
-                            "lineHeight": undefined,
-                            "paddingHorizontal": 16,
-                            "textAlign": "left",
-                            "textAlignVertical": "center",
-                          },
-                          false,
-                          [
-                            {},
-                          ],
-                          undefined,
-                        ]
-                      }
-                      testID="text-input-outlined"
-                      underlineColorAndroid="transparent"
-                      value="90"
-                    />
-                  </View>
+                    testID="text-input-outlined"
+                    underlineColorAndroid="transparent"
+                    value="90"
+                  />
                 </View>
               </View>
             </View>
@@ -947,6 +967,9 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                         "top": 6,
                       },
                       {
+                        "top": 0,
+                      },
+                      {
                         "backgroundColor": "#303030",
                         "borderColor": "#7AC6FF",
                         "borderRadius": 4,
@@ -957,70 +980,71 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                   }
                   testID="text-input-outline"
                 />
-                <View>
-                  <View
+                <View
+                  style={
+                    [
+                      {
+                        "flexGrow": 1,
+                        "paddingBottom": 0,
+                      },
+                      {
+                        "minHeight": 56,
+                        "paddingTop": 0,
+                      },
+                    ]
+                  }
+                >
+                  <TextInput
+                    accessibilityLabel="Players"
+                    autoCapitalize="none"
+                    cursorColor="#ffd600"
+                    editable={true}
+                    keyboardType="number-pad"
+                    maxFontSizeMultiplier={1.5}
+                    multiline={false}
+                    onBlur={[Function]}
+                    onChangeText={[Function]}
+                    onFocus={[Function]}
+                    onLayout={[Function]}
+                    placeholder="Players"
+                    placeholderTextColor="#ffffff"
+                    selectionColor="#ffd600"
                     style={
                       [
                         {
-                          "paddingBottom": 0,
+                          "flexGrow": 1,
+                          "margin": 0,
                         },
                         {
-                          "minHeight": 56,
-                          "paddingTop": 8,
+                          "height": 56,
                         },
+                        {
+                          "paddingBottom": 0,
+                          "paddingTop": 0,
+                        },
+                        {
+                          "color": "#ffd600",
+                          "fontFamily": "System",
+                          "fontSize": 16,
+                          "fontWeight": undefined,
+                          "letterSpacing": 0.15,
+                          "lineHeight": undefined,
+                          "minWidth": 65,
+                          "paddingHorizontal": 16,
+                          "textAlign": "left",
+                          "textAlignVertical": "center",
+                        },
+                        false,
+                        [
+                          {},
+                        ],
+                        undefined,
                       ]
                     }
-                  >
-                    <TextInput
-                      accessibilityLabel="Players"
-                      autoCapitalize="none"
-                      cursorColor="#ffd600"
-                      editable={true}
-                      keyboardType="number-pad"
-                      maxFontSizeMultiplier={1.5}
-                      multiline={false}
-                      onBlur={[Function]}
-                      onChangeText={[Function]}
-                      onFocus={[Function]}
-                      placeholder="Players"
-                      placeholderTextColor="#ffffff"
-                      selectionColor="#ffd600"
-                      style={
-                        [
-                          {
-                            "margin": 0,
-                            "zIndex": 1,
-                          },
-                          {
-                            "height": 48,
-                          },
-                          {
-                            "paddingBottom": 0,
-                            "paddingTop": 0,
-                          },
-                          {
-                            "color": "#ffd600",
-                            "fontFamily": "System",
-                            "fontSize": 16,
-                            "fontWeight": undefined,
-                            "letterSpacing": 0.15,
-                            "lineHeight": undefined,
-                            "paddingHorizontal": 16,
-                            "textAlign": "left",
-                            "textAlignVertical": "center",
-                          },
-                          false,
-                          [
-                            {},
-                          ],
-                          undefined,
-                        ]
-                      }
-                      testID="text-input-outlined"
-                      underlineColorAndroid="transparent"
-                      value="7"
-                    />
-                  </View>
+                    testID="text-input-outlined"
+                    underlineColorAndroid="transparent"
+                    value="7"
+                  />
                 </View>
               </View>
             </View>
@@ -1082,6 +1106,9 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                         "top": 6,
                       },
                       {
+                        "top": 0,
+                      },
+                      {
                         "backgroundColor": "#303030",
                         "borderColor": "#7AC6FF",
                         "borderRadius": 4,
@@ -1092,70 +1119,71 @@ exports[`CreateGameScreen should match snapshot 1`] = `
                   }
                   testID="text-input-outline"
                 />
-                <View>
-                  <View
+                <View
+                  style={
+                    [
+                      {
+                        "flexGrow": 1,
+                        "paddingBottom": 0,
+                      },
+                      {
+                        "minHeight": 56,
+                        "paddingTop": 0,
+                      },
+                    ]
+                  }
+                >
+                  <TextInput
+                    accessibilityLabel="Timeouts"
+                    autoCapitalize="none"
+                    cursorColor="#ffd600"
+                    editable={true}
+                    keyboardType="number-pad"
+                    maxFontSizeMultiplier={1.5}
+                    multiline={false}
+                    onBlur={[Function]}
+                    onChangeText={[Function]}
+                    onFocus={[Function]}
+                    onLayout={[Function]}
+                    placeholder="Timeouts"
+                    placeholderTextColor="#ffffff"
+                    selectionColor="#ffd600"
                     style={
                       [
                         {
-                          "paddingBottom": 0,
+                          "flexGrow": 1,
+                          "margin": 0,
                         },
                         {
-                          "minHeight": 56,
-                          "paddingTop": 8,
+                          "height": 56,
                         },
+                        {
+                          "paddingBottom": 0,
+                          "paddingTop": 0,
+                        },
+                        {
+                          "color": "#ffd600",
+                          "fontFamily": "System",
+                          "fontSize": 16,
+                          "fontWeight": undefined,
+                          "letterSpacing": 0.15,
+                          "lineHeight": undefined,
+                          "minWidth": 65,
+                          "paddingHorizontal": 16,
+                          "textAlign": "left",
+                          "textAlignVertical": "center",
+                        },
+                        false,
+                        [
+                          {},
+                        ],
+                        undefined,
                       ]
                     }
-                  >
-                    <TextInput
-                      accessibilityLabel="Timeouts"
-                      autoCapitalize="none"
-                      cursorColor="#ffd600"
-                      editable={true}
-                      keyboardType="number-pad"
-                      maxFontSizeMultiplier={1.5}
-                      multiline={false}
-                      onBlur={[Function]}
-                      onChangeText={[Function]}
-                      onFocus={[Function]}
-                      placeholder="Timeouts"
-                      placeholderTextColor="#ffffff"
-                      selectionColor="#ffd600"
-                      style={
-                        [
-                          {
-                            "margin": 0,
-                            "zIndex": 1,
-                          },
-                          {
-                            "height": 48,
-                          },
-                          {
-                            "paddingBottom": 0,
-                            "paddingTop": 0,
-                          },
-                          {
-                            "color": "#ffd600",
-                            "fontFamily": "System",
-                            "fontSize": 16,
-                            "fontWeight": undefined,
-                            "letterSpacing": 0.15,
-                            "lineHeight": undefined,
-                            "paddingHorizontal": 16,
-                            "textAlign": "left",
-                            "textAlignVertical": "center",
-                          },
-                          false,
-                          [
-                            {},
-                          ],
-                          undefined,
-                        ]
-                      }
-                      testID="text-input-outlined"
-                      underlineColorAndroid="transparent"
-                      value="1"
-                    />
-                  </View>
+                    testID="text-input-outlined"
+                    underlineColorAndroid="transparent"
+                    value="1"
+                  />
                 </View>
               </View>
             </View>

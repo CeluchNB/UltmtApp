@@ -23,8 +23,6 @@ import {
     waitUntilRefreshComplete,
 } from '../../fixtures/utils'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const navigate = jest.fn()
 const addListener = jest.fn()
 

@@ -4,7 +4,6 @@ import PlayerActionTagModal from '../../../src/components/molecules/PlayerAction
 import React from 'react'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const originalWarn = console.warn.bind(console.warn)
 beforeAll(() => {
     jest.useFakeTimers({ legacyFakeTimers: true })

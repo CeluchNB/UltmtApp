@@ -9,8 +9,6 @@ import renderer from 'react-test-renderer'
 import store from '../../src/store/store'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const reset = jest.fn()
 const navigate = jest.fn()
 const addListener = jest.fn().mockImplementation((event, callback) => {

@@ -15,7 +15,6 @@ import PointAccordionGroup, {
 } from '../../../src/components/organisms/PointAccordionGroup'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 const mockedNavigate = jest.fn()
 
 jest.mock('@react-navigation/native', () => {

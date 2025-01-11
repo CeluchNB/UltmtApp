@@ -5,7 +5,6 @@ import { render } from '@testing-library/react-native'
 import { Action, ActionFactory, ActionType } from '../../../src/types/action'
 import Point, { PointStatus } from '../../../src/types/point'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native-google-mobile-ads', () => {
     return {
         default: { initialize: jest.fn(), setRequestConfiguration: jest.fn() },

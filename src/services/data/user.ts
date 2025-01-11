@@ -1,7 +1,7 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { throwApiError } from '../../utils/service-utils'
 import { CreateUserData, DisplayUser, User } from '../../types/user'
 import { getTokens, withToken } from './auth'
@@ -318,7 +318,7 @@ export const getUserId = async (): Promise<string> => {
     if (!token) {
         return ''
     }
-    const decoded = jwt_decode(token) as any
+    const decoded = jwtDecode(token) as any
     return decoded.sub
 }
 

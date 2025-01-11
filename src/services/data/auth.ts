@@ -2,7 +2,7 @@ import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import { AxiosResponse } from 'axios'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { isTokenExpired, throwApiError } from '../../utils/service-utils'
 import {
     login as networkLogin,
@@ -127,7 +127,7 @@ export const isLoggedIn = async (): Promise<boolean> => {
             throw new ApiError(Constants.GENERIC_GET_TOKEN_ERROR)
         }
 
-        const { exp: rExp } = jwt_decode(rToken) as any
+        const { exp: rExp } = jwtDecode(rToken) as any
         if (isTokenExpired(rExp)) {
             throw new ApiError(Constants.GENERIC_GET_TOKEN_ERROR)
         }
@@ -153,7 +153,7 @@ export const hasValidAccessToken = async (): Promise<boolean> => {
         return false
     }
 
-    const { exp } = jwt_decode(token) as any
+    const { exp } = jwtDecode(token) as any
     return !isTokenExpired(exp)
 }
 

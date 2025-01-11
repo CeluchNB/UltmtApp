@@ -9,13 +9,13 @@ import {
     act,
     fireEvent,
     render,
+    waitFor,
     waitForElementToBeRemoved,
 } from '@testing-library/react-native'
 
 import MockDate from 'mockdate'
 MockDate.set('01 October 2022 00:00 UTC')
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('../../../src/components/atoms/GameCard', () => () => {
     return <div>Game</div>
 })
@@ -118,13 +118,9 @@ it('should load more on scroll', async () => {
     )
 
     const scrollView = getByTestId('game-search-list')
-    fireEvent.scroll(scrollView, {
-        nativeEvent: {
-            contentSize: { height: 100, width: 100 },
-            contentOffset: { y: 10, x: 0 },
-            layoutMeasurement: { height: 100, width: 100 }, // Dimensions of the device
-        },
-    })
+    fireEvent(scrollView, 'onEndReached')
 
-    expect(spy).toHaveBeenCalledTimes(2)
+    await waitFor(async () => {
+        expect(spy).toHaveBeenCalledTimes(2)
+    })
 })

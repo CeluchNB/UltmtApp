@@ -2,7 +2,6 @@ import JoinByCodeModal from '../../../src/components/molecules/JoinByCodeModal'
 import React from 'react'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 describe('JoinByCodeModal', () => {

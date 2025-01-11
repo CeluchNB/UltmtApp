@@ -49,9 +49,11 @@ exports[`SearchBar should match snapshot 1`] = `
       testID="text-input-underline"
     />
     <View
+      onLayout={[Function]}
       style={
         [
           {
+            "flexGrow": 1,
             "paddingBottom": 0,
             "paddingTop": 0,
           },
@@ -78,11 +80,10 @@ exports[`SearchBar should match snapshot 1`] = `
         style={
           [
             {
+              "flexGrow": 1,
               "margin": 0,
             },
-            {
-              "height": 56,
-            },
+            {},
             {
               "paddingBottom": 0,
               "paddingTop": 0,
@@ -94,6 +95,7 @@ exports[`SearchBar should match snapshot 1`] = `
               "fontWeight": undefined,
               "letterSpacing": 0.15,
               "lineHeight": undefined,
+              "minWidth": 65,
               "paddingLeft": 16,
               "paddingRight": 16,
               "textAlign": "left",
@@ -314,9 +316,11 @@ exports[`SearchBar should match snapshot with minimal props 1`] = `
       testID="text-input-underline"
     />
     <View
+      onLayout={[Function]}
       style={
         [
           {
+            "flexGrow": 1,
             "paddingBottom": 0,
             "paddingTop": 0,
           },
@@ -343,11 +347,10 @@ exports[`SearchBar should match snapshot with minimal props 1`] = `
         style={
           [
             {
+              "flexGrow": 1,
               "margin": 0,
             },
-            {
-              "height": 56,
-            },
+            {},
             {
               "paddingBottom": 0,
               "paddingTop": 0,
@@ -359,6 +362,7 @@ exports[`SearchBar should match snapshot with minimal props 1`] = `
               "fontWeight": undefined,
               "letterSpacing": 0.15,
               "lineHeight": undefined,
+              "minWidth": 65,
               "paddingLeft": 16,
               "paddingRight": 16,
               "textAlign": "left",

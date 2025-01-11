@@ -7,7 +7,6 @@ import React, { useEffect } from 'react'
 import { RealmProvider, useRealm } from '@ultmt-app/context/realm'
 import { fireEvent, render, screen } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/Animated/animations/TimingAnimation')
 
 const teamOne = DisplayTeamFactory.build()

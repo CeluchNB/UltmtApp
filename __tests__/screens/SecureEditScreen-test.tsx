@@ -9,8 +9,6 @@ import store from '../../src/store/store'
 import { SecureEditField, SecureEditProps } from '../../src/types/navigation'
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const goBack = jest.fn()
 const setOptions = jest.fn()
 let props: SecureEditProps

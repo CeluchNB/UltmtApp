@@ -29,6 +29,9 @@ exports[`should match snapshot while closed 1`] = `
               "top": 6,
             },
             {
+              "top": 0,
+            },
+            {
               "backgroundColor": "#303030",
               "borderColor": "#7AC6FF",
               "borderRadius": 4,
@@ -39,69 +42,70 @@ exports[`should match snapshot while closed 1`] = `
         }
         testID="text-input-outline"
       />
-      <View>
-        <View
+      <View
+        style={
+          [
+            {
+              "flexGrow": 1,
+              "paddingBottom": 0,
+            },
+            {
+              "minHeight": 56,
+              "paddingTop": 0,
+            },
+          ]
+        }
+      >
+        <TextInput
+          cursorColor="#ffd600"
+          editable={true}
+          focusable={false}
+          maxFontSizeMultiplier={1.5}
+          multiline={false}
+          onBlur={[Function]}
+          onChangeText={[Function]}
+          onFocus={[Function]}
+          onLayout={[Function]}
+          onPressOut={[Function]}
+          placeholder="01/01/22"
+          placeholderTextColor="#ffd600"
+          selectionColor="#ffd600"
+          showSoftInputOnFocus={false}
           style={
             [
               {
-                "paddingBottom": 0,
+                "flexGrow": 1,
+                "margin": 0,
               },
               {
-                "minHeight": 56,
-                "paddingTop": 8,
+                "height": 56,
               },
+              {
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              },
+              {
+                "color": "rgba(28, 27, 31, 1)",
+                "fontFamily": "System",
+                "fontSize": 16,
+                "fontWeight": undefined,
+                "letterSpacing": 0.15,
+                "lineHeight": undefined,
+                "minWidth": 65,
+                "paddingHorizontal": 16,
+                "textAlign": "left",
+                "textAlignVertical": "center",
+              },
+              false,
+              [
+                {},
+              ],
+              undefined,
             ]
           }
-        >
-          <TextInput
-            cursorColor="#ffd600"
-            editable={true}
-            focusable={false}
-            maxFontSizeMultiplier={1.5}
-            multiline={false}
-            onBlur={[Function]}
-            onChangeText={[Function]}
-            onFocus={[Function]}
-            onPressOut={[Function]}
-            placeholder="01/01/22"
-            placeholderTextColor="#ffd600"
-            selectionColor="#ffd600"
-            showSoftInputOnFocus={false}
-            style={
-              [
-                {
-                  "margin": 0,
-                  "zIndex": 1,
-                },
-                {
-                  "height": 48,
-                },
-                {
-                  "paddingBottom": 0,
-                  "paddingTop": 0,
-                },
-                {
-                  "color": "rgba(28, 27, 31, 1)",
-                  "fontFamily": "System",
-                  "fontSize": 16,
-                  "fontWeight": undefined,
-                  "letterSpacing": 0.15,
-                  "lineHeight": undefined,
-                  "paddingHorizontal": 16,
-                  "textAlign": "left",
-                  "textAlignVertical": "center",
-                },
-                false,
-                [
-                  {},
-                ],
-                undefined,
-              ]
-            }
-            testID="date-text-input"
-            underlineColorAndroid="transparent"
-          />
-        </View>
+          testID="date-text-input"
+          underlineColorAndroid="transparent"
+        />
       </View>
     </View>
   </View>

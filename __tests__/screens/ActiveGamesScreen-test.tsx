@@ -17,8 +17,6 @@ import {
     waitFor,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const mockedNavigate = jest.fn()
 const setOptions = jest.fn()
 jest.mock('@react-navigation/native', () => {

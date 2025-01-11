@@ -17,8 +17,6 @@ import {
     waitForElementToBeRemoved,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const teamOne = {
     _id: 'team1',
     place: 'Place 1',

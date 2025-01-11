@@ -9,8 +9,6 @@ import {
     within,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const mockedNavigate = jest.fn()
 jest.mock('@react-navigation/native', () => {
     const actualNav = jest.requireActual('@react-navigation/native')

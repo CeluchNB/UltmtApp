@@ -16,8 +16,6 @@ import {
 } from '../../src/types/navigation'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const navigate = jest.fn()
 const props: SettingsScreenProps = {
     navigation: { navigate } as any,
