@@ -39,14 +39,14 @@ export const useSelectPlayers = (
 
     const [lineOptions, setLineOptions] = useState(
         mapLines(
-            realmLines.map(l => ({ ...new LineSchema(l), _id: l._id })),
+            (realmLines ?? []).map(l => ({ ...new LineSchema(l), _id: l._id })),
             () => false,
         ),
     )
 
     const [playerOptions, setPlayerOptions] = useState<{
         [x: string]: { player: InGameStatsUser; selected: boolean }
-    }>(mapPlayers(players, () => false))
+    }>(mapPlayers(players ?? [], () => false))
 
     useEffect(() => {
         setPlayerOptions(mapPlayers(players, () => false))
@@ -145,7 +145,10 @@ export const useSelectPlayers = (
     const refreshLines = () => {
         setLineOptions(
             mapLines(
-                realmLines.map(l => ({ ...new LineSchema(l), _id: l._id })),
+                (realmLines ?? []).map(l => ({
+                    ...new LineSchema(l),
+                    _id: l._id,
+                })),
                 () => false,
             ),
         )

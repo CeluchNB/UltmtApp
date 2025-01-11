@@ -9,8 +9,6 @@ import { GameStats, TeamStats } from '../../src/types/stats'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render, screen } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 jest.mock('react-native-element-dropdown', () => {
     return {
         Dropdown: () => <span>dropdown</span>,

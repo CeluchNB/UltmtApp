@@ -7,8 +7,6 @@ import renderer from 'react-test-renderer'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const reset = jest.fn()
 const navigate = jest.fn()
 

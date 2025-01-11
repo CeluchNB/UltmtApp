@@ -23,7 +23,6 @@ import {
     setSavedAction,
 } from '../../../src/store/reducers/features/action/viewAction'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/Animated/animations/TimingAnimation')
 
 const mockedNavigate = jest.fn()

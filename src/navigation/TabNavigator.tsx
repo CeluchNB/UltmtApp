@@ -3,7 +3,7 @@ import AccountNavigator from './../navigation/AccountNavigator'
 import { AllScreenProps } from '../types/navigation'
 import GameNavigator from './../navigation/GameNavigator'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { useTheme } from './../hooks'
 
 const Tab = createMaterialBottomTabNavigator()
@@ -33,7 +33,7 @@ const TabNavigator: React.FC<AllScreenProps> = () => {
                 options={{
                     tabBarLabel: 'Account',
                     tabBarIcon: AccountIcon,
-                    tabBarTestID: 'account',
+                    tabBarButtonTestID: 'account',
                 }}
             />
             <Tab.Screen
@@ -42,7 +42,7 @@ const TabNavigator: React.FC<AllScreenProps> = () => {
                 options={{
                     tabBarLabel: 'Games',
                     tabBarIcon: HomeIcon,
-                    tabBarTestID: 'games',
+                    tabBarButtonTestID: 'games',
                 }}
             />
         </Tab.Navigator>

@@ -2,7 +2,6 @@ import LabeledFormInput from '../../../src/components/molecules/LabeledFormInput
 import React from 'react'
 import { Text } from 'react-native'
 import { fireEvent, render } from '@testing-library/react-native'
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 const onChange = jest.fn()
 const props = {

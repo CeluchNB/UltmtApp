@@ -14,8 +14,6 @@ import { waitUntilRefreshComplete } from '../../fixtures/utils'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { act, fireEvent, render, screen } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const navigate = jest.fn()
 const goBack = jest.fn()
 const addListener = jest.fn().mockReturnValue(() => {})

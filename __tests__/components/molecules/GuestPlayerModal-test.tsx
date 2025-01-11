@@ -19,8 +19,6 @@ import {
 import { NavigationContainer } from '@react-navigation/native'
 import { TeamFactory } from '../../test-data/team'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const client = new QueryClient()
 
 describe('GuestPlayerModal', () => {

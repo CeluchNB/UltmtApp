@@ -9,8 +9,6 @@ import { fetchProfileData } from '../../fixtures/data'
 import store from '../../src/store/store'
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const navigate = jest.fn()
 
 const token = '1234.asdf.6543'

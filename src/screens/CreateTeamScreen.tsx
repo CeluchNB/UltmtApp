@@ -164,7 +164,7 @@ const CreateTeamScreen: React.FC<CreateTeamProps> = ({ navigation }) => {
             width: '75%',
             alignSelf: 'center',
             backgroundColor: colors.primary,
-            pickerStyleType: 'dropdown',
+            // pickerStyleType: 'dropdown',
             margin: 0,
         },
         button: {

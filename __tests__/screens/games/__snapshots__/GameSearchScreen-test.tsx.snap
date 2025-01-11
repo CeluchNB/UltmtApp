@@ -58,9 +58,11 @@ exports[`should match snapshot 1`] = `
           testID="text-input-underline"
         />
         <View
+          onLayout={[Function]}
           style={
             [
               {
+                "flexGrow": 1,
                 "paddingBottom": 0,
                 "paddingTop": 0,
               },
@@ -87,11 +89,10 @@ exports[`should match snapshot 1`] = `
             style={
               [
                 {
+                  "flexGrow": 1,
                   "margin": 0,
                 },
-                {
-                  "height": 56,
-                },
+                {},
                 {
                   "paddingBottom": 0,
                   "paddingTop": 0,
@@ -103,6 +104,7 @@ exports[`should match snapshot 1`] = `
                   "fontWeight": undefined,
                   "letterSpacing": 0.15,
                   "lineHeight": undefined,
+                  "minWidth": 65,
                   "paddingLeft": 16,
                   "paddingRight": 16,
                   "textAlign": "left",
@@ -273,14 +275,6 @@ exports[`should match snapshot 1`] = `
       </View>
     </View>
   </View>
-  <Modal
-    animationType="slide"
-    hardwareAccelerated={false}
-    onRequestClose={[Function]}
-    testID="base-modal"
-    transparent={true}
-    visible={false}
-  />
   <View>
     <RCTScrollView
       horizontal={true}
@@ -415,6 +409,13 @@ exports[`should match snapshot 1`] = `
                           "writingDirection": "ltr",
                         },
                         [
+                          {
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
                           [
                             {
                               "marginVertical": 6,
@@ -434,10 +435,6 @@ exports[`should match snapshot 1`] = `
                             },
                             undefined,
                           ],
-                          {
-                            "color": "#ffd600",
-                            "fontWeight": "bold",
-                          },
                         ],
                       ]
                     }
@@ -580,6 +577,13 @@ exports[`should match snapshot 1`] = `
                           "writingDirection": "ltr",
                         },
                         [
+                          {
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
                           [
                             {
                               "marginVertical": 6,
@@ -599,10 +603,6 @@ exports[`should match snapshot 1`] = `
                             },
                             undefined,
                           ],
-                          {
-                            "color": "#ffd600",
-                            "fontWeight": "bold",
-                          },
                         ],
                       ]
                     }
@@ -746,6 +746,13 @@ exports[`should match snapshot 1`] = `
                           "writingDirection": "ltr",
                         },
                         [
+                          {
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
                           [
                             {
                               "marginVertical": 6,
@@ -765,10 +772,6 @@ exports[`should match snapshot 1`] = `
                             },
                             undefined,
                           ],
-                          {
-                            "color": "#ffd600",
-                            "fontWeight": "bold",
-                          },
                         ],
                       ]
                     }
@@ -911,6 +914,13 @@ exports[`should match snapshot 1`] = `
                           "writingDirection": "ltr",
                         },
                         [
+                          {
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
                           [
                             {
                               "marginVertical": 6,
@@ -930,10 +940,6 @@ exports[`should match snapshot 1`] = `
                             },
                             undefined,
                           ],
-                          {
-                            "color": "#ffd600",
-                            "fontWeight": "bold",
-                          },
                         ],
                       ]
                     }
@@ -1243,6 +1249,13 @@ exports[`should match snapshot 1`] = `
                           "writingDirection": "ltr",
                         },
                         [
+                          {
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
                           [
                             {
                               "marginVertical": 6,
@@ -1262,10 +1275,6 @@ exports[`should match snapshot 1`] = `
                             },
                             undefined,
                           ],
-                          {
-                            "color": "#303030",
-                            "fontWeight": "bold",
-                          },
                         ],
                       ]
                     }
@@ -1408,6 +1417,13 @@ exports[`should match snapshot 1`] = `
                           "writingDirection": "ltr",
                         },
                         [
+                          {
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
                           [
                             {
                               "marginVertical": 6,
@@ -1427,10 +1443,6 @@ exports[`should match snapshot 1`] = `
                             },
                             undefined,
                           ],
-                          {
-                            "color": "#303030",
-                            "fontWeight": "bold",
-                          },
                         ],
                       ]
                     }
@@ -1540,7 +1552,7 @@ exports[`should match snapshot 1`] = `
     onScrollEndDrag={[Function]}
     removeClippedSubviews={false}
     renderItem={[Function]}
-    scrollEventThrottle={50}
+    scrollEventThrottle={0.0001}
     stickyHeaderIndices={[]}
     testID="game-search-list"
     viewabilityConfigCallbackPairs={[]}

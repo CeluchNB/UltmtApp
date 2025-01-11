@@ -10,8 +10,6 @@ import {
     waitFor,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const mockedPush = jest.fn()
 jest.mock('@react-navigation/native', () => {
     const actualNav = jest.requireActual('@react-navigation/native')

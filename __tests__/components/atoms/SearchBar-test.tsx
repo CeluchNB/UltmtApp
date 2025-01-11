@@ -2,8 +2,6 @@ import React from 'react'
 import SearchBar from '../../../src/components/atoms/SearchBar'
 import { act, fireEvent, render } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 describe('SearchBar', () => {
     beforeAll(() => {
         jest.useFakeTimers()

@@ -19,7 +19,6 @@ import {
     waitFor,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 const goBack = jest.fn()
@@ -316,7 +315,7 @@ describe('RequestUserScreen', () => {
             expect(spy).toHaveBeenCalled()
         })
 
-        const modal = getByTestId('base-modal')
+        const modal = getByTestId('base-modal', { includeHiddenElements: true })
         await act(async () => {})
         expect(modal.props.visible).toBe(true)
     })
@@ -341,12 +340,9 @@ describe('RequestUserScreen', () => {
 
         expect(spy).toHaveBeenCalled()
 
-        const modal = getByTestId('base-modal')
-        await act(async () => {})
-        expect(modal.props.visible).toBe(true)
-
-        const error = getByText('bulk code error')
-        expect(error).toBeTruthy()
+        await waitFor(async () => {
+            expect(getByText('bulk code error')).toBeTruthy()
+        })
     })
 
     it('should close bulk code modal', async () => {
@@ -354,7 +350,7 @@ describe('RequestUserScreen', () => {
             .spyOn(TeamData, 'createBulkJoinCode')
             .mockReturnValueOnce(Promise.resolve('123456'))
 
-        const { getByText, getByTestId } = render(
+        const { getByText, queryByText } = render(
             <Provider store={store}>
                 <NavigationContainer>
                     <QueryClientProvider client={client}>
@@ -369,16 +365,14 @@ describe('RequestUserScreen', () => {
 
         expect(spy).toHaveBeenCalled()
 
-        const modal = getByTestId('base-modal')
-        await act(async () => {})
-        expect(modal.props.visible).toBe(true)
+        await waitFor(async () => {
+            expect(getByText('123456')).toBeTruthy()
+        })
 
         const doneButton = getByText('done')
         fireEvent.press(doneButton)
 
-        const closedModal = getByTestId('base-modal')
-        await act(async () => {})
-        expect(closedModal.props.visible).toBe(false)
+        expect(queryByText('123456')).toBeFalsy()
     })
 
     it('handles add guest click', async () => {

@@ -150,7 +150,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
     const game = useObject<GameSchema>('Game', gameId)
     const players =
         game?.teamOne._id === teamId
-            ? game.teamOnePlayers
+            ? game?.teamOnePlayers
             : game?.teamTwoPlayers
 
     const { playerOptions, toggleSelection, clearSelection, toggleLine } =
@@ -160,7 +160,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
         `gameId == '${gameId}'`,
     )
     const gameLines = useMemo(() => {
-        return realmLines.map(line => ({
+        return (realmLines ?? []).map(line => ({
             ...new LineSchema(line),
             _id: line._id,
         }))
@@ -168,7 +168,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
 
     const [mode, setMode] = useState<LineBuilderState>('add')
     const [activeLine, setActiveLine] = useState<LineSchema | undefined>(
-        gameLines.at(0),
+        gameLines?.[0],
     )
     const [addModalVisible, setAddModalVisible] = useState(false)
     const [deleteModalVisible, setDeleteModalVisible] = useState(false)
@@ -176,7 +176,9 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
         undefined,
     )
 
-    const onSelectLine = (line: LineSchema) => {
+    const onSelectLine = (line?: LineSchema) => {
+        if (!line) return
+
         setActiveLine(line)
         setMode('view')
         clearSelection()
@@ -204,7 +206,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
         const line = realm.objectForPrimaryKey<LineSchema>('Line', deletingLine)
         if (!line) return
 
-        setActiveLine(gameLines.length > 0 ? gameLines.at(0) : undefined)
+        setActiveLine((gameLines?.length ?? 0) > 0 ? gameLines?.[0] : undefined)
         realm.write(() => {
             realm.delete(line)
         })
@@ -245,14 +247,14 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
         <SafeAreaView style={styles.screen}>
             <View style={styles.pageContainer}>
                 <View style={styles.contentContainer}>
-                    {gameLines.length === 0 ? (
+                    {gameLines?.length === 0 ? (
                         <Text style={styles.noLineWarning}>
                             No lines created yet
                         </Text>
                     ) : (
                         <View style={styles.listContainer}>
                             <FlatList
-                                data={gameLines}
+                                data={gameLines ?? []}
                                 renderItem={({ item }) => {
                                     return (
                                         <View style={styles.lineContainer}>
@@ -345,7 +347,7 @@ export const LineBuilder: React.FC<LineBuilderProps> = ({ route }) => {
                             onPress={async () => {
                                 setMode('add')
                                 setActiveLine(
-                                    gameLines.at(gameLines.length - 1),
+                                    gameLines?.[(gameLines?.length ?? 0) - 1],
                                 )
                             }}
                         />

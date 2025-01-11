@@ -15,8 +15,6 @@ import {
     waitFor,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const navigate = jest.fn()
 const reset = jest.fn()
 const game = GameFactory.build()

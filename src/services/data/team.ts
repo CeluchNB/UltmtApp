@@ -1,7 +1,7 @@
 import * as Constants from '../../utils/constants'
 import { ApiError } from '../../types/services'
 import EncryptedStorage from 'react-native-encrypted-storage'
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { withToken } from './auth'
 import { CreateTeam, Team } from '../../types/team'
 import { isTokenExpired, throwApiError } from '../../utils/service-utils'
@@ -236,7 +236,7 @@ export const getManagingTeams = async (): Promise<Team[]> => {
 
         // refresh token is most persistent method of determining the current user's ID
         // teams are not available if token is not valid
-        const { exp: rExp, sub: managerId } = jwt_decode(refreshToken) as any
+        const { exp: rExp, sub: managerId } = jwtDecode(refreshToken) as any
         if (isTokenExpired(rExp)) return []
 
         return await localGetTeamsByManager(managerId)

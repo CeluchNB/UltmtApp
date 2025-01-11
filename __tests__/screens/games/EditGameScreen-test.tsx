@@ -14,8 +14,6 @@ import {
     waitFor,
 } from '@testing-library/react-native'
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-
 const goBack = jest.fn()
 const game = GameFactory.build()
 const props: EditGameProps = {

@@ -57,9 +57,11 @@ exports[`GameHomeScreen should match snapshot with live and recent data 1`] = `
         testID="text-input-underline"
       />
       <View
+        onLayout={[Function]}
         style={
           [
             {
+              "flexGrow": 1,
               "paddingBottom": 0,
               "paddingTop": 0,
             },
@@ -86,11 +88,10 @@ exports[`GameHomeScreen should match snapshot with live and recent data 1`] = `
           style={
             [
               {
+                "flexGrow": 1,
                 "margin": 0,
               },
-              {
-                "height": 56,
-              },
+              {},
               {
                 "paddingBottom": 0,
                 "paddingTop": 0,
@@ -102,6 +103,7 @@ exports[`GameHomeScreen should match snapshot with live and recent data 1`] = `
                 "fontWeight": undefined,
                 "letterSpacing": 0.15,
                 "lineHeight": undefined,
+                "minWidth": 65,
                 "paddingLeft": 16,
                 "paddingRight": 16,
                 "textAlign": "left",
@@ -585,9 +587,11 @@ exports[`GameHomeScreen should match snapshot with no data 1`] = `
         testID="text-input-underline"
       />
       <View
+        onLayout={[Function]}
         style={
           [
             {
+              "flexGrow": 1,
               "paddingBottom": 0,
               "paddingTop": 0,
             },
@@ -614,11 +618,10 @@ exports[`GameHomeScreen should match snapshot with no data 1`] = `
           style={
             [
               {
+                "flexGrow": 1,
                 "margin": 0,
               },
-              {
-                "height": 56,
-              },
+              {},
               {
                 "paddingBottom": 0,
                 "paddingTop": 0,
@@ -630,6 +633,7 @@ exports[`GameHomeScreen should match snapshot with no data 1`] = `
                 "fontWeight": undefined,
                 "letterSpacing": 0.15,
                 "lineHeight": undefined,
+                "minWidth": 65,
                 "paddingLeft": 16,
                 "paddingRight": 16,
                 "textAlign": "left",
