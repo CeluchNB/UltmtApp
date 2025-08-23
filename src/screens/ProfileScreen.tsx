@@ -162,6 +162,7 @@ const ProfileScreen: React.FC<ProfileProps> = ({ navigation }) => {
         container: {
             minHeight: '100%',
             backgroundColor: colors.primary,
+            paddingTop: 30,
         },
         titleContainer: {
             flexDirection: 'row',

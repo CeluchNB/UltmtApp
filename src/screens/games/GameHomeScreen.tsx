@@ -101,6 +101,7 @@ const GameHomeScreen: React.FC<GameHomeProps> = ({ navigation }) => {
         screen: {
             height: '100%',
             backgroundColor: colors.primary,
+            paddingTop: 40,
         },
         title: { alignSelf: 'center' },
         container: {
