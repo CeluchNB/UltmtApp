@@ -82,8 +82,8 @@ android {
         applicationId "com.ultmtapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 23
-        versionName "2.1.5"
+        versionCode 24
+        versionName "2.1.6"
     }
     signingConfigs {
         debug {
