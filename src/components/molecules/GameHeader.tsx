@@ -42,6 +42,8 @@ const GameHeader: React.FC<GameHeaderProps> = ({ game, header, editing }) => {
         container: {
             display: 'flex',
             flexDirection: 'column',
+            paddingLeft: 5,
+            paddingRight: 5,
         },
         baseContainer: {
             display: 'flex',

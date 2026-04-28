@@ -15,8 +15,20 @@ const LiveGameNavigator: React.FC<{}> = () => {
     } = useTheme()
 
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="FirstPoint" component={FirstPointScreen} />
+        <Stack.Navigator>
+            <Stack.Screen
+                name="FirstPoint"
+                component={FirstPointScreen}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: colors.primary,
+                    },
+                    headerTintColor: colors.textPrimary,
+                    headerBackVisible: false,
+                    title: 'First Point',
+                }}
+            />
             <Stack.Screen
                 name="EditGame"
                 component={EditGameScreen}
@@ -34,7 +46,15 @@ const LiveGameNavigator: React.FC<{}> = () => {
                 name="LiveGameEdit"
                 component={LiveGameEditScreen}
                 initialParams={{ gameId: '' }}
-                options={{ headerShown: false }}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: colors.primary,
+                    },
+                    headerTintColor: colors.textPrimary,
+                    headerTitle: 'Live Game',
+                    headerBackVisible: false,
+                }}
             />
             <Stack.Screen
                 name="LineBuilder"

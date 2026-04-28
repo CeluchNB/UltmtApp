@@ -59,7 +59,12 @@ const LiveGameWizard: React.FC<LiveGameWizardProps> = ({
             <View style={styles.flexOne}>
                 <LiveGameActionView state={state} onNavigate={navigate} />
             </View>
-            <View style={[styles.flexRow, styles.flexShrink]}>
+            <View
+                style={[
+                    styles.flexRow,
+                    styles.flexShrink,
+                    { marginBottom: 10 },
+                ]}>
                 <Button
                     textColor={colors.textPrimary}
                     onPress={() => back()}
